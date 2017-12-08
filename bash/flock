@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Remember, if you edit this file it will probably get a new
+# inode and any existing locks will be made obsolete.
+die() { printf "$(date +%s) $(basename $0)\t%s" "$*"; exit 1; } >&2
+exec 9< $0
+echo basename: $(basename $0)
+flock -n 9 || die "Already running: ($(pgrep -a $(basename $0) | tr \\n \ ))"
+flock 9
+echo -n $$ got lock
+
+"$@" &
+echo and is waiting for $!
+wait || kill $!

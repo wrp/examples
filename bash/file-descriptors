@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Check if a file descriptor is open
+
+check_fd() {
+	true >&$1
+} 2> /dev/null
+
+for fd in 0 0 1 2 5 8 9 9; do
+	if check_fd $fd; then
+		echo $fd is open
+	else
+		echo $fd is closed
+	fi
+done
+
+find_open_fd() {
+	i=0
+	while check_fd $((++i)); do : ; done
+	echo $i
+}
+find_open_fd

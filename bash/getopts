@@ -1,0 +1,22 @@
+#!/bin/sh
+
+usage() { basename $0 | tr -d \\n; echo ": example using getopts"; }
+die() { echo "$@" >&2; exit 1; }
+
+parse_args() {
+	while getopts ":cd:h" opt; do
+		case $opt in
+		c) FLAG_C=1;;
+		d) FLAG_D=$OPTARG;;
+		h) usage; exit 0;;
+		*) die "illegal option -$OPTARG (-h for usage)"
+		esac
+	done
+}
+
+parse_args "$@"
+
+shift $(($OPTIND-1))
+echo FLAG_C=$FLAG_C
+echo FLAG_D=$FLAG_D
+echo args: "$@"

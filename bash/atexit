@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# This is a terrible approach: way too fragile with quoting characters
+atexit() {
+	local current_trap=$(trap)
+	if test -z "$current_trap"; then
+		trap -- "$1" 0
+	else
+		eval "$(echo "$current_trap" |
+			awk "{\$3=\"'$(echo "$1" |
+				sed 's/"/\\"/g');'\"\$3}1")"
+	fi
+}
+
+atexit "echo \"foo'blah\""
+atexit 'echo bar'
+atexit 'echo "bin;qux"'
+
+foo() {
+	var="this value is assigned at the top of $FUNCNAME"
+	trap 'echo In return trap for $FUNCNAME, var = "$var"' RETURN
+	trap 'echo In USR1 trap for $FUNCNAME, var = "$var"' USR1
+	atexit() {
+		cmd="${1%;}"
+		eval set -- $(trap -p EXIT)
+		trap "$cmd${3:+; }$3" 0
+	}
+	atexit 'echo In exit trap, var = "$var"'
+	kill -USR1 $$
+	var="this value is assigned at the end of $FUNCNAME"
+}
+
+var='this is the original value of var'
+foo
+var='this is the value assigned after the call'
+
+atexit() {
+	cmd="${1%;}"
+	eval set -- $(trap -p EXIT)
+	trap "$cmd${3:+; }$3" 0
+}
+atexit 'echo banana $LINENO;'
+atexit "echo split: $LINENO"
+echo "in main: $@"
