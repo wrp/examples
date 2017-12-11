@@ -1,0 +1,10 @@
+#!/usr/bin/env python2.7
+
+def foo(a,b,c):
+	def bar(d):
+		print a, b, c, d
+
+	bar('world')
+	bar('baz')
+
+foo('hello','cruel','world')

@@ -1,0 +1,20 @@
+#!/usr/bin/python2
+
+# Verify the buffering behavior of "for x in file" vs "file.readline()"
+import sys
+
+
+if len(sys.argv) == 1:
+    print 'using for loop'
+    for x in sys.stdin:
+        print x,
+else:
+    print 'using readline'
+    while True:
+        line = sys.stdin.readline()
+        if not line:
+            break
+        print line,
+
+
+

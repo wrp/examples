@@ -1,0 +1,24 @@
+#!/usr/bin/env python2.7
+
+
+def baz(i):
+    return 'baz', i
+
+class foo(object):
+    def __init__(self, arg):
+        self.arg=arg
+        print 'creating a foo with', arg
+
+    def __call__(self, o):
+        print 'my arg is', self.arg
+        print 'my o is', o
+        return baz
+
+
+
+@foo(3)
+def bar(arg):
+    return baz
+
+
+bar(9)
