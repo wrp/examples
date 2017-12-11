@@ -1,0 +1,11 @@
+
+
+Sometimes, pushing to github will cause git to prompt for user:
+Username for 'https://github.com': 
+
+This happens if the url is 
+        url = https://github.com/$user/$repo.git
+
+Fix it with:
+
+$ git remote set-url origin git@github.com:$user/$repo.git

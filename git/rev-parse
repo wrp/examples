@@ -1,0 +1,9 @@
+
+git rev-parse --show-toplevel  # Get top level dir
+
+
+# Show name of current branch
+git rev-parse --abbrev-ref HEAD
+
+# Show sha of current branch
+git rev-parse HEAD
