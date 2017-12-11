@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import foo
+import baz
 import sys
 
 print 'sys.modules:', sys.modules['foo']
