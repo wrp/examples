@@ -1,0 +1,36 @@
+
+FROM debian
+RUN printf 'set editing-mode vi\nset keymap vi\n' > /etc/inputrc
+RUN apt-get update
+RUN apt-get -y install aptitude
+RUN aptitude install -y sudo
+RUN aptitude install -y less
+RUN aptitude install -y manpages
+RUN aptitude install -y man-db
+RUN aptitude install -y vim
+RUN aptitude install -y perl
+RUN aptitude install -y gcc
+RUN aptitude install -y procps
+RUN aptitude install -y apt-file
+RUN aptitude install -y openssl
+RUN aptitude install -y libopensc-openssl
+RUN aptitude install -y libcrypto++-dev
+RUN aptitude install -y libssl-dev
+RUN aptitude install -y autoconf
+RUN aptitude install -y automake
+RUN aptitude install -y libtool
+RUN aptitude install -y check
+RUN aptitude install -y make
+RUN aptitude install -y nmap
+RUN aptitude install -y ruby-dev build-essential
+RUN apt update
+RUN gem install fpm
+RUN aptitude install -y git
+RUN aptitude install -y rpm
+
+
+ADD sudoers /etc/sudoers
+RUN adduser william
+CMD bash
+
+EXPOSE 8125

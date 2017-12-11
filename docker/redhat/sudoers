@@ -1,0 +1,4 @@
+root ALL=(ALL) ALL
+william ALL=(ALL) NOPASSWD:ALL
+
+Defaults env_keep += "SSH_CLIENT SSH_USER"
