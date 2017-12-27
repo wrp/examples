@@ -9,6 +9,8 @@ try:
 	raise foo ("help")
 except Exception as e:
     print "Raised", e
+    print "dir", dir(e)
+    print 'raise.format: {}'.format(e)
     sys.stderr.write("{}: cannot write {}/{}: {}\n".format(
         os.path.basename(sys.argv[0]), "foo", "bar", e))
 
