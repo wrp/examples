@@ -24,6 +24,7 @@ RUN aptitude install -y make
 RUN aptitude install -y nmap
 RUN aptitude install -y ruby-dev build-essential
 RUN apt update
+RUN apt-file update
 RUN gem install fpm
 RUN aptitude install -y git
 RUN aptitude install -y rpm
