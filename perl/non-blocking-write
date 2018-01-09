@@ -3,15 +3,15 @@
 use strict;
 use warnings;
 
-
 my $v = 0;
 $SIG{'PIPE'} = sub { print STDERR "Caught a PIPE" };
 
+my $p;
 STDERR->blocking(0);
-while (print "writing..") {
+do {
+	$p = <STDIN>;
 	$v++;
-	print "done\n"
-}
+} while(print $p);
 
 print STDERR "failed after $v\n";
 
