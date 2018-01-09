@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+
+my $v = 0;
+$SIG{'PIPE'} = sub { print STDERR "Caught a PIPE" };
+
+STDERR->blocking(0);
+while (print "writing..") {
+	$v++;
+	print "done\n"
+}
+
+print STDERR "failed after $v\n";
+
