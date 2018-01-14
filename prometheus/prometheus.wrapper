@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Setup prometheus config with local ip
 # After starting the docker container, you should be
@@ -14,6 +14,8 @@ ip=$( awk 'END{print $1}' /etc/hosts )
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/collectd/collectd.conf
 
+collectd
+
 i=5
 while true; do
 	v=$((RANDOM % 10))
@@ -27,5 +29,4 @@ while true; do
 	sleep 60
 done &  # Throw some data at statsd
 
-collectd
 prometheus --web.listen-address=$ip:8124
