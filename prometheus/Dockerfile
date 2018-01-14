@@ -42,4 +42,4 @@ COPY prometheus.wrapper /bin
 
 CMD /bin/prometheus.wrapper
 
-EXPOSE 8125
+EXPOSE 8124
