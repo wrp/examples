@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Setup prometheus config with local ip
+# After starting the docker container, you should be
+# able to view prometheus running on localhost:${port}
+# where port is derived from 'docker port $container'
+# (get the container identifier via 'docker ps'
+
+
+ip=$( awk 'END{print $1}' /etc/hosts )
+sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
+
+collectd
+prometheus --web.listen-address=$ip:8125
