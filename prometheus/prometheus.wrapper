@@ -6,9 +6,22 @@
 # where port is derived from 'docker port $container'
 # (get the container identifier via 'docker ps'
 
+# build with 'docker build -t myprometheus .'
+# run with 'docker run -it -p 8124 myprometheus'
 
 ip=$( awk 'END{print $1}' /etc/hosts )
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
 
+while sleep 60; do
+	v=$((RANDOM % 10));
+	test $v -gt 8 &&  : $((i++));
+	test $v -gt 5 && : $((i++));
+	test $v -le 5 && : $((i--));
+	test $v -le 2 && : $((i--));
+	test $i -gt 10 && i=10;
+	test $i -lt 0 && i=0;
+	echo "my_gauge:$i|g" | ncat -u 172.17.0.2 8047;
+done &  # Throw some data at statsd
+
 collectd
-prometheus --web.listen-address=$ip:8125
+prometheus --web.listen-address=$ip:8124

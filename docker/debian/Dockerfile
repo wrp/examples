@@ -28,6 +28,13 @@ RUN apt-file update
 RUN gem install fpm
 RUN aptitude install -y git
 RUN aptitude install -y rpm
+RUN aptitude install -y collectd collectd-utils
+RUN aptitude install -y curl
+
+RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
+RUN apt-get update
+RUN aptitude install -y prometheus=2.0.0+ds3-1
+
 
 
 ADD sudoers /etc/sudoers
