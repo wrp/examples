@@ -14,7 +14,7 @@ scrape_configs:
     scrape_interval: 5s
     scrape_timeout: 5s
     static_configs:
-      - targets: ['172.17.0.2:8125']
+      - targets: ['172.17.0.2:8124']
   - job_name: 'collectd'
     static_configs:
       - targets: ['172.17.0.2:9103']

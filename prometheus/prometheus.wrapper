@@ -14,15 +14,16 @@ ip=$( awk 'END{print $1}' /etc/hosts )
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/collectd/collectd.conf
 
-while sleep 60; do
-	v=$((RANDOM % 10));
-	test $v -gt 8 &&  : $((i+=1));
-	test $v -gt 5 && : $((i+=1));
-	test $v -le 5 && : $((i-=1));
-	test $v -le 2 && : $((i-=1));
-	test $i -gt 10 && i=10;
-	test $i -lt 0 && i=0;
-	echo "my_gauge:$i|g" | ncat -u $ip 8047;
+while true; do
+	v=$((RANDOM % 10))
+	test $v -gt 8 &&  : $((i+=1))
+	test $v -gt 5 && : $((i+=1))
+	test $v -le 5 && : $((i-=1))
+	test $v -le 2 && : $((i-=1))
+	test $i -gt 10 && i=10
+	test $i -lt 0 && i=0
+	echo "my_gauge:$i|g" | ncat -u $ip 8047
+	sleep 60
 done &  # Throw some data at statsd
 
 collectd
