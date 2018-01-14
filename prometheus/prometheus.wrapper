@@ -14,6 +14,7 @@ ip=$( awk 'END{print $1}' /etc/hosts )
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/collectd/collectd.conf
 
+i=5
 while true; do
 	v=$((RANDOM % 10))
 	test $v -gt 8 &&  : $((i+=1))
