@@ -29,4 +29,15 @@ while true; do
 	sleep 60
 done &  # Throw some data at statsd
 
+echo 'upper_bound:10|g' | ncat -u $ip 8047
+echo 'lower_bound:0|g' | ncat -u $ip 8047
+while sleep 1; do
+	v=$((++v % 10))
+	echo "fast_montonic:$v|g" | ncat -u $ip 8047
+done &
+while sleep 30; do
+	v=$((++v % 10))
+	echo "slow_montonic:$v|g" | ncat -u $ip 8047
+done &
+
 prometheus --web.listen-address=$ip:8124
