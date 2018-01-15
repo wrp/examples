@@ -14,25 +14,6 @@ ip=$( awk 'END{print $1}' /etc/hosts )
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/prometheus/prometheus.yml
 sed -i "s/172\\.17\\.0\\.2/$ip/" /etc/collectd/collectd.conf
 
-collectd
-
-i=1800
-while true; do
-	v=$((RANDOM % 16))
-	case $(( i += v-8 )) in
-	3600|0) i=1800;;
-	esac
-	echo "my_gauge:$i|g" | ncat -u $ip 8047
-	sleep 1
-done &  # Throw some data at statsd
-
-while sleep 1; do
-	test $((v++)) -gt 3600 && v=0
-	echo "fast_montonic:$v|g" | ncat -u $ip 8047
-done &
-while sleep 60; do
-	test $((v++)) -gt 3600 && v=0
-	echo "slow_montonic:$v|g" | ncat -u $ip 8047
-done &
-
+collectd  # daemonizes itself
+generate_stats $ip 8047 &
 prometheus --web.listen-address=$ip:8124
