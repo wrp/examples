@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Setup prometheus config with local ip
 # After starting the docker container, you should be

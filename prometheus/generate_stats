@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Generate statsd data and send to $1:$2
 ip=${1?}
