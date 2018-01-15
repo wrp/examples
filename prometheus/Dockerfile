@@ -38,8 +38,9 @@ RUN aptitude install -y prometheus=2.0.0+ds3-1
 RUN rm /etc/prometheus/prometheus.yml /etc/collectd/collectd.conf
 COPY prometheus.yml /etc/prometheus
 COPY collectd.conf /etc/collectd
-COPY prometheus.wrapper /bin
+COPY prometheus.wrapper /usr/bin
+COPY generate_stats /usr/bin
 
-CMD /bin/prometheus.wrapper
+CMD /usr/bin/prometheus.wrapper
 
 EXPOSE 8124
