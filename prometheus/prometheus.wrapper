@@ -18,21 +18,12 @@ collectd
 
 i=1800
 while true; do
-	v=$((RANDOM % 10))
-	case $v in
-	9) : $((i+=200)) ;;
-	8) : $((i+=150)) ;;
-	7) : $((i+=100)) ;;
-	6) : $((i+=50)) ;;
-	5) : $((i+=25)) ;;
-	4) : $((i-=25)) ;;
-	3) : $((i-=50)) ;;
-	2) : $((i-=100)) ;;
-	1) : $((i-=150)) ;;
-	0) : $((i-=200)) ;;
+	v=$((RANDOM % 16))
+	case $(( i += v-8 )) in
+	3600|0) i=1800;;
 	esac
 	echo "my_gauge:$i|g" | ncat -u $ip 8047
-	sleep 60
+	sleep 1
 done &  # Throw some data at statsd
 
 while sleep 1; do
