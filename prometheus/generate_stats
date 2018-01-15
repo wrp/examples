@@ -1,23 +1,19 @@
 #!/bin/bash
 
+pgid=$(ps -o pgid= $$ | tr -d ' ')
+trap 'kill -- -$pgid' 0
 # Generate statsd data and send to $1:$2
 ip=${1?}
 port=${2?}
 
-random() {
-	# Avoid the $RANDOM bashism
-	# dd if=/dev/random bs=1 count=1 2> /dev/null | xxd | awk '{print ("0x" $2) + 0}'
-	dd if=/dev/random bs=1 count=1 2> /dev/null | perl -pE 'say ord $_'
-}
-
 report() {
-	echo "1" | ncat -u $ip $port
+	echo "$1" | ncat -u $ip $port
 }
 
 # Gauges
 i=1800
 while true; do
-	case $(( i += $(random) % 16 - 8 )) in
+	case $(( i += RANDOM % 16 - 8 )) in
 	3600|0) i=1800;;
 	esac
 	report "my_gauge:$i|g"
@@ -41,6 +37,7 @@ done &
 
 # Timers
 while sleep 10; do
-	report "my_timer:$(random)|ms"
+	report "my_timer:$((RANDOM % 256))|ms"
 done &
 
+wait
