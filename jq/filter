@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Select items in which the key matches a string
+
+json='[{"genre":"deep house"}, {"genre": "progressive house"}, {"genre": "dubstep"}]'
+
+echo "$json" | jq -c '.[] | select(.genre | contains("house"))'
+echo "$json" | jq -c '.[] | select(.genre | contains("house") and startswith("deep"))'
+
+
+json='{ "xc" : { "foo": ["a", "bc", "de"] , "bar": ["blah"], "baz":["bc"]}}'
+echo "$json" | jq -c '.[]'
+echo "$json" | jq -c '.xc | objects | keys[]'   # Print "foo" and "bar"
+# echo "$json" | jq -c '.xc | keys[]'   # Print "foo" and "bar"
+
+echo 'MATHCING KEYS'
+echo "$json" | jq -c '.xc | to_entries | map(select(.value | contains(["bc"]))) | .[].key '
+#echo "$json" | jq -c '.xc | to_entries | .'
+
+json='{ "devices" : [ {"id" : 0, "name": "bcval" }, {"id":1, "name":"doug"}],
+	"buckets" : [ {"id" : 0, "name": "doug" }, {"id":1, "name":"banana"}]
+}'
+
+echo
+echo json="$json"
+exe() {
+	cmd=$1
+	echo jq -c "'$cmd'"
+	echo $json | eval jq -c "'$cmd'"
+}
+exe '.'
+exe '.[]'
+exe '.devices[] | objects.name'  # Print '"bcval"\n"doug"\n'
+exe '.devices[] | select (.name | startswith ("doug"))'
+exe '.devices[] | select (.name == "bcval")'

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Given a clustermap input, show the services running on the given host
+
+host=${1?}
+cluster=${host:0:2}
+
+clustermap $cluster |
+jq -c ".$cluster | to_entries | map(select(.value | contains([\"$host\"]))) | .[].key"

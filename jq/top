@@ -1,0 +1,12 @@
+#!/bin/sh
+
+json='{ "devices" : [ {"id" : 0, "name": "bcval" }, {"id":1, "name":"doug"}],
+	"buckets" : [ {"id" : 8, "name": "doug" }, {"id":1, "name":"banana"}]
+}'
+echo json="$json"
+exe() {
+	cmd=$1
+	echo jq -c "'$cmd'"
+	echo $json | eval jq -c "'$cmd'"
+}
+exe '. | keys' # Gives the array ["buckets","devices"]
