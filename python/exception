@@ -6,13 +6,32 @@ class foo(Exception):
     pass
 
 try:
-	raise foo ("help")
+    raise foo ("help")
 except Exception as e:
     print "Raised", e
     print "dir", dir(e)
     print 'raise.format: {}'.format(e)
     sys.stderr.write("{}: cannot write {}/{}: {}\n".format(
         os.path.basename(sys.argv[0]), "foo", "bar", e))
+
+
+def f():
+    try:
+        print 'try'
+        raise foo('bar')
+        return 5
+    except:
+        print 'except'
+    finally:
+        print 'finally'
+        # If there is an exception before return in try, then
+        # the function returns None unless the finally clause returns a value.
+        # If not, it returns 5 and executes the finally clause
+        # and still returns 5, regardless of whehter or not the finally
+        # clause returns.  Returning something from a finally clause is bad practice
+
+a= f()
+print 'f returns:', a
 
 
 try:
