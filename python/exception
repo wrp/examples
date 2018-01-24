@@ -2,12 +2,12 @@
 
 import sys
 import os
-class foo(Exception):
-    pass
+class foo(Exception): pass
+class bar(Exception): pass
 
 try:
     raise foo ("help")
-except Exception as e:
+except (foo, bar) as e:
     print "Raised", e
     print "dir", dir(e)
     print 'raise.format: {}'.format(e)
@@ -32,6 +32,11 @@ def f():
 
 a= f()
 print 'f returns:', a
+
+try:
+    print 'try/finally with no except ',
+finally:
+    print 'is ok'
 
 
 try:
