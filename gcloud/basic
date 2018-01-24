@@ -2,3 +2,7 @@
 
 # List instances in a project.
 gcloud compute instances list --project ${project?}
+
+# Set defaults:
+gcloud config set project ${project?}
+gcloud config set compute/zone us-central1-b
