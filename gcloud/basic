@@ -1,4 +1,6 @@
 
+# Show current config
+gcloud config list
 
 # List instances in a project.
 gcloud compute instances list --project ${project?}
