@@ -18,6 +18,7 @@ ADD sudoers /etc/sudoers
 RUN adduser william
 RUN yum install -y sudo
 RUN yum install -y wget
+RUN yum install -y rpm-build
 
 CMD bash
 EXPOSE 8125
