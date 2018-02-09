@@ -1,0 +1,3 @@
+
+# Which package provides /bin/foo?
+yum provides foo
