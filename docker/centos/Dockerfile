@@ -19,6 +19,11 @@ RUN adduser william
 RUN yum install -y sudo
 RUN yum install -y wget
 RUN yum install -y rpm-build
+RUN yum install -y which
+RUN curl https://sdk.cloud.google.com > /tmp/install
+RUN chmod +x /tmp/install
+RUN /tmp/install --disable-prompts
+RUN ln -s /root/google-cloud-sdk/bin/gsutil /bin/gsutil
 
 CMD bash
 EXPOSE 8125
