@@ -17,6 +17,7 @@ RUN gem install fpm
 ADD sudoers /etc/sudoers
 RUN adduser william
 RUN yum install -y sudo
+RUN yum install -y wget
 
 CMD bash
 EXPOSE 8125
