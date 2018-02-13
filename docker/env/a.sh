@@ -1,5 +1,5 @@
 #!/bin/bash
 
-env
 date
-echo  abc=$abc
+echo pid=$$
+echo abc=$abc
