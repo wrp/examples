@@ -1,0 +1,8 @@
+
+To set up a cluster:
+
+$ gcloud components install kubectl
+$ gcloud container clusters create test-cluster
+$ kubectl cluster-info
+$ kubectl run ${deployment_name-test_deployment} --image us.gcr.io/${project?}/${image?}
+$ kubectl get pods
