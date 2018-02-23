@@ -5,4 +5,13 @@ $ gcloud components install kubectl
 $ gcloud container clusters create test-cluster
 $ kubectl cluster-info
 $ kubectl run ${deployment_name-test_deployment} --image us.gcr.io/${project?}/${image?}
+
+# Get info about what's running
 $ kubectl get pods
+$ kubectl cluster-info
+
+# Attach to a pod
+$ kubectl exec -it $NAME bash  # NAME comes from first column of output of 'get pods'
+
+# Logging
+$ kubectl logs $NAME bash      # NAME comes from first column of output of 'get pods'
