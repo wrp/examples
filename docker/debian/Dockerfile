@@ -30,12 +30,16 @@ RUN aptitude install -y git
 RUN aptitude install -y rpm
 RUN aptitude install -y collectd collectd-utils
 RUN aptitude install -y curl
+RUN aptitude install -y python3
+RUN aptitude install -y python3-yaml
+RUN aptitude install -y python-yaml
 
-RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
-RUN apt-get update
-RUN aptitude install -y prometheus=2.0.0+ds3-1
+RUN aptitude install -y dtach
+RUN aptitude install -y tmux
 
-
+# RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
+# RUN apt-get update
+# RUN aptitude install -y prometheus=2.0.0+ds3-1
 
 ADD sudoers /etc/sudoers
 RUN adduser william
