@@ -37,6 +37,12 @@ RUN aptitude install -y python-yaml
 RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 
+COPY .tmux.conf /root
+RUN aptitude install -y locales
+COPY locale.gen /etc
+RUN locale-gen
+
+
 # RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
 # RUN apt-get update
 # RUN aptitude install -y prometheus=2.0.0+ds3-1
