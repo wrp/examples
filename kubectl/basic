@@ -1,6 +1,7 @@
 
 To set up a cluster:
 
+$ gcloud auth login
 $ gcloud components install kubectl
 $ gcloud container clusters create test-cluster
 $ kubectl cluster-info
