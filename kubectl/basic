@@ -25,6 +25,18 @@ kubectl exec -it $NAME bash  # NAME is first column of output of 'get pods'
 # Logging
 kubectl logs $NAME bash      # NAME is first column of output of 'get pods'
 
+# Update the deployment (eg, rolling-update)
+kubectl edit deployment/${deployment}
+	# Edit the change and quit the editor.  Rollout begins
+# After using edit to deploy, the change-cause will be None,
+# so the output of:
+kubectl rollout history deployment/${deployment}
+# is not very helpful.  Try:
+kubectl annotate deployment/${deployment} kubernetes.io/change-cause='test string'
+# to annotate the update.  Or, update with:
+kubectl set image deployment/${deployment} $image=$fqimagename:$version
+
+
 
 # Cleanup
 kubectl delete deployment ${deployment_name}
