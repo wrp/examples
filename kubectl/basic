@@ -5,20 +5,27 @@ gcloud auth login
 gcloud components install kubectl
 gcloud container clusters create test-cluster
 kubectl cluster-info
-kubectl run ${deployment_name-test_deployment} --image us.gcr.io/${project?}/${image?}
+kubectl run ${deployment_name-test_deployment} \
+	--image us.gcr.io/${project?}/${image?} \
+	--replicas $N
 
 # Get info about what's running
 kubectl get pods
+kubectl get services
+kubectl get deployments
 kubectl cluster-info
 gcloud container clusters list
 
+kubectl get pods -o json \
+	| jq '.items[].spec.containers[].ports' # ports in all pods
+
 # Attach to a pod
-kubectl exec -it $NAME bash  # NAME comes from first column of output of 'get pods'
+kubectl exec -it $NAME bash  # NAME is first column of output of 'get pods'
 
 # Logging
-kubectl logs $NAME bash      # NAME comes from first column of output of 'get pods'
+kubectl logs $NAME bash      # NAME is first column of output of 'get pods'
 
 
 # Cleanup
-kubectl delete service ${deployment_name}
+kubectl delete deployment ${deployment_name}
 gcloud container clusters delete test-cluster
