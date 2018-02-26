@@ -31,3 +31,9 @@ gcloud beta compute --project micro-bus-121218 instances \
 	pd-standard --boot-disk-device-name instance-1 --container-image \
 	us.gcr.io/micro-bus-121218/airflow-di-extern --container-restart-policy \
 	always
+
+gcloud auth login
+gcloud components install kubectl
+gcloud container clusters create ${cluster?}
+gcloud container clusters list
+gcloud container clusters delete ${cluster?}
