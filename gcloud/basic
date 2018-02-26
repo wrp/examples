@@ -20,16 +20,16 @@ gcloud config set compute/zone us-central1-b
 
 
 # Example to create an instance:
-gcloud beta compute --project micro-bus-121218 instances \
+gcloud beta compute --project ${project?} instances \
 	create-with-container instance-1 --zone us-central1-b --machine-type \
-	n1-standard-1 --network micro-bus-internal-network --maintenance-policy \
+	n1-standard-1 --network ${network?} --maintenance-policy \
 	MIGRATE --service-account \
-	31253520017-compute@developer.gserviceaccount.com --scopes \
+	${service_account?} --scopes \
 	https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
 	--min-cpu-platform Automatic --image cos-stable-64-10176-62-0 \
 	--image-project cos-cloud --boot-disk-size 10 --boot-disk-type \
 	pd-standard --boot-disk-device-name instance-1 --container-image \
-	us.gcr.io/micro-bus-121218/airflow-di-extern --container-restart-policy \
+	us.gcr.io/${project?}/$image --container-restart-policy \
 	always
 
 gcloud auth login
