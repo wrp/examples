@@ -7,6 +7,13 @@ gcloud config list
 # List instances in a project.
 gcloud compute instances list --project ${project?}
 
+# List images
+gcloud container images list
+gcloud container images list --repository us.gcr.io/$project
+gcloud container images describe us.gcr.io/$project/$image
+gcloud container images list-tags us.gcr.io/$project/$image
+
+
 # Set defaults:
 gcloud config set project ${project?}
 gcloud config set compute/zone us-central1-b

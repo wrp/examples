@@ -34,8 +34,8 @@ kubectl rollout history deployment/${deployment}
 # is not very helpful.  Try:
 kubectl annotate deployment/${deployment} kubernetes.io/change-cause='test string'
 # to annotate the update.  Or, update with:
-kubectl set image deployment/${deployment} $image=$fqimagename:$version
-
+kubectl set image deployment/${deployment} $container=$fqimagename:$version
+	(container is from kubectl describe pod $pod)
 
 
 # Cleanup
