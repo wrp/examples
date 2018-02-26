@@ -1,0 +1,91 @@
+#!/bin/sh
+
+
+gcloud beta compute --project liquid-champion-135823 \
+	instances create dev-1 \
+	--zone us-central1-b \
+	--machine-type custom-1-1024 \
+	--subnet default \
+	--maintenance-policy MIGRATE \
+	--service-account 324403848901-compute@developer.gserviceaccount.com \
+	--scopes $( tr -s '[:space:]' , <<- EOF
+		https://www.googleapis.com/auth/devstorage.read_only
+		https://www.googleapis.com/auth/logging.write
+		https://www.googleapis.com/auth/monitoring.write
+		https://www.googleapis.com/auth/servicecontrol
+		https://www.googleapis.com/auth/service.management.readonly
+		https://www.googleapis.com/auth/trace.append 
+	EOF
+	) \
+	--min-cpu-platform Automatic \
+	--image debian-9-stretch-v20180206 \
+	--image-project debian-cloud \
+	--boot-disk-size 10 \
+	--boot-disk-type pd-standard \
+	--boot-disk-device-name dev-1
+
+exit
+# Related REST
+
+curl https://www.googleapis.com/compute/v1/projects/liquid-champion-135823/zones/us-central1-b/instances -X POST -d '
+{
+  "name": "dev-1",
+  "zone": "projects/liquid-champion-135823/zones/us-central1-b",
+  "minCpuPlatform": "Automatic",
+  "machineType": "projects/liquid-champion-135823/zones/us-central1-b/machineTypes/custom-1-1024",
+  "metadata": {
+    "items": []
+  },
+  "tags": {
+    "items": []
+  },
+  "disks": [
+    {
+      "type": "PERSISTENT",
+      "boot": true,
+      "mode": "READ_WRITE",
+      "autoDelete": true,
+      "deviceName": "instance-1",
+      "initializeParams": {
+        "sourceImage": "projects/debian-cloud/global/images/debian-9-stretch-v20180206",
+        "diskType": "projects/liquid-champion-135823/zones/us-central1-b/diskTypes/pd-standard",
+        "diskSizeGb": "10"
+      }
+    }
+  ],
+  "canIpForward": false,
+  "networkInterfaces": [
+    {
+      "subnetwork": "projects/liquid-champion-135823/regions/us-central1/subnetworks/default",
+      "accessConfigs": [
+        {
+          "name": "External NAT",
+          "type": "ONE_TO_ONE_NAT"
+        }
+      ],
+      "aliasIpRanges": []
+    }
+  ],
+  "description": "",
+  "labels": {},
+  "scheduling": {
+    "preemptible": false,
+    "onHostMaintenance": "MIGRATE",
+    "automaticRestart": true
+  },
+  "deletionProtection": false,
+  "serviceAccounts": [
+    {
+      "email": "324403848901-compute@developer.gserviceaccount.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/devstorage.read_only",
+        "https://www.googleapis.com/auth/logging.write",
+        "https://www.googleapis.com/auth/monitoring.write",
+        "https://www.googleapis.com/auth/servicecontrol",
+        "https://www.googleapis.com/auth/service.management.readonly",
+        "https://www.googleapis.com/auth/trace.append"
+      ]
+    }
+  ]
+}
+'
