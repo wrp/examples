@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: test-airflow
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: airflow-di-extern
-        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-97-g32a8c20
+        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-99-gbdc09ce
         ports:
         - containerPort: 80
         env:
