@@ -11,6 +11,28 @@ spec:
     spec:
       containers:
       - name: airflow-di-extern
-        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-90-g8c08c44
+        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-97-g32a8c20
         ports:
         - containerPort: 80
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: password
+
+
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=<INSTANCE_CONNECTION_NAME>=tcp:3306",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+          - name: cloudsql-instance-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
