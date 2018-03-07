@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: airflow-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: airflow
+    spec:
+      containers:
+      - name: airflow-di-extern
+        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-90-g8c08c44
+        ports:
+        - containerPort: 80
