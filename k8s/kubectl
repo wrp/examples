@@ -11,7 +11,7 @@ kubectl run ${deployment_name-test_deployment} \
 	--image us.gcr.io/${project?}/${image?} \
 	--replicas $N
 # Or, for more control:
-kubectl create -f test-airflow.yaml --record
+kubectl create -f ${yaml_file}.yaml --record
 
 # Get info about what's running
 kubectl get pods
@@ -32,6 +32,9 @@ kubectl logs $NAME bash      # NAME is first column of output of 'get pods'
 # Update the deployment (eg, rolling-update)
 kubectl edit deployment/${deployment}
 	# Edit the change and quit the editor.  Rollout begins
+# For declarative:
+kubectl replace -f ${yaml_file}.yaml
+
 # After using edit to deploy, the change-cause will be None,
 # so the output of:
 kubectl rollout history deployment/${deployment}
