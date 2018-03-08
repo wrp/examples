@@ -1,17 +1,20 @@
 
-# To set up a cluster:
-
+# General overhead commands
 gcloud auth login
 gcloud components install kubectl
-gcloud container clusters create test-cluster
-kubectl cluster-info
 
-# For simple case, use run
+# To set up a cluster:
+gcloud container clusters create test-cluster
+
+# Create a deployment
 kubectl run ${deployment_name-test_deployment} \
 	--image us.gcr.io/${project?}/${image?} \
 	--replicas $N
 # Or, for more control:
 kubectl create -f ${yaml_file}.yaml --record
+
+# Create a service to make the deployment available
+kubectl expose deployment test-airflow --type LoadBalancer
 
 # Get info about what's running
 kubectl get pods
