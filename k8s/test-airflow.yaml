@@ -13,7 +13,7 @@ spec:
       - name: airflow-di-extern
         image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-100-ga79a915
         ports:
-        - containerPort: 80
+        - containerPort: 8000
         env:
         - name: DB_USER
           valueFrom:
