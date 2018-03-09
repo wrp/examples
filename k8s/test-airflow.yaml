@@ -32,13 +32,13 @@ spec:
           - name: SERVICE_HOST_ENV_NAME
             value: 127.0.0.1
           - name: SERVICE_PORT_ENV_NAME
-            value: 8000
+            value: '8000'
           - name: ENABLE_SSL
-            value: true
+            value: 'true'
         ports:
           - name: pod-https
             containerPort: 443
-            protocol: TCP
+            protocol: "TCP"
         volumeMounts:
           - name: secrets
             mountPath: /etc/secrets
@@ -60,3 +60,6 @@ spec:
             secretName: cloudsql-instance-credentials
         - name: cloudsql
           emptyDir:
+        - name: secrets
+          secret:
+            secretName: sidecar-ssl
