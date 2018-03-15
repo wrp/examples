@@ -8,11 +8,11 @@ $ git push $remote --delete $remote_branch
 # Create local branch to track extant remote
 $ git fetch $remote
 $ git branch $local_branch
-$ git branch -u $remote/$remote_branch $local_branch
+$ git branch -u $remote/${remote_branch-$local_branch} $local_branch
 
 # Create and checkout local branch to track existing branch on remote
 $ git fetch $remote
-$ git checkout -t -b $local_branch $remote/$remote_branch
+$ git checkout -t -b $local_branch $remote/${remote_branch-$local_branch}
 
 # Make extant local branch track branch on remote
 $ git branch -u $remote/$remote_branch $local_branch
