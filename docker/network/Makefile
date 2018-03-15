@@ -10,6 +10,7 @@ all:
 		--name deb$${i} --network test-network mydebian bash \
 		|| docker start deb$${i}; \
 		docker exec --user $(USER) deb$${i} mkdir $(RHOME)/.ssh; \
+		docker exec deb$${i} service ssh start; \
 		docker exec --user $(USER) deb$${i} cp $(RHOME)/examples/docker/network/authorized_keys \
 			$(RHOME)/.ssh/; \
 	done
