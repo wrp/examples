@@ -4,7 +4,8 @@
 all:
 	-docker network create test-network
 	#docker network inspect test-network
-	-for i in 1 2 3 4; do docker run -dit --name deb$${i} --network test-network mydebian bash \
+	-for i in 1 2 3 4; do docker run -dit -v $$HOME/examples:/home/william/examples \
+		--name deb$${i} --network test-network mydebian bash \
 		|| docker start deb$${i}; done
 	@echo 'attaching to container 1'
 	-docker attach deb1
