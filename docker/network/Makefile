@@ -13,6 +13,7 @@ all:
 		docker exec deb$${i} service ssh start; \
 		docker exec --user $(USER) deb$${i} cp $(RHOME)/examples/docker/network/authorized_keys \
 			$(RHOME)/.ssh/; \
+		docker exec deb$${i} cp $(RHOME)/examples/ansible/ansible.cfg /etc; \
 	done
 
 	docker exec --user $(USER) deb1 cp $(RHOME)/examples/docker/network/id_rsa_deb1 \
