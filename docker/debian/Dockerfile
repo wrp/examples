@@ -37,7 +37,6 @@ RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 RUN aptitude install -y ansible
 RUN aptitude install -y ssh
-RUN service ssh start
 
 
 COPY .tmux.conf /root
