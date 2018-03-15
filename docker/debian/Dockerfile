@@ -37,6 +37,7 @@ RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 RUN aptitude install -y ansible
 RUN aptitude install -y ssh
+RUN service ssh start
 
 
 COPY .tmux.conf /root
@@ -50,7 +51,7 @@ RUN locale-gen
 # RUN aptitude install -y prometheus=2.0.0+ds3-1
 
 ADD sudoers /etc/sudoers
-RUN adduser william
+RUN adduser --quiet williamp
 CMD bash
 
 EXPOSE 8125
