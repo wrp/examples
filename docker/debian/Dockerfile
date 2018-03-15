@@ -33,9 +33,10 @@ RUN aptitude install -y curl
 RUN aptitude install -y python3
 RUN aptitude install -y python3-yaml
 RUN aptitude install -y python-yaml
-
 RUN aptitude install -y dtach
 RUN aptitude install -y tmux
+RUN aptitude install -y ansible
+
 
 COPY .tmux.conf /root
 RUN aptitude install -y locales
