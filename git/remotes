@@ -29,3 +29,10 @@ $ git push --delete $remote $tag
 
 # Stop tracking remote
 $ git branch --unset-upstream [branch (default to current)]
+
+# Show all refs on a remote
+git remote show $remote
+
+
+# Sync refs with remote
+git remote update --prune
