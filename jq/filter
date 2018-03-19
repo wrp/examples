@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -v
 
 # Select items in which the key matches a string
 
@@ -33,3 +33,19 @@ exe '.[]'
 exe '.devices[] | objects.name'  # Print '"bcval"\n"doug"\n'
 exe '.devices[] | select (.name | startswith ("doug"))'
 exe '.devices[] | select (.name == "bcval")'
+
+
+# Select particular keys
+json='[{"blah":"bar", "name":"barry","projectId":"barrys id"}, {"name":"foo"}]'
+echo "$json" | jq ".[] | {name: .name, id: .projectId}"
+
+# output:
+# {
+#   "name": "barry",
+#   "id": "barrys id"
+# }
+# {
+#   "name": "foo",
+#   "id": null
+# }
+
