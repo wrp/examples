@@ -3,7 +3,9 @@ foo:
         this is a single string
         which retains spaces at end of
         line but discards the newline
-        and indentation
+           and indentation that matches the first line
+        (eg, there will be a total of 3 spaces and
+        a newline before "and", and a single newline before '(')
   defintion: >
         Scalar content can be written in block notation, using a
         literal style (indicated by “|”) where all line breaks are
