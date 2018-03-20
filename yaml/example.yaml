@@ -13,4 +13,15 @@ foo:
         folded style (denoted by “>”) where each line break is
         folded to a space unless it ends an empty or a more-indented
         line.
+  nospace: "this string should\
+        have no space between \"should\" and \"have\""
+
   bar: barvalue
+
+nospace2: >
+        "this has\
+        a backslash and a space between 'has' and 'a'"
+
+nospace3:
+        "this has\
+        no space between 'has' and 'no'"
