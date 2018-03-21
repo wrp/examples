@@ -25,3 +25,11 @@ nospace2: >
 nospace3:
         "this has\
         no space between 'has' and 'no'"
+
+nospace4: "\
+        same as\
+        nospace 3"
+
+"quoted":
+        "wtf\
+        will this do?"
