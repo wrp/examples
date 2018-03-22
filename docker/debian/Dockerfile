@@ -52,6 +52,6 @@ RUN locale-gen
 
 ADD sudoers /etc/sudoers
 RUN adduser --quiet williamp
-CMD bash
+CMD sudo -u williamp bash
 
 EXPOSE 8125
