@@ -13,5 +13,8 @@ run:
 	# can be found with 'docker inspect $container_id | grep IPAddress'
 	# eg, on the container, run 'ncat -kl $this_ip 8125'
 	# The IP is also found in /etc/hosts within the container
+	#
+clean:
+	docker system prune -a -f
 
-.PHONY: all build run
+.PHONY: all build run clean
