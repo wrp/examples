@@ -37,3 +37,5 @@ gcloud components install kubectl
 gcloud container clusters create ${cluster?}
 gcloud container clusters list
 gcloud container clusters delete ${cluster?}
+
+gcloud beta container operations list # Show all operations on a container
