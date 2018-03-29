@@ -18,7 +18,7 @@ gcloud beta compute --project liquid-champion-135823 \
 	EOF
 	) \
 	--min-cpu-platform Automatic \
-	--image debian-9-stretch-v20180206 \
+	--image "centos-7-v20180314" \
 	--image-project debian-cloud \
 	--boot-disk-size 10 \
 	--boot-disk-type pd-standard \

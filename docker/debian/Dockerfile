@@ -37,13 +37,13 @@ RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 RUN aptitude install -y ansible
 RUN aptitude install -y ssh
-RUN aptitude install -y maven
+#RUN aptitude install -y maven
 
 
-COPY .tmux.conf /root
-RUN aptitude install -y locales
-COPY locale.gen /etc
-RUN locale-gen
+#COPY .tmux.conf /root
+#RUN aptitude install -y locales
+#COPY locale.gen /etc
+#RUN locale-gen
 
 
 # RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
