@@ -13,7 +13,7 @@ spec:
       - name: airflow-di-extern
         image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-100-ga79a915
         ports:
-        - containerPort: 8000
+        - containerPort: 443
         env:
         - name: DB_USER
           valueFrom:
@@ -26,23 +26,6 @@ spec:
               name: cloudsql-db-credentials
               key: password
 
-      - name: nginx-ssl-proxy
-        image: artifactory.devops.wepay-inc.com/wepay/nginx-ssl-proxy:1.3.3
-        env:
-          - name: SERVICE_HOST_ENV_NAME
-            value: 127.0.0.1
-          - name: SERVICE_PORT_ENV_NAME
-            value: '8000'
-          - name: ENABLE_SSL
-            value: 'true'
-        ports:
-          - name: pod-https
-            containerPort: 443
-            protocol: "TCP"
-        volumeMounts:
-          - name: secrets
-            mountPath: /etc/secrets
-            readOnly: true
 
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11
