@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: airflow-di-extern
-        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-100-ga79a915
+        image: us.gcr.io/liquid-champion-135823/airflow-di-extern:1.6.1-104-gcd30d83
         ports:
         - containerPort: 443
         env:
