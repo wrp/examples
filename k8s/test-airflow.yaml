@@ -43,6 +43,3 @@ spec:
             secretName: cloudsql-instance-credentials
         - name: cloudsql
           emptyDir:
-        - name: secrets
-          secret:
-            secretName: sidecar-ssl
