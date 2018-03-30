@@ -53,6 +53,3 @@ kubectl get svc ${service?}
 # Cleanup
 kubectl delete deployment ${deployment_name}
 gcloud container clusters delete test-cluster
-
-# Mark a node unschduleable
-kubectl cordon $NODENAME
