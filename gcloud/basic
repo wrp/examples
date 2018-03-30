@@ -39,3 +39,5 @@ gcloud container clusters list
 gcloud container clusters delete ${cluster?}
 
 gcloud beta container operations list # Show all operations on a container
+gcloud beta container operations describe ${NAME} # Name is the header from previous, but is
+                                                  # referred to as "operation id" in docs.
