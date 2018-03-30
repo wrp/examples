@@ -13,6 +13,9 @@ kubectl run ${deployment_name-test_deployment} \
 # Or, for more control:
 kubectl create -f ${yaml_file}.yaml --record
 
+# To debug if not getting created:
+kubectl describe pods
+
 # Create a service to make the deployment available
 kubectl expose deployment test-airflow --type LoadBalancer
 
