@@ -25,6 +25,10 @@ spec:
             secretKeyRef:
               name: cloudsql-db-credentials
               key: password
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+          readOnly: true
 
 
       - name: cloudsql-proxy
@@ -43,3 +47,6 @@ spec:
             secretName: cloudsql-instance-credentials
         - name: cloudsql
           emptyDir:
+        - name: secrets
+        - secret:
+        -   secretName: nginx-ssl
