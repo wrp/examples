@@ -4,7 +4,7 @@ hello.class: hello.java
 
 
 william/properties.class: properties.java
-	javac -d properties.java
+	javac -d . properties.java
 
 run: hello.class
 	java -cp . hello
