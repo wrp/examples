@@ -13,6 +13,7 @@ run: hello.class
 
 
 clean:
+	rm -rf william
 	find . -name '*.class' -delete
 
 
