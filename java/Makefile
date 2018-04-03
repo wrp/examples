@@ -6,9 +6,9 @@ hello.class: hello.java
 william/properties.class: properties.java
 	javac -d . properties.java
 
-run: hello.class
+run: hello.class william/properties.class
 	java -cp . hello
-	java william.properties
+	java william.properties /dev/null
 
 
 
