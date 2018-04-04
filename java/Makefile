@@ -8,7 +8,7 @@ william/properties.class: properties.java
 
 run: hello.class william/properties.class
 	java -cp . hello
-	java william.properties /dev/null
+	printf 'baz=qux' | java william.properties
 
 
 
