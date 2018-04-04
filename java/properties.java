@@ -1,7 +1,6 @@
 
 package william;
 import java.util.Properties;
-import java.util.List;
 import java.io.FileInputStream;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,8 +13,7 @@ public class properties {
 
 		Yaml yaml = new Yaml();
 		String doc = "\nfoo\n- bar\n- baz\n- qux\n";
-		List<String> list = (List<String>) yaml.load(doc);
-		System.out.println(list);
+		System.out.println(yaml.load(doc));
 	}
 }
 
