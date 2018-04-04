@@ -1,7 +1,7 @@
 
 all: hello.class william/properties.class
 	java -cp . hello
-	printf 'baz=qux' | java william.properties
+	printf 'baz=qux' | java -cp . william.properties
 
 
 
