@@ -13,6 +13,7 @@ snakeyaml-1.9.jar.zip:
 
 snakeyaml-1.9.jar: snakeyaml-1.9.jar.zip
 	unzip snakeyaml-1.9.jar.zip
+	touch snakeyaml-1.9.jar  # Update timestamp
 
 william/properties.class: properties.java snakeyaml-1.9.jar
 	javac -cp snakeyaml-1.9.jar -d . properties.java
