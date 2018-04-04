@@ -23,6 +23,9 @@ public class properties {
 
 		Map obya = (Map)yaml.load(doc);
 		System.out.println( obya.get("foo"));
+
+		Map obyak = (Map)yaml.load(new FileInputStream("sample.yaml"));
+		System.out.println( obyak.get("foo"));
 	}
 }
 
