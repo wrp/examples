@@ -12,5 +12,5 @@ for root, dirs, files in os.walk(start):
 #    print 'root:', root
 #    print 'dirs:', dirs
 #    print 'files:', files
-    for f in map(lambda f: os.path.join(root, f), filter(lambda x: x.endswith('.pyc'), files)):
+    for f in map(lambda f: os.path.join(root, f), filter(lambda x: not x.endswith('.pyc'), files)):
         print f
