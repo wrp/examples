@@ -4,6 +4,9 @@
 foo:
 - item: item in list
   item2: 2nd item
+
+---
+
 # bar's value is a dictionary with 2 keys
 bar:
   item: item in list
