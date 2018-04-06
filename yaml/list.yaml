@@ -1,0 +1,10 @@
+
+# foo's value is a list containing 1 item
+# which is a dictionary with 2 keys
+foo:
+- item: item in list
+  item2: 2nd item
+# bar's value is a dictionary with 2 keys
+bar:
+  item: item in list
+  item2: 2nd item
