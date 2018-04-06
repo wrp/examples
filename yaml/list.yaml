@@ -16,3 +16,11 @@ bar:
 # This document is a list with 2 entries
 - baz: { 'a': 'av', 'b':'bv'} # Same as bar
 - qux: [{'a':'av', 'b':'bv'}] # Same as foo
+
+---
+# 
+bar:
+- a: av
+  b: bv
+- c: test
+
