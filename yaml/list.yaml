@@ -2,12 +2,17 @@
 # foo's value is a list containing 1 item
 # which is a dictionary with 2 keys
 foo:
-- item: item in list
-  item2: 2nd item
+- a: av
+  b: bv
 
 ---
 
 # bar's value is a dictionary with 2 keys
 bar:
-  item: item in list
-  item2: 2nd item
+  a: av
+  b: bv
+
+---
+# This document is a list with 2 entries
+- baz: { 'a': 'av', 'b':'bv'} # Same as bar
+- qux: [{'a':'av', 'b':'bv'}] # Same as foo
