@@ -37,6 +37,7 @@ RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 RUN aptitude install -y ansible
 RUN aptitude install -y ssh
+RUN aptitude install -y ncdu
 #RUN aptitude install -y maven
 
 
