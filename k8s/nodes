@@ -1,0 +1,10 @@
+
+# Mark a node unschduleable
+kubectl cordon $NODENAME  # untested
+kubectl patch node $NODENAME\ -p '{"spec":{"unschedulable":true}}'  # untested
+
+# Which pods are running on a node?
+kubectl get pods --all-namespaces -o jsonpath="{range .items[?(.spec.nodeName==\"$NODENAME\")]}{.metadata.name} {end}"
+
+# On which node is a pod running?
+kubectl describe pod ${name?}  | grep Node:
