@@ -1,6 +1,7 @@
 
 
 http://techblog.netflix.com/2015/11/linux-performance-analysis-in-60s.html
+https://medium.com/netflix-techblog/linux-performance-analysis-in-60-000-milliseconds-accc10403c55
 
 dstat                 summary of vmstat, iostat, ifstat
 uptime                load averages
@@ -13,3 +14,13 @@ free -m               memory usage
 sar -n DEV 1          network IO
 sar -n TCP,ETCP 1     tcp stats
 htop                  process overview
+
+
+misc:
+
+meminfo
+free
+ss  # obsoletes netstat
+nmon   # curses based wrapper to many subsystems
+pmap
+pstree
