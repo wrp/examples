@@ -7,7 +7,7 @@ build:
 run:
 	@# -p 8130:8125 Map port 8130 on the local host to port 8125 on the container
 	@# -p 8125      Let docker select the port.  Discover with 'docker port $container'
-	docker run -it -p 8125 -v $$HOME:/home/williamp mydebian
+	-docker run -it -p 8125 -v $$HOME:/home/williamp mydebian
 
 	@# To access that port, the container needs to use its ip address which
 	@# can be found with 'docker inspect $container_id | grep IPAddress'
