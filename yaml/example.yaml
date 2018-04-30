@@ -15,6 +15,8 @@ foo:
         line.
   nospace: "this string should\
         have no space between \"should\" and \"have\""
+  onespace: "this string should \
+        have one space between \"should\" and \"have\""
 
   bar: barvalue
 

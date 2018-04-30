@@ -7,5 +7,5 @@ list:
 anchor:
 	@python -c 'import yaml; import sys; print yaml.load(sys.stdin)' < anchors.yaml
 
-all:
+example:
 	@python -c 'import yaml; import sys; print yaml.load(sys.stdin)' < example.yaml
