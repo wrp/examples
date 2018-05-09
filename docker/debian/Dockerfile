@@ -51,8 +51,10 @@ RUN apt-get update
 #RUN aptitude install -y prometheus=2.0.0+ds3-1
 RUN aptitude install -y git
 
+ENV DOCKER=1
+
 ADD sudoers /etc/sudoers
 RUN adduser --quiet williamp
-CMD sudo -u williamp bash
+CMD sudo DOCKER=1 -u williamp bash
 
 EXPOSE 8125
