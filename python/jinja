@@ -18,13 +18,17 @@ def main(path=None):
                 #}",
         "unset becomes blank": "{{kafka_truststore_password}}"
     }
+    {% for i in alist %}
+        item {{ i }}
+    {% endfor %}
 }
 '''
 
-    env = Environment()
+    env = Environment(trim_blocks=True)
     template = env.from_string(data)
     render_data = template.render(
         title='title',
+        alist=(1,2,3),
         DB_USER=os.environ.get('USER')
     )
     print render_data
