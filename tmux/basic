@@ -1,2 +1,14 @@
 
 When the shell stops responding, you've probably hit ctrl-S. Recover with ctrl-Q
+
+
+# Copy a pane:
+#     capture-pane [-aepPqCJ] [-b buffer-name] [-E end-line] [-S start-line] [-t target-pane]
+#                   (alias: capturep)
+#             Capture the contents of a pane.  If -p is given, the output goes to stdout, otherwise to the buffer specified with -b or a new buffer if omitted.  If -a is given, the alternate screen is used, and the history is not
+#             accessible.  If no alternate screen exists, an error will be returned unless -q is given.  If -e is given, the output includes escape sequences for text and background attributes.  -C also escapes non-printable char-
+#             acters as octal \xxx.  -J joins wrapped lines and preserves trailing spaces at each line's end.  -P captures only any output that the pane has received that is the beginning of an as-yet incomplete escape sequence.
+#
+#             -S and -E specify the starting and ending line numbers, zero is the first line of the visible pane and negative numbers are lines in the history.  `-' to -S is the start of the history and to -E the end of the visi-
+#             ble pane.  The default is to capture only the visible contents of the pane.
+tmux capture-pane -p -S - -t 0
