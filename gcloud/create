@@ -1,13 +1,16 @@
 #!/bin/sh
 
+: ${PROJECT?PROJECT must be defined}
+instance_name=${1?Give name as first param}
 
-gcloud beta compute --project liquid-champion-135823 \
-	instances create dev-1 \
-	--zone us-central1-b \
-	--machine-type custom-1-1024 \
-	--subnet default \
+gcloud compute --project ${PROJECT} \
+	instances create ${instance_name} \
+	--zone=us-central1-a \
+	--machine-type=custom-1-1024 \
+	--network=wepay \
+	--subnet=airflow \
 	--maintenance-policy MIGRATE \
-	--service-account 324403848901-compute@developer.gserviceaccount.com \
+	--service-account 610649040664-compute@developer.gserviceaccount.com \
 	--scopes $( tr -s '[:space:]' , <<- EOF
 		https://www.googleapis.com/auth/devstorage.read_only
 		https://www.googleapis.com/auth/logging.write
@@ -18,11 +21,9 @@ gcloud beta compute --project liquid-champion-135823 \
 	EOF
 	) \
 	--min-cpu-platform Automatic \
-	--image "centos-7-v20180314" \
-	--image-project debian-cloud \
 	--boot-disk-size 10 \
 	--boot-disk-type pd-standard \
-	--boot-disk-device-name dev-1
+	--boot-disk-device-name ${instance_name}
 
 exit
 # Related REST
