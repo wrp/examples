@@ -35,6 +35,7 @@ exe '.[]'
 exe '.devices[] | objects.name'  # Print '"bcval"\n"doug"\n'
 exe '.devices[] | select (.name | startswith ("doug"))'
 exe '.devices[] | select (.name == "bcval")'
+exe '.devices[] | .name'
 
 
 # Select particular keys
