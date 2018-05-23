@@ -9,7 +9,9 @@ echo "$json" | jq -c '.[] | select(.genre | contains("house") and startswith("de
 
 
 json='{ "xc" : { "foo": ["a", "bc", "de"] , "bar": ["blah"], "baz":["bc"]}}'
-echo "$json" | jq -c '.[]'
+echo "$json" | jq -c '.[]' # {"foo":["a","bc","de"],"bar":["blah"],"baz":["bc"]}
+echo "$json" | jq -c '.xc.foo[1]' # "bc"
+echo "$json" | jq -r -c '.xc.foo[1]' # bc  (no quotes)
 echo "$json" | jq -c '.xc | objects | keys[]'   # Print "foo" and "bar"
 # echo "$json" | jq -c '.xc | keys[]'   # Print "foo" and "bar"
 
@@ -37,7 +39,7 @@ exe '.devices[] | select (.name == "bcval")'
 
 # Select particular keys
 json='[{"blah":"bar", "name":"barry","projectId":"barrys id"}, {"name":"foo"}]'
-echo "$json" | jq ".[] | {name: .name, id: .projectId}"
+echo "$json" | jq --tab ".[] | {name: .name, id: .projectId}"
 
 # output:
 # {
