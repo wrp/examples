@@ -51,4 +51,9 @@ echo "$json" | jq --tab ".[] | {name: .name, id: .projectId}"
 #   "name": "foo",
 #   "id": null
 # }
+json='[{"blah":"bar", "name":"barry","projectId":"barrys id"}, {"name":"foo"},
+	{ "k":{"z":{"name":"buried foo"}}}
+]'
+exe .
+exe '..|.name?' # Recursive descent
 

@@ -3,3 +3,5 @@
         tasks:
         -       name: test hostname
                 action: command hostname
+        -       name: pipe
+                action: command sh -c 'hostname | tr d z'
