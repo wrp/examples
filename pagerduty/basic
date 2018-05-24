@@ -9,8 +9,7 @@ query() {
 		-H "Authorization: Token token=$(cat ~/secrets/pagerduty/key-a4t1)" \
 		--data-urlencode 'limit=100' \
 		-X GET \
-		https://api.pagerduty.com/$1 \
-	| jq .
+		https://api.pagerduty.com/$1
 }
 
 for endpoint; do query $endpoint; done
