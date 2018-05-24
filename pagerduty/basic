@@ -1,0 +1,7 @@
+#!/bin/sh
+
+curl -sS \
+	-H 'Accept: application/vnd.pagerduty+json;version=2' \
+	-H "Authorization: Token token=$(cat ~/secrets/pagerduty/key-a4t1)" \
+	-X GET \
+	https://api.pagerduty.com/schedules
