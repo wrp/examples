@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Demonstrate various ways to insert newlines
+show() {
+	echo arguments:
+	i=0
+	for x; do printf "$((++i)):\t%s\n" "$x"; done
+}
+
+# Requires hard tabs
+show foo baa $( tr <<- EOF \\n , | sed -e 's/,$//'
+	this
+	should
+	be
+	a
+	comma
+	separated
+	list
+	EOF
+) qux
+
+# Allows leading spaces
+show foo baa $( tr <<- EOF -s ' \n' ,, | sed -e 's/^,//' -e 's/,$//'
+        this
+        should
+        be
+        a
+        comma
+        separated
+        list
+EOF
+) qux
