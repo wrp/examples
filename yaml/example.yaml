@@ -31,8 +31,13 @@ nospace3:
 
 nospace4: "\
         same as\
-        nospace 3"
+                nospace 3\
+        "
 
 "quoted":
         "wtf\
         will this do?"
+
+noquotes:
+        big\
+        query
