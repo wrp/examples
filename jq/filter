@@ -6,6 +6,7 @@ json='[{"genre":"deep house"}, {"genre": "progressive house"}, {"genre": "dubste
 
 echo "$json" | jq -c '.[] | select(.genre | contains("house"))'
 echo "$json" | jq -c '.[] | select(.genre | contains("house") and startswith("deep"))'
+echo "$json" | jq -c '.[] | select(.genre == "dubstep")'
 
 
 json='{ "xc" : { "foo": ["a", "bc", "de"] , "bar": ["blah"], "baz":["bc"]}}'
