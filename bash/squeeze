@@ -7,6 +7,18 @@ show() {
 	for x; do printf "$((++i)):\t%s\n" "$x"; done
 }
 
+csv() {
+	printf "%s" "$1"
+	shift
+	for x; do printf ",%s" "$x"; done
+}
+show foo bar $( csv \
+	this \
+	is a \
+	comma \
+	list \
+)
+
 # Requires hard tabs
 show foo baa $( tr <<- EOF \\n , | sed -e 's/,$//'
 	this
