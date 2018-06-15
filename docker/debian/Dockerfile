@@ -50,6 +50,7 @@ RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
 RUN apt-get update
 #RUN aptitude install -y prometheus=2.0.0+ds3-1
 RUN aptitude install -y git
+RUN aptitude install -y strace
 
 ENV DOCKER=1
 
