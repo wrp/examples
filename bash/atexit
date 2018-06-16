@@ -1,4 +1,5 @@
 #!/bin/bash
+# Define atexit as a function stack
 
 # This is a terrible approach: way too fragile with quoting characters
 atexit() {
@@ -34,6 +35,7 @@ var='this is the original value of var'
 foo
 var='this is the value assigned after the call'
 
+# This is a better approach
 atexit() {
 	cmd="${1%;}"
 	eval set -- $(trap -p EXIT)
@@ -41,4 +43,16 @@ atexit() {
 }
 atexit 'echo banana $LINENO;'
 atexit "echo split: $LINENO"
-echo "in main: $@"
+echo "in main:$@"
+
+exit 0
+== OUTPUT ==
+In USR1 trap for foo, var = this value is assigned at the top of foo
+In return trap for foo, var = this value is assigned at the end of foo
+in main:
+split: 45
+banana 48
+In exit trap, var = this is the value assigned after the call
+bin;qux
+bar
+foo'blah
