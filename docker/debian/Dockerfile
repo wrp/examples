@@ -1,6 +1,7 @@
 
 FROM debian
 RUN printf 'set editing-mode vi\nset keymap vi\n' > /etc/inputrc
+RUN printf 'bind -v\n' > /root/.editrc
 RUN apt-get update
 RUN apt-get -y install aptitude
 RUN aptitude install -y sudo
