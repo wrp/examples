@@ -37,6 +37,8 @@ RUN aptitude install -y tmux
 RUN aptitude install -y ansible
 RUN aptitude install -y ssh
 RUN aptitude install -y ncdu
+RUN aptitude install -y git
+RUN aptitude install -y strace
 #RUN aptitude install -y maven
 
 
@@ -46,11 +48,9 @@ RUN aptitude install -y ncdu
 #RUN locale-gen
 
 
-RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
-RUN apt-get update
+#RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
+#RUN apt-get update
 #RUN aptitude install -y prometheus=2.0.0+ds3-1
-RUN aptitude install -y git
-RUN aptitude install -y strace
 
 ENV DOCKER=1
 
