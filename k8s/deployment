@@ -1,0 +1,2 @@
+
+kubectl scale --replicas=0 deployment/${deployment}
