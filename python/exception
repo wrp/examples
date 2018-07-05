@@ -15,6 +15,15 @@ except (foo, bar) as e:
         os.path.basename(sys.argv[0]), "foo", "bar", e))
 
 
+print 're raise a foo'
+try:
+    raise foo("raised foo")
+except Exception as e:
+    raise e
+finally:
+    print 'finally in re-raised foo'
+    
+
 def f():
     try:
         print 'try'
@@ -49,3 +58,4 @@ except IOError as e:
 except Exception as e:
     raise SystemExit("{}: {}".format(
         os.path.basename(sys.argv[0]), e))
+
