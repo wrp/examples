@@ -1,11 +1,8 @@
 
-.PHONY: all anchor
+.PHONY: default
 
-list:
-	@python -c 'import yaml; import sys; print list(yaml.load_all(sys.stdin))[0:]' < list.yaml
+default: anchors example list variables
 
-anchor:
-	@python -c 'import yaml; import sys; print yaml.load(sys.stdin)' < anchors.yaml
-
-example:
-	@python -c 'import yaml; import sys; print yaml.load(sys.stdin)' < example.yaml
+%: %.yaml
+	echo $<
+	@python -c 'import yaml; import sys; print list(yaml.load_all(sys.stdin))[0:]' < $<
