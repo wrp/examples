@@ -1,8 +1,10 @@
 
-.PHONY: default
+files = $(shell ls *.yaml | sort)
 
-default: anchors example list variables
+
+.PHONY: default
+default: $(files:.yaml=)
 
 %: %.yaml
-	echo $<
+	@echo; echo $<
 	@python -c 'import yaml; import sys; print list(yaml.load_all(sys.stdin))[0:]' < $<
