@@ -24,3 +24,4 @@ ss  # obsoletes netstat
 nmon   # curses based wrapper to many subsystems
 pmap
 pstree
+sysctl -n hw.ncpu  # Number of logcial processors
