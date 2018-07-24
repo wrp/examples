@@ -42,7 +42,6 @@ RUN aptitude install -y git
 RUN aptitude install -y strace
 RUN aptitude install -y gcj-6-jdk
 RUN aptitude install -y maven
-RUN aptitude install -y docker-compose
 
 
 #COPY .tmux.conf /root
@@ -55,6 +54,15 @@ RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
 RUN apt-get update
 RUN aptitude install -y git=1:2.18.0-1
 #RUN aptitude install -y prometheus=2.0.0+ds3-1
+
+# Setup to install docker
+RUN aptitude install -y apt-transport-https ca-certificates curl gnupg2 \
+	software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian \
+      $(lsb_release -cs) stable"
+RUN apt-get update
+RUN aptitude install -y docker-ce
 
 ENV DOCKER=1
 
