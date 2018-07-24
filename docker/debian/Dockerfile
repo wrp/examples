@@ -40,7 +40,7 @@ RUN aptitude install -y ssh
 RUN aptitude install -y ncdu
 RUN aptitude install -y git
 RUN aptitude install -y strace
-RUN aptitude install -y gcj-6-jdk
+RUN aptitude install -y openjdk-8-jdk
 RUN aptitude install -y maven
 
 
@@ -65,6 +65,9 @@ RUN apt-get update
 RUN aptitude install -y docker-ce
 
 ENV DOCKER=1
+ENV DOCKER_HOST=tcp://10.1.2.2:2376
+ENV DOCKER_CERT_PATH=/path/to/cdk/.vagrant/machines/default/virtualbox/.docker
+ENV DOCKER_TLS_VERIFY=1
 
 ADD sudoers /etc/sudoers
 RUN adduser --quiet williamp
