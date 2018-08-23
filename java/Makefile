@@ -3,6 +3,8 @@ all: hello.class william/properties.class
 	java -cp . hello
 	printf 'baz=qux' | java -cp . william.properties
 
+hello: hello.class
+	java -cp . hello
 
 
 hello.class: hello.java
