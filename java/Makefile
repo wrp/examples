@@ -11,7 +11,7 @@ hello.class: hello.java
 	javac hello.java
 
 snakeyaml-1.9.jar.zip:
-	curl http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
+	curl -Ss http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
 
 snakeyaml-1.9.jar: snakeyaml-1.9.jar.zip
 	unzip snakeyaml-1.9.jar.zip
