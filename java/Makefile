@@ -1,7 +1,9 @@
 
-all: hello.class william/properties.class
-	java -cp . hello
-	printf 'baz=qux' | java -cp . william.properties
+.PHONY: all properties hello
+all: hello properties
+
+properties:
+	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar william.properties
 
 hello: hello.class
 	java -cp . hello
@@ -23,6 +25,7 @@ william/properties.class: properties.java snakeyaml-1.9.jar
 clean:
 	rm -rf william
 	find . -name '*.class' -delete
+	rm -f snakeyml-1.9.jar*
 
 
 .PHONY: clean all
