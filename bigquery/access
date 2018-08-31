@@ -1,0 +1,4 @@
+
+bq show --format=prettyjson ${PROJECT?}:${DATASET?} > ${OUTPUT_FILE?}
+${EDITOR?} ${OUTPUT_FILE?}
+bq update --source ${OUTPUT_FILE?} ${PROJECT?}:${DATASET?} 
