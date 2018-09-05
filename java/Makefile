@@ -2,12 +2,11 @@
 .PHONY: all properties hello
 all: hello properties
 
-properties:
+properties: william/properties.class
 	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar william.properties
 
 hello: hello.class
-	java -cp . hello
-
+	java hello
 
 hello.class: hello.java
 	javac hello.java
