@@ -3,7 +3,7 @@
 # openssl rsa -in private_key.pem -pubout -out public_key.pem
 
 
-
+==============
 script from https://dev.mysql.com/doc/refman/8.0/en/creating-ssl-files-using-openssl.html
 # Create clean environment
 rm -rf newcerts
@@ -15,14 +15,34 @@ openssl req -new -x509 -nodes -days 3600 -key ca-key.pem -out ca.pem
 
 # Create server certificate, remove passphrase, and sign it
 # server-cert.pem = public key, server-key.pem = private key
-openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out server-req.pem
-openssl rsa -in server-key.pem -out server-key.pem
-openssl x509 -req -in server-req.pem -days 3600 \
+openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out server-req.pem \
+&& openssl rsa -in server-key.pem -out server-key.pem \
+&& openssl x509 -req -in server-req.pem -days 3600 \
         -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
 
 # Create client certificate, remove passphrase, and sign it
 # client-cert.pem = public key, client-key.pem = private key
-openssl req -newkey rsa:2048 -days 3600 -nodes -keyout client-key.pem -out client-req.pem
-openssl rsa -in client-key.pem -out client-key.pem
-openssl x509 -req -in client-req.pem -days 3600 \
+openssl req -newkey rsa:2048 -days 3600 -nodes -keyout client-key.pem -out client-req.pem \
+&& openssl rsa -in client-key.pem -out client-key.pem \
+&& openssl x509 -req -in client-req.pem -days 3600 \ 
         -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
+
+
+==============
+And from https://serverfault.com/questions/622317/mysql-ssl-bad-other-signature-confirmation
+
+openssl genrsa 2048 > ca-key.pem
+openssl req -sha1 -new -x509 -nodes -days 3650 -key ca-key.pem > ca-cert.pem
+
+# Create server key and certficate with SHA1 digest, sign it and convert
+# the RSA key from PKCS #8 (OpenSSL 1.0 and newer) to the old PKCS #1 format
+
+openssl req -sha1 -newkey rsa:2048 -days 3650 -nodes -keyout server-key.pem > server-req.pem \
+&& openssl x509 -sha1 -req -in server-req.pem -days 3650 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > server-cert.pem \
+&& openssl rsa -in server-key.pem -out server-key.pem;
+
+# Create client key and certificate with SHA digest, sign it and convert
+# the RSA key from PKCS #8 (OpenSSL 1.0 and newer) to the old PKCS #1 format
+openssl req -sha1 -newkey rsa:2048 -days 3650 -nodes -keyout client-key.pem > client-req.pem \
+&& openssl x509 -sha1 -req -in client-req.pem -days 3650 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > client-cert.pem \
+&& openssl rsa -in client-key.pem -out client-key.pem;

@@ -4,7 +4,9 @@
 import sys
 import json
 d = json.load(sys.stdin)
+
 print d
+print d.get('foo','default')
 
 #k = {'foo':'bar'}
 
