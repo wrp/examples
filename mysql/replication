@@ -1,0 +1,5 @@
+
+On master:
+
+mysql> show master logs;                                          # See binary log names
+mysql> show binlog events in 'some-name-from-show-master-logs';   # Show events
