@@ -16,7 +16,7 @@ def cli():
 @cli.command(short_help='short help')
 @click.argument('name')
 @click.option('-g', '--greeting')
-@click.option('-c', help='use all caps')
+@click.option('-c', is_flag=True, help='use all caps')
 def greet(name, greeting, c):
     """Hello world"""
 
