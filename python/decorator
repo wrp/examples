@@ -21,4 +21,26 @@ def bar(arg):
     return baz
 
 
-bar(9)
+print 'calling bar'
+k = bar(9)
+print 'bar returned:', k
+
+
+def wr2(func):
+    def rv(arg):
+        print "in wr2 rv"
+        return func(arg) + 1
+    return rv
+
+def wr1(func):
+    def rv(arg):
+        print "in wr1 rv"
+        return func(arg) + 3
+    return rv
+
+@wr2
+@wr1
+def sum(arg):
+    return arg + 2
+
+print sum(1)
