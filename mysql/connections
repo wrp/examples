@@ -1,0 +1,6 @@
+show processlist;
+
+SHOW STATUS WHERE variable_name = 'Threads_connected';
+SHOW STATUS WHERE variable_name = 'Max_used_connections';
+
+https://stackoverflow.com/questions/7432241/mysql-show-status-active-or-total-connections
