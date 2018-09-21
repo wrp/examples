@@ -1,0 +1,3 @@
+
+# Give act read access to a file
+gsutil acl ch -u ${act:?}:R gs://$project/$file
