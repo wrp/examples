@@ -1,0 +1,5 @@
+
+jdb is pretty barebones.  To make it usable, use 'rlwrap -H ~/.jdbhistory -z pipeto jdb'
+
+basic commands:
+jdb> stop in class.method
