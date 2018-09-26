@@ -3,3 +3,52 @@ jdb is pretty barebones.  To make it usable, use 'rlwrap -H ~/.jdbhistory -z pip
 
 basic commands:
 jdb> stop in class.method
+
+The following is from:
+https://docs.oracle.com/javase/7/docs/technotes/tools/windows/jdb.html
+
+run: After starting jdb, and setting any necessary breakpoints, you can use this command
+     to start the execution the debugged application. This command is
+     available only when jdb launches the debugged application (as opposed
+     to attaching to an existing VM).  
+
+cont: Continues execution of the debugged application after a breakpoint, exception, or step.  print
+      Displays Java objects and primitive values. For variables or fields
+      of primitive types, the actual value is printed. For objects, a
+      short description is printed. See the dump command below for getting
+      more information about an object.  NOTE: To display local variables,
+      the containing class must have been compiled with the javac -g
+      option.
+
+print: supports many simple Java expressions including those with
+       method invocations, for example:
+
+       print MyClass.myStaticField print myObj.myInstanceField print i +
+       j + k (i, j, k are primities and either fields or local variables)
+       print myObj.myMethod() (if myMethod returns a non-null) print new
+       java.lang.String("Hello").length() dump For primitive values, this
+       command is identical to print. For objects, it prints the current
+       value of each field defined in the object. Static and instance
+       fields are included.  The dump command supports the same set of
+       expressions as the print command.
+
+threads: List the threads that are currently running. For each thread,
+         its name and current status are printed, as well as an index that
+         can be used for other commands, for example: 4. (java.lang.Thread)0x1
+         main      running In this example, the thread index is 4, the thread
+         is an instance of java.lang.Thread, the thread name is "main", and
+         it is currently running, thread Select a thread to be the current
+         thread. Many jdb commands are based on the setting of the current
+         thread. The thread is specified with the thread index described in
+         the threads command above.  
+         
+where: where with no arguments dumps the
+       stack of the current thread.
+       
+where all: dumps the stack of all threads
+         in the current thread group. where threadindex dumps the stack of
+         the specified thread.  If the current thread is suspended (either
+         through an event such as a breakpoint or through the suspend command),
+         local variables and fields can be displayed with the print and dump
+         commands. The up and down commands select which stack frame is
+         current.
