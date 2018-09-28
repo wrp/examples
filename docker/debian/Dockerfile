@@ -63,6 +63,7 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debia
       $(lsb_release -cs) stable"
 RUN apt-get update
 RUN aptitude install -y docker-ce
+RUN aptitude install -y rlwrap
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
