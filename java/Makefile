@@ -26,10 +26,10 @@ clean:
 	find . -name '*.class' -delete
 	rm -f snakeyml-1.9.jar*
 
-jdb:
+jdb: hello.class
 	@# Set breakpoint: stop at hello:4
 	@# run: run, step, next, cont
 	java -agentlib:jdwp=transport=dt_socket,server=y,address=8394 hello &
 	rlwrap -H ~/.jdbhistory -z pipeto jdb -attach 8394
 
-.PHONY: clean all
+.PHONY: clean all jdb
