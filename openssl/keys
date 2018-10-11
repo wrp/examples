@@ -1,3 +1,5 @@
+Good write up at
+https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs/
 
 # openssl genrsa -out private_key.pem 2048
 # openssl rsa -in private_key.pem -pubout -out public_key.pem
