@@ -24,12 +24,11 @@ json='{ "devices" : [ {"id" : 0, "name": "bcval" }, {"id":1, "name":"doug"}],
 	"buckets" : [ {"id" : 0, "name": "doug" }, {"id":1, "name":"banana"}]
 }'
 
-echo
-echo json="$json"
 exe() {
 	cmd=$1
+	echo "input: $json"
 	echo jq -c "'$cmd'"
-	echo $json | eval jq -c "'$cmd'"
+	echo "$json" | eval jq -c "'$cmd'"
 }
 exe '.'
 exe '.[]'
@@ -57,4 +56,8 @@ json='[{"blah":"bar", "name":"barry","projectId":"barrys id"}, {"name":"foo"},
 ]'
 exe .
 exe '..|.name?' # Recursive descent
+
+# Pick multiple keys
+json='[{"a":"a1", "b":"b1","c":"c1"},{"a":"a2", "b":"b2","c":"c2"}]'
+exe '.[] | [.a,.c]'
 
