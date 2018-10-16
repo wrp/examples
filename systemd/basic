@@ -1,0 +1,21 @@
+
+Drop this file in /etc/systemd/system with a 
+name $name.service, and that's all there is to it.
+Then 'sudo systemctl start $name' will start the service
+
+===========
+
+[Unit]
+Description=systemd demo service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=me
+ExecStart=/path/to/executable with arguments
+
+[Install]
+WantedBy=multi-user.target
