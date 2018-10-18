@@ -6,7 +6,7 @@ properties: william/properties.class
 	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar william.properties
 
 hello: hello.class
-	java hello
+	java hello $(USER)
 
 hello.class: hello.java
 	javac hello.java
