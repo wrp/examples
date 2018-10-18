@@ -33,6 +33,10 @@ nospace4: "\
         same as\
                 nospace 3\
         "
+nospace5: >-
+        "this has\
+        a backslash and a space between 'has' and 'a', and no trailing newline"
+
 
 "quoted":
         "wtf\

@@ -1,9 +1,15 @@
 
-Drop this file in /etc/systemd/system with a 
-name $name.service, and that's all there is to it.
-Then 'sudo systemctl start $name' will start the service
+# Drop this file  in /etc/systemd/system with a name $name.service,
+# and that's all there is to it.  Then 'sudo systemctl start $name'
+# will start the service
 
-===========
+# See also:
+#     systemd.service
+#     systemd.directives
+#     systemd.exec
+#     systemd.unit
+#     systemd-system.conf
+
 
 [Unit]
 Description=systemd demo service
