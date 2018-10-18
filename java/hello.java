@@ -1,5 +1,7 @@
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.lang.StringBuilder;
 
 public class hello {
 	public static void main(String args[]) {
@@ -13,11 +15,10 @@ public class hello {
 
 		/* Read name from a file */
 		try {
-			FileInputStream f = new FileInputStream(args[0]);
-			int c;
-			while(( c = f.read()) != -1) {
-				System.out.print((char)c);
-			}
+			BufferedReader br = new BufferedReader(new FileReader(args[0]));
+			StringBuilder sb = new StringBuilder();
+			String t = br.readLine();
+			System.out.println( String.format("Hello, %s!", t));
 		}
 		catch( Exception e) {
 			System.err.print(e + "\n");
