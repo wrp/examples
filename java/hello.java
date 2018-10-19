@@ -1,6 +1,7 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.StringBuilder;
 
 public class hello {
@@ -20,7 +21,7 @@ public class hello {
 			String t = br.readLine();
 			System.out.println( String.format("Hello, %s!", t));
 		}
-		catch( Exception e) {
+		catch(IOException e) {
 			System.err.print(e + "\n");
 		}
 	}
