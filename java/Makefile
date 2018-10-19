@@ -1,6 +1,6 @@
 
-.PHONY: all properties hello
-all: hello properties
+.PHONY: all properties hello array
+all: hello properties array
 
 properties: william/properties.class
 	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar william.properties
@@ -8,8 +8,11 @@ properties: william/properties.class
 hello: hello.class
 	java hello $(USER)
 
-hello.class: hello.java
-	javac hello.java
+array: array.class
+	java array
+
+%.class: %.java
+	javac $<
 
 snakeyaml-1.9.jar.zip:
 	curl -Ss http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
