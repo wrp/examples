@@ -12,7 +12,8 @@ array: array.class
 	java array
 
 log: log.class
-	java -cp '.:apache-log4j-1.2.17/*' log
+	java -Dlog4j.configuration=file:$(PWD)/config/log4j \
+		-cp '.:apache-log4j-1.2.17/*' log
 
 %.class: %.java
 	javac -cp '.:apache-log4j-1.2.17/*' $<
