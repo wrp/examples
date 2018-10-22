@@ -4,3 +4,5 @@ gcloud compute instances list
 
 # activate credentials
 gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
+
+gcloud auth list
