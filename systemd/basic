@@ -14,12 +14,11 @@
 [Unit]
 Description=systemd demo service
 After=network.target
-StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-Restart=always
-RestartSec=1
+Restart=always  # default is no
+RestartSec=1    # Time to sleep before restarting Defaults to 100ms
 User=me
 ExecStart=/path/to/executable with arguments
 
