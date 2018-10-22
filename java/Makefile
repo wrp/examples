@@ -11,8 +11,11 @@ hello: hello.class
 array: array.class
 	java array
 
+log: log.class
+	java -cp '.:apache-log4j-1.2.17/*' log
+
 %.class: %.java
-	javac $<
+	javac -cp '.:apache-log4j-1.2.17/*' $<
 
 snakeyaml-1.9.jar.zip:
 	curl -Ss http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
