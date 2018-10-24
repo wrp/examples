@@ -5,18 +5,6 @@ import java.util.Map;
 
 
 public class map_example {
-	static class cmdlinearg {
-		public String short_name;
-		public String description;
-		public Boolean required;
-
-		cmdlinearg(String short_name, String description, Boolean req) {
-			this.short_name = short_name;
-			this.description = description;
-			this.required = req;
-		}
-	}
-
 	public static void main(String args[]) {
 		Map<Integer, String> m = new HashMap<Integer, String>();
 		m.put(5, "five");
@@ -32,4 +20,16 @@ public class map_example {
 		}  
 		System.out.println("direct access: " + v.get("test").description);
 	}
+	static class cmdlinearg {
+		public String short_name;
+		public String description;
+		public Boolean required;
+
+		cmdlinearg(String short_name, String description, Boolean req) {
+			this.short_name = short_name;
+			this.description = description;
+			this.required = req;
+		}
+	}
+
 }
