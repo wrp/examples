@@ -1,0 +1,7 @@
+
+# Examples of how to use :g
+
+# Pipe all lines matching "pat" to a command
+# See https://stackoverflow.com/questions/52989896
+:g/pat/.!tr h z
+
