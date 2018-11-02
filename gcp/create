@@ -62,6 +62,10 @@ SYNOPSIS
         [--no-require-csek-key-create] [--no-restart-on-failure]
         [--source-instance-template=SOURCE_INSTANCE_TEMPLATE] [--subnet=SUBNET]
         [--tags=TAG,[TAG,...]] [--zone=ZONE] [--address=ADDRESS | --no-address]
+        [--boot-disk-kms-key=BOOT_DISK_KMS_KEY
+          : --boot-disk-kms-keyring=BOOT_DISK_KMS_KEYRING
+          --boot-disk-kms-location=BOOT_DISK_KMS_LOCATION
+          --boot-disk-kms-project=BOOT_DISK_KMS_PROJECT]
         [--custom-cpu=CUSTOM_CPU --custom-memory=CUSTOM_MEMORY
           : --custom-extensions]
         [--image-project=IMAGE_PROJECT --image=IMAGE
@@ -206,6 +210,40 @@ FLAGS
             the instance, this option won't apply. The default value for this
             is no.
 
+         kms-key
+            Fully qualified Cloud KMS cryptokey name that will protect the
+            disk. This can either be the fully qualified path or the name. The
+            fully qualified Cloud KMS cryptokey name format is:
+            projects/<kms-project>/locations/<kms-location>/keyRings/<kms-keyring>/
+            cryptoKeys/<key-name>. If the value is not fully qualified then
+            kms-location, kms-keyring, and optionally kms-project are required.
+            See
+            https://cloud.google.com/compute/docs/disks/customer-managed-encryption
+            for more details.
+
+         kms-project
+            Project that contains the Cloud KMS cryptokey that will protect the
+            disk. If the project is not specified then the project where the
+            disk is being created will be used. If this flag is set then
+            key-location, kms-keyring, and kms-key are required. See
+            https://cloud.google.com/compute/docs/disks/customer-managed-encryption
+            for more details.
+
+         kms-location
+            Location of the Cloud KMS cryptokey to be used for protecting the
+            disk. All Cloud KMS cryptokeys are reside in a 'location'. To get a
+            list of possible locations run 'gcloud kms locations list'. If this
+            flag is set then kms-keyring and kms-key are required. See
+            https://cloud.google.com/compute/docs/disks/customer-managed-encryption
+            for more details.
+
+         kms-keyring
+            The keyring which contains the Cloud KMS cryptokey that will
+            protect the disk. If this flag is set then kms-location and kms-key
+            are required. See
+            https://cloud.google.com/compute/docs/disks/customer-managed-encryption
+            for more details.
+
      --csek-key-file=FILE
         Path to a Customer-Supplied Encryption Key (CSEK) key file, mapping
         Google Compute Engine resources to user managed keys to be used when
@@ -264,8 +302,6 @@ FLAGS
 
      --local-ssd=[device-name=DEVICE-NAME],[interface=INTERFACE]
         Attaches a local SSD to the instances.
-
-        This flag is currently in BETA and may change without notice.
 
          device-name
             Optional. A name that indicates the disk name the guest operating
@@ -487,6 +523,24 @@ FLAGS
           If provided, the instances will not be assigned external IP
           addresses.
 
+     Key resource - The Cloud KMS (Key Management Service) cryptokey that will
+     be used to protect the disk. The arguments in this group can be used to
+     specify the attributes of this resource.
+
+       --boot-disk-kms-key=BOOT_DISK_KMS_KEY
+          ID of the key or fully qualified identifier for the key. This flag
+          must be specified if any of the other arguments in this group are
+          specified.
+
+       --boot-disk-kms-keyring=BOOT_DISK_KMS_KEYRING
+          The KMS keyring of the key.
+
+       --boot-disk-kms-location=BOOT_DISK_KMS_LOCATION
+          The Cloud location for the key.
+
+       --boot-disk-kms-project=BOOT_DISK_KMS_PROJECT
+          The Cloud project for the key.
+
      Custom machine type extensions.
 
        --custom-cpu=CUSTOM_CPU
@@ -692,10 +746,3 @@ EXAMPLES
         $ gcloud compute instances create example-instance \
             --image-family rhel-7 --image-project rhel-cloud \
             --zone us-central1-a
-
-NOTES
-    These variants are also available:
-
-        $ gcloud alpha compute instances create
-        $ gcloud beta compute instances create
-
