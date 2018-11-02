@@ -1,3 +1,5 @@
+#list projects
+gcloud projects list
 
 # list instances:
 gcloud compute instances list
