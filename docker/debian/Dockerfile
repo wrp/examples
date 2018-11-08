@@ -52,7 +52,7 @@ RUN aptitude install -y maven
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
 RUN apt-get update
-RUN aptitude install -y git=1:2.18.0-1
+# RUN aptitude install -y git=1:2.18.0-1
 #RUN aptitude install -y prometheus=2.0.0+ds3-1
 
 # Setup to install docker
