@@ -9,3 +9,9 @@ keytool \
 	-storepass password \
 	-validity 360 \
 	-keysize 2048
+
+Export a certificate from a keystore:
+
+keytool -export -keystore ${keystore_file}.jks \
+	-alias ${alias} \
+	-file ${output_file}.cer

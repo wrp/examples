@@ -64,9 +64,9 @@ openssl req \
 
 # Create a private key and a self-signed certificate
 openssl req \
-	-newkey rsa:2048 \
+	-newkey rsa:${size_of_key_in_bits-2048} \
 	-nodes \
-	-keyout domain.key \
+	-keyout ${output_file_for_key?}.key \
 	-x509 \
-	-days 365 \
-	-out domain.crt
+	-days ${days_until_expiration:-365} \
+	-out ${output_file?}.crt
