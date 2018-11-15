@@ -1,0 +1,23 @@
+
+Get private keys out of a keystore:
+
+# Find the desired alias
+$ alias=$(keytool -list -v ${pass+-storepass $pass} -keystore ${keystore?} \
+	| awk '/Alias name:/ { print $3}')
+
+# Convert the keystore to p12
+$ keytool -importkeystore \
+	-srckeystore ${keystore?} \
+	${pass+-srcstorepass ${pass}} \
+	${pass+-srckeypass ${pass}} \
+	-destkeystore ${keystore%.jks}.p12 \
+	-deststoretype PKCS12 \
+	-srcalias ${alias?} \
+	-deststorepass ${storepassword?} \
+	-destkeypass ${keypassword?}
+
+# Get the keys
+$ openssl pkcs12 -in ${keystore%.jks}.p12 -nodes -nocerts -out ${keystore%.jks}.key
+
+# Get the certs
+$ openssl pkcs12 -in ${keystore%.jks}.p12 -nodes -nokeys -out ${keystore%.jks}.pem
