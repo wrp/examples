@@ -64,6 +64,7 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debia
 RUN apt-get update
 RUN aptitude install -y docker-ce
 RUN aptitude install -y rlwrap
+RUN aptitude install -y zlib1g-dev
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
