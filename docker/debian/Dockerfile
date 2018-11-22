@@ -65,6 +65,7 @@ RUN apt-get update
 RUN aptitude install -y docker-ce
 RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
+RUN aptitude install -y exuberant-ctags
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
