@@ -8,13 +8,13 @@ $ alias=$(keytool -list -v ${pass+-storepass $pass} -keystore ${keystore?} \
 # Convert the keystore to p12
 $ keytool -importkeystore \
 	-srckeystore ${keystore?} \
-	${pass+-srcstorepass ${pass}} \
-	${pass+-srckeypass ${pass}} \
+	${srcstorepass+-srcstorepass ${srcstorepass}} \
+	${srckeypass+-srckeypass ${srckeypass}} \
 	-destkeystore ${keystore%.jks}.p12 \
-	-deststoretype PKCS12 \
+	-deststoretype pkcs12 \
 	-srcalias ${alias?} \
-	-deststorepass ${storepassword?} \
-	-destkeypass ${keypassword?}
+	${deststorepass+-deststorepass ${deststorepass}} \
+	${destkeypass+-destkeypass ${destkeypass}}
 
 # Get the keys
 $ openssl pkcs12 -in ${keystore%.jks}.p12 -nodes -nocerts -out ${keystore%.jks}.key
