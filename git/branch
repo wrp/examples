@@ -1,0 +1,3 @@
+
+# Move a branch to a new commit
+git branch -f branch-name new-tip-commit
