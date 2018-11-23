@@ -6,6 +6,6 @@ build:
 	docker build -t $(NAME) .
 
 run:
-	docker run -it -p 8125 -v $$HOME:/home/william $(NAME)
+	docker run -it -p 8125 -v $$HOME:/home/docker_user $(NAME)
 
 .PHONY: all build run

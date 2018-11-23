@@ -9,7 +9,7 @@ RUN yum install -y ruby-devel
 RUN gem install fpm
 
 ADD sudoers /etc/sudoers
-RUN adduser william
+RUN adduser docker_user
 CMD bash
 
 EXPOSE 8125

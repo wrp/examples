@@ -15,7 +15,7 @@ RUN yum install -y ruby-devel
 RUN gem install fpm
 
 ADD sudoers /etc/sudoers
-RUN adduser william
+RUN adduser centos_docker_user
 RUN yum install -y sudo
 RUN yum install -y wget
 RUN yum install -y rpm-build

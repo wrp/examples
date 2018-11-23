@@ -73,7 +73,7 @@ ENV DOCKER_CERT_PATH=/path/to/cdk/.vagrant/machines/default/virtualbox/.docker
 ENV DOCKER_TLS_VERIFY=1
 
 ADD sudoers /etc/sudoers
-RUN adduser --quiet williamp
-CMD sudo DOCKER=1 -u williamp bash
+RUN adduser --quiet docker_user
+CMD sudo DOCKER=1 -u docker_user bash
 
 EXPOSE 8125

@@ -1,5 +1,5 @@
 
-package william;
+package subdir;
 import java.util.Properties;
 import java.io.FileInputStream;
 import org.yaml.snakeyaml.Yaml;

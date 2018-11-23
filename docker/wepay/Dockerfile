@@ -5,7 +5,7 @@ RUN yum install -y sudo
 RUN yum install -y gcc
 
 ADD sudoers /etc/sudoers
-RUN adduser william
+RUN adduser docker_user
 CMD bash
 
 EXPOSE 8125

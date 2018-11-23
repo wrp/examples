@@ -2,8 +2,8 @@
 .PHONY: all properties hello array
 all: hello properties array
 
-properties: william/properties.class
-	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar william.properties
+properties: subdir/properties.class
+	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar subdir.properties
 
 hello: hello.class
 	java hello $(USER)
@@ -25,11 +25,11 @@ snakeyaml-1.9.jar: snakeyaml-1.9.jar.zip
 	unzip snakeyaml-1.9.jar.zip
 	touch snakeyaml-1.9.jar  # Update timestamp
 
-william/properties.class: properties.java snakeyaml-1.9.jar
+subdir/properties.class: properties.java snakeyaml-1.9.jar
 	javac -cp snakeyaml-1.9.jar -d . properties.java
 
 clean:
-	rm -rf william
+	rm -rf subdir
 	find . -name '*.class' -delete
 	rm -f snakeyml-1.9.jar*
 

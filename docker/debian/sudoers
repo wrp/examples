@@ -1,4 +1,4 @@
 root ALL=(ALL) ALL
-williamp ALL=(ALL) NOPASSWD:ALL
+docker_user ALL=(ALL) NOPASSWD:ALL
 
 Defaults env_keep += "SSH_CLIENT SSH_USER"
