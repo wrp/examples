@@ -1,0 +1,23 @@
+
+To create a disk image:
+
+https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images
+
+Mount the disk on a vm and get it to the state you want.  The docs claim you can
+create the image while it's attached, but that appears to be untrue (as of
+Google Cloud SDK 226.0.0, bq 2.0.38, core 2018.11.16, gsutil 4.34), as I'm
+getting the error:
+
+ - The disk resource '..<disk name>..' is already being used by '..<instance name>..''
+
+ So stop the vm, then run:
+
+ gcloud compute images create ${image_name?} \
+	--source-disk ${ref_to_disk?} \
+	--source-disk-zone ${zone-us-central1-b} \
+	${family+--family ${family}}
+
+image_name is the name you are giving to the new disk
+ref_to_disk can be found from the description of the vm. eg:
+      'https://www.googleapis.com/compute/v1/projects/.../zones/us-central1-b/disks/...'
+
