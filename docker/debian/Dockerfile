@@ -67,6 +67,11 @@ RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
 RUN aptitude install -y exuberant-ctags
 
+# Fix locales for tmux
+RUN aptitude install -y locales
+RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
+RUN locale-gen
+
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
 ENV DOCKER_CERT_PATH=/path/to/cdk/.vagrant/machines/default/virtualbox/.docker
