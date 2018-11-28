@@ -7,7 +7,9 @@ qux ?= conditional assignment
 
 all:
 	echo foo
-	echo test :+ $${TMP:+TMP is $(TMP)}
+	#
+	# Whitespace is preserved in both expansions here:
+	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
 
 
 ifeq '$(qux)' 'foo'
