@@ -6,20 +6,11 @@ qux ?= conditional assignment
 # qan != echo shell expanded var
 
 all:
-	echo foo
+	@echo  Run in Makefile
 	#
 	# Whitespace is preserved in both expansions here:
 	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
 
-
-ifeq '$(qux)' 'foo'
-
-else ifeq '$(qux)' 'qux'
-	$(error qux "$(env)")
-else
-	$(warn qux not set)
-endif
- 
 
 other:
 	echo foo = $(foo)
