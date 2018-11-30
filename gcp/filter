@@ -1,0 +1,5 @@
+
+
+Select all vms with a given network tag:
+
+gcloud compute instances list --filter=tags.items=${tag?}
