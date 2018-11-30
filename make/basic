@@ -1,0 +1,5 @@
+
+Order of file lookup:
+	GNUmakefile
+	makefile
+	Makefile
