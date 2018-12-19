@@ -15,6 +15,7 @@ parse_args() {
 }
 
 parse_args "$@"
+# Reset OPTIND=1 if you call getops again
 
 shift $(($OPTIND-1))
 echo FLAG_C=$FLAG_C

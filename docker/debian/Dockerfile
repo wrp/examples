@@ -66,6 +66,7 @@ RUN aptitude install -y docker-ce
 RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
 RUN aptitude install -y exuberant-ctags
+RUN aptitude install -y jq
 
 # Fix locales for tmux
 RUN aptitude install -y locales
