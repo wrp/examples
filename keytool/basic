@@ -1,17 +1,19 @@
 
-Create self-signed certificate:
-
+# Create new keystore
 keytool \
 	-genkey \
 	-keyalg RSA \
-	-alias selfsigned \
-	-keystore keystore.jks \
-	-storepass password \
+	-alias ${alias?} \
+	-keystore ${keystore?}.jks \
+	-storepass ${storepass:-${password?}} \
+	-keypass ${keypass:-${password?}} \
 	-validity 360 \
-	-keysize 2048
+	-keysize 2048 \
+	-dname CN=${common_name?},OU=${org_unit?},$( :
+		)O=${org?},L=${locality},ST=${state},C=US
 
-Export a certificate from a keystore:
 
+# Export a certificate from a keystore:
 keytool -export -keystore ${keystore_file}.jks \
 	-alias ${alias} \
 	-file ${output_file}.cer
