@@ -12,6 +12,13 @@ keytool \
 	-dname CN=${common_name?},OU=${org_unit?},$( :
 		)O=${org?},L=${locality},ST=${state},C=US
 
+# Generate a csr ($alias and $keystore are from above)
+keytool -certreq \
+	-alias ${alias?} \
+	-keyalg RSA \
+	-file ${domain?}.csr \
+	-keystore ${keystore?}.jks
+
 
 # Export a certificate from a keystore:
 keytool -export -keystore ${keystore_file}.jks \
