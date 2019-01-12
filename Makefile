@@ -3,5 +3,7 @@
 passwd: password
 password:
 	@perl -E '@s = (A..Z,a..z,0..9); $$s .= $$s[rand @s] for 1..12; say $$s' \
-	| tee /dev/tty | if env <&- | grep -q TMUX; then tmux load-buffer - && \
-	echo "^^ copied to tmux paste buffer"; fi
+	| { while read line; do echo "$$line" >&3; echo "$$line"; done \
+	| if env <&- | grep -q TMUX; then tmux load-buffer - && \
+	echo "^^ copied to tmux paste buffer" >&2; fi; } 3>&1 \
+	| pbcopy

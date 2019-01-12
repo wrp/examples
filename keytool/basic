@@ -19,6 +19,9 @@ keytool -certreq \
 	-file ${domain?}.csr \
 	-keystore ${keystore?}.jks
 
+# List aliases in a keysotre
+keytool -list -v -keystore ${keystore_file}.jks
+
 
 # Export a certificate from a keystore:
 keytool -export -keystore ${keystore_file}.jks \

@@ -3,3 +3,9 @@ On master:
 
 mysql> show master logs;                                          # See binary log names
 mysql> show binlog events in 'some-name-from-show-master-logs';   # Show events
+
+
+Create a snapshot:  ("take a dump")
+mysqldump --databases ${database?} --single-transaction --triggers --routines --host=${sql_ip?} \
+	--port=3306 --user=${db_user?} --password=${password?} --ssl-ca=server-ca.pem \
+	--ssl-cert=client-cert.pem --ssl-key=client-key.pem > ${database}.sql
