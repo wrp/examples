@@ -1,0 +1,66 @@
+
+# Following the tutorial at https://jamielinux.com/docs/openssl-certificate-authority/create-the-root-pair.html
+
+# Steps to create a root CA.
+
+# Create the directory structure. The index.txt and serial files act as a flat file database to keep track of signed certificates.
+mkdir /root/ca
+
+cd /root/ca
+mkdir certs crl newcerts private
+chmod 700 private
+touch index.txt
+echo 1000 > serial
+
+# Create the root key
+openssl genrsa -aes256 -out private/ca.key.pem 4096
+
+# Create root certificate
+openssl req -config openssl.cnf \
+	-key private/ca.key.pem \
+	-new -x509 -days 7300 -sha256 -extensions v3_ca \
+	-out certs/ca.cert.pem \
+	-subj "/C=US/ST=${State?}/L=${Locality?}/O=${Org?}/CN=$USER root CA"
+chmod 444 certs/ca.cert.pem
+
+# Create /root/ca/intermediate with similar directory structure, copy the
+# openssl.cnf with minor modifications (change dir, private_key, certificate,
+# crl, and policy in CA_default.  Everything else is the same)
+#
+# (Still in /root/ca directory:
+openssl genrsa -aes256 -out intermediate/private/intermediate.key.pem 4096
+chmod 400 intermediate/private/intermediate.key.pem
+
+# Use the intermediate key to create a CSR
+openssl req -config intermediate/openssl.cnf -new -sha256 \
+	-key intermediate/private/intermediate.key.pem \
+	-out intermediate/csr/intermediate.csr.pem \
+	-subj "/C=US/ST=${State?}/L=${Locality?}/O=${Org?}/CN=$USER intermediate CA"
+
+# Sign the intermediate using the root CA
+openssl ca -config openssl.cnf -extensions v3_intermediate_ca \
+       -days 3650 -notext -md sha256 \
+       -in intermediate/csr/intermediate.csr.pem \
+       -out intermediate/certs/intermediate.cert.pem
+chmod 444 intermediate/certs/intermediate.cert.pem
+
+# Verify the certificate against the root CA
+openssl verify -CAfile certs/ca.cert.pem intermediate/certs/intermediate.cert.pem
+
+# Generate a key for a client (add -aes256 option to give a password)
+openssl genrsa -out intermediate/private/client.key.pem 2048
+chmod 400 intermediate/private/client.key.pem
+
+# Create a csr for the client key:
+openssl req -config intermediate/openssl.cnf \
+	-key intermediate/private/client.key.pem \
+	-new -sha256 -out intermediate/csr/client.csr.pem \
+	-subj "/C=US/ST=${State?}/L=${Locality?}/O=${Org?}/CN=${Client?}"
+
+# Sign the csr (use server_cert for a server, usr_cert for client) with
+# the intermediate CA
+openssl ca -config intermediate/openssl.cnf \
+	-extensions server_cert -days 375 -notext -md sha256 \
+	-in intermediate/csr/client.csr.pem \
+	-out intermediate/certs/client.cert.pem
+chmod 444 intermediate/certs/client.cert.pem
