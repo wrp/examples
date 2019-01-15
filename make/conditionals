@@ -1,0 +1,7 @@
+
+ifndef USER
+$(error USER is not set)
+endif
+
+all:
+	echo $(USER)
