@@ -4,9 +4,10 @@
 # Steps to create a root CA.
 
 # Create the directory structure. The index.txt and serial files act as a flat file database to keep track of signed certificates.
-mkdir /root/ca
+dir=/root/ca
+mkdir ${dir}
 
-cd /root/ca
+cd ${dir}
 mkdir certs crl newcerts private
 chmod 700 private
 touch index.txt
@@ -23,11 +24,11 @@ openssl req -config openssl.cnf \
 	-subj "/C=US/ST=${State?}/L=${Locality?}/O=${Org?}/CN=$USER root CA"
 chmod 444 certs/ca.cert.pem
 
-# Create /root/ca/intermediate with similar directory structure, copy the
+# Create ${dir}/intermediate with similar directory structure, copy the
 # openssl.cnf with minor modifications (change dir, private_key, certificate,
 # crl, and policy in CA_default.  Everything else is the same)
 #
-# (Still in /root/ca directory:
+# (Still in ${dir} directory:
 openssl genrsa -aes256 -out intermediate/private/intermediate.key.pem 4096
 chmod 400 intermediate/private/intermediate.key.pem
 
