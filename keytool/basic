@@ -1,10 +1,12 @@
 
+# ${keystore} should have a name ending ".jks"
+
 # Create new keystore
 keytool \
 	-genkey \
 	-keyalg RSA \
 	-alias ${alias?} \
-	-keystore ${keystore?}.jks \
+	-keystore ${keystore?} \
 	-storepass ${storepass:-${password?}} \
 	-keypass ${keypass:-${password?}} \
 	-validity 360 \
@@ -17,14 +19,14 @@ keytool -certreq \
 	-alias ${alias?} \
 	-keyalg RSA \
 	-file ${domain?}.csr \
-	-keystore ${keystore?}.jks
+	-keystore ${keystore?}
 
-# List aliases in a keysotre
-keytool -list -v -keystore ${keystore_file}.jks
+# List data in a keysotre
+keytool -list -v -keystore ${keystore?}
 
 
 # Export a certificate from a keystore:
-keytool -export -keystore ${keystore_file}.jks \
+keytool -export -keystore ${keystore?} \
 	-alias ${alias} \
 	-file ${output_file}.cer
 
