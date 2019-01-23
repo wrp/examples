@@ -1,0 +1,121 @@
+#!/bin/sh
+
+PATH=/usr/local/bin:$HOME/google-cloud-sdk/bin:$PATH
+. $(dirname $0)/funcs.sh
+
+set_group_and_type() {
+	group=compute
+	orig_type="$(basename $(dirname "$1"))"
+	type="$orig_type"s
+	case $type in
+	addresss)
+		type=addresses
+		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list)
+		;;
+	sql-instances)
+		type=instances
+		group=sql
+		;;
+	instances)
+		if test "$host" != list; then
+			zone=$(awk '$1 == host{print $2}' \
+				host="$host" ${1%/*}/list)
+			test -z "$zone" && die "Could not find zone"
+		fi
+		;;
+	esac
+}
+
+
+all_hosts() {
+	# Update the description of each host listed in $1/list
+	: ${FORCE=Auto update of all hosts in $1}
+	export FORCE
+	test -s $1/list || { echo "No entries in $1/list" >&2; return 1; }
+
+	$(dirname $0)/purge $1 || return 1
+	count=$(( $(wc -l < $1/list) - 1 ))
+
+	trap 'tput ve' RETURN
+
+	tput vi #  make cursor invisible
+	el=$(tput el)
+	awk 'NR>1 {print $1}' $1/list | while read host; do
+		printf "\r(%d/%d) update $host$el" "$((++i))" "$count"
+		$0 $1/$host || return 1
+	done
+	echo
+}
+
+execute() {
+	echo "$@" >&2
+	eval "$@"
+}
+
+main() {
+	trap 'rm -f $TMPFILE' return
+	local TMPFILE=$(mktemp)
+
+	if test "$1" = all-lists; then
+		test -z "$2" && die "commit message required (arg 2)"
+		find $(dirname $0) -name list \
+		| while read f; do FORCE="$2" "$0" $f; done
+		exit
+	fi
+
+	# Each argument should be a path.  eg $project/$type/[$instance]
+	# If the target of the path is a dir, update 'list' inside that dir
+	# and then all of the machines
+	unset do_all
+	for x; do
+		x=$(realpath $x)
+		test -d "$x" && { do_all=1; x=$x/list; }
+
+		PROJECT=$(basename $(dirname $(dirname $x)))
+		host=$(basename $x)
+		set_group_and_type $x
+		case $host in
+		project-info)
+			execute gcloud compute project-info describe \
+				--project=${orig_type}
+		;;
+		list)
+			execute gcloud $group $type list --project=${PROJECT?}
+		;;
+		*)
+			execute gcloud $group $type describe \
+				${zone:+--zone="$zone"} \
+				${region:+--region="$region"} \
+				--project=${PROJECT?} \
+				--format=json \
+				$host \
+		;;
+		esac > $TMPFILE
+		test -s $TMPFILE && cat $TMPFILE > "$x"
+
+		(
+		cd $(dirname $0)
+		git add $x
+		interactive_commit "$(printf \
+			"Update $orig_type/$host$(test "$PROJECT" != gcloud &&
+				echo " in $PROJECT").\n\n%s" \
+			"${FORCE}"
+		)"
+		)
+		test -n "$do_all" && all_hosts $(dirname $x)
+	done
+	return 0
+}
+if ! ( cd $(dirname $0); git diff-index --exit-code HEAD --); then
+	die repo is dirty
+fi
+
+while getopts ":v" opt; do
+	case $opt in
+	v) set -x ;;
+	*) die "illegal option -$OPTARG (-h for usage)";;
+	esac
+done
+shift $(($OPTIND-1))
+
+main "$@"
