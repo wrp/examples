@@ -1,5 +1,18 @@
 #!/bin/sh
 
+# Naive script to record changes in gcp.  Directory structure should be like:
+# project-name/
+# |-- address
+# |-- firewall-rule
+# |-- image
+# |-- instance
+# |-- keys
+# |-- network
+# |-- project-info
+# |-- sql-instance
+# `-- sshKeys
+
+
 PATH=/usr/local/bin:$HOME/google-cloud-sdk/bin:$PATH
 . $(dirname $0)/funcs.sh
 
