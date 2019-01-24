@@ -25,6 +25,9 @@ set_group_and_type() {
 		type=addresses
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list)
 		;;
+	forwarding-rules)
+		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list)
+		;;
 	sql-instances)
 		type=instances
 		group=sql
