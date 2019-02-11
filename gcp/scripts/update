@@ -23,10 +23,12 @@ set_group_and_type() {
 	case $type in
 	addresss)
 		type=addresses
-		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list)
+		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
+			|| die "Can't get region for ${orig_type} $host"
 		;;
 	forwarding-rules|target-pools)
-		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list)
+		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
+			|| die "Can't get region for ${orig_type} $host"
 		;;
 	sql-instances)
 		type=instances
@@ -35,8 +37,8 @@ set_group_and_type() {
 	instances)
 		if test "$host" != list; then
 			zone=$(awk '$1 == host{print $2}' \
-				host="$host" ${1%/*}/list)
-			test -z "$zone" && die "Could not find zone"
+				host="$host" ${1%/*}/list | grep .) \
+			|| die "Can't get zone for ${orig_type} $host"
 		fi
 		;;
 	esac
