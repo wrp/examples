@@ -6,5 +6,5 @@ openssl x509 -enddate -noout -in ${pemfile?}
 # Check if an x509 cert is expired
 openssl x509 -checkend 0 -noout -in ${pemfile?}
 
-# Show contents of certificat
+# Show contents of certificate
 openssl x509 -in ${pemfile?} -text
