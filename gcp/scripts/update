@@ -7,6 +7,8 @@
 # |-- image
 # |-- instance
 # |-- keys
+# |-- target-pool
+# |-- forwarding-rule
 # |-- network
 # |-- project-info
 # |-- sql-instance
@@ -20,21 +22,21 @@ set_group_and_type() {
 	group=compute
 	orig_type="$(basename $(dirname "$1"))"
 	type="$orig_type"s
-	case $type in
-	addresss)
+	case $orig_type in
+	address)
 		type=addresses
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
-	forwarding-rules|target-pools)
+	forwarding-rule|target-pool)
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
-	sql-instances)
+	sql-instance)
 		type=instances
 		group=sql
 		;;
-	instances)
+	instance)
 		if test "$host" != list; then
 			zone=$(awk '$1 == host{print $2}' \
 				host="$host" ${1%/*}/list | grep .) \
