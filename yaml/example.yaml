@@ -1,10 +1,10 @@
 foo:
 - newline: >
         this is a single string
-        which retains spaces at end of
-        line but discards the newline
-           and indentation that matches the first line
-        (eg, there will be a total of 3 spaces and
+        which compresses newline and following
+           indentation that matches the first line to one space
+        (eg, there will be one space between "string" and "which" and
+        there will be a total of 3 spaces and
         a newline before "and", and a single newline before '(')
   defintion: >
         Scalar content can be written in block notation, using a
