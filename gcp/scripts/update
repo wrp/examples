@@ -90,10 +90,12 @@ main() {
 	for x; do
 		x=$(realpath $x)
 		test -d "$x" && { do_all=1; x="$x"/list; }
-		touch "$x"
 
 		PROJECT=$(basename $(dirname $(dirname "$x")))
 		host=$(basename $x)
+		if test "$host" != list && ! test -f "$(dirname "$x")"/list; then
+			$0 "$x"/list
+		fi
 		set_group_and_type $x
 		case $host in
 		project-info)
