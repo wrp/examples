@@ -89,9 +89,10 @@ main() {
 	unset do_all
 	for x; do
 		x=$(realpath $x)
-		test -d "$x" && { do_all=1; x=$x/list; }
+		test -d "$x" && { do_all=1; x="$x"/list; }
+		touch "$x"
 
-		PROJECT=$(basename $(dirname $(dirname $x)))
+		PROJECT=$(basename $(dirname $(dirname "$x")))
 		host=$(basename $x)
 		set_group_and_type $x
 		case $host in
