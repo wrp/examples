@@ -28,8 +28,15 @@ keytool -list -v -keystore ${keystore?}
 # Export a certificate from a keystore:
 keytool -export -keystore ${keystore?} \
 	-alias ${alias} \
-	-file ${output_file}.cer
+	-file ${output_file}.pem
 
 # Import a .pem into a keystore:
 openssl x509 -outform der -in certificate.pem -out certificate.der
 keytool -import -alias ${alias?} -keystore ${output}.jks -file certificate.der
+
+# Import one cert from a keystore into another
+keytool \
+	-importkeystore \
+	-srckeystore ${src_keystore}.jks \
+	-srcalias ${alias_to_import} \
+	-destkeystore ${dest_keystore}
