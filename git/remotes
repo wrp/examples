@@ -1,38 +1,39 @@
-# Use a name other than origin
-$ git clone --origin ${remote_name?} ${url?}
+# Assign branch (for cut-n-paste)
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Use a name other than 'origin' when cloning
+git clone --origin ${remote_name?} ${url?}
 
 # Delete a branch on remote
-$ git push ${remote?} --delete ${remote_branch?}
-
+git push ${remote?} --delete ${remote_branch?}
 
 # Create local branch to track extant remote
-$ git fetch ${remote?}
-$ git branch ${branch?}
-$ git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
+git fetch ${remote?}
+git branch ${branch?}
+git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
 
 # Create and checkout local branch to track existing branch on remote
-$ git fetch ${remote?}
-$ git checkout -t -b ${branch?} ${remote?}/${remote_branch-$branch}
+git fetch ${remote?}
+git checkout -t -b ${branch?} ${remote?}/${remote_branch-$branch}
 
 # Make extant local branch track branch on remote
-$ git branch -u ${remote?}/${remote_branch-${branch?}} ${branch?}
+git branch -u ${remote?}/${remote_branch-${branch?}} ${branch?}
 
 # Create remote branch
-$ git push ${remote?} ${branch?}       # creates remote with same name
-$ git push --set-upstream ${remote?} ${branch?}
+git push ${remote?} ${branch?}       # creates remote with same name
+git push --set-upstream ${remote?} ${branch?}
 
 # Push local branch to differently named remote branch (possibly creating remote_branch)
-$ git push ${remote?} ${branch?}:${remote_branch?}
+git push ${remote?} ${branch?}:${remote_branch?}
 
 # Delete a tag from a remote
-$ git push --delete ${remote?} ${tag?}
+git push --delete ${remote?} ${tag?}
 
 # Stop tracking remote
-$ git branch --unset-upstream [branch (default to current)]
+git branch --unset-upstream [branch (default to current)]
 
 # Show all refs on a remote
 git remote show ${remote?}
-
 
 # Sync refs with remote
 git remote update --prune
