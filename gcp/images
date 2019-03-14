@@ -1,0 +1,3 @@
+
+# To see which image is most recent in an image family
+gcloud compute images describe-from-family ${family?}
