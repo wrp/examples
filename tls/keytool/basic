@@ -25,8 +25,14 @@ keytool -certreq \
 keytool -list -v -keystore ${keystore?}
 
 
+# Export a .der certificate from a keystore:
+keytool -export -keystore ${keystore?} \
+	-alias ${alias} \
+	-file ${output_file}.der
+
 # Export a .pem certificate from a keystore:
 keytool -export -keystore ${keystore?} \
+	-rfc \
 	-alias ${alias} \
 	-file ${output_file}.pem
 
