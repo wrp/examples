@@ -25,7 +25,7 @@ keytool -certreq \
 keytool -list -v -keystore ${keystore?}
 
 
-# Export a certificate from a keystore:
+# Export a .pem certificate from a keystore:
 keytool -export -keystore ${keystore?} \
 	-alias ${alias} \
 	-file ${output_file}.pem
