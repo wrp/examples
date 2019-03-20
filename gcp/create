@@ -4,16 +4,20 @@ instance_name=${1?Give name of instance as first param}
 shift
 
 : ${zone:=us-central1-b}
-: ${image:=debian-9-stretch-v20181011 }
-: ${image_project:=default_project_name}
+# ${image:=debian-9-stretch-v20181011 }
+# ${image_project:=default_project_name}
+if test -z "${image}${image_family}"; then
+	image_family=debian-9
+fi
 
-read -p "Enter description: " description
+test -z "$description" &&
+	read -p "Enter description: " description
 
 gcloud compute --project=${PROJECT?PROJECT is undefined} \
 	instances create \
 	"${instance_name}" \
-	--image=${image} \
-	--image-project=${image_project} \
+	${image:+--image=${image}} \
+	${image_project:+--image-project=${image_project}} \
 	--zone="$zone" \
 	--description="$description" \
 	--network-tier=PREMIUM \
