@@ -67,6 +67,7 @@ RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
 RUN aptitude install -y exuberant-ctags
 RUN aptitude install -y jq
+RUN aptitude install -y pkg-config
 
 # Fix locales for tmux
 RUN aptitude install -y locales
