@@ -67,7 +67,6 @@ RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
 RUN aptitude install -y exuberant-ctags
 RUN aptitude install -y jq
-RUN aptitude install -y pkg-config
 
 # Fix locales for tmux
 RUN aptitude install -y locales
@@ -82,5 +81,7 @@ ENV DOCKER_TLS_VERIFY=1
 ADD sudoers /etc/sudoers
 RUN adduser --quiet docker_user
 CMD sudo DOCKER=1 -u docker_user bash
+
+RUN aptitude install -y pkg-config
 
 EXPOSE 8125
