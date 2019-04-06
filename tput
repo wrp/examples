@@ -67,3 +67,8 @@ tput sc  # save cursor position
 tput rc  # restore cursor position
 tput vi  # make cursor invisible
 tput ve  # make cursor visible
+
+echo blinking text:
+tput mb; echo foo; tput sgr0
+
+(see terminfo(5))
