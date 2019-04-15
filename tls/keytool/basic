@@ -21,7 +21,7 @@ keytool -certreq \
 	-file ${domain?}.csr \
 	-keystore ${keystore?}
 
-# List data in a keysotre
+# List data in a keystore
 keytool -list -v -keystore ${keystore?}
 
 
