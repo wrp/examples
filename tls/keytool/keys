@@ -10,7 +10,7 @@ $ keytool -importkeystore \
 	-srckeystore ${keystore?} \
 	${srcstorepass+-srcstorepass ${srcstorepass}} \
 	${srckeypass+-srckeypass ${srckeypass}} \
-	-destkeystore ${keystore%.jks}.p12 \
+	-destkeystore ${output_file:-${keystore%.jks}.p12} \
 	-deststoretype pkcs12 \
 	-srcalias ${alias?} \
 	${deststorepass+-deststorepass ${deststorepass}} \
