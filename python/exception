@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# Demonstrate basic syntax of some exception handling cases
 import sys
 import os
 class foo(Exception): pass
@@ -7,27 +8,38 @@ class bar(Exception): pass
 
 try:
     raise foo ("help")
-except (foo, bar) as e:
+except (foo, bar) as e:   # Use parens to group multiple exceptions
     print "Raised", e
-    print "dir", dir(e)
-    print 'raise.format: {}'.format(e)
-    sys.stderr.write("{}: cannot write {}/{}: {}\n".format(
-        os.path.basename(sys.argv[0]), "foo", "bar", e))
+    """ At this point, attributes of e (output of dir)
+    dir ['__class__', '__delattr__', '__dict__', '__doc__',
+        '__format__', '__getattribute__', '__getitem__', '__getslice__',
+        '__hash__', '__init__', '__module__', '__new__', '__reduce__',
+        '__reduce_ex__', '__repr__', '__setattr__', '__setstate__',
+        '__sizeof__', '__str__', '__subclasshook__', '__unicode__',
+        '__weakref__', 'args', 'message']
+    """
+    # e.message = 'help'
+    # e.args = ('help',)
 
 
-print 're raise a foo'
+def reraise():
+    print 're raise a foo'
+    try:
+        raise foo("raised foo")
+    except Exception as e:
+        raise e
+    finally:
+        print 'finally in re-raised foo'
+
 try:
-    raise foo("raised foo")
-except Exception as e:
-    raise e
-finally:
-    print 'finally in re-raised foo'
-    
+    reraise()
+except Exception:
+    pass
 
-def f():
+def f(flag=False):
     try:
         print 'try'
-        raise foo('bar')
+        if flag: raise foo('bar')
         return 5
     except:
         print 'except'
@@ -39,23 +51,34 @@ def f():
         # and still returns 5, regardless of whehter or not the finally
         # clause returns.  Returning something from a finally clause is bad practice
 
-a= f()
-print 'f returns:', a
+rv = f()
+print 'f without exception returns:', rv
+rv = f(True)
+print 'f with exception returns:', rv
 
 try:
-    print 'try/finally with no except ',
+    print 'try/finally with no except',
 finally:
     print 'is ok'
 
 
-try:
-    f = open('/non/extant/file', 'r')
-except IOError as e:
-    sys.stderr.write("{}: {}: {}\n".format(
-        os.path.basename(sys.argv[0]), e.filename, e.strerror))
-    raise SystemExit("{}: {}: {}".format(
-        os.path.basename(sys.argv[0]), e.filename, e.strerror))
-except Exception as e:
-    raise SystemExit("{}: {}".format(
-        os.path.basename(sys.argv[0]), e))
+# Demonstrate getting IO error messages
+def open_file(path):
+    try:
+        f = open(path, 'r')
+    except IOError as e:
+        sys.stderr.write("{}: {}: {}\n".format(
+            os.path.basename(sys.argv[0]), e.filename, e.strerror))
 
+try: open_file('/non/extant-file')
+except Exception: pass
+
+# Last example, since this will abort.  Trigger a stacktrace
+def func1(a):
+    func2(a)
+def func2(a):
+    func3(a)
+def func3(a):
+    raise foo('f1->f2->f3')
+
+func1(3)
