@@ -2,16 +2,17 @@
 
 # Naive script to record changes in gcp.  Directory structure should be like:
 # project-name/
-# |-- address
-# |-- firewall-rule
-# |-- image
-# |-- instance
+# |-- address/
+# |-- firewall-rule/
+# |-- image/
+# |-- instance/
 # |-- keys
-# |-- target-pool
-# |-- forwarding-rule
-# |-- network
+# |-- target-pool/
+# |-- forwarding-rule/
+# |-- network/
 # |-- project-info
-# |-- sql-instance
+# |-- sql-instance/
+# |-- big-query/
 # `-- sshKeys
 
 
