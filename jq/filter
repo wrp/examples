@@ -1,7 +1,12 @@
 #!/bin/sh
 
-# Select items in which the key matches a string
+# Select certain keys:
+json='{"a":"a value", "bab": "b value", "c": "c value"}'
+echo "$json" | jq '{a,c}'
+echo "$json" | jq '. | with_entries( select(.key == "a" ) )'
+echo "$json" | jq '. | with_entries( select(.key | contains ("a") ) )'
 
+# Select items in which the key matches a string
 json='[{"genre":"deep house"}, {"genre": "progressive house"}, {"genre": "dubstep"}]'
 
 echo "$json" | jq -c '.[] | select(.genre | contains("house"))'
