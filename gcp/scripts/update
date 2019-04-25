@@ -23,6 +23,8 @@ set_group_and_type() {
 	orig_type="$(basename $(dirname "$1"))"
 	type="$orig_type"s
 	case $orig_type in
+	big-query)
+		group=bq;;
 	address)
 		type=addresses
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
@@ -97,21 +99,31 @@ main() {
 			$0 "$x"/list
 		fi
 		set_group_and_type $x
-		case $host in
-		project-info)
-			execute gcloud compute project-info describe \
-				--project=${orig_type}
-		;;
-		list)
-			execute gcloud $group $type list --project=${PROJECT?}
+		case $group in
+		bq)
+			case $host in
+			list) bq ls --project_id=$PROJECT ;;
+			*) bq ls --project_id=$PROJECT $host;;
+			esac
 		;;
 		*)
-			execute gcloud $group $type describe \
-				${zone:+--zone="$zone"} \
-				${region:+--region="$region"} \
-				--project=${PROJECT?} \
-				--format=json \
-				$host \
+			case $host in
+			project-info)
+				execute gcloud compute project-info describe \
+					--project=${orig_type}
+			;;
+			list)
+				execute gcloud $group $type list --project=${PROJECT?}
+			;;
+			*)
+				execute gcloud $group $type describe \
+					${zone:+--zone="$zone"} \
+					${region:+--region="$region"} \
+					--project=${PROJECT?} \
+					--format=json \
+					$host \
+			;;
+			esac
 		;;
 		esac > $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
