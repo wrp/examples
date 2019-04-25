@@ -102,7 +102,7 @@ main() {
 		case $group in
 		bq)
 			case $host in
-			list) bq ls --project_id=$PROJECT ;;
+			list) bq ls --max_results 100000 --project_id=$PROJECT ;;
 			*) bq ls --project_id=$PROJECT $host;;
 			esac
 		;;
