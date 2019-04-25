@@ -12,6 +12,8 @@ git fetch ${remote?}
 git branch ${branch?}
 git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
 # -- or (also checkout new branch) --
+git checkout -t ${remote?}/${remote_branch-$branch}
+# -- or (to use explicit local name)
 git checkout -t -b ${branch?} ${remote?}/${remote_branch-$branch}
 
 # Make extant local branch track branch on remote

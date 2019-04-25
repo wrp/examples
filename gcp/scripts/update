@@ -103,7 +103,10 @@ main() {
 		bq)
 			case $host in
 			list) bq ls --max_results 100000 --project_id=$PROJECT ;;
-			*) bq ls --project_id=$PROJECT $host;;
+			*)
+				test "$host" = "${host#*.}" && bq ls --project_id=$PROJECT $host
+				bq show --project_id=$PROJECT $host
+			;;
 			esac
 		;;
 		*)
