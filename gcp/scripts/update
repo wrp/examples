@@ -16,7 +16,6 @@
 # `-- sshKeys
 
 
-PATH=/usr/local/bin:$HOME/google-cloud-sdk/bin:$PATH
 . $(dirname $0)/funcs.sh
 
 set_group_and_type() {
