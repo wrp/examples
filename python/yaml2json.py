@@ -14,7 +14,6 @@ def main(args):
                 json.dump(yaml.load(x), sys.stdout, indent = 8)
             else:
                 raise e
-                
 
 
 data = r'''
@@ -24,7 +23,7 @@ foo:
         Scalar content can be written in block notation, using a '>'
     nospace: "this string has\
         no space between 'has' and 'no'"
-view: 
+view:
     query: >
         SELECT  * EXCEPT (etl_row_num)
             FROM (
@@ -33,7 +32,7 @@ view:
         "SELECT  * EXCEPT (etl_row_num) \n FROM ( \n SELECT "
     "query3":
         "SELECT  * EXCEPT (etl_row_num) \n FROM ( \n SELECT "
-    useLegacySql: false 
+    useLegacySql: false
 '''
 
 if __name__ == '__main__':
