@@ -27,7 +27,7 @@ openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out serve
 # client-cert.pem = public key, client-key.pem = private key
 openssl req -newkey rsa:2048 -days 3600 -nodes -keyout client-key.pem -out client-req.pem \
 && openssl rsa -in client-key.pem -out client-key.pem \
-&& openssl x509 -req -in client-req.pem -days 3600 \ 
+&& openssl x509 -req -in client-req.pem -days 3600 \
         -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
 
 
@@ -44,11 +44,13 @@ openssl req -sha1 -newkey rsa:2048 -days 3650 -nodes -keyout server-key.pem > se
 && openssl x509 -sha1 -req -in server-req.pem -days 3650 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > server-cert.pem \
 && openssl rsa -in server-key.pem -out server-key.pem
 
-# Create client key and certificate with SHA digest, sign it and convert
-# the RSA key from PKCS #8 (OpenSSL 1.0 and newer) to the old PKCS #1 format
-openssl req -sha1 -newkey rsa:2048 -days 3650 -nodes -keyout client-key.pem > client-req.pem \
-&& openssl x509 -sha1 -req -in client-req.pem -days 3650 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > client-cert.pem \
-&& openssl rsa -in client-key.pem -out client-key.pem
+# Create client key and certificate with SHA digest
+openssl req -sha1 -newkey rsa:2048 -days 3650 -nodes -keyout client-key.pem  \
+	-subj "/C=US/ST=Ohio/L=Toledo/O=MyCompany/CN=fqdn" > client-req.pem
+# Sign the csr.
+openssl x509 -sha1 -req -in client-req.pem -days 3650 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > client-cert.pem
+# Convert the RSA key from PKCS #8 (OpenSSL 1.0 and newer) to the old PKCS #1 format
+openssl rsa -in client-key.pem -out client-key.pem
 
 
 ============
