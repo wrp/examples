@@ -72,6 +72,8 @@ RUN aptitude install -y jq
 RUN aptitude install -y locales
 RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 RUN locale-gen
+RUN aptitude install -y pkg-config
+RUN aptitude install -y figlet
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
@@ -82,6 +84,5 @@ ADD sudoers /etc/sudoers
 RUN adduser --quiet docker_user
 CMD sudo DOCKER=1 -u docker_user bash
 
-RUN aptitude install -y pkg-config
 
 EXPOSE 8125
