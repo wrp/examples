@@ -37,3 +37,8 @@ git remote show ${remote?}
 
 # Sync refs with remote
 git remote update --prune
+
+# Add multiple urls to a remote:
+git remote add ${remote?} $(git remote get-url --push bitbucket)
+git remote set-url ${remote?} --add $(git remote get-url --push gitlab)
+git remote set-url ${remote?} --add $(git remote get-url --push github)
