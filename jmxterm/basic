@@ -1,0 +1,5 @@
+
+To monitor mbeans in jmxterm:
+
+$ sudo rlwrap java -jar jmxterm-1.0.0-uber.jar
+$>open $PID
