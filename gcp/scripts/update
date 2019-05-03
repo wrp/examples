@@ -116,7 +116,10 @@ main() {
 					--project=${orig_type}
 			;;
 			list)
-				execute gcloud $group $type list --project=${PROJECT?}
+				# Fix host name width to 60 to try to minimize churn when gcloud
+				# changes all the widths for reformat
+				execute gcloud $group $type list --project=${PROJECT?} \
+				| while read host n; do printf "%-60s%s\n" "$host" "$n"; done
 			;;
 			*)
 				execute gcloud $group $type describe \
