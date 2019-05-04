@@ -1,2 +1,6 @@
 
+# Create a worktree
 git worktree add ${path?} ${branch}
+
+# List all the extant worktrees
+git worktree list
