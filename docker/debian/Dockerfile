@@ -24,6 +24,10 @@ RUN aptitude install -y check
 RUN aptitude install -y make
 RUN aptitude install -y nmap
 RUN aptitude install -y ruby-dev build-essential
+RUN apt-get update && aptitude install -y gdb
+
+
+
 RUN apt update
 RUN apt-file update
 RUN gem install fpm
@@ -48,6 +52,9 @@ RUN aptitude install -y maven
 #RUN aptitude install -y locales
 #COPY locale.gen /etc
 #RUN locale-gen
+RUN aptitude install -y exuberant-ctags
+RUN aptitude install -y rlwrap
+RUN aptitude install -y jq
 
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
@@ -63,10 +70,7 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debia
       $(lsb_release -cs) stable"
 RUN apt-get update
 RUN aptitude install -y docker-ce
-RUN aptitude install -y rlwrap
 RUN aptitude install -y zlib1g-dev
-RUN aptitude install -y exuberant-ctags
-RUN aptitude install -y jq
 
 # Fix locales for tmux
 RUN aptitude install -y locales
