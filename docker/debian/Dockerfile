@@ -55,6 +55,7 @@ RUN aptitude install -y maven
 RUN aptitude install -y exuberant-ctags
 RUN aptitude install -y rlwrap
 RUN aptitude install -y jq
+RUN aptitude install -y perl-doc
 
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
