@@ -79,6 +79,8 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 RUN locale-gen
 RUN aptitude install -y pkg-config
 RUN aptitude install -y figlet
+RUN aptitude install -y python-click
+RUN aptitude install -y python-googleapi
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
