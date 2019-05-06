@@ -1,0 +1,6 @@
+
+# View versions for a topic
+curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions; echo
+
+# View a version of the schema
+curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions/1; echo
