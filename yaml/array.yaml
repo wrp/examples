@@ -1,0 +1,20 @@
+foo-barh:
+  a: [bar,2,3]
+  b:
+  - bar
+  - 2
+  - 3
+  # a and b are the same
+
+
+baz:
+  a: { "bar": "blah", baz}
+
+qux:
+  a:
+    bar:
+      blah
+    baz:
+
+
+# baz and qux are the same
