@@ -6,6 +6,7 @@ interactive_commit() {
 	local response
 	msg="$1"
 	if ! git diff-index --exit-code HEAD --; then # repo is changed
+		LESS+=E
 		git diff ${IGNORE_WHITE--w} --cached --word-diff
 		if test -z "$FORCE"; then
 			printf "%s ([n]yR)? " "Commit the above changes" > /dev/tty
