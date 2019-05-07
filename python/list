@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+
+a = []  # An empty list
+
+# lists are passed by reference
+def mutate(b,x=5):
+  b.append(x)
+
+mutate(a,5)         # A is mutated by the call
+mutate(list(a),9)   # Pass a copy to avoid mutation
