@@ -9,5 +9,12 @@ class dqdict(dict):
 a = dqdict()
 a['foo'] = 'bar'
 a[3] = 'aux'
-
 print a
+
+def mutate(a):
+    '''Dictionaries are passed by reference.  This mutates in the caller.'''
+    a['foo'] += 5
+
+b = {'foo':1}
+mutate( b )       # value increments
+mutate( dict(b) ) # To avoid mutation, pass a copy
