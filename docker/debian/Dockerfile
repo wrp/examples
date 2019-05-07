@@ -26,8 +26,6 @@ RUN aptitude install -y nmap
 RUN aptitude install -y ruby-dev build-essential
 RUN apt-get update && aptitude install -y gdb
 
-
-
 RUN apt update
 RUN apt-file update
 RUN gem install fpm
@@ -88,8 +86,9 @@ ENV DOCKER_CERT_PATH=/path/to/cdk/.vagrant/machines/default/virtualbox/.docker
 ENV DOCKER_TLS_VERIFY=1
 
 ADD sudoers /etc/sudoers
-RUN adduser --quiet docker_user
-CMD sudo DOCKER=1 -u docker_user bash
-
+ARG user=docker_user
+RUN adduser --quiet $user
+ENV USER=$user
+CMD sudo DOCKER=1 -u "$USER" bash
 
 EXPOSE 8125
