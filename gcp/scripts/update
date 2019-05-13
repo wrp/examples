@@ -93,12 +93,22 @@ main() {
 		x=$(realpath $x)
 		test -d "$x" && { do_all=1; x="$x"/list; }
 
+		case $(basename $x) in
+		project-info)
+			execute gcloud compute project-info describe \
+				--project=$(basename $(dirname $x))
+		;;
+		iam-policy)
+			execute gcloud projects get-iam-policy $(basename $(dirname $x))
+		;;
+		*)
 		PROJECT=$(basename $(dirname $(dirname "$x")))
 		host=$(basename $x)
 		if test "$host" != list && ! test -f "$(dirname "$x")"/list; then
 			$0 "$x"/list
 		fi
 		set_group_and_type $x
+
 		case $group in
 		bq)
 			case $host in
@@ -111,10 +121,6 @@ main() {
 		;;
 		*)
 			case $host in
-			project-info)
-				execute gcloud compute project-info describe \
-					--project=${orig_type}
-			;;
 			list)
 				# Fix host name width to 60 to try to minimize churn when gcloud
 				# changes all the widths for reformat
@@ -131,6 +137,7 @@ main() {
 			;;
 			esac
 		;;
+		esac
 		esac > $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
 
