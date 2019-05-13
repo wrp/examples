@@ -38,7 +38,7 @@ set_group_and_type() {
 		type=instances
 		group=sql
 		;;
-	instance)
+	*)
 		if test "$host" != list; then
 			zone=$(awk '$1 == host{print $2}' \
 				host="$host" ${1%/*}/list | grep .) \
