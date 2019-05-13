@@ -10,7 +10,7 @@
 # |-- target-pool/
 # |-- forwarding-rule/
 # |-- network/
-# |-- project-info
+# |-- metadata/
 # |-- sql-instance/
 # |-- big-query/
 # `-- sshKeys
@@ -23,8 +23,8 @@ set_group_and_type() {
 	orig_type="$(basename $(dirname "$1"))"
 	type="$orig_type"s
 	case $orig_type in
-	big-query)
-		group=bq;;
+	metadata) group=metadata;;
+	big-query) group=bq;;
 	address)
 		type=addresses
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
@@ -90,26 +90,29 @@ main() {
 	# and then all of the machines
 	unset do_all
 	for x; do
+		touch "$x"
 		x=$(realpath $x)
 		test -d "$x" && { do_all=1; x="$x"/list; }
 
-		case $(basename $x) in
-		project-info)
-			execute gcloud compute project-info describe \
-				--project=$(basename $(dirname $x))
-		;;
-		iam-policy)
-			execute gcloud projects get-iam-policy $(basename $(dirname $x))
-		;;
-		*)
 		PROJECT=$(basename $(dirname $(dirname "$x")))
 		host=$(basename $x)
-		if test "$host" != list && ! test -f "$(dirname "$x")"/list; then
+		if test "$host" != list && test -d "$x" && ! test -f "$(dirname "$x")"/list; then
 			$0 "$x"/list
 		fi
 		set_group_and_type $x
-
 		case $group in
+		metadata)
+			case $host in
+			list) echo 'This file intentionally left blank';;
+			project-info)
+				execute gcloud compute project-info describe \
+					--project=$PROJECT
+			;;
+			iam-policy)
+				execute gcloud projects get-iam-policy $PROJECT
+			;;
+			esac
+		;;
 		bq)
 			case $host in
 			list) bq ls --max_results 100000 --project_id=$PROJECT ;;
@@ -137,7 +140,6 @@ main() {
 			;;
 			esac
 		;;
-		esac
 		esac > $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
 
