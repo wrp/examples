@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# assign a value using =
+json='{"a":"a value", "b": "b value", "c": "c value"}'
+echo "$json" | jq '{a,c}'       # Print a and c
+echo "$json" | jq '.b = "foo"'  # Print all, replacing value of b
+echo "$json" | jq '.b = "foo" | .'  # Same as above, with explicit .
+echo "$json" | jq '.b = "foo" | {a,b}' # Filter a and b, replace b
+echo "$json" | jq '{a,b} | .b = "foo"' # Filter a and b, replace b
