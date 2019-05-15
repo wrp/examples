@@ -19,18 +19,20 @@
 . $(dirname $0)/funcs.sh
 
 set_group_and_type() {
-	group=compute
 	orig_type="$(basename $(dirname "$1"))"
 	type="$orig_type"s
 	case $orig_type in
 	metadata) group=metadata;;
 	big-query) group=bq;;
+	dataflow) group=dataflow; type=jobs;;
 	address)
+		group=compute
 		type=addresses
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
 	forwarding-rule|target-pool)
+		group=compute
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
@@ -39,6 +41,7 @@ set_group_and_type() {
 		group=sql
 		;;
 	*)
+		group=compute
 		if test "$host" != list; then
 			zone=$(awk '$1 == host{print $2}' \
 				host="$host" ${1%/*}/list | grep .) \
