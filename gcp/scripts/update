@@ -145,16 +145,17 @@ main() {
 		;;
 		esac > $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
-
-		(
-		cd $(dirname $0)
-		git add $x
-		interactive_commit "$(printf \
-			"Update $orig_type/$host$(test "$PROJECT" != gcloud &&
-				echo " in $PROJECT")\n\n%s" \
-			"${FORCE}"
-		)"
-		)
+                if ! test -s "$x"; then rm "$x"; else (
+			cd $(dirname $0)
+			git add $x
+			interactive_commit "$(printf \
+				"Update $orig_type/$host$(
+					test "$PROJECT" != gcloud && echo " in $PROJECT"
+					)\n\n%s" \
+					"${FORCE}"
+				)"
+			)
+		fi
 		test -n "$do_all" && all_hosts $(dirname $x)
 	done
 	return 0
