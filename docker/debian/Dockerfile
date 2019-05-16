@@ -58,8 +58,6 @@ RUN aptitude install -y perl-doc
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
 RUN apt-get update
-# RUN aptitude install -y git=1:2.18.0-1
-#RUN aptitude install -y prometheus=2.0.0+ds3-1
 
 # Setup to install docker
 RUN aptitude install -y apt-transport-https ca-certificates curl gnupg2 \
@@ -79,6 +77,10 @@ RUN aptitude install -y pkg-config
 RUN aptitude install -y figlet
 RUN aptitude install -y python-click
 RUN aptitude install -y python-googleapi
+# Install newest git  (we're now looking at sid)
+RUN aptitude install -y git
+RUN aptitude install -y e2fsprogs
+RUN aptitude install -y uuid-runtime
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
