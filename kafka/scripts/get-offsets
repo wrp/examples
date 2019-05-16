@@ -1,0 +1,21 @@
+#!/bin/sh
+
+D=/path/to/kafka/bin
+zk="--zookeeper ${IP1}:${PORT1},${IP2}:${PORT2}"
+
+$D/kafka-topics $zk --list > $HOME/topics/list
+
+while read topic; do {
+        $D/kafka-topics $zk --describe --topic $topic
+        printf '\n\nOffsets:\n'
+        $D/kafka-run-class kafka.tools.GetOffsetShell \
+                --broker-list $(hostname):9092 \
+                --topic $topic --time -1 | sort -t: -k2,2n
+        } > $HOME/topics/$topic
+done < $HOME/topics/list
+
+create_msg() {
+        git diff --cached --stat | tac | sed -e '1a\
+'
+}
+cd $HOME/topics && git add . && create_msg | git commit -a -F -
