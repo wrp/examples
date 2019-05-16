@@ -10,7 +10,6 @@ interactive_commit() {
 		git diff ${IGNORE_WHITE--w} \
 			--cached \
 			--word-diff=color \
-			--word-diff-regex='[a-z0-9]*' \
 		;
 		if test -z "$FORCE"; then
 			printf "%s ([n]yR)? " "Commit the above changes" > /dev/tty
