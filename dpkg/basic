@@ -1,0 +1,2 @@
+# Get list of files from a package
+dpkg-query -L ${package?}
