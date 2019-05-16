@@ -16,5 +16,7 @@ qux:
       blah
     baz:
 
-
 # baz and qux are the same
+
+qax:
+  a:  bar=blash  foo=kkk
