@@ -3,16 +3,18 @@
 # Naive script to record changes in gcp.  Directory structure should be like:
 # project-name/
 # |-- address/
+# |-- big-query/
+# |-- dataflow/
 # |-- firewall-rule/
+# |-- forwarding-rule/
 # |-- image/
 # |-- instance/
 # |-- keys
-# |-- target-pool/
-# |-- forwarding-rule/
-# |-- network/
 # |-- metadata/
+# |-- network/
+# |-- service-account/
 # |-- sql-instance/
-# |-- big-query/
+# |-- target-pool/
 # `-- sshKeys
 
 
@@ -22,6 +24,7 @@ set_group_and_type() {
 	orig_type="$(basename $(dirname "$1"))"
 	type="$orig_type"s
 	case $orig_type in
+	service-account) group=iam;;
 	metadata) group=metadata;;
 	big-query) group=bq;;
 	dataflow) group=dataflow; type=jobs;;
