@@ -1,3 +1,9 @@
 
 # Move a branch to a new commit
 git branch -f branch-name new-tip-commit
+
+
+# Annotate a branch.  See https://stackoverflow.com/a/31441819/140750
+git branch B A
+git checkout B
+git commit --allow-empty -m "Created branch 'B' from 'A'"
