@@ -1,0 +1,7 @@
+
+This directory contains examples intended to be portable amongst the various
+shells.
+
+See also the examples in ../bash.  Today, I feel like separating them
+and putting non-bash specific things here.  I suspect I will not actually
+bother, but that's the plan at the moment.
