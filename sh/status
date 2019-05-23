@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Run a command and use a background process to report status
+
+cmd() { sleep 5; exit 24; }
+
+cmd &   # Run the long running process
+pid=$!  # Record the pid
+
+# Spawn a process that coninually reports that the command is still running
+while printf "\r$(date): process $pid is still running"; do sleep 1; done &
+echoer=$!
+
+# Set a trap to kill the reporter when the process finishes
+trap 'kill $echoer' 0
+
+# Wait for the process to finish
+if wait $pid; status=$?; echo; then
+    echo "cmd succeeded"
+else
+    echo "cmd FAILED!! (returned $status)" >&2
+fi
