@@ -30,3 +30,12 @@ tmux capture-pane -p -S -10000 -t :0
 
 # misc. cmds
 :setw synchronize-panes    # Send keystrokes to multiple panes
+
+
+To move a pane between sessions, go to the destination window:
+:join-pane -s {src-pane}
+src-pane is [{session}:]{window}[.{pane}]
+eg:
+:join-pane -s 2      # Split current window and insert pane with focus from window 2
+:join-pane -s 2.1    # Split current window and insert pane witn index 1 from window 2
+:join-pane -s 4:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
