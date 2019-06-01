@@ -8,7 +8,10 @@ AC_CONFIG_SRCDIR([prctl.c])
 AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_CC
-AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/time.h sys/types.h unistd.h])
+AC_CHECK_HEADERS([unistd.h sys/mman.h])
+AC_CHECK_DECLS([MAP_POPULATE])
+AC_CHECK_DECLS([PROT_READ])
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 
