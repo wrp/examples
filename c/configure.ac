@@ -9,7 +9,7 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_CC
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/time.h sys/types.h unistd.h])
-AC_CHECK_HEADERS([unistd.h sys/mman.h])
+AC_CHECK_HEADERS([unistd.h sys/mman.h math.h])
 AC_CHECK_DECLS([MAP_POPULATE])
 AC_CHECK_DECLS([PROT_READ])
 AC_TYPE_SIZE_T
@@ -17,6 +17,8 @@ AC_TYPE_SSIZE_T
 
 AC_FUNC_MMAP
 AC_FUNC_REALLOC
+AC_SEARCH_LIBS([pow],[m])
+
 AC_CHECK_FUNCS([getdelim gettimeofday strtol])
 
 AC_CONFIG_FILES([Makefile])

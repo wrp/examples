@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
+#include <math.h>
 
 struct state {
 	double stack[1024];
@@ -78,6 +79,8 @@ main(int argc, char **argv)
 			S.sp -= 1; S.sp[0] += S.sp[1]; break;
 		case '/':
 			S.sp -= 1; S.sp[0] /= S.sp[1]; break;
+		case '^':
+			S.sp -= 1; S.sp[0] = pow(S.sp[0], S.sp[1]); break;
 		case '-':
 			S.sp -= 1; S.sp[0] -= S.sp[1]; break;
 		case 'k':
