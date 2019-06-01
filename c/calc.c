@@ -47,13 +47,9 @@ main(int argc, char **argv)
 	S.precision = 3;
 
 	while( (c=getchar()) != EOF ) {
-		switch(c) {
-		case '0': case '1': case '2': case '3': case '4':
-		case '5': case '6': case '7': case '8': case '9':
-		case '.': case 'e': case 'E':
-			*S.bp++ = (char)c; break;
-		case '_': break;
-		default:
+		if(strchr("0123456789.eE_", c)) {
+			*S.bp++ = (char)c; /* fall thru */
+		} else {
 			compute_value(&S);
 		}
 		switch(c) {
