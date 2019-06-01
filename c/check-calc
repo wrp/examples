@@ -17,4 +17,5 @@ test_string '5 6*p' '    30'
 test_string '7 3-p' '     4'
 test_string '7 3-2wp' ' 4'
 test_string '7 2/p' '   3.5'
+test_string '1 2 *7-p' '    -5'
 exit $RV

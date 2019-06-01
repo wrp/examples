@@ -19,11 +19,7 @@ main(int argc, char **argv)
 	int precision = 3;
 	char fmt[32];
 
-#ifndef DEBUG
 	while( (c=getchar()) != EOF ) {
-#else
-	for( int *k = "1 2 *p7-p"; ; (c = *k) != 0; k++ ) {
-#endif
 		switch(c) {
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
