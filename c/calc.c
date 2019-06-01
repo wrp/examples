@@ -5,6 +5,7 @@
 #define siz(x) ( (sizeof (x) / sizeof *(x)))
 
 #include <stdio.h>
+#include <ctype.h>
 
 int
 main(int argc, char **argv)
@@ -13,7 +14,7 @@ main(int argc, char **argv)
 	double stack[1024];
 
 	double *sp = stack + 1;
-	int prev = ' ';
+	int new=1;
 	int width = 6;
 	int precision = 3;
 	char fmt[32];
@@ -21,18 +22,17 @@ main(int argc, char **argv)
 #ifndef DEBUG
 	while( (c=getchar()) != EOF ) {
 #else
-	int input[] = {'1', '2', ',', '6', '/', 'p', 0 };
-	for( int *k = input; (c = *k) != 0; k++ ) {
+	for( int *k = "1 2 *p7-p"; ; (c = *k) != 0; k++ ) {
 #endif
 		switch(c) {
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
-			if( prev == ' ') *(++sp) = 0.0;
+			if( new ) *(++sp) = 0.0;
 			*sp = 10.0 * *sp + (c - '0'); break;
 		case '*':
 			sp -= 1; sp[0] *= sp[1]; break;
 		case ' ': case '\n': case '\t': case ',':
-			c = ' '; break;
+			break;
 		case '+':
 			sp -= 1; sp[0] += sp[1]; break;
 		case '/':
@@ -52,7 +52,7 @@ main(int argc, char **argv)
 		case 'q':
 			goto end;
 		}
-		prev = c;
+		new = !isdigit(c);
 		if( sp == stack || sp - stack >= siz(stack)) {
 			fprintf(stderr, "%sflow\n", sp == stack ? "Under" : "Over");
 			goto fail;
