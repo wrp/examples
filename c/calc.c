@@ -11,24 +11,12 @@
 #include <math.h>
 
 struct state {
-	double stack[1024];
-	double *sp;
-	char buf[32];
-	char *bp;
+	double stack[1024], *sp;
+	char buf[32], *bp;
 	int width;
 	int precision;
 };
 
-
-void
-append_digit(int c, struct state *S)
-{
-	assert( isdigit(c) || c == '.' || c == 'e' || c == 'E' || c == '_' );
-	if( c == '_' ) {
-		return;
-	}
-	*S->bp++ = (char)c;
-}
 
 void
 compute_value(struct state *S)
@@ -62,39 +50,30 @@ main(int argc, char **argv)
 		switch(c) {
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
-		case '.': case 'e': case 'E': case '_':
-			append_digit(c, &S); break;
+		case '.': case 'e': case 'E':
+			*S.bp++ = (char)c; break;
+		case '_': break;
 		default:
 			compute_value(&S);
 		}
 		switch(c) {
+		case ' ': case '\n': case '\t': case ',':
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
 		case '.': case 'e': case 'E': case '_': break;
-		case '*':
-			S.sp -= 1; S.sp[0] *= S.sp[1]; break;
-		case ' ': case '\n': case '\t': case ',':
-			break;
-		case '+':
-			S.sp -= 1; S.sp[0] += S.sp[1]; break;
-		case '/':
-			S.sp -= 1; S.sp[0] /= S.sp[1]; break;
-		case '^':
-			S.sp -= 1; S.sp[0] = pow(S.sp[0], S.sp[1]); break;
-		case '-':
-			S.sp -= 1; S.sp[0] -= S.sp[1]; break;
-		case 'k':
-			S.precision = *S.sp--; break;
-		case 'w':
-			S.width = *S.sp--; break;
+		case '*': S.sp -= 1; S.sp[0] *= S.sp[1]; break;
+		case '+': S.sp -= 1; S.sp[0] += S.sp[1]; break;
+		case '/': S.sp -= 1; S.sp[0] /= S.sp[1]; break;
+		case '^': S.sp -= 1; S.sp[0] = pow(S.sp[0], S.sp[1]); break;
+		case '-': S.sp -= 1; S.sp[0] -= S.sp[1]; break;
+		case 'k': S.precision = *S.sp--; break;
+		case 'w': S.width = *S.sp--; break;
 		case 'p':
 			snprintf(fmt, sizeof fmt, "%%%d.%dg\n", S.width, S.precision);
 			printf(fmt, S.sp[0]);
 			break;
-		default:
-			fprintf(stderr, "Unrecognized value: %c\n", c);
-		case 'q':
-			goto end;
+		default: fprintf(stderr, "Unrecognized value: %c\n", c);
+		case 'q': goto end;
 		}
 		if( S.sp == S.stack || S.sp - S.stack >= siz(S.stack)) {
 			fprintf(stderr, "%sflow\n", S.sp == S.stack ? "Under" : "Over");
