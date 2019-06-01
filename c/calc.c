@@ -53,10 +53,6 @@ main(int argc, char **argv)
 			*S.bp++ = (char)c;
 		}
 		switch(c) {
-		case ' ': case '\n': case '\t': case ',':
-		case '0': case '1': case '2': case '3': case '4':
-		case '5': case '6': case '7': case '8': case '9':
-		case '.': case 'e': case 'E': case '_': break;
 		case '*': S.sp -= 1; S.sp[0] *= S.sp[1]; break;
 		case '+': S.sp -= 1; S.sp[0] += S.sp[1]; break;
 		case '/': S.sp -= 1; S.sp[0] /= S.sp[1]; break;
@@ -68,7 +64,6 @@ main(int argc, char **argv)
 			snprintf(fmt, sizeof fmt, "%%%d.%dg\n", S.width, S.precision);
 			printf(fmt, S.sp[0]);
 			break;
-		default: fprintf(stderr, "Unrecognized value: %c\n", c);
 		case 'q': goto end;
 		}
 		if( S.sp == S.stack || S.sp - S.stack >= siz(S.stack)) {
