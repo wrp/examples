@@ -47,10 +47,10 @@ main(int argc, char **argv)
 	S.precision = 3;
 
 	while( (c=getchar()) != EOF ) {
-		if(strchr("0123456789.eE_", c)) {
-			*S.bp++ = (char)c; /* fall thru */
-		} else {
+		if(strchr("*+/^-kwpq \t\n", c)) {
 			compute_value(&S);
+		} else {
+			*S.bp++ = (char)c;
 		}
 		switch(c) {
 		case ' ': case '\n': case '\t': case ',':
