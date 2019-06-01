@@ -1,8 +1,8 @@
 /*
  * A simple reverse polish calculator
- * Plenty of stack overflows possible here!
  */
 
+#define siz(x) ( (sizeof (x) / sizeof *(x)))
 
 #include <stdio.h>
 
@@ -12,7 +12,7 @@ main(int argc, char **argv)
 	int c;
 	double stack[1024];
 
-	double *sp = stack - 1;
+	double *sp = stack + 1;
 	int prev = ' ';
 	int width = 6;
 	int precision = 3;
@@ -53,7 +53,13 @@ main(int argc, char **argv)
 			goto end;
 		}
 		prev = c;
+		if( sp == stack || sp - stack >= siz(stack)) {
+			fprintf(stderr, "%sflow\n", sp == stack ? "Under" : "Over");
+			goto fail;
+		}
 	}
 end:
 	return 0;
+fail:
+	return 1;
 }
