@@ -2,8 +2,6 @@
  * A simple reverse polish calculator
  */
 
-#define siz(x) ( (sizeof (x) / sizeof *(x)))
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,7 +10,8 @@
 #include <math.h>
 
 struct state {
-	double stack[1024], *sp;
+	double *stack, *sp;
+	size_t stack_size;
 	char buf[32], *bp;
 	int width;
 	int precision;
@@ -50,30 +49,45 @@ apply_operator(struct state *S, int c)
 }
 
 
+void
+realloc_stack( struct state *S )
+{
+	assert( S->sp == NULL || S->sp - S->stack == S->stack_size - 1);
+	if( ( S->stack = realloc(S->stack, S->stack_size * 2 )) == NULL) {
+		perror("realloc");
+		exit(1);
+	}
+	S->sp = S->stack + S->stack_size - 1;
+	S->stack_size *= 2;
+}
+
+
 int
 main(int argc, char **argv)
 {
 	int c;
 	struct state S[1];
 
-	S->sp = S->stack + 1;
+	S->stack = NULL;
+	S->stack_size = 1;
+	S->sp = S->stack;
+	realloc_stack(S);
 	S->bp = S->buf;
 	S->width = 6;
 	S->precision = 3;
 
 	while( (c=getchar()) != EOF ) {
 		if(strchr("*+/^-kwpq \t\n", c)) {
-			apply_operator(&S,c);
+			apply_operator(S,c);
 		} else {
 			*S->bp++ = (char)c;
 		}
-		if( S->sp == S->stack || S->sp - S->stack >= siz(S->stack)) {
-			fprintf(stderr, "%sflow\n", S->sp == S->stack ? "Under" : "Over");
-			goto fail;
+		if( S->sp == S->stack ) {
+			fprintf(stderr, "Stack empty\n");
+			S->sp = S->stack + 1;
+		} else if ( S->sp - S->stack == S->stack_size - 1) {
+			realloc_stack(S);
 		}
 	}
-end:
 	return 0;
-fail:
-	return 1;
 }
