@@ -5,6 +5,7 @@
 #define siz(x) ( (sizeof (x) / sizeof *(x)))
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
