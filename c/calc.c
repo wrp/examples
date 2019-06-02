@@ -18,9 +18,47 @@ struct state {
 	int precision;
 };
 
-
 void process_entry( struct state *S, int c );
 void realloc_stack( struct state *S );
+void apply_operator(struct state *S, int c);
+void realloc_stack( struct state *S );
+
+int
+main(int argc, char **argv)
+{
+	int c;
+	struct state S[1];
+
+	S->stack = NULL;
+	S->stack_size = 1;
+	S->sp = S->stack;
+	realloc_stack(S);
+	S->bp = S->buf;
+	S->precision = 3;
+
+	if( argc > 1) {
+		for( argv += 1; *argv; argv++ ) {
+			for( char *k = *argv; *k; k++ ) {
+				process_entry(S, (int)*k);
+			}
+			process_entry(S, ' ');
+		}
+	} else while( (c=getchar()) != EOF ) {
+		process_entry(S, c);
+	}
+	return 0;
+}
+
+void
+process_entry(struct state *S, int c)
+{
+	if(strchr( operators " \t\n", c)) {
+		apply_operator(S,c);
+	} else {
+		*S->bp++ = (char)c;
+	}
+}
+
 void
 apply_operator(struct state *S, int c)
 {
@@ -69,41 +107,4 @@ realloc_stack( struct state *S )
 	}
 	S->sp = S->stack + S->stack_size - 1;
 	S->stack_size *= 2;
-}
-
-
-int
-main(int argc, char **argv)
-{
-	int c;
-	struct state S[1];
-
-	S->stack = NULL;
-	S->stack_size = 1;
-	S->sp = S->stack;
-	realloc_stack(S);
-	S->bp = S->buf;
-	S->precision = 3;
-
-	if( argc > 1) {
-		for( argv += 1; *argv; argv++ ) {
-			for( char *k = *argv; *k; k++ ) {
-				process_entry(S, (int)*k);
-			}
-			process_entry(S, ' ');
-		}
-	} else while( (c=getchar()) != EOF ) {
-		process_entry(S, c);
-	}
-	return 0;
-}
-
-void
-process_entry(struct state *S, int c)
-{
-	if(strchr( operators " \t\n", c)) {
-		apply_operator(S,c);
-	} else {
-		*S->bp++ = (char)c;
-	}
 }
