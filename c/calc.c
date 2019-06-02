@@ -14,7 +14,8 @@
 struct state {
 	double *stack, *sp;
 	size_t stack_size;
-	char buf[32], *bp;
+	char *buf, *bp;
+	size_t buf_size;
 	int precision;
 };
 
@@ -32,6 +33,8 @@ main(int argc, char **argv)
 	S->stack_size = 4;
 	S->stack = xrealloc( NULL, sizeof *S->stack * S->stack_size );
 	S->sp = S->stack;
+	S->buf_size = 1;
+	S->buf = xrealloc( NULL, sizeof *S->buf * S->buf_size );
 	S->bp = S->buf;
 	S->precision = 3;
 
@@ -55,6 +58,11 @@ process_entry(struct state *S, int c)
 		apply_operator(S,c);
 	} else {
 		*S->bp++ = (char)c;
+		if( S->bp - S->buf == S->buf_size ) {
+			S->buf = xrealloc(S->buf, S->buf_size * 2 * sizeof *S->buf );
+			S->bp = S->buf + S->buf_size;
+			S->buf_size *= 2;
+		}
 	}
 }
 
