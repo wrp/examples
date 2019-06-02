@@ -30,7 +30,7 @@ main(int argc, char **argv)
 	struct state S[1];
 
 	S->stack = xrealloc( NULL, S->stack_size = 128 );
-	S->sp = S->stack + 1;
+	S->sp = S->stack;
 	S->bp = S->buf;
 	S->precision = 3;
 
@@ -57,40 +57,58 @@ process_entry(struct state *S, int c)
 	}
 }
 
+/*
+ * Decrement the stack pointer.  This checks if the caller
+ * can consume the given number of arguments, and leaves
+ * the stack pointer pointed to assume the caller will replace
+ * repl arguments on the stack.  (ie, this simply decrements
+ * the stack pointer by consume - repl, but does a bounds check first).
+ */
+void
+decr(struct state *S, int repl, int consume)
+{
+	assert( S->sp >= S->stack );
+	assert( consume >= repl );
+	if( S->sp - S->stack < consume ) {
+		fprintf(stderr, "Stack empty (need %d values)\n", consume);
+	} else {
+		S->sp -= consume - repl;
+	}
+}
+
 void
 apply_operator(struct state *S, int c)
 {
 	char *end;
 	char fmt[32];
+
 	*S->bp = '\0';
 	if( S->bp != S->buf ) {
-		*(++S->sp) = strtod(S->buf, &end);
+		*(S->sp++) = strtod(S->buf, &end);
 		if( end != S->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->buf);
 		}
 		S->bp = S->buf;
 	}
-
+	if( S->sp - S->stack == S->stack_size ) {
+		grow_stack(S);
+	}
 	switch(c) {
-	case '*': S->sp -= 1; S->sp[0] *= S->sp[1]; break;
-	case '+': S->sp -= 1; S->sp[0] += S->sp[1]; break;
-	case '/': S->sp -= 1; S->sp[0] /= S->sp[1]; break;
-	case '^': S->sp -= 1; S->sp[0] = pow(S->sp[0], S->sp[1]); break;
-	case '-': S->sp -= 1; S->sp[0] -= S->sp[1]; break;
-	case 'k': S->precision = *S->sp--; break;
+	case '*': decr(S, 1, 2); S->sp[-1] *= S->sp[0]; break;
+	case '+': decr(S, 1, 2); S->sp[-1] += S->sp[0]; break;
+	case '/': decr(S, 1, 2); S->sp[-1] /= S->sp[0]; break;
+	case '-': decr(S, 1, 2); S->sp[-1] -= S->sp[0]; break;
+	case '^': decr(S, 1, 2); S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
+	case 'k': decr(S, 0, 1); S->precision = S->sp[0]; break;
 	case 'p':
+		decr(S, 1, 1);
 		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
-		printf(fmt, S->sp[0]);
+		printf(fmt, S->sp[-1]);
 		break;
 	case 'q': exit(1);
 	/* Attempt to assure consistency with this case statement. */
-	default: assert(!strchr(operators, c));
-	}
-	if( S->sp == S->stack ) {
-		fprintf(stderr, "Stack empty\n");
-		S->sp = S->stack + 1;
-	} else if ( S->sp - S->stack == S->stack_size - 1) {
-		grow_stack(S);
+	default:
+		assert(!strchr(operators, c) || c == '\0');
 	}
 }
 
