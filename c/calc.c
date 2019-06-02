@@ -77,17 +77,23 @@ main(int argc, char **argv)
 	S->precision = 3;
 
 	while( (c=getchar()) != EOF ) {
-		if(strchr("*+/^-kwpq \t\n", c)) {
-			apply_operator(S,c);
-		} else {
-			*S->bp++ = (char)c;
-		}
-		if( S->sp == S->stack ) {
-			fprintf(stderr, "Stack empty\n");
-			S->sp = S->stack + 1;
-		} else if ( S->sp - S->stack == S->stack_size - 1) {
-			realloc_stack(S);
-		}
+		process_entry(S, c);
 	}
 	return 0;
+}
+
+void
+process_entry(struct state *S, int c)
+{
+	if(strchr("*+/^-kwpq \t\n", c)) {
+		apply_operator(S,c);
+	} else {
+		*S->bp++ = (char)c;
+	}
+	if( S->sp == S->stack ) {
+		fprintf(stderr, "Stack empty\n");
+		S->sp = S->stack + 1;
+	} else if ( S->sp - S->stack == S->stack_size - 1) {
+		realloc_stack(S);
+	}
 }
