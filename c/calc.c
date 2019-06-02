@@ -29,7 +29,7 @@ main(int argc, char **argv)
 	int c;
 	struct state S[1];
 
-	S->stack = xrealloc( NULL, S->stack_size = 128 );
+	S->stack = xrealloc( NULL, sizeof *S->stack * (S->stack_size = 4));
 	S->sp = S->stack;
 	S->bp = S->buf;
 	S->precision = 3;
@@ -116,8 +116,8 @@ apply_operator(struct state *S, int c)
 void
 grow_stack( struct state *S )
 {
-	assert( S->sp == NULL || S->sp - S->stack == S->stack_size - 1);
-	S->stack = xrealloc(S->stack, S->stack_size * 2 );
+	assert( S->sp - S->stack == S->stack_size );
+	S->stack = xrealloc(S->stack, S->stack_size * 2 * sizeof *S->stack );
 	S->sp = S->stack + S->stack_size - 1;
 	S->stack_size *= 2;
 }
