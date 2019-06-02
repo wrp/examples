@@ -19,9 +19,9 @@ struct state {
 };
 
 void process_entry( struct state *S, int c );
-void realloc_stack( struct state *S );
 void apply_operator(struct state *S, int c);
-void realloc_stack( struct state *S );
+void grow_stack( struct state *S );
+void * xrealloc( void *p, size_t s );
 
 int
 main(int argc, char **argv)
@@ -29,10 +29,8 @@ main(int argc, char **argv)
 	int c;
 	struct state S[1];
 
-	S->stack = NULL;
-	S->stack_size = 1;
-	S->sp = S->stack;
-	realloc_stack(S);
+	S->stack = xrealloc( NULL, S->stack_size = 128 );
+	S->sp = S->stack + 1;
 	S->bp = S->buf;
 	S->precision = 3;
 
@@ -92,19 +90,28 @@ apply_operator(struct state *S, int c)
 		fprintf(stderr, "Stack empty\n");
 		S->sp = S->stack + 1;
 	} else if ( S->sp - S->stack == S->stack_size - 1) {
-		realloc_stack(S);
+		grow_stack(S);
 	}
 }
 
 
 void
-realloc_stack( struct state *S )
+grow_stack( struct state *S )
 {
 	assert( S->sp == NULL || S->sp - S->stack == S->stack_size - 1);
-	if( ( S->stack = realloc(S->stack, S->stack_size * 2 )) == NULL) {
+	S->stack = xrealloc(S->stack, S->stack_size * 2 );
+	S->sp = S->stack + S->stack_size - 1;
+	S->stack_size *= 2;
+}
+
+
+void *
+xrealloc( void *p, size_t s )
+{
+	void *rv = realloc( p, s );
+	if( rv == NULL ) {
 		perror("realloc");
 		exit(1);
 	}
-	S->sp = S->stack + S->stack_size - 1;
-	S->stack_size *= 2;
+	return rv;
 }
