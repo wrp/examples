@@ -127,7 +127,7 @@ grow_stack( struct state *S )
 {
 	assert( S->sp - S->stack == S->stack_size );
 	S->stack = xrealloc(S->stack, S->stack_size * 2 * sizeof *S->stack );
-	S->sp = S->stack + S->stack_size - 1;
+	S->sp = S->stack + S->stack_size;
 	S->stack_size *= 2;
 }
 
