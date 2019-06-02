@@ -18,6 +18,7 @@ struct state {
 };
 
 
+void process_entry(struct state *S, int c);
 void
 apply_operator(struct state *S, int c)
 {
@@ -45,6 +46,12 @@ apply_operator(struct state *S, int c)
 		printf(fmt, S->sp[0]);
 		break;
 	case 'q': exit(1);
+	}
+	if( S->sp == S->stack ) {
+		fprintf(stderr, "Stack empty\n");
+		S->sp = S->stack + 1;
+	} else if ( S->sp - S->stack == S->stack_size - 1) {
+		realloc_stack(S);
 	}
 }
 
@@ -76,7 +83,14 @@ main(int argc, char **argv)
 	S->width = 6;
 	S->precision = 3;
 
-	while( (c=getchar()) != EOF ) {
+	if( argc > 1) {
+		for( argv += 1; *argv; argv++ ) {
+			for( char *k = *argv; *k; k++ ) {
+				process_entry(S, (int)*k);
+			}
+			process_entry(S, ' ');
+		}
+	} else while( (c=getchar()) != EOF ) {
 		process_entry(S, c);
 	}
 	return 0;
@@ -89,11 +103,5 @@ process_entry(struct state *S, int c)
 		apply_operator(S,c);
 	} else {
 		*S->bp++ = (char)c;
-	}
-	if( S->sp == S->stack ) {
-		fprintf(stderr, "Stack empty\n");
-		S->sp = S->stack + 1;
-	} else if ( S->sp - S->stack == S->stack_size - 1) {
-		realloc_stack(S);
 	}
 }
