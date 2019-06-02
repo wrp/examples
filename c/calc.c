@@ -9,16 +9,18 @@
 #include <ctype.h>
 #include <math.h>
 
+#define operators "*+/^-kpq"
+
 struct state {
 	double *stack, *sp;
 	size_t stack_size;
 	char buf[32], *bp;
-	int width;
 	int precision;
 };
 
 
-void process_entry(struct state *S, int c);
+void process_entry( struct state *S, int c );
+void realloc_stack( struct state *S );
 void
 apply_operator(struct state *S, int c)
 {
@@ -40,12 +42,13 @@ apply_operator(struct state *S, int c)
 	case '^': S->sp -= 1; S->sp[0] = pow(S->sp[0], S->sp[1]); break;
 	case '-': S->sp -= 1; S->sp[0] -= S->sp[1]; break;
 	case 'k': S->precision = *S->sp--; break;
-	case 'w': S->width = *S->sp--; break;
 	case 'p':
-		snprintf(fmt, sizeof fmt, "%%%d.%dg\n", S->width, S->precision);
+		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
 		printf(fmt, S->sp[0]);
 		break;
 	case 'q': exit(1);
+	/* Attempt to assure consistency with this case statement. */
+	default: assert(!strchr(operators, c));
 	}
 	if( S->sp == S->stack ) {
 		fprintf(stderr, "Stack empty\n");
@@ -80,7 +83,6 @@ main(int argc, char **argv)
 	S->sp = S->stack;
 	realloc_stack(S);
 	S->bp = S->buf;
-	S->width = 6;
 	S->precision = 3;
 
 	if( argc > 1) {
@@ -99,7 +101,7 @@ main(int argc, char **argv)
 void
 process_entry(struct state *S, int c)
 {
-	if(strchr("*+/^-kwpq \t\n", c)) {
+	if(strchr( operators " \t\n", c)) {
 		apply_operator(S,c);
 	} else {
 		*S->bp++ = (char)c;
