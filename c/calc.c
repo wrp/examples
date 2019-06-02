@@ -29,7 +29,8 @@ main(int argc, char **argv)
 	int c;
 	struct state S[1];
 
-	S->stack = xrealloc( NULL, sizeof *S->stack * (S->stack_size = 4));
+	S->stack_size = 4;
+	S->stack = xrealloc( NULL, sizeof *S->stack * S->stack_size );
 	S->sp = S->stack;
 	S->bp = S->buf;
 	S->precision = 3;
@@ -105,7 +106,7 @@ apply_operator(struct state *S, int c)
 		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
 		printf(fmt, S->sp[-1]);
 		break;
-	case 'q': exit(1);
+	case 'q': exit(0);
 	/* Attempt to assure consistency with this case statement. */
 	default:
 		assert(!strchr(operators, c) || c == '\0');
