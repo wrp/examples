@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Check coverage of calc.c.  If configured without --coverage in CFLAGS,
+# this will likely just get skipped.  (eg, configure with
+# CFLAGS='--coverage -g -O0' to run this test)
+if ! test -f calc.gcda; then
+	exit 77
+fi
+gcov calc
+if grep '#####' calc.c.gcov | grep -v 'no coverage' | grep .; then
+	echo The above lines were not executed during testing
+	exit 1
+fi >&2

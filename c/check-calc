@@ -24,7 +24,11 @@ test_string '7 3-p' '4'
 test_string '7    2/p' '3.5'
 test_string '1 2 *7 -p ' '-5'
 test_string '3.1 1.3+p' '4.4'
-test_string '2 5^p' '32'
+test_string '2 5^pq' '32'
+test_string '2y5' 'Garbled: 2y5'
+test_string '10k10 3/p' '3.333333333'
+
+
 # Grow the stack
 s=$(yes 1 | sed -e 128q | tr \\n ' ')
 test_string "$s"

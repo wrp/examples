@@ -129,8 +129,8 @@ xrealloc( void *p, size_t s )
 {
 	void *rv = realloc( p, s );
 	if( rv == NULL ) {
-		perror("realloc");
-		exit(1);
+		perror("realloc"); /* no coverage */
+		exit(1);           /* no coverage */
 	}
 	return rv;
 }
