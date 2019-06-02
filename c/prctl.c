@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#if HAVE_SYS_PRCTL_H
 #include <sys/prctl.h>
+#endif
 
 /* Demonstrate use of prctl to get a signal when the parent terminates */
 void
@@ -16,6 +18,7 @@ handle(int s, siginfo_t *i, void *v)
 int
 main(void)
 {
+#if HAVE_SYS_PRCTL_H
 	struct sigaction act = {{0}};
 
 	act.sa_sigaction = handle;
@@ -32,5 +35,6 @@ main(void)
 		exit(1);
 	}
 	pause();
+#endif
 	return 0;
 }
