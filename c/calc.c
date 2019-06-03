@@ -30,6 +30,7 @@ void xpipe(int *fd);
 int xdup2(int s, int t);
 void xclose(int fd);
 void write_args_to_stdin(const char **argv);
+void push_number(struct state *S);
 
 int
 main(int argc, char **argv)
@@ -57,8 +58,14 @@ main(int argc, char **argv)
 void
 process_entry(struct state *S, int c)
 {
-	if(strchr( operators commands " \t\n", c)) {
-		apply_operator(S,c);
+	if(strchr( " \t\n", c )) {
+		push_number(S);
+	} else if(strchr( operators, c )) {
+		push_number(S);
+		apply_operator(S, c);
+	} else if(strchr( commands, c )) {
+		push_number(S);
+		apply_command(S, c);
 	} else {
 		*S->bp++ = (char)c;
 		if( S->bp - S->buf == S->buf_size ) {
@@ -88,14 +95,13 @@ decr(struct state *S, int repl, int consume)
 	}
 }
 
-void
-apply_operator(struct state *S, int c)
-{
-	char *end;
-	char fmt[32];
 
+void
+push_number(struct state *S)
+{
 	*S->bp = '\0';
 	if( S->bp != S->buf ) {
+		char *end;
 		*(S->sp++) = strtod(S->buf, &end);
 		if( end != S->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->buf);
@@ -105,22 +111,38 @@ apply_operator(struct state *S, int c)
 	if( S->sp - S->stack == S->stack_size ) {
 		grow_stack(S);
 	}
+}
+
+
+void
+apply_command(struct state *S, int c)
+{
+	char fmt[32];
+
+	switch(c) {
+	case 'k': decr(S, 0, 1); S->precision = S->sp[0]; break;
+	case 'p': {
+		char fmt[32];
+		decr(S, 1, 1);
+		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
+		printf(fmt, S->sp[-1]);
+	} break;
+	case 'q': exit(0);
+	default: assert(0); /* no coverage */
+	}
+}
+
+
+void
+apply_operator(struct state *S, int c)
+{
 	switch(c) {
 	case '*': decr(S, 1, 2); S->sp[-1] *= S->sp[0]; break;
 	case '+': decr(S, 1, 2); S->sp[-1] += S->sp[0]; break;
 	case '/': decr(S, 1, 2); S->sp[-1] /= S->sp[0]; break;
 	case '-': decr(S, 1, 2); S->sp[-1] -= S->sp[0]; break;
 	case '^': decr(S, 1, 2); S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
-	case 'k': decr(S, 0, 1); S->precision = S->sp[0]; break;
-	case 'p':
-		decr(S, 1, 1);
-		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
-		printf(fmt, S->sp[-1]);
-		break;
-	case 'q': exit(0);
-	/* Attempt to assure consistency with this case statement. */
-	default:
-		assert(!strchr(operators commands, c) || c == '\0');
+	default: assert(0); /* no coverage */
 	}
 }
 
