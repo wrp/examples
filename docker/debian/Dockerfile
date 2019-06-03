@@ -82,6 +82,7 @@ RUN aptitude install -y git
 RUN aptitude install -y e2fsprogs
 RUN aptitude install -y uuid-runtime
 RUN aptitude install -y libinline-c-perl
+RUN aptitude install -y info
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
