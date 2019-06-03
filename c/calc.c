@@ -18,7 +18,7 @@ struct state {
 	size_t stack_size;
 	char *buf, *bp;
 	size_t buf_size;
-	int precision;
+	char fmt[32];
 };
 
 void process_entry( struct state *S, int c );
@@ -44,7 +44,7 @@ main(int argc, char **argv)
 	S->buf_size = 1;
 	S->buf = xrealloc( NULL, sizeof *S->buf * S->buf_size );
 	S->bp = S->buf;
-	S->precision = 3;
+	strcpy(S->fmt, "%.3g\n");
 
 	if( argc > 1) {
 		write_args_to_stdin(argv + 1);
@@ -117,15 +117,14 @@ push_number(struct state *S)
 void
 apply_command(struct state *S, int c)
 {
-	char fmt[32];
-
 	switch(c) {
-	case 'k': decr(S, 0, 1); S->precision = S->sp[0]; break;
+	case 'k':
+		decr(S, 0, 1);
+		snprintf(S->fmt, sizeof S->fmt, "%%.%dg\n", (int)S->sp[0]);
+		break;
 	case 'p': {
-		char fmt[32];
 		decr(S, 1, 1);
-		snprintf(fmt, sizeof fmt, "%%.%dg\n", S->precision);
-		printf(fmt, S->sp[-1]);
+		printf(S->fmt, S->sp[-1]);
 	} break;
 	case 'q': exit(0);
 	default: assert(0); /* no coverage */
