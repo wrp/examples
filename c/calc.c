@@ -55,6 +55,16 @@ main(int argc, char **argv)
 	return 0;
 }
 
+void push_buf(struct state *S, int c)
+{
+	*S->bp++ = (char)c;
+	if( S->bp - S->buf == S->buf_size ) {
+		S->buf = xrealloc(S->buf, S->buf_size * 2 * sizeof *S->buf );
+		S->bp = S->buf + S->buf_size;
+		S->buf_size *= 2;
+	}
+}
+
 void
 process_entry(struct state *S, int c)
 {
@@ -67,12 +77,7 @@ process_entry(struct state *S, int c)
 		push_number(S);
 		apply_command(S, c);
 	} else {
-		*S->bp++ = (char)c;
-		if( S->bp - S->buf == S->buf_size ) {
-			S->buf = xrealloc(S->buf, S->buf_size * 2 * sizeof *S->buf );
-			S->bp = S->buf + S->buf_size;
-			S->buf_size *= 2;
-		}
+		push_buf(S, c);
 	}
 }
 
