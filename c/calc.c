@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <math.h>
+#include <unistd.h>
 
 #define operators "*+/^-kpq"
 
@@ -23,6 +24,10 @@ void process_entry( struct state *S, int c );
 void apply_operator(struct state *S, int c);
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
+void die(const char *msg);
+void xpipe(int *fd);
+int xdup2(int s, int t);
+void xclose(int fd);
 
 int
 main(int argc, char **argv)
@@ -39,13 +44,23 @@ main(int argc, char **argv)
 	S->precision = 3;
 
 	if( argc > 1) {
-		for( argv += 1; *argv; argv++ ) {
-			for( char *k = *argv; *k; k++ ) {
-				process_entry(S, (int)*k);
+		int p[2];
+		xpipe(p);
+		xdup2(p[0],STDIN_FILENO);
+		switch(fork()) {
+		case -1: die("fork"); /* no coverage */
+		case 0:
+			xclose(STDIN_FILENO);
+			xdup2(p[1], STDOUT_FILENO);
+			for( argv += 1; *argv; argv++ ) {
+				printf("%s ", *argv);
 			}
-			process_entry(S, ' ');
+			exit(EXIT_SUCCESS);
+		default:
+			xclose(p[1]);
 		}
-	} else while( (c=getchar()) != EOF ) {
+	}
+	while( (c=getchar()) != EOF ) {
 		process_entry(S, c);
 	}
 	return 0;
@@ -142,3 +157,14 @@ xrealloc( void *p, size_t s )
 	}
 	return rv;
 }
+
+void
+die(const char *msg)  /* no coverage */
+{
+	perror(msg);  /* no coverage */
+	exit(1);      /* no coverage */
+}
+
+void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
+int xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
+void xclose(int fd) { if(close(fd) == -1 ) die("close"); }
