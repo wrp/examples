@@ -10,7 +10,8 @@
 #include <math.h>
 #include <unistd.h>
 
-#define operators "*+/^-kpq"
+#define operators "*+/^-"
+#define commands "kpq"
 
 struct state {
 	double *stack, *sp;
@@ -56,7 +57,7 @@ main(int argc, char **argv)
 void
 process_entry(struct state *S, int c)
 {
-	if(strchr( operators " \t\n", c)) {
+	if(strchr( operators commands " \t\n", c)) {
 		apply_operator(S,c);
 	} else {
 		*S->bp++ = (char)c;
@@ -119,7 +120,7 @@ apply_operator(struct state *S, int c)
 	case 'q': exit(0);
 	/* Attempt to assure consistency with this case statement. */
 	default:
-		assert(!strchr(operators, c) || c == '\0');
+		assert(!strchr(operators commands, c) || c == '\0');
 	}
 }
 
