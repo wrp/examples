@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 #define operators "*+/^-"
-#define commands "kpq"
+#define commands "fkpq"
 
 struct state {
 	double *stack, *sp;
@@ -23,6 +23,7 @@ struct state {
 
 void process_entry( struct state *S, int c );
 void apply_operator(struct state *S, int c);
+void apply_command(struct state *S, int c);
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
 void die(const char *msg);
@@ -126,6 +127,12 @@ apply_command(struct state *S, int c)
 	case 'k':
 		decr(S, 0, 1);
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dg\n", (int)S->sp[0]);
+		break;
+	case 'f':
+		for(double *s = S->stack; s < S->sp; s++) {
+			printf("%3d: ", s - S->stack);
+			printf(S->fmt, *s);
+		}
 		break;
 	case 'p': {
 		decr(S, 1, 1);

@@ -17,7 +17,10 @@ test_string() {
 	fi
 }
 
+nl='
+'
 test_string '1 1+p' '2'
+test_string '4.5 1 1+f' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'
 test_string '7 3-p' '4'
 test_string '7 3-p' '4'
@@ -32,8 +35,6 @@ test_string '10k10 3/p' '3.333333333'
 # Grow the stack
 s=$(yes 1 | sed -e 128q | tr \\n ' ')
 test_string "$s"
-nl='
-'
 e='Stack empty (need 2 values)'
 test_string '**' "$e$nl$e"
 
