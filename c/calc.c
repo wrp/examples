@@ -28,6 +28,7 @@ void die(const char *msg);
 void xpipe(int *fd);
 int xdup2(int s, int t);
 void xclose(int fd);
+void write_args_to_stdin(const char **argv);
 
 int
 main(int argc, char **argv)
@@ -44,21 +45,7 @@ main(int argc, char **argv)
 	S->precision = 3;
 
 	if( argc > 1) {
-		int p[2];
-		xpipe(p);
-		xdup2(p[0],STDIN_FILENO);
-		switch(fork()) {
-		case -1: die("fork"); /* no coverage */
-		case 0:
-			xclose(STDIN_FILENO);
-			xdup2(p[1], STDOUT_FILENO);
-			for( argv += 1; *argv; argv++ ) {
-				printf("%s ", *argv);
-			}
-			exit(EXIT_SUCCESS);
-		default:
-			xclose(p[1]);
-		}
+		write_args_to_stdin(argv + 1);
 	}
 	while( (c=getchar()) != EOF ) {
 		process_entry(S, c);
@@ -168,3 +155,21 @@ die(const char *msg)  /* no coverage */
 void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
 int xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
 void xclose(int fd) { if(close(fd) == -1 ) die("close"); }
+void write_args_to_stdin(const char **argv)
+{
+	int p[2];
+	xpipe(p);
+	xdup2(p[0],STDIN_FILENO);
+	switch(fork()) {
+	case -1: die("fork"); /* no coverage */
+	case 0:
+		xclose(STDIN_FILENO);
+		xdup2(p[1], STDOUT_FILENO);
+		for(; *argv; argv++ ) {
+			printf("%s ", *argv);
+		}
+		exit(EXIT_SUCCESS);
+	default:
+		xclose(p[1]);
+	}
+}
