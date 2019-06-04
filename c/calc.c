@@ -27,10 +27,7 @@ void apply_command( struct state *S, int c );
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
-void xpipe( int *fd );
-int xdup2( int s, int t );
-void xclose( int fd );
-void write_args_to_stdin( const char **argv );
+void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
 
 int
@@ -59,7 +56,7 @@ main( int argc, char **argv )
 void push_buf(struct state *S, int c)
 {
 	*S->bp++ = (char)c;
-	if( S->bp - S->buf == S->buf_size ) {
+	if( S->bp == S->buf + S->buf_size ) {
 		S->buf = xrealloc( S->buf, S->buf_size * 2 * sizeof *S->buf );
 		S->bp = S->buf + S->buf_size;
 		S->buf_size *= 2;
@@ -94,7 +91,7 @@ push_number(struct state *S)
 			fprintf(stderr, "Garbled: %s\n", S->buf);
 		}
 		S->bp = S->buf;
-		if( S->sp - S->stack == S->stack_size ) {
+		if( S->sp == S->stack + S->stack_size ) {
 			grow_stack(S);
 		}
 	}
@@ -150,7 +147,7 @@ apply_operator(struct state *S, int c)
 void
 grow_stack( struct state *S )
 {
-	assert( S->sp - S->stack == S->stack_size );
+	assert( S->sp == S->stack + S->stack_size );
 	S->stack = xrealloc(S->stack, S->stack_size * 2 * sizeof *S->stack );
 	S->sp = S->stack + S->stack_size;
 	S->stack_size *= 2;
@@ -176,9 +173,9 @@ die(const char *msg)  /* uncovered */
 }                     /* uncovered */
 
 void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
-int xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
 void xclose(int fd) { if(close(fd) == -1 ) die("close"); }
-void write_args_to_stdin(const char **argv)
+void xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
+void write_args_to_stdin(char *const*argv)
 {
 	int p[2];
 	xpipe(p);
