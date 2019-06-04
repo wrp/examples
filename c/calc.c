@@ -22,19 +22,19 @@ struct state {
 };
 
 void process_entry( struct state *S, int c );
-void apply_operator(struct state *S, int c);
-void apply_command(struct state *S, int c);
+void apply_operator( struct state *S, int c );
+void apply_command( struct state *S, int c );
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
-void die(const char *msg);
-void xpipe(int *fd);
-int xdup2(int s, int t);
-void xclose(int fd);
-void write_args_to_stdin(const char **argv);
-void push_number(struct state *S);
+void die( const char *msg );
+void xpipe( int *fd );
+int xdup2( int s, int t );
+void xclose( int fd );
+void write_args_to_stdin( const char **argv );
+void push_number( struct state *S );
 
 int
-main(int argc, char **argv)
+main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
@@ -45,13 +45,13 @@ main(int argc, char **argv)
 	S->buf_size = 1;
 	S->buf = xrealloc( NULL, sizeof *S->buf * S->buf_size );
 	S->bp = S->buf;
-	strcpy(S->fmt, "%.3g\n");
+	strcpy( S->fmt, "%.3g\n" );
 
 	if( argc > 1) {
 		write_args_to_stdin( argv + 1 );
 	}
 	while( (c=getchar()) != EOF ) {
-		process_entry(S, c);
+		process_entry( S, c );
 	}
 	return 0;
 }
@@ -60,7 +60,7 @@ void push_buf(struct state *S, int c)
 {
 	*S->bp++ = (char)c;
 	if( S->bp - S->buf == S->buf_size ) {
-		S->buf = xrealloc(S->buf, S->buf_size * 2 * sizeof *S->buf );
+		S->buf = xrealloc( S->buf, S->buf_size * 2 * sizeof *S->buf );
 		S->bp = S->buf + S->buf_size;
 		S->buf_size *= 2;
 	}
@@ -69,7 +69,7 @@ void push_buf(struct state *S, int c)
 void
 process_entry(struct state *S, int c)
 {
-	if(strchr( " \t\n", c )) {
+	if( strchr( " \t\n", c )) {
 		push_number(S);
 	} else if(strchr( operators, c )) {
 		push_number(S);
