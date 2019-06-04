@@ -14,7 +14,7 @@
 #define commands "fkpq"
 
 struct state {
-	double *stack, *sp;
+	long double *stack, *sp;
 	size_t stack_size;
 	char *buf, *bp;
 	size_t buf_size;
@@ -42,7 +42,7 @@ main( int argc, char **argv )
 	S->buf_size = 1;
 	S->buf = xrealloc( NULL, sizeof *S->buf * S->buf_size );
 	S->bp = S->buf;
-	strcpy( S->fmt, "%.3g\n" );
+	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
 		write_args_to_stdin( argv + 1 );
@@ -109,10 +109,10 @@ apply_command(struct state *S, int c)
 	}
 	switch(c) {
 	case 'k':
-		snprintf(S->fmt, sizeof S->fmt, "%%.%dg\n", (int)*--S->sp);
+		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
 		break;
 	case 'f':
-		for(double *s = S->stack; s < S->sp; s++) {
+		for(typeof(S->stack) s = S->stack; s < S->sp; s++) {
 			printf("%3u: ", (unsigned)(s - S->stack));
 			printf(S->fmt, *s);
 		}
