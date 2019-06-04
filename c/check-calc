@@ -19,6 +19,7 @@ test_string() {
 
 nl='
 '
+test_string 'p' 'Stack empty (need 1 value)'
 test_string '1 1+p' '2'
 test_string '4.5 1 1+f' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'

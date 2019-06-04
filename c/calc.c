@@ -82,25 +82,6 @@ process_entry(struct state *S, int c)
 	}
 }
 
-/*
- * Decrement the stack pointer.  This checks if the caller
- * can consume the given number of arguments, and leaves
- * the stack pointer pointed to assume the caller will replace
- * repl arguments on the stack.  (ie, this simply decrements
- * the stack pointer by consume - repl, but does a bounds check first).
- */
-void
-decr(struct state *S, int repl, int consume)
-{
-	assert( S->sp >= S->stack );
-	assert( consume >= repl );
-	if( S->sp - S->stack < consume ) {
-		fprintf(stderr, "Stack empty (need %d values)\n", consume);
-	} else {
-		S->sp -= consume - repl;
-	}
-}
-
 
 void
 push_number(struct state *S)
@@ -123,23 +104,26 @@ push_number(struct state *S)
 void
 apply_command(struct state *S, int c)
 {
+	assert( S->sp >= S->stack );
+	assert( strchr( commands, c ));
+	if( S->sp - S->stack < 1 ) {
+		fputs( "Stack empty (need 1 value)\n", stderr );
+		return;
+	}
 	switch(c) {
 	case 'k':
-		decr(S, 0, 1);
-		snprintf(S->fmt, sizeof S->fmt, "%%.%dg\n", (int)S->sp[0]);
+		snprintf(S->fmt, sizeof S->fmt, "%%.%dg\n", (int)*--S->sp);
 		break;
 	case 'f':
 		for(double *s = S->stack; s < S->sp; s++) {
-			printf("%3d: ", s - S->stack);
+			printf("%3u: ", (unsigned)(s - S->stack));
 			printf(S->fmt, *s);
 		}
 		break;
 	case 'p': {
-		decr(S, 1, 1);
 		printf(S->fmt, S->sp[-1]);
 	} break;
 	case 'q': exit(0);
-	default: assert(0); /* uncovered */
 	}
 }
 
@@ -147,13 +131,18 @@ apply_command(struct state *S, int c)
 void
 apply_operator(struct state *S, int c)
 {
+	assert( S->sp >= S->stack );
+	if( S->sp - S->stack < 2 ) {
+		fputs( "Stack empty (need 2 values)\n", stderr );
+		return;
+	}
+	S->sp -= 1;
 	switch(c) {
-	case '*': decr(S, 1, 2); S->sp[-1] *= S->sp[0]; break;
-	case '+': decr(S, 1, 2); S->sp[-1] += S->sp[0]; break;
-	case '/': decr(S, 1, 2); S->sp[-1] /= S->sp[0]; break;
-	case '-': decr(S, 1, 2); S->sp[-1] -= S->sp[0]; break;
-	case '^': decr(S, 1, 2); S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
-	default: assert(0); /* uncovered */
+	case '*': S->sp[-1] *= S->sp[0]; break;
+	case '+': S->sp[-1] += S->sp[0]; break;
+	case '/': S->sp[-1] /= S->sp[0]; break;
+	case '-': S->sp[-1] -= S->sp[0]; break;
+	case '^': S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
 	}
 }
 
