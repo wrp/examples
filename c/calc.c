@@ -48,7 +48,7 @@ main(int argc, char **argv)
 	strcpy(S->fmt, "%.3g\n");
 
 	if( argc > 1) {
-		write_args_to_stdin(argv + 1);
+		write_args_to_stdin( argv + 1 );
 	}
 	while( (c=getchar()) != EOF ) {
 		process_entry(S, c);
@@ -113,9 +113,9 @@ push_number(struct state *S)
 			fprintf(stderr, "Garbled: %s\n", S->buf);
 		}
 		S->bp = S->buf;
-	}
-	if( S->sp - S->stack == S->stack_size ) {
-		grow_stack(S);
+		if( S->sp - S->stack == S->stack_size ) {
+			grow_stack(S);
+		}
 	}
 }
 
@@ -184,7 +184,7 @@ die(const char *msg)  /* no coverage */
 {
 	perror(msg);  /* no coverage */
 	exit(1);      /* no coverage */
-}
+}                     /* no coverage */
 
 void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
 int xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
