@@ -7,7 +7,7 @@ if ! test -f calc.gcda; then
 	exit 77
 fi
 gcov calc
-if grep '#####' calc.c.gcov | grep -v 'no coverage' | grep .; then
+if grep '#####' calc.c.gcov | grep -v -F '/* uncovered */' | grep .; then
 	echo The above lines were not executed during testing
 	exit 1
 fi >&2

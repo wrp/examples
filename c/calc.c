@@ -139,7 +139,7 @@ apply_command(struct state *S, int c)
 		printf(S->fmt, S->sp[-1]);
 	} break;
 	case 'q': exit(0);
-	default: assert(0); /* no coverage */
+	default: assert(0); /* uncovered */
 	}
 }
 
@@ -153,7 +153,7 @@ apply_operator(struct state *S, int c)
 	case '/': decr(S, 1, 2); S->sp[-1] /= S->sp[0]; break;
 	case '-': decr(S, 1, 2); S->sp[-1] -= S->sp[0]; break;
 	case '^': decr(S, 1, 2); S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
-	default: assert(0); /* no coverage */
+	default: assert(0); /* uncovered */
 	}
 }
 
@@ -173,18 +173,18 @@ xrealloc( void *p, size_t s )
 {
 	void *rv = realloc( p, s );
 	if( rv == NULL ) {
-		perror("realloc"); /* no coverage */
-		exit(1);           /* no coverage */
+		perror("realloc"); /* uncovered */
+		exit(1);           /* uncovered */
 	}
 	return rv;
 }
 
 void
-die(const char *msg)  /* no coverage */
+die(const char *msg)  /* uncovered */
 {
-	perror(msg);  /* no coverage */
-	exit(1);      /* no coverage */
-}                     /* no coverage */
+	perror(msg);  /* uncovered */
+	exit(1);      /* uncovered */
+}                     /* uncovered */
 
 void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
 int xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
@@ -195,7 +195,7 @@ void write_args_to_stdin(const char **argv)
 	xpipe(p);
 	xdup2(p[0],STDIN_FILENO);
 	switch(fork()) {
-	case -1: die("fork"); /* no coverage */
+	case -1: die("fork"); /* uncovered */
 	case 0:
 		xclose(STDIN_FILENO);
 		xdup2(p[1], STDOUT_FILENO);
