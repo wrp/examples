@@ -86,7 +86,7 @@ push_number(struct state *S)
 	*S->bp = '\0';
 	if( S->bp != S->buf ) {
 		char *end;
-		*(S->sp++) = strtod(S->buf, &end);
+		*(S->sp++) = strtold(S->buf, &end);
 		if( end != S->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->buf);
 		}
