@@ -9,10 +9,13 @@ run:
 	@# -p 8125      Let docker select the port.  Discover with 'docker port $container'
 	@# ($container can be found from 'docker ps')
 	@# -v localmnt:mount_in_docker_image
-	-docker run -it -p 8125 -v $(HOME):/home/$(USER) -v /$(USER):/$(USER) \
+	-if ! id=$$(docker ps | awk '$$2 == "mydebian" {print $$1; exit 1}'); then \
+		docker exec -it -u $(USER) "$$id" bash; \
+	else \
+		docker run -it -p 8125 -v $(HOME):/home/$(USER) -v /$(USER):/$(USER) \
 		-e USE_HOME=/$(USER) \
-		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined mydebian
-
+		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined mydebian; \
+	fi
 	@# To access that port, the container needs to use its ip address which
 	@# can be found with 'docker inspect $container_id | grep IPAddress'
 	@# eg, on the container, run 'ncat -kl $this_ip 8125'
