@@ -10,7 +10,7 @@
 #include <math.h>
 #include <unistd.h>
 
-#define binary "*+/^-"
+#define binary "*+/^-r"
 #define unary "dfkpq"
 
 struct state {
@@ -143,6 +143,12 @@ apply_binary(struct state *S, int c)
 	}
 	S->sp -= 1;
 	switch(c) {
+	case 'r': {
+		typeof (*S->sp) tmp = S->sp[0];
+		S->sp[0] = S->sp[-1];
+		S->sp[-1] = tmp;
+		S->sp += 1;
+	} break;
 	case '*': S->sp[-1] *= S->sp[0]; break;
 	case '+': S->sp[-1] += S->sp[0]; break;
 	case '/': S->sp[-1] /= S->sp[0]; break;
