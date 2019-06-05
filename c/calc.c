@@ -10,8 +10,8 @@
 #include <math.h>
 #include <unistd.h>
 
-#define operators "*+/^-"
-#define commands "dfkpq"
+#define binary "*+/^-"
+#define unary "dfkpq"
 
 struct state {
 	long double *stack, *sp;
@@ -22,8 +22,8 @@ struct state {
 };
 
 void process_entry( struct state *S, int c );
-void apply_operator( struct state *S, int c );
-void apply_command( struct state *S, int c );
+void apply_binary( struct state *S, int c );
+void apply_unary( struct state *S, int c );
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
@@ -71,12 +71,12 @@ process_entry(struct state *S, int c)
 {
 	if( strchr( " \t\n", c )) {
 		push_number(S);
-	} else if(strchr( operators, c )) {
+	} else if(strchr( binary, c )) {
 		push_number(S);
-		apply_operator(S, c);
-	} else if(strchr( commands, c )) {
+		apply_binary(S, c);
+	} else if(strchr( unary, c )) {
 		push_number(S);
-		apply_command(S, c);
+		apply_unary(S, c);
 	} else {
 		push_buf(S, c);
 	}
@@ -102,10 +102,10 @@ push_number(struct state *S)
 
 
 void
-apply_command(struct state *S, int c)
+apply_unary(struct state *S, int c)
 {
 	assert( S->sp >= S->stack );
-	assert( strchr( commands, c ));
+	assert( strchr( unary, c ));
 	if( S->sp - S->stack < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
@@ -133,9 +133,10 @@ apply_command(struct state *S, int c)
 
 
 void
-apply_operator(struct state *S, int c)
+apply_binary(struct state *S, int c)
 {
 	assert( S->sp >= S->stack );
+	assert( strchr( binary, c ));
 	if( S->sp - S->stack < 2 ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
