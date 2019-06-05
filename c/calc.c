@@ -29,7 +29,6 @@ void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
-
 int
 main( int argc, char **argv )
 {
@@ -45,13 +44,17 @@ main( int argc, char **argv )
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		write_args_to_stdin( argv + 1 );
-	}
-	while( (c=getchar()) != EOF ) {
+		for( ; *++argv; process_entry( S, ' ')) {
+			for( char *t = *argv; *t; t++ ) {
+				process_entry( S, *t );
+			}
+		}
+	} else while( (c=getchar()) != EOF ) {
 		process_entry( S, c );
 	}
 	return 0;
 }
+
 
 void push_buf(struct state *S, int c)
 {
@@ -171,25 +174,3 @@ die(const char *msg)  /* uncovered */
 	perror(msg);  /* uncovered */
 	exit(1);      /* uncovered */
 }                     /* uncovered */
-
-void xpipe(int *fd) { if(pipe(fd) == -1) die("pipe"); }
-void xclose(int fd) { if(close(fd) == -1 ) die("close"); }
-void xdup2(int s, int t) { if(dup2(s,t) == -1)  die("dup2"); xclose(s); }
-void write_args_to_stdin(char *const*argv)
-{
-	int p[2];
-	xpipe(p);
-	xdup2(p[0],STDIN_FILENO);
-	switch(fork()) {
-	case -1: die("fork"); /* uncovered */
-	case 0:
-		xclose(STDIN_FILENO);
-		xdup2(p[1], STDOUT_FILENO);
-		for(; *argv; argv++ ) {
-			printf("%s ", *argv);
-		}
-		exit(EXIT_SUCCESS);
-	default:
-		xclose(p[1]);
-	}
-}
