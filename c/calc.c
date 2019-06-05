@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 #define operators "*+/^-"
-#define commands "fkpq"
+#define commands "dfkpq"
 
 struct state {
 	long double *stack, *sp;
@@ -111,6 +111,10 @@ apply_command(struct state *S, int c)
 		return;
 	}
 	switch(c) {
+	case 'd':
+		S->sp[0] = S->sp[-1];
+		S->sp += 1;
+		break;
 	case 'k':
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
 		break;
