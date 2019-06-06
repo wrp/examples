@@ -13,11 +13,15 @@
 #define binary "*+/^-r"
 #define unary "dfkpq"
 
+struct char_buf {
+	char *buf, *bp;
+	size_t size;
+};
+
 struct state {
 	long double *stack, *sp;
 	size_t stack_size;
-	char *buf, *bp;
-	size_t buf_size;
+	struct char_buf *char_stack, *bp;
 	char fmt[32];
 };
 
@@ -36,11 +40,10 @@ main( int argc, char **argv )
 	struct state S[1];
 
 	S->stack_size = 4;
-	S->stack = xrealloc( NULL, sizeof *S->stack * S->stack_size );
-	S->sp = S->stack;
-	S->buf_size = 1;
-	S->buf = xrealloc( NULL, sizeof *S->buf * S->buf_size );
-	S->bp = S->buf;
+	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
+	S->bp = S->char_stack = xrealloc( NULL, 1 * sizeof *S->bp );
+	S->bp->size = 1;
+	S->bp->bp = S->bp->buf = xrealloc( NULL, sizeof *S->bp->buf * S->bp->size );
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -58,11 +61,11 @@ main( int argc, char **argv )
 
 void push_buf(struct state *S, int c)
 {
-	*S->bp++ = (char)c;
-	if( S->bp == S->buf + S->buf_size ) {
-		S->buf = xrealloc( S->buf, S->buf_size * 2 * sizeof *S->buf );
-		S->bp = S->buf + S->buf_size;
-		S->buf_size *= 2;
+	*S->bp->bp++ = (char)c;
+	if( S->bp->bp == S->bp->buf + S->bp->size ) {
+		S->bp->buf = xrealloc( S->bp->buf, S->bp->size * 2 * sizeof *S->bp->buf );
+		S->bp->bp = S->bp->buf + S->bp->size;
+		S->bp->size *= 2;
 	}
 }
 
@@ -86,14 +89,14 @@ process_entry(struct state *S, int c)
 void
 push_number(struct state *S)
 {
-	*S->bp = '\0';
-	if( S->bp != S->buf ) {
+	*S->bp->bp = '\0';
+	if( S->bp->bp != S->bp->buf ) {
 		char *end;
-		*(S->sp++) = strtold(S->buf, &end);
-		if( end != S->bp ) {
-			fprintf(stderr, "Garbled: %s\n", S->buf);
+		*(S->sp++) = strtold(S->bp->buf, &end);
+		if( end != S->bp->bp ) {
+			fprintf(stderr, "Garbled: %s\n", S->bp->buf);
 		}
-		S->bp = S->buf;
+		S->bp->bp = S->bp->buf;
 		if( S->sp == S->stack + S->stack_size ) {
 			grow_stack(S);
 		}
