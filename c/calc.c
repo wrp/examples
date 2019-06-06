@@ -21,7 +21,8 @@ struct char_buf {
 struct state {
 	long double *stack, *sp;
 	size_t stack_size;
-	struct char_buf *char_stack, *bp;
+	struct char_buf *char_stack, *cbp;
+	size_t cb_size;
 	char fmt[32];
 };
 
@@ -39,11 +40,11 @@ main( int argc, char **argv )
 	int c;
 	struct state S[1];
 
-	S->stack_size = 4;
+	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
-	S->bp = S->char_stack = xrealloc( NULL, 1 * sizeof *S->bp );
-	S->bp->size = 1;
-	S->bp->bp = S->bp->buf = xrealloc( NULL, sizeof *S->bp->buf * S->bp->size );
+	S->cbp = S->char_stack = xrealloc( NULL, sizeof *S->cbp * S->cb_size );
+	S->cbp->size = 1;
+	S->cbp->bp = S->cbp->buf = xrealloc( NULL, sizeof *S->cbp->buf * S->cbp->size );
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -61,11 +62,11 @@ main( int argc, char **argv )
 
 void push_buf(struct state *S, int c)
 {
-	*S->bp->bp++ = (char)c;
-	if( S->bp->bp == S->bp->buf + S->bp->size ) {
-		S->bp->buf = xrealloc( S->bp->buf, S->bp->size * 2 * sizeof *S->bp->buf );
-		S->bp->bp = S->bp->buf + S->bp->size;
-		S->bp->size *= 2;
+	*S->cbp->bp++ = (char)c;
+	if( S->cbp->bp == S->cbp->buf + S->cbp->size ) {
+		S->cbp->buf = xrealloc( S->cbp->buf, S->cbp->size * 2 * sizeof *S->cbp->buf );
+		S->cbp->bp = S->cbp->buf + S->cbp->size;
+		S->cbp->size *= 2;
 	}
 }
 
@@ -89,14 +90,14 @@ process_entry( struct state *S, int c )
 void
 push_number( struct state *S )
 {
-	*S->bp->bp = '\0';
-	if( S->bp->bp != S->bp->buf ) {
+	*S->cbp->bp = '\0';
+	if( S->cbp->bp != S->cbp->buf ) {
 		char *end;
-		*(S->sp++) = strtold(S->bp->buf, &end);
-		if( end != S->bp->bp ) {
-			fprintf(stderr, "Garbled: %s\n", S->bp->buf);
+		*(S->sp++) = strtold(S->cbp->buf, &end);
+		if( end != S->cbp->bp ) {
+			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
 		}
-		S->bp->bp = S->bp->buf;
+		S->cbp->bp = S->cbp->buf;
 		if( S->sp == S->stack + S->stack_size ) {
 			grow_stack(S);
 		}
