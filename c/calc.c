@@ -21,7 +21,7 @@ void print_help( void ) {
 		"F    use value from the string stack as format string\n"
 		"[s]  add s to the string stack\n"
 		"x    execute string in string stack\n"
-		"l    list elements of strig stack\n"
+		"l    list elements of string stack\n"
 		"d    duplicate top value of stack\n"
 		"f    print contents of stack\n"
 		"k    set precision of %g format string\n"
