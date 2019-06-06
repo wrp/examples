@@ -40,6 +40,8 @@ test_string '[a][b][3p][c][d][1 1+p]xcx' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 test_string '[]tx' 'Invalid register'
 test_string 'x' 'Invalid register'
+test_string '1024p[%.0Lf]Fp' "1.02e+03${nl}1024"
+test_string '[%.0f]F' "Warning: output fmt should match '%.*L'"
 
 
 # Grow the stack

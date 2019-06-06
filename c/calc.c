@@ -10,7 +10,7 @@
 #include <math.h>
 #include <unistd.h>
 
-#define string_ops "[]xl"
+#define string_ops "[]Fxl"
 #define binary_ops "*+/^-r"
 #define unary_ops "dfkp"
 #define nonary_ops "q"
@@ -120,6 +120,38 @@ push_number( struct state *S )
 
 
 void
+validate_format( struct state const *S )
+{
+	int count[2] = {0};
+	for(char const *k = S->fmt; *k; k++) {
+		if( *k == '%' )
+			count[0] += 1;
+		if( *k == 'L' && count[0] )
+			count[1] += 1;
+	}
+	if( ! count[0] || ! count[1] ) {
+		fputs( "Warning: output fmt should match '%.*L'\n", stderr );
+	}
+}
+
+
+char *
+select_char_buf( struct state *S )
+{
+	int offset;
+	if( S->cbp->bp != S->cbp->buf ) {
+		offset = *--S->cbp->bp - 'a';
+	} else {
+		offset = S->cbp - S->char_stack - 1;
+	}
+	if( offset < 0 || offset > ( S->cbp - S->char_stack - 1 )) {
+		fprintf(stderr, "Invalid register\n");
+		return NULL;
+	}
+	return S->char_stack[offset].buf;
+}
+
+void
 apply_string_op( struct state *S, int c )
 {
 	switch(c) {
@@ -137,28 +169,20 @@ apply_string_op( struct state *S, int c )
 		}
 		init_char_buf( S->cbp );
 		break;
+	case 'F':
+		snprintf(S->fmt, sizeof S->fmt, "%s\n", select_char_buf( S ) ? : "%.3Lg" );
+		validate_format( S );
+		break;
 	case 'l':
 		for( typeof(S->cbp) s = S->char_stack; s < S->cbp; s++ ) {
 			printf("(%c): %s\n", 'a' + (s - S->char_stack), s->buf );
 		}
 		break;
-	case 'x': {
-		int offset;
-		if( S->cbp->bp != S->cbp->buf ) {
-			offset = *--S->cbp->bp - 'a';
-		} else {
-			offset = S->cbp - S->char_stack - 1;
+	case 'x':
+		for( char *k = select_char_buf( S ); k && *k; k++ ) {
+			process_entry(S, *k );
 		}
-		if( offset < 0 || offset > ( S->cbp - S->char_stack - 1 )) {
-			fprintf(stderr, "Invalid register\n");
-		} else {
-			for( char *k = S->char_stack[offset].buf; *k; k++ ) {
-				process_entry(S, *k );
-			}
-		}
-
 		break;
-	}
 	}
 }
 
