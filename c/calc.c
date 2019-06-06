@@ -70,7 +70,7 @@ void push_buf(struct state *S, int c)
 }
 
 void
-process_entry(struct state *S, int c)
+process_entry( struct state *S, int c )
 {
 	if( strchr( " \t\n", c )) {
 		push_number(S);
@@ -87,7 +87,7 @@ process_entry(struct state *S, int c)
 
 
 void
-push_number(struct state *S)
+push_number( struct state *S )
 {
 	*S->bp->bp = '\0';
 	if( S->bp->bp != S->bp->buf ) {
@@ -105,7 +105,7 @@ push_number(struct state *S)
 
 
 void
-apply_unary(struct state *S, int c)
+apply_unary( struct state *S, int c )
 {
 	assert( S->sp >= S->stack );
 	assert( strchr( unary, c ));
