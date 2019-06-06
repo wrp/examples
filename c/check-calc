@@ -6,12 +6,12 @@
 RV=0
 test_string() {
 	out=$(echo "$1" | ./calc 2>&1)
-	if test "$out" != "$2"; then
+	if test -n "$2" && test "$out" != "$2"; then
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
 	out=$( ./calc "$1" 2>&1) # allow word splitting (no quotes)
-	if test "$out" != "$2"; then
+	if test -n "$2" && test "$out" != "$2"; then
 		echo "With args:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
@@ -20,7 +20,7 @@ test_string() {
 nl='
 '
 test_string 'p' 'Stack empty (need 1 value)'
-test_string 'q' ''
+test_string 'hq' ''
 test_string '1 1+p' '2'
 test_string '4.5 1 1+f' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'

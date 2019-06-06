@@ -13,8 +13,21 @@
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^-r"
 #define unary_ops "dfkp"
-#define nonary_ops "q"
+#define nonary_ops "hq"
 #define token_div " \t\n"
+
+void print_help( void ) {
+	puts(
+		"F    use value from the string stack as format string\n"
+		"[s]  add s to the string stack\n"
+		"x    execute string in string stack\n"
+		"l    list elements of strig stack\n"
+		"d    duplicate top value of stack\n"
+		"f    print contents of stack\n"
+		"k    set precision of %g format string\n"
+		"p    print top value of stack\n"
+	);
+}
 
 struct char_buf {
 	char *buf, *bp;
@@ -87,8 +100,10 @@ process_entry( struct state *S, int c )
 	} else if( strchr( token_div, c )) {
 		push_number(S);
 	} else if(strchr( nonary_ops, c )) {
-		assert( c == 'q' );
-		exit(0);
+		switch(c) {
+		case 'q': exit(0);
+		case 'h': print_help();
+		}
 	} else if(strchr( unary_ops, c )) {
 		push_number(S);
 		apply_unary(S, c);
