@@ -12,7 +12,8 @@
 
 #define string_ops "[]xl"
 #define binary_ops "*+/^-r"
-#define unary_ops "dfkpq"
+#define unary_ops "dfkp"
+#define nonary_ops "q"
 #define token_div " \t\n"
 
 struct char_buf {
@@ -85,12 +86,15 @@ process_entry( struct state *S, int c )
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
 		push_number(S);
-	} else if(strchr( binary_ops, c )) {
-		push_number(S);
-		apply_binary(S, c);
+	} else if(strchr( nonary_ops, c )) {
+		assert( c == 'q' );
+		exit(0);
 	} else if(strchr( unary_ops, c )) {
 		push_number(S);
 		apply_unary(S, c);
+	} else if(strchr( binary_ops, c )) {
+		push_number(S);
+		apply_binary(S, c);
 	} else {
 		push_buf(S, c);
 	}
@@ -185,7 +189,6 @@ apply_unary( struct state *S, int c )
 	case 'p': {
 		printf(S->fmt, S->sp[-1]);
 	} break;
-	case 'q': exit(0);
 	}
 }
 
