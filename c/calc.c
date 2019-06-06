@@ -10,8 +10,10 @@
 #include <math.h>
 #include <unistd.h>
 
-#define binary "*+/^-r"
-#define unary "dfkpq"
+#define string_ops "[]xl"
+#define binary_ops "*+/^-r"
+#define unary_ops "dfkpq"
+#define token_div " \t\n"
 
 struct char_buf {
 	char *buf, *bp;
@@ -24,27 +26,31 @@ struct state {
 	struct char_buf *char_stack, *cbp;
 	size_t cb_size;
 	char fmt[32];
+	int enquote;
 };
 
 void process_entry( struct state *S, int c );
 void apply_binary( struct state *S, int c );
 void apply_unary( struct state *S, int c );
+void apply_string_op( struct state *S, int c );
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
+void init_char_buf( struct char_buf *p );
+
 int
 main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
 
+	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
 	S->cbp = S->char_stack = xrealloc( NULL, sizeof *S->cbp * S->cb_size );
-	S->cbp->size = 1;
-	S->cbp->bp = S->cbp->buf = xrealloc( NULL, sizeof *S->cbp->buf * S->cbp->size );
+	init_char_buf( S->cbp );
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -73,12 +79,16 @@ void push_buf(struct state *S, int c)
 void
 process_entry( struct state *S, int c )
 {
-	if( strchr( " \t\n", c )) {
+	if( S->enquote && c != ']' ) {
+		push_buf( S, c );
+	} else if( strchr( string_ops, c )) {
+		apply_string_op( S, c );
+	} else if( strchr( token_div, c )) {
 		push_number(S);
-	} else if(strchr( binary, c )) {
+	} else if(strchr( binary_ops, c )) {
 		push_number(S);
 		apply_binary(S, c);
-	} else if(strchr( unary, c )) {
+	} else if(strchr( unary_ops, c )) {
 		push_number(S);
 		apply_unary(S, c);
 	} else {
@@ -106,10 +116,54 @@ push_number( struct state *S )
 
 
 void
+apply_string_op( struct state *S, int c )
+{
+	switch(c) {
+	case '[':
+		S->enquote = 1;
+		break;
+	case ']':
+		S->enquote = 0;
+		*S->cbp->bp = '\0';
+		S->cbp += 1;
+		if( S->cbp == S->char_stack + S->cb_size ) {
+			S->char_stack = xrealloc(S->char_stack, S->cb_size * 2 * sizeof *S->cbp );
+			S->cbp = S->char_stack + S->cb_size;
+			S->cb_size *= 2;
+		}
+		init_char_buf( S->cbp );
+		break;
+	case 'l':
+		for( typeof(S->cbp) s = S->char_stack; s < S->cbp; s++ ) {
+			printf("(%c): %s\n", 'a' + (s - S->char_stack), s->buf );
+		}
+		break;
+	case 'x': {
+		int offset;
+		if( S->cbp->bp != S->cbp->buf ) {
+			offset = *--S->cbp->bp - 'a';
+		} else {
+			offset = S->cbp - S->char_stack - 1;
+		}
+		if( offset < 0 || offset > ( S->cbp - S->char_stack - 1 )) {
+			fprintf(stderr, "Invalid register\n");
+		} else {
+			for( char *k = S->char_stack[offset].buf; *k; k++ ) {
+				process_entry(S, *k );
+			}
+		}
+
+		break;
+	}
+	}
+}
+
+
+void
 apply_unary( struct state *S, int c )
 {
 	assert( S->sp >= S->stack );
-	assert( strchr( unary, c ));
+	assert( strchr( unary_ops, c ));
 	if( S->sp - S->stack < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
@@ -140,7 +194,7 @@ void
 apply_binary(struct state *S, int c)
 {
 	assert( S->sp >= S->stack );
-	assert( strchr( binary, c ));
+	assert( strchr( binary_ops, c ));
 	if( S->sp - S->stack < 2 ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
@@ -189,3 +243,9 @@ die(const char *msg)  /* uncovered */
 	perror(msg);  /* uncovered */
 	exit(1);      /* uncovered */
 }                     /* uncovered */
+
+void init_char_buf( struct char_buf *p )
+{
+	p->size = 32;
+	p->bp = p->buf = xrealloc( NULL, sizeof *p->buf * p->size );
+}
