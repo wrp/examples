@@ -71,7 +71,7 @@ main( int argc, char **argv )
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		for( ; *++argv; process_entry( S, ' ')) {
+		for( ; *++argv; rb_push( S->r, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
 				rb_push( S->r, *t );
 				while(( c = rb_pop( S->r )) != EOF ) {
