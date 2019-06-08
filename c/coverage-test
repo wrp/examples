@@ -10,15 +10,16 @@ if ! test -f calc.gcda; then
 fi
 RV=0
 
-#for file in calc ring-buffer; do
-for file in calc; do
+for file in calc ring-buffer; do
 	if test -f .libs/$file.gcno; then
 		arg='-o .libs'
 	else
 		unset arg
 	fi
 	gcov $file $arg
-	if grep '#####' $file.c.gcov | grep -v -F '/* uncovered */' | grep .; then
+	if grep '#####' $file.c.gcov |
+			sed -e '\@/* uncovered block */@,@/* uncovered end */@d' \
+			-e '\@/* uncovered */@d' | grep .; then
 		echo The above lines of $file were not executed during testing
 		RV=1
 	fi >&2

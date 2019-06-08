@@ -23,8 +23,8 @@ rb_create( void )
 	if( r != NULL ) {
 		r->end = r->start = r->buf = malloc( r->s = 4 );
 		if( r->buf == NULL ) {
-			free( r );
-			r = NULL;
+			free( r ); /* uncovered */
+			r = NULL;  /* uncovered */
 		}
 	}
 	return r;
@@ -39,13 +39,13 @@ grow( struct ring_buf *R )
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
 	if( tmp == NULL ) {
-		return 0;
+		return 0; /* uncovered */
 	}
-	if( R->buf != tmp ) {
+	if( R->buf != tmp ) { /* uncovered block */
 		R->start = tmp + ( R->start - R->buf );
 		R->end = tmp + ( R->end - R->buf );
 		R->buf = tmp;
-	}
+	} /* uncovered end */
 	if( R->end <= R->start ) {
 		memmove( R->buf + R->s, R->buf, R->end - R->buf );
 		R->end = R->end + R->s;
