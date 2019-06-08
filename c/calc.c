@@ -42,6 +42,7 @@ struct state {
 	size_t cb_size;
 	char fmt[32];
 	int enquote;
+	struct ring_buf *r;
 };
 
 void process_entry( struct state *S, int c );
@@ -60,9 +61,8 @@ main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
-	struct ring_buf *r;
 
-	r = rb_create();
+	S->r = rb_create();
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
@@ -73,16 +73,16 @@ main( int argc, char **argv )
 	if( argc > 1) {
 		for( ; *++argv; process_entry( S, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
-				rb_push( r, *t );
-				while(( c = rb_pop( r )) != EOF ) {
+				rb_push( S->r, *t );
+				while(( c = rb_pop( S->r )) != EOF ) {
 					process_entry( S, c );
 				}
 			}
 		}
 	} else while( (c=getchar()) != EOF ) {
 		int d;
-		rb_push( r, c );
-		while(( d = rb_pop( r )) != EOF ) {
+		rb_push( S->r, c );
+		while(( d = rb_pop( S->r )) != EOF ) {
 			process_entry( S, d );
 		}
 	}
@@ -205,7 +205,7 @@ apply_string_op( struct state *S, int c )
 		break;
 	case 'x':
 		for( char *k = select_char_buf( S ); k && *k; k++ ) {
-			process_entry(S, *k );
+			rb_push( S->r, *k );
 		}
 		break;
 	}
