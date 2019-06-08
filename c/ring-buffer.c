@@ -21,7 +21,7 @@ rb_create( void )
 	struct ring_buf *r;
 	r = malloc( sizeof *r );
 	if( r != NULL ) {
-		r->end = r->start = r->buf = malloc( r->s = 1024 );
+		r->end = r->start = r->buf = malloc( r->s = 4 );
 		if( r->buf == NULL ) {
 			free( r );
 			r = NULL;
@@ -63,13 +63,13 @@ rb_push( struct ring_buf *R, unsigned char c )
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
 	*R->end++ = c;
+	if( R->end == R->buf + R->s ) {
+		R->end = R->buf;
+	}
 	if( R->end == R->start ) {
 		if( ! grow( R )) {
 			return 0;
 		}
-	}
-	if( R->end == R->buf + R->s ) {
-		R->end = R->buf;
 	}
 	return 1;
 }
