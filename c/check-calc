@@ -34,11 +34,11 @@ test_string '2y5' 'Garbled: 2y5'
 test_string '10k10 3/p' '3.333333333'
 test_string '1d+p' '2'
 test_string '2 4r/p' '2'
-test_string '[2 2+p][1 1+p]xax' "2${nl}4"
-test_string '[foo][bar]l' "(a): foo${nl}(b): bar"
-test_string '[a][b][3p][c][d][1 1+p]xcx' "2${nl}3"
+test_string '[2 2+p][1 1+p]x0x' "2${nl}4"
+test_string '[foo][bar]l' "(0): foo${nl}(1): bar"
+test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
-test_string '[]tx' 'Invalid register'
+test_string '[]9x' 'Invalid register'
 test_string 'x' 'Invalid register'
 test_string '1024p[%.0Lf]Fp' "1.02e+03${nl}1024"
 test_string '[%.0f]F' "Warning: output fmt should match '%.*L'"

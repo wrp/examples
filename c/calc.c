@@ -155,7 +155,7 @@ select_char_buf( struct state *S )
 {
 	int offset;
 	if( S->cbp->bp != S->cbp->buf ) {
-		offset = *--S->cbp->bp - 'a';
+		offset = *--S->cbp->bp - '0';
 	} else {
 		offset = S->cbp - S->char_stack - 1;
 	}
@@ -190,7 +190,7 @@ apply_string_op( struct state *S, int c )
 		break;
 	case 'l':
 		for( typeof(S->cbp) s = S->char_stack; s < S->cbp; s++ ) {
-			printf("(%c): %s\n", 'a' + (s - S->char_stack), s->buf );
+			printf("(%d): %s\n", (int)(s - S->char_stack), s->buf );
 		}
 		break;
 	case 'x':
