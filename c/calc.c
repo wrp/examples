@@ -9,6 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include "ring-buffer.h"
 
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^-r"
@@ -59,7 +60,9 @@ main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
+	struct ring_buf *r;
 
+	r = rb_create();
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
@@ -70,11 +73,18 @@ main( int argc, char **argv )
 	if( argc > 1) {
 		for( ; *++argv; process_entry( S, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
-				process_entry( S, *t );
+				rb_push( r, *t );
+				while(( c = rb_pop( r )) != EOF ) {
+					process_entry( S, c );
+				}
 			}
 		}
 	} else while( (c=getchar()) != EOF ) {
-		process_entry( S, c );
+		int d;
+		rb_push( r, c );
+		while(( d = rb_pop( r )) != EOF ) {
+			process_entry( S, d );
+		}
 	}
 	return 0;
 }

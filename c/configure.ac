@@ -4,6 +4,8 @@
 AC_PREREQ([2.69])
 AC_INIT([C-examples], [0.0.1], [william.r.pursell@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_PROG_AR
+LT_INIT
 AC_CONFIG_SRCDIR([prctl.c])
 AC_CONFIG_HEADERS([config.h])
 
