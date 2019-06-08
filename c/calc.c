@@ -46,6 +46,7 @@ struct state {
 };
 
 void process_entry( struct state *S, int c );
+void push_it( struct state *S, int c );
 void apply_binary( struct state *S, int c );
 void apply_unary( struct state *S, int c );
 void apply_string_op( struct state *S, int c );
@@ -73,18 +74,11 @@ main( int argc, char **argv )
 	if( argc > 1) {
 		for( ; *++argv; rb_push( S->r, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
-				rb_push( S->r, *t );
-				while(( c = rb_pop( S->r )) != EOF ) {
-					process_entry( S, c );
-				}
+				push_it( S, *t );
 			}
 		}
 	} else while( (c=getchar()) != EOF ) {
-		int d;
-		rb_push( S->r, c );
-		while(( d = rb_pop( S->r )) != EOF ) {
-			process_entry( S, d );
-		}
+		push_it( S, c );
 	}
 	return 0;
 }
@@ -99,6 +93,17 @@ void push_buf(struct state *S, int c)
 		S->cbp->size *= 2;
 	}
 }
+
+
+void
+push_it( struct state *S, int c )
+{
+	rb_push( S->r, c );
+	while(( c = rb_pop( S->r )) != EOF ) {
+		process_entry( S, c );
+	}
+}
+
 
 void
 process_entry( struct state *S, int c )
