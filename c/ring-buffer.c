@@ -16,12 +16,12 @@ struct ring_buf {
  * Create an initialized a ring buffer.
  */
 struct ring_buf *
-rb_create( void )
+rb_create( size_t s )
 {
 	struct ring_buf *r;
 	r = malloc( sizeof *r );
 	if( r != NULL ) {
-		r->end = r->start = r->buf = malloc( r->s = 4 );
+		r->end = r->start = r->buf = malloc( r->s = s ? s : 1024 );
 		if( r->buf == NULL ) {
 			free( r ); /* uncovered */
 			r = NULL;  /* uncovered */
@@ -71,6 +71,7 @@ rb_push( struct ring_buf *R, unsigned char c )
 			return 0;
 		}
 	}
+	assert( R->end != R->start );
 	return 1;
 }
 

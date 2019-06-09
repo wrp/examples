@@ -63,7 +63,7 @@ main( int argc, char **argv )
 	int c;
 	struct state S[1];
 
-	S->r = rb_create();
+	S->r = rb_create( 0 );
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
