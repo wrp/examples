@@ -42,6 +42,8 @@ test_string '[]9x' 'Invalid register'
 test_string 'x' 'Invalid register'
 test_string '1024p[%.0Lf]Fp' "1.02e+03${nl}1024"
 test_string '[%.0f]F' "Warning: output fmt should match '%.*L'"
+long_string="1 $( yes "1+" | sed 1049q )"
+test_string "[$long_string]x[%.0Lf]Fp" '1050'
 
 
 # Grow the stack
