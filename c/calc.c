@@ -45,11 +45,11 @@ struct state {
 	struct ring_buf *r;
 };
 
-void process_entry( struct state *S, int c );
-void push_it( struct state *S, int c );
-void apply_binary( struct state *S, int c );
-void apply_unary( struct state *S, int c );
-void apply_string_op( struct state *S, int c );
+void process_entry( struct state *S, unsigned char c );
+void push_it( struct state *S, unsigned char c );
+void apply_binary( struct state *S, unsigned char c );
+void apply_unary( struct state *S, unsigned char c );
+void apply_string_op( struct state *S, unsigned char c );
 void grow_stack( struct state *S );
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
@@ -72,19 +72,20 @@ main( int argc, char **argv )
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		for( ; *++argv; push_it( S, ' ')) {
+		for( ; *++argv; push_it( S, (unsigned char)' ')) {
 			for( char *t = *argv; *t; t++ ) {
-				push_it( S, *t );
+				push_it( S, (unsigned char)*t );
 			}
 		}
 	} else while( (c=getchar()) != EOF ) {
-		push_it( S, c );
+		push_it( S, (unsigned char)c );
 	}
 	return 0;
 }
 
 
-void push_buf(struct state *S, int c)
+void
+push_buf(struct state *S, unsigned char c)
 {
 	*S->cbp->bp++ = (char)c;
 	if( S->cbp->bp == S->cbp->buf + S->cbp->size ) {
@@ -96,37 +97,38 @@ void push_buf(struct state *S, int c)
 
 
 void
-push_it( struct state *S, int c )
+push_it( struct state *S, unsigned char c )
 {
+	int k;
 	rb_push( S->r, c );
-	while(( c = rb_pop( S->r )) != EOF ) {
-		process_entry( S, c );
+	while( ( k = rb_pop( S->r )) != EOF ) {
+		process_entry( S, (unsigned char)k );
 	}
 }
 
 
 void
-process_entry( struct state *S, int c )
+process_entry( struct state *S, unsigned char c )
 {
 	if( S->enquote && c != ']' ) {
 		push_buf( S, c );
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
-		push_number(S);
+		push_number( S );
 	} else if(strchr( nonary_ops, c )) {
 		switch(c) {
 		case 'q': exit(0);
 		case 'h': print_help();
 		}
 	} else if(strchr( unary_ops, c )) {
-		push_number(S);
-		apply_unary(S, c);
+		push_number( S );
+		apply_unary( S, c );
 	} else if(strchr( binary_ops, c )) {
-		push_number(S);
-		apply_binary(S, c);
+		push_number( S );
+		apply_binary( S, c );
 	} else {
-		push_buf(S, c);
+		push_buf( S, c );
 	}
 }
 
@@ -182,7 +184,7 @@ select_char_buf( struct state *S )
 }
 
 void
-apply_string_op( struct state *S, int c )
+apply_string_op( struct state *S, unsigned char c )
 {
 	switch(c) {
 	case '[':
@@ -218,7 +220,7 @@ apply_string_op( struct state *S, int c )
 
 
 void
-apply_unary( struct state *S, int c )
+apply_unary( struct state *S, unsigned char c )
 {
 	assert( S->sp >= S->stack );
 	assert( strchr( unary_ops, c ));
@@ -248,7 +250,7 @@ apply_unary( struct state *S, int c )
 
 
 void
-apply_binary(struct state *S, int c)
+apply_binary(struct state *S, unsigned char c)
 {
 	assert( S->sp >= S->stack );
 	assert( strchr( binary_ops, c ));
