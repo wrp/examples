@@ -22,7 +22,7 @@ nl='
 test_string 'p' 'Stack empty (need 1 value)'
 test_string 'hq' ''
 test_string '1 1+p' '2'
-test_string '4.5 1 1+f' "  0: 4.5${nl}  1: 2"
+test_string '4.5 1 1+l' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'
 test_string '5,6*p' '30'
 test_string '7 -3+p' '4'
@@ -38,7 +38,7 @@ test_string '1 2 3np' "3${nl}2"
 test_string '2 4r/p' '2'
 test_string '[2 2+p][1 1+p]x0x' "2${nl}4"
 test_string '[2 2+n]5[1 1+n]x0xp' "2${nl}4${nl}5"
-test_string '[f_oo][bar]l' "(0): f_oo${nl}(1): bar"
+test_string '[f_oo][bar]L' "(0): f_oo${nl}(1): bar"
 test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 test_string '[]9x' 'Invalid register'

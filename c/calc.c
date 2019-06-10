@@ -21,9 +21,9 @@
 #include "ring-buffer.h"
 
 #define numeric_tok "-0123456789XPABCDEabcde."
-#define string_ops "[]Fxl"
+#define string_ops "[]FxL"
 #define binary_ops "*+/^r"
-#define unary_ops "fknpy"
+#define unary_ops "lknpy"
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
@@ -31,10 +31,10 @@ void print_help( void ) {
 	puts(
 		"F    use value from the string stack as format string\n"
 		"[s]  push s onto the string stack\n"
-		"f    print contents of stack\n"
 		"h    print this help message\n"
 		"k    set precision of %g format string\n"
-		"l    list elements of string stack\n"
+		"l    list elements of the stack\n"
+		"L    list elements of string stack\n"
 		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
 		"q    quite"
@@ -234,7 +234,7 @@ apply_string_op( struct state *S, unsigned char c )
 		snprintf(S->fmt, sizeof S->fmt, "%s\n", select_char_buf( S ) ? : "%.3Lg" );
 		validate_format( S );
 		break;
-	case 'l':
+	case 'L':
 		for( typeof(S->cbp) s = S->char_stack; s < S->cbp; s++ ) {
 			printf("(%d): %s\n", (int)(s - S->char_stack), s->buf );
 		}
@@ -265,7 +265,7 @@ apply_unary( struct state *S, unsigned char c )
 	case 'k':
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
 		break;
-	case 'f':
+	case 'l':
 		for(typeof(S->stack) s = S->stack; s < S->sp; s++) {
 			printf("%3u: ", (unsigned)(s - S->stack));
 			printf(S->fmt, *s);
