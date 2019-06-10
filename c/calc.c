@@ -176,18 +176,21 @@ push_number( struct state *S )
 }
 
 
+/*
+ * Extremely naive check of format string.
+ * Primarily this is to remind the user to include 'L',
+ * but doesn't catch simple mistakes like '%L'
+ */
 void
 validate_format( struct state const *S )
 {
 	int count[2] = {0};
 	for(char const *k = S->fmt; *k; k++) {
-		if( *k == '%' )
-			count[0] += 1;
-		if( *k == 'L' && count[0] )
-			count[1] += 1;
+		count[0] += *k == '%';
+		count[1] += count[0] && *k == 'L';
 	}
 	if( ! count[0] || ! count[1] ) {
-		fputs( "Warning: output fmt should match '%.*L'\n", stderr );
+		fputs( "Warning: output fmt should print a long double (eg '%%Lf')\n", stderr );
 	}
 }
 
