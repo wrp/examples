@@ -84,8 +84,11 @@ main( int argc, char **argv )
 }
 
 
+/*
+ * Append an octet to the char buf.   Grow if necessary.
+ */
 void
-push_buf(struct state *S, unsigned char c)
+push_buf( struct state *S, unsigned char c )
 {
 	*S->cbp->bp++ = (char)c;
 	if( S->cbp->bp == S->cbp->buf + S->cbp->size ) {
@@ -96,6 +99,11 @@ push_buf(struct state *S, unsigned char c)
 }
 
 
+/*
+ * Push an item onto the ring buffer and then read the ring buffer until empty.
+ * Some operations (notably 'x') will push additional values into the ring
+ * buffer, and they should be processed before the next entry coming from input.
+ */
 void
 push_it( struct state *S, unsigned char c )
 {
