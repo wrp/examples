@@ -18,8 +18,8 @@ for file in calc ring-buffer; do
 	fi
 	gcov $file $arg
 	if grep '#####' $file.c.gcov |
-			sed -e '\@/* uncovered block */@,@/* uncovered end */@d' \
-			-e '\@/* uncovered */@d' | grep .; then
+			sed \
+			-e '\@/\* uncovered \*/@d' | grep .; then
 		echo The above lines of $file were not executed during testing
 		RV=1
 	fi >&2
