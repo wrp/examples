@@ -4,4 +4,4 @@ TESTS = calc-test coverage-test
 noinst_LTLIBRARIES = libringbuf.la
 calc_LDADD = libringbuf.la
 libringbuf_la_SOURCES = ring-buffer.c
-CLEANFILES = *.gcda *.gcno
+CLEANFILES = *.gcda *.gcno *.gcov
