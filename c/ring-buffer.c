@@ -6,6 +6,7 @@
 #include <string.h>
 
 struct ring_buf {
+	int err;
 	unsigned char *buf;
 	unsigned char *start;
 	unsigned char *end;
@@ -39,7 +40,7 @@ grow( struct ring_buf *R )
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
 	if( tmp == NULL ) {
-		return 0; /* uncovered */
+		return 1; /* uncovered */
 	}
 	if( R->buf != tmp ) { /* uncovered block */
 		R->start = tmp + ( R->start - R->buf );
@@ -51,7 +52,7 @@ grow( struct ring_buf *R )
 		R->end = R->end + R->s;
 	}
 	R->s *= 2;
-	return 1;
+	return 0;
 }
 
 
@@ -62,18 +63,19 @@ rb_push( struct ring_buf *R, unsigned char c )
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
-	*R->end++ = c;
-	if( R->end == R->buf + R->s ) {
-		R->end = R->buf;
-	}
-	if( R->end == R->start ) {
-		if( ! grow( R )) {
-			return 0;
+	if( R->err == 0 ) {
+		*R->end++ = c;
+		if( R->end == R->buf + R->s ) {
+			R->end = R->buf;
+		}
+		if( R->end == R->start ) {
+			R->err = grow( R );
 		}
 	}
-	assert( R->end != R->start );
-	return 1;
+	assert( R->end != R->start || R->err == 1 );
+	return R->err;
 }
+
 
 int
 rb_pop( struct ring_buf *R )
