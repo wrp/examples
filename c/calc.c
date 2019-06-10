@@ -210,6 +210,7 @@ apply_string_op( struct state *S, unsigned char c )
 {
 	switch(c) {
 	case '[':
+		push_number( S );
 		S->enquote = 1;
 		break;
 	case ']':
