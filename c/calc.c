@@ -23,7 +23,7 @@
 #define numeric_tok "-0123456789eE."
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^r"
-#define unary_ops "dfkp"
+#define unary_ops "dfknp"
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
@@ -264,9 +264,12 @@ apply_unary( struct state *S, unsigned char c )
 			printf(S->fmt, *s);
 		}
 		break;
-	case 'p': {
+	case 'p':
 		printf(S->fmt, S->sp[-1]);
-	} break;
+		break;
+	case 'n':
+		printf(S->fmt, *--S->sp);
+		break;
 	}
 }
 

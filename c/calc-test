@@ -34,8 +34,11 @@ test_string '2 5^pq' '32'
 test_string '2y5 ' 'Unexpected: y'
 test_string '10k10 3/p' '3.333333333'
 test_string '1d+p' '2'
+test_string '1 2 3np' "3${nl}2"
 test_string '2 4r/p' '2'
 test_string '[2 2+p][1 1+p]x0x' "2${nl}4"
+# TODO: fix this case!
+# test_string '[2 2+n]5[1 1+p]x0xp' "2${nl}4${nl}5"
 test_string '[f_oo][bar]l' "(0): f_oo${nl}(1): bar"
 test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
