@@ -24,6 +24,7 @@ test_string 'hq' ''
 test_string '1 1+p' '2'
 test_string '4.5 1 1+f' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'
+test_string '5,6*p' '30'
 test_string '7 -3+p' '4'
 test_string '5e-1 30*p' 15
 test_string '7    2/p' '3.5'
@@ -41,6 +42,7 @@ test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 test_string '[]9x' 'Invalid register'
 test_string 'x' 'Invalid register'
 test_string '1024p[%.0Lf]Fp' "1.02e+03${nl}1024"
+test_string '1_024p[%.0Lf]Fp' "1.02e+03${nl}1024"
 test_string '[%.0f]F' "Warning: output fmt should match '%.*L'"
 long_string="1 $( yes "1+" | sed 1049q )"
 test_string "[$long_string]x[%.0Lf]Fp" '1050'

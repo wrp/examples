@@ -1,10 +1,14 @@
 /*
  * A simple reverse polish calculator
  *
- * Perhaps not simple. :)   '-' is not an operator.  Instead, it is a
- * numeric entry, so to perform simple arithmetic, you must use +: eg
- * '2 -1+' to subtract 1 from 2.  This makes it easier to enter negative
- * numbers.  (eg, to enter -5 you just enter '-5' instead of '0 5-')
+ * '-' is not an operator.  Instead, it is a numeric entry.  To perform
+ * simple arithmetic, you must use +.  For example, '2 -1+' to subtract 1
+ * from 2.  This makes it easier to enter negative numbers.  To
+ * enter -5 you just enter '-5' instead of '0 5-' and .01 is '1e-2' (or '.01'!)
+ * rather than the cumbersome '1 0 * 2-^')
+ *
+ * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
+ * '_' is an ignored place holder, so 65536 can be written 65_536
  */
 
 #include <stdio.h>
@@ -20,8 +24,8 @@
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^r"
 #define unary_ops "dfkp"
-#define nonary_ops "hq"
-#define token_div " \t\n"
+#define nonary_ops "hq_"
+#define token_div " \t\n,"
 
 void print_help( void ) {
 	puts(
@@ -135,6 +139,7 @@ process_entry( struct state *S, unsigned char c )
 		push_number( S );
 	} else if(strchr( nonary_ops, c )) {
 		switch(c) {
+		case '_': break; /* noop */
 		case 'q': exit(0);
 		case 'h': print_help();
 		}
