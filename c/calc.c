@@ -37,7 +37,7 @@ void print_help( void ) {
 		"L    list elements of string stack\n"
 		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
-		"q    quite"
+		"q    quit\n"
 		"x    execute string in string stack\n"
 		"y    duplicate top value of stack\n"
 	);
