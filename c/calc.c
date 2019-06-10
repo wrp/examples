@@ -23,7 +23,7 @@
 #define numeric_tok "-0123456789XPABCDEabcde."
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^r"
-#define unary_ops "dfknp"
+#define unary_ops "fknpy"
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
@@ -31,7 +31,6 @@ void print_help( void ) {
 	puts(
 		"F    use value from the string stack as format string\n"
 		"[s]  push s onto the string stack\n"
-		"d    duplicate top value of stack\n"
 		"f    print contents of stack\n"
 		"h    print this help message\n"
 		"k    set precision of %g format string\n"
@@ -40,6 +39,7 @@ void print_help( void ) {
 		"p    print top value of stack\n"
 		"q    quite"
 		"x    execute string in string stack\n"
+		"y    duplicate top value of stack\n"
 	);
 }
 
@@ -258,7 +258,7 @@ apply_unary( struct state *S, unsigned char c )
 		return;
 	}
 	switch(c) {
-	case 'd':
+	case 'y':
 		S->sp[0] = S->sp[-1];
 		S->sp += 1;
 		break;
