@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include "ring-buffer.h"
 
+#define numeric_tok "-0123456789eE."
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^-r"
 #define unary_ops "dfkp"
@@ -118,7 +119,10 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
+
 	if( S->enquote && c != ']' ) {
+		push_buf( S, c );
+	} else if( strchr( numeric_tok, c )) {
 		push_buf( S, c );
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
@@ -136,7 +140,7 @@ process_entry( struct state *S, unsigned char c )
 		push_number( S );
 		apply_binary( S, c );
 	} else {
-		push_buf( S, c );
+		fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
 
@@ -149,7 +153,7 @@ push_number( struct state *S )
 		char *end;
 		*(S->sp++) = strtold(S->cbp->buf, &end);
 		if( end != S->cbp->bp ) {
-			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
+			fprintf(stderr, "Garbled: %s\n", S->cbp->buf); /* uncovered */
 		}
 		S->cbp->bp = S->cbp->buf;
 		if( S->sp == S->stack + S->stack_size ) {
