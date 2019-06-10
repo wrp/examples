@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include "ring-buffer.h"
 
-#define numeric_tok "-0123456789eE."
+#define numeric_tok "-0123456789XPABCDEabcde."
 #define string_ops "[]Fxl"
 #define binary_ops "*+/^r"
 #define unary_ops "dfknp"
