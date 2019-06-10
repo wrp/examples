@@ -1,5 +1,10 @@
 /*
  * A simple reverse polish calculator
+ *
+ * Perhaps not simple. :)   '-' is not an operator.  Instead, it is a
+ * numeric entry, so to perform simple arithmetic, you must use +: eg
+ * '2 -1+' to subtract 1 from 2.  This makes it easier to enter negative
+ * numbers.  (eg, to enter -5 you just enter '-5' instead of '0 5-')
  */
 
 #include <stdio.h>
@@ -13,7 +18,7 @@
 
 #define numeric_tok "-0123456789eE."
 #define string_ops "[]Fxl"
-#define binary_ops "*+/^-r"
+#define binary_ops "*+/^r"
 #define unary_ops "dfkp"
 #define nonary_ops "hq"
 #define token_div " \t\n"
@@ -281,7 +286,6 @@ apply_binary(struct state *S, unsigned char c)
 	case '*': S->sp[-1] *= S->sp[0]; break;
 	case '+': S->sp[-1] += S->sp[0]; break;
 	case '/': S->sp[-1] /= S->sp[0]; break;
-	case '-': S->sp[-1] -= S->sp[0]; break;
 	case '^': S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
 	}
 }
