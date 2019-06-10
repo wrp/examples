@@ -137,6 +137,9 @@ process_entry( struct state *S, unsigned char c )
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
 		push_number( S );
+	} else if(strchr( binary_ops, c )) {
+		push_number( S );
+		apply_binary( S, c );
 	} else if(strchr( nonary_ops, c )) {
 		switch(c) {
 		case '_': break; /* noop */
@@ -146,9 +149,6 @@ process_entry( struct state *S, unsigned char c )
 	} else if(strchr( unary_ops, c )) {
 		push_number( S );
 		apply_unary( S, c );
-	} else if(strchr( binary_ops, c )) {
-		push_number( S );
-		apply_binary( S, c );
 	} else {
 		fprintf( stderr, "Unexpected: %c\n", c );
 	}
