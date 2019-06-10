@@ -1,7 +1,7 @@
 /*
  * A simple reverse polish calculator
  *
- * '-' is not an operator.  Instead, it is a numeric entry.  To perform
+ * '-' is not an operator.  Instead, it is a numeric symbol.  To perform
  * simple arithmetic, you must use +.  For example, '2 -1+' to subtract 1
  * from 2.  This makes it easier to enter negative numbers.  To
  * enter -5 you just enter '-5' instead of '0 5-' and .01 is '1e-2' (or '.01'!)
@@ -30,13 +30,16 @@
 void print_help( void ) {
 	puts(
 		"F    use value from the string stack as format string\n"
-		"[s]  add s to the string stack\n"
-		"x    execute string in string stack\n"
-		"l    list elements of string stack\n"
+		"[s]  push s onto the string stack\n"
 		"d    duplicate top value of stack\n"
 		"f    print contents of stack\n"
+		"h    print this help message\n"
 		"k    set precision of %g format string\n"
+		"l    list elements of string stack\n"
+		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
+		"q    quite"
+		"x    execute string in string stack\n"
 	);
 }
 
