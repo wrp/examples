@@ -164,7 +164,7 @@ push_number( struct state *S )
 		*(S->sp++) = strtold(S->cbp->buf, &end);
 		if( end != S->cbp->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf); /* uncovered */
-		}
+		} /* uncovered */
 		S->cbp->bp = S->cbp->buf;
 		if( S->sp == S->stack + S->stack_size ) {
 			grow_stack(S);

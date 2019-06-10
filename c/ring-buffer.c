@@ -26,7 +26,7 @@ rb_create( size_t s )
 		if( r->buf == NULL ) {
 			free( r ); /* uncovered */
 			r = NULL;  /* uncovered */
-		}
+		} /* uncovered */
 	}
 	return r;
 }
