@@ -63,7 +63,7 @@ main( int argc, char **argv )
 	int c;
 	struct state S[1];
 
-	S->r = rb_create( 0 );
+	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
 	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
@@ -72,7 +72,7 @@ main( int argc, char **argv )
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		for( ; *++argv; rb_push( S->r, ' ')) {
+		for( ; *++argv; push_it( S, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
 				push_it( S, *t );
 			}
