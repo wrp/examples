@@ -3,28 +3,31 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <unistd.h>
+#include <stdlib.h>
 #if 0
 #include <uuid/uuid.h>
 #endif
 
+/* Print the user id of the owner of a file */
 
-void print_user_ID(char* filepath) {
-    struct stat sb;
-    struct passwd pwent;
-    struct passwd *pwentp;
-    char buf[_SC_GETPW_R_SIZE_MAX];
+int
+main( int argc, char **argv )
+{
+	struct stat sb;
+	struct passwd pwent;
+	struct passwd *pwentp;
+	char buf[ _SC_GETPW_R_SIZE_MAX ];
 
-    if(stat(filepath, &sb) == -1) {
-        perror("stat");
-    }
+	char *filepath = argc > 1 ? argv[1] : "foo";
 
-    if (!getpwuid_r(sb.st_uid, &pwent, buf, sizeof(buf), &pwentp))
-        printf("%10s\n", pwent.pw_name);
-    else
-        printf("%7d\n", sb.st_uid);
-}
+	if( stat( filepath, &sb ) == -1 ) {
+		perror( "stat" );
+		return EXIT_FAILURE;
+	}
 
-
-int main(int argc, char **argv) {
-	print_user_ID(argc > 1 ? argv[1] : "foo");
+	if( !getpwuid_r( sb.st_uid, &pwent, buf, sizeof buf, &pwentp )) {
+		printf( "%s\n", pwent.pw_name );
+	} else {
+		printf( "%d\n", sb.st_uid );
+	}
 }
