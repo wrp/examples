@@ -10,7 +10,6 @@
 
 void print_user_ID(char* filepath) {
     struct stat sb;
-#if 0
     struct passwd pwent;
     struct passwd *pwentp;
     char buf[_SC_GETPW_R_SIZE_MAX];
@@ -23,7 +22,6 @@ void print_user_ID(char* filepath) {
         printf("%10s\n", pwent.pw_name);
     else
         printf("%7d\n", sb.st_uid);
-#endif
 }
 
 

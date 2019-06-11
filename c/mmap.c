@@ -33,7 +33,7 @@ getsize(int fd) {
 int
 main(int argc, char **argv)
 {
-	int fd = argv[1] ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
+	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 	size_t s = getsize(fd);
 	char *d = mmap(NULL, s, PROT_READ, MAP_PRIVATE
 #if HAVE_DECL_MAP_POPULATE

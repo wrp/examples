@@ -11,6 +11,9 @@
 void
 handle(int s, siginfo_t *i, void *v)
 {
+	(void)i;
+	(void)s;
+	(void)v;
 	write(1, "handle\n", 7);
 	return;
 }

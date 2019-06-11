@@ -24,7 +24,6 @@ main(int argc, char **argv)
 	char *input = NULL;
 	FILE *ifp = argc > 1 ? xfopen(input_path = argv[1], "r") : stdin;
 	FILE *ofp = argc > 2 ? xfopen(output_path = argv[2], "w") : stdout;
-	int c;
 
 	if( (rc = getdelim( &input, &n, EOF, ifp)) == -1) {
 		perror(input_path);
