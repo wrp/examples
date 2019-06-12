@@ -42,3 +42,7 @@ git remote update --prune
 git remote add ${remote?} $(git remote get-url --push bitbucket)
 git remote set-url ${remote?} --add $(git remote get-url --push gitlab)
 git remote set-url ${remote?} --add $(git remote get-url --push github)
+
+# List branches on a given remote
+git ls-remote --heads ${remote}
+git branch --list -r "${remote}/*"
