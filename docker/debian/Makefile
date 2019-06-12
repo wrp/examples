@@ -9,7 +9,8 @@ run:
 	@# -p 8125      Let docker select the port.  Discover with 'docker port $container'
 	@# ($container can be found from 'docker ps')
 	@# -v localmnt:mount_in_docker_image
-	-if ! id=$$(docker ps | awk '$$2 == "mydebian" {print $$1; exit 1}'); then \
+
+	-if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
 		docker exec -it -u $(USER) "$$id" bash; \
 	else \
 		docker run -it -p 8125 -v $(HOME):/home/$(USER) -v /$(USER):/$(USER) \
