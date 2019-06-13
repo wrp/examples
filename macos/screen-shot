@@ -1,7 +1,12 @@
 
-To screen shot directly to file:
+
+To screen shot directly to clipboard:
 
 shift-command-control-4
 
 Note that in my default keymapping, control is labeled "option"
 (because it's on both sides of the space bar)
+
+To save screen shot to file
+
+shift-command-4
