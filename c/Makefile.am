@@ -1,5 +1,6 @@
 
-bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args
+bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args \
+	clean-man
 TESTS = calc-test coverage-test
 noinst_LTLIBRARIES = libringbuf.la
 calc_LDADD = libringbuf.la
