@@ -38,4 +38,4 @@ src-pane is [{session}:]{window}[.{pane}]
 eg:
 :join-pane -s 2      # Split current window and insert pane with focus from window 2
 :join-pane -s 2.1    # Split current window and insert pane witn index 1 from window 2
-:join-pane -s 4:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
+:join-pane -s name-of-session:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
