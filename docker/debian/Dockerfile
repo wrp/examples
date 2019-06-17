@@ -84,6 +84,7 @@ RUN aptitude install -y uuid-runtime
 RUN aptitude install -y libinline-c-perl
 RUN aptitude install -y info
 RUN aptitude install -y libevent-dev
+RUN aptitude install -y libncurses6
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
