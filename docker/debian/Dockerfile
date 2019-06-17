@@ -86,6 +86,7 @@ RUN aptitude install -y info
 RUN aptitude install -y libevent-dev
 RUN aptitude install -y libncurses6
 RUN aptitude install -y libncurses-dev
+RUN aptitude install -y byacc
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
