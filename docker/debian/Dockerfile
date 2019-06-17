@@ -85,6 +85,7 @@ RUN aptitude install -y libinline-c-perl
 RUN aptitude install -y info
 RUN aptitude install -y libevent-dev
 RUN aptitude install -y libncurses6
+RUN aptitude install -y libncurses-dev
 
 ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
