@@ -1,0 +1,3 @@
+
+# Get status on pods
+kubectl get pods --all-namespaces -o json
