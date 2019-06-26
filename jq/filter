@@ -1,7 +1,11 @@
 #!/bin/sh
 
+# Select members of a dict which have certain values:
+json='[{"a":"av","b":"bv","c":"cv"},{"a":5,"b":7,"c":9}]'
+echo "$json" | jq -c '.[] | select( .c == 9 )'
+
 # Select certain keys:
-json='{"a":"a value", "bab": "b value", "c": "c value"}'
+json='{"a":"avalue", "b": "bvalue", "c": "cvalue"}'
 echo "$json" | jq '{a,c}'
 echo "$json" | jq '. | with_entries( select(.key == "a" ) )'
 echo "$json" | jq '. | with_entries( select(.key | contains ("a") ) )'
