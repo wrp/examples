@@ -1,8 +1,9 @@
 
+image ?= mydebian
 
 all: build run
 build:
-	docker build --build-arg user=$(USER) -t mydebian .
+	docker build --build-arg user=$(USER) -t $(image) .
 
 run:
 	@# -p 8130:8125 Map port 8130 on the local host to port 8125 on the container
@@ -16,7 +17,7 @@ run:
 		docker run -it -p 8125 -v $(HOME):/home/$(USER) -v /$(USER):/$(USER) \
 		-e USE_HOME=/$(USER) \
 		--label $(USER)-debian \
-		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined mydebian; \
+		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
 	fi
 	@# To access that port, the container needs to use its ip address which
 	@# can be found with 'docker inspect $container_id | grep IPAddress'
