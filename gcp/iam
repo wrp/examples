@@ -1,5 +1,6 @@
 
-1554924085   | gcloud projects set-iam-policy $PROJECT $PROJECT.iam
+# Set policy
+gcloud projects set-iam-policy ${PROJECT:?} $PROJECT.iam
 
 #kw: roles role owner   Show all owners of a project
 gcloud projects --format=json get-iam-policy ${PROJECT?} \
