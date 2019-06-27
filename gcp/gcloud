@@ -8,3 +8,10 @@ gcloud compute instances list
 gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
 
 gcloud auth list
+
+# Get all owners of a project
+gcloud projects --format=json get-iam-policy ${PROJECT?}
+| jq '.bindings[]|select(.role == "roles/owner")|.members'
+
+# Get list of service accounts
+gcloud iam service-accounts list
