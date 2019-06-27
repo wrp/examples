@@ -1,8 +1,8 @@
 
 # Setting up smudge filter to do something like keyword expansion
 
-echo ${file?} filter=id >> $(git rev-parse --show-toplevel)/.gitattributes
-git config filter.id.clean "git show HEAD:./${file?}"
+echo $(basename ${file?}) filter=id >> $(git rev-parse --show-toplevel)/.gitattributes
+git config filter.id.clean "git show HEAD:${file?}"
 git config filter.id.smudge "sed -e \"s/%id%/\$(git describe --tags --dirty)/g\""
 echo '#!/bin/sh' >> $(git rev-parse --git-dir)/hooks/post-commit
 echo "rm ${file?}; git checkout HEAD ${file?}" >> $(git rev-parse --git-dir)/hooks/post-commit
