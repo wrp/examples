@@ -7,3 +7,10 @@ SELECT table_name AS `Table`,
 # Get the number of rows of a tables in a db
 SELECT table_name as 'Table', table_schema, TABLE_ROWS as 'Rows'
 	FROM information_schema.tables;
+
+# Get the total size of a db
+SELECT table_schema AS "Database",
+	ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "Size (MB)"
+	FROM information_schema.TABLES
+	GROUP BY table_schema;
+
