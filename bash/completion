@@ -1,0 +1,16 @@
+
+# First, check in /usr/share/bash-completion/completions to see if a completion
+# already exists.  If so, source the file there.
+
+# Basically, to make a completion, you need to tie a function to a command.  That
+# function needs to populate COMPREPLY.  For example:
+
+_example_completion() {
+	list='these are the possible completions'
+	COMPREPLY=($(compgen -W "$list" -- "${COMP_WORDS[$COMP_CWORD]}"))
+}
+
+complete -o default -F _example_completion example
+
+# If you source this file, then 'example t<tab>' should generate
+# "these" and "the" as possible completions
