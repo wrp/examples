@@ -1,0 +1,2 @@
+# Get the pid of a service
+systemctl show -p MainPID ${service_name?}.service | cut -d = -f 2
