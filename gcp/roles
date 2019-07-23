@@ -1,0 +1,6 @@
+
+# Get the list of all roles in a project:
+gcloud iam roles list
+
+# Check the set of permissions given to a role:
+gcloud iam roles describe roles/storage.admin
