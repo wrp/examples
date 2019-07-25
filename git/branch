@@ -1,6 +1,10 @@
 
 # Move a branch to a new commit
 git branch -f branch-name new-tip-commit
+# or:
+git update-ref refs/heads/${branch} ${new_value}
+
+
 
 
 # Annotate a branch.  See https://stackoverflow.com/a/31441819/140750
