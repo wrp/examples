@@ -21,6 +21,10 @@ def main(path=None):
     {% for i in alist %}
         item {{ i }}
     {% endfor %}
+    "join-sample": "{{ names | join(',') }}"
+    "join-append-sample" : "{{ names | join(':' + (port | string) + ',') }}{{":" + (port|string)}}"
+    "join-append-sample" : "{{ names | join(':' + (port | string) + ',') +
+        ":" + (port|string)}}"
 }
 '''
 
@@ -29,6 +33,8 @@ def main(path=None):
     render_data = template.render(
         title='title',
         alist=(1,2,3),
+        port = 3764,
+        names = [ 'name1', 'name2', 'name3' ],
         DB_USER=os.environ.get('USER')
     )
     print render_data
