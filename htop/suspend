@@ -1,0 +1,5 @@
+
+Not sure why I'm putting this here, but htop seems to be the utility
+where I most often want this.  To stop output to the tty, use
+ctrl-s.  Restart output with ctrl-q.  This makes it easy to pause
+htop to examine the state.
