@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# There are several "special" builtins that behave oddly.  In paritcular, with
+# posix compatibility enabled, the followig variables retain their value.
+# If you run in non-compat mode, bash will not set the variables
+
+# See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_14
+
+a=foo :
+b=bar export c=qux
+
+printf "%10s: " "${POSIXLY_CORRECT-non}compat"
+echo $a $b $c
+
+test -z "${POSIXLY_CORRECT+k}" && POSIXLY_CORRECT= bash $0
