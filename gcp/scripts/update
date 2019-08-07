@@ -39,6 +39,9 @@ set_group_and_type() {
 		region=$(awk '$1 == host{print $2}' host="$host" ${1%/*}/list) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
+	firewall-rule)
+		group=compute
+		;;
 	sql-instance)
 		type=instances
 		group=sql
