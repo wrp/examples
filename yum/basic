@@ -7,3 +7,6 @@ yum whatprovides */foo
 
 # List all packages provided by an rpm.
 rpm -ql ${package}
+
+# Which package owns /p/a/t/h
+rpm -qf /p/a/t/h
