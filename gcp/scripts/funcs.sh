@@ -6,11 +6,11 @@ interactive_commit() {
 	local response
 	msg="$1"
 	if ! git diff-index --exit-code HEAD --; then # repo is changed
-		LESS=XFeSR+G git diff ${IGNORE_WHITE--w} \
-			--cached \
-			--word-diff=color \
-		;
 		if test -z "$FORCE"; then
+			LESS=XFESR+G git diff ${IGNORE_WHITE--w} \
+				--cached \
+				--word-diff=color \
+			;
 			printf "%s ([n]yR)? " "Commit the above changes" > /dev/tty
 			read response < /dev/tty
 			case $response in
