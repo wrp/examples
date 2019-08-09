@@ -10,12 +10,8 @@ all:
 	#
 	# Whitespace is preserved in both expansions here:
 	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
-
-
-other:
-	echo foo = $(foo)
-	echo bar = $(bar)
-	echo baz = $(baz)
-	echo qux = $(qux)
-	echo qan = $(qan)
-
+	@echo foo = $(foo)
+	@echo bar = $(bar)
+	@echo baz = $(baz)
+	@echo qux = $(qux)
+	@echo qan = $(qan)
