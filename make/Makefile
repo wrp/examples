@@ -6,7 +6,7 @@ qux ?= conditional assignment
 # qan != echo shell expanded var
 
 all:
-	@echo  Run in Makefile
+	@echo Running rules in Makefile
 	#
 	# Whitespace is preserved in both expansions here:
 	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
