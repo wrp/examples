@@ -1,0 +1,4 @@
+
+all:
+	@echo 'Running rules in BSDmakefile (Use gnu make or -f to use other)'
+	@echo Make is running from $(.CURDIR)
