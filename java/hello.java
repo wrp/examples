@@ -21,6 +21,10 @@ public class hello {
 			String t = br.readLine();
 			System.out.println( String.format("Hello, %s!", t));
 		}
+		catch(java.io.FileNotFoundException e) {
+			System.err.print("FileNotFound:" + e + "\n");
+			System.out.println( String.format("Hello, %s!", args[0]));
+		}
 		catch(IOException e) {
 			System.err.print(e + "\n");
 		}
