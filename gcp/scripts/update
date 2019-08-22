@@ -157,7 +157,7 @@ main() {
 		| sed -E -e 's/[[:space:]]*$//' \
 		> $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
-                if ! test -s "$x"; then rm "$x"; else (
+		if ! test -s "$x"; then rm "$x"; else (
 			cd $(dirname $0)
 			git add $x
 			interactive_commit "$(printf \
