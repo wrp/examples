@@ -102,4 +102,6 @@ RUN adduser --quiet $user
 ENV USER=$user
 CMD sudo DOCKER=1 -u "$USER" bash
 
+RUN aptitude install -y cdecl
+
 EXPOSE 8125
