@@ -3,3 +3,9 @@
 # see https://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
 
 git diff-index --quiet HEAD --
+
+
+# Handy function to create a generic log message:
+create_msg() {
+        git diff --cached --stat | tac | awk 'NR==2{print ""}1'
+}
