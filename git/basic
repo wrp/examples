@@ -9,3 +9,5 @@ git diff-index --quiet HEAD --
 create_msg() {
         git diff --cached --stat | tac | awk 'NR==2{print ""}1'
 }
+
+# Can be used with 'create_msg | git commit -F -'
