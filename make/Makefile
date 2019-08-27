@@ -15,3 +15,11 @@ all:
 	@echo baz = $(baz)
 	@echo qux = $(qux)
 	@echo qan = $(qan)
+
+quotes:
+	# Demonstrate how to embed newlines into an argument
+	echo foo "$$( printf '%s\n%s\n%s\n' \
+		'#!/bin/bash' \
+		'cd /etc/vm/startup' \
+		'exec ./start.sh "$@"' \
+	)"
