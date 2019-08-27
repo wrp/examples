@@ -5,6 +5,12 @@ bar := simply expanded variable
 qux ?= conditional assignment
 # qan != echo shell expanded var
 
+ifeq ($(foo), foo)
+qaz := foo is foo
+else
+qaz := foo is not foo
+endif
+
 all:
 	@echo Running rules in Makefile
 	#
@@ -15,6 +21,7 @@ all:
 	@echo baz = $(baz)
 	@echo qux = $(qux)
 	@echo qan = $(qan)
+	@echo qaz = $(qaz)
 
 quotes:
 	# Demonstrate how to embed newlines into an argument
