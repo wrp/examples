@@ -38,7 +38,7 @@ to do this TODO, find the better way):
 
 gcloud compute instances describe --format=json ${instance?}
 
-on the instance, run 'lsblk' to confirm the tables before creating a filesystem:
+on the instance, run 'lsblk' and check /dev/disk to confirm the tables before creating a filesystem:
 sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/${device?}
 
 Then mount the device
