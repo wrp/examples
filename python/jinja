@@ -13,6 +13,11 @@ def main(pathlist=None):
         render_string('''
 {
     "name": "{{ DB_USER }}"
+    "literal_bracket": {{ '{{' }}
+    "raw": {% raw %}
+    This really does not need to {{ unexpanded }} be json!
+    {% endraw %}{# These leading spaces are retained!!
+        So "data" will be indented extra #}
     "data": {
         "name": "example template",
         "comments": "demonstrate{#
