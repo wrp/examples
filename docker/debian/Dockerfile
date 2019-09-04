@@ -88,7 +88,6 @@ RUN aptitude install -y libncurses6
 RUN aptitude install -y libncurses-dev
 RUN aptitude install -y byacc
 
-ENV DOCKER=1
 ENV DOCKER_HOST=tcp://10.1.2.2:2376
 ENV DOCKER_CERT_PATH=/path/to/cdk/.vagrant/machines/default/virtualbox/.docker
 ENV DOCKER_TLS_VERIFY=1
@@ -100,7 +99,7 @@ RUN printf '\nDefaults env_keep += "SSH_CLIENT SSH_USER"\n' >> /etc/sudoers
 
 RUN adduser --quiet $user
 ENV USER=$user
-CMD sudo DOCKER=1 -u "$USER" bash
+CMD sudo DOCKER=debian -u "$USER" bash
 
 RUN aptitude install -y cdecl
 

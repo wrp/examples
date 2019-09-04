@@ -10,6 +10,7 @@ run:
 	@# -p 8125      Let docker select the port.  Discover with 'docker port $container'
 	@# ($container can be found from 'docker ps')
 	@# -v localmnt:mount_in_docker_image
+	-rename-tmux-window debian
 
 	-if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
 		docker exec -it -u $(USER) "$$id" bash; \
