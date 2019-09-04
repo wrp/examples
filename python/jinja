@@ -2,13 +2,15 @@
 
 from jinja2 import Environment, FileSystemLoader
 import os
+import sys
 
-def main(path=None):
-    if path:
-        with open(path, 'r') as f:
-            data = f.read()
+def main(pathlist=None):
+    if pathlist:
+        for path in pathlist:
+            with open(path, 'r') as f:
+                render_string(f.read())
     else:
-        data = '''
+        render_string('''
 {
     "name": "{{ DB_USER }}"
     "data": {
@@ -26,7 +28,9 @@ def main(path=None):
     "join-append-sample" : "{{ names | join(':' + (port | string) + ',') +
         ":" + (port|string)}}"
 }
-'''
+''')
+
+def render_string(data):
 
     env = Environment(trim_blocks=True)
     template = env.from_string(data)
@@ -40,4 +44,4 @@ def main(path=None):
     print render_data
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
