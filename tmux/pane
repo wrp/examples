@@ -32,7 +32,14 @@ tmux capture-pane -p -S -10000 -t :0
 :setw synchronize-panes    # Send keystrokes to multiple panes
 
 
-To move a pane between sessions, go to the destination window:
+To move window:
+:movew -a -t {target-window}
+# target-windows is of the form name-of-session:n  eg :movew -t 0:3
+# without -a, the move will fail if the target window already exists.  With -a
+# it pickes the next available index.
+
+
+To move a pane between sessions, go to the destination pane:
 :join-pane -s {src-pane}
 src-pane is [{session}:]{window}[.{pane}]
 eg:
