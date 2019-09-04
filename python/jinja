@@ -13,8 +13,8 @@ def main(path=None):
     "name": "{{ DB_USER }}"
     "data": {
         "name": "example template",
-        "comments": "{#
-                #}demonstrate commenting out whitespace{#
+        "comments": "demonstrate{#
+                #} commenting out whitespace{#
                 #}",
         "unset becomes blank": "{{kafka_truststore_password}}"
     }
