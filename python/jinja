@@ -4,36 +4,36 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import sys
 
+sample_input = '''
+Simple substituion: {{ DB_USER }}
+literal_bracket: {{ '{{' }}
+raw: {% raw -%}
+    This text is not {{ expanded }} at all!
+    And, by virtue of the "-", all leading whitespace is removed.
+{% endraw %}
+"data": {
+        "name": "example template",
+        "comments": "demonstrate{#
+                #} commenting out whitespace{#
+                #}",
+        "unset becomes blank": "{{kafka_truststore_password}}"
+}
+{% for i in alist %}
+    item {{ i }}
+{% endfor %}
+
+join-sample: {{ names | join(',') }}
+join-append-sample: {{ names | join(':' + (port | string) + ',') +
+        ":" + (port|string)}}
+'''
+
 def main(pathlist=None):
     if pathlist:
         for path in pathlist:
             with open(path, 'r') as f:
                 render_string(f.read())
     else:
-        render_string('''
-{
-    "name": "{{ DB_USER }}"
-    "literal_bracket": {{ '{{' }}
-    "raw": {% raw %}
-    This really does not need to {{ unexpanded }} be json!
-    {% endraw %}{# These leading spaces are retained!!
-        So "data" will be indented extra #}
-    "data": {
-        "name": "example template",
-        "comments": "demonstrate{#
-                #} commenting out whitespace{#
-                #}",
-        "unset becomes blank": "{{kafka_truststore_password}}"
-    }
-    {% for i in alist %}
-        item {{ i }}
-    {% endfor %}
-    "join-sample": "{{ names | join(',') }}"
-    "join-append-sample" : "{{ names | join(':' + (port | string) + ',') }}{{":" + (port|string)}}"
-    "join-append-sample" : "{{ names | join(':' + (port | string) + ',') +
-        ":" + (port|string)}}"
-}
-''')
+        render_string(sample_input)
 
 def render_string(data):
 
