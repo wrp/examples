@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from jinja2 import Environment, FileSystemLoader
+import jinja2
 import os
 import sys
 
@@ -25,6 +25,8 @@ raw: {% raw -%}
 join-sample: {{ names | join(',') }}
 join-append-sample: {{ names | join(':' + (port | string) + ',') +
         ":" + (port|string)}}
+
+custom filter example: {{ names | myfilter(5) }}
 '''
 
 def main(pathlist=None):
@@ -35,9 +37,14 @@ def main(pathlist=None):
     else:
         render_string(sample_input)
 
+def filter(a, b):
+    return 'a = {}, b = {}'.format(a,b)
+
+
 def render_string(data):
 
-    env = Environment(trim_blocks=True)
+    env = jinja2.Environment(trim_blocks=True)
+    env.filters['myfilter'] = filter
     template = env.from_string(data)
     render_data = template.render(
         title='title',
@@ -48,5 +55,13 @@ def render_string(data):
     )
     print render_data
 
+
+def die(msg):
+    raise SystemExit("{}: {}".format(os.path.basename(sys.argv[0]), msg))
+
+
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    try:
+        main(sys.argv[1:])
+    except jinja2.exceptions.TemplateAssertionError as e:
+        die('jinja templating error: {}'.format(e.message))
