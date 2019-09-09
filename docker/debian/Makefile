@@ -13,9 +13,12 @@ run:
 	-rename-tmux-window debian
 
 	-if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
-		docker exec -it -u $(USER) "$$id" bash; \
+		docker exec -it -e DOCKER=debian -u $(USER) "$$id" bash; \
 	else \
-		docker run -it -p 8125 -v $(HOME):/home/$(USER) -v /$(USER):/$(USER) \
+		docker run -it \
+		-p 8125 \
+		-v $(HOME):/home/$(USER) \
+		-v /$(USER):/$(USER) \
 		-e USE_HOME=/$(USER) \
 		--label $(USER)-debian \
 		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
