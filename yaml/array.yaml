@@ -1,10 +1,13 @@
 foo-barh:
-  a: [bar,2,3]
+  a: [bar,2]
   b:
   - bar
   - 2
-  - 3
-  # a and b are the same
+  c:
+    - bar
+    - 2
+
+  # a, b, and c are the same
 
 
 baz:
