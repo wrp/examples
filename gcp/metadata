@@ -1,0 +1,5 @@
+
+gcloud compute instances add-metadata INSTANCE_NAME
+	[--metadata=KEY=VALUE,[KEY=VALUE,...]]
+	[--metadata-from-file=KEY=LOCAL_FILE_PATH,[...]] [--zone=ZONE]
+	[GCLOUD_WIDE_FLAG ...]
