@@ -1,11 +1,6 @@
 #!/bin/bash
 
-die() { printf "%s: %s: %s\n" \
-	"$(basename $0)" \
-	"$(date +"%Y-%m-%d %H:%M:%S%z")" \
-	"${*-Failed}"
-	exit 1;
-} >&2
+die() { echo "$(basename $0): $(date +"%Y-%m-%d %H:%M:%S%z"): ${*-Failed}"; exit 1; } >&2
 
 ( die "Test with args" )
 echo 'Testing die without arguments...'
