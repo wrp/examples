@@ -11,3 +11,8 @@ git update-ref refs/heads/${branch} ${new_value}
 git branch B A
 git checkout B
 git commit --allow-empty -m "Created branch 'B' from 'A'"
+
+# Delete a remote branch locally
+git branch -r -d ${remote:?}/${branch:?}
+# Not to be confused with deleting the remote branch on the remote:
+git push --delete ${remote?} ${branch?}
