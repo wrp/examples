@@ -1,0 +1,18 @@
+#!/bin/sh
+
+jq -r '.[] | select( .name == "Burrito") | .uuid ' << EOF
+[
+  {
+    "uuid": "832390ed-58ed-4338-bf97-eb42f123d9f3",
+    "name": "Nacho"
+  },
+  {
+    "uuid": "5b55ea5e-96f4-48d3-a258-75e152d8236a",
+    "name": "Taco"
+  },
+  {
+    "uuid": "a68f5249-828c-4265-9317-fc902b0d65b9",
+    "name": "Burrito"
+  }
+]
+EOF
