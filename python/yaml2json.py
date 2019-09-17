@@ -25,13 +25,11 @@ foo:
         no space between 'has' and 'no'"
 view:
     query: >
-        SELECT  * EXCEPT (etl_row_num)
-            FROM (
-                SELECT *, ROW_NUMBER() OVER (PARTITION BY producerHeader.uuid ORDER BY producerHeader.timestamp DESC) etl_row_num\n  FROM\n    `micro-bus-121218.queuing_kafka_stingray.billcom_money_movement_report`\n  WHERE\n
+        SELECT  * EXCEPT (foo)
     "query2": >
-        "SELECT  * EXCEPT (etl_row_num) \n FROM ( \n SELECT "
+        "SELECT  * EXCEPT (foo)
     "query3":
-        "SELECT  * EXCEPT (etl_row_num) \n FROM ( \n SELECT "
+        "SELECT  * EXCEPT (foo)
     useLegacySql: false
 '''
 
