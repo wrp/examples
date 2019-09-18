@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Hacky trick to suppress (sort of) the output of xtrace
+# for subshells
+up=$(tput cuu1)
+
+PS4="${1:-$up} "
+set -x
+
+echo "This should overwrite: $(echo this)"
+echo "This should overwrite: $(echo this $(echo and that))"
+echo "This should overwrite: $(echo this $(echo and that $(echo and this)))"
+echo
+
+exit
+
+# Note that the first level subshell is pretty effectively overwritten (the $up
+# gets written twice!), but it's a bit ugly
+
+For example:
+$ echo; echo; ./ps4
+
+ echo 'This should overwrite: this'
+ echo 'This should overwrite: this and that'
+ echo 'This should overwrite: this and that and this'
+ echoshould overwrite: this and that and this
+ exit
+$ ./ps4 x
+xx echo this
+x echo 'This should overwrite: this'
+This should overwrite: this
+xxx echo and that
+xx echo this and that
+x echo 'This should overwrite: this and that'
+This should overwrite: this and that
+xxxx echo and this
+xxx echo and that and this
+xx echo this and that and this
+x echo 'This should overwrite: this and that and this'
+This should overwrite: this and that and this
+x echo
+
+x exit
