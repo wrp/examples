@@ -29,5 +29,6 @@ interactive_commit() {
 		else
 			git reset; echo resetting repo, not committing
 		fi
+		if test -n "$FORCE"; then git show; fi
 	fi
 }

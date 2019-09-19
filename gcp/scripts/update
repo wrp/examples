@@ -20,7 +20,7 @@
 
 . $(dirname $0)/funcs.sh
 
-FORCE="auto update"
+: ${FORCE="update gcp data on $(DATE)"}
 
 set_group_and_type() {
 	orig_type="$(basename $(dirname "$1"))"
