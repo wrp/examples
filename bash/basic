@@ -1,0 +1,9 @@
+#!/bin/bash
+
+case $- in
+*i*) echo this is an interactive shell;;
+esac
+
+case $0 in
+-*) echo This is a login shell;;
+esac
