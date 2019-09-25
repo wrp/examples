@@ -13,7 +13,7 @@ array: array.class
 
 log: log.class
 	java -Dlog4j.configuration=file:$(PWD)/config/log4j \
-		-cp '.:/usr/share/java/log4j-1.2.jar' log
+		-cp '.:/usr/share/java/log4j-1.2.jar:/usr/share/java/log4j-core-2.11.1.jar' log
 
 %.class: %.java
 	javac -cp '.:/usr/share/java/log4j-1.2.jar' $<

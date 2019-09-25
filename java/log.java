@@ -54,9 +54,11 @@ log4j.appender.stderr.layout.ConversionPattern = %m%n
 		stderr.activateOptions();
 		Logger.getRootLogger().addAppender(stderr);
 
-		log.debug("Hello this is a debug message");
-		log.info("Hello this is an info message");
-		log.warn("Hello this is an warn message");
-		log.error("Hello this is an error message");
+		for(int i=0; i < 1000; i++) {
+			log.debug("Hello this is a debug message");
+			log.info("Hello this is an info message");
+			log.warn("Hello this is an warn message");
+			log.error("Hello this is an error message");
+		}
 	}
 }
