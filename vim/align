@@ -1,0 +1,12 @@
+
+EasyAlign is a very nice plugin
+" See https://github.com/junegunn/vim-easy-align
+
+Summary:  start by loading plugins:
+" (see curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim)
+
+:PlugInstall
+
+Avoid putting that in .vimrc, since it is slow
+
+Then, to align text, try putting the cursor inside a chunk and use vipga| to align on |
