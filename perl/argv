@@ -6,8 +6,13 @@ foreach my $arg (@ARGV) {
 	say "arg: $arg"
 }
 
-say "total number of args:" . @ARGV
+say "total number of args:" . @ARGV;
 
 # "length" does not work.  Prints the length of the string 'scalar @ARGV'
 # so 1 or 2 ( or 3 if you pass 100 args!)
 # say "total number of args:", length @ARGV
+#
+
+if( @ARGV == 0) {
+	say "no args"
+}
