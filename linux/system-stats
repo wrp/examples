@@ -25,3 +25,7 @@ nmon   # curses based wrapper to many subsystems
 pmap
 pstree
 sysctl -n hw.ncpu  # Number of logcial processors
+lscpu  # list cpus
+nproc  # show number of cpus
+
+cat /proc/loadavg
