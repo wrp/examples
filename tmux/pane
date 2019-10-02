@@ -2,6 +2,34 @@
 https://superuser.com/questions/1105090/move-a-tmux-pane-to-another-session
 
 
+**************************
+How to identify a pane:  (from man-page)
+     target-pane (or src-pane or dst-pane) may be a pane ID or takes a similar form to target-window but with the optional addition of a period followed by a pane index or pane ID, for example: `mysession:mywindow.1'.  If the
+     pane index is omitted, the currently active pane in the specified window is used.  The following special tokens are available for the pane index:
+
+     Token                  Meaning
+     {last}            !    The last (previously active) pane
+     {next}            +    The next pane by number
+     {previous}        -    The previous pane by number
+     {top}                  The top pane
+     {bottom}               The bottom pane
+     {left}                 The leftmost pane
+     {right}                The rightmost pane
+     {top-left}             The top-left pane
+     {top-right}            The top-right pane
+     {bottom-left}          The bottom-left pane
+     {bottom-right}         The bottom-right pane
+     {up-of}                The pane above the active pane
+     {down-of}              The pane below the active pane
+     {left-of}              The pane to the left of the active pane
+     {right-of}             The pane to the right of the active pane
+
+     The tokens `+' and `-' may be followed by an offset, for example:
+
+           select-window -t:+2
+
+
+**************************
 Copy a pane:
     capture-pane [-aepPqCJ] [-b buffer-name] [-E end-line] [-S
     start-line] [-t target-pane]
@@ -49,5 +77,14 @@ eg:
 
 
 
+**************************
 Create a new pane above the current pane, using 80% of the screen:
 tmux split-window -p 80 -b cmd with args
+
+
+**************************
+Cool trick:  run a command with output to a new pane:
+$ cmd | tmux splitw -dI
+
+Now, run another command with output to that same pane:
+$ cmd | tmux display-message -I -t:+
