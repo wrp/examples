@@ -84,7 +84,7 @@ tmux split-window -p 80 -b cmd with args
 
 **************************
 Cool trick:  run a command with output to a new pane:
-$ cmd | tmux splitw -dI
+$ cmd | tmux splitw -dI    # split-window
 
 Now, run another command with output to that same pane:
 $ cmd | tmux display-message -I -t:+
