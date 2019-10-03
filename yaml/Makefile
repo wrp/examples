@@ -6,5 +6,4 @@ files = $(shell ls *.yaml | sort)
 default: $(files:.yaml=)
 
 %: %.yaml
-	@echo; echo $<
-	@python -c 'import yaml; import sys; print list(yaml.load_all(sys.stdin))[0:]' < $<
+	@python -c 'import yaml; import json; import sys; print json.dumps(list(yaml.load_all(sys.stdin))[0:])' < $<
