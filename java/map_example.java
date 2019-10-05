@@ -8,16 +8,16 @@ public class map_example {
 	public static void main(String args[]) {
 		Map<Integer, String> m = new HashMap<Integer, String>();
 		m.put(5, "five");
-		for(Map.Entry mp:m.entrySet()) {  
-			System.out.println(mp.getKey() + ": "  + mp.getValue());  
-		}  
+		for(Map.Entry mp:m.entrySet()) {
+			System.out.println(mp.getKey() + ": "  + mp.getValue());
+		}
 		System.out.println("direct access: " + m.get(5));
 
 		Map<String, cmdlinearg> v = new HashMap<String, cmdlinearg>();
 		v.put("test", new cmdlinearg("t", "test func", true));
-		for(Map.Entry mp:v.entrySet()) {  
-			System.out.println(mp.getKey() + ": "  + mp.getValue());  
-		}  
+		for(Map.Entry mp:v.entrySet()) {
+			System.out.println(mp.getKey() + ": "  + mp.getValue());
+		}
 		System.out.println("direct access: " + v.get("test").description);
 	}
 	static class cmdlinearg {
