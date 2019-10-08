@@ -8,3 +8,8 @@ def mutate(b,x=5):
 
 mutate(a,5)         # A is mutated by the call
 mutate(list(a),9)   # Pass a copy to avoid mutation
+
+# list comprehension:
+# [expression(i) for i in list if filter(i)]
+a = [1,2,3]
+print [x for x in a if x%2 ]
