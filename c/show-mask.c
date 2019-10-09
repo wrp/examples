@@ -1,5 +1,3 @@
-
-
 /* Show the current set of blocked signals */
 
 #include <signal.h>
