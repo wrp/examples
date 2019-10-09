@@ -14,6 +14,9 @@ public class hello {
 			.getResource("hello.class")
 		);
 
+		System.out.println("version: " + hello.getClass()
+			.getImplementationVersion());
+
 		/* Read name from a file */
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(args[0]));
