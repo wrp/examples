@@ -13,17 +13,32 @@
 #include <stdio.h>
 
 
+void
+set_default(struct sigaction *act, int s)
+{
+	if(sigaction(s, act, NULL)) {
+		perror("sigaction");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int
 main(int argc, char **argv)
 {
 	struct sigaction act = {{0}};
+	sigset_t new;
+
+	sigemptyset(&new);
+
+	if(sigprocmask(SIG_SETMASK, &new, NULL)) {
+		perror("sigprocmask");
+		return EXIT_FAILURE;
+	}
 
 	act.sa_handler = SIG_DFL;
-
-	if(sigaction(SIGPIPE, &act, NULL)) {
-		perror("sigaction");
-		exit(EXIT_FAILURE);
-	}
+	set_default(&act, SIGPIPE);
+	set_default(&act, SIGINT);
+	set_default(&act, SIGTERM);
 
 	execvp(argv[1], argv+1);
 
