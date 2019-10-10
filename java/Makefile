@@ -15,8 +15,8 @@ log: log.class
 	java -Dlog4j.configuration=file:$(PWD)/config/log4j \
 		-cp '.:/usr/share/java/log4j-1.2.jar:/usr/share/java/log4j-core-2.11.1.jar' log
 
-%.class: %.java
-	javac -cp '.:/usr/share/java/log4j-1.2.jar' $<
+%.class: %.java snakeyaml-1.9.jar
+	javac -cp .:/usr/share/java/log4j-1.2.jar:snakeyaml-1.9.jar $<
 
 snakeyaml-1.9.jar.zip:
 	curl -Ss http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
