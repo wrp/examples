@@ -3,7 +3,7 @@
 git rev-parse --abbrev-ref HEAD
 
 # Move a branch to a new commit
-git branch -f branch-name new-tip-commit
+git branch -f ${branch} ${new_tip_commit}  # reset branch
 # or:
 git update-ref refs/heads/${branch} ${new_value}
 
