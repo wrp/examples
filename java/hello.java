@@ -1,7 +1,10 @@
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.StringBuilder;
 
 public class hello {
@@ -14,12 +17,18 @@ public class hello {
 			.getResource("hello.class")
 		);
 
+		/*
 		System.out.println("version: " + hello.getClass()
 			.getImplementationVersion());
+			*/
 
 		/* Read name from a file */
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(args[0]));
+
+			InputStream fis = new FileInputStream(args[0]);
+			BufferedReader br=new BufferedReader(new InputStreamReader(fis));
+
+			/* BufferedReader br = new BufferedReader(new FileReader(args[0])); */
 			StringBuilder sb = new StringBuilder();
 			String t = br.readLine();
 			System.out.println( String.format("Hello, %s!", t));
