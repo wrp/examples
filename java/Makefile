@@ -8,6 +8,14 @@ properties: subdir/properties.class
 hello: hello.class
 	java hello $(USER)
 
+yaml: yaml.class
+	@if test -t 0; then \
+		printf 'foo: "bar"\nbaz: "qux"\n'; \
+	else \
+		cat; \
+	fi \
+	| java -cp .:snakeyaml-1.9.jar yaml
+
 array: array.class
 	java array
 
