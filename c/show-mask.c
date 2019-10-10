@@ -16,5 +16,5 @@ main(int argc, char **argv)
 	}
 	printf("mask: %x\n", old);
 
-	return 0;
+	return !!old;
 }
