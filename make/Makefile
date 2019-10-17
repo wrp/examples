@@ -22,6 +22,7 @@ all:
 	@echo qux = $(qux)
 	@echo qan = $(qan)
 	@echo qaz = $(qaz)
+	@echo  target name: $@
 
 quotes:
 	# Demonstrate how to embed newlines into an argument

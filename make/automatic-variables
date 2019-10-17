@@ -115,6 +115,3 @@ function.  Here is a table of the variants:
 `$(^F)'
      Lists of the directory parts and the file-within-directory parts
      of all prerequisites.
-
-
-
