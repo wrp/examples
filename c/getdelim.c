@@ -35,7 +35,7 @@ main(int argc, char **argv)
 			perror(output_path);
 			return EXIT_FAILURE;
 		}
-		this -=1; 
+		this -=1;
 	} while( this >= input);
 	return EXIT_SUCCESS;
 }
