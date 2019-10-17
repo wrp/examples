@@ -3,7 +3,8 @@
 all: hello properties array
 
 properties: subdir/properties.class
-	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar subdir.properties
+	printf 'baz=qux' | java -cp .:snakeyaml-1.9.jar \
+		-Dbanana=blah subdir.properties
 
 hello: hello.class
 	java hello $(USER)
