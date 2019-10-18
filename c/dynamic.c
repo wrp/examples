@@ -29,7 +29,7 @@ main(int argc, char **argv)
 	while( (rc = getdelim( &buf, &bufsiz, ',', ifp)) > 0) {
 		char *end, *prev=buf;
 		push(&V, strtod(buf, &end));
-		if(*end == '\n' && end[1]) {
+		if( *end == '\n' && end[1] ) {
 			push(&V, strtod(prev=end, &end));
 		}
 		if( end == prev || strcspn(end, ",\n") ) {
