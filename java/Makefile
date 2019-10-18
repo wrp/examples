@@ -22,10 +22,16 @@ array: array.class
 
 log: log.class
 	java -Dlog4j.configuration=file:$(PWD)/config/log4j \
-		-cp '.:/usr/share/java/log4j-1.2.jar:/usr/share/java/log4j-core-2.11.1.jar' log
+		-cp '.:apache-log4j-2.12.1-bin/log4j-1.2-2.12.1.jar'$$( : \
+		)':apache-log4j-2.12.1-bin/log4j-core-2.12.1.jar' \
+		log
 
 %.class: %.java snakeyaml-1.9.jar
-	javac -cp .:/usr/share/java/log4j-1.2.jar:snakeyaml-1.9.jar $<
+	javac -cp .:/usr/share/java/log4j-1.2.jar$$( : \
+		):apache-log4j-2.12.1-bin/log4j-1.2-api-2.12.1.jar$$( : \
+		):apache-log4j-2.12.1-bin/log4j-api-1.2-2.12.1.jar$$( : \
+		):apache-log4j-2.12.1-bin/log4j-core-2.12.1.jar$$( : \
+		):snakeyaml-1.9.jar $<
 
 snakeyaml-1.9.jar.zip:
 	curl -Ss http://www.java2s.com/Code/JarDownload/snakeyaml/snakeyaml-1.9.jar.zip > snakeyaml-1.9.jar.zip
@@ -49,3 +55,10 @@ jdb: hello.class
 	rlwrap -H ~/.jdbhistory -z pipeto jdb -attach 8394
 
 .PHONY: clean all jdb
+
+apache-log4j-2.12.1-src.tar.gz:
+	wget https://www-us.apache.org/dist/logging/log4j/2.12.1/$@
+
+
+apache-log4j-2.12.1-bin.tar.gz:
+	wget https://www-us.apache.org/dist/logging/log4j/2.12.1/$@
