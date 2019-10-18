@@ -22,7 +22,10 @@ test_string '1 ,2' "invalid input"
 test_string '1,2 ' "invalid input"
 test_string "1${nl}2,3 " 'invalid input'
 test_string "1${nl} 2" "1: 1${nl}2: 2"
+
+# Ensure trailing whitespace doesn't inject a 0
 test_string "1${nl} " 'invalid input'
+test_string "1${nl}${nl}2" "1: 1${nl}2: 2"
 test_string "1${nl}" '1: 1'
 test_string "1.8${nl}" '1: 1.8'
 test_string "1.8${nl} " 'invalid input'
