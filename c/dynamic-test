@@ -1,0 +1,31 @@
+#!/bin/sh
+
+RV=0
+# Run a string through and validate the output
+test_string() {
+	out=$(echo "$1" | ./dynamic 2>&1)
+	if test "${2+set}" = set && test "$out" != "$2"; then
+		echo "On input:'$1', expected output '$2', got '$out'" >&2
+		RV=1
+	fi
+}
+
+nl='
+'
+test_string '1,2,3' "1: 1${nl}2: 2${nl}3: 3"
+test_string "1${nl}2,3" "1: 1${nl}2: 2${nl}3: 3"
+test_string 'k' "invalid input"
+test_string '1,,2' "invalid input"
+
+
+# Exercise reallocation
+perl -e 'print join ",",(1..1000000)' | ./dynamic > /dev/null || RV=1
+
+# Exercise file read
+./dynamic /dev/null || RV=1
+./dynamic /dev/null | grep . && RV=1
+
+# Exercise file error
+./dynamic /non-extant-file 2> /dev/null && RV=1
+
+exit $RV

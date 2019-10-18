@@ -10,7 +10,7 @@ if ! test -f calc.gcda; then
 fi
 RV=0
 
-for file in calc ring-buffer; do
+for file in calc ring-buffer dynamic; do
 	if test -f .libs/$file.gcno; then
 		arg='-o .libs'
 	else
