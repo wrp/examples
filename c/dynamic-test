@@ -3,7 +3,7 @@
 RV=0
 # Run a string through and validate the output
 test_string() {
-	out=$(echo "$1" | ./dynamic 2>&1)
+	out=$(printf "%s" "$1" | ./dynamic 2>&1)
 	if test "${2+set}" = set && test "$out" != "$2"; then
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
 		RV=1
@@ -21,6 +21,11 @@ test_string '1, 2' "1: 1${nl}2: 2"
 test_string '1 ,2' "invalid input"
 test_string '1,2 ' "invalid input"
 test_string "1${nl}2,3 " 'invalid input'
+test_string "1${nl} 2" "1: 1${nl}2: 2"
+test_string "1${nl} " 'invalid input'
+test_string "1${nl}" '1: 1'
+test_string "1.8${nl}" '1: 1.8'
+test_string "1.8${nl} " 'invalid input'
 
 
 # Exercise reallocation

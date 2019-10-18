@@ -27,12 +27,12 @@ main(int argc, char **argv)
 	Realloc(&V);
 
 	while( (rc = getdelim( &buf, &bufsiz, ',', ifp)) > 0) {
-		char *end;
+		char *end, *prev=buf;
 		push(&V, strtod(buf, &end));
 		if(*end == '\n' && end[1]) {
-			push(&V, strtod(end, &end));
+			push(&V, strtod(prev=end, &end));
 		}
-		if( end == buf || strcspn(end, ",\n") ) {
+		if( end == prev || strcspn(end, ",\n") ) {
 			fputs("invalid input\n", stderr);
 			exit(EXIT_FAILURE);
 		}
