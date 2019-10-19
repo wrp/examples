@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <inttypes.h>
+#include <string.h>
 #include <stdlib.h>
 /*
  *      0
@@ -12,14 +12,12 @@
 
 void write_line(int line, int size)
 {
-	int i = 0;
-	int c = '0' + line;
-	for(; i < size - line; i++) {
-		putchar(' ');
-	}
-	do putchar(c); while(c-- != '0');
-	while(++c < '0' + line) putchar(c + 1);
-	putchar('\n');
+	char template[]="9876543210123456789";
+	char *s = template + (9 - size);
+	char *e = s + size + line;
+	e[1] = '\0';
+	memset(s, ' ', size - line);
+	puts(s);
 }
 
 int
