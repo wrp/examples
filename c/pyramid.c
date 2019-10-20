@@ -16,6 +16,11 @@ main(int argc, char **argv)
 		char *s = template + 9 - size;
 		template[10 + line] = '\0';
 		memset(s, ' ', size - line);
-		puts(s);
-	}
+
+		if(puts(s) == EOF) {
+			perror("puts");
+			    return EXIT_FAILURE;
+		    }
+	    }
+	    return EXIT_SUCCESS;
 }
