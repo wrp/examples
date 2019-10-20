@@ -36,12 +36,12 @@ main(void)
 
 	act.sa_sigaction = handle;
 
-	printf( "pipe catcher %d\n", getpid());
+	printf( "pipe catcher %d: ", getpid());
 	set_action(&act, SIGPIPE);
 	set_action(&act, SIGHUP);
 	set_action(&act, SIGINT);
 	while(1) {
-		sprintf(buf, "%d\n", i++);
+		sprintf(buf, "%d.", i++);
 		write(1, buf, strlen(buf));
 		sleep(1);
 	}
