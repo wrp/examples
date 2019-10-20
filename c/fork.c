@@ -12,7 +12,6 @@ main(int argc, char **argv)
 	int p1[2];
 	int p2[2];
 	int val = argc > 1 ? strtol(argv[1], NULL, 10) : 1;
-	char buf[128];
 	int len;
 	ssize_t rc;
 	if(pipe(p1) || pipe(p2)) {
@@ -30,7 +29,7 @@ main(int argc, char **argv)
 		xdup2(p2[1],STDOUT_FILENO);
 		xclose(p2[0]);
 		xclose(p2[1]);
-		execlp("perl", "perl", "-ane" "print unpack('i*') + 1", NULL);
+		execlp("perl", "perl", "-ane" "print pack('i*', unpack('i*') + 1)", NULL);
 		perror("exec");
 		return EXIT_FAILURE;
 	default:
@@ -38,12 +37,11 @@ main(int argc, char **argv)
 		xclose(p1[1]);
 		xclose(p1[0]);
 		xclose(p2[1]);
-		if(( rc = read(p2[0], buf, sizeof buf)) == -1) {
+		if(( rc = read(p2[0], &val, sizeof val)) == -1) {
 			perror("read");
 		}
 		xclose(p2[0]);
-		buf[rc] = '\0';
-		printf("%s\n", buf);
+		write(STDOUT_FILENO, &val, sizeof val);
 	}
 	if(fclose(stdout)) {
 		perror("stdout");
