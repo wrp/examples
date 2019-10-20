@@ -1,9 +1,11 @@
 
 bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args \
+	pyramid \
 	dynamic \
 	clean-man
 TESTS = calc-test \
 	dynamic-test \
+	pyramid-test \
 	coverage-test
 noinst_LTLIBRARIES = libringbuf.la
 calc_LDADD = libringbuf.la
