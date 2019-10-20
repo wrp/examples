@@ -36,7 +36,8 @@ main(void)
 
 	act.sa_sigaction = handle;
 
-	printf( "pipe catcher %d: ", getpid());
+	fprintf(stderr, "pipe catcher %d: ", getpid());
+	fflush(stderr);
 	set_action(&act, SIGPIPE);
 	set_action(&act, SIGHUP);
 	set_action(&act, SIGINT);
