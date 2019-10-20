@@ -30,12 +30,11 @@ main(int argc, char **argv)
 		xdup2(p2[1],STDOUT_FILENO);
 		xclose(p2[0]);
 		xclose(p2[1]);
-		execlp("awk", "awk", "{print $1 * 2}", NULL);
+		execlp("perl", "perl", "-ane" "print unpack('i*') + 1", NULL);
 		perror("exec");
 		return EXIT_FAILURE;
 	default:
-		len = sprintf(buf, "%d", val);
-		write(p1[1], buf, len);
+		write(p1[1], &val, sizeof val);
 		xclose(p1[1]);
 		xclose(p1[0]);
 		xclose(p2[1]);
@@ -44,7 +43,11 @@ main(int argc, char **argv)
 		}
 		xclose(p2[0]);
 		buf[rc] = '\0';
-		printf("%s", buf);
+		printf("%s\n", buf);
+	}
+	if(fclose(stdout)) {
+		perror("stdout");
+		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
