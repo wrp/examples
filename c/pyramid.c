@@ -13,14 +13,11 @@ main(int argc, char **argv)
 	}
 	for(int line = 0; line <= size; line++) {
 		char template[]="9876543210123456789";
-		char *s = template + 9 - size;
 		template[10 + line] = '\0';
-		memset(s, ' ', size - line);
-
-		if(puts(s) == EOF) {
+		if(puts(memset(template + 9 - size, ' ', size - line)) == EOF) {
 			perror("puts");
-			    return EXIT_FAILURE;
-		    }
-	    }
-	    return EXIT_SUCCESS;
+			return EXIT_FAILURE;
+		}
+	}
+	return EXIT_SUCCESS;
 }
