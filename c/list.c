@@ -80,7 +80,6 @@ main(int argc, char **argv)
 	while( scanf(fmt, &val) == 1) {
 		push(&list, val);
 	}
-	display(&list, fmt);
 
 	/* delete duplicates */
 	for(struct node *t = list.next; t != &list; t = t->next) {
