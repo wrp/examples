@@ -34,10 +34,10 @@ push(struct node *list, int val)
  * Print the contents of the list.
  */
 void
-display(const struct node *list, const char *fmt)
+display(const struct node *list, char delim)
 {
 	for(const struct node *t = list->next; t != list; t = t->next) {
-		printf(fmt, t->val);
+		printf("%i%c", t->val, t->next == list ? '\n' : delim);
 	}
 	putchar('\n');
 }
@@ -70,7 +70,7 @@ main(int argc, char **argv)
 	struct tree *tree = NULL;
 	struct node list = {0, &list, &list};
 	int val;
-	const char delim = argc > 1 ? argv[1][0] : ' ';
+	char delim = argc > 1 ? argv[1][0] : ' ';
 	char fmt[32];
 
 	snprintf(fmt, sizeof fmt, "%%i%c", delim);
@@ -91,7 +91,7 @@ main(int argc, char **argv)
 			free(tmp);
 		}
 	}
-	display(&list, fmt);
+	display(&list, delim);
 }
 
 void *
