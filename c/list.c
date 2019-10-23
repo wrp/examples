@@ -1,9 +1,17 @@
-/* Import numbers into a doubly linked list */
+/*
+ * Trivial demonstration of a linked list
+ * and a simple (unbalanced) binary search tree.
+ */
 #include<stdio.h>
 #include<stdlib.h>
 struct node {
 	int val;
 	struct node *next, *prev;
+};
+
+struct tree {
+	int val;
+	struct tree *left, *right;
 };
 
 void *xmalloc(size_t s);
@@ -31,12 +39,36 @@ display(const struct node *list, const char *fmt)
 	for(const struct node *t = list->next; t != list; t = t->next) {
 		printf(fmt, t->val);
 	}
+	putchar('\n');
+}
+
+/*
+ * Push val into the tree.  Return non-zero if val
+ * is already in the tree
+ */
+int
+push_tree(struct tree **t, int val)
+{
+	struct tree *T = *t;
+	if( T == NULL ) {
+		T = *t = xmalloc(sizeof **t);
+		T->val = val;
+		T->left = T->right = NULL;
+		return 0;
+	} else if( T->val == val) {
+		return 1;
+	} else if( T->val < val) {
+		return push_tree( &(T->left), val);
+	} else {
+		return push_tree( &(T->right), val);
+	}
 }
 
 int
 main(int argc, char **argv)
 {
-	struct node list;
+	struct tree *tree = NULL;
+	struct node list = {0, &list, &list};
 	int val;
 	const char delim = argc > 1 ? argv[1][0] : ' ';
 	char fmt[32];
@@ -47,6 +79,18 @@ main(int argc, char **argv)
 
 	while( scanf(fmt, &val) == 1) {
 		push(&list, val);
+	}
+	display(&list, fmt);
+
+	/* delete duplicates */
+	for(struct node *t = list.next; t != &list; t = t->next) {
+		if(push_tree(&tree, t->val)) {
+			struct node *tmp = t;
+			t->prev->next = t->next;
+			t->next->prev = t->prev;
+			t = t->prev;
+			free(tmp);
+		}
 	}
 	display(&list, fmt);
 }
