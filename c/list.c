@@ -36,10 +36,16 @@ push(struct node *list, int val)
 void
 display(const struct node *list, char delim)
 {
+	char *cols = getenv("COLUMNS");
+	int avail = cols ? strtol(cols, NULL, 10) : 80;
+	int used = 0;
 	for(const struct node *t = list->next; t != list; t = t->next) {
-		printf("%i%c", t->val, t->next == list ? '\n' : delim);
+		used += printf("%i%c", t->val,
+			t->next == list ? '\n'
+			: avail - used < 20 ? used = 0, '\n'
+			: delim
+		);
 	}
-	putchar('\n');
 }
 
 /*
