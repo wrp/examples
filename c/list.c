@@ -100,8 +100,8 @@ xmalloc(size_t s)
 {
 	void *rv = malloc(s);
 	if(rv == NULL) {
-		perror("malloc");
-		exit(EXIT_FAILURE);
+		perror("malloc"); /* uncovered */
+		exit(EXIT_FAILURE); /* uncovered */
 	}
 	return rv;
 }
