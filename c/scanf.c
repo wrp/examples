@@ -10,12 +10,6 @@ get(const char *fmt, ...)
 	r = vscanf(fmt, ap);
 	va_end(ap);
 	printf("fmt: %s, returned %d", fmt, r );
-	if(r != EOF) {
-		fputs(", scanned:\n", stdout);
-		va_start(ap, fmt);
-		vprintf(fmt, ap);
-		va_end(ap);
-	}
 	putchar('\n');
 }
 
@@ -28,5 +22,7 @@ main(void)
 
 	/* Read up to 15 chars up to the first whitespace.  Append terminating nul. */
 	get("%15s", s);
+	printf("s = %s\n", s);
 	get("%d", &v);
+	printf("v = %d\n", v);
 }
