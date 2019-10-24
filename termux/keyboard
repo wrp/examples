@@ -71,3 +71,5 @@ extra-keys = [ \
   BACKSLASH
   QUOTE
   APOSTROPHE
+
+  After editing termux.properties file, you need to reload Termux configuration by executing command "termux-reload-settings".
