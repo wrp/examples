@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# get each line of a file into an array, and join on ;
+# Use -000 for slurp mode.  Also can be done with 'local $/'
+# See slurp in perlvar and perlrun
+
+perl -000 -lan -F'\n' -e 'print join ";", @F'
