@@ -129,7 +129,7 @@ exit 0
 
                The following rules apply:
 
-               +o   Each letter may optionally be followed by a number
+               o   Each letter may optionally be followed by a number
                    indicating the repeat count.  A numeric repeat count may
                    optionally be enclosed in brackets, as in "pack("C[80]",
                    @arr)".  The repeat count gobbles that many values from the
@@ -139,12 +139,12 @@ exit 0
                    for the repeat count instead of a number means to use
                    however many items are left, except for:
 
-                   +o   "@", "x", and "X", where it is equivalent to 0.
+                   o   "@", "x", and "X", where it is equivalent to 0.
 
-                   +o   <.>, where it means relative to the start of the
+                   o   <.>, where it means relative to the start of the
                        string.
 
-                   +o   "u", where it is equivalent to 1 (or 45, which here is
+                   o   "u", where it is equivalent to 1 (or 45, which here is
                        equivalent).
 
                    One can replace a numeric repeat count with a template
@@ -169,22 +169,22 @@ exit 0
                    When used with ".", the repeat count determines the
                    starting position to calculate the value offset as follows:
 
-                   +o   If the repeat count is 0, it's relative to the current
+                   o   If the repeat count is 0, it's relative to the current
                        position.
 
-                   +o   If the repeat count is "*", the offset is relative to
+                   o   If the repeat count is "*", the offset is relative to
                        the start of the packed string.
 
-                   +o   And if it's an integer _n, the offset is relative to the
-                       start of the _nth innermost "( )" group, or to the start
-                       of the string if _n is bigger then the group level.
+                   o   And if it's an integer n, the offset is relative to the
+                       start of the nth innermost "( )" group, or to the start
+                       of the string if n is bigger then the group level.
 
                    The repeat count for "u" is interpreted as the maximal
                    number of bytes to encode per line of output, with 0, 1 and
                    2 replaced by 45.  The repeat count should not be more than
                    65.
 
-               +o   The "a", "A", and "Z" types gobble just one value, but pack
+               o   The "a", "A", and "Z" types gobble just one value, but pack
                    it as a string of length count, padding with nulls or
                    spaces as needed.  When unpacking, "A" strips trailing
                    whitespace and nulls, "Z" strips everything after the first
@@ -196,7 +196,7 @@ exit 0
                    "Z" always packs a trailing null, except when the count is
                    0.
 
-               +o   Likewise, the "b" and "B" formats pack a string that's that
+               o   Likewise, the "b" and "B" formats pack a string that's that
                    many bits long.  Each such format generates 1 bit of the
                    result.  These are typically followed by a repeat count
                    like "B8" or "B64".
@@ -225,11 +225,11 @@ exit 0
                    field.  On unpacking, bits are converted to a string of 0s
                    and 1s.
 
-               +o   The "h" and "H" formats pack a string that many nybbles
+               o   The "h" and "H" formats pack a string that many nybbles
                    (4-bit groups, representable as hexadecimal digits,
                    "0".."9" "a".."f") long.
 
-                   For each such format, _p_a_c_k_(_) generates 4 bits of result.
+                   For each such format, pack() generates 4 bits of result.
                    With non-alphabetical characters, the result is based on
                    the 4 least-significant bits of the input character, i.e.,
                    on "ord($char)%16".  In particular, characters "0" and "1"
@@ -239,7 +239,7 @@ exit 0
                    and "A" both generate the nybble "0xA==10".  Use only these
                    specific hex characters with this format.
 
-                   Starting from the beginning of the template to _p_a_c_k_(_), each
+                   Starting from the beginning of the template to pack(), each
                    pair of characters is converted to 1 character of output.
                    With format "h", the first character of the pair determines
                    the least-significant nybble of the output character; with
@@ -253,17 +253,17 @@ exit 0
                    are ignored.
 
                    A "*" for the repeat count uses all characters of the input
-                   field.  For _u_n_p_a_c_k_(_), nybbles are converted to a string of
+                   field.  For unpack(), nybbles are converted to a string of
                    hexadecimal digits.
 
-               +o   The "p" format packs a pointer to a null-terminated string.
+               o   The "p" format packs a pointer to a null-terminated string.
                    You are responsible for ensuring that the string is not a
                    temporary value, as that could potentially get deallocated
                    before you got around to using the packed result.  The "P"
                    format packs a pointer to a structure of the size indicated
                    by the length.  A null pointer is created if the
                    corresponding value for "p" or "P" is "undef"; similarly
-                   with _u_n_p_a_c_k_(_), where a null pointer unpacks into "undef".
+                   with unpack(), where a null pointer unpacks into "undef".
 
                    If your system has a strange pointer size--meaning a
                    pointer is neither as big as an int nor as big as a
@@ -271,33 +271,33 @@ exit 0
                    big- or little-endian byte order.  Attempting to do so
                    raises an exception.
 
-               +o   The "/" template character allows packing and unpacking of
+               o   The "/" template character allows packing and unpacking of
                    a sequence of items where the packed structure contains a
                    packed item count followed by the packed items themselves.
                    This is useful when the structure you're unpacking has
                    encoded the sizes or repeat counts for some of its fields
                    within the structure itself as separate fields.
 
-                   For "pack", you write _l_e_n_g_t_h_-_i_t_e_m"/"_s_e_q_u_e_n_c_e_-_i_t_e_m, and the
-                   _l_e_n_g_t_h_-_i_t_e_m describes how the length value is packed.
+                   For "pack", you write length-item"/"sequence-item, and the
+                   length-item describes how the length value is packed.
                    Formats likely to be of most use are integer-packing ones
                    like "n" for Java strings, "w" for ASN.1 or SNMP, and "N"
                    for Sun XDR.
 
-                   For "pack", _s_e_q_u_e_n_c_e_-_i_t_e_m may have a repeat count, in which
+                   For "pack", sequence-item may have a repeat count, in which
                    case the minimum of that and the number of available items
-                   is used as the argument for _l_e_n_g_t_h_-_i_t_e_m.  If it has no
+                   is used as the argument for length-item.  If it has no
                    repeat count or uses a '*', the number of available items
                    is used.
 
                    For "unpack", an internal stack of integer arguments
-                   unpacked so far is used.  You write "/"_s_e_q_u_e_n_c_e_-_i_t_e_m and
+                   unpacked so far is used.  You write "/"sequence-item and
                    the repeat count is obtained by popping off the last
-                   element from the stack.  The _s_e_q_u_e_n_c_e_-_i_t_e_m must not have a
+                   element from the stack.  The sequence-item must not have a
                    repeat count.
 
-                   If _s_e_q_u_e_n_c_e_-_i_t_e_m refers to a string type ("A", "a", or
-                   "Z"), the _l_e_n_g_t_h_-_i_t_e_m is the string length, not the number
+                   If sequence-item refers to a string type ("A", "a", or
+                   "Z"), the length-item is the string length, not the number
                    of strings.  With an explicit repeat count for pack, the
                    packed string is adjusted to that length.  For example:
 
@@ -310,14 +310,14 @@ exit 0
                     pack("n/a* w/a","hello,","world")     "\000\006hello,\005world"
                     pack("a/W2", ord("a") .. ord("z"))    "2ab"
 
-                   The _l_e_n_g_t_h_-_i_t_e_m is not returned explicitly from "unpack".
+                   The length-item is not returned explicitly from "unpack".
 
-                   Supplying a count to the _l_e_n_g_t_h_-_i_t_e_m format letter is only
-                   useful with "A", "a", or "Z".  Packing with a _l_e_n_g_t_h_-_i_t_e_m
+                   Supplying a count to the length-item format letter is only
+                   useful with "A", "a", or "Z".  Packing with a length-item
                    of "a" or "Z" may introduce "\000" characters, which Perl
                    does not regard as legal in numeric strings.
 
-               +o   The integer types "s", "S", "l", and "L" may be followed by
+               o   The integer types "s", "S", "l", and "L" may be followed by
                    a "!" modifier to specify native shorts or longs.  As shown
                    in the example above, a bare "l" means exactly 32 bits,
                    although the native "long" as seen by the local C compiler
@@ -355,7 +355,7 @@ exit 0
                    $Config{longlongsize} is undefined on systems without long
                    long support.
 
-               +o   The integer formats "s", "S", "i", "I", "l", "L", "j", and
+               o   The integer formats "s", "S", "i", "I", "l", "L", "j", and
                    "J" are inherently non-portable between processors and
                    operating systems because they obey native byteorder and
                    endianness.  For example, a 4-byte integer 0x12345678
@@ -371,10 +371,10 @@ exit 0
                    either: Digital/Compaq uses (well, used) them in little-
                    endian mode, but SGI/Cray uses them in big-endian mode.
 
-                   The names _b_i_g_-_e_n_d_i_a_n and _l_i_t_t_l_e_-_e_n_d_i_a_n are comic references
+                   The names big-endian and little-endian are comic references
                    to the egg-eating habits of the little-endian Lilliputians
                    and the big-endian Blefuscudians from the classic Jonathan
-                   Swift satire, _G_u_l_l_i_v_e_r_'_s _T_r_a_v_e_l_s.  This entered computer
+                   Swift satire, Gulliver's Travels.  This entered computer
                    lingo via the paper "On Holy Wars and a Plea for Peace" by
                    Danny Cohen, USC/ISI IEN 137, April 1, 1980.
 
@@ -405,7 +405,7 @@ exit 0
                    "N", "v", and "V" or else use the ">" and "<" modifiers
                    described immediately below.  See also perlport.
 
-               +o   Starting with Perl 5.10.0, integer and floating-point
+               o   Starting with Perl 5.10.0, integer and floating-point
                    formats, along with the "p" and "P" formats and "()"
                    groups, may all be followed by the ">" or "<" endianness
                    modifiers to respectively enforce big- or little-endian
@@ -416,16 +416,16 @@ exit 0
                    Here are some concerns to keep in mind when using an
                    endianness modifier:
 
-                   +o   Exchanging signed integers between different platforms
+                   o   Exchanging signed integers between different platforms
                        works only when all platforms store them in the same
                        format.  Most platforms store signed integers in two's-
                        complement notation, so usually this is not an issue.
 
-                   +o   The ">" or "<" modifiers can only be used on floating-
+                   o   The ">" or "<" modifiers can only be used on floating-
                        point formats on big- or little-endian machines.
                        Otherwise, attempting to use them raises an exception.
 
-                   +o   Forcing big- or little-endian byte-order on floating-
+                   o   Forcing big- or little-endian byte-order on floating-
                        point values for data exchange can work only if all
                        platforms use the same binary representation such as
                        IEEE floating-point.  Even if all platforms are using
@@ -435,14 +435,14 @@ exit 0
                        what you're doing.  It is not a general way to portably
                        store floating-point values.
 
-                   +o   When using ">" or "<" on a "()" group, this affects all
+                   o   When using ">" or "<" on a "()" group, this affects all
                        types inside the group that accept byte-order
                        modifiers, including all subgroups.  It is silently
                        ignored for all other types.  You are not allowed to
                        override the byte-order within a group that already has
                        a byte-order modifier suffix.
 
-               +o   Real numbers (floats and doubles) are in native machine
+               o   Real numbers (floats and doubles) are in native machine
                    format only.  Due to the multiplicity of floating-point
                    formats and the lack of a standard "network" representation
                    for them, no facility for interchange has been made.  This
@@ -452,7 +452,7 @@ exit 0
                    the memory representation is not part of the IEEE spec).
                    See also perlport.
 
-                   If you know _e_x_a_c_t_l_y what you're doing, you can use the ">"
+                   If you know exactly what you're doing, you can use the ">"
                    or "<" modifiers to force big- or little-endian byte-order
                    on floating-point values.
 
@@ -462,7 +462,7 @@ exit 0
                    precision, so "unpack("f", pack("f", $foo)") will not in
                    general equal $foo.
 
-               +o   Pack and unpack can operate in two modes: character mode
+               o   Pack and unpack can operate in two modes: character mode
                    ("C0" mode) where the packed string is processed per
                    character, and UTF-8 mode ("U0" mode) where the packed
                    string is processed in its UTF-8-encoded Unicode form on a
@@ -474,7 +474,7 @@ exit 0
                    applies to.
 
                    Using "C0" to get Unicode characters while using "U0" to
-                   get _n_o_n-Unicode bytes is not necessarily obvious.
+                   get non-Unicode bytes is not necessarily obvious.
                    Probably only the first of these is what you want:
 
                        $ perl -CS -E 'say "\x{3B1}\x{3C9}"' |
@@ -493,15 +493,15 @@ exit 0
                    Those examples also illustrate that you should not try to
                    use "pack"/"unpack" as a substitute for the Encode module.
 
-               +o   You must yourself do any alignment or padding by inserting,
+               o   You must yourself do any alignment or padding by inserting,
                    for example, enough "x"es while packing.  There is no way
-                   for _p_a_c_k_(_) and _u_n_p_a_c_k_(_) to know where characters are going
+                   for pack() and unpack() to know where characters are going
                    to or coming from, so they handle their output and input as
                    flat sequences of characters.
 
-               +o   A "()" group is a sub-TEMPLATE enclosed in parentheses.  A
+               o   A "()" group is a sub-TEMPLATE enclosed in parentheses.  A
                    group may take a repeat count either as postfix, or for
-                   _u_n_p_a_c_k_(_), also via the "/" template character.  Within each
+                   unpack(), also via the "/" template character.  Within each
                    repetition of a group, positioning with "@" starts over at
                    0.  Therefore, the result of
 
@@ -509,10 +509,10 @@ exit 0
 
                    is the string "\0X\0\0YZ".
 
-               +o   "x" and "X" accept the "!" modifier to act as alignment
+               o   "x" and "X" accept the "!" modifier to act as alignment
                    commands: they jump forward or back to the closest position
                    aligned at a multiple of "count" characters.  For example,
-                   to _p_a_c_k_(_) or _u_n_p_a_c_k_(_) a C structure like
+                   to pack() or unpack() a C structure like
 
                        struct {
                            char   c;    /* one signed, 8-bit character */
@@ -526,14 +526,14 @@ exit 0
                    For alignment commands, a "count" of 0 is equivalent to a
                    "count" of 1; both are no-ops.
 
-               +o   "n", "N", "v" and "V" accept the "!" modifier to represent
+               o   "n", "N", "v" and "V" accept the "!" modifier to represent
                    signed 16-/32-bit integers in big-/little-endian order.
                    This is portable only when all platforms sharing packed
                    data use the same binary representation for signed
                    integers; for example, when all platforms use two's-
                    complement representation.
 
-               +o   Comments can be embedded in a TEMPLATE using "#" through
+               o   Comments can be embedded in a TEMPLATE using "#" through
                    the end of line.  White space can separate pack codes from
                    each other, but modifiers and repeat counts must follow
                    immediately.  Breaking complex templates into individual
@@ -541,8 +541,8 @@ exit 0
                    to improve legibility and maintainability of pack/unpack
                    formats as "/x" can for complicated pattern matches.
 
-               +o   If TEMPLATE requires more arguments than _p_a_c_k_(_) is given,
-                   _p_a_c_k_(_) assumes additional "" arguments.  If TEMPLATE
+               o   If TEMPLATE requires more arguments than pack() is given,
+                   pack() assumes additional "" arguments.  If TEMPLATE
                    requires fewer arguments than given, extra arguments are
                    ignored.
 
@@ -616,7 +616,7 @@ exit 0
                    $foo = pack('(sl)<', -42, 4711);
                    # exactly the same
 
-               The same template may generally also be used in _u_n_p_a_c_k_(_).
+               The same template may generally also be used in unpack().
 
 
 
