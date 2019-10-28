@@ -13,6 +13,10 @@ perl -anE "say join(',',unpack('$fmt'))"
 
 exit 0
 
+from perldoc pack:
+
+perl -V:{short,int,long{,long}}size   # Get machine sizes
+
 
 6IYHW8HKJ9(1)         User Contributed Perl Documentation        6IYHW8HKJ9(1)
 
