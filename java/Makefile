@@ -9,6 +9,9 @@ properties: subdir/properties.class
 hello: hello.class
 	java hello $(USER)
 
+environ: environ.class
+	java environ HOME PWD
+
 yaml: yaml.class
 	@if test -t 0; then \
 		printf 'foo: "bar"\nbaz: "qux"\n'; \
