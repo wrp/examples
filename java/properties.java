@@ -17,6 +17,7 @@ public class properties {
 		System.out.println("-- End of properties listing --");
 
 		String line = System.getProperty("banana");
+		System.out.println("-- Showing value of 'banana'");
 		System.out.println(line);
 
 		Properties jvm = System.getProperties();
