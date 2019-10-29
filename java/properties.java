@@ -13,6 +13,11 @@ public class properties {
 		Properties props = new Properties();
 		props.load(System.in);
 		props.put("foo", "bar");
+		System.out.println(
+			"expect default and bar:" +
+			props.getProperty("nonextant", "default value") +
+			props.getProperty("foo", "default value for foo")
+		);
 		props.list(System.out);
 		System.out.println("-- End of properties listing --");
 
