@@ -1,12 +1,10 @@
 
-
-import java.lang.StringBuilder;
-
 public class hello {
 	String name;
 
 	hello() {
-		name = String.format("Doug");
+		String default_name = System.getProperty("hello.name", "Doug");
+		name = String.format(default_name);
 	}
 	hello(String lname) {
 		name = lname;
