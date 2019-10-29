@@ -5,5 +5,6 @@ public class main {
 		h.run();
 		hello k = new hello("Bob");
 		k.run();
+		new hello("Larry").run();
 	}
 }
