@@ -3,6 +3,8 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	pyramid \
 	pipehup \
 	list \
+	udp-client \
+	udp-server \
 	dynamic \
 	clean-man
 TESTS = calc-test \
