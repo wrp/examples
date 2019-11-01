@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+
+# Print a random value from a list or a string
+if( @ARGV == 0) {
+	# Select random element from a list
+	my @s = ('a'..'z','0'..'9');
+	say $s[rand @s];
+} else {
+	# Select random char from a string
+	foreach my $arg (@ARGV) {
+		say substr ($arg, rand length $arg, 1)
+	}
+}
