@@ -6,4 +6,5 @@ password:
 	| { while read line; do echo "$$line" >&3; echo "$$line"; done \
 	| if env <&- | grep -q TMUX; then tmux load-buffer - && \
 	echo "^^ copied to tmux paste buffer" >&2; fi; } 3>&1 \
-	| tee /dev/stderr | pbcopy
+	| if test -f /proc/self/fd/2; then tee /proc/self/fd/2; else tee /dev/stderr; fi \
+	| pbcopy
