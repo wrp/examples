@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+
+# Demonstrate some time stamp manipulations
+
+use strict;
+use warnings;
+use 5.12.0;
+use Time::Piece;
+
+$_ = sprintf "%d", scalar time;
+print "now: ", $_;
+s/([0-9]{9,10})/sprintf "%s (%sUTC)", $1, scalar gmtime $1/ge;
+printf "%s\n", $_;
+
+my $n = qx{date +"%m/%d/%y %H:%M:%S"};
+print $n;
+my $t = Time::Piece->strptime($n, "%m/%d/%y %H:%M:%S\n");
+say $t;
