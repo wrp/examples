@@ -6,14 +6,14 @@
 #include <fcntl.h>
 
 
-
-int xopen( const char *path, int mode)
+int
+xopen( const char *path, int mode)
 {
 	int ret;
 	ret = open(path, mode);
 	if( ret == -1 ) {
 		perror(path);
-		exit(1); 
+		exit(1);
 	}
 	return ret;
 }
