@@ -1,0 +1,6 @@
+#!/bin/sh
+
+out=$(printf 'foo bar\none two\n' | ./dynamic-read)
+if ! test "$out" = 'rab oof
+owt eno';
+then echo "Got $out" >&2; exit 1; fi
