@@ -34,7 +34,7 @@ main(int argc, char **argv)
 	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
 		end = s + rc;
 
-		if( (eol = findchr(s, end, '\n')) == end) {
+		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
 			if( end > buf + siz ) {
 				ptrdiff_t e_off = end - buf;
@@ -45,6 +45,7 @@ main(int argc, char **argv)
 				prev = buf + p_off;
 			}
 			s = end;
+			assert( s - buf <= siz );
 			continue;
 		}
 		s = prev;
@@ -53,6 +54,7 @@ main(int argc, char **argv)
 			assert(eol < end);
 			reverse(s, eol-1);
 			s = eol + 1;
+			assert(s <= end);
 		} while( (eol = findchr(s, end, '\n')) < end );
 		assert(eol == end);
 		assert(eol[-1] != '\n' || s == end);
@@ -79,7 +81,7 @@ main(int argc, char **argv)
  */
 char *
 findchr(char *str, char *end, char v) {
-	assert(str <= end );
+	assert(str <= end);
 	while( str < end && *str != v )
 		str += 1;
 	return str;
