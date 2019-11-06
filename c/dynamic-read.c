@@ -36,7 +36,7 @@ main(int argc, char **argv)
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end > buf + siz ) {
+			if( end - buf > siz ) {
 				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
@@ -68,9 +68,9 @@ main(int argc, char **argv)
 		perror(argc > 1 ? argv[1] : "stdin");
 		return EXIT_FAILURE;
 	}
-	if(prev < end) {
-		reverse(prev, end-1);
-		fwrite(prev, 1, end - prev, stdout);
+	if(prev < eol && eol[-1] != '\n') {
+		reverse(prev, eol-1);
+		fwrite(prev, 1, eol - prev, stdout);
 	}
 }
 
