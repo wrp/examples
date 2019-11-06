@@ -32,9 +32,9 @@ main(int argc, char **argv)
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 	char *prev = s; /* start of unprocessed data from previous read */
 	char *end = s; /* one past last char read from input */
-	char *eol; /* A newline, or one past valid data */
 
 	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
+		char *eol; /* A newline, or one past valid data */
 		end = s + rc;
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
@@ -71,9 +71,9 @@ main(int argc, char **argv)
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
 		return EXIT_FAILURE;                  /* uncovered */
 	}
-	if(prev < eol) {
-		reverse(prev, eol-1);
-		fwrite(prev, 1, eol - prev, stdout);
+	if(prev < s) {
+		reverse(prev, s-1);
+		fwrite(prev, 1, s - prev, stdout);
 	}
 
 	return EXIT_SUCCESS;
