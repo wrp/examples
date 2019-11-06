@@ -21,7 +21,7 @@ char * findchr(char *, char *, char);
 int
 main(int argc, char **argv)
 {
-	size_t rc;
+	ssize_t rc;
 
 	size_t siz = BUFSIZ;  /* size available to read into */
 	char *buf = Realloc(NULL, BUFSIZ + siz); /* Pad the front */
