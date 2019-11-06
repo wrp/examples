@@ -71,7 +71,7 @@ main(int argc, char **argv)
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
 		return EXIT_FAILURE;                  /* uncovered */
 	}
-	if(prev < eol && eol[-1] != '\n') {
+	if(prev < eol) {
 		reverse(prev, eol-1);
 		fwrite(prev, 1, eol - prev, stdout);
 	}
