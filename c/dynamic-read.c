@@ -1,56 +1,92 @@
-/* Read a text file into memory using read.  Reverse each line. */
+/*
+ * Reverse the lines of input.
+ * Demonstrates using read and growing the buffer.
+ *
+ * This utterly fails on long lines.  It's close,
+ * but I've gotten bored.  Maybe come back to this some day.
+ */
 
+#include <assert.h>
+#include <fcntl.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
 
 int xopen(const char *, int);
 void * Realloc( void *buf, size_t s );
-char * reverse_line( char *start);
+void reverse(char *, char *);
+char * findchr(char *, char *, char);
 
 int
 main(int argc, char **argv)
 {
 	size_t rc;
-	size_t file_size = 0;
-	size_t siz = BUFSIZ;
-	char *buf = Realloc(NULL, siz);
-	char *line;
+
+	size_t siz = BUFSIZ;  /* size available to read into */
+	char *buf = Realloc(NULL, BUFSIZ + siz); /* Pad the front */
+	char *s = buf + BUFSIZ; /* position into which we read */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
+	char *start = s;  /* start of unprocessed data in current read */
+	char *prev = start; /* start of unprocessed data from previous read */
 
-	/* Read the file into buf */
-	while(( rc = read( fd, buf + file_size, BUFSIZ )) == BUFSIZ ) {
-		file_size += rc;
-		siz += BUFSIZ;
-		buf = Realloc( buf, siz );
+	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
+		char *end = s + rc;
+		int found = 0;
+		char *eol;
+
+		s = prev;
+		while( (eol = findchr(s, end, '\n')) < end) {
+			assert(*eol == '\n');
+			reverse(s, eol-1);
+			s = eol + 1;
+			found = 1;
+		}
+		if( !found ) {
+			/* No newlines found in the last read.  Read more. */
+			if( buf + siz < end ) {
+				ptrdiff_t s_off = s - buf;
+				ptrdiff_t p_off = prev - buf;
+				siz += BUFSIZ;
+				buf = Realloc(buf, BUFSIZ + siz);
+				start = buf + BUFSIZ;
+				s = buf + s_off;
+				prev = buf + p_off;
+				end = s + rc;
+			}
+			s = end;
+			continue;
+		}
+		memcpy(buf + BUFSIZ - (end - s), s, end - s);
+		s = start;
+		fwrite( prev, 1, end - prev, stdout );
 	}
-	file_size += rc;
-	buf[file_size]  = '\0';
-
-	/* Reverse each line */
-	line = buf;
-	while( ( line = reverse_line(line)) != NULL )
-		;
-	fwrite( buf, 1, file_size, stdout );
 }
 
+/*
+ * Find v between str and end.  If not found,
+ * return end.  (This is basically strchr, but
+ * doesn't care about nul.)
+ */
 char *
-reverse_line( char *start)
+findchr(char *str, char *end, char v) {
+	assert(str <= end );
+	while( str < end && *str != v )
+		str += 1;
+	return str;
+}
+
+void
+reverse(char *start, char *end)
 {
-	char *eol = strchr(start, '\n');
-	char *rv = eol ? eol + 1 : NULL;
-	if(eol) {
-		for( eol -= 1; start < eol; start++, eol-- ) {
-			char tmp = *eol;
-			*eol = *start;
-			*start = tmp;
-		}
+	for( ; start < end; start++, end-- ) {
+		char tmp = *end;
+		*end = *start;
+		*start = tmp;
 	}
-	return rv;
 }
 
 
