@@ -18,14 +18,17 @@ expect 'foo\nbar' "oof${nl}rab"
 expect abc cba
 
 count=0
+start_time="$(date +%s)"
 for i in *; do
 	test -f "$i" || continue
-	# Ignore the file that this is writing to
-	test "$i" = $(basename $0).log && continue
 	: $(( count += 1 ))
 	if ! $exe "$i" | $exe | cmp - "$i"; then
-		echo "Okay on $count files, but failed on $i" >&2
-		exit 1
+		if ! test "$(stat -c '%Y' "$i")" -lt "$start"; then
+			# File recently modified.  Ignore test.
+			: $(( count -= 1 ))
+		else
+			die "Okay for $count files, but failed on $i"
+		fi
 	fi
 done
 if test "$count" -lt 10; then
