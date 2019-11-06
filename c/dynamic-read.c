@@ -68,8 +68,8 @@ main(int argc, char **argv)
 		eol = s = buf + BUFSIZ;
 	}
 	if(rc == -1) {
-		perror(argc > 1 ? argv[1] : "stdin");
-		return EXIT_FAILURE;
+		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
+		return EXIT_FAILURE;                  /* uncovered */
 	}
 	if(prev < eol && eol[-1] != '\n') {
 		reverse(prev, eol-1);

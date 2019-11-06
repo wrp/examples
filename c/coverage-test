@@ -4,13 +4,14 @@
 # this will likely just get skipped.  (eg, configure with
 # CFLAGS='--coverage -g -O0' to run this test)
 
+progs='calc ring-buffer dynamic list dynamic-read'
 
 if ! test -f calc.gcda; then
 	exit 77
 fi
 RV=0
 
-for file in calc ring-buffer dynamic list; do
+for file in $progs; do
 	if test -f .libs/$file.gcno; then
 		arg='-o .libs'
 	else
