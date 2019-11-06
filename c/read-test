@@ -31,3 +31,7 @@ for i in *.c *; do
 		exit 1
 	fi
 done
+if test "$count" -lt 10; then
+	echo "Not enough tests" >&2
+	exit 77
+fi
