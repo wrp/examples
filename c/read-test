@@ -2,23 +2,21 @@
 
 exe=./dynamic-read
 
-die() { echo "$*"; exit 1; } >&2
+die() { test -n "$*" && echo "$*"; exit 1; } >&2
 
 expect() {
-	out=$(printf "$1" | $exe)
-	if ! test "$out" = "$2"; then
-		die "Got $out, expected '$2' for inpput '$1'"
-	fi
+	printf "$1" | $exe | perl -w -000 -e 'my $m = <STDIN>;
+		die "Got \"$m\", expected \"$ARGV[0]\"" if $m ne $ARGV[0]' "$2" || die
 }
 
 nl='
 '
-expect 'foo bar\none two\n' "rab oof${nl}owt eno"
+expect 'foo bar\none two\n' "rab oof${nl}owt eno${nl}"
 expect 'foo\nbar' "oof${nl}rab"
 expect abc cba
 expect '' ''
 expect z z
-expect "z${nl}" z  # TODO: cleanly deal with process subst truncating trailing newline
+expect "z\n" "z${nl}"
 
 count=0
 start_time="$(date +%s)"
