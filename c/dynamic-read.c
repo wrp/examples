@@ -1,9 +1,6 @@
 /*
  * Reverse the lines of input.
  * Demonstrates using read and growing the buffer.
- *
- * This utterly fails on long lines.  It's close,
- * but I've gotten bored.  Maybe come back to this some day.
  */
 
 #include <assert.h>
@@ -28,41 +25,46 @@ main(int argc, char **argv)
 
 	size_t siz = BUFSIZ;  /* size available to read into */
 	char *buf = Realloc(NULL, BUFSIZ + siz); /* Pad the front */
-	char *s = buf + BUFSIZ; /* position into which we read */
+	char *s = buf + BUFSIZ; /* first char of a line */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
-	char *start = s;  /* start of unprocessed data in current read */
-	char *prev = start; /* start of unprocessed data from previous read */
+	char *prev = s; /* start of unprocessed data from previous read */
+	char * end; /* one past last char read from input */
+	char *eol; /* A newline, or one past valid data */
 
 	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
-		char *end = s + rc;
-		int found = 0;
-		char *eol;
+		end = s + rc;
 
-		s = prev;
-		while( (eol = findchr(s, end, '\n')) < end) {
-			assert(*eol == '\n');
-			reverse(s, eol-1);
-			s = eol + 1;
-			found = 1;
-		}
-		if( !found ) {
+		if( (eol = findchr(s, end, '\n')) == end) {
 			/* No newlines found in the last read.  Read more. */
-			if( buf + siz < end ) {
-				ptrdiff_t s_off = s - buf;
+			if( end > buf + siz ) {
+				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
 				buf = Realloc(buf, BUFSIZ + siz);
-				start = buf + BUFSIZ;
-				s = buf + s_off;
+				eol = end = buf + e_off;
 				prev = buf + p_off;
-				end = s + rc;
 			}
 			s = end;
 			continue;
 		}
-		memcpy(buf + BUFSIZ - (end - s), s, end - s);
-		s = start;
-		fwrite( prev, 1, end - prev, stdout );
+		s = prev;
+		do {
+			assert(*eol == '\n');
+			assert(eol < end);
+			reverse(s, eol-1);
+			s = eol + 1;
+		} while( (eol = findchr(s, end, '\n')) < end );
+		assert(eol == end);
+		assert(eol[-1] != '\n' || s == end);
+
+		fwrite(prev, 1, s - prev, stdout);
+		prev = buf + BUFSIZ - (end - s);
+		memcpy(prev, s, end - s);
+		s = buf + BUFSIZ;
+	}
+	if(prev < buf + BUFSIZ) {
+		reverse(prev, end-1);
+		fwrite(prev, 1, end - prev, stdout);
 	}
 }
 
