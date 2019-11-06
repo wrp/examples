@@ -2,10 +2,16 @@
 
 exe=./dynamic-read
 
+die() { echo "$*"; exit 1; } >&2
+
 out=$(printf 'foo bar\none two\n' | $exe)
 if ! test "$out" = 'rab oof
 owt eno';
 then echo "Got $out" >&2; exit 1; fi
+
+if ! test "$( printf abc | $exe )" = cbq; then
+	die "Failed on single line with no newline"
+fi
 
 count=0
 for i in *.c *; do
