@@ -72,6 +72,8 @@ main(int argc, char **argv)
 		reverse(prev, eol-1);
 		fwrite(prev, 1, eol - prev, stdout);
 	}
+
+	return EXIT_SUCCESS;
 }
 
 /*
