@@ -4,24 +4,21 @@ exe=./dynamic-read
 
 die() { echo "$*"; exit 1; } >&2
 
-out=$(printf 'foo bar\none two\n' | $exe)
-if ! test "$out" = 'rab oof
-owt eno';
-then echo "Got $out" >&2; exit 1; fi
+expect() {
+	out=$(printf "$1" | $exe)
+	if ! test "$out" = "$2"; then
+		die "Got $out, expected '$2' for inpput '$1'"
+	fi
+}
 
-out=$(printf 'foo\nbar' | $exe)
-if ! test "$out" = 'oof
-rab'; then
-	die "$LINENO: Got $out"
-fi
-
-out=$( printf abc | $exe )
-if ! test "$out" = cba; then
-	die "Failed on single line with no newline.  Got '$out', expected cba"
-fi
+nl='
+'
+expect 'foo bar\none two\n' "rab oof${nl}owt eno"
+expect 'foo\nbar' "oof${nl}rab"
+expect abc cba
 
 count=0
-for i in *.c *; do
+for i in *; do
 	test -f "$i" || continue
 	# Ignore the file that this is writing to
 	test "$i" = $(basename $0).log && continue
