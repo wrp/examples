@@ -36,7 +36,7 @@ main(int argc, char **argv)
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end - buf > siz ) {
+			if( end < buf + siz ) {
 				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
@@ -45,7 +45,7 @@ main(int argc, char **argv)
 				prev = buf + p_off;
 			}
 			s = end;
-			assert( s - buf <= siz );
+			assert( s <= buf + siz );
 			continue;
 		}
 		s = prev;
