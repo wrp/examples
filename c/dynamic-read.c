@@ -28,7 +28,7 @@ main(int argc, char **argv)
 	char *s = buf + BUFSIZ; /* first char of a line */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 	char *prev = s; /* start of unprocessed data from previous read */
-	char * end; /* one past last char read from input */
+	char *end = s; /* one past last char read from input */
 	char *eol; /* A newline, or one past valid data */
 
 	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
