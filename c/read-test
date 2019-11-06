@@ -23,6 +23,8 @@ fi
 count=0
 for i in *.c *; do
 	test -f "$i" || continue
+	# Ignore the file that this is writing to
+	test "$i" = $(basename $0).log && continue
 	: $(( count += 1 ))
 	if ! $exe "$i" | $exe | cmp - "$i"; then
 		echo "Okay on $count files, but failed on $i" >&2

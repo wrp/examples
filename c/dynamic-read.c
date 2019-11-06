@@ -36,7 +36,7 @@ main(int argc, char **argv)
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end < buf + siz ) {
+			if( end > buf + siz ) {
 				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
@@ -62,7 +62,7 @@ main(int argc, char **argv)
 		fwrite(prev, 1, s - prev, stdout);
 		prev = buf + BUFSIZ - (end - s);
 		memcpy(prev, s, end - s);
-		s = buf + BUFSIZ;
+		eol = s = buf + BUFSIZ;
 	}
 	if(rc == -1) {
 		perror(argc > 1 ? argv[1] : "stdin");
