@@ -9,9 +9,15 @@ if ! test "$out" = 'rab oof
 owt eno';
 then echo "Got $out" >&2; exit 1; fi
 
-got=$( printf abc | $exe )
-if ! test "$got" = cba; then
-	die "Failed on single line with no newline.  Got '$got', expected cba"
+out=$(printf 'foo\nbar' | $exe)
+if ! test "$out" = 'oof
+rab'; then
+	die "$LINENO: Got $out"
+fi
+
+out=$( printf abc | $exe )
+if ! test "$out" = cba; then
+	die "Failed on single line with no newline.  Got '$out', expected cba"
 fi
 
 count=0
