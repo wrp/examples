@@ -62,7 +62,11 @@ main(int argc, char **argv)
 		memcpy(prev, s, end - s);
 		s = buf + BUFSIZ;
 	}
-	if(prev < buf + BUFSIZ) {
+	if(rc == -1) {
+		perror(argc > 1 ? argv[1] : "stdin");
+		return EXIT_FAILURE;
+	}
+	if(prev < end) {
 		reverse(prev, end-1);
 		fwrite(prev, 1, end - prev, stdout);
 	}
