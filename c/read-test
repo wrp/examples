@@ -1,6 +1,17 @@
 #!/bin/sh
 
-out=$(printf 'foo bar\none two\n' | ./dynamic-read)
+exe=./dynamic-read
+
+out=$(printf 'foo bar\none two\n' | $exe)
 if ! test "$out" = 'rab oof
 owt eno';
 then echo "Got $out" >&2; exit 1; fi
+
+count=0
+for i in *.c *; do
+	: $(( count += 1 ))
+	if ! $exe "$i" | $exe | cmp - "$i"; then
+		echo "Okay on $count files, but failed on $i" >&2
+		exit 1
+	fi
+done
