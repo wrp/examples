@@ -16,6 +16,9 @@ nl='
 expect 'foo bar\none two\n' "rab oof${nl}owt eno"
 expect 'foo\nbar' "oof${nl}rab"
 expect abc cba
+expect '' ''
+expect z z
+expect "z${nl}" z  # TODO: cleanly deal with process subst truncating trailing newline
 
 count=0
 start_time="$(date +%s)"
