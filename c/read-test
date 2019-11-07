@@ -14,6 +14,7 @@ nl='
 expect 'foo bar\none two\n' "rab oof${nl}owt eno${nl}"
 expect 'foo\nbar' "oof${nl}rab"
 expect abc cba
+expect 'abc\n\n\ndef\n' "cba${nl}${nl}${nl}fed$nl"
 expect '' ''
 expect z z
 expect "z\n" "z${nl}"
