@@ -4,6 +4,9 @@
 #include <stdlib.h>
 /* Take a 4 digit number.  Rearrange in ascending/descending order.
  * Find the difference.  Repeat
+ *
+ * This demonstrates the fixed points of Kaprekar's routine
+ * https://en.wikipedia.org/wiki/6174_(number)
  */
 
 int
@@ -41,11 +44,16 @@ process(int x)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	int v = argc > 1 ? strtol(argv[1], NULL, 0) : 1233;
-	while(v != 6174) {
-		printf("v = %d\n", v = process(v));
+	for( int i = 0; i < 10000; i++ ) {
+		int v = i;
+		int count = 0;
+		while(v != 0 && v != 6174) {
+			v = process(v);
+			count += 1;
+		}
+		printf("%d: %d -> %d\n", i, count , v);
 	}
 	return 0;
 }
