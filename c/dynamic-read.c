@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 int xopen(const char *, int);
-void * Realloc( void *buf, size_t s );
+void * Realloc(void *, size_t);
 void reverse(char *, char *);
 char * findchr(char *, char *, char);
 
@@ -26,12 +26,12 @@ main(int argc, char **argv)
 {
 	ssize_t rc;
 
-	size_t siz = BUFSIZ;  /* size available to read into */
+	size_t siz = BUFSIZ;         /* size available to read into */
 	char *buf = Realloc(NULL, BUFSIZ + siz); /* Pad the front */
-	char *s = buf + BUFSIZ; /* first char of a line */
+	char *s = buf + BUFSIZ;      /* first char of a line */
+	char *prev = s;              /* start of data from previous read */
+	char *end = s;               /* one past last char read from input */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
-	char *prev = s; /* start of unprocessed data from previous read */
-	char *end = s; /* one past last char read from input */
 
 	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
 		char *eol; /* A newline, or one past valid data */
