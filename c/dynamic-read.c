@@ -63,7 +63,7 @@ main(int argc, char **argv)
 		fwrite(prev, 1, s - prev, stdout);
 		prev = buf + BUFSIZ - (end - s);
 		memcpy(prev, s, end - s);
-		eol = s = buf + BUFSIZ;
+		s = buf + BUFSIZ;
 	}
 	if(rc == -1) {
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
