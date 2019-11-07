@@ -30,7 +30,7 @@ for i in *; do
 	test -f "$i" || continue
 	: $(( count += 1 ))
 	if ! $exe "$i" | $exe | cmp - "$i"; then
-		if ! test "$(stat -c '%Y' "$i")" -lt "$start"; then
+		if ! test "$(stat -c '%Y' "$i")" -lt "$start" 2> /dev/null; then
 			# File recently modified.  Ignore test.
 			: $(( count -= 1 ))
 		else
