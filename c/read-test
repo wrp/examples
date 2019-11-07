@@ -5,7 +5,7 @@ exe=./dynamic-read
 die() { test -n "$*" && echo "$*"; exit 1; } >&2
 
 expect() {
-	printf "$1" | $exe | perl -w -000 -e 'my $m = <STDIN>;
+	printf "$1" | $exe | perl -w -0777 -e 'my $m = <STDIN>;
 		die "Got \"$m\", expected \"$ARGV[0]\"" if $m ne $ARGV[0]' "$2" || die
 }
 
