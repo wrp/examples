@@ -17,6 +17,8 @@ expect abc cba
 expect '' ''
 expect z z
 expect "z\n" "z${nl}"
+long=$( perl -e 'print "abcdefghgfedcba" x 1000')
+expect "$long" "$long"
 
 count=0
 start_time="$(date +%s)"
