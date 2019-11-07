@@ -9,7 +9,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	dynamic \
 	clean-man
 TESTS = calc-test \
-	read-test \
+	dynamic-read-test \
 	list-test \
 	dynamic-test \
 	pyramid-test \
