@@ -15,13 +15,14 @@ compare_char( const void *a, const void *b )
 	return *(char *)a > *(char *)b;
 }
 
-/* Reverse a 4 character string */
-void rev4(char *a) {
-	assert(strlen(a) == 4);
-	for(int i=0; i < 2; i++) {
-		char t = a[i];
-		a[i] = a[3-i];
-		a[3-i] = t;
+/* Reverse a string */
+void
+rev(char *a)
+{
+	for( char *e = a + strlen(a) - 1; a < e; a++, e-- ) {
+		char t = *a;
+		*a = *e;
+		*e = t;
 	}
 }
 
@@ -38,7 +39,7 @@ process(int x)
 	assert(strlen(v) == 4);
 	qsort(v, 4, 1, compare_char);
 	a = strtol(v, NULL, 10);
-	rev4(v);
+	rev(v);
 	b = strtol(v, NULL, 10);
 	return b - a;
 }
