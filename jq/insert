@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Insert an element
+json='
+{
+      "foo": {
+        "bar": [
+          {
+            "a": "0000",
+            "b": "aaaa"
+          },
+          {
+            "a": "2222",
+            "b": "cccc"
+          }
+        ]
+      }
+}
+'
+
+
+# echo "$json" | jq '.foo.bar[2] |= 5'
+# echo "$json" | jq '.foo.bar[2] = {"c":5}'
+# echo "$json" | jq '.foo.bar[1] |= {"c":5}'  # completely overwrites existing value
+# echo "$json" | jq '.foo.bar[1].c |= 5'  # inserts a value into .foo.bar.[1]
+# echo "$json" | jq '.foo.bar[1].c = "5" | .foo.bar'  # inserts a value into .foo.bar.[1], and selects only it
+
+# Add surrounding (parent) element
+echo "$json" | jq -s '{parent: .[]}'
+# produces: {"parent":{"foo":{"bar":[{"a":"0000","b":"aaaa"},{"a":"2222","b":"cccc"}]}}}
