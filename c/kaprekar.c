@@ -47,14 +47,13 @@ process(int x)
 int
 main(void)
 {
-	for( int i = 0; i < 10000; i++ ) {
+	for( int i = 1; i < 10000; i++ ) {
 		int v = i;
-		int count = 0;
 		while(v != 0 && v != 6174) {
+			printf("%4d -> ", v);
 			v = process(v);
-			count += 1;
 		}
-		printf("%d: %d -> %d\n", i, count , v);
+		printf("%d\n", v);
 	}
 	return 0;
 }
