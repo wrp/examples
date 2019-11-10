@@ -19,3 +19,5 @@ depcomp
 install-sh
 libtool
 missing
+*.gcda
+*.gcno
