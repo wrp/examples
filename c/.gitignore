@@ -4,6 +4,7 @@
 *.lo
 *.log
 *.o
+*.trs
 .deps
 .gdbinit
 .libs
