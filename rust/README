@@ -1,0 +1,15 @@
+
+Very ignorant README.  Trust nothing.  This is based on me digging
+through my .bash-history from many months ago while sitting on a couch
+with no internet access and no Rust documentation.
+
+To start a new project:
+cargo new $project
+
+This creates:
+${project}/Cargo.toml
+${project}/src/main.rs
+apparently using user information from git. (Cargo.toml gets email
+and author name, and seems to get it from the git config).
+
+From inside ${project}/ , run "cargo run"
