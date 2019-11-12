@@ -2,8 +2,9 @@
 
 d1='{"a":"a1","b":"b1"}'
 d2='{"b":"b2","c":"c2"}'
+d3='{"c":"c3","d":"c3"}'
 jq --slurp -S '.[0] * .[1]' <(echo "$d1") <(echo "$d2")
-jq --slurp -S '.[1] * .[0]' <(echo "$d1") <(echo "$d2")
+jq --slurp -S '.[1] * .[0] * .[2]' <(echo "$d1") <(echo "$d2") <(echo "$d3")
 exit 0
 
 output:
@@ -15,5 +16,6 @@ output:
 {
   "a": "a1",
   "b": "b1",
-  "c": "c2"
+  "c": "c3",
+  "d": "c3"
 }
