@@ -79,8 +79,8 @@ main(int argc, char **argv)
 
 /*
  * Find v between str and end.  If not found,
- * return end.  (This is basically strchr, but
- * doesn't care about nul.)
+ * return end.  (This is basically memchr, but
+ * returns pointer to end if not found.)
  */
 char *
 findchr(char *str, char *end, char v) {
