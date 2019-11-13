@@ -1,0 +1,11 @@
+#!/bin/sh
+
+exe=./poly
+
+out="$(printf 2 | $exe 1x^3 +3x^1)"
+if ! test "$out" = ' +1x^3 +3x
+2: 14'; then
+
+ echo unexpected output: got "'$out'" >&2
+ exit 1
+fi
