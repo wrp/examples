@@ -36,5 +36,4 @@ main(void)
 
 	get(4, "%d%d%d%d", &a, &b, &c, &v);
 	printf("a = %d, b = %d, c = %d, d = %d\n", a, b, c, v);
-
 }
