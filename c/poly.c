@@ -12,7 +12,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define DEFAULT_POLYFILE "poly.def"
 struct poly {
 	int degree;
 	double value;
@@ -39,28 +38,9 @@ parse_poly(struct poly **head, int argc, char *const*argv)
 	/* Read the polynomial.*/
 	struct poly this;
 	int c;
-	int invert = 0;
-	FILE *pf = xfopen(argc > 1 ? argv[1] : DEFAULT_POLYFILE, "r");
 
-	while(
-	(c = fscanf(pf, "%lf x^%d", &this.value, &this.degree)) == 2) {
-		char sign;
-		if( invert ) {
-			this.value *= -1;
-		}
+	while( argc > 0 && (c = sscanf(argv[--argc], "%lf x^%d", &this.value, &this.degree)) == 2) {
 		push(head, &this);
-		if( ( c = fscanf(pf, " %c", &sign)) != 1) {
-			break;
-		}
-		switch(sign) {
-		case '-': invert = 1; break;
-		case '+': invert = 0; break;
-		default: ungetc(sign, pf);
-		}
-	}
-	if( c != EOF ) {
-		fputs("invalid polynomial\n", stderr);
-		exit(EXIT_FAILURE);
 	}
 }
 
@@ -97,7 +77,7 @@ main(int argc, char **argv)
 	}
 	putchar('\n');
 	while( scanf("%lf ", &val) == 1 ) {
-		printf("%lg -> %lg\n", val, eval(val, head));
+		printf("%lg: %lg\n", val, eval(val, head));
 	}
 	return 0;
 }
