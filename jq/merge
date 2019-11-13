@@ -5,6 +5,11 @@ d2='{"b":"b2","c":"c2"}'
 d3='{"c":"c3","d":"c3"}'
 jq --slurp -S '.[0] * .[1]' <(echo "$d1") <(echo "$d2")
 jq --slurp -S '.[1] * .[0] * .[2]' <(echo "$d1") <(echo "$d2") <(echo "$d3")
+jq -n --argfile a1 <(echo "$d1") --argfile a2 <(echo "$d2") '$a1 * $a2'
+jq -n --slurpfile a1 <(echo "$d1") --slurpfile a2 <(echo "$d2") '$a1[0] * $a2[0]'
+echo "$d1" "$d2" | jq -s add
+
+
 exit 0
 
 output:
