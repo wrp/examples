@@ -4,6 +4,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	dynamic-read \
 	pipehup \
 	list \
+	scanf-term \
 	udp-client \
 	udp-server \
 	dynamic \
@@ -12,6 +13,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 TESTS = calc-test \
 	dynamic-read-test \
 	list-test \
+	scanf-term-test \
 	poly-test \
 	dynamic-test \
 	pyramid-test \
