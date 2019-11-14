@@ -15,7 +15,7 @@ main(int argc, char **argv)
 	for(argv += 1; *argv; argv++) {
 		c = scanf(*argv, a, b, s, s, s, s, s, s, s, s);
 		printf("%s\t: ", *argv);
-		printf("scanned %d items, ", c);
+		printf("scanned %d item%s, ", c, c > 1 ? "s" : "");
 		printf("first is '%c' (%02x%02x%02x%02x), ",
 			a[0], a[0], a[1], a[2], a[3]);
 		ld = ftell(stdin);
