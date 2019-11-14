@@ -10,7 +10,7 @@ test_string() {
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
-	out=$( ./calc "$1" 2>&1) # allow word splitting (no quotes)
+	out=$( ./calc "$1" 2>&1)
 	if test -n "$2" && test "$out" != "$2"; then
 		echo "With args:'$1', expected output '$2', got '$out'" >&2
 		RV=1
