@@ -3,37 +3,32 @@
 #include <stdarg.h>
 
 int
-get(int expected, const char *fmt, ...)
+main(int argc, char **argv)
 {
-	va_list ap;
-	int r;
-	va_start(ap, fmt);
-	r = vscanf(fmt, ap);
-	va_end(ap);
-	printf("fmt: %s, returned %d", fmt, r );
-	putchar('\n');
-	if( r != expected ) {
-		int c;
+	int c;
+	long ld;
+	char a[1024];
+	char b[1024];
+	char s[1024];
+
+	(void)argc;
+	for(argv += 1; *argv; argv++) {
+		c = scanf(*argv, a, b, s, s, s, s, s, s, s, s);
+		printf("%s\t: ", *argv);
+		printf("scanned %d items, ", c);
+		printf("first is '%c' (%02x%02x%02x%02x), ",
+			a[0], a[0], a[1], a[2], a[3]);
+		ld = ftell(stdin);
+		if( ld != -1 ) {
+			printf("stream now at position %ld, ", ld);
+		}
 		c = getchar();
-		printf( "expected %d: scan failed at '%c'\n", expected, c );
-		exit(EXIT_FAILURE);
+		ungetc(c, stdin);
+		printf("next char '%c' ", c);
+		printf(c != EOF ? "(%x)" : "(EOF)", c);
+		putchar('\n');
+		if(feof(stdin) && fseek(stdin, 0L, SEEK_SET) == -1) {
+			break;
+		}
 	}
-	return r;
-}
-
-
-int
-main(void)
-{
-	int a,b,c,v;
-	char s[16];
-
-	/* Read up to 15 chars up to the first whitespace.  Append terminating nul. */
-	get(1, "%15s", s);
-	printf("s = %s\n", s);
-	get(1, "%d", &v);
-	printf("v = %d\n", v);
-
-	get(4, "%d%d%d%d", &a, &b, &c, &v);
-	printf("a = %d, b = %d, c = %d, d = %d\n", a, b, c, v);
 }
