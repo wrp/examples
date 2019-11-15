@@ -1,6 +1,6 @@
 #!/bin/sh
 
-jq -r '.[] | select( .name == "Burrito") | .uuid ' << EOF
+data() { cat << EOF
 [
   {
     "uuid": "832390ed-58ed-4338-bf97-eb42f123d9f3",
@@ -16,3 +16,5 @@ jq -r '.[] | select( .name == "Burrito") | .uuid ' << EOF
   }
 ]
 EOF
+}
+data | jq -r '.[] | select( .name == "Burrito") | .uuid '
