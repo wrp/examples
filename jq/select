@@ -17,4 +17,7 @@ data() { cat << EOF
 ]
 EOF
 }
+
 data | jq -r '.[] | select( .name == "Burrito") | .uuid '
+# Use a variable to select
+data | jq --arg target Nacho -r '.[] | select( .name == $target) | .uuid'
