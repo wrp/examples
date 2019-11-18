@@ -12,17 +12,17 @@ qaz := foo is not foo
 endif
 
 all:
-	@echo Running rules in Makefile
+	echo Running rules in Makefile
 	#
 	# Whitespace is preserved in both expansions here:
 	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
-	@echo foo = $(foo)
-	@echo bar = $(bar)
-	@echo baz = $(baz)
-	@echo qux = $(qux)
-	@echo qan = $(qan)
-	@echo qaz = $(qaz)
-	@echo  target name: $@
+	echo foo = $(foo)
+	echo bar = $(bar)
+	echo baz = $(baz)
+	echo qux = $(qux)
+	echo qan = $(qan)
+	echo qaz = $(qaz)
+	echo  target name: $@
 
 quotes:
 	# Demonstrate how to embed newlines into an argument
