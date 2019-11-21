@@ -4,9 +4,11 @@
 gcloud projects --format=json get-iam-policy ${PROJECT?} \
 | jq '.bindings[]|select(.role == "roles/owner")|.members'
 
-# Set policy
-gcloud projects set-iam-policy ${PROJECT:?} $PROJECT.iam
+# Get current policy
+gcloud projects --format=json get-iam-policy ${PROJECT?} > ${PROJECT}.iam
 
+# Set policy  (give service account access)
+gcloud projects set-iam-policy ${PROJECT:?} $PROJECT.iam
 
 # Change acl on a gcs bucket
 gsutil acl get gs://${bucket} > ${bucket}.acl
