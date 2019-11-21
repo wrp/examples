@@ -102,5 +102,6 @@ ENV USER=$user
 CMD sudo DOCKER=debian -u "$USER" bash
 
 RUN aptitude install -y cdecl
+RUN aptitude install -y tree
 
 EXPOSE 8125
