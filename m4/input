@@ -1,3 +1,3 @@
 changequote(`[', `]')dnl
-define([foo], [hello])dnl
+define([foo], [Hello, world!])dnl
 foo
