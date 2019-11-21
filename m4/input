@@ -1,0 +1,3 @@
+changequote(`[', `]')dnl
+define([foo], [hello])dnl
+foo
