@@ -5,3 +5,7 @@ define(`bar',``foo'')dnl
 bar                        Prints literal text
 define(`baz',`foo')dnl
 baz                        Prints greeting
+
+sinclude(`input2')dnl If the file exists, include it
+define(`qux',value)dnl since unquoted, value may be munged by previous include
+qux
