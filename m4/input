@@ -1,8 +1,7 @@
-changequote(`[', `]')dnl
-define([foo], [Hello, world!])dnl
+define(`foo', `Hello, world!')dnl
 foo                        Prints greeting
-[foo]                      Prints literal text
-define([bar],[[foo]])dnl
+`foo'                      Prints literal text
+define(`bar',``foo'')dnl
 bar                        Prints literal text
-define([baz],[foo])dnl
+define(`baz',`foo')dnl
 baz                        Prints greeting
