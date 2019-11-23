@@ -1,3 +1,8 @@
 changequote(`[', `]')dnl
 define([foo], [Hello, world!])dnl
-foo
+foo                        Prints greeting
+[foo]                      Prints literal text
+define([bar],[[foo]])dnl
+bar                        Prints literal text
+define([baz],[foo])dnl
+baz                        Prints greeting
