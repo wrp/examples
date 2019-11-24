@@ -1,0 +1,1 @@
+define(`value',defined in __file__@line:__line__)
