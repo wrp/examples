@@ -5,22 +5,12 @@ d2='{"b":"b2","c":"c2"}'
 d3='{"c":"c3","d":"c3"}'
 jq --slurp -S '.[0] * .[1]' <(echo "$d1") <(echo "$d2")
 jq --slurp -S '.[1] * .[0] * .[2]' <(echo "$d1") <(echo "$d2") <(echo "$d3")
+# --> { "a": "a1", "b": "b2", "c": "c2" }
+
 jq -n --argfile a1 <(echo "$d1") --argfile a2 <(echo "$d2") '$a1 * $a2'
 jq -n --slurpfile a1 <(echo "$d1") --slurpfile a2 <(echo "$d2") '$a1[0] * $a2[0]'
 echo "$d1" "$d2" | jq -s add
 
-
-exit 0
-
-output:
-{
-  "a": "a1",
-  "b": "b2",
-  "c": "c2"
-}
-{
-  "a": "a1",
-  "b": "b1",
-  "c": "c3",
-  "d": "c3"
-}
+# Merge component
+echo '{"b":{"s1":"s2"}}' "$d2" | jq -s '.[0].b *= .[1] | .[0]'
+# --> { "b": { "s1": "s2", "b": "b2", "c": "c2" } }
