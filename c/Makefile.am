@@ -13,6 +13,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 TESTS = calc-test \
 	dynamic-read-test \
 	list-test \
+	udp-test \
 	scanf-term-test \
 	poly-test \
 	dynamic-test \

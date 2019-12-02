@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Simple test of the udp socket
+trap 'rm -f $output' 0
+output=$(mktemp)
+
+./udp-server > $output &
+echo foo | ./udp-client
+echo q | ./udp-client
+
+grep -q foo $output

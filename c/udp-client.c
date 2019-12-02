@@ -27,8 +27,7 @@ main( int argc, char **argv )
 	serv_addr.sin_addr.s_addr = inet_addr(host);
 	serv_addr.sin_port = htons(port);
 
-	while(1) {
-		fgets( message, BUFSIZ, stdin );
+	while( fgets( message, BUFSIZ, stdin ) != NULL ) {
 
 		if( -1 == sendto(
 				sock,
