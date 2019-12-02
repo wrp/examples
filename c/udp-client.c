@@ -1,4 +1,4 @@
-/* Simple client to read stdin and write to a udp client */
+/* Simple client to read stdin and write to a udp socket */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,10 +38,12 @@ main( int argc, char **argv )
 				(struct sockaddr*)&serv_addr,
 				sizeof serv_addr
 			)
-		)
+		) {
 			die("sendto");
-		if( !strcmp( message, "q\n" ))
+		}
+		if( !strcmp( message, "q\n" )) {
 			break;
+		}
 	}
 	if( close(sock))
 		die("close");
