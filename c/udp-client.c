@@ -20,7 +20,7 @@ main( int argc, char **argv )
 	struct sockaddr_in serv_addr;
 
 	if( (sock = socket( PF_INET, SOCK_DGRAM, 0 )) == -1 )
-		die("socket");
+		die("socket"); /* uncovered */
 
 	memset( &serv_addr, 0, sizeof serv_addr );
 	serv_addr.sin_family = AF_INET;
@@ -38,20 +38,20 @@ main( int argc, char **argv )
 				sizeof serv_addr
 			)
 		) {
-			die("sendto");
+			die("sendto"); /* uncovered */
 		}
 		if( !strcmp( message, "q\n" )) {
 			break;
 		}
 	}
 	if( close(sock))
-		die("close");
+		die("close"); /* uncovered */
 	return 0;
 }
 
 void
-die(const char *message)
+die(const char *message) /* uncovered */
 {
-	perror(message);
-	exit(1);
+	perror(message); /* uncovered */
+	exit(1); /* uncovered */
 }

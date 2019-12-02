@@ -24,7 +24,7 @@ main( int argc, char **argv )
 
 	serv_sock = socket( PF_INET, SOCK_DGRAM, 0 );
 	if( serv_sock == -1 )
-		die("socket");
+		die("socket"); /* uncovered */
 
 	memset( &serv_addr, 0, sizeof serv_addr );
 	serv_addr.sin_family = AF_INET;
@@ -32,7 +32,7 @@ main( int argc, char **argv )
 	serv_addr.sin_port = htons(port);
 
 	if( bind( serv_sock, (struct sockaddr*) &serv_addr, sizeof serv_addr ) == -1)
-		die("bind");
+		die("bind"); /* uncovered */
 
 	while( (str_len = recvfrom(serv_sock, message, BUFSIZ, 0,
 			(struct sockaddr*)&clnt_addr, &clnt_addr_size)) != 0) {
@@ -46,8 +46,8 @@ main( int argc, char **argv )
 }
 
 void
-die( const char *message )
+die(const char *message) /* uncovered */
 {
-	perror(message);
-	exit(1);
+	perror(message); /* uncovered */
+	exit(1); /* uncovered */
 }
