@@ -1,0 +1,3 @@
+
+# list acls for topic $t
+${d?}/kafka-acls --authorizer-properties zookeeper.connect=${zkhost?}:${zkport-2181} --list --topic ${t?}
