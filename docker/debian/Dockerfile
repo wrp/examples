@@ -103,7 +103,5 @@ CMD sudo DOCKER=debian -u "$USER" bash
 
 RUN aptitude install -y cdecl
 RUN aptitude install -y tree
-RUN aptitude install -y ffmpeg
-RUN aptitude install -y ffmpeg-doc
 
 EXPOSE 8125
