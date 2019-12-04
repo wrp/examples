@@ -1,0 +1,6 @@
+#!/bin/sh
+
+date +%s \
+| jq --slurp --raw-input 'split("\n")[:-1] | map({
+ 	date: (. | strptime("%s") | todate[0:10]), time: (. | strptime("%s") | todate[11:19])
+		})'
