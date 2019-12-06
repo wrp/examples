@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Select all those objects in which a sub-member array contains a particular string
+
+for t in a b c; do
+	printf "%s: " "$t"; echo '{ "q": {"m": ["a","b"]}, "z": {"m": ["b", "c"]}}' |
+
+jq -c "map_values(select((.m| index(\"$t\"))))"
+
+done
+exit
+
+# output:
+
+
+a: {"q":{"m":["a","b"]}}
+b: {"q":{"m":["a","b"]},"z":{"m":["b","c"]}}
+c: {"z":{"m":["b","c"]}}
