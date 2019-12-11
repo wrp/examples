@@ -1,19 +1,7 @@
-define(`foo', `Hello, world!')dnl
-foo                        Prints greeting
-`foo'                      Prints literal text
-define(`bar',``foo'')dnl
-bar                        Prints literal text
-define(`baz',`foo')dnl
-baz                        Prints greeting
+define(`embed_quote', `Hello, \'world!\'')dnl
+embed_quote
 
-define(`warn_if_undef', `ifdef(`$1',,`errprint(`warning: $1 undefined
-')')')
-warn_if_undef(`value')
-
-sinclude(`input2')dnl If the file exists, include it
-fatal_if_undef(`value')
-ifdef(`value',is defined,`errprint(`value not defined
-')m4exit')
-
-define(`qux',value)dnl since unquoted, value may be munged by previous include
-`qux'=qux
+define(bar, value)
+define(`foo', `Hello' ```3:$1''' ``2:$1'' `1:$1' 0:$1)dnl
+foo(bar)
+foo(`bar')
