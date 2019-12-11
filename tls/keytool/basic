@@ -37,8 +37,8 @@ keytool -export -keystore ${keystore?} \
 	-file ${output_file:-${keystore%.jks}.pem}
 
 # Import a .pem into a keystore:
-openssl x509 -outform der -in certificate.pem -out certificate.der
-keytool -import -alias ${alias?} -keystore ${output?}.jks -file certificate.der
+openssl x509 -outform der -in ${file?}.pem -out ${file?}.der
+keytool -import -alias ${alias?} -keystore ${file?}.jks -file ${file?}.der
 
 # Import one cert from a keystore into another
 keytool \
