@@ -128,9 +128,10 @@ main() {
 		;;
 		bq)
 			case $host in
-			list) bq ls --max_results 100000 --project_id=$PROJECT ;;
+			list) execute bq ls --max_results 100000 --project_id=$PROJECT ;;
 			*)
-				test "$host" = "${host#*.}" && bq ls --max_results 100000 --project_id=$PROJECT $host
+				test "$host" = "${host#*.}" \
+				&& execute bq ls --max_results 100000 --project_id=$PROJECT $host
 				execute bq show --max_rows_per_request 100000 --project_id=$PROJECT $host
 			;;
 			esac
@@ -142,6 +143,7 @@ main() {
 				# changes all the widths for reformat
 				execute gcloud $group $type list --project=${PROJECT?} \
 				| if test "$type" != service-accounts; then
+					read line; echo "$line"
 					while read host n; do printf "%-60s%s\n" "$host" "$n"; done
 				else
 					cat
