@@ -82,7 +82,6 @@ all_hosts() {
 
 execute() {
 	echo "$@" >&2
-	executed_cmd="$*"
 	eval "$@"
 }
 
@@ -166,8 +165,7 @@ main() {
 			interactive_commit "$(printf \
 				"Update $orig_type/$host$(
 					test "$PROJECT" != gcloud && echo " in $PROJECT"
-					)\n\n%s\n%s" \
-					"$executed_cmd" \
+					)\n\n%s" \
 					"${FORCE}"
 				)"
 			)
