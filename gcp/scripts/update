@@ -82,6 +82,8 @@ all_hosts() {
 
 execute() {
 	echo "$@" >&2
+	echo "$@"
+	echo
 	eval "$@"
 }
 
