@@ -61,7 +61,7 @@ display() {
 				printf( "\t%s", sum[i])
 			printf( "\t%s\n", sum[max])
 		}
-	' $output
+	' "$1"
 }
 
 cleanup() {
@@ -70,7 +70,7 @@ cleanup() {
 	printf '%s' "$v" > $1
 }
 while true; do
-	display
+	display "$output"
 	compute_next
 	player_name=$(awk 'NR==1 {print $(1+c)}' c=$player FS=\\t $output)
 
@@ -82,9 +82,16 @@ while true; do
 		cleanup "$output"
 		git add "$output"
 		git commit -m 'Manual edit'
-	continue;;
-	q) exit 0;;
-	*) printf "\t%d" "$score" >> $output
+		continue;;
+	q)
+		v=$(display "$output")
+		echo "$v" > $output
+		git add "$output"
+		git commit -m "Total scores"
+		cat "$output"
+		exit 0;;
+	*)
+		printf "\t%d" "$score" >> $output
 		git add "$output"
 		git commit -m "Round $round for $player_name"
 	;;
