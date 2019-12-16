@@ -19,6 +19,7 @@
 
 
 . $(dirname $0)/funcs.sh
+: ${base_dir=$(dirname $0)}
 
 : ${FORCE="update gcp data on $(DATE)"}
 
@@ -93,7 +94,7 @@ main() {
 
 	if test "$1" = all-lists; then
 		test -z "$2" && die "commit message required (arg 2)"
-		find $(dirname $0) -name list \
+		find "$base_dir" -name list \
 		| while read f; do FORCE="$2" "$0" $f; done
 		exit
 	fi
@@ -164,7 +165,7 @@ main() {
 		> $TMPFILE
 		test -s $TMPFILE && cat $TMPFILE > "$x"
 		if ! test -s "$x"; then rm "$x"; else (
-			cd $(dirname $0)
+			cd "$base_dir"
 			git add $x
 			interactive_commit "$(printf \
 				"Update $orig_type/$host$(
@@ -178,7 +179,7 @@ main() {
 	done
 	return 0
 }
-if ! ( cd $(dirname $0); git diff-index --exit-code HEAD --); then
+if ! ( cd "$base_dir"; git diff-index --exit-code HEAD --); then
 	die repo is dirty
 fi
 
