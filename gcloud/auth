@@ -1,0 +1,4 @@
+# Get list of accounts for which you have credentials.
+gcloud auth list
+
+

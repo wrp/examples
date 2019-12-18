@@ -1,4 +1,5 @@
-
+# Get list of service accounts
+gcloud iam service-accounts list
 
 #roles role owner   Show all owners of a project
 gcloud projects --format=json get-iam-policy ${PROJECT?} \
