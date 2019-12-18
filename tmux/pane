@@ -68,12 +68,12 @@ To move window:
 
 
 To move a pane between sessions, go to the destination pane:
-:join-pane -s {src-pane}
-src-pane is [{session}:]{window}[.{pane}]
-eg:
-:join-pane -s 2      # Split current window and insert pane with focus from window 2
-:join-pane -s 2.1    # Split current window and insert pane witn index 1 from window 2
-:join-pane -s name-of-session:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
+tmux join-pane -s ${src_pane}  # Note: raw "2" means current window, pane 2.  Use ":2" to grab pane in window 2.
+# Where src-pane is [{session}:]{window}[.{pane}]
+# eg:
+tmux join-pane -s :2     # Split current window and insert pane from window 2.  Focus moves to added pane.
+tmux join-pane -s 2.1    # Split current window and insert pane witn index 1 from window 2
+tmux join-pane -s name-of-session:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
 
 
 
