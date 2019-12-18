@@ -1,0 +1,17 @@
+
+# https://cloud.google.com/sql/docs/mysql/configure-ssl-instance
+
+# Require tls
+$ gcloud sql instances patch ${instance_name?} --require-ssl
+
+# Get server cert for instance
+gcloud beta sql ssl server-ca-certs list --format='value(cert)' \
+    --instance=${instance_name?} > ${instance_name}.pem
+
+
+# Create a client cert  (creates client-key.pem)
+gcloud sql ssl client-certs create ${CN} client-key.pem --instance=${instance_name?}
+
+# Get public key for the cert you just created
+gcloud sql ssl client-certs describe ${CN} --instance=${instance_name?} \
+	--format='value(cert)' > client-cert.pem
