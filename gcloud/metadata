@@ -1,5 +1,7 @@
+# Get metadata:
+gcloud compute instances describe ${instance?} \
+	--zone ${zone?} \
+	--format='value(metadata)'
 
-gcloud compute instances add-metadata INSTANCE_NAME
-	[--metadata=KEY=VALUE,[KEY=VALUE,...]]
-	[--metadata-from-file=KEY=LOCAL_FILE_PATH,[...]] [--zone=ZONE]
-	[GCLOUD_WIDE_FLAG ...]
+# Change metadata:
+gcloud compute instances add-metadata ${instance?} --metadata=KEY=VALUE
