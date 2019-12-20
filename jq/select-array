@@ -5,9 +5,19 @@
 for t in a b c; do
 	printf "%s: " "$t"; echo '{ "q": {"m": ["a","b"]}, "z": {"m": ["b", "c"]}}' |
 
-jq -c "map_values(select((.m| index(\"$t\"))))"
+jq -c "map_values( select( .m | index(\"$t\")))"
 
 done
+
+for t in a b c; do
+	printf "%s: " "$t"; echo '[ { "m": ["a","b"], "r": "foo"}, { "m": ["b", "c"], "r":"bar" }]' |
+
+jq -c "map_values( select( .m | index(\"$t\")))[] | .r"
+
+done
+
+
+
 exit
 
 # output:
