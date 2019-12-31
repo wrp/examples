@@ -15,3 +15,7 @@ gcloud projects set-iam-policy ${PROJECT:?} $PROJECT.iam
 gsutil acl get gs://${bucket} > ${bucket}.acl
 vi ${bucket}.acl
 gsutil acl set ${bucket}.acl gs://${bucket}
+
+# Get all roles for a given user (or service account)
+gcloud projects --format=json get-iam-policy ${PROJECT?} |
+jq -rc ".bindings[] | select( .members[] | test(\"${user?}\")) | \"\t\" + .role"
