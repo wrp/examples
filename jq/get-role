@@ -7,6 +7,5 @@ if test -t 0 && test -z "$TTY_OK"; then
 fi
 for user; do
 	echo $user:
-	jq -rc '.bindings[] | select( .members[] | test("'"$user"'")) | .role' |
-	sed -e 's/^/	/'
+	jq -rc '.bindings[] | select( .members[] | test("'"$user"'")) | "\t" + .role'
 done
