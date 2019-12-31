@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Get all roles for a given user from a gcp project
+if test -t 0 && test -z "$TTY_OK"; then
+	echo stdin is from a tty.  Define TTY_OK if that is intended >&2
+	exit 1
+fi
+for user; do
+	echo $user:
+	jq -rc '.bindings[] | select( .members[] | test("'"$user"'")) | .role' |
+	sed -e 's/^/	/'
+done
