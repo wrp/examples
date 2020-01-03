@@ -1,0 +1,22 @@
+
+Initial notes as I try to learn the mess of the environ.
+
+$ ls -l /Library/Java/JavaVirtualMachines
+total 0
+drwxr-xr-x  3 root  wheel  96 Jan  3 11:38 adoptopenjdk-8.jdk
+lrwxr-xr-x  1 root  wheel  42 Dec 17 11:04 openjdk.jdk -> /usr/local/opt/openjdk/libexec/openjdk.jdk
+
+The adoptopen came from brew cask install adoptopenjdk/openjdk/adoptopenjdk8.
+I believe the symlink came from installing from jdk-13.0.1_osx-x64_bin.dmg
+
+$ java -version
+openjdk version "13.0.1" 2019-10-15
+OpenJDK Runtime Environment (build 13.0.1+9)
+OpenJDK 64-Bit Server VM (build 13.0.1+9, mixed mode, sharing)
+$ sudo rm /Library/Java/JavaVirtualMachines/openjdk.jdk
+$ java -version
+openjdk version "1.8.0_232"
+OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_232-b09)
+OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.232-b09, mixed mode)
+
+I think this gets me where I want to be.
