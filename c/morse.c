@@ -16,21 +16,28 @@ char *nummorse[]={
 	"-----", ".----", "..---", "...--", "....-",
 	".....", "-....", "--...", "---..", "----."
 };
+
+void
+text_to_morse(char c, FILE *out)
+{
+		if( islower(c)) {
+			fputs(alphamorse[c - 'a'], out);
+			fputc(' ', out);
+		} else if( isdigit(c)) {
+			fputs(nummorse[c - '0'], stdout);
+			fputc(' ', out);
+		} else if( isspace(c)) {
+			fputc(c, out);
+		} else {
+			fputc(' ', out);
+		}
+}
+
 int
 main(void)
 {
 	int c;
 	while( ( c = tolower(getchar())) != EOF ) {
-		if( islower(c)) {
-			fputs(alphamorse[c - 'a'], stdout);
-			putchar(' ');
-		} else if( isdigit(c)) {
-			fputs(nummorse[c - '0'], stdout);
-			putchar(' ');
-		} else if( isspace(c)) {
-			putchar(c);
-		} else {
-			putchar(' ');
-		}
+		text_to_morse(c, stdout);
 	}
 }
