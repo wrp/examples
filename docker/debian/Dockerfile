@@ -42,7 +42,7 @@ RUN aptitude install -y ssh
 RUN aptitude install -y ncdu
 RUN aptitude install -y git
 RUN aptitude install -y strace
-RUN aptitude install -y openjdk-8-jdk
+# RUN aptitude install -y openjdk-8-jdk
 RUN aptitude install -y maven
 
 
