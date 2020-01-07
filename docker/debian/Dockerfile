@@ -76,7 +76,7 @@ RUN locale-gen
 RUN aptitude install -y pkg-config
 RUN aptitude install -y figlet
 RUN aptitude install -y python-click
-RUN aptitude install -y python-googleapi
+# RUN aptitude install -y python-googleapi
 # Install newest git  (we're now looking at sid)
 RUN aptitude install -y git
 RUN aptitude install -y e2fsprogs
