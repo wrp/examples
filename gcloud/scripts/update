@@ -86,11 +86,14 @@ execute() {
 	echo "$@"
 	echo
 	eval "$@"
+	command_status=$?
+	return $command_status
 }
 
 main() {
-	trap 'rm -f $TMPFILE' return
+	trap 'rm -f $TMPFILE $TMPFILE2' return
 	local TMPFILE=$(mktemp)
+	local TMPFILE2=$(mktemp)
 
 	if test "$1" = all-lists; then
 		test -z "$2" && die "commit message required (arg 2)"
@@ -142,13 +145,13 @@ main() {
 			list)
 				# Fix host name width to 60 to try to minimize churn when gcloud
 				# changes all the widths for reformat
-				execute gcloud $group $type list --project=${PROJECT?} \
-				| if test "$type" != service-accounts; then
+				execute gcloud $group $type list --project=${PROJECT?}  > $TMPFILE2
+				if test "$type" != service-accounts; then
 					read line; echo "$line"
 					while read host n; do printf "%-60s%s\n" "$host" "$n"; done
 				else
 					cat
-				fi
+				fi < $TMPFILE2
 			;;
 			*)
 				execute gcloud $group $type describe \
@@ -161,9 +164,10 @@ main() {
 			esac
 		;;
 		esac \
-		| sed -E -e 's/[[:space:]]*$//' \
 		> $TMPFILE
-		test -s $TMPFILE && cat $TMPFILE > "$x"
+		if test "$command_status" = 0 && test -s $TMPFILE; then
+			sed -E -e 's/[[:space:]]*$//'  "$TMPFILE" > "$x"
+		fi
 		if ! test -s "$x"; then rm "$x"; else (
 			cd "$base_dir"
 			git add $x
