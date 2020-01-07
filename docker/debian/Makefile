@@ -18,7 +18,6 @@ run:
 		docker run -it \
 		-p 8125 \
 		-v $(HOME):/home/$(USER) \
-		-v /$(USER):/$(USER) \
 		-e USE_HOME=/$(USER) \
 		--label $(USER)-debian \
 		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
