@@ -1,6 +1,9 @@
 #!/bin/sh
 # Replace spaces with tabs in all files throughout history
 
+# Note that git-filter-branch is generally considered obsolete.  Instead, look at
+# git://github.com/newren/git-filter-repo
+
 if test -z "$REPLACE_TABS"; then
 	git filter-branch --tree-filter "git ls-files | REPLACE_TABS=1 xargs $0" HEAD
 else
