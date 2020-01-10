@@ -2,7 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([C-examples], [0.0.1], [william.r.pursell@gmail.com])
+AC_INIT([C-examples], m4_esyscmd([{ git describe --tags --dirty || echo unknown; } | tr -d \\n]),
+	[william.r.pursell@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
 LT_INIT
