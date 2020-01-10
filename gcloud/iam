@@ -20,6 +20,12 @@ gsutil acl set ${bucket}.acl gs://${bucket}
 gcloud projects --format=json get-iam-policy ${PROJECT?} |
 jq -rc ".bindings[] | select( .members[] | test(\"${user?}\")) | \"\t\" + .role"
 
+
+# Big-query
 # To change iam for a bq dataset, use 'bq set-iam-policy' and 'bq get-iam-policy'
 # But....that only works if you have whitelisted the project for alpha.
 # Otherwise, just ust 'gcloud projects get-iam-policy'
+# or:
+bq show --format=prettyjson ${PROJECT?}:$dataset > ${dataset?}.json
+${EDITOR-vi} ${dataset?}.json
+bq update --source ${dataset?}.json ${PROJECT?}:$dataset
