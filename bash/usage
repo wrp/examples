@@ -6,6 +6,6 @@
 
 case "$1" in
 -h)
-	sed -e 1d -e "s|@NAME@|$(basename $0)|" -e '/^#/!q' -e 's/# //' $0
+	sed -E -e 1d -e "s|@NAME@|$(basename $0)|" -e '/^#/!q' -e 's/# ?//' $0
 	exit
 esac
