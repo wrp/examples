@@ -1,0 +1,15 @@
+#!/bin/sh
+
+orig_msg_file="$1"
+tmp=$(mktemp git-commit-XXXX)
+trap 'rm -f $tmp' 0
+
+cat > $tmp << EOF
+Commit on $(git rev-parse --short HEAD)
+
+This template commit comes from the prepare-commit-msg hook
+
+EOF
+
+cat $orig_msg_file >> $tmp
+cat $tmp > $orig_msg_file
