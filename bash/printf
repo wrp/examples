@@ -1,0 +1,4 @@
+#!/bin/sh
+# Use ' to force digit separators
+
+printf "%'d\n" "1234567890"  # 1,234,567,890
