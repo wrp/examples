@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# Check coverage of calc.c.  If configured without --coverage in CFLAGS,
+# Check coverage of various programs.  If configured without --coverage in CFLAGS,
 # this will likely just get skipped.  (eg, configure with
 # CFLAGS='--coverage -g -O0' to run this test)
 
 progs='calc ring-buffer dynamic list dynamic-read
-	udp-server udp-client'
+	udp-server udp-client grow'
 
 if ! test -f calc.gcda; then
 	exit 77

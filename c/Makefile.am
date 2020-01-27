@@ -1,5 +1,6 @@
 
 bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args \
+	grow \
 	pyramid \
 	dynamic-read \
 	pipehup \
@@ -11,6 +12,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	poly \
 	clean-man
 TESTS = calc-test \
+	grow-test \
 	dynamic-read-test \
 	list-test \
 	udp-test \
