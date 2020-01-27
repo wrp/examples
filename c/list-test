@@ -6,6 +6,7 @@ args=
 RV=0
 # Run a string through and validate the output
 test_string() {
+	export COLUMNS
 	out=$(printf "$1" | $exe $args 2>&1)
 	if test "${2+set}" = set && test "$out" != "$(printf "$2")"; then
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
