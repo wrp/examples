@@ -8,3 +8,6 @@ openssl x509 -checkend 0 -noout -in ${pemfile?}
 
 # Show/list contents of certificate
 openssl x509 -in ${pemfile?} -text
+
+# Show/list contents of a csr
+openssl req -in ${file}.csr -text
