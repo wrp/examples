@@ -1,3 +1,4 @@
+# keywords: attributes, metadata
 # Get metadata:
 gcloud compute instances describe ${instance?} \
 	--zone ${zone?} \
