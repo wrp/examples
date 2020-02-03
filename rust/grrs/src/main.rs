@@ -3,5 +3,5 @@ fn main() {
     let path = std::env::args().nth(2).expect("no path given");
 
     println!("Hello, world!");
-    println!(pattern);
+    println!("{}: {}", pattern, path);
 }
