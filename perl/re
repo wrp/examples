@@ -1,0 +1,19 @@
+
+# See:
+# perldoc <re|perlretut|perlre>
+
+modifiers: (details in perlre)
+       m   Treat string as multiple lines.
+       s   Treat string as single line.
+       i   Do case-insensitive pattern matching.
+       x   Extend your pattern's legibility by permitting whitespace and comments
+       p   Make ${^PREMATCH}, ${^MATCH}, and ${^POSTMATCH} available after matching.
+       g   Global
+       c    keep the Current position after failed
+       a, d, l and u    Change character-set semantics (new in 5.14)
+
+
+? impacts greediness.  That is 's/m+?/' Will match the shortest string of 'm's
++ is "possesive non-greedy".  That is, the modified match is non-greedy, but will be
+  long enough to allow the rest of the pattern to match
+
