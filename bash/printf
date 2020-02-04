@@ -20,7 +20,7 @@ printf "%'d\n" "1234567890"  # 1,234,567,890
 # are undefined.
 
 for i in 5 15 20; do
-	printf '%d:%*.*s:\n' $i $i $i "a string"
+	printf '%d:%*.*s:\n' $i $i $i "a string"  # Truncate
 	printf '%d:%*s:\n' $i $i "a string"
 	printf '%5d:%*s:\n' $i $i "a string"
 done
