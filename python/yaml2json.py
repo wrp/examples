@@ -4,6 +4,10 @@ import sys
 import yaml
 import json
 
+# Simple version:
+# json.dump(yaml.load(sys.stdin.read()), sys.stdout, indent = 8)
+
+
 def main(args):
 
     for x in args:
