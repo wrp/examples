@@ -10,7 +10,7 @@ main(int argc, char **argv)
 {
 	int c;
 	long ld;
-	char a[1024];
+	char a[1024] = "XXXXXXXXXXXXXXXX....";
 	char b[1024];
 	char s[1024];
 
