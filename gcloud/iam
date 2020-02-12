@@ -29,3 +29,8 @@ jq -rc ".bindings[] | select( .members[] | test(\"${user?}\")) | \"\t\" + .role"
 bq show --format=prettyjson ${PROJECT?}:$dataset > ${dataset?}.json
 ${EDITOR-vi} ${dataset?}.json
 bq update --source ${dataset?}.json ${PROJECT?}:$dataset
+
+# To set owners of the table to only projectOwners:
+bq show --format=prettyjson ${PROJECT?}:$dataset \
+| jq '.access = [{"role":"OWNER", "specialGroup": "projectOwners"}]' > ${dataset?}.json &&
+bq update --source $dataset.json $PROJECT:$dataset
