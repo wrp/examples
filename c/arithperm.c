@@ -86,8 +86,7 @@ next_mask(int N)
 
 	assert(N < 15);
 	while( x < max &&  __builtin_popcount(++x) != N)
-		if( x == max )
-			return 0;
+		;
 	return x < max ? x : 0;
 }
 
