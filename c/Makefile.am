@@ -9,10 +9,12 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	udp-client \
 	udp-server \
 	dynamic \
+	arithperm \
 	poly \
 	clean-man
 TESTS = calc-test \
 	grow-test \
+	arithperm-test \
 	dynamic-read-test \
 	list-test \
 	udp-test \
