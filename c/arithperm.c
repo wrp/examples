@@ -48,7 +48,7 @@ render(struct operation *op)
 	struct element *stack = xmalloc( op->count * sizeof *stack);
 	struct element *sp = stack;
 
-	while( m || c < op->count ) {
+	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
 			if(sp - stack < 2) {
@@ -58,10 +58,10 @@ render(struct operation *op)
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
 			strncpy(sp[-1].descr, buf, sizeof sp->descr);
 			switch(*ops) {
-			case '+': sp[-1].val += sp[0].val; break;
-			case '-': sp[-1].val -= sp[0].val; break;
-			case '*': sp[-1].val *= sp[0].val; break;
-			case '/': sp[-1].val /= sp[0].val; break;
+			case '+': sp[-1].val += sp->val; break;
+			case '-': sp[-1].val -= sp->val; break;
+			case '*': sp[-1].val *= sp->val; break;
+			case '/': sp[-1].val /= sp->val; break;
 			default: assert(0);
 			}
 			ops += 1;
@@ -75,8 +75,8 @@ render(struct operation *op)
 		}
 		m >>= 1;
 	}
-
-	printf("%s = %g\n", sp[-1].descr, sp[-1].val);
+	sp -= 1;
+	printf("%s = %g\n", sp->descr, sp->val);
 end:
 	free(stack);
 	return 0;
