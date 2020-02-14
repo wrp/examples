@@ -83,9 +83,8 @@ render(struct operation *op)
 
 /* generate the next uint32_t with N bits set  */
 uint32_t
-next_mask(int N)
+next_mask(int N, uint32_t x)
 {
-	static uint32_t x = 0;
 	uint32_t max = 1 << (2*N + 1);
 
 	assert(N < 15);
@@ -113,9 +112,8 @@ next_perm( char *s )
 int
 next_op(struct operation *op)
 {
-
 	if(strspn( op->operators, "/" ) == (unsigned)op->count - 1) {
-		op->mask = next_mask(op->count - 1);
+		op->mask = next_mask(op->count - 1, op->mask);
 	}
 	next_perm(op->operators);
 	return !!op->mask;
@@ -157,7 +155,7 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 	if(op->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
 	}
-	op->mask = next_mask(op->count - 1);
+	op->mask = next_mask(op->count - 1, 0);
 	op->operands = op->operands;
 	op->stack = xmalloc( op->count * sizeof *op->stack);
 }
