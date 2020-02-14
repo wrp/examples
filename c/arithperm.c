@@ -81,7 +81,7 @@ render(struct operation *op)
 }
 
 
-/* generate the next uint32_t with N bits set  */
+/* generate the next mask with N bits set. Mask is 2N+1 wide. */
 uint32_t
 next_mask(int N, uint32_t x)
 {
