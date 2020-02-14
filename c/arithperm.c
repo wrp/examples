@@ -1,6 +1,7 @@
-/* Read N numbers.  Perform permutations of arithmetic on them.
+/*
+ * Perform permutations of arithmetic on a fixed set of values.
  * Inspired by https://stackoverflow.com/questions/60196706/is-there-a-way-to-interchange-mathematical-operators-in-a-while-or-for-loop
-*/
+ */
 
 #include <stdio.h>
 #include <stdint.h>
