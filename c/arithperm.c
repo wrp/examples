@@ -19,7 +19,7 @@ struct operation {
 void * xmalloc(size_t s);
 void parse_cmd_line(int argc, char **argv, struct operation*);
 int next_op(struct operation *op);
-int render(struct operation *op);
+void render(struct operation *op);
 
 int
 main(int argc, char **argv)
@@ -31,6 +31,7 @@ main(int argc, char **argv)
 	while(next_op(&op)) {
 		render(&op);
 	}
+	free(op.operands);
 }
 
 struct element {
@@ -38,7 +39,7 @@ struct element {
 	char descr[512];
 };
 
-int
+void
 render(struct operation *op)
 {
 	int c = 0;
@@ -51,7 +52,7 @@ render(struct operation *op)
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
 			if(sp - stack < 2) {
-				return 1;
+				goto end;
 			}
 			sp -= 1;
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
@@ -66,7 +67,7 @@ render(struct operation *op)
 			ops += 1;
 		} else {
 			if( c >= op->count ) {
-				return 1;
+				goto end;
 			}
 			sp->val = op->operands[c++];
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
@@ -76,6 +77,8 @@ render(struct operation *op)
 	}
 
 	printf("%s = %g\n", sp[-1].descr, sp[-1].val);
+end:
+	free(stack);
 	return 0;
 }
 
@@ -112,26 +115,27 @@ next_perm( char *s )
 int
 next_op(struct operation *op)
 {
-	static struct operation *b = NULL;
+	static struct operation b;
+	static int init = 0;
 
-	if( b == NULL ) {
-		b = xmalloc( sizeof *b );
-		b->operators = strndup("++++++++++++++++++++", op->count - 1);
-		if(b->operators == NULL) {
+	if( !init ) {
+		init = 1;
+		b.operators = strndup("++++++++++++++++++++", op->count - 1);
+		if(b.operators == NULL) {
 			err(EXIT_FAILURE, "strndup");
 		}
-		b->mask = next_mask(op->count - 1);
-		b->operands = op->operands;
-		b->count = op->count;
+		b.mask = next_mask(op->count - 1);
+		b.operands = op->operands;
+		b.count = op->count;
 	} else {
-		if(strspn( b->operators, "/" ) == (unsigned)b->count - 1) {
-			b->mask = next_mask(op->count - 1);
+		if(strspn( b.operators, "/" ) == (unsigned)b.count - 1) {
+			b.mask = next_mask(op->count - 1);
 		}
-		next_perm(b->operators);
+		next_perm(b.operators);
 	}
-	if( b->mask == 0)
+	if( b.mask == 0)
 		return 0;
-	memcpy(op, b, sizeof *op);
+	memcpy(op, &b, sizeof *op);
 	return 1;
 }
 
