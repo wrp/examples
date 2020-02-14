@@ -17,8 +17,8 @@ struct operation {
 	int count;        /* Number of operands */
 	struct element {
 		double val;
-		char descr[512];
-	} *stack;
+		char descr[512];  /* Human readable description (for infix) */
+	} *stack;                 /* Stack used for computation */
 };
 
 void * xmalloc(size_t s);
@@ -52,7 +52,7 @@ render(struct operation *op)
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
 			if(sp - op->stack < 2) {
-				goto end;
+				return; /* underflow indicates invalid mask.  Ignore the error */
 			}
 			sp -= 1;
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
@@ -66,18 +66,16 @@ render(struct operation *op)
 			}
 			ops += 1;
 		} else {
-			if( c >= op->count ) {
-				goto end;
-			}
+			assert( c < op->count );
 			sp->val = op->operands[c++];
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
 			sp += 1;
+			assert( sp - op->stack <= op->count );
 		}
 		m >>= 1;
 	}
 	sp -= 1;
 	printf("%s = %g\n", sp->descr, sp->val);
-end:
 	return;
 }
 
@@ -90,8 +88,7 @@ next_mask(int N)
 	uint32_t max = 1 << (2*N + 1);
 
 	assert(N < 15);
-	while( x < max &&  __builtin_popcount(++x) != N)
-		;
+	do x += 1; while( x < max &&  __builtin_popcount(x) != N);
 	return x < max ? x : 0;
 }
 
@@ -125,8 +122,7 @@ next_op(struct operation *op)
 
 
 /*
- * Create an array of doubles consisting of all the command line arguments
- * Caller should free.
+ * Initialize struct operation from the command line args.
  */
 void
 parse_cmd_line(int argc, char **argv, struct operation *op)
