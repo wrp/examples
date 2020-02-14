@@ -57,6 +57,7 @@ render(struct operation *op)
 			sp -= 1;
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
 			strncpy(sp[-1].descr, buf, sizeof sp->descr);
+			sp[-1].descr[sizeof sp->descr - 1] = '\0';
 			switch(*ops) {
 			case '+': sp[-1].val += sp->val; break;
 			case '-': sp[-1].val -= sp->val; break;
