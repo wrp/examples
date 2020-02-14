@@ -81,14 +81,21 @@ render(struct operation *op)
 }
 
 
-/* generate the next mask with N bits set. Mask is 2N+1 wide. */
+/*
+ * generate the next mask with N bits set. Mask is 2N+1 wide.
+ * Taken from:
+ * https://stackoverflow.com/questions/26594951/finding-next-bigger-number-with-same-number-of-set-bits
+ */
 uint32_t
 next_mask(int N, uint32_t x)
 {
-	uint32_t max = 1 << (2*N + 1);
-
 	assert(N < 15);
-	do x += 1; while( x < max &&  __builtin_popcount(x) != N);
+	uint32_t max = 1 << (2*N + 1);
+	uint32_t c = x & -x;
+	uint32_t r = x + c;
+
+	x = (((r ^ x) >> 2) / c) | r;
+
 	return x < max ? x : 0;
 }
 
@@ -155,7 +162,7 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 	if(op->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
 	}
-	op->mask = next_mask(op->count - 1, 0);
+	op->mask = ( 0x1 << ( op->count - 1 )) - 1;
 	op->operands = op->operands;
 	op->stack = xmalloc( op->count * sizeof *op->stack);
 }
