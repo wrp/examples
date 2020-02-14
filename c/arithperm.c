@@ -14,7 +14,11 @@ struct operation {
 	double *operands; /* The numbers to be manipulated */
 	char *operators;  /* operators to apply, eg "++/-*" */
 	uint32_t mask;    /* A bit mask showing where to apply operators */
-	int count;     /* Number of operands */
+	int count;        /* Number of operands */
+	struct element {
+		double val;
+		char descr[512];
+	} *stack;
 };
 
 void * xmalloc(size_t s);
@@ -28,17 +32,13 @@ main(int argc, char **argv)
 	struct operation op;
 
 	parse_cmd_line(argc, argv, &op);
-
 	while(next_op(&op)) {
 		render(&op);
 	}
 	free(op.operands);
+	free(op.stack);
 }
 
-struct element {
-	double val;
-	char descr[512];
-};
 
 void
 render(struct operation *op)
@@ -46,13 +46,12 @@ render(struct operation *op)
 	int c = 0;
 	uint32_t m = op->mask;
 	char *ops = op->operators;
-	struct element *stack = xmalloc( op->count * sizeof *stack);
-	struct element *sp = stack;
+	struct element *sp = op->stack;
 
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
-			if(sp - stack < 2) {
+			if(sp - op->stack < 2) {
 				goto end;
 			}
 			sp -= 1;
@@ -79,8 +78,7 @@ render(struct operation *op)
 	sp -= 1;
 	printf("%s = %g\n", sp->descr, sp->val);
 end:
-	free(stack);
-	return 0;
+	return;
 }
 
 
@@ -113,31 +111,16 @@ next_perm( char *s )
 	}
 }
 
+
 int
 next_op(struct operation *op)
 {
-	static struct operation b;
-	static int init = 0;
 
-	if( !init ) {
-		init = 1;
-		b.operators = strndup("++++++++++++++++++++", op->count - 1);
-		if(b.operators == NULL) {
-			err(EXIT_FAILURE, "strndup");
-		}
-		b.mask = next_mask(op->count - 1);
-		b.operands = op->operands;
-		b.count = op->count;
-	} else {
-		if(strspn( b.operators, "/" ) == (unsigned)b.count - 1) {
-			b.mask = next_mask(op->count - 1);
-		}
-		next_perm(b.operators);
+	if(strspn( op->operators, "/" ) == (unsigned)op->count - 1) {
+		op->mask = next_mask(op->count - 1);
 	}
-	if( b.mask == 0)
-		return 0;
-	memcpy(op, &b, sizeof *op);
-	return 1;
+	next_perm(op->operators);
+	return !!op->mask;
 }
 
 
@@ -173,6 +156,13 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 	assert(*argv == NULL);
 	op->operands = v - argc;
 	op->count = argc;
+	op->operators = strndup("++++++++++++++++++++", op->count - 1);
+	if(op->operators == NULL) {
+		err(EXIT_FAILURE, "strndup");
+	}
+	op->mask = next_mask(op->count - 1);
+	op->operands = op->operands;
+	op->stack = xmalloc( op->count * sizeof *op->stack);
 }
 
 
