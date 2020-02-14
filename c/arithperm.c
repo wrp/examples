@@ -33,18 +33,19 @@ main(int argc, char **argv)
 	}
 }
 
+struct element {
+	double val;
+	char descr[512];
+};
+
 int
 render(struct operation *op)
 {
 	int c = 0;
 	uint32_t m = op->mask;
 	char *ops = op->operators;
-	double *stack = xmalloc( op->count * sizeof *stack);
-	double *sp = stack;
-
-	char output[1024];
-
-	sprintf(output, "%g", op->operands[0]);
+	struct element *stack = xmalloc( op->count * sizeof *stack);
+	struct element *sp = stack;
 
 	while( m || c < op->count ) {
 		if( m & 0x1 ) { /* Apply an operator */
@@ -53,13 +54,13 @@ render(struct operation *op)
 				return 1;
 			}
 			sp -= 1;
-			sprintf(buf, "(%s %c %g)", output, *ops, sp[0]);
-			strncpy(output, buf, sizeof output);
+			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
+			strncpy(sp[-1].descr, buf, sizeof sp->descr);
 			switch(*ops) {
-			case '+': sp[-1] += sp[0]; break;
-			case '-': sp[-1] -= sp[0]; break;
-			case '*': sp[-1] *= sp[0]; break;
-			case '/': sp[-1] /= sp[0]; break;
+			case '+': sp[-1].val += sp[0].val; break;
+			case '-': sp[-1].val -= sp[0].val; break;
+			case '*': sp[-1].val *= sp[0].val; break;
+			case '/': sp[-1].val /= sp[0].val; break;
 			default: assert(0);
 			}
 			ops += 1;
@@ -67,13 +68,14 @@ render(struct operation *op)
 			if( c >= op->count ) {
 				return 1;
 			}
-			*sp = op->operands[c++];
+			sp->val = op->operands[c++];
+			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
 			sp += 1;
 		}
 		m >>= 1;
 	}
 
-	printf("%s = %g\n", output, sp[-1]);
+	printf("%s = %g\n", sp[-1].descr, sp[-1].val);
 	return 0;
 }
 
