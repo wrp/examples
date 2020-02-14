@@ -44,3 +44,17 @@ sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,discard /dev/${device?}
 
 Then mount the device
 sudo mount -o discard,defaults /dev/${device?} ${mount_path?}
+
+
+
+********************************************
+Copying a disk.
+
+AFAIK, you can't directly copy the disk.  You can use 'gcloud compute disks move'
+to move a disk to a new zone, and you can use 'gcloud compute disks snapshot' to
+make a snapshot.  After you've made a snapshot, you can use 'gcloud compute disks create'
+with the --source-snapshot  argument to make a new disk with the original data.
+So, to summarize, to make a copy of ${src_disk} at ${dest_disk}, do:
+
+gcloud compute disks snapshot ${src_disk?} --zone=${zone?} --snapshot-names ${snap_name?}
+gcloud compute disks create ${dest_disk?} --zone=${new_zone-${zone?}} --size 1024 --source-snapshot ${snap_name?} --type pd-standard
