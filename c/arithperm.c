@@ -43,36 +43,37 @@ render(struct operation *op)
 	double *sp = stack;
 
 	char output[1024];
-	char *outp = output;
+
+	sprintf(output, "%g", op->operands[0]);
 
 	while( m || c < op->count ) {
 		if( m & 0x1 ) { /* Apply an operator */
+			char buf[1024];
 			if(sp - stack < 2) {
 				return 1;
 			}
 			sp -= 1;
-			*outp++ = *ops;
-			*outp++ = ' ';
-			switch(*ops++) {
-			case '+': sp[-1] = sp[-1] + sp[0]; break;
-			case '-': sp[-1] = sp[-1] - sp[0]; break;
-			case '*': sp[-1] = sp[-1] * sp[0]; break;
-			case '/': sp[-1] = sp[-1] / sp[0]; break;
+			sprintf(buf, "(%s %c %g)", output, *ops, sp[0]);
+			strncpy(output, buf, sizeof output);
+			switch(*ops) {
+			case '+': sp[-1] += sp[0]; break;
+			case '-': sp[-1] -= sp[0]; break;
+			case '*': sp[-1] *= sp[0]; break;
+			case '/': sp[-1] /= sp[0]; break;
 			default: assert(0);
 			}
+			ops += 1;
 		} else {
 			if( c >= op->count ) {
 				return 1;
 			}
 			*sp = op->operands[c++];
-			outp += sprintf(outp, "%g ", *sp);
 			sp += 1;
 		}
 		m >>= 1;
 	}
 
-	sprintf(outp, " = %g\n", sp[-1]);
-	printf("%s", output);
+	printf("%s = %g\n", output, sp[-1]);
 	return 0;
 }
 
