@@ -1,6 +1,16 @@
 /*
  * Perform permutations of arithmetic on a fixed set of values.
  * Inspired by https://stackoverflow.com/questions/60196706/is-there-a-way-to-interchange-mathematical-operators-in-a-while-or-for-loop
+ *
+ * We take a set of double values as parameters and generate all possible
+ * arithmetic operations using +, -, *, and /.  The key observation is that
+ * with N values, there are N-1 operators.  We generate all possible combintations
+ * by building masks that are 2N - 1 wide, where the set bit indicates that an operator
+ * is to be applied.  For example, with N = 3, the mask 0x18 would correspond to
+ * the grouping ABC** (Things are reversed.  The mask is '11000', and reading from
+ * right to left gives 3 operands, follwed by 2 operators, in postfix.)  In infix
+ * notation, that example would be (A * (B * C)).  For each mask, we iterate over
+ * all permutations of +,-,*,/
  */
 
 #include <stdio.h>
