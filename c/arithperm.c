@@ -10,7 +10,7 @@
 #include <err.h>
 #include <assert.h>
 
-struct operation {
+struct expression {
 	double *operands; /* The numbers to be manipulated */
 	char *operators;  /* operators to apply, eg "++/-*" */
 	uint32_t mask;    /* A bit mask showing where to apply operators */
@@ -22,35 +22,38 @@ struct operation {
 };
 
 void * xmalloc(size_t s);
-void parse_cmd_line(int argc, char **argv, struct operation*);
-int next_op(struct operation *op);
-void render(struct operation *op);
+void parse_cmd_line(int argc, char **argv, struct expression*);
+int next_op(struct expression *);
+void eval(struct expression *);
 
 int
 main(int argc, char **argv)
 {
-	struct operation op;
+	struct expression exp;
 
-	parse_cmd_line(argc, argv, &op);
-	do render(&op); while(next_op(&op));
-	free(op.operands);
-	free(op.stack);
+	parse_cmd_line(argc, argv, &exp);
+	do eval(&exp); while(next_op(&exp));
+	free(exp.operands);
+	free(exp.stack);
 }
 
 
+/*
+ * Evaluate the expression and pretty print it to stdout
+ */
 void
-render(struct operation *op)
+eval(struct expression *exp)
 {
 	int c = 0;
-	uint32_t m = op->mask;
-	char *ops = op->operators;
-	struct element *sp = op->stack;
+	uint32_t m = exp->mask;
+	char *ops = exp->operators;
+	struct element *sp = exp->stack;
 
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
 			/* We pre-validated the mask to ensure this assertion. */
-			assert(sp - op->stack > 1);
+			assert(sp - exp->stack > 1);
 			sp -= 1;
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
 			strncpy(sp[-1].descr, buf, sizeof sp->descr);
@@ -64,11 +67,11 @@ render(struct operation *op)
 			}
 			ops += 1;
 		} else {
-			assert( c < op->count );
-			sp->val = op->operands[c++];
+			assert( c < exp->count );
+			sp->val = exp->operands[c++];
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
 			sp += 1;
-			assert( sp - op->stack <= op->count );
+			assert( sp - exp->stack <= exp->count );
 		}
 		m >>= 1;
 	}
@@ -143,21 +146,21 @@ next_perm( char *s )
 
 
 int
-next_op(struct operation *op)
+next_op(struct expression *exp)
 {
-	if(strspn( op->operators, "/" ) == (unsigned)op->count - 1) {
-		op->mask = next_mask(op->count - 1, op->mask);
+	if(strspn( exp->operators, "/" ) == (unsigned)exp->count - 1) {
+		exp->mask = next_mask(exp->count - 1, exp->mask);
 	}
-	next_perm(op->operators);
-	return !!op->mask;
+	next_perm(exp->operators);
+	return !!exp->mask;
 }
 
 
 /*
- * Initialize struct operation from the command line args.
+ * Initialize struct expression from the command line args.
  */
 void
-parse_cmd_line(int argc, char **argv, struct operation *op)
+parse_cmd_line(int argc, char **argv, struct expression *exp)
 {
 	double *v;
 	char *defaults[] = { argv[0], "2.0", "1.0", NULL };
@@ -182,16 +185,16 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 		}
 	}
 	assert(*argv == NULL);
-	op->operands = v - argc;
-	op->count = argc;
-	op->operators = strndup("++++++++++++++++++++", op->count - 1);
-	if(op->operators == NULL) {
+	exp->operands = v - argc;
+	exp->count = argc;
+	exp->operators = strndup("++++++++++++++++++++", exp->count - 1);
+	if(exp->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
 	}
-	op->mask = (( 0x1 << ( op->count - 1 )) - 1);
-	op->mask = next_mask(op->count - 1, op->mask);
-	op->operands = op->operands;
-	op->stack = xmalloc( op->count * sizeof *op->stack);
+	exp->mask = (( 0x1 << ( exp->count - 1 )) - 1);
+	exp->mask = next_mask(exp->count - 1, exp->mask);
+	exp->operands = exp->operands;
+	exp->stack = xmalloc( exp->count * sizeof *exp->stack);
 }
 
 
