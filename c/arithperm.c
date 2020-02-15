@@ -52,10 +52,11 @@ eval(struct expression *exp)
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
+			char *fmt = (m == 1) ? "%s %c %s" : "(%s %c %s)";
 			/* We pre-validated the mask to ensure this assertion. */
 			assert(sp - exp->stack > 1);
 			sp -= 1;
-			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
+			snprintf(buf, sizeof buf, fmt, sp[-1].descr, *ops, sp->descr);
 			strncpy(sp[-1].descr, buf, sizeof sp->descr);
 			sp[-1].descr[sizeof sp->descr - 1] = '\0';
 			switch(*ops) {
