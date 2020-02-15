@@ -32,9 +32,7 @@ main(int argc, char **argv)
 	struct operation op;
 
 	parse_cmd_line(argc, argv, &op);
-	while(next_op(&op)) {
-		render(&op);
-	}
+	do render(&op); while(next_op(&op));
 	free(op.operands);
 	free(op.stack);
 }
@@ -51,9 +49,8 @@ render(struct operation *op)
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
-			if(sp - op->stack < 2) {
-				return; /* underflow indicates invalid mask.  Ignore the error */
-			}
+			/* We pre-validated the mask to ensure this assertion. */
+			assert(sp - op->stack > 1);
 			sp -= 1;
 			snprintf(buf, sizeof buf, "(%s %c %s)", sp[-1].descr, *ops, sp->descr);
 			strncpy(sp[-1].descr, buf, sizeof sp->descr);
@@ -191,7 +188,8 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 	if(op->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
 	}
-	op->mask = (( 0x1 << ( op->count - 1 )) - 1) << 2;
+	op->mask = (( 0x1 << ( op->count - 1 )) - 1);
+	op->mask = next_mask(op->count - 1, op->mask);
 	op->operands = op->operands;
 	op->stack = xmalloc( op->count * sizeof *op->stack);
 }
