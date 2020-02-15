@@ -39,3 +39,17 @@ then
 	echo "Got unexpected: '$out'" >&2
 	exit 1
 fi
+
+# Check if bc is installed
+if ! test "$(echo 1 + 1 | bc)" = 2; then
+	exit 77
+else
+	./arithperm 1 4 5 7.8 | while IFS== read lhs rhs; do
+		if ! { echo "$lhs" | bc -l | tr -d \\n; echo "$rhs"; } \
+				| awk '(NF != 2)  || ($2 - $1 > eps ) ||
+					($1 - $2) > eps{ exit 1}' eps=.01; then
+			echo arithperm incorrectly reported $lhs = $rhs >&2
+			exit 1
+		fi
+	done
+fi
