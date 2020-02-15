@@ -1,0 +1,7 @@
+
+With gcc:
+
+
+gcc -pg main.c -o main
+./main  # Should create gmon.out
+gprof main gmon.out  # should generate profile
