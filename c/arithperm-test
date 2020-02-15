@@ -48,7 +48,7 @@ else
 		if ! { echo "$lhs" | bc -l | tr -d \\n; echo "$rhs"; } \
 				| awk '(NF != 2)  || ($2 - $1 > eps ) ||
 					($1 - $2) > eps{ exit 1}' eps=.01; then
-			echo arithperm incorrectly reported $lhs = $rhs >&2
+			echo "arithperm incorrectly reported $lhs = $rhs" >&2
 			exit 1
 		fi
 	done
