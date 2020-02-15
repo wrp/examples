@@ -99,7 +99,7 @@ mask_is_invalid(uint32_t m)
 
 
 /*
- * generate the next mask with N bits set. Mask is 2N+1 wide.
+ * generate the next mask with N bits set.
  * Taken from:
  * https://stackoverflow.com/questions/26594951/finding-next-bigger-number-with-same-number-of-set-bits
  */
@@ -118,7 +118,6 @@ next_mask(int N, uint32_t x)
 	uint32_t max = 1 << (2*N + 1);
 
 	do x = compute_next_mask(x); while( mask_is_invalid(x));
-
 	return x < max ? x : 0;
 }
 
