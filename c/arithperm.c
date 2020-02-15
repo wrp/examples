@@ -89,18 +89,12 @@ mask_is_invalid(uint32_t m)
 	 *  For any given bit, the number of unset bits to the right must of it must be greater
 	 *  that the number of set bits.
 	 */
-	int i, sum;
-	for( sum = i = 0; i < 32; i++, m >>= 1) {
-		if( m & 0x1) {
-			sum += 1;
-		} else {
-			sum -= 1;
-		}
-		if( sum >= 0 ) { /* This mask is invalid */
-			return 1;
-		}
-	}
-	return 0; /* Not necessarily valid, but this check doesn't notice */
+	int sum = 0;
+	do {
+		sum += ( m & 0x1 ) ? 1 : -1;
+		m >>= 1;
+	} while( m && sum < 0 );
+	return sum >= 0;
 }
 
 
