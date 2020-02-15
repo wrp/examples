@@ -63,27 +63,25 @@ eval(struct expression *exp)
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
 			char *fmt = (m == 1) ? "%s %c %s" : "(%s %c %s)";
-			/* We pre-validated the mask to ensure this assertion. */
-			assert(sp - exp->stack > 1);
-			sp -= 1;
-			snprintf(buf, sizeof buf, fmt, sp[-1].descr, *ops, sp->descr);
-			strncpy(sp[-1].descr, buf, sizeof sp->descr);
-			sp[-1].descr[sizeof sp->descr - 1] = '\0';
-			switch(*ops) {
-			case '+': sp[-1].val += sp->val; break;
-			case '-': sp[-1].val -= sp->val; break;
-			case '*': sp[-1].val *= sp->val; break;
-			case '/': sp[-1].val /= sp->val; break;
+			assert(sp - exp->stack > 1); /* True because of mask_is_invalid() */
+			assert(sizeof buf >= sizeof sp->descr); /* Ensure terminating null after strncpy */
+			sp -= 2;
+			snprintf(buf, sizeof buf, fmt, sp->descr, *ops, sp[1].descr);
+			strncpy(sp->descr, buf, sizeof sp->descr);
+			switch(*ops++) {
+			case '+': sp->val += sp[1].val; break;
+			case '-': sp->val -= sp[1].val; break;
+			case '*': sp->val *= sp[1].val; break;
+			case '/': sp->val /= sp[1].val; break;
 			default: assert(0);
 			}
-			ops += 1;
 		} else {
-			assert( c < exp->count );
+			assert(c < exp->count);
 			sp->val = exp->operands[c++];
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
-			sp += 1;
-			assert( sp - exp->stack <= exp->count );
 		}
+		sp += 1;
+		assert( sp - exp->stack <= exp->count );
 		m >>= 1;
 	}
 	sp -= 1;
