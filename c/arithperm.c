@@ -81,20 +81,49 @@ render(struct operation *op)
 }
 
 
+int
+mask_is_invalid(uint32_t m)
+{
+	/* A mask is invalid (will lead to underflow) unless it meets the following conditions:
+	 *  The 2 LSB must be 0
+	 *  For any given bit, the number of unset bits to the right must of it must be greater
+	 *  that the number of set bits.
+	 */
+	int i, sum;
+	for( sum = i = 0; i < 32; i++, m >>= 1) {
+		if( m & 0x1) {
+			sum += 1;
+		} else {
+			sum -= 1;
+		}
+		if( sum >= 0 ) { /* This mask is invalid */
+			return 1;
+		}
+	}
+	return 0; /* Not necessarily valid, but this check doesn't notice */
+}
+
+
 /*
  * generate the next mask with N bits set. Mask is 2N+1 wide.
  * Taken from:
  * https://stackoverflow.com/questions/26594951/finding-next-bigger-number-with-same-number-of-set-bits
  */
 uint32_t
+compute_next_mask(uint32_t x)
+{
+	uint32_t c = x & -x;
+	uint32_t r = x + c;
+	return (((r ^ x) >> 2) / c) | r;
+}
+
+uint32_t
 next_mask(int N, uint32_t x)
 {
 	assert(N < 15);
 	uint32_t max = 1 << (2*N + 1);
-	uint32_t c = x & -x;
-	uint32_t r = x + c;
 
-	x = (((r ^ x) >> 2) / c) | r;
+	do x = compute_next_mask(x); while( mask_is_invalid(x));
 
 	return x < max ? x : 0;
 }
