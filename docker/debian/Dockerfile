@@ -104,5 +104,6 @@ CMD sudo DOCKER=debian -u "$USER" bash
 RUN aptitude install -y cdecl
 RUN aptitude install -y tree
 RUN aptitude install -y libyaml-perl
+RUN aptitude install -y bc
 
 EXPOSE 8125
