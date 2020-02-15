@@ -119,6 +119,12 @@ next_mask(int N, uint32_t x)
 	uint32_t max = 1 << (2*N + 1);
 
 	do x = compute_next_mask(x); while( mask_is_invalid(x));
+
+	/* As a side effect of mask_is_invalid, it will always be true
+	 * that the highest bit will be set.  (Highest in the 2N+1 wide mask).
+	 */
+	assert( ( ( x >> (2 * N) ) & 0x1 ) || (x >= max) );
+
 	return x < max ? x : 0;
 }
 
