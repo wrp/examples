@@ -21,10 +21,10 @@
 #include <assert.h>
 
 struct expression {
-	double *operands; /* The numbers to be manipulated */
-	char *operators;  /* operators to apply, eg "++/-*" */
-	uint32_t mask;    /* A bit mask showing where to apply operators */
-	int count;        /* Number of operands */
+	double *operands;    /* The numbers to be manipulated */
+	char operators[16];  /* operators to apply, eg "++/-*" */
+	uint32_t mask;       /* A bit mask showing where to apply operators */
+	int count;           /* Number of operands */
 	struct element {
 		double val;
 		char descr[512];  /* Human readable description (for infix) */
@@ -192,10 +192,8 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 				*argv, end - *argv, *end);
 		}
 	}
-	exp->operators = strndup("++++++++++++++++++++", exp->count - 1);
-	if(exp->operators == NULL) {
-		err(EXIT_FAILURE, "strndup");
-	}
+	strncpy(exp->operators, "++++++++++++++++++++", exp->count - 1);
+	exp->operators[exp->count] = '\0';
 	exp->mask = (( 0x1 << ( exp->count - 1 )) - 1);
 	exp->mask = next_mask(exp->count - 1, exp->mask);
 	exp->operands = exp->operands;
