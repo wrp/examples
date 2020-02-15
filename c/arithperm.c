@@ -162,7 +162,7 @@ parse_cmd_line(int argc, char **argv, struct operation *op)
 	if(op->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
 	}
-	op->mask = ( 0x1 << ( op->count - 1 )) - 1;
+	op->mask = (( 0x1 << ( op->count - 1 )) - 1) << 2;
 	op->operands = op->operands;
 	op->stack = xmalloc( op->count * sizeof *op->stack);
 }
