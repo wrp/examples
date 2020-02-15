@@ -93,10 +93,10 @@ eval(struct expression *exp)
 int
 mask_is_invalid(uint32_t m)
 {
-	/* A mask is invalid (will lead to underflow) unless it meets the following conditions:
-	 *  The 2 LSB must be 0
-	 *  For any given bit, the number of unset bits to the right must of it must be greater
-	 *  that the number of set bits.
+	/*
+	 * A mask is invalid (will lead to underflow) unless it meets the following condition:
+	 *  For any given bit, the number of unset bits to the right of it must be greater
+	 *  than the number of set bits.
 	 */
 	int sum = 0;
 	do {
@@ -108,8 +108,7 @@ mask_is_invalid(uint32_t m)
 
 
 /*
- * generate the next mask with N bits set.
- * Taken from:
+ * generate the next mask with N bits set.  Taken from:
  * https://stackoverflow.com/questions/26594951/finding-next-bigger-number-with-same-number-of-set-bits
  */
 uint32_t
@@ -165,7 +164,7 @@ next_op(struct expression *exp)
 
 
 /*
- * Initialize struct expression from the command line args.
+ * Initialize exp from the command line arguments.
  */
 void
 parse_cmd_line(int argc, char **argv, struct expression *exp)
@@ -181,7 +180,8 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 
 	argv += 1;
 	argc -= 1;
-	v = xmalloc( sizeof *v * argc);
+	exp->operands = v = xmalloc( sizeof *v * argc);
+	exp->count = argc;
 
 	for( ;*argv; argv++, v++ ) {
 		char *end;
@@ -192,9 +192,6 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 				*argv, end - *argv, *end);
 		}
 	}
-	assert(*argv == NULL);
-	exp->operands = v - argc;
-	exp->count = argc;
 	exp->operators = strndup("++++++++++++++++++++", exp->count - 1);
 	if(exp->operators == NULL) {
 		err(EXIT_FAILURE, "strndup");
