@@ -120,19 +120,11 @@ compute_next_mask(uint32_t x)
 }
 
 uint32_t
-next_mask(int N, uint32_t x)
+next_mask(uint32_t x)
 {
-	assert(N < 15);
-	uint32_t max = 1 << (2*N + 1);
-
 	do x = compute_next_mask(x); while( mask_is_invalid(x));
 
-	/* As a side effect of mask_is_invalid, it will always be true
-	 * that the highest bit will be set.  (Highest in the 2N+1 wide mask).
-	 */
-	assert( ( ( x >> (2 * N) ) & 0x1 ) || (x >= max) );
-
-	return x < max ? x : 0;
+	return x;
 }
 
 /* Given a string of operators (eg "+*-/++"), generate the next permutation */
@@ -155,11 +147,13 @@ next_perm( char *s )
 int
 next_op(struct expression *exp)
 {
-	if(strspn( exp->operators, "/" ) == (unsigned)exp->count - 1) {
-		exp->mask = next_mask(exp->count - 1, exp->mask);
+	int N = exp->count - 1;
+	if(strspn( exp->operators, "/" ) == (unsigned)N) {
+		exp->mask = next_mask(exp->mask);
+		assert( exp->mask >= 1 << 2*N );
 	}
 	next_perm(exp->operators);
-	return !!exp->mask;
+	return exp->mask < 1 << (2*N + 1);
 }
 
 
@@ -195,7 +189,7 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 	strncpy(exp->operators, "++++++++++++++++++++", exp->count - 1);
 	exp->operators[exp->count] = '\0';
 	exp->mask = (( 0x1 << ( exp->count - 1 )) - 1);
-	exp->mask = next_mask(exp->count - 1, exp->mask);
+	exp->mask = next_mask(exp->mask);
 	exp->operands = exp->operands;
 	exp->stack = xmalloc( exp->count * sizeof *exp->stack);
 }
