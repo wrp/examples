@@ -108,22 +108,17 @@ mask_is_invalid(uint32_t m)
 
 
 /*
- * generate the next mask with N bits set.  Taken from:
+ * generate the next mask with N bits set.  See:
  * https://stackoverflow.com/questions/26594951/finding-next-bigger-number-with-same-number-of-set-bits
  */
 uint32_t
-compute_next_mask(uint32_t x)
-{
-	uint32_t c = x & -x;
-	uint32_t r = x + c;
-	return (((r ^ x) >> 2) / c) | r;
-}
-
-uint32_t
 next_mask(uint32_t x)
 {
-	do x = compute_next_mask(x); while( mask_is_invalid(x));
-
+	do {
+		uint32_t c = x & -x;
+		uint32_t r = x + c;
+		x = (((r ^ x) >> 2) / c) | r;
+	} while( mask_is_invalid(x));
 	return x;
 }
 
