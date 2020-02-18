@@ -159,12 +159,8 @@ void
 parse_cmd_line(int argc, char **argv, struct expression *exp)
 {
 	double *v;
-	char *defaults[] = { argv[0], "2.0", "1.0", NULL };
-	if(argc < 3) {
-		argc = 3;
-		if(argv[1] != NULL)
-			defaults[1] = argv[1];
-		argv = defaults;
+	if(argc < 3 || argc > 14) {
+		errx(EXIT_FAILURE, "Invalid call: must specify between 2 and 14 numeric values");
 	}
 
 	argv += 1;
