@@ -1,0 +1,36 @@
+#!/bin/sh
+printf 'one\ntwo\nthree' |
+jq -Rs --arg a '/' --arg c 'node1' '
+	[ .[:-1] |
+
+	split("\n")[]
+	|
+	{ "{host}" : $a ,
+	"{queue}": . ,
+	"{node}": $c } ]
+	|
+	{ "data" : . }'
+
+exit
+
+OUTPUT:
+
+{
+  "data": [
+    {
+      "{host}": "/",
+      "{queue}": "one",
+      "{node}": "node1"
+    },
+    {
+      "{host}": "/",
+      "{queue}": "two",
+      "{node}": "node1"
+    },
+    {
+      "{host}": "/",
+      "{queue}": "thre",
+      "{node}": "node1"
+    }
+  ]
+}
