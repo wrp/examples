@@ -55,7 +55,9 @@ main(int argc, char **argv)
  * TODO: rework the mask.  Instead of having a string of operands and a mask that
  * inidcates position, build the string like "00-0*00*+", where the 0 indicates
  * the position of an operand.  This will cleanup the eval a bit, since there would
- * just be a switch and no initial if.
+ * just be a switch and no initial if. And, deal with grouping better.  It feels like
+ * we can easily get '1 + 2 + 3' instead of '( 1 + 2 ) + 3'.  Current logic is a bit
+ * kludgy.
  */
 void
 eval(struct expression *exp)
