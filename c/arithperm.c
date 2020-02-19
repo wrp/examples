@@ -27,6 +27,7 @@ struct expression {
 	int count;           /* Number of operands */
 	struct element {
 		double val;
+		int grouped;
 		char descr[512];  /* Human readable description (for infix) */
 	} *stack;                 /* Stack used for computation */
 };
@@ -67,10 +68,21 @@ eval(struct expression *exp)
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
-			char *fmt = (m == 1) ? "%s %c %s" : "(%s %c %s)";
+			char *fmt;
+
 			assert(sp - exp->stack > 1); /* True because of mask_is_invalid() */
 			assert(sizeof buf >= sizeof sp->descr); /* Ensure terminating null after strncpy */
+
+			if(*ops == '/' && ! sp[-1].grouped ) {
+				fmt = "%s %c (%s)";
+			} else if(m == 1 || strchr("*/", *ops)) {
+				fmt = "%s %c %s";
+			} else {
+				fmt = "(%s %c %s)";
+			}
+
 			sp -= 2;
+			sp->grouped = *fmt == '(';
 			snprintf(buf, sizeof buf, fmt, sp->descr, *ops, sp[1].descr);
 			strncpy(sp->descr, buf, sizeof sp->descr);
 			switch(*ops++) {
@@ -83,6 +95,7 @@ eval(struct expression *exp)
 		} else {
 			assert(c < exp->count);
 			sp->val = exp->operands[c++];
+			sp->grouped = 1;
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
 		}
 		sp += 1;
