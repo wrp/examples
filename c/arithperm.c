@@ -50,6 +50,11 @@ main(int argc, char **argv)
 
 /*
  * Evaluate the expression and pretty print it to stdout
+ *
+ * TODO: rework the mask.  Instead of having a string of operands and a mask that
+ * inidcates position, build the string like "00-0*00*+", where the 0 indicates
+ * the position of an operand.  This will cleanup the eval a bit, since there would
+ * just be a switch and no initial if.
  */
 void
 eval(struct expression *exp)
