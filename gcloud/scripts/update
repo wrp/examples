@@ -31,6 +31,7 @@ set_group_and_type() {
 	metadata) group=metadata;;
 	big-query) group=bq;;
 	dataflow) group=dataflow; type=jobs;;
+	cluster) group=container;;
 	address)
 		group=compute
 		type=addresses
