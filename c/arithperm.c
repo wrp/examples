@@ -27,7 +27,7 @@ struct expression {
 	int count;           /* Number of operands */
 	struct element {
 		double val;
-		int grouped;
+		int last;
 		char descr[512];  /* Human readable description (for infix) */
 	} *stack;                 /* Stack used for computation */
 };
@@ -46,6 +46,41 @@ main(int argc, char **argv)
 	do eval(&exp); while(next_op(&exp));
 	free(exp.operands);
 	free(exp.stack);
+}
+
+
+void
+compute_fmt( struct element *sp, char *fmt, char op, int flag)
+{
+	char *paren = "(%s)";
+	char *noparen = "%s";
+	char *template[2] = {noparen, noparen};;
+	switch(op) {
+	case '/':
+		if( sp->last != '.') {
+			template[0] = paren;
+		}
+		if( sp[1].last != '.') {
+			template[1] = paren;
+		}
+		break;
+	case '*':
+		if( sp->last != '.' && (strchr("+-", sp->last) || sp->last != op )) {
+			template[0] = paren;
+		}
+		if( sp[1].last != '.' && (strchr("+-", sp[1].last) || sp[1].last != op )) {
+			template[1] = paren;
+		}
+		break;
+	case '-':
+		if( sp[1].last != '.' && strchr("+-", sp[1].last) ) {
+			template[1] = paren;
+		}
+		break;
+	}
+	sprintf( fmt, "%s %%c %s", template[0], template[1]);
+
+	return;
 }
 
 
@@ -70,21 +105,14 @@ eval(struct expression *exp)
 	while( m ) {
 		if( m & 0x1 ) { /* Apply an operator */
 			char buf[1024];
-			char *fmt;
+			char fmt[32];
 
 			assert(sp - exp->stack > 1); /* True because of mask_is_invalid() */
 			assert(sizeof buf >= sizeof sp->descr); /* Ensure terminating null after strncpy */
 
-			if(*ops == '/' && ! sp[-1].grouped ) {
-				fmt = "%s %c (%s)";
-			} else if(m == 1 || strchr("*/", *ops)) {
-				fmt = "%s %c %s";
-			} else {
-				fmt = "(%s %c %s)";
-			}
-
+			compute_fmt(sp - 2, fmt, *ops, m == 1);
 			sp -= 2;
-			sp->grouped = *fmt == '(';
+			sp->last = *ops;
 			snprintf(buf, sizeof buf, fmt, sp->descr, *ops, sp[1].descr);
 			strncpy(sp->descr, buf, sizeof sp->descr);
 			switch(*ops++) {
@@ -97,7 +125,7 @@ eval(struct expression *exp)
 		} else {
 			assert(c < exp->count);
 			sp->val = exp->operands[c++];
-			sp->grouped = 1;
+			sp->last = '.';
 			snprintf(sp->descr, sizeof sp->descr, "%g", sp->val);
 		}
 		sp += 1;
