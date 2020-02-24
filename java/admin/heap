@@ -1,4 +1,4 @@
 
 To get a heap dump:
 
-jmap -dump:format=b,file=${output_file} ${pid}
+jmap -dump:format=b,file=${output_file?} ${pid?}
