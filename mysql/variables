@@ -1,4 +1,4 @@
 
 mysql> show variables like '%password%';
-mysql> show global variables like 'GTID_PURGED';
+mysql> show global variables like 'GTID_EXECUTED';
 mysql> set global validate_password_special_char_count = 0;
