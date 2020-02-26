@@ -49,6 +49,7 @@ set_group_and_type() {
 			|| die "Can't get region for ${orig_type} $host"
 		;;
 	firewall-rule) group=compute ;;
+	route) group=compute;;
 	sql-instance)
 		type=instances
 		group=sql
