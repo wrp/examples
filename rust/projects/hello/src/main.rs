@@ -6,7 +6,7 @@ fn main() {
 
 
 
-fn print_msg(s: &String) {
+fn print_msg(s: &str) {
 	let hello = &s[0..5];
 	let world = &s[5..];
 	println!("{}, {}", hello, world);
