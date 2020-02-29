@@ -8,7 +8,7 @@ fn main() -> io::Result<()> {
 		.collect::<Result<Vec<_>, io::Error>>()?;
 
 	for e in entries.iter() {
-		println!("{}", e.as_os_str().to_str().unwrap().to_string());
+		println!("{}", e.to_string_lossy());
 	}
 
 	Ok(())
