@@ -1,3 +1,10 @@
+
+#![allow(non_camel_case_types)]
+struct greeting {
+	salutation: String,
+	name: String,
+}
+
 fn main() {
 	let mut s = String::from("Hello");
 	s.push_str("world!");
@@ -7,7 +14,9 @@ fn main() {
 
 
 fn print_msg(s: &str) {
-	let hello = &s[0..5];
-	let world = &s[5..];
-	println!("{}, {}", hello, world);
+	let g = greeting {
+		salutation: s[0..5].to_string(),
+		name: s[5..].to_string(),
+	};
+	println!("{}, {}", g.salutation, g.name);
 }
