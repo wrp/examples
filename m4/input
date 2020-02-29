@@ -10,3 +10,12 @@ Use ifdef to produce a default value
 1: ifdef(`qux',`qux',`foo')
 define(`qux', `quxvalue')dnl
 2: ifdef(`qux',`qux',`foo')
+
+define(nl,`'
+)
+
+Use ifelse and error out: `larry' = larry
+ifelse(
+	larry,`bar',larry is equal to bar,
+	larry,`baz',`errprint(error oops`'nl)m4exit(1)',
+	ifelse used default)
