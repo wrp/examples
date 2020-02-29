@@ -1,12 +1,13 @@
 fn main() {
-	let mut s = String::from("hello");
-	s.push_str(", world!");
+	let mut s = String::from("Hello");
+	s.push_str("world!");
 	print_msg(&s);  // Pass reference to prevent move
-	println!("{}", s);  // Still valid
 }
 
 
 
 fn print_msg(s: &String) {
-	println!("{}", s);
+	let hello = &s[0..5];
+	let world = &s[5..];
+	println!("{}, {}", hello, world);
 }
