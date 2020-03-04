@@ -37,8 +37,8 @@ main(int argc, char **argv)
 	int a;
 	int result = 0;
 	char *b;
-	int count;   /* Number of children to spawn */
-	int fd[2];   /* Pipe to communicate back to the parent */
+	size_t count; /* Number of children to spawn */
+	int fd[2];    /* Pipe to communicate back to the parent */
 	if(argc != 3) {
 		printf("usage: %s arg1 arg2\n", basename(argv[0]));
 		return EXIT_SUCCESS;
@@ -58,7 +58,7 @@ main(int argc, char **argv)
 		perror("pipe");
 		return EXIT_FAILURE;
 	}
-	for(int i = 0, mult = 1; i < count; i++) {
+	for(unsigned i = 0, mult = 1; i < count; i++) {
 		int c;
 		switch(fork()) {
 		case -1:
