@@ -50,6 +50,10 @@ main(int argc, char **argv)
 	}
 	b = argv[2];
 	count = strlen(b);
+	if(strspn(b,"0123456789") != count) {
+		fprintf(stderr, "Invalid argument: %s\n", b);
+		return EXIT_FAILURE;
+	}
 	if(pipe(fd) == -1) {
 		perror("pipe");
 		return EXIT_FAILURE;
