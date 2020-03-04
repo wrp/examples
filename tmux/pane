@@ -88,3 +88,13 @@ $ cmd | tmux splitw -dI    # split-window
 
 Now, run another command with output to that same pane:
 $ cmd | tmux display-message -I -t:+
+
+
+
+**************************
+Run ssh in a split window.  Use select-pane to update the pane title
+
+tmux split-window -p 80 -b sh -c "/usr/bin/ssh -A '$host'
+	echo 'Hit return to close pane' >&2
+	read";
+tmux select-pane -T "$1"
