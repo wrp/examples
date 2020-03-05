@@ -3,5 +3,10 @@
 # Use declare instead of eval for dynamic naming.
 
 foo=bar
-declare ${foo}=bar_value
+declare ${foo}='Value assigned by declare'
+echo $bar
+
+# Also:
+
+printf -v "$foo" 'value assigned by printf'
 echo $bar
