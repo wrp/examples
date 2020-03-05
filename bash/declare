@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Use declare instead of eval for dynamic naming.
+
+foo=bar
+declare ${foo}=bar_value
+echo $bar
