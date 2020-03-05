@@ -36,6 +36,7 @@ main(int argc, char **argv)
 {
 	int a;
 	int result = 0;
+	int sign = 1;
 	char *b;
 	size_t count; /* Number of children to spawn */
 	int fd[2];    /* Pipe to communicate back to the parent */
@@ -49,6 +50,10 @@ main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	b = argv[2];
+	if( b[0] == '-' ) {
+		sign = -1;
+		b += 1;
+	}
 	count = strlen(b);
 	if(strspn(b,"0123456789") != count) {
 		fprintf(stderr, "Invalid argument: %s\n", b);
@@ -79,5 +84,5 @@ main(int argc, char **argv)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	printf("%d * %s = %d\n", a, b, result);
+	printf("%d * %s = %d\n", a, argv[2], result * sign);
 }
