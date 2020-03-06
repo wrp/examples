@@ -1,6 +1,7 @@
 /* Read a file into memory */
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 FILE * xfopen(const char *, const char *);
@@ -27,7 +28,7 @@ main(int argc, char **argv)
 FILE *
 xfopen(const char *path, const char *mode)
 {
-	FILE *fp = fopen(path, mode);
+	FILE *fp = strcmp(path, "-") ? fopen(path, mode) : stdin;
 	if( fp == NULL ) {
 		perror(path);
 		exit(EXIT_FAILURE);
