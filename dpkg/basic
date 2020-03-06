@@ -1,2 +1,5 @@
 # Get list of files from a package
 dpkg-query -L ${package?}
+
+# Find the package that owns a file
+dpkg -S ${full_path}
