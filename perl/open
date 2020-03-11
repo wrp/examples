@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-open my $fh, '<', $ARGV[0], or die "$ARGV[0]:$!";
+open my $fh, '<', $ARGV[0] or die "$ARGV[0]:$!";
 
 while(<$fh>) {
 	print $_;
