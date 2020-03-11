@@ -1,0 +1,8 @@
+#!/bin/sh
+
+exe=./fread
+
+die() { test -n "$*" && echo "$*"; exit 1; } >&2
+
+< $0 $exe | cmp - $0 || die
+< fread.c $exe | cmp - fread.c || die

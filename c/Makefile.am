@@ -12,7 +12,9 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	arithperm \
 	poly \
 	clean-man
+
 TESTS = calc-test \
+	fread-test \
 	grow-test \
 	arithperm-test \
 	dynamic-read-test \
@@ -23,6 +25,7 @@ TESTS = calc-test \
 	dynamic-test \
 	pyramid-test \
 	coverage-test
+
 noinst_LTLIBRARIES = libringbuf.la
 calc_LDADD = libringbuf.la
 libringbuf_la_SOURCES = ring-buffer.c
