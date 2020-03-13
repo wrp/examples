@@ -82,7 +82,6 @@ main( int argc, char **argv )
 	S->char_stack = stack_create(sizeof(struct char_buf));
 	B.r = rb_create(32);
 	stack_push(S->char_stack, &B);
-	stack_decr(S->char_stack);
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -104,7 +103,7 @@ main( int argc, char **argv )
 void
 push_buf( struct state *S, unsigned char c )
 {
-	struct char_buf* cbp = stack_top(S->char_stack);;
+	struct char_buf* cbp = stack_top(S->char_stack);
 	rb_push(cbp->r, c);
 }
 
@@ -202,11 +201,11 @@ select_char_buf( struct state *S )
 	int offset;
 	struct char_buf *cbp = stack_top(S->char_stack);
 	if( rb_isempty(cbp->r)) {
-		offset = stack_size(S->char_stack) - 1;
+		offset = stack_size(S->char_stack) - 2;
 	} else {
 		offset = rb_tail(cbp->r) - '0';
 	}
-	if( offset < 0 || offset > stack_size(S->char_stack) - 1 ) {
+	if( offset < 0 || offset > stack_size(S->char_stack) - 2 ) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
@@ -218,6 +217,7 @@ void
 apply_string_op( struct state *S, unsigned char c )
 {
 	struct char_buf *cbp = stack_top(S->char_stack);
+	struct char_buf B;
 	int i = 0;
 	switch(c) {
 	case '[':
@@ -227,8 +227,8 @@ apply_string_op( struct state *S, unsigned char c )
 	case ']':
 		S->enquote = 0;
 		rb_push(cbp->r, '\0');
-		cbp = stack_incr(S->char_stack);
-		cbp->r = rb_create(32);
+		B.r = rb_create(32);
+		stack_push(S->char_stack, &B);
 		break;
 	case 'F': {
 		char buf[32];
@@ -238,7 +238,7 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( struct char_buf *s = stack_base(S->char_stack); i < stack_size(S->char_stack); s++, i++ ) {
+		for( struct char_buf *s = stack_base(S->char_stack); i < stack_size(S->char_stack) - 1; s++, i++ ) {
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
 			printf("(%d): %s\n", i, buf);
