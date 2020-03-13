@@ -173,17 +173,20 @@ push_number( struct state *S )
 {
 
 	if(! rb_isempty(S->cbp->r)) {
-		char *end;
 		typeof(*S->sp) val;
+		char s[128];
+		char *cp = s;
 
 		rb_push(S->cbp->r, '\0');
-		val = strtold(rb_start(S->cbp->r), &end);
-		if( end != rb_end(S->cbp->r) - 1) {
-			fprintf(stderr, "Garbled: %s\n", rb_start(S->cbp->r));
+		while( (*cp++ = rb_pop(S->cbp->r)) != EOF)
+			;
+
+		val = strtold(s, &cp);
+		if( *cp ) {
+			fprintf(stderr, "Garbled: %s\n", s);
 		}
 		*S->sp = val;
 		S->sp = incr(&S->stack);
-		rb_clear(S->cbp->r);
 	}
 }
 
