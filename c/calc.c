@@ -48,6 +48,11 @@ void print_help( void ) {
 struct char_buf {
 	struct ring_buf *r;
 };
+void
+init_char_buf( struct char_buf *p )
+{
+       p->r = rb_create(32);
+}
 
 
 struct state {
@@ -67,8 +72,6 @@ void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
-void init_char_buf( struct char_buf *p );
-
 
 
 int
@@ -76,12 +79,15 @@ main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
+	struct char_buf B;
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->stack = stack_create(sizeof(long double));
 	S->char_stack = stack_create(sizeof(struct char_buf));
-	init_char_buf(stack_top(S->char_stack));
+	B.r = rb_create(32);
+	stack_push(S->char_stack, &B);
+	stack_decr(S->char_stack);
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -228,6 +234,11 @@ apply_string_op( struct state *S, unsigned char c )
 		rb_push(cbp->r, '\0');
 		cbp = stack_incr(S->char_stack);
 		init_char_buf( cbp );
+
+/*
+		B.r = rb_create(32);
+		stack_push(S->char_stack, &B);
+		*/
 		break;
 	case 'F': {
 		char buf[32];
@@ -336,9 +347,3 @@ die(const char *msg)  /* uncovered */
 	perror(msg);  /* uncovered */
 	exit(1);      /* uncovered */
 }                     /* uncovered */
-
-void
-init_char_buf( struct char_buf *p )
-{
-	p->r = rb_create(32);
-}

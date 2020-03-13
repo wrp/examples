@@ -52,6 +52,17 @@ stack_incr(struct stack *s)
 	return s->top;
 }
 
+void *
+stack_decr(struct stack *s)
+{
+	char *t = s->top;
+	if( s->top > s->data) {
+		t -= s->element_size;
+		s->top = t;
+	}
+	return s->top;
+}
+
 size_t
 stack_size(struct stack *s)
 {
