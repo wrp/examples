@@ -49,18 +49,10 @@ struct char_buf {
 	struct ring_buf *r;
 };
 
-struct stack {
-	void *data;
-	void *top;
-	void *end;
-	size_t element_size;
-};
 
 struct state {
-	struct stack stack[1];
-	long double *sp;
-	struct stack char_stack[1];
-	struct char_buf *cbp;
+	struct stack *stack;
+	struct stack *char_stack;
 	char fmt[32];
 	int enquote;
 	struct ring_buf *r;
@@ -71,21 +63,12 @@ void push_it( struct state *S, unsigned char c );
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
-void * incr(struct stack *);
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
 void init_char_buf( struct char_buf *p );
 
-void *
-init(struct stack *st, size_t el)
-{
-	st->element_size = el;
-	st->data = st->top = xrealloc(NULL, el * 4);
-	st->end = (char *)st->data + el * 4;
-	return st->data;
-}
 
 
 int
@@ -96,9 +79,9 @@ main( int argc, char **argv )
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
-	S->sp = init(S->stack, sizeof *S->sp);
-	S->cbp = init(S->char_stack, sizeof *S->cbp);
-	init_char_buf(S->cbp);
+	S->stack = stack_create(sizeof(long double));
+	S->char_stack = stack_create(sizeof(struct char_buf));
+	init_char_buf(stack_top(S->char_stack));
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -120,7 +103,8 @@ main( int argc, char **argv )
 void
 push_buf( struct state *S, unsigned char c )
 {
-	rb_push(S->cbp->r, c);
+	struct char_buf* cbp = stack_top(S->char_stack);;
+	rb_push(cbp->r, c);
 }
 
 
@@ -172,22 +156,22 @@ process_entry( struct state *S, unsigned char c )
 void
 push_number( struct state *S )
 {
+	struct char_buf *cbp = stack_top(S->char_stack);
 
-	if(! rb_isempty(S->cbp->r)) {
-		typeof(*S->sp) val;
+	if(! rb_isempty(cbp->r)) {
+		long double val;
 		char s[128];
 		char *cp = s;
 
-		rb_push(S->cbp->r, '\0');
-		while( (*cp++ = rb_pop(S->cbp->r)) != EOF)
+		rb_push(cbp->r, '\0');
+		while( (*cp++ = rb_pop(cbp->r)) != EOF)
 			;
 
 		val = strtold(s, &cp);
 		if( *cp ) {
 			fprintf(stderr, "Garbled: %s\n", s);
 		}
-		*S->sp = val;
-		S->sp = incr(S->stack);
+		stack_push(S->stack, &val);
 	}
 }
 
@@ -215,22 +199,24 @@ struct ring_buf *
 select_char_buf( struct state *S )
 {
 	int offset;
-	if( rb_isempty(S->cbp->r)) {
-		offset = S->cbp - (typeof(S->cbp))S->char_stack->data - 1;
+	struct char_buf *cbp = stack_top(S->char_stack);
+	if( rb_isempty(cbp->r)) {
+		offset = cbp - (typeof(cbp))stack_base(S->char_stack) - 1;
 	} else {
-		offset = rb_tail(S->cbp->r) - '0';
+		offset = rb_tail(cbp->r) - '0';
 	}
-	if( offset < 0 || offset > ( S->cbp - (typeof(S->cbp))S->char_stack->data - 1 )) {
+	if( offset < 0 || offset > ( cbp - (typeof(cbp))stack_base(S->char_stack) - 1 )) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
 
-	return ((typeof(S->cbp))S->char_stack->data)[offset].r;
+	return ((typeof(cbp))stack_base(S->char_stack))[offset].r;
 }
 
 void
 apply_string_op( struct state *S, unsigned char c )
 {
+	struct char_buf *cbp = stack_top(S->char_stack);
 	switch(c) {
 	case '[':
 		push_number( S );
@@ -238,9 +224,9 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
-		rb_push(S->cbp->r, '\0');
-		S->cbp = incr(S->char_stack);
-		init_char_buf( S->cbp );
+		rb_push(cbp->r, '\0');
+		cbp = stack_incr(S->char_stack);
+		init_char_buf( cbp );
 		break;
 	case 'F': {
 		char buf[32];
@@ -250,10 +236,10 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( typeof(S->cbp) s = S->char_stack->data; s < S->cbp; s++ ) {
+		for( typeof(cbp) s = stack_base(S->char_stack); s < cbp; s++ ) {
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
-			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack->data), buf);
+			printf("(%d): %s\n", (int)(s - (typeof(cbp))stack_base(S->char_stack)), buf);
 			free(buf);
 		}
 	} break;
@@ -273,78 +259,63 @@ apply_string_op( struct state *S, unsigned char c )
 void
 apply_unary( struct state *S, unsigned char c )
 {
-	assert( (void *)S->sp >= S->stack->data );
+	long double *sp = stack_top(S->stack);
+	long double val;
 	assert( strchr( unary_ops, c ));
-	if( S->sp - 1 < (typeof(S->sp))S->stack->data ) {
+	if( stack_size(S->stack) < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
 	}
+	stack_pop(S->stack, &val);
 	switch(c) {
 	case 'y':
-		S->sp[0] = S->sp[-1];
-		S->sp += 1;
+		stack_push(S->stack, &val);
+		stack_push(S->stack, &val);
 		break;
 	case 'k':
-		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
+		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)val);
 		break;
 	case 'l':
-		for(typeof(S->sp) s = S->stack->data; s < S->sp; s++) {
-			printf("%3u: ", (unsigned)(s - (typeof(S->sp))S->stack->data));
+		stack_push(S->stack, &val);
+		for(typeof(sp) s = stack_base(S->stack); s < (long double *)stack_top(S->stack); s++) {
+			printf("%3u: ", (unsigned)(s - (long double *)stack_base(S->stack)));
 			printf(S->fmt, *s);
 		}
 		break;
 	case 'p':
-		printf(S->fmt, S->sp[-1]);
-		break;
+		stack_push(S->stack, &val);
 	case 'n':
-		printf(S->fmt, *--S->sp);
+		printf(S->fmt, val);
 		break;
 	}
-	S->stack->top = S->sp;
 }
 
 
 void
 apply_binary(struct state *S, unsigned char c)
 {
-	assert( (void *)S->sp >= S->stack->data );
+	long double val[2];
+	long double res;
 	assert( strchr( binary_ops, c ));
-	if( S->sp - 2 < (typeof(S->sp))S->stack->data ) {
+	if( stack_size(S->stack) < 2 ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
 	}
-	S->sp -= 1;
+	stack_pop(S->stack, val);
+	stack_pop(S->stack, val + 1);
 	switch(c) {
 	case 'r': {
-		typeof (*S->sp) tmp = S->sp[0];
-		S->sp[0] = S->sp[-1];
-		S->sp[-1] = tmp;
-		S->sp += 1;
+		stack_push(S->stack, val);
+		res = val[1];
 	} break;
-	case '*': S->sp[-1] *= S->sp[0]; break;
-	case '+': S->sp[-1] += S->sp[0]; break;
-	case '/': S->sp[-1] /= S->sp[0]; break;
-	case '^': S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
+	case '*': res = val[1] * val[0]; break;
+	case '+': res = val[1] + val[0]; break;
+	case '/': res = val[1] / val[0]; break;
+	case '^': res = pow(val[1], val[0]); break;
 	}
-	S->stack->top = S->sp;
+	stack_push(S->stack, &res);
 }
 
-
-
-void *
-incr(struct stack *s)
-{
-
-	ptrdiff_t off = s->end - s->data;
-
-	s->top = (char *)s->top + s->element_size;
-	if( s->top == (char *)s->data + off) {
-		s->data = xrealloc(s->data, 2 * off);
-		s->top = s->end = (char *)s->data + off;
-	}
-
-	return s->top;
-}
 
 
 void *
