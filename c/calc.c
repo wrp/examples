@@ -59,10 +59,8 @@ struct stack {
 struct state {
 	struct stack stack;
 	long double *sp;
-	size_t stack_size;
 	struct stack char_stack;
 	struct char_buf *cbp;
-	size_t cb_size;
 	char fmt[32];
 	int enquote;
 	struct ring_buf *r;
@@ -81,11 +79,11 @@ void push_number( struct state *S );
 void init_char_buf( struct char_buf *p );
 
 void *
-init(struct stack *st, size_t el, size_t n)
+init(struct stack *st, size_t el)
 {
-	st->data = st->top = xrealloc(NULL, el * n);
 	st->element_size = el;
-	st->stack_size = n;
+	st->stack_size = 4;
+	st->data = st->top = xrealloc(NULL, el * st->stack_size);
 	return st->data;
 }
 
@@ -98,9 +96,8 @@ main( int argc, char **argv )
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
-	S->cb_size = S->stack_size = 4;
-	S->sp = init(&S->stack, sizeof *S->sp, S->stack_size);
-	S->cbp = init(&S->char_stack, sizeof *S->cbp, S->cb_size );
+	S->sp = init(&S->stack, sizeof *S->sp);
+	S->cbp = init(&S->char_stack, sizeof *S->cbp);
 	init_char_buf( S->cbp );
 	strcpy( S->fmt, "%.3Lg\n" );
 
