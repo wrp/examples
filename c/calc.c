@@ -202,19 +202,26 @@ validate_format( struct state const *S )
 struct ring_buf *
 select_char_buf( struct state *S )
 {
+	struct ring_buf *ret = NULL;
 	int offset;
-	struct char_buf *cbp = stack_top(S->char_stack);
+	struct char_buf cbp[1];
+
+	stack_pop(S->char_stack, cbp);
+
 	if( rb_isempty(cbp->r)) {
-		offset = stack_size(S->char_stack) - 2;
+		offset = stack_size(S->char_stack) - 1;
 	} else {
 		offset = rb_tail(cbp->r) - '0';
 	}
-	if( offset < 0 || offset > stack_size(S->char_stack) - 2 ) {
+	if( offset < 0 || offset > stack_size(S->char_stack) - 1 ) {
 		fprintf(stderr, "Invalid register\n");
-		return NULL;
+		ret = NULL;
+	} else {
+		ret = ((struct char_buf *)stack_base(S->char_stack))[offset].r;
 	}
 
-	return ((typeof(cbp))stack_base(S->char_stack))[offset].r;
+	stack_push(S->char_stack, cbp);
+	return ret;
 }
 
 void
