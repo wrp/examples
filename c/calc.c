@@ -73,8 +73,7 @@ void push_it( struct state *S, unsigned char c );
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
-void * grow(struct stack *, void *);
-void * push(struct stack *, void *);
+void * incr(struct stack *);
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
@@ -189,8 +188,8 @@ push_number( struct state *S )
 		if( end != S->cbp->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
 		}
-		S->sp = push(&S->stack, &val);
-		S->sp = grow(&S->stack, S->sp);
+		*S->sp = val;
+		S->sp = incr(&S->stack);
 		S->cbp->bp = S->cbp->buf;
 	}
 }
@@ -242,8 +241,7 @@ apply_string_op( struct state *S, unsigned char c )
 	case ']':
 		S->enquote = 0;
 		*S->cbp->bp = '\0';
-		S->cbp += 1;
-		S->cbp = grow(&S->char_stack, S->cbp);
+		S->cbp = incr(&S->char_stack);
 		init_char_buf( S->cbp );
 		break;
 	case 'F':
@@ -324,29 +322,21 @@ apply_binary(struct state *S, unsigned char c)
 }
 
 
+
 void *
-push(struct stack *s, void * val)
+incr(struct stack *s)
 {
+
 	ptrdiff_t off = s->stack_size * s->element_size;
-	memcpy(s->top, val, s->element_size);
+
 	s->top = (char *)s->top + s->element_size;
-	return s->top;
-}
-
-
-void *
-grow(struct stack *s, void * e)
-{
-
-	ptrdiff_t off = s->stack_size * s->element_size;
-
-	if( e != (char *)s->data + off) {
-		return e;
+	if( s->top == (char *)s->data + off) {
+		s->stack_size *= 2;
+		s->data = xrealloc(s->data, s->stack_size * s->element_size);
+		s->top = (char *)s->data + off;
 	}
-	s->stack_size *= 2;
-	s->data = xrealloc(s->data, s->stack_size * s->element_size);
 
-	return (char *)s->data + off;
+	return s->top;
 }
 
 
