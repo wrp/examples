@@ -248,11 +248,14 @@ apply_string_op( struct state *S, unsigned char c )
 		snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
 		validate_format( S );
 	} break;
-	case 'L':
+	case 'L': {
 		for( typeof(S->cbp) s = S->char_stack.data; s < S->cbp; s++ ) {
-			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), rb_start(s->r) );
+			char *buf = malloc(rb_length(s->r) + 4);
+			rb_string(s->r, buf, rb_length(s->r));
+			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), buf);
+			free(buf);
 		}
-		break;
+	} break;
 	case 'x': {
 		struct ring_buf *rb = select_char_buf(S);
 		char *buf = malloc(rb_length(rb) + 4);
