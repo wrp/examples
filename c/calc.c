@@ -248,7 +248,7 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( typeof(cbp) s = stack_base(S->char_stack); i < stack_size(S->char_stack); s++, i++ ) {
+		for( struct char_buf *s = stack_base(S->char_stack); i < stack_size(S->char_stack); s++, i++ ) {
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
 			printf("(%d): %s\n", i, buf);
