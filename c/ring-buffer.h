@@ -7,7 +7,3 @@ int rb_clear( struct ring_buf *R );
 int rb_isempty( struct ring_buf *R );
 int rb_string(struct ring_buf *, char *, size_t);
 int rb_length(struct ring_buf *);
-
-/* Mostly temporary, for debugging */
-char * rb_start( struct ring_buf *R );
-char * rb_end( struct ring_buf *R );

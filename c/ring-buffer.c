@@ -90,20 +90,6 @@ rb_isempty(struct ring_buf *r)
 }
 
 
-char *
-rb_start(struct ring_buf *r)
-{
-	return r->start;
-}
-
-
-char *
-rb_end(struct ring_buf *r)
-{
-	return r->end;
-}
-
-
 int
 rb_pop( struct ring_buf *R )
 {
