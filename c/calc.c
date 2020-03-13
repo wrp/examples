@@ -48,11 +48,6 @@ void print_help( void ) {
 struct char_buf {
 	struct ring_buf *r;
 };
-void
-init_char_buf( struct char_buf *p )
-{
-       p->r = rb_create(32);
-}
 
 
 struct state {
@@ -233,12 +228,7 @@ apply_string_op( struct state *S, unsigned char c )
 		S->enquote = 0;
 		rb_push(cbp->r, '\0');
 		cbp = stack_incr(S->char_stack);
-		init_char_buf( cbp );
-
-/*
-		B.r = rb_create(32);
-		stack_push(S->char_stack, &B);
-		*/
+		cbp->r = rb_create(32);
 		break;
 	case 'F': {
 		char buf[32];
