@@ -52,8 +52,8 @@ struct char_buf {
 struct stack {
 	void *data;
 	void *top;
+	void *end;
 	size_t element_size;
-	size_t stack_size;
 };
 
 struct state {
@@ -82,8 +82,8 @@ void *
 init(struct stack *st, size_t el)
 {
 	st->element_size = el;
-	st->stack_size = 4;
-	st->data = st->top = xrealloc(NULL, el * st->stack_size);
+	st->data = st->top = xrealloc(NULL, el * 4);
+	st->end = (char *)st->data + el * 4;
 	return st->data;
 }
 
@@ -324,13 +324,12 @@ void *
 incr(struct stack *s)
 {
 
-	ptrdiff_t off = s->stack_size * s->element_size;
+	ptrdiff_t off = s->end - s->data;
 
 	s->top = (char *)s->top + s->element_size;
 	if( s->top == (char *)s->data + off) {
-		s->stack_size *= 2;
-		s->data = xrealloc(s->data, s->stack_size * s->element_size);
-		s->top = (char *)s->data + off;
+		s->data = xrealloc(s->data, 2 * off);
+		s->top = s->end = (char *)s->data + off;
 	}
 
 	return s->top;
