@@ -20,6 +20,7 @@
 #include <math.h>
 #include <unistd.h>
 #include "ring-buffer.h"
+#include "stack.h"
 
 #define numeric_tok "-0123456789XPEabcdef."
 #define string_ops "[]FxL"
@@ -56,9 +57,9 @@ struct stack {
 };
 
 struct state {
-	struct stack stack;
+	struct stack stack[1];
 	long double *sp;
-	struct stack char_stack;
+	struct stack char_stack[1];
 	struct char_buf *cbp;
 	char fmt[32];
 	int enquote;
@@ -95,8 +96,8 @@ main( int argc, char **argv )
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
-	S->sp = init(&S->stack, sizeof *S->sp);
-	S->cbp = init(&S->char_stack, sizeof *S->cbp);
+	S->sp = init(S->stack, sizeof *S->sp);
+	S->cbp = init(S->char_stack, sizeof *S->cbp);
 	init_char_buf(S->cbp);
 	strcpy( S->fmt, "%.3Lg\n" );
 
@@ -186,7 +187,7 @@ push_number( struct state *S )
 			fprintf(stderr, "Garbled: %s\n", s);
 		}
 		*S->sp = val;
-		S->sp = incr(&S->stack);
+		S->sp = incr(S->stack);
 	}
 }
 
@@ -215,16 +216,16 @@ select_char_buf( struct state *S )
 {
 	int offset;
 	if( rb_isempty(S->cbp->r)) {
-		offset = S->cbp - (typeof(S->cbp))S->char_stack.data - 1;
+		offset = S->cbp - (typeof(S->cbp))S->char_stack->data - 1;
 	} else {
 		offset = rb_tail(S->cbp->r) - '0';
 	}
-	if( offset < 0 || offset > ( S->cbp - (typeof(S->cbp))S->char_stack.data - 1 )) {
+	if( offset < 0 || offset > ( S->cbp - (typeof(S->cbp))S->char_stack->data - 1 )) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
 
-	return ((typeof(S->cbp))S->char_stack.data)[offset].r;
+	return ((typeof(S->cbp))S->char_stack->data)[offset].r;
 }
 
 void
@@ -238,7 +239,7 @@ apply_string_op( struct state *S, unsigned char c )
 	case ']':
 		S->enquote = 0;
 		rb_push(S->cbp->r, '\0');
-		S->cbp = incr(&S->char_stack);
+		S->cbp = incr(S->char_stack);
 		init_char_buf( S->cbp );
 		break;
 	case 'F': {
@@ -249,10 +250,10 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( typeof(S->cbp) s = S->char_stack.data; s < S->cbp; s++ ) {
+		for( typeof(S->cbp) s = S->char_stack->data; s < S->cbp; s++ ) {
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
-			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), buf);
+			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack->data), buf);
 			free(buf);
 		}
 	} break;
@@ -272,9 +273,9 @@ apply_string_op( struct state *S, unsigned char c )
 void
 apply_unary( struct state *S, unsigned char c )
 {
-	assert( (void *)S->sp >= S->stack.data );
+	assert( (void *)S->sp >= S->stack->data );
 	assert( strchr( unary_ops, c ));
-	if( S->sp - 1 < (typeof(S->sp))S->stack.data ) {
+	if( S->sp - 1 < (typeof(S->sp))S->stack->data ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
 	}
@@ -287,8 +288,8 @@ apply_unary( struct state *S, unsigned char c )
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
 		break;
 	case 'l':
-		for(typeof(S->sp) s = S->stack.data; s < S->sp; s++) {
-			printf("%3u: ", (unsigned)(s - (typeof(S->sp))S->stack.data));
+		for(typeof(S->sp) s = S->stack->data; s < S->sp; s++) {
+			printf("%3u: ", (unsigned)(s - (typeof(S->sp))S->stack->data));
 			printf(S->fmt, *s);
 		}
 		break;
@@ -299,16 +300,16 @@ apply_unary( struct state *S, unsigned char c )
 		printf(S->fmt, *--S->sp);
 		break;
 	}
-	S->stack.top = S->sp;
+	S->stack->top = S->sp;
 }
 
 
 void
 apply_binary(struct state *S, unsigned char c)
 {
-	assert( (void *)S->sp >= S->stack.data );
+	assert( (void *)S->sp >= S->stack->data );
 	assert( strchr( binary_ops, c ));
-	if( S->sp - 2 < (typeof(S->sp))S->stack.data ) {
+	if( S->sp - 2 < (typeof(S->sp))S->stack->data ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
 	}
@@ -325,7 +326,7 @@ apply_binary(struct state *S, unsigned char c)
 	case '/': S->sp[-1] /= S->sp[0]; break;
 	case '^': S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
 	}
-	S->stack.top = S->sp;
+	S->stack->top = S->sp;
 }
 
 
