@@ -183,6 +183,7 @@ push_number( struct state *S )
 	*S->cbp->bp = '\0';
 	if( S->cbp->bp != S->cbp->buf ) {
 		char *end;
+		/* TODO: implement push/pop on the stack */
 		*(S->sp++) = strtold(S->cbp->buf, &end);
 		if( end != S->cbp->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
