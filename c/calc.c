@@ -217,7 +217,7 @@ select_char_buf( struct state *S )
 		fprintf(stderr, "Invalid register\n");
 		ret = NULL;
 	} else {
-		ret = ((struct char_buf *)stack_base(S->char_stack))[offset].r;
+		ret = ((struct char_buf *)((char *)stack_base(S->char_stack) + offset * sizeof(ret)))->r;
 	}
 
 	stack_push(S->char_stack, cbp);
