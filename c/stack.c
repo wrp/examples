@@ -55,7 +55,7 @@ stack_incr(struct stack *s)
 size_t
 stack_size(struct stack *s)
 {
-	return s->top - s->data;
+	return (s->top - s->data) / s->element_size;
 }
 
 int

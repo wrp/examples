@@ -277,7 +277,7 @@ apply_unary( struct state *S, unsigned char c )
 		break;
 	case 'l':
 		stack_push(S->stack, &val);
-		for(long double * s = stack_base(S->stack); s < (long double *)stack_top(S->stack); s++, i++) {
+		for(long double * s = stack_base(S->stack); i < stack_size(S->stack); s++, i++) {
 			printf("%3u: ", i);
 			printf(S->fmt, *s);
 		}
