@@ -217,6 +217,7 @@ void
 apply_string_op( struct state *S, unsigned char c )
 {
 	struct char_buf *cbp = stack_top(S->char_stack);
+	int i = 0;
 	switch(c) {
 	case '[':
 		push_number( S );
@@ -236,10 +237,10 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( typeof(cbp) s = stack_base(S->char_stack); s < cbp; s++ ) {
+		for( typeof(cbp) s = stack_base(S->char_stack); i < stack_size(S->char_stack); s++, i++ ) {
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
-			printf("(%d): %s\n", (int)(s - (typeof(cbp))stack_base(S->char_stack)), buf);
+			printf("(%d): %s\n", i, buf);
 			free(buf);
 		}
 	} break;
