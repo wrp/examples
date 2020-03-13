@@ -98,17 +98,6 @@ main( int argc, char **argv )
 
 
 /*
- * Append an octet to the char buf.   Grow if necessary.
- */
-void
-push_buf( struct state *S, unsigned char c )
-{
-	struct char_buf *b = stack_get(S->char_stack, -1);
-	rb_push(b->r, c);
-}
-
-
-/*
  * Push an item onto the ring buffer and then read the ring buffer until empty.
  * Some operations (notably 'x') will push additional values into the ring
  * buffer, and they should be processed before the next entry coming from input.
@@ -127,10 +116,12 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
+	struct char_buf *b = stack_get(S->char_stack, -1);
+
 	if( S->enquote && c != ']' ) {
-		push_buf( S, c );
+		rb_push(b->r, c);
 	} else if( strchr( numeric_tok, c )) {
-		push_buf( S, c );
+		rb_push(b->r, c);
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
