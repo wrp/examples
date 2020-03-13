@@ -210,7 +210,7 @@ validate_format( struct state const *S )
 }
 
 
-char *
+struct ring_buf *
 select_char_buf( struct state *S )
 {
 	int offset;
@@ -224,7 +224,7 @@ select_char_buf( struct state *S )
 		return NULL;
 	}
 
-	return rb_start(((typeof(S->cbp))S->char_stack.data)[offset].r);
+	return ((typeof(S->cbp))S->char_stack.data)[offset].r;
 }
 
 void
@@ -241,20 +241,27 @@ apply_string_op( struct state *S, unsigned char c )
 		S->cbp = incr(&S->char_stack);
 		init_char_buf( S->cbp );
 		break;
-	case 'F':
-		snprintf(S->fmt, sizeof S->fmt, "%s\n", select_char_buf( S ) ? : "%.3Lg" );
+	case 'F': {
+		char buf[32];
+		struct ring_buf *rb = select_char_buf(S);
+		rb_string(rb, buf, sizeof buf);
+		snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
 		validate_format( S );
-		break;
+	} break;
 	case 'L':
 		for( typeof(S->cbp) s = S->char_stack.data; s < S->cbp; s++ ) {
 			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), rb_start(s->r) );
 		}
 		break;
-	case 'x':
-		for( char *k = select_char_buf( S ); k && *k; k++ ) {
+	case 'x': {
+		struct ring_buf *rb = select_char_buf(S);
+		char *buf = malloc(rb_length(rb) + 4);
+		rb_string(rb, buf, rb_length(rb));
+		for( char *k = buf; k && *k; k++ ) {
 			rb_push( S->r, *k );
 		}
-		break;
+		free(buf);
+	} break;
 	}
 }
 
