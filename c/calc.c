@@ -222,7 +222,6 @@ apply_string_op( struct state *S, unsigned char c )
 {
 	struct char_buf *cbp;
 	struct char_buf B;
-	int i = 0;
 	switch(c) {
 	case '[':
 		push_number( S );
@@ -243,7 +242,8 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 	} break;
 	case 'L': {
-		for( struct char_buf *s = stack_base(S->char_stack); i < stack_size(S->char_stack) - 1; s++, i++ ) {
+		for( int i = 0; i < stack_size(S->char_stack) - 1; i++ ) {
+			struct char_buf *s = stack_get(S->char_stack, i);
 			char *buf = malloc(rb_length(s->r) + 4);
 			rb_string(s->r, buf, rb_length(s->r));
 			printf("(%d): %s\n", i, buf);
