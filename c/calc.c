@@ -48,10 +48,18 @@ struct char_buf {
 	size_t size;
 };
 
-struct state {
-	long double *stack, *sp;
+struct stack {
+	void *data;
+	size_t element_size;
 	size_t stack_size;
-	struct char_buf *char_stack, *cbp;
+};
+
+struct state {
+	struct stack stack;
+	long double *sp;
+	size_t stack_size;
+	struct stack char_stack;
+	struct char_buf *cbp;
 	size_t cb_size;
 	char fmt[32];
 	int enquote;
@@ -79,8 +87,8 @@ main( int argc, char **argv )
 	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
-	S->sp = S->stack = xrealloc( NULL, sizeof *S->sp * S->stack_size );
-	S->cbp = S->char_stack = xrealloc( NULL, sizeof *S->cbp * S->cb_size );
+	S->sp = S->stack.data = xrealloc( NULL, sizeof *S->sp * S->stack_size );
+	S->cbp = S->char_stack.data = xrealloc( NULL, sizeof *S->cbp * S->cb_size );
 	init_char_buf( S->cbp );
 	strcpy( S->fmt, "%.3Lg\n" );
 
@@ -169,7 +177,7 @@ push_number( struct state *S )
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
 		}
 		S->cbp->bp = S->cbp->buf;
-		if( S->sp == S->stack + S->stack_size ) {
+		if( S->sp - S->stack_size == S->stack.data ) {
 			grow_stack(S);
 		}
 	}
@@ -202,13 +210,13 @@ select_char_buf( struct state *S )
 	if( S->cbp->bp != S->cbp->buf ) {
 		offset = *--S->cbp->bp - '0';
 	} else {
-		offset = S->cbp - S->char_stack - 1;
+		offset = S->cbp - (typeof(S->cbp))S->char_stack.data - 1;
 	}
-	if( offset < 0 || offset > ( S->cbp - S->char_stack - 1 )) {
+	if( offset < 0 || offset > ( S->cbp - (typeof(S->cbp))S->char_stack.data - 1 )) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
-	return S->char_stack[offset].buf;
+	return ((typeof(S->cbp))S->char_stack.data)[offset].buf;
 }
 
 void
@@ -223,9 +231,9 @@ apply_string_op( struct state *S, unsigned char c )
 		S->enquote = 0;
 		*S->cbp->bp = '\0';
 		S->cbp += 1;
-		if( S->cbp == S->char_stack + S->cb_size ) {
-			S->char_stack = xrealloc(S->char_stack, S->cb_size * 2 * sizeof *S->cbp );
-			S->cbp = S->char_stack + S->cb_size;
+		if( S->cbp == (typeof(S->cbp))S->char_stack.data+ S->cb_size ) {
+			S->char_stack.data = xrealloc(S->char_stack.data, S->cb_size * 2 * sizeof *S->cbp );
+			S->cbp = (typeof(S->cbp))S->char_stack.data + S->cb_size;
 			S->cb_size *= 2;
 		}
 		init_char_buf( S->cbp );
@@ -235,8 +243,8 @@ apply_string_op( struct state *S, unsigned char c )
 		validate_format( S );
 		break;
 	case 'L':
-		for( typeof(S->cbp) s = S->char_stack; s < S->cbp; s++ ) {
-			printf("(%d): %s\n", (int)(s - S->char_stack), s->buf );
+		for( typeof(S->cbp) s = S->char_stack.data; s < S->cbp; s++ ) {
+			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), s->buf );
 		}
 		break;
 	case 'x':
@@ -251,9 +259,9 @@ apply_string_op( struct state *S, unsigned char c )
 void
 apply_unary( struct state *S, unsigned char c )
 {
-	assert( S->sp >= S->stack );
+	assert( (void *)S->sp >= S->stack.data );
 	assert( strchr( unary_ops, c ));
-	if( S->sp - S->stack < 1 ) {
+	if( S->sp - 1 < (typeof(S->sp))S->stack.data ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
 	}
@@ -266,8 +274,8 @@ apply_unary( struct state *S, unsigned char c )
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)*--S->sp);
 		break;
 	case 'l':
-		for(typeof(S->stack) s = S->stack; s < S->sp; s++) {
-			printf("%3u: ", (unsigned)(s - S->stack));
+		for(typeof(S->sp) s = S->stack.data; s < S->sp; s++) {
+			printf("%3u: ", (unsigned)(s - (typeof(S->sp))S->stack.data));
 			printf(S->fmt, *s);
 		}
 		break;
@@ -284,9 +292,9 @@ apply_unary( struct state *S, unsigned char c )
 void
 apply_binary(struct state *S, unsigned char c)
 {
-	assert( S->sp >= S->stack );
+	assert( (void *)S->sp >= S->stack.data );
 	assert( strchr( binary_ops, c ));
-	if( S->sp - S->stack < 2 ) {
+	if( S->sp - 2 < (typeof(S->sp))S->stack.data ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
 	}
@@ -309,9 +317,9 @@ apply_binary(struct state *S, unsigned char c)
 void
 grow_stack( struct state *S )
 {
-	assert( S->sp == S->stack + S->stack_size );
-	S->stack = xrealloc(S->stack, S->stack_size * 2 * sizeof *S->stack );
-	S->sp = S->stack + S->stack_size;
+	assert( S->sp - S->stack_size == S->stack.data );
+	S->stack.data = xrealloc(S->stack.data, S->stack_size * 2 * sizeof *S->sp );
+	S->sp = (typeof(S->sp))S->stack.data + S->stack_size;
 	S->stack_size *= 2;
 }
 
