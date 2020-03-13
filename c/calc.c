@@ -207,11 +207,11 @@ select_char_buf( struct state *S )
 	int offset;
 	struct char_buf *cbp = stack_top(S->char_stack);
 	if( rb_isempty(cbp->r)) {
-		offset = cbp - (typeof(cbp))stack_base(S->char_stack) - 1;
+		offset = stack_size(S->char_stack) - 1;
 	} else {
 		offset = rb_tail(cbp->r) - '0';
 	}
-	if( offset < 0 || offset > ( cbp - (typeof(cbp))stack_base(S->char_stack) - 1 )) {
+	if( offset < 0 || offset > stack_size(S->char_stack) - 1 ) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
