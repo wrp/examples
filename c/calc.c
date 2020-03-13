@@ -243,9 +243,7 @@ apply_string_op( struct state *S, unsigned char c )
 		*S->cbp->bp = '\0';
 		S->cbp += 1;
 		if( S->cbp == (typeof(S->cbp))S->char_stack.data+ S->cb_size ) {
-			S->char_stack.data = xrealloc(S->char_stack.data, S->cb_size * 2 * sizeof *S->cbp );
-			S->cbp = (typeof(S->cbp))S->char_stack.data + S->cb_size;
-			S->cb_size *= 2;
+			S->cbp = grow(&S->char_stack);
 		}
 		init_char_buf( S->cbp );
 		break;
