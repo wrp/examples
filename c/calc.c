@@ -200,30 +200,27 @@ select_char_buf( struct state *S )
 {
 	struct ring_buf *ret = NULL;
 	int offset;
-	struct char_buf cbp[1];
-
-	stack_pop(S->char_stack, cbp);
+	struct char_buf *cbp = stack_get(S->char_stack, -1);
 
 	if( rb_isempty(cbp->r)) {
-		offset = stack_size(S->char_stack) - 1;
+		offset = stack_size(S->char_stack) - 2;
 	} else {
 		offset = rb_tail(cbp->r) - '0';
 	}
-	if( offset < 0 || offset > stack_size(S->char_stack) - 1 ) {
+	if( offset < 0 || offset > stack_size(S->char_stack) - 2 ) {
 		fprintf(stderr, "Invalid register\n");
 		ret = NULL;
 	} else {
 		ret = ((struct char_buf *)stack_get(S->char_stack, offset))->r;
 	}
 
-	stack_push(S->char_stack, cbp);
 	return ret;
 }
 
 void
 apply_string_op( struct state *S, unsigned char c )
 {
-	struct char_buf cbp[1];
+	struct char_buf *cbp;
 	struct char_buf B;
 	int i = 0;
 	switch(c) {
@@ -233,9 +230,8 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
-		stack_pop(S->char_stack, cbp);
+		cbp = stack_get(S->char_stack, -1);
 		rb_push(cbp->r, '\0');
-		stack_push(S->char_stack, cbp);
 		B.r = rb_create(32);
 		stack_push(S->char_stack, &B);
 		break;
