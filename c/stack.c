@@ -81,3 +81,14 @@ stack_pop(struct stack *s, void *v)
 	}
 	return 0;
 }
+
+
+void *
+stack_get(struct stack *s, int idx)
+{
+	void *k;
+	if( idx < 0 || idx > stack_size(s)) {
+		return NULL;
+	}
+	return (char *)s->data + idx * s->element_size;
+}
