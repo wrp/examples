@@ -259,8 +259,8 @@ apply_string_op( struct state *S, unsigned char c )
 void
 apply_unary( struct state *S, unsigned char c )
 {
-	long double *sp = stack_top(S->stack);
 	long double val;
+	unsigned i = 0;
 	assert( strchr( unary_ops, c ));
 	if( stack_size(S->stack) < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
@@ -277,8 +277,8 @@ apply_unary( struct state *S, unsigned char c )
 		break;
 	case 'l':
 		stack_push(S->stack, &val);
-		for(typeof(sp) s = stack_base(S->stack); s < (long double *)stack_top(S->stack); s++) {
-			printf("%3u: ", (unsigned)(s - (long double *)stack_base(S->stack)));
+		for(long double * s = stack_base(S->stack); s < (long double *)stack_top(S->stack); s++, i++) {
+			printf("%3u: ", i);
 			printf(S->fmt, *s);
 		}
 		break;
