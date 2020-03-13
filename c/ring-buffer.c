@@ -78,6 +78,33 @@ rb_push( struct ring_buf *R, unsigned char c )
 
 
 int
+rb_clear(struct ring_buf *r)
+{
+	r->start = r->end = r->buf;
+}
+
+int
+rb_isempty(struct ring_buf *r)
+{
+	return r->start == r->end;
+}
+
+
+char *
+rb_start(struct ring_buf *r)
+{
+	return r->start;
+}
+
+
+char *
+rb_end(struct ring_buf *r)
+{
+	return r->end;
+}
+
+
+int
 rb_pop( struct ring_buf *R )
 {
 	unsigned char rv;
@@ -94,3 +121,21 @@ rb_pop( struct ring_buf *R )
 	}
 	return rv;
 }
+
+
+int
+rb_tail( struct ring_buf *R )
+{
+	assert( R->start >= R->buf );
+	assert( R->start < R->buf + R->s );
+	assert( R->end >= R->buf );
+	assert( R->end < R->buf + R->s );
+	if( R->start == R->end ) {
+		return EOF;
+	}
+	if(R->end == R->buf) {
+		R->end == R->buf + R->s;
+	}
+	return (int)*--R->end;
+}
+

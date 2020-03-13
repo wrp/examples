@@ -45,8 +45,7 @@ void print_help( void ) {
 }
 
 struct char_buf {
-	char *buf, *bp;
-	size_t size;
+	struct ring_buf *r;
 };
 
 struct stack {
@@ -98,7 +97,7 @@ main( int argc, char **argv )
 	S->enquote = 0;
 	S->sp = init(&S->stack, sizeof *S->sp);
 	S->cbp = init(&S->char_stack, sizeof *S->cbp);
-	init_char_buf( S->cbp );
+	init_char_buf(S->cbp);
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -120,12 +119,7 @@ main( int argc, char **argv )
 void
 push_buf( struct state *S, unsigned char c )
 {
-	*S->cbp->bp++ = (char)c;
-	if( S->cbp->bp == S->cbp->buf + S->cbp->size ) {
-		S->cbp->buf = xrealloc( S->cbp->buf, S->cbp->size * 2 * sizeof *S->cbp->buf );
-		S->cbp->bp = S->cbp->buf + S->cbp->size;
-		S->cbp->size *= 2;
-	}
+	rb_push(S->cbp->r, c);
 }
 
 
@@ -148,7 +142,6 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
-
 	if( S->enquote && c != ']' ) {
 		push_buf( S, c );
 	} else if( strchr( numeric_tok, c )) {
@@ -178,16 +171,19 @@ process_entry( struct state *S, unsigned char c )
 void
 push_number( struct state *S )
 {
-	*S->cbp->bp = '\0';
-	if( S->cbp->bp != S->cbp->buf ) {
+
+	if(! rb_isempty(S->cbp->r)) {
 		char *end;
-		typeof(*S->sp) val = strtold(S->cbp->buf, &end);
-		if( end != S->cbp->bp ) {
-			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
+		typeof(*S->sp) val;
+
+		rb_push(S->cbp->r, '\0');
+		val = strtold(rb_start(S->cbp->r), &end);
+		if( end != rb_end(S->cbp->r) - 1) {
+			fprintf(stderr, "Garbled: %s\n", rb_start(S->cbp->r));
 		}
 		*S->sp = val;
 		S->sp = incr(&S->stack);
-		S->cbp->bp = S->cbp->buf;
+		rb_clear(S->cbp->r);
 	}
 }
 
@@ -215,16 +211,17 @@ char *
 select_char_buf( struct state *S )
 {
 	int offset;
-	if( S->cbp->bp != S->cbp->buf ) {
-		offset = *--S->cbp->bp - '0';
-	} else {
+	if( rb_isempty(S->cbp->r)) {
 		offset = S->cbp - (typeof(S->cbp))S->char_stack.data - 1;
+	} else {
+		offset = rb_tail(S->cbp->r) - '0';
 	}
 	if( offset < 0 || offset > ( S->cbp - (typeof(S->cbp))S->char_stack.data - 1 )) {
 		fprintf(stderr, "Invalid register\n");
 		return NULL;
 	}
-	return ((typeof(S->cbp))S->char_stack.data)[offset].buf;
+
+	return rb_start(((typeof(S->cbp))S->char_stack.data)[offset].r);
 }
 
 void
@@ -237,7 +234,7 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
-		*S->cbp->bp = '\0';
+		rb_push(S->cbp->r, '\0');
 		S->cbp = incr(&S->char_stack);
 		init_char_buf( S->cbp );
 		break;
@@ -247,7 +244,7 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case 'L':
 		for( typeof(S->cbp) s = S->char_stack.data; s < S->cbp; s++ ) {
-			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), s->buf );
+			printf("(%d): %s\n", (int)(s - (typeof(S->cbp))S->char_stack.data), rb_start(s->r) );
 		}
 		break;
 	case 'x':
@@ -354,8 +351,8 @@ die(const char *msg)  /* uncovered */
 	exit(1);      /* uncovered */
 }                     /* uncovered */
 
-void init_char_buf( struct char_buf *p )
+void
+init_char_buf( struct char_buf *p )
 {
-	p->size = 32;
-	p->bp = p->buf = xrealloc( NULL, sizeof *p->buf * p->size );
+	p->r = rb_create(32);
 }
