@@ -72,7 +72,7 @@ void push_it( struct state *S, unsigned char c );
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
-void * grow(struct stack *);
+void * grow(struct stack *, void *);
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
@@ -188,9 +188,7 @@ push_number( struct state *S )
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
 		}
 		S->cbp->bp = S->cbp->buf;
-		if( S->sp - S->stack_size == S->stack.data ) {
-			S->sp = grow(&S->stack);
-		}
+		S->sp = grow(&S->stack, S->sp);
 	}
 }
 
@@ -242,9 +240,7 @@ apply_string_op( struct state *S, unsigned char c )
 		S->enquote = 0;
 		*S->cbp->bp = '\0';
 		S->cbp += 1;
-		if( S->cbp == (typeof(S->cbp))S->char_stack.data+ S->cb_size ) {
-			S->cbp = grow(&S->char_stack);
-		}
+		S->cbp = grow(&S->char_stack, S->cbp);
 		init_char_buf( S->cbp );
 		break;
 	case 'F':
@@ -324,11 +320,14 @@ apply_binary(struct state *S, unsigned char c)
 
 
 void *
-grow(struct stack *s)
+grow(struct stack *s, void * e)
 {
-	/* assert( S->sp - S->stack_size == S->stack.data ); */
 
 	ptrdiff_t off = s->stack_size * s->element_size;
+
+	if( e != (char *)s->data + off) {
+		return e;
+	}
 	s->stack_size *= 2;
 	s->data = xrealloc(s->data, s->stack_size * s->element_size);
 
