@@ -24,12 +24,6 @@ stack_create(size_t el)
 }
 
 void *
-stack_top(struct stack *s)
-{
-	return (char *)s->top - s->element_size;
-}
-
-void *
 stack_base(struct stack *s)
 {
 	return s->data;

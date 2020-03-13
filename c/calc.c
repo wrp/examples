@@ -227,7 +227,7 @@ select_char_buf( struct state *S )
 void
 apply_string_op( struct state *S, unsigned char c )
 {
-	struct char_buf *cbp = stack_top(S->char_stack);
+	struct char_buf cbp[1];
 	struct char_buf B;
 	int i = 0;
 	switch(c) {
@@ -237,7 +237,9 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
+		stack_pop(S->char_stack, cbp);
 		rb_push(cbp->r, '\0');
+		stack_push(S->char_stack, cbp);
 		B.r = rb_create(32);
 		stack_push(S->char_stack, &B);
 		break;
