@@ -51,6 +51,7 @@ struct char_buf {
 
 struct stack {
 	void *data;
+	void *top;
 	size_t element_size;
 	size_t stack_size;
 };
@@ -73,6 +74,7 @@ void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
 void * grow(struct stack *, void *);
+void * push(struct stack *, void *);
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
@@ -82,7 +84,7 @@ void init_char_buf( struct char_buf *p );
 void *
 init(struct stack *st, size_t el, size_t n)
 {
-	st->data = xrealloc(NULL, el * n);
+	st->data = st->top = xrealloc(NULL, el * n);
 	st->element_size = el;
 	st->stack_size = n;
 	return st->data;
@@ -187,7 +189,7 @@ push_number( struct state *S )
 		if( end != S->cbp->bp ) {
 			fprintf(stderr, "Garbled: %s\n", S->cbp->buf);
 		}
-		*(S->sp++) = val;
+		S->sp = push(&S->stack, &val);
 		S->sp = grow(&S->stack, S->sp);
 		S->cbp->bp = S->cbp->buf;
 	}
@@ -292,6 +294,7 @@ apply_unary( struct state *S, unsigned char c )
 		printf(S->fmt, *--S->sp);
 		break;
 	}
+	S->stack.top = S->sp;
 }
 
 
@@ -317,6 +320,17 @@ apply_binary(struct state *S, unsigned char c)
 	case '/': S->sp[-1] /= S->sp[0]; break;
 	case '^': S->sp[-1] = pow(S->sp[-1], S->sp[0]); break;
 	}
+	S->stack.top = S->sp;
+}
+
+
+void *
+push(struct stack *s, void * val)
+{
+	ptrdiff_t off = s->stack_size * s->element_size;
+	memcpy(s->top, val, s->element_size);
+	s->top = (char *)s->top + s->element_size;
+	return s->top;
 }
 
 
