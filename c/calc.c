@@ -11,6 +11,7 @@
  * '_' is an ignored place holder, so 65536 can be written 65_536
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -71,12 +72,22 @@ void push_it( struct state *S, unsigned char c );
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
-void grow_stack( struct state *S );
+void * grow(struct stack *);
 void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
 void init_char_buf( struct char_buf *p );
+
+void *
+init(struct stack *st, size_t el, size_t n)
+{
+	st->data = xrealloc(NULL, el * n);
+	st->element_size = el;
+	st->stack_size = n;
+	return st->data;
+}
+
 
 int
 main( int argc, char **argv )
@@ -87,8 +98,8 @@ main( int argc, char **argv )
 	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->cb_size = S->stack_size = 4;
-	S->sp = S->stack.data = xrealloc( NULL, sizeof *S->sp * S->stack_size );
-	S->cbp = S->char_stack.data = xrealloc( NULL, sizeof *S->cbp * S->cb_size );
+	S->sp = init(&S->stack, sizeof *S->sp, S->stack_size);
+	S->cbp = init(&S->char_stack, sizeof *S->cbp, S->cb_size );
 	init_char_buf( S->cbp );
 	strcpy( S->fmt, "%.3Lg\n" );
 
@@ -178,7 +189,7 @@ push_number( struct state *S )
 		}
 		S->cbp->bp = S->cbp->buf;
 		if( S->sp - S->stack_size == S->stack.data ) {
-			grow_stack(S);
+			S->sp = grow(&S->stack);
 		}
 	}
 }
@@ -314,13 +325,16 @@ apply_binary(struct state *S, unsigned char c)
 }
 
 
-void
-grow_stack( struct state *S )
+void *
+grow(struct stack *s)
 {
-	assert( S->sp - S->stack_size == S->stack.data );
-	S->stack.data = xrealloc(S->stack.data, S->stack_size * 2 * sizeof *S->sp );
-	S->sp = (typeof(S->sp))S->stack.data + S->stack_size;
-	S->stack_size *= 2;
+	/* assert( S->sp - S->stack_size == S->stack.data ); */
+
+	ptrdiff_t off = s->stack_size * s->element_size;
+	s->stack_size *= 2;
+	s->data = xrealloc(s->data, s->stack_size * s->element_size);
+
+	return (char *)s->data + off;
 }
 
 
