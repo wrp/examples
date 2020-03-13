@@ -151,17 +151,17 @@ push_number( struct state *S )
 
 	if(! rb_isempty(b->r)) {
 		long double val;
-		char s[128];
-		char *cp = s;
+		char *s, *cp;
 
 		rb_push(b->r, '\0');
+		cp = s = malloc(rb_length(b->r));;
 		while( (*cp++ = rb_pop(b->r)) != EOF)
 			;
-
 		val = strtold(s, &cp);
 		if( *cp ) {
 			fprintf(stderr, "Garbled: %s\n", s);
 		}
+		free(s);
 		stack_push(S->stack, &val);
 	}
 }
