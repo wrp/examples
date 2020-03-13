@@ -103,10 +103,8 @@ main( int argc, char **argv )
 void
 push_buf( struct state *S, unsigned char c )
 {
-	struct char_buf b[1];
-	stack_pop(S->char_stack, b);
+	struct char_buf *b = stack_get(S->char_stack, -1);
 	rb_push(b->r, c);
-	stack_push(S->char_stack, b);
 }
 
 
@@ -158,8 +156,7 @@ process_entry( struct state *S, unsigned char c )
 void
 push_number( struct state *S )
 {
-	struct char_buf b[1];
-	stack_pop(S->char_stack, b);
+	struct char_buf *b = stack_get(S->char_stack, -1);
 
 	if(! rb_isempty(b->r)) {
 		long double val;
@@ -176,7 +173,6 @@ push_number( struct state *S )
 		}
 		stack_push(S->stack, &val);
 	}
-	stack_push(S->char_stack, b);
 }
 
 
