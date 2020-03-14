@@ -26,8 +26,9 @@ TESTS = calc-test \
 	pyramid-test \
 	coverage-test
 
-noinst_LTLIBRARIES = libringbuf.la libstack.la
-calc_LDADD = libringbuf.la libstack.la
+noinst_LTLIBRARIES = libringbuf.la libstack.la libutil.la
+LDADD = libringbuf.la libstack.la libutil.la
 libringbuf_la_SOURCES = ring-buffer.c
 libstack_la_SOURCES = stack.c
+libutil_la_SOURCES = util.c
 CLEANFILES = *.gcda *.gcno *.gcov

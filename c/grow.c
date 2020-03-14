@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "util.h"
 
 struct buffer {
 	char *start;
@@ -11,7 +12,6 @@ struct buffer {
 	size_t s;
 };
 
-FILE *xfopen(const char *, const char *);
 void grow(struct buffer *);
 
 int
@@ -59,15 +59,4 @@ grow(struct buffer *b)
 	} /* end uncovered */
 	b->end = b->start + offset;
 	b->s = siz;
-}
-
-FILE *
-xfopen(const char *path, const char * mode)
-{
-	FILE *ret = fopen(path, mode);
-	if(ret == NULL) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return ret;
 }

@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
+#include "util.h"
 
 struct buf {
 	char *data;
@@ -45,17 +46,6 @@ append(struct buf *b, FILE *fp, size_t n)
 	b->end += rc;
 	assert( b->end <= b->data + b->capacity );
 	return rc == n;
-}
-
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = strcmp(path, "-") ? fopen(path, mode) : stdin;
-	if( fp == NULL ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
 }
 
 void
