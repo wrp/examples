@@ -11,6 +11,8 @@
  * '_' is an ignored place holder, so 65536 can be written 65_536
  */
 
+#include "stack.h"
+#include "ring-buffer.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,8 +21,6 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
-#include "ring-buffer.h"
-#include "stack.h"
 
 #define numeric_tok "-0123456789XPEabcdef."
 #define string_ops "[]FxL"

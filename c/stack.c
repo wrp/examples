@@ -1,7 +1,8 @@
+
 #include "stack.h"
 #include <string.h>
-
-
+#include <stdio.h>
+#include <unistd.h>
 
 struct stack {
 	void *data; /* The base (allocated) */
@@ -25,8 +26,10 @@ stack_create(size_t el)
 {
 	struct stack *st;
 	int initial_size = 4 * el;
+	long align;
 
-	if( ! posix_memalign((void *)&st, sizeof(void *), sizeof *st)) {
+	align = sysconf(_SC_PAGESIZE);
+	if( align > 0 && ! posix_memalign((void *)&st, align, sizeof *st)) {
 		st->element_size = el;
 		if (! posix_memalign((void *)&st->data, sizeof(void *), initial_size)) {
 			st->top = st->data;
