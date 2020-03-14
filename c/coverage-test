@@ -19,8 +19,10 @@ for file in $progs; do
 		unset arg
 	fi
 	gcov $file $arg
-	if grep '#####' $file.c.gcov |
-			sed \
+	if < "$file".c.gcov sed \
+			-e '\@{ /\* uncovered block \*/@,'"$( :
+				)"'\@} /\* end uncovered \*/@d' \
+			-e '/#####/!d' \
 			-e '\@/\* uncovered \*/@d' | grep .; then
 		echo The above lines of $file were not executed during testing
 		RV=1
