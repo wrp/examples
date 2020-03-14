@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include "util.h"
 
 /* Open a file.  Pause.  Upon receipt of signal, read from the file.
  * Testing how access time is modified
@@ -30,11 +31,9 @@ main(int argc, char **argv)
 	const char *path = argc > 1 ? argv[1] : "foo";
 	FILE *fp;
 
-	fp = fopen(path, "a+");
-	if(fp == NULL) { perror(path); return 1; }
+	fp = xfopen(path, "a+");
 
 	printf("pid: %d\n", getpid());
-
 
 	act.sa_sigaction = handle;
 	if(sigaction( SIGUSR1, &act, NULL )) { perror("sigaction"); exit(1); }
