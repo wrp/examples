@@ -52,11 +52,7 @@ grow(struct buffer *b)
 		siz = b->s * 2;
 		offset = b->end - b->start;
 	}
-	b->start = realloc(b->start, siz);
-	if (b->start == NULL) { /* uncovered block */
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	} /* end uncovered */
+	b->start = xrealloc(b->start, siz);
 	b->end = b->start + offset;
 	b->s = siz;
 }
