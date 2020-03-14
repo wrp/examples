@@ -13,12 +13,17 @@ struct stack {
 struct stack *
 stack_create(size_t el)
 {
-	struct stack *st = malloc(sizeof *st);
+	struct stack *st;
+	int initial_size = 4 * el;
 
-	if(st != NULL) {
+	if( ! posix_memalign((void *)&st, sizeof(void *), sizeof *st)) {
 		st->element_size = el;
-		st->data = st->top = realloc(NULL, el * 4);
-		st->end = (char *)st->data + el * 4;
+		if (! posix_memalign((void *)&st->data, sizeof(void *), initial_size)) {
+			st->top = st->data;
+			st->end = (char *)st->data + initial_size;
+		} else {
+			free(st);
+		}
 	}
 	return st;
 }
