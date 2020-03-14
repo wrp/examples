@@ -45,11 +45,6 @@ void print_help( void ) {
 	);
 }
 
-struct char_buf {
-	struct ring_buf *r;
-};
-
-
 struct state {
 	struct stack *stack;
 	struct stack *char_stack;
@@ -74,13 +69,13 @@ main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
-	struct char_buf B;
+	struct ring_buf *B;
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->stack = stack_xcreate(sizeof(long double));
-	S->char_stack = stack_xcreate(sizeof(struct char_buf));
-	B.r = rb_create(32);
+	S->char_stack = stack_xcreate(sizeof(struct ring_buf *));
+	B = rb_create(32);
 	stack_push(S->char_stack, &B);
 	strcpy( S->fmt, "%.3Lg\n" );
 
@@ -116,12 +111,12 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
-	struct char_buf *b = stack_get(S->char_stack, -1);
+	struct ring_buf **b = stack_get(S->char_stack, -1);
 
 	if( S->enquote && c != ']' ) {
-		rb_push(b->r, c);
+		rb_push(*b, c);
 	} else if( strchr( numeric_tok, c )) {
-		rb_push(b->r, c);
+		rb_push(*b, c);
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
@@ -147,15 +142,15 @@ process_entry( struct state *S, unsigned char c )
 void
 push_number( struct state *S )
 {
-	struct char_buf *b = stack_get(S->char_stack, -1);
+	struct ring_buf **b = stack_get(S->char_stack, -1);
 
-	if(! rb_isempty(b->r)) {
+	if(! rb_isempty(*b)) {
 		long double val;
 		char *s, *cp;
 
-		rb_push(b->r, '\0');
-		cp = s = malloc(rb_length(b->r));;
-		while( (*cp++ = rb_pop(b->r)) != EOF)
+		rb_push(*b, '\0');
+		cp = s = malloc(rb_length(*b));;
+		while( (*cp++ = rb_pop(*b)) != EOF)
 			;
 		val = strtold(s, &cp);
 		if( *cp ) {
@@ -191,18 +186,19 @@ select_char_buf( struct state *S )
 {
 	struct ring_buf *ret = NULL;
 	int offset;
-	struct char_buf *cbp = stack_get(S->char_stack, -1);
+	struct ring_buf **cbp = stack_get(S->char_stack, -1);
 
-	if( rb_isempty(cbp->r)) {
+	if( rb_isempty(*cbp)) {
 		offset = stack_size(S->char_stack) - 2;
 	} else {
-		offset = rb_tail(cbp->r) - '0';
+		offset = rb_tail(*cbp) - '0';
 	}
 	if( offset < 0 || offset > stack_size(S->char_stack) - 2 ) {
 		fprintf(stderr, "Invalid register\n");
 		ret = NULL;
 	} else {
-		ret = ((struct char_buf *)stack_get(S->char_stack, offset))->r;
+		struct ring_buf **p = stack_get(S->char_stack, offset);
+		ret = *p;
 	}
 
 	return ret;
@@ -211,8 +207,8 @@ select_char_buf( struct state *S )
 void
 apply_string_op( struct state *S, unsigned char c )
 {
-	struct char_buf *cbp;
-	struct char_buf B;
+	struct ring_buf **Bp;
+	struct ring_buf *B;
 	switch(c) {
 	case '[':
 		push_number( S );
@@ -220,9 +216,9 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
-		cbp = stack_get(S->char_stack, -1);
-		rb_push(cbp->r, '\0');
-		B.r = rb_create(32);
+		Bp = stack_get(S->char_stack, -1);
+		rb_push(*Bp, '\0');
+		B = rb_create(32);
 		stack_push(S->char_stack, &B);
 		break;
 	case 'F': {
@@ -234,9 +230,9 @@ apply_string_op( struct state *S, unsigned char c )
 	} break;
 	case 'L': {
 		for( int i = 0; i < stack_size(S->char_stack) - 1; i++ ) {
-			struct char_buf *s = stack_get(S->char_stack, i);
-			char *buf = malloc(rb_length(s->r) + 4);
-			rb_string(s->r, buf, rb_length(s->r));
+			struct ring_buf **s = stack_get(S->char_stack, i);
+			char *buf = malloc(rb_length(*s) + 4);
+			rb_string(*s, buf, rb_length(*s));
 			printf("(%d): %s\n", i, buf);
 			free(buf);
 		}
