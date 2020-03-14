@@ -35,6 +35,7 @@ static int
 grow( struct ring_buf *R )
 {
 	unsigned char *tmp = realloc( R->buf, 2 * R->s );
+	assert( R->end == R->start );
 	assert( R->start >= R->buf );
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
@@ -43,16 +44,13 @@ grow( struct ring_buf *R )
 		return 1; /* uncovered */
 	}
 	if( R->buf != tmp ) {
-		R->start = tmp + ( R->start - R->buf );
-		R->end = tmp + ( R->end - R->buf );
+		R->end = R->start = tmp + ( R->start - R->buf );
 		R->buf = tmp;
 	}
-	if( R->end <= R->start ) {
-		if(R->end != R->buf) {
-			memmove( R->buf + R->s, R->buf, R->end - R->buf );
-		}
-		R->end = R->end + R->s;
+	if(R->end != R->buf) {
+		memmove( R->buf + R->s, R->buf, R->end - R->buf );
 	}
+	R->end = R->start + R->s;
 	R->s *= 2;
 	return 0;
 }
