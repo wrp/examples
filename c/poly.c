@@ -11,6 +11,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "util.h"
 
 struct poly {
 	int degree;
@@ -18,7 +19,6 @@ struct poly {
 	struct poly *next;
 };
 
-FILE * xfopen(const char *path, const char *mode);
 void * xmalloc(size_t s);
 
 void
@@ -82,13 +82,6 @@ main(int argc, char **argv)
 	return 0;
 }
 
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = fopen(path, mode);
-	if( fp == NULL ) { perror(path); exit(EXIT_FAILURE); }
-	return fp;
-}
 
 void *
 xmalloc(size_t s)

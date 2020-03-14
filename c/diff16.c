@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "util.h"
 
 /*
  * Compare two files, 16 bytes at a time. (Purely to demonstrate memcmp.
  * Clearly, this should be implemented with getc.)
  */
 
-FILE * xfopen(const char *, const char *);
 size_t xfread(void *, FILE *, const char *);
 
 
@@ -45,15 +45,4 @@ xfread(void *b, FILE *fp, const char *name)
 		exit(EXIT_FAILURE);
 	}
 	return n;
-}
-
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = strcmp(path, "-") ? fopen(path, mode) : stdin;
-	if( fp == NULL ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
 }

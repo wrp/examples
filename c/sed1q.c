@@ -8,8 +8,8 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "util.h"
 
-FILE * xfopen(const char *path, const char *mode);
 int is_regular(int, const char *);
 
 int
@@ -48,16 +48,6 @@ main(int argc, char **argv)
 	return EXIT_SUCCESS;
 }
 
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = fopen(path, mode);
-	if( fp == NULL ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
-}
 
 int
 is_regular(int fd, const char *name)

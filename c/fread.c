@@ -16,7 +16,6 @@ struct buf {
 	size_t capacity;
 };
 
-FILE * xfopen(const char *, const char *);
 void grow(struct buf *);
 int append(struct buf *, FILE *, size_t);
 

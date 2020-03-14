@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "util.h"
 
 /* Use getdelim to read comma-separated numbers */
 
@@ -11,7 +12,6 @@ struct data {
 	double *val;
 };
 
-FILE * xfopen(const char *, const char *);
 void Realloc(struct data *);
 void push(struct data *, double);
 int print(const struct data *);
@@ -41,16 +41,6 @@ main(int argc, char **argv)
 	return print(&V);
 }
 
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = fopen(path, mode);
-	if( fp == NULL ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
-}
 
 void
 Realloc(struct data *V)

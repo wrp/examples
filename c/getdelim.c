@@ -1,17 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "util.h"
 
 /* demonstrate getdelim to read an entire file */
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = fopen(path, mode);
-	if( fp == NULL ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
-}
 
 int
 main(int argc, char **argv)
