@@ -1,0 +1,5 @@
+#!/bin/sh
+getconf WORD_BIT
+getconf LONG_BIT
+
+see POSIX_MEMALIGN(3)
