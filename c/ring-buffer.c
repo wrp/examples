@@ -7,10 +7,10 @@
 
 struct ring_buf {
 	int err;
-	unsigned char *buf;
-	unsigned char *start;
-	unsigned char *end;
-	size_t s;
+	unsigned char *buf;   /* Allocated base */
+	unsigned char *start; /* First byte of data */
+	unsigned char *end;   /* One last final byte of data */
+	size_t s;             /* Total allocated size */
 };
 
 /*
@@ -42,13 +42,15 @@ grow( struct ring_buf *R )
 	if( tmp == NULL ) {
 		return 1; /* uncovered */
 	}
-	if( R->buf != tmp ) { /* uncovered block */
+	if( R->buf != tmp ) {
 		R->start = tmp + ( R->start - R->buf );
 		R->end = tmp + ( R->end - R->buf );
 		R->buf = tmp;
-	} /* uncovered end */
+	}
 	if( R->end <= R->start ) {
-		memmove( R->buf + R->s, R->buf, R->end - R->buf );
+		if(R->end != R->buf) {
+			memmove( R->buf + R->s, R->buf, R->end - R->buf );
+		}
 		R->end = R->end + R->s;
 	}
 	R->s *= 2;
@@ -76,12 +78,6 @@ rb_push( struct ring_buf *R, unsigned char c )
 	return R->err;
 }
 
-
-int
-rb_clear(struct ring_buf *r)
-{
-	r->start = r->end = r->buf;
-}
 
 int
 rb_isempty(struct ring_buf *r)
@@ -117,10 +113,10 @@ rb_tail( struct ring_buf *R )
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
 	if( R->start == R->end ) {
-		return EOF;
+		return EOF; /* uncovered */
 	}
 	if(R->end == R->buf) {
-		R->end == R->buf + R->s;
+		R->end == R->buf + R->s; /* uncovered */
 	}
 	return (int)*--R->end;
 }
@@ -137,8 +133,8 @@ rb_string(struct ring_buf *r, char *dest, size_t siz)
 		*dest++ = *s;
 	}
 	if( r->start > r->end ) {
-		for( s=r->buf; *s && s < r->end && siz--; s++ ) {
-			*dest++ = *s;
+		for( s=r->buf; *s && s < r->end && siz--; s++ ) { /* uncovered */
+			*dest++ = *s; /* uncovered */
 		}
 	}
 	*dest = '\0';
