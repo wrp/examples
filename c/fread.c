@@ -54,10 +54,6 @@ grow(struct buf *b)
 
 	b->capacity = b->capacity ? b->capacity * 2 : BUFSIZ;
 
-	b->data = realloc(b->data, b->capacity);
-	if( b->data == NULL ) {
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	}
+	b->data = xrealloc(b->data, b->capacity);
 	b->end = b->data + delta;
 }
