@@ -18,8 +18,9 @@ int
 main(int argc, char **argv)
 {
 	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
-	struct buffer input;
-	int c;
+	size_t count;
+	struct buffer input = {0};
+	int c, status = EXIT_SUCCESS;
 
 	grow(&input);
 	while( (c = fgetc(fp)) != EOF ) {
@@ -28,8 +29,12 @@ main(int argc, char **argv)
 		}
 		*input.end++ = c;
 	}
-	printf("%s", input.start);
-
+	count = input.end - input.start;
+	if( fwrite(input.start, 1, count, stdout) != count) { /* uncovered block */
+		perror("stdout");
+		status = EXIT_FAILURE;
+	} /* end uncovered */
+	return status;
 }
 
 
@@ -40,7 +45,7 @@ grow(struct buffer *b)
 	ptrdiff_t offset;
 
 	if(b->start == NULL) {
-		siz = 1024;
+		siz = 8;
 		offset = 0;
 	} else {
 		assert(b->end != NULL);
@@ -48,10 +53,10 @@ grow(struct buffer *b)
 		offset = b->end - b->start;
 	}
 	b->start = realloc(b->start, siz);
-	if (b->start == NULL) {
+	if (b->start == NULL) { /* uncovered block */
 		perror("realloc");
 		exit(EXIT_FAILURE);
-	}
+	} /* end uncovered */
 	b->end = b->start + offset;
 	b->s = siz;
 }
