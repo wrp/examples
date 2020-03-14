@@ -58,7 +58,6 @@ void push_it( struct state *S, unsigned char c );
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
-void * xrealloc( void *p, size_t s );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 void push_number( struct state *S );
@@ -313,23 +312,3 @@ apply_binary(struct state *S, unsigned char c)
 	}
 	stack_push(S->stack, &res);
 }
-
-
-
-void *
-xrealloc( void *p, size_t s )
-{
-	void *rv = realloc( p, s );
-	if( rv == NULL ) {
-		perror("realloc"); /* uncovered */
-		exit(1);           /* uncovered */
-	}
-	return rv;
-}
-
-void
-die(const char *msg)  /* uncovered */
-{
-	perror(msg);  /* uncovered */
-	exit(1);      /* uncovered */
-}                     /* uncovered */
