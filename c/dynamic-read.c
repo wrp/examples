@@ -13,9 +13,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "util.h"
 
 int xopen(const char *, int);
-void * Realloc(void *, size_t);
 void reverse(char *, char *);
 char * findchr(char *, char *, char);
 
@@ -25,7 +25,7 @@ main(int argc, char **argv)
 	ssize_t rc;
 
 	size_t siz = BUFSIZ;         /* size available to read into */
-	char *buf = Realloc(NULL, BUFSIZ + siz); /* Pad the front */
+	char *buf = xrealloc(NULL, BUFSIZ + siz); /* Pad the front */
 	char *s = buf + BUFSIZ;      /* first char of a line */
 	char *prev = s;              /* start of data from previous read */
 	char *end = s;               /* one past last char read from input */
@@ -41,7 +41,7 @@ main(int argc, char **argv)
 				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
-				buf = Realloc(buf, BUFSIZ + siz);
+				buf = xrealloc(buf, BUFSIZ + siz);
 				eol = end = buf + e_off;
 				prev = buf + p_off;
 			}
@@ -98,15 +98,6 @@ reverse(char *start, char *end)
 		*end = *start;
 		*start = tmp;
 	}
-}
-
-
-void *
-Realloc( void *buf, size_t s )
-{
-	buf = realloc( buf, s );
-	if( buf == NULL) { perror("realloc"); exit(EXIT_FAILURE); }
-	return buf;
 }
 
 

@@ -12,3 +12,14 @@ xfopen(const char *path, const char *mode)
 	}
 	return fp;
 }
+
+void *
+xrealloc(void *buf, size_t s)
+{
+	buf = realloc(buf, s);
+	if( buf == NULL ) {
+		perror("realloc");
+		exit(EXIT_FAILURE);
+	}
+	return buf;
+}
