@@ -23,6 +23,7 @@ rb_create( size_t s )
 	r = malloc( sizeof *r );
 	if( r != NULL ) {
 		r->end = r->start = r->buf = malloc( r->s = s ? s : 1024 );
+		r->err = 0;
 		if( r->buf == NULL ) {
 			free( r ); /* uncovered */
 			r = NULL;  /* uncovered */
