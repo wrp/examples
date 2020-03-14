@@ -1,5 +1,11 @@
 #!/bin/sh
-getconf WORD_BIT
-getconf LONG_BIT
 
-see POSIX_MEMALIGN(3)
+
+show() {
+	printf "%s: " "$1"
+	getconf "$1"
+}
+show WORD_BIT
+show LONG_BIT
+
+echo 'see POSIX_MEMALIGN(3)'
