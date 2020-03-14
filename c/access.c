@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <signal.h>
 #include <unistd.h>
 #include "util.h"
@@ -27,7 +28,7 @@ handle(int sig, siginfo_t *i, void *v)
 int
 main(int argc, char **argv)
 {
-	struct sigaction act = {{0}};
+	struct sigaction act;
 	const char *path = argc > 1 ? argv[1] : "foo";
 	FILE *fp;
 
@@ -35,6 +36,7 @@ main(int argc, char **argv)
 
 	printf("pid: %d\n", getpid());
 
+	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
 	if(sigaction( SIGUSR1, &act, NULL )) { perror("sigaction"); exit(1); }
 	if(sigaction( SIGUSR2, &act, NULL )) { perror("sigaction"); exit(1); }
