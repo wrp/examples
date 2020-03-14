@@ -78,8 +78,8 @@ main( int argc, char **argv )
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
-	S->stack = stack_create(sizeof(long double));
-	S->char_stack = stack_create(sizeof(struct char_buf));
+	S->stack = stack_xcreate(sizeof(long double));
+	S->char_stack = stack_xcreate(sizeof(struct char_buf));
 	B.r = rb_create(32);
 	stack_push(S->char_stack, &B);
 	strcpy( S->fmt, "%.3Lg\n" );

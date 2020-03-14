@@ -11,6 +11,16 @@ struct stack {
 };
 
 struct stack *
+stack_xcreate(size_t el) {
+	struct stack *rv;
+	if( (rv = stack_create(el)) == NULL) {
+		perror("stack_create");
+		exit(EXIT_FAILURE);
+	}
+	return rv;
+}
+
+struct stack *
 stack_create(size_t el)
 {
 	struct stack *st;
