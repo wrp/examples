@@ -224,9 +224,11 @@ apply_string_op( struct state *S, unsigned char c )
 	case 'F': {
 		char buf[32];
 		struct ring_buf *rb = select_char_buf(S);
-		rb_string(rb, buf, sizeof buf);
-		snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
-		validate_format( S );
+		if( rb ) {
+			rb_string(rb, buf, sizeof buf);
+			snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
+			validate_format( S );
+		}
 	} break;
 	case 'L': {
 		for( int i = 0; i < stack_size(S->char_stack) - 1; i++ ) {
@@ -239,12 +241,14 @@ apply_string_op( struct state *S, unsigned char c )
 	} break;
 	case 'x': {
 		struct ring_buf *rb = select_char_buf(S);
-		char *buf = malloc(rb_length(rb) + 4);
-		rb_string(rb, buf, rb_length(rb));
-		for( char *k = buf; k && *k; k++ ) {
-			rb_push( S->r, *k );
+		if( rb ) {
+			char *buf = malloc(rb_length(rb) + 4);
+			rb_string(rb, buf, rb_length(rb));
+			for( char *k = buf; k && *k; k++ ) {
+				rb_push( S->r, *k );
+			}
+			free(buf);
 		}
-		free(buf);
 	} break;
 	}
 }
