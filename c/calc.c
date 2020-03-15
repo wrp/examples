@@ -60,7 +60,7 @@ void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
-int push_number(struct state *, unsigned char);
+static int push_value(struct state *, unsigned char);
 
 
 int
@@ -119,9 +119,9 @@ process_entry( struct state *S, unsigned char c )
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
-		push_number(S, c);
+		push_value(S, c);
 	} else if(strchr( binary_ops, c )) {
-		if(!push_number(S, c))
+		if(!push_value(S, c))
 			apply_binary(S, c);
 	} else if(strchr( nonary_ops, c )) {
 		switch(c) {
@@ -130,7 +130,7 @@ process_entry( struct state *S, unsigned char c )
 		case 'h': print_help();
 		}
 	} else if(strchr( unary_ops, c )) {
-		if(!push_number(S, c))
+		if(!push_value(S, c))
 			apply_unary(S, c);
 	} else {
 		fprintf( stderr, "Unexpected: %c\n", c );
@@ -145,7 +145,7 @@ process_entry( struct state *S, unsigned char c )
  * return non-zero to indicate that has happened.
  */
 int
-push_number(struct state *S, unsigned char c)
+push_value(struct state *S, unsigned char c)
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
 	char s[256] = "", *cp = s, *end = s + sizeof s;
@@ -233,7 +233,7 @@ apply_string_op( struct state *S, unsigned char c )
 	struct ring_buf *B;
 	switch(c) {
 	case '[':
-		push_number(S, c);
+		push_value(S, c);
 		S->enquote = 1;
 		break;
 	case ']':
