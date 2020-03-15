@@ -51,6 +51,7 @@ test_string '[%.0f]F' "$fmt_warning"
 test_string '[L%.0f]F' "$fmt_warning"
 long_string="1 $( yes "1+" | sed 1049q )"
 test_string "[$long_string]x[%.0Lf]Fp" '1050'
+test_string "4eXe2" 'Garbled: 4eXe2'
 test_string "4-2" 'Stack empty (need 2 values)'
 test_string "4 3.5-p" '0.5'
 test_string "4 2e-1-p" '3.8'
