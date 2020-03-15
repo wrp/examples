@@ -246,15 +246,14 @@ apply_string_op( struct state *S, unsigned char c )
 		stack_push(S->char_stack, &B);
 		break;
 	case 'F': {
-		char buf[32];
 		struct ring_buf *rb = select_char_buf(S);
 		if( rb ) {
 			int c, j;
-			for( j = 0; (c = rb_peek(rb, j)) != EOF && j < sizeof buf; j++) {
-				buf[j] = c;
+			char *b = S->fmt;
+			for( j = 0; (c = rb_peek(rb, j)) != EOF && j < sizeof S->fmt; j++) {
+				*b++ = c;
 			}
-			buf[j] = '\0';
-			snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
+			*b = '\0';
 			validate_format( S );
 		}
 	} break;
