@@ -49,7 +49,7 @@ void print_help( void ) {
 
 struct state {
 	struct stack *stack;
-	struct stack *char_stack;
+	struct stack *registers;
 	char fmt[32];
 	int enquote;
 	struct ring_buf *r;
@@ -75,9 +75,9 @@ main( int argc, char **argv )
 	S->r = rb_create( 32 );
 	S->enquote = 0;
 	S->stack = stack_xcreate(sizeof(long double), 0);
-	S->char_stack = stack_xcreate(sizeof(struct ring_buf *), 0);
+	S->registers = stack_xcreate(sizeof(struct ring_buf *), 0);
 	B = rb_create(32);
-	stack_push(S->char_stack, &B);
+	stack_push(S->registers, &B);
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -112,7 +112,7 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
-	struct ring_buf **b = stack_get(S->char_stack, -1);
+	struct ring_buf **b = stack_get(S->registers, -1);
 
 	if( S->enquote && c != ']' ) {
 		rb_push(*b, c);
@@ -149,7 +149,7 @@ process_entry( struct state *S, unsigned char c )
 int
 push_value(struct state *S, unsigned char c)
 {
-	struct ring_buf **b = stack_get(S->char_stack, -1);
+	struct ring_buf **b = stack_get(S->registers, -1);
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
 	int i;
@@ -213,18 +213,18 @@ select_char_buf( struct state *S )
 {
 	struct ring_buf *ret = NULL;
 	int offset;
-	struct ring_buf **cbp = stack_get(S->char_stack, -1);
+	struct ring_buf **cbp = stack_get(S->registers, -1);
 
 	if( rb_isempty(*cbp)) {
-		offset = stack_size(S->char_stack) - 2;
+		offset = stack_size(S->registers) - 2;
 	} else {
 		offset = rb_tail(*cbp) - '0';
 	}
-	if( offset < 0 || offset > stack_size(S->char_stack) - 2 ) {
+	if( offset < 0 || offset > stack_size(S->registers) - 2 ) {
 		fprintf(stderr, "Invalid register\n");
 		ret = NULL;
 	} else {
-		struct ring_buf **p = stack_get(S->char_stack, offset);
+		struct ring_buf **p = stack_get(S->registers, offset);
 		ret = *p;
 	}
 
@@ -243,9 +243,9 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case ']':
 		S->enquote = 0;
-		Bp = stack_get(S->char_stack, -1);
+		Bp = stack_get(S->registers, -1);
 		B = rb_create(32);
-		stack_push(S->char_stack, &B);
+		stack_push(S->registers, &B);
 		break;
 	case 'F': {
 		struct ring_buf *rb = select_char_buf(S);
@@ -260,9 +260,9 @@ apply_string_op( struct state *S, unsigned char c )
 		}
 	} break;
 	case 'L': {
-		for( int i = 0; i < stack_size(S->char_stack) - 1; i++ ) {
+		for( int i = 0; i < stack_size(S->registers) - 1; i++ ) {
 			int j = 0, c;
-			struct ring_buf **s = stack_get(S->char_stack, i);
+			struct ring_buf **s = stack_get(S->registers, i);
 
 			printf("(%d): ", i);
 			while( (c = rb_peek(*s, j++)) != EOF ) {
