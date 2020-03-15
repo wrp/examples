@@ -258,11 +258,14 @@ apply_string_op( struct state *S, unsigned char c )
 	} break;
 	case 'L': {
 		for( int i = 0; i < stack_size(S->char_stack) - 1; i++ ) {
+			int j = 0, c;
 			struct ring_buf **s = stack_get(S->char_stack, i);
-			char *buf = malloc(rb_length(*s) + 4);
-			rb_string(*s, buf, rb_length(*s));
-			printf("(%d): %s\n", i, buf);
-			free(buf);
+
+			printf("(%d): ", i);
+			while( (c = rb_peek(*s, j++)) != EOF ) {
+				putchar(c);
+			}
+			putchar('\n');
 		}
 	} break;
 	case 'x': {

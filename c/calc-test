@@ -45,6 +45,8 @@ test_string '[2 2+p][1 1+p]x0x' "2${nl}4"
 test_string '[2 2+n]5[1 1+n]x0xp' "2${nl}4${nl}5"
 test_string '[garbage][2 2+]5[1 1+n]x1xnp' "2${nl}4${nl}5"
 test_string '[f_oo][bar]L' "(0): f_oo${nl}(1): bar"
+long='this string needs to be at least 32 characters long'
+test_string "[$long][bar]L" "(0): ${long}${nl}(1): bar"
 test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 test_string '[]9x' 'Invalid register'

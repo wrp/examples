@@ -1,5 +1,6 @@
 /* A simple ring buffer */
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -101,6 +102,33 @@ rb_pop( struct ring_buf *R )
 		R->start = R->buf;
 	}
 	return rv;
+}
+
+
+int
+rb_peek(struct ring_buf const *R, size_t idx)
+{
+	unsigned char *retv = NULL;
+
+	assert( R->start >= R->buf );
+	assert( R->start < R->buf + R->s );
+	assert( R->end >= R->buf );
+	assert( R->end < R->buf + R->s );
+	if( R->start == R->end ) {
+		;
+	} else if( R->end > R->start ) {
+		if( idx < R->end - R->start ) {
+			retv = R->start + idx;
+		}
+	} else { /* uncovered block */
+		ptrdiff_t off = R->buf + R->s - R->start;
+		if( idx < off ) {
+			retv = R->start + idx;
+		} else if( idx - off < R->s ) {
+			retv = R->buf + ( idx - off );
+		}
+	} /* end uncovered */
+	return retv ? *retv : EOF;
 }
 
 
