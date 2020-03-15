@@ -251,7 +251,11 @@ apply_string_op( struct state *S, unsigned char c )
 		char buf[32];
 		struct ring_buf *rb = select_char_buf(S);
 		if( rb ) {
-			rb_string(rb, buf, sizeof buf);
+			int c, j;
+			for( j = 0; (c = rb_peek(rb, j)) != EOF && j < sizeof buf; j++) {
+				buf[j] = c;
+			}
+			buf[j] = '\0';
 			snprintf(S->fmt, sizeof S->fmt, "%s\n", *buf ? buf : "%.3Lg" );
 			validate_format( S );
 		}
