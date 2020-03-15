@@ -271,12 +271,10 @@ apply_string_op( struct state *S, unsigned char c )
 	case 'x': {
 		struct ring_buf *rb = select_char_buf(S);
 		if( rb ) {
-			char *buf = malloc(rb_length(rb) + 4);
-			rb_string(rb, buf, rb_length(rb));
-			for( char *k = buf; k && *k; k++ ) {
-				rb_push( S->r, *k );
+			int j=0, c;
+			while( (c = rb_peek(rb, j++)) != EOF && c ) {
+				rb_push( S->r, c );
 			}
-			free(buf);
 		}
 	} break;
 	}
