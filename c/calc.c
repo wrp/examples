@@ -148,9 +148,11 @@ int
 push_value(struct state *S, unsigned char c)
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
-	char s[256] = "", *cp = s, *end = s + sizeof s;
+	char s[256] = "", *end = s + sizeof s;
+	char *cp, *start;
 	int i;
 
+	cp = start = s;
 	if(! rb_isempty(*b)) {
 		long double val;
 
@@ -165,10 +167,12 @@ push_value(struct state *S, unsigned char c)
 			return 0;
 		}
 		val = strtold(s, &cp);
+		while( *cp == '-' && cp != start) {
+			stack_push(S->stack, &val);
+			start = cp;
+			val = strtold(start, &cp);
+		}
 		if( *cp == '-' ) {
-			if( cp != s) {
-				stack_push(S->stack, &val);
-			}
 			apply_binary( S, '-' );
 			for( char *t = cp + 1; *t; t++ ) {
 				push_it(S, *t);
