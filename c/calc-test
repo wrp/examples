@@ -55,8 +55,8 @@ test_string "4eXe2" 'Garbled: 4eXe2'
 test_string "4-2" 'Stack empty (need 2 values)'
 test_string "4 3.5-p" '0.5'
 test_string "4 2e-1-p" '3.8'
-test_string '1 2-5 9+p' '8'  # The 5 is discarded, computes 9 + -1
-test_string '1 2 -5 9+p' '4'  # The 5 is retained, computes 9 + -5
+test_string '1 2-5 9+p' '14'  # 9 + 5
+test_string '1 2 -5 9+p' '4'  # 9 + 5
 test_string "4 2e-1 -p" '3.8'
 test_string "[a]5[b]p" 5
 test_string '4[1 1+]xnn' "2${nl}4"

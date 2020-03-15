@@ -4,14 +4,7 @@
  * '-' is treated specially.  When possible, it is treated as a numeric symbol,
  * so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier
  * to enter negative numbers and values like '1e-2'.  Any time a token can be
- * interpreted as a numeric value, it is.  If a '-' is encountered in a token
- * that cannot be completely interpreted numerically, the string to the left
- * of the '-' is evaluated and pushed onto the stack, the `-` is treated
- * as a binary operator, and the remainder of the string is discarded.
- * For example "2-5 9", will push 2 onto the stack, pop 2 values and subtract,
- * discard the 5, and push 9.  But "2- 5" will retain the 5.  As another example,
- * "8 2 -5" will push 3 values onto the stack, but "8 2-5" will discard
- * the 5 and leave a 6 on the stack.
+ * interpreted as a numeric value, it is.
  *
  * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
  * '_' is an ignored place holder, so 65536 can be written 65_536
@@ -66,7 +59,7 @@ void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
-void push_number( struct state *S );
+int push_number(struct state *, unsigned char);
 
 
 int
@@ -125,10 +118,10 @@ process_entry( struct state *S, unsigned char c )
 	} else if( strchr( string_ops, c )) {
 		apply_string_op( S, c );
 	} else if( strchr( token_div, c )) {
-		push_number( S );
+		push_number(S, c);
 	} else if(strchr( binary_ops, c )) {
-		push_number( S );
-		apply_binary( S, c );
+		if(!push_number(S, c))
+			apply_binary(S, c);
 	} else if(strchr( nonary_ops, c )) {
 		switch(c) {
 		case '_': break; /* noop */
@@ -136,16 +129,16 @@ process_entry( struct state *S, unsigned char c )
 		case 'h': print_help();
 		}
 	} else if(strchr( unary_ops, c )) {
-		push_number( S );
-		apply_unary( S, c );
+		if(!push_number(S, c))
+			apply_unary(S, c);
 	} else {
 		fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
 
 
-void
-push_number( struct state *S )
+int
+push_number(struct state *S, unsigned char c)
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
 	int subtract = 0;
@@ -159,21 +152,25 @@ push_number( struct state *S )
 		while( (*cp++ = rb_pop(*b)) != EOF)
 			;
 		val = strtold(s, &cp);
-		if( *cp ) {
-			if( *cp == '-' ) {
-				subtract = 1;
-			} else {
-				fprintf(stderr, "Garbled: %s\n", s);
+		if( *cp == '-' ) {
+			subtract = 1;
+			if( cp != s) {
+				stack_push(S->stack, &val);
 			}
+			apply_binary( S, '-' );
+			for( cp += 1; *cp; cp++ ) {
+				push_it(S, *cp);
+			}
+			push_it(S, c);
+		} else if( *cp ) {
+			fprintf(stderr, "Garbled: %s\n", s);
 		}
-		free(s);
-		if( !subtract || cp != s ) {
+		if( !subtract ) {
 			stack_push(S->stack, &val);
 		}
-		if( subtract ) {
-			apply_binary( S, '-' );
-		}
+		free(s);
 	}
+	return subtract;
 }
 
 
@@ -226,7 +223,7 @@ apply_string_op( struct state *S, unsigned char c )
 	struct ring_buf *B;
 	switch(c) {
 	case '[':
-		push_number( S );
+		push_number(S, c);
 		S->enquote = 1;
 		break;
 	case ']':
