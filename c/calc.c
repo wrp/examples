@@ -156,7 +156,6 @@ push_value(struct state *S, unsigned char c)
 	if(! rb_isempty(*b)) {
 		long double val;
 
-		rb_push(*b, '\0');
 		while( (i = rb_pop(*b)) != EOF) {
 			if(cp < end) {
 				*cp++ = i;
@@ -243,7 +242,6 @@ apply_string_op( struct state *S, unsigned char c )
 	case ']':
 		S->enquote = 0;
 		Bp = stack_get(S->char_stack, -1);
-		rb_push(*Bp, '\0');
 		B = rb_create(32);
 		stack_push(S->char_stack, &B);
 		break;
@@ -276,7 +274,7 @@ apply_string_op( struct state *S, unsigned char c )
 		struct ring_buf *rb = select_char_buf(S);
 		if( rb ) {
 			int j=0, c;
-			while( (c = rb_peek(rb, j++)) != EOF && c ) {
+			while( (c = rb_peek(rb, j++)) != EOF ) {
 				rb_push( S->r, c );
 			}
 		}
