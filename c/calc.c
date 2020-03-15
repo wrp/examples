@@ -137,6 +137,12 @@ process_entry( struct state *S, unsigned char c )
 }
 
 
+/*
+ * Parse a number.  If we encounter an unexpcted '-',
+ * treat it as a binary operator and push the rest of
+ * the buffer back on the stack to be processed, and
+ * return non-zero to indicate that has happened.
+ */
 int
 push_number(struct state *S, unsigned char c)
 {
@@ -164,8 +170,7 @@ push_number(struct state *S, unsigned char c)
 			push_it(S, c);
 		} else if( *cp ) {
 			fprintf(stderr, "Garbled: %s\n", s);
-		}
-		if( !subtract ) {
+		} else {
 			stack_push(S->stack, &val);
 		}
 		free(s);
