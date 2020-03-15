@@ -148,12 +148,11 @@ int
 push_number(struct state *S, unsigned char c)
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
-	int subtract = 0;
+	char s[256] = "", *cp = s, *end = s + sizeof s;
 	int i;
 
 	if(! rb_isempty(*b)) {
 		long double val;
-		char s[256], *cp = s, *end = s + sizeof s;
 
 		rb_push(*b, '\0');
 		while( (i = rb_pop(*b)) != EOF) {
@@ -167,13 +166,12 @@ push_number(struct state *S, unsigned char c)
 		}
 		val = strtold(s, &cp);
 		if( *cp == '-' ) {
-			subtract = 1;
 			if( cp != s) {
 				stack_push(S->stack, &val);
 			}
 			apply_binary( S, '-' );
-			for( cp += 1; *cp; cp++ ) {
-				push_it(S, *cp);
+			for( char *t = cp + 1; *t; t++ ) {
+				push_it(S, *t);
 			}
 			push_it(S, c);
 		} else if( *cp ) {
@@ -182,7 +180,7 @@ push_number(struct state *S, unsigned char c)
 			stack_push(S->stack, &val);
 		}
 	}
-	return subtract;
+	return *cp == '-';
 }
 
 
