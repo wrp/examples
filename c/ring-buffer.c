@@ -147,33 +147,3 @@ rb_tail( struct ring_buf *R )
 	}
 	return (int)*--R->end;
 }
-
-
-int
-rb_string(struct ring_buf *r, char *dest, size_t siz)
-{
-	unsigned char *s = r->start;
-	unsigned char *end = r->start <= r->end ? r->end : r->buf + r->s;
-
-	siz -= 1;  /* leave space for terminator */
-	for( ; *s && s < end && siz--; s++ ) {
-		*dest++ = *s;
-	}
-	if( r->start > r->end ) {
-		for( s=r->buf; *s && s < r->end && siz--; s++ ) { /* uncovered */
-			*dest++ = *s; /* uncovered */
-		}
-	}
-	*dest = '\0';
-	return s == r->end;
-}
-
-
-int
-rb_length(struct ring_buf *r)
-{
-	if(r->end > r->start)
-		return r->end - r->start;
-	else
-		return r->s - (r->start - r->end); /* uncovered */
-}

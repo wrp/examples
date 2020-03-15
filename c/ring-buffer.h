@@ -5,5 +5,3 @@ int rb_pop( struct ring_buf *R );
 int rb_peek(struct ring_buf const *R, size_t idx);
 int rb_tail( struct ring_buf *R );
 int rb_isempty( struct ring_buf *R );
-int rb_string(struct ring_buf *, char *, size_t);
-int rb_length(struct ring_buf *);
