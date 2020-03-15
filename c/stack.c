@@ -9,12 +9,13 @@ struct stack {
 	void *top;  /* One beyond top element */
 	void *end;  /* One behond last allocated */
 	size_t element_size;
+	unsigned flags;
 };
 
 struct stack *
-stack_xcreate(size_t el) {
+stack_xcreate(size_t el, unsigned flags) {
 	struct stack *rv;
-	if( (rv = stack_create(el)) == NULL) {
+	if( (rv = stack_create(el, flags)) == NULL) {
 		perror("stack_create");
 		exit(EXIT_FAILURE);
 	}
@@ -22,18 +23,19 @@ stack_xcreate(size_t el) {
 }
 
 struct stack *
-stack_create(size_t el)
+stack_create(size_t el, unsigned flags)
 {
-	struct stack *st;
+	struct stack *st = NULL;
 	int initial_size = 4 * el;
 	long align;
 
 	align = sysconf(_SC_PAGESIZE);
-	if( align > 0 && ! posix_memalign((void *)&st, align, sizeof *st)) {
+	if( align > 0 && (st = malloc( sizeof *st)) != NULL) {
 		st->element_size = el;
-		if (! posix_memalign((void *)&st->data, sizeof(void *), initial_size)) {
+		if (! posix_memalign((void *)&st->data, align, initial_size)) {
 			st->top = st->data;
 			st->end = (char *)st->data + initial_size;
+			st->flags = flags;
 		} else {
 			free(st);
 		}
