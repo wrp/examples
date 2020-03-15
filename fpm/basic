@@ -1,0 +1,13 @@
+
+fpm seems somewhat clumsy, but maybe I just need more experience with it.
+If you have done:
+
+$ make DESTDIR=$dest install
+
+you can create a usable .deb with:
+
+fpm -n ${package_name} -s dir -t deb -C ${dest}
+
+
+it seems a bit odd, in that when printing the file list in the resulting package
+with dpkg -c, each path is prefixed with './', but the package seems to work.
