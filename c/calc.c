@@ -4,7 +4,8 @@
  * '-' is treated specially.  When possible, it is treated as a numeric symbol,
  * so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier
  * to enter negative numbers and values like '1e-2'.  Any time a token can be
- * interpreted as a numeric value, it is.
+ * interpreted as a numeric value, it is.  This sometimes gets confusing.  For
+ * example, '3 1--5-' will compute (3-1)-(-5), pushing 7 onto the stack.
  *
  * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
  * '_' is an ignored place holder, so 65536 can be written 65_536
