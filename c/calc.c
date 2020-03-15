@@ -1,11 +1,15 @@
 /*
  * A simple reverse polish calculator
  *
- * '-' is treated specially.  When possible, it is treated as a numeric symbol.
+ * '-' is treated specially.  When possible, it is treated as a numeric symbol,
  * so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier
- * to enter negative numbers and values like '1e-2'.  This means that "2-5"
- * will push 2 onto the stack, use the top 2 value of the stack as operands,
- * and then discard the 5.  But "2- 5" will retain the 5.  In other words,
+ * to enter negative numbers and values like '1e-2'.  Any time a token can be
+ * interpreted as a numeric value, it is.  If a '-' is encountered in a token
+ * that cannot be completely interpreted numerically, the string to the left
+ * of the '-' is evaluated and pushed onto the stack, the `-` is treated
+ * as a binary operator, and the remainder of the string is discarded.
+ * For example "2-5 9", will push 2 onto the stack, pop 2 values and subtract,
+ * discard the 5, and push 9.  But "2- 5" will retain the 5.  As another example,
  * "8 2 -5" will push 3 values onto the stack, but "8 2-5" will discard
  * the 5 and leave a 6 on the stack.
  *
