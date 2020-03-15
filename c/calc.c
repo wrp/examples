@@ -1,11 +1,11 @@
 /*
  * A simple reverse polish calculator
  *
- * '-' is not an operator.  Instead, it is a numeric symbol.  To perform
- * simple arithmetic, you must use +.  For example, '2 -1+' to subtract 1
- * from 2.  This makes it easier to enter negative numbers.  To
- * enter -5 you just enter '-5' instead of '0 5-' and .01 is '1e-2' (or '.01'!)
- * rather than the cumbersome '1 0 * 2-^')
+ * '-' is treated specially.  When possible, it is treated as a numeric symbol.
+ * so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier
+ * to enter negative numbers and values like '1e-2'.  This means that "2-5"
+ * will push 2 onto the stack, use the top 2 value of the stack as operand,
+ * and then discard the 5.  But "2- 5" will retain the 5.
  *
  * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
  * '_' is an ignored place holder, so 65536 can be written 65_536
@@ -142,6 +142,7 @@ void
 push_number( struct state *S )
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
+	int subtract = 0;
 
 	if(! rb_isempty(*b)) {
 		long double val;
@@ -153,10 +154,19 @@ push_number( struct state *S )
 			;
 		val = strtold(s, &cp);
 		if( *cp ) {
-			fprintf(stderr, "Garbled: %s\n", s);
+			if( *cp == '-' ) {
+				subtract = 1;
+			} else {
+				fprintf(stderr, "Garbled: %s\n", s);
+			}
 		}
 		free(s);
-		stack_push(S->stack, &val);
+		if( !subtract || cp != s ) {
+			stack_push(S->stack, &val);
+		}
+		if( subtract ) {
+			apply_binary( S, '-' );
+		}
 	}
 }
 
@@ -293,7 +303,7 @@ apply_binary(struct state *S, unsigned char c)
 {
 	long double val[2];
 	long double res;
-	assert( strchr( binary_ops, c ));
+	assert( strchr( binary_ops, c ) || c == '-' );
 	if( stack_size(S->stack) < 2 ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
@@ -306,6 +316,7 @@ apply_binary(struct state *S, unsigned char c)
 		res = val[1];
 	} break;
 	case '*': res = val[1] * val[0]; break;
+	case '-': res = val[1] - val[0]; break;
 	case '+': res = val[1] + val[0]; break;
 	case '/': res = val[1] / val[0]; break;
 	case '^': res = pow(val[1], val[0]); break;
