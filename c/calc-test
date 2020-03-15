@@ -20,6 +20,7 @@ test_string() {
 nl='
 '
 test_string 'p' 'Stack empty (need 1 value)'
+test_string "1 $(yes 24 | sed -e 300q | tr -d \\n) 3+p" "Overflow: Term truncated${nl}4"
 test_string 'hq' ''
 test_string '1 1+p' '2'
 test_string '10 3 1--5-p' '7'  # 2 - (-5)

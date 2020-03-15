@@ -149,15 +149,22 @@ push_number(struct state *S, unsigned char c)
 {
 	struct ring_buf **b = stack_get(S->char_stack, -1);
 	int subtract = 0;
+	int i;
 
 	if(! rb_isempty(*b)) {
 		long double val;
-		char *s, *cp;
+		char s[256], *cp = s, *end = s + sizeof s;
 
 		rb_push(*b, '\0');
-		cp = s = malloc(rb_length(*b));;
-		while( (*cp++ = rb_pop(*b)) != EOF)
-			;
+		while( (i = rb_pop(*b)) != EOF) {
+			if(cp < end) {
+				*cp++ = i;
+			}
+		}
+		if(cp == end) {
+			fprintf(stderr, "Overflow: Term truncated\n", s);
+			return 0;
+		}
 		val = strtold(s, &cp);
 		if( *cp == '-' ) {
 			subtract = 1;
@@ -174,7 +181,6 @@ push_number(struct state *S, unsigned char c)
 		} else {
 			stack_push(S->stack, &val);
 		}
-		free(s);
 	}
 	return subtract;
 }
