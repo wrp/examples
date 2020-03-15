@@ -4,8 +4,10 @@
  * '-' is treated specially.  When possible, it is treated as a numeric symbol.
  * so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier
  * to enter negative numbers and values like '1e-2'.  This means that "2-5"
- * will push 2 onto the stack, use the top 2 value of the stack as operand,
- * and then discard the 5.  But "2- 5" will retain the 5.
+ * will push 2 onto the stack, use the top 2 value of the stack as operands,
+ * and then discard the 5.  But "2- 5" will retain the 5.  In other words,
+ * "8 2 -5" will push 3 values onto the stack, but "8 2-5" will discard
+ * the 5 and leave a 6 on the stack.
  *
  * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
  * '_' is an ignored place holder, so 65536 can be written 65_536
