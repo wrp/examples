@@ -175,7 +175,7 @@ push_number(struct state *S, unsigned char c)
 			}
 			push_it(S, c);
 		} else if( *cp ) {
-			fprintf(stderr, "Garbled: %s\n", s);
+			fprintf(stderr, "Garbled (discarded): %s\n", s);
 		} else {
 			stack_push(S->stack, &val);
 		}
