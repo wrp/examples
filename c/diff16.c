@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "util.h"
+#include "xutil.h"
 
 /*
  * Compare two files, 16 bytes at a time. (Purely to demonstrate memcmp.

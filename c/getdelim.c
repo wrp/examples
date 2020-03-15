@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "util.h"
+#include "xutil.h"
 
 /* demonstrate getdelim to read an entire file */
 

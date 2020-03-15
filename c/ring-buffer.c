@@ -147,5 +147,5 @@ rb_length(struct ring_buf *r)
 	if(r->end > r->start)
 		return r->end - r->start;
 	else
-		return r->s - (r->start - r->end);
+		return r->s - (r->start - r->end); /* uncovered */
 }

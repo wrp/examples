@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "util.h"
+#include "xutil.h"
 
 int is_regular(int, const char *);
 

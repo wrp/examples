@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "util.h"
+#include "xutil.h"
 
 /* Use getdelim to read comma-separated numbers */
 

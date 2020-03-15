@@ -8,7 +8,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-#include "util.h"
+#include "xutil.h"
 
 struct buf {
 	char *data;

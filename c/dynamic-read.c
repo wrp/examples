@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "util.h"
+#include "xutil.h"
 
 int xopen(const char *, int);
 void reverse(char *, char *);

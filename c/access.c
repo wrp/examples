@@ -4,7 +4,7 @@
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
-#include "util.h"
+#include "xutil.h"
 
 /* Open a file.  Pause.  Upon receipt of signal, read from the file.
  * Testing how access time is modified

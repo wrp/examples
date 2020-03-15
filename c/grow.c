@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include "util.h"
+#include "xutil.h"
 
 struct buffer {
 	char *start;
