@@ -64,7 +64,8 @@ struct state {
 	struct stack *registers;
 	char fmt[32];
 	int enquote;
-	struct ring_buf *r;
+	struct ring_buf *r;     /* raw input as entered */
+	struct ring_buf *accum; /* accumulator (used to re-process) */
 };
 
 void process_entry( struct state *S, unsigned char c );
@@ -82,14 +83,12 @@ main( int argc, char **argv )
 {
 	int c;
 	struct state S[1];
-	struct ring_buf *B;
 
 	S->r = rb_create( 32 );
+	S->accum = rb_create(32);
 	S->enquote = 0;
 	S->stack = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
-	B = rb_create(32);
-	stack_xpush(S->registers, B);
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
@@ -124,7 +123,7 @@ push_it( struct state *S, unsigned char c )
 void
 process_entry( struct state *S, unsigned char c )
 {
-	struct ring_buf *b = stack_get(S->registers, -1);
+	struct ring_buf *b = S->accum;
 
 	if( S->enquote && c != ']' ) {
 		rb_push(b, c);
@@ -158,7 +157,7 @@ process_entry( struct state *S, unsigned char c )
 int
 push_value(struct state *S, unsigned char c)
 {
-	struct ring_buf *b = stack_get(S->registers, -1);
+	struct ring_buf *b = S->accum;
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
 	int i;
@@ -222,14 +221,14 @@ select_register( struct state *S )
 {
 	long double val;
 	struct ring_buf *ret = NULL;
-	int offset = -2;
+	int offset = -1;
 
 	if(stack_pop(S->stack, &val) != NULL) {
 		offset = val;
 	}
 
 	if( (ret = stack_get(S->registers, offset)) == NULL) {
-		fprintf(stderr, "Invalid register: %d\n", offset);
+		fprintf(stderr, "Empty register\n" );
 	}
 
 	return ret;
@@ -245,19 +244,18 @@ apply_string_op( struct state *S, unsigned char c )
 	}
 	switch(c) {
 	case '[':
+		rb_clear(S->accum);
 		S->enquote = 1;
 		break;
 	case ']':
 		S->enquote = 0;
-		stack_xpush(S->registers, rb_create(32));
+		stack_xpush(S->registers, S->accum);
+		S->accum = rb_create(32);
 		break;
 	case 'D':
-		if( stack_size(S->registers) > 1 ) {
+		if( stack_size(S->registers) > 0 ) {
 			void *e;
-			struct ring_buf *a, *b;
-			a = stack_pop(S->registers, &e);
-			b = stack_pop(S->registers, &e);
-			stack_push(S->registers, a);
+			stack_pop(S->registers, &e);
 		}
 	break;
 	case 'F': {
@@ -273,19 +271,17 @@ apply_string_op( struct state *S, unsigned char c )
 		}
 	} break;
 	case 'R':
-		if( stack_size(S->registers) > 2 ) {
+		if( stack_size(S->registers) > 1 ) {
 			void *e;
-			struct ring_buf *a, *b, *c;
+			struct ring_buf *a, *b;
 			a = stack_pop(S->registers, &e);
 			b = stack_pop(S->registers, &e);
-			c = stack_pop(S->registers, &e);
-			stack_push(S->registers, b);
-			stack_push(S->registers, c);
 			stack_push(S->registers, a);
+			stack_push(S->registers, b);
 		}
 	break;
 	case 'L': {
-		for( int i = 0; i < stack_size(S->registers) - 1; i++ ) {
+		for( int i = 0; i < stack_size(S->registers); i++ ) {
 			int j = 0, c;
 			struct ring_buf *s = stack_get(S->registers, i);
 

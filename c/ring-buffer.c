@@ -33,6 +33,24 @@ rb_create( size_t s )
 	return r;
 }
 
+
+void
+rb_free(struct ring_buf *r)
+{
+	if(r) {
+		free(r->buf);
+		free(r);
+	}
+}
+
+
+void
+rb_clear(struct ring_buf *r)
+{
+	r->end = r->start = r->buf;
+}
+
+
 static int
 grow( struct ring_buf *R )
 {
