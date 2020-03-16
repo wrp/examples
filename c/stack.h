@@ -10,6 +10,7 @@ struct stack;
 struct stack * stack_create(size_t);
 struct stack * stack_xcreate(size_t);
 int stack_push(struct stack *, void *);
+void stack_xpush(struct stack *, void *);
 void * stack_pop(struct stack *, void *);
 void * stack_get(struct stack *, int);
 void * stack_incr(struct stack *);

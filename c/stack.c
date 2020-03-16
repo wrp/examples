@@ -89,6 +89,16 @@ stack_size(struct stack *s)
 	return (s->top - s->data) / s->element_size;
 }
 
+
+void
+stack_xpush(struct stack *s, void *v)
+{
+	if(! stack_push(s, v)) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int
 stack_push(struct stack *s, void *v)
 {
@@ -124,11 +134,19 @@ stack_pop(struct stack *s, void *v)
 void *
 stack_get(struct stack *s, int idx)
 {
-	void *k = NULL;
+	void *v = NULL;
+	char *base = NULL;
 	if( idx >= 0 && idx <= stack_size(s)) {
-		k = (char *)s->data + idx * s->element_size;
+		base = s->data;
 	} else if( idx < 0 && idx >= -stack_size(s)) {
-		k = (char *)s->top + idx * s->element_size;
+		base = s->top;
 	}
-	return k;
+	if(base != NULL) {
+		if( s->raw ) {
+			v = *(void **)(base + idx * (sizeof v));
+		} else {
+			v = base + idx * s->element_size;
+		}
+	}
+	return v;
 }
