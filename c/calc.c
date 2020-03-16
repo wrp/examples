@@ -218,21 +218,18 @@ validate_format( struct state const *S )
 
 
 struct ring_buf *
-select_char_buf( struct state *S )
+select_register( struct state *S )
 {
+	long double val;
 	struct ring_buf *ret = NULL;
-	int offset;
-	struct ring_buf *b = stack_get(S->registers, -1);
+	int offset = -2;
 
-	if( rb_isempty(b)) {
-		offset = stack_size(S->registers) - 2;
-	} else {
-		offset = rb_tail(b) - '0';
+	if(stack_pop(S->stack, &val) != NULL) {
+		offset = val;
 	}
-	if( offset < 0 || offset > stack_size(S->registers) - 2 ) {
-		fprintf(stderr, "Invalid register\n");
-	} else {
-		ret = stack_get(S->registers, offset);
+
+	if( (ret = stack_get(S->registers, offset)) == NULL) {
+		fprintf(stderr, "Invalid register: %d\n", offset);
 	}
 
 	return ret;
@@ -242,9 +239,12 @@ void
 apply_string_op( struct state *S, unsigned char c )
 {
 	struct ring_buf *Bp;
+	assert( !S->enquote || c == ']');
+	if( c != ']' ) {
+		push_value(S, c);
+	}
 	switch(c) {
 	case '[':
-		push_value(S, c);
 		S->enquote = 1;
 		break;
 	case ']':
@@ -261,7 +261,7 @@ apply_string_op( struct state *S, unsigned char c )
 		}
 	break;
 	case 'F': {
-		struct ring_buf *rb = select_char_buf(S);
+		struct ring_buf *rb = select_register(S);
 		if( rb ) {
 			int c, j;
 			char *b = S->fmt;
@@ -297,7 +297,7 @@ apply_string_op( struct state *S, unsigned char c )
 		}
 	} break;
 	case 'x': {
-		struct ring_buf *rb = select_char_buf(S);
+		struct ring_buf *rb = select_register(S);
 		if( rb ) {
 			int j=0, c;
 			while( (c = rb_peek(rb, j++)) != EOF ) {
