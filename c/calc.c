@@ -38,7 +38,7 @@
 #include <unistd.h>
 
 #define numeric_tok "-0123456789XPEabcdef."
-#define string_ops "[]FxL"
+#define string_ops "[]FxLR"
 #define binary_ops "*+/^r"
 #define unary_ops "lknpy"
 #define nonary_ops "hq_"
@@ -55,6 +55,8 @@ void print_help( void ) {
 		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
 		"q    quit\n"
+		"r    swap top two elements of the stack\n"
+		"R    swap top two registers\n"
 		"x    execute string in string stack\n"
 		"y    duplicate top value of stack\n"
 	);
@@ -264,6 +266,18 @@ apply_string_op( struct state *S, unsigned char c )
 			validate_format( S );
 		}
 	} break;
+	case 'R':
+		if( stack_size(S->registers) > 2 ) {
+			void *e;
+			struct ring_buf *a, *b, *c;
+			a = stack_pop(S->registers, &e);
+			b = stack_pop(S->registers, &e);
+			c = stack_pop(S->registers, &e);
+			stack_push(S->registers, b);
+			stack_push(S->registers, c);
+			stack_push(S->registers, a);
+		}
+	break;
 	case 'L': {
 		for( int i = 0; i < stack_size(S->registers) - 1; i++ ) {
 			int j = 0, c;
