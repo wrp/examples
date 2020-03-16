@@ -125,17 +125,14 @@ process_entry( struct state *S, unsigned char c )
 	} else if(strchr( binary_ops, c )) {
 		if(!push_value(S, c))
 			apply_binary(S, c);
-	} else if(strchr( nonary_ops, c )) {
-		switch(c) {
-		case '_': break; /* noop */
-		case 'q': exit(0);
-		case 'h': print_help();
-		}
 	} else if(strchr( unary_ops, c )) {
 		if(!push_value(S, c))
 			apply_unary(S, c);
-	} else {
-		fprintf( stderr, "Unexpected: %c\n", c );
+	} else switch(c) {
+		case '_': break; /* noop */
+		case 'q': exit(0);
+		case 'h': print_help();
+		default: fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
 
