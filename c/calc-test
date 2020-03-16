@@ -41,11 +41,14 @@ test_string '10k10 3/p' '3.333333333'
 test_string '1y+p' '2'
 test_string '1 2 3np' "3${nl}2"
 test_string '2 4r/p' '2'
+
+# Test string registers
 test_string '[2 2+p][1 1+p]x0x' "2${nl}4"
 test_string '[2 2+n]5[1 1+n]x0xp' "2${nl}4${nl}5"
 test_string '[garbage][2 2+]5[1 1+n]x1xnp' "2${nl}4${nl}5"
 test_string '[f_oo][bar]L' "(0): f_oo${nl}(1): bar"
 test_string '[foo][bar]RL' "(0): bar${nl}(1): foo"
+test_string '[foo][bar][baz]DL' "(0): foo${nl}(1): bar"
 test_string '[foo]LRL' "(0): foo${nl}(0): foo"
 long='this string needs to be at least 32 characters long'
 test_string "[$long][bar]L" "(0): ${long}${nl}(1): bar"

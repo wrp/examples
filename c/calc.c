@@ -15,11 +15,7 @@
 
 /*
  * TODO:
- * implement a method for manipulating hte string stack. eg perhaps
- * 'S' could store the current buffer at a given location (eg, 3S)
- * might store into stack position 3.  Also should do N to print the
- * to register and delete.  Or something like that.  Also, document
- * x better, and generate an error if 'x' is given and the
+ * document x better, and generate an error if 'x' is given and the
  * register is empty.  eg, '[1 1+]x' is supposed to execute 1 1+, and
  * 3x should execute the contents of register 3, but no error is
  * given if either register is empty.
@@ -38,7 +34,7 @@
 #include <unistd.h>
 
 #define numeric_tok "-0123456789XPEabcdef."
-#define string_ops "[]FxLR"
+#define string_ops "[]FxLRD"
 #define binary_ops "*+/^r"
 #define unary_ops "lknpy"
 #define nonary_ops "hq_"
@@ -46,6 +42,7 @@
 
 void print_help( void ) {
 	puts(
+		"D    Delete the first register\n"
 		"F    use value from the string stack as format string\n"
 		"[s]  push s onto the string stack\n"
 		"h    print this help message\n"
@@ -254,6 +251,15 @@ apply_string_op( struct state *S, unsigned char c )
 		S->enquote = 0;
 		stack_xpush(S->registers, rb_create(32));
 		break;
+	case 'D':
+		if( stack_size(S->registers) > 1 ) {
+			void *e;
+			struct ring_buf *a, *b;
+			a = stack_pop(S->registers, &e);
+			b = stack_pop(S->registers, &e);
+			stack_push(S->registers, a);
+		}
+	break;
 	case 'F': {
 		struct ring_buf *rb = select_char_buf(S);
 		if( rb ) {
