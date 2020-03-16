@@ -13,6 +13,19 @@
  * '_' is an ignored place holder, so 65536 can be written 65_536
  */
 
+/*
+ * TODO:
+ * implement a method for manipulating hte string stack. eg perhaps
+ * 'S' could store the current buffer at a given location (eg, 3S)
+ * might store into stack position 3.  Also should do N to print the
+ * to register and delete.  Or something like that.  Also, document
+ * x better, and generate an error if 'x' is given and the
+ * register is empty.  eg, '[1 1+]x' is supposed to execute 1 1+, and
+ * 3x should execute the contents of register 3, but no error is
+ * given if either register is empty.
+
+ */
+
 #include "stack.h"
 #include "ring-buffer.h"
 #include <stddef.h>
