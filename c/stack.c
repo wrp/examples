@@ -10,6 +10,7 @@ struct stack {
 	void *end;  /* One behond last allocated */
 	size_t element_size;
 	unsigned flags;
+	int raw;
 };
 
 struct stack *
@@ -29,12 +30,14 @@ stack_create(size_t s)
 	long align;
 	struct stack *st = NULL;
 
-	if( s == 0 ) {
-		s = sizeof(void *);
-	}
-	initial_size = 4 * s;
 	align = sysconf(_SC_PAGESIZE);
 	if( align > 0 && (st = malloc( sizeof *st)) != NULL) {
+		st->raw = 0;
+		if( s == 0 ) {
+			st->raw = 1;
+			s = sizeof(void *);
+		}
+		initial_size = 4 * s;
 		st->element_size = s;
 		if (! posix_memalign((void *)&st->data, align, initial_size)) {
 			st->top = st->data;
@@ -89,20 +92,32 @@ stack_size(struct stack *s)
 int
 stack_push(struct stack *s, void *v)
 {
-	memcpy(s->top, v, s->element_size);
+	if( s->raw ) {
+		*(void **)s->top = v;
+	} else {
+		memcpy(s->top, v, s->element_size);
+	}
 	return stack_incr(s) != NULL;
 }
 
 
-int
+void *
 stack_pop(struct stack *s, void *v)
 {
+	void *rv = NULL;
 	if(s->top > s->data) {
 		s->top = (char *)s->top - s->element_size;
-		memcpy(v, s->top, s->element_size);
-		return 1;
+		if( s->raw ) {
+			rv = *(void **)s->top;
+			*(void**) v = s->top;
+		} else {
+			rv = v;
+			memcpy(v, s->top, s->element_size);
+		}
+	} else if( s->raw ){
+		*(void**) v = NULL;
 	}
-	return 0;
+	return rv;
 }
 
 
