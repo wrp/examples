@@ -151,8 +151,8 @@ rb_peek(struct ring_buf const *R, size_t idx)
 
 
 int
-rb_tail( struct ring_buf *R )
-{
+rb_tail( struct ring_buf *R ) /* uncovered */
+{ /* uncovered block */
 	assert( R->start >= R->buf );
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
@@ -164,4 +164,4 @@ rb_tail( struct ring_buf *R )
 		R->end == R->buf + R->s; /* uncovered */
 	}
 	return (int)*--R->end;
-}
+} /* end uncovered */

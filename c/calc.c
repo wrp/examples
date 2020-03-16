@@ -100,6 +100,8 @@ main( int argc, char **argv )
 	} else while( (c=getchar()) != EOF ) {
 		push_it( S, (unsigned char)c );
 	}
+	rb_free(S->r);
+	rb_free(S->accum);
 	return 0;
 }
 
