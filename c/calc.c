@@ -74,8 +74,8 @@ main( int argc, char **argv )
 
 	S->r = rb_create( 32 );
 	S->enquote = 0;
-	S->stack = stack_xcreate(sizeof(long double), 0);
-	S->registers = stack_xcreate(sizeof(struct ring_buf *), 0);
+	S->stack = stack_xcreate(sizeof(long double));
+	S->registers = stack_xcreate(0);
 	B = rb_create(32);
 	stack_push(S->registers, &B);
 	strcpy( S->fmt, "%.3Lg\n" );
