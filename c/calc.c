@@ -51,7 +51,7 @@ void print_help( void ) {
 }
 
 struct state {
-	struct stack *stack;
+	struct stack *values;
 	struct stack *registers;
 	char fmt[32];
 	int enquote;
@@ -79,7 +79,7 @@ main( int argc, char **argv )
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
-	S->stack = stack_xcreate(sizeof(long double));
+	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
 	strcpy( S->fmt, "%.3Lg\n" );
 
@@ -171,7 +171,7 @@ push_value(struct state *S, unsigned char c)
 		}
 		val = strtold(s, &cp);
 		while( *cp == '-' && cp != start) {
-			stack_push(S->stack, &val);
+			stack_push(S->values, &val);
 			start = cp;
 			val = strtold(start, &cp);
 		}
@@ -184,7 +184,7 @@ push_value(struct state *S, unsigned char c)
 		} else if( *cp ) {
 			fprintf(stderr, "Garbled (discarded): %s\n", s);
 		} else {
-			stack_push(S->stack, &val);
+			stack_push(S->values, &val);
 		}
 	}
 	return *cp == '-';
@@ -219,7 +219,7 @@ select_register( struct state *S )
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if(stack_pop(S->stack, &val) != NULL) {
+	if(stack_pop(S->values, &val) != NULL) {
 		offset = val;
 	}
 
@@ -297,28 +297,28 @@ apply_unary( struct state *S, unsigned char c )
 	long double val;
 	unsigned i = 0;
 	assert( strchr( unary_ops, c ));
-	if( stack_size(S->stack) < 1 ) {
+	if( stack_size(S->values) < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
 	}
-	stack_pop(S->stack, &val);
+	stack_pop(S->values, &val);
 	switch(c) {
 	case 'y':
-		stack_push(S->stack, &val);
-		stack_push(S->stack, &val);
+		stack_push(S->values, &val);
+		stack_push(S->values, &val);
 		break;
 	case 'k':
 		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)val);
 		break;
 	case 'l':
-		stack_push(S->stack, &val);
-		for(long double * s = stack_base(S->stack); i < stack_size(S->stack); s++, i++) {
+		stack_push(S->values, &val);
+		for(long double * s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
 			printf("%3u: ", i);
 			printf(S->fmt, *s);
 		}
 		break;
 	case 'p':
-		stack_push(S->stack, &val);
+		stack_push(S->values, &val);
 	case 'n':
 		printf(S->fmt, val);
 		break;
@@ -332,15 +332,15 @@ apply_binary(struct state *S, unsigned char c)
 	long double val[2];
 	long double res;
 	assert( strchr( binary_ops, c ) || c == '-' );
-	if( stack_size(S->stack) < 2 ) {
+	if( stack_size(S->values) < 2 ) {
 		fputs( "Stack empty (need 2 values)\n", stderr );
 		return;
 	}
-	stack_pop(S->stack, val);
-	stack_pop(S->stack, val + 1);
+	stack_pop(S->values, val);
+	stack_pop(S->values, val + 1);
 	switch(c) {
 	case 'r': {
-		stack_push(S->stack, val);
+		stack_push(S->values, val);
 		res = val[1];
 	} break;
 	case '*': res = val[1] * val[0]; break;
@@ -349,5 +349,5 @@ apply_binary(struct state *S, unsigned char c)
 	case '/': res = val[1] / val[0]; break;
 	case '^': res = pow(val[1], val[0]); break;
 	}
-	stack_push(S->stack, &res);
+	stack_push(S->values, &res);
 }
