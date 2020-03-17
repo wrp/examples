@@ -169,7 +169,7 @@ push_value(struct state *S, unsigned char c)
 			fprintf(stderr, "Overflow: Term truncated\n", s);
 			return 0;
 		}
-		val = strtold(s, &cp);
+		val = strtold(start, &cp);
 		while( *cp == '-' && cp != start) {
 			stack_push(S->values, &val);
 			start = cp;
@@ -289,12 +289,21 @@ apply_string_op( struct state *S, unsigned char c )
 	}
 }
 
+void
+print_stack(struct state *S)
+{
+	unsigned i = 0;
+	for(long double * s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
+		printf("%3u: ", i);
+		printf(S->fmt, *s);
+	}
+}
+
 
 void
 apply_unary( struct state *S, unsigned char c )
 {
 	long double val;
-	unsigned i = 0;
 	assert( strchr( unary_ops, c ));
 	if( stack_size(S->values) < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
@@ -311,10 +320,7 @@ apply_unary( struct state *S, unsigned char c )
 		break;
 	case 'l':
 		stack_push(S->values, &val);
-		for(long double * s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
-			printf("%3u: ", i);
-			printf(S->fmt, *s);
-		}
+		print_stack(S);
 		break;
 	case 'p': stack_push(S->values, &val); /* Fall thru */
 	case 'n': printf(S->fmt, val);
