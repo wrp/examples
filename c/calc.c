@@ -34,18 +34,18 @@
 void print_help( void ) {
 	puts(
 		"D    Delete the first register\n"
-		"F    use value from the string stack as format string\n"
-		"[s]  push s onto the string stack\n"
+		"F    use value from the register as format string\n"
+		"[s]  push s onto the register stack\n"
 		"h    print this help message\n"
 		"k    set precision of %g format string\n"
 		"l    list elements of the stack\n"
-		"L    list elements of string stack\n"
+		"L    list elements of register stack\n"
 		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
 		"q    quit\n"
 		"r    swap top two elements of the stack\n"
-		"R    swap top two registers\n"
-		"x    execute string in string stack\n"
+		"R    swap top two elements of the register stack\n"
+		"x    execute a string in register\n"
 		"y    duplicate top value of stack\n"
 	);
 }
