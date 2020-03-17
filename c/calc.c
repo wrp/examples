@@ -67,6 +67,7 @@ void apply_string_op( struct state *S, unsigned char c );
 void die( const char *msg );
 void write_args_to_stdin( char *const*argv );
 static int push_value(struct state *, unsigned char);
+struct ring_buf * select_register(struct state *S);
 
 
 int
@@ -196,15 +197,21 @@ push_value(struct state *S, unsigned char c)
  * but doesn't catch simple mistakes like '%L'
  */
 void
-validate_format( struct state const *S )
+validate_format(struct state *S)
 {
-	int count[2] = {0};
-	for(char const *k = S->fmt; *k; k++) {
-		count[0] += *k == '%';
-		count[1] += count[0] && *k == 'L';
-	}
-	if( ! count[0] || ! count[1] ) {
-		fputs( "Warning: output fmt should print a long double (eg '%%Lf')\n", stderr );
+	struct ring_buf *rb = select_register(S);
+	if( rb ) {
+		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
+		int count[2] = {0};
+
+		for( ; b < e && (*b = rb_peek(rb, b - S->fmt)) != EOF; b++) {
+			count[0] += *b == '%';
+			count[1] += count[0] && *b == 'L';
+		}
+		*b = '\0';
+		if( ! count[0] || ! count[1] ) {
+			fputs( "Warning: output fmt should print a long double (eg '%%Lf')\n", stderr );
+		}
 	}
 }
 
@@ -250,18 +257,9 @@ apply_string_op( struct state *S, unsigned char c )
 			stack_pop(S->registers, &e);
 		}
 	break;
-	case 'F': {
-		struct ring_buf *rb = select_register(S);
-		if( rb ) {
-			int c, j;
-			char *b = S->fmt;
-			for( j = 0; (c = rb_peek(rb, j)) != EOF && j < sizeof S->fmt; j++) {
-				*b++ = c;
-			}
-			*b = '\0';
-			validate_format( S );
-		}
-	} break;
+	case 'F':
+		validate_format(S);
+	break;
 	case 'R':
 		if( stack_size(S->registers) > 1 ) {
 			void *e;
