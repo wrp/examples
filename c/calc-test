@@ -61,8 +61,9 @@ test_string '1_024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 fmt_warning="Warning: output fmt should print a long double (eg '%%Lf')"
 test_string '[%.0f]F' "$fmt_warning"
 test_string '[L%.0f]F' "$fmt_warning"
-long_string="1 $( yes "1+" | sed 1049q )"  # Test this with longer string
+long_string="1 $( yes "1+" | sed 1049q )"
 test_string "[$long_string]0x[%.0Lf]1Fp" '1050'
+test_string "[${long_string} 1+]0x[%.0Lf]1Fp" '1051'
 test_string '1 4eXe2 3-p' "Garbled (discarded): 4eXe2${nl}-2"
 test_string "4-" 'Stack empty (need 2 values)'
 test_string "4-2" ''
