@@ -191,25 +191,21 @@ push_value(struct state *S, unsigned char c)
 }
 
 
-/*
- * Extremely naive check of format string.
- * Primarily this is to remind the user to include 'L',
- * but doesn't catch simple mistakes like '%L'
- */
 void
-validate_format(struct state *S)
+extract_format(struct state *S)
 {
 	struct ring_buf *rb = select_register(S);
 	if( rb ) {
 		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
-		int count[2] = {0};
+		int count = 0;
 
 		for( ; b < e && (*b = rb_peek(rb, b - S->fmt)) != EOF; b++) {
-			count[0] += *b == '%';
-			count[1] += count[0] && *b == 'L';
+			/* Extremely naive check of format string.  */
+			count += !count && *b == '%';
+			count += count && *b == 'L';
 		}
 		*b = '\0';
-		if( ! count[0] || ! count[1] ) {
+		if( count < 2 ) {
 			fputs( "Warning: output fmt should print a long double (eg '%%Lf')\n", stderr );
 		}
 	}
@@ -258,8 +254,8 @@ apply_string_op( struct state *S, unsigned char c )
 		}
 	break;
 	case 'F':
-		validate_format(S);
-	break;
+		extract_format(S);
+		break;
 	case 'R':
 		if( stack_size(S->registers) > 1 ) {
 			void *e;
