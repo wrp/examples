@@ -44,13 +44,6 @@ rb_free(struct ring_buf *r)
 }
 
 
-void
-rb_clear(struct ring_buf *r)
-{
-	r->end = r->start = r->buf;
-}
-
-
 static int
 grow( struct ring_buf *R )
 {
@@ -138,30 +131,13 @@ rb_peek(struct ring_buf const *R, size_t idx)
 		if( idx < R->end - R->start ) {
 			retv = R->start + idx;
 		}
-	} else { /* uncovered block */
+	} else {
 		ptrdiff_t off = R->buf + R->s - R->start;
 		if( idx < off ) {
 			retv = R->start + idx;
 		} else if( idx - off < R->end - R->buf ) {
 			retv = R->buf + ( idx - off );
 		}
-	} /* end uncovered */
+	}
 	return retv ? *retv : EOF;
 }
-
-
-int
-rb_tail( struct ring_buf *R ) /* uncovered */
-{ /* uncovered block */
-	assert( R->start >= R->buf );
-	assert( R->start < R->buf + R->s );
-	assert( R->end >= R->buf );
-	assert( R->end < R->buf + R->s );
-	if( R->start == R->end ) {
-		return EOF; /* uncovered */
-	}
-	if(R->end == R->buf) {
-		R->end == R->buf + R->s; /* uncovered */
-	}
-	return (int)*--R->end;
-} /* end uncovered */
