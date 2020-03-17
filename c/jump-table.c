@@ -20,9 +20,9 @@ int
 main(int argc, char **argv)
 {
 	double a, b;
-	char option = argc > 2 ? tolower(*argv[2]) : '+';
+	char operator = argc > 2 ? tolower(*argv[2]) : '+';
 	char *lut = "+-*/";
-	char *opt = strchr(lut, option);
+	char *opt = strchr(lut, operator);
 	int idx = opt == NULL ? -1 : opt - lut;
 	struct func table[] = {
 		{"Addition", '+', add},
@@ -36,11 +36,11 @@ main(int argc, char **argv)
 	b = argc > 3 ? strtod(argv[3], NULL) : 20;
 
 	if(idx == -1) {
-		fprintf (stderr, "Invalid option: '%c'\n", option);
+		fprintf (stderr, "Invalid operator: '%c'\n", operator);
 		return EXIT_FAILURE;
 	}
 	f = table + idx;
-	printf("%s: %g %c %g = %g\n" , f->descr, a, option, b, f->f(a,b));
+	printf("%s: %g %c %g = %g\n" , f->descr, a, operator, b, f->f(a,b));
 
 	return 0;
 }
