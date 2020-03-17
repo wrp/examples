@@ -55,7 +55,7 @@ struct state {
 	struct stack *registers;
 	char fmt[32];
 	int enquote;
-	struct ring_buf *r;     /* raw input as entered */
+	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 };
 
@@ -75,7 +75,7 @@ main( int argc, char **argv )
 	int c;
 	struct state S[1];
 
-	S->r = rb_create( 32 );
+	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
 	S->stack = stack_xcreate(sizeof(long double));
@@ -91,7 +91,7 @@ main( int argc, char **argv )
 	} else while( (c=getchar()) != EOF ) {
 		push_it( S, (unsigned char)c );
 	}
-	rb_free(S->r);
+	rb_free(S->raw);
 	rb_free(S->accum);
 	return 0;
 }
@@ -106,8 +106,8 @@ void
 push_it( struct state *S, unsigned char c )
 {
 	int k;
-	rb_push( S->r, c );
-	while( ( k = rb_pop( S->r )) != EOF ) {
+	rb_push( S->raw, c );
+	while( ( k = rb_pop( S->raw )) != EOF ) {
 		process_entry( S, (unsigned char)k );
 	}
 }
@@ -289,7 +289,7 @@ apply_string_op( struct state *S, unsigned char c )
 		if( rb ) {
 			int j=0, c;
 			while( (c = rb_peek(rb, j++)) != EOF ) {
-				rb_push( S->r, c );
+				rb_push( S->raw, c );
 			}
 		}
 	} break;
