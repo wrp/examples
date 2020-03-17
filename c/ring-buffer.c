@@ -142,7 +142,7 @@ rb_peek(struct ring_buf const *R, size_t idx)
 		ptrdiff_t off = R->buf + R->s - R->start;
 		if( idx < off ) {
 			retv = R->start + idx;
-		} else if( idx - off < R->s ) {
+		} else if( idx - off < R->end - R->buf ) {
 			retv = R->buf + ( idx - off );
 		}
 	} /* end uncovered */

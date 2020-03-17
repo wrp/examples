@@ -246,7 +246,6 @@ apply_string_op( struct state *S, unsigned char c )
 	}
 	switch(c) {
 	case '[':
-		rb_clear(S->accum);
 		S->enquote = 1;
 		break;
 	case ']':
