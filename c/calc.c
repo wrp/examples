@@ -234,6 +234,7 @@ void
 apply_string_op( struct state *S, unsigned char c )
 {
 	struct ring_buf *Bp;
+	void *e;
 	assert( !S->enquote || c == ']');
 	if( c != ']' ) {
 		push_value(S, c);
@@ -249,7 +250,6 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case 'D':
 		if( stack_size(S->registers) > 0 ) {
-			void *e;
 			stack_pop(S->registers, &e);
 		}
 	break;
@@ -258,7 +258,6 @@ apply_string_op( struct state *S, unsigned char c )
 		break;
 	case 'R':
 		if( stack_size(S->registers) > 1 ) {
-			void *e;
 			struct ring_buf *a, *b;
 			a = stack_pop(S->registers, &e);
 			b = stack_pop(S->registers, &e);
@@ -317,10 +316,8 @@ apply_unary( struct state *S, unsigned char c )
 			printf(S->fmt, *s);
 		}
 		break;
-	case 'p':
-		stack_push(S->values, &val);
-	case 'n':
-		printf(S->fmt, val);
+	case 'p': stack_push(S->values, &val); /* Fall thru */
+	case 'n': printf(S->fmt, val);
 		break;
 	}
 }
@@ -339,10 +336,10 @@ apply_binary(struct state *S, unsigned char c)
 	stack_pop(S->values, val);
 	stack_pop(S->values, val + 1);
 	switch(c) {
-	case 'r': {
+	case 'r':
 		stack_push(S->values, val);
 		res = val[1];
-	} break;
+		break;
 	case '*': res = val[1] * val[0]; break;
 	case '-': res = val[1] - val[0]; break;
 	case '+': res = val[1] + val[0]; break;
