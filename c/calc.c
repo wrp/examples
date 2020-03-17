@@ -60,7 +60,7 @@ struct state {
 };
 
 void process_entry( struct state *S, unsigned char c );
-void push_it( struct state *S, unsigned char c );
+void push_it(struct state *, int);
 void apply_binary( struct state *S, unsigned char c );
 void apply_unary( struct state *S, unsigned char c );
 void apply_string_op( struct state *S, unsigned char c );
@@ -84,13 +84,13 @@ main( int argc, char **argv )
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		for( ; *++argv; push_it( S, (unsigned char)' ')) {
+		for( ; *++argv; push_it(S, ' ')) {
 			for( char *t = *argv; *t; t++ ) {
-				push_it( S, (unsigned char)*t );
+				push_it(S, *t);
 			}
 		}
 	} else while( (c=getchar()) != EOF ) {
-		push_it( S, (unsigned char)c );
+		push_it(S, c);
 	}
 	rb_free(S->raw);
 	rb_free(S->accum);
@@ -104,10 +104,10 @@ main( int argc, char **argv )
  * buffer, and they should be processed before the next entry coming from input.
  */
 void
-push_it( struct state *S, unsigned char c )
+push_it(struct state *S, int c)
 {
 	int k;
-	rb_push( S->raw, c );
+	rb_push(S->raw, (unsigned char)c);
 	while( ( k = rb_pop( S->raw )) != EOF ) {
 		process_entry( S, (unsigned char)k );
 	}
@@ -143,7 +143,7 @@ process_entry( struct state *S, unsigned char c )
 
 
 /*
- * Parse a number.  If we encounter an unexpcted '-',
+ * Parse a number.  If we encounter an unexpected '-',
  * treat it as a binary operator and push the rest of
  * the buffer back on the stack to be processed, and
  * return non-zero to indicate that has happened.
