@@ -1,6 +1,11 @@
 /*
  * Trivial demonstration of a linked list
  * and a simple (unbalanced) binary search tree.
+ *
+ * Note: this uses a sentinel object for the list (eg,
+ * a node that acts as a HEAD object that is not part
+ * of the list. This allows us to avoid checking for NULL
+ * in the list operators.)
  */
 #include<stdio.h>
 #include<stdlib.h>
