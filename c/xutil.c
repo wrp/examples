@@ -23,3 +23,14 @@ xrealloc(void *buf, size_t s)
 	}
 	return buf;
 }
+
+void *
+xmalloc(size_t s)
+{
+	void *rv = malloc(s);
+	if(rv == NULL) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	return rv;
+}

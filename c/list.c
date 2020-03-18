@@ -4,6 +4,8 @@
  */
 #include<stdio.h>
 #include<stdlib.h>
+#include "xutil.h"
+
 struct node {
 	int val;
 	struct node *next, *prev;
@@ -14,7 +16,6 @@ struct tree {
 	struct tree *left, *right;
 };
 
-void *xmalloc(size_t s);
 
 /*
  * Allocate a new struct node and push it to the end of the list.
@@ -29,6 +30,21 @@ push(struct node *list, int val)
 	new->prev->next = new;
 	new->next = list;
 }
+
+/*
+ * Reverse the list
+ */
+void
+reverse(struct node *list)
+{
+	struct node *t = list;
+	do {
+		struct node *next = t->next;
+		t->next = t->prev;
+		t = t->prev = next;
+	} while( t != list );
+}
+
 
 /*
  * Print the contents of the list.
@@ -50,7 +66,7 @@ display(const struct node *list, char delim)
 
 /*
  * Push val into the tree.  Return non-zero if val
- * is already in the tree
+ * is already in the tree.
  */
 int
 push_tree(struct tree **t, int val)
@@ -98,15 +114,7 @@ main(int argc, char **argv)
 		}
 	}
 	display(&list, delim);
-}
-
-void *
-xmalloc(size_t s)
-{
-	void *rv = malloc(s);
-	if(rv == NULL) {
-		perror("malloc"); /* uncovered */
-		exit(EXIT_FAILURE); /* uncovered */
-	}
-	return rv;
+	reverse(&list);
+	display(&list, delim);
+	return EXIT_SUCCESS;
 }
