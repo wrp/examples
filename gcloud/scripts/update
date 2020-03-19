@@ -141,6 +141,7 @@ main() {
 				test "$host" = "${host#*.}" \
 				&& execute bq ls --max_results 100000 --project_id=$PROJECT $host
 				execute bq show --max_rows_per_request 100000 --project_id=$PROJECT $host
+				execute bq show --format=prettyjson --max_rows_per_request 100000 --project_id=$PROJECT $host
 			;;
 			esac
 		;;
