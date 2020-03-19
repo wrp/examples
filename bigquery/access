@@ -2,3 +2,10 @@
 bq show --format=prettyjson ${PROJECT?}:${DATASET?} > ${OUTPUT_FILE?}
 ${EDITOR?} ${OUTPUT_FILE?}
 bq update --source ${OUTPUT_FILE?} ${PROJECT?}:${DATASET?}
+
+
+# To set owners of the table to only projectOwners:
+bq mk $dataset
+bq show --format=prettyjson ${PROJECT?}:$dataset \
+	| jq '.access = [{"role":"OWNER", "specialGroup": "projectOwners"}]' > ${dataset?}.json \
+	&& bq update --source $dataset.json $PROJECT:$dataset
