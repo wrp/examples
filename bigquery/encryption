@@ -1,0 +1,46 @@
+
+# Steps needed to use hms keys for encryption.
+# See https://cloud.google.com/bigquery/docs/customer-managed-encryption
+#
+# $kms_project is the project in which keys are stored, $project is the
+# project in which big query is running.
+
+# If no keyring exists in the project which will store the keys, create one:
+gcloud kms keyrings create \
+	--project=${kms_project:?} --location ${location:?} ${keyring:?}
+
+# Create key (using hsm) in that keyring:
+# See 'gcloud topic datetimes' for description of ${time}
+# for example: time=2021-01-11T11:00:00.0-0700
+gcloud kms keys create ${key:?} \
+	--purpose encryption \
+	--project=${kms_project:?} \
+	--protection-level hsm \
+	--rotation-period 1Y \
+	--next-rotation-time ${time?} \
+	--location ${location:?} \
+	--keyring ${keyring:?} \
+;
+
+
+# Get the service account used for big query:
+service_account=$( bq show --encryption_service_account --project_id ${project:?} \
+	| tr -d ' ' | sed -n 3p )
+
+
+# Grant that account permission to use the key
+gcloud kms keys add-iam-policy-binding \
+	--project=${kms_project:?} \
+	--member serviceAccount:${service_account:?} \
+	--role roles/cloudkms.cryptoKeyEncrypterDecrypter \
+	--location=${location:?} \
+	--keyring=${keyring:?} \
+	${key:?}
+
+# Change a table from default encryption to use the hms key
+# by copying the table to itself eg srcdataset=destdataset
+bq cp \
+	--project_id=${project:?} \
+	--destination_kms_key projects/${kms_project:?}/locations/${location:?}/$( :
+	)keyRings/${keyring:?}/cryptoKeys/${key:?} \
+	${srcdataset:?}.${srctable:?} ${destdataset:?}.${desttable:?}
