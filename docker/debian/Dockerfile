@@ -105,5 +105,6 @@ RUN aptitude install -y cdecl
 RUN aptitude install -y tree
 RUN aptitude install -y libyaml-perl
 RUN aptitude install -y bc
+RUN aptitude install -y csvtool
 
 EXPOSE 8125
