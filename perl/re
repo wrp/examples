@@ -17,3 +17,5 @@ modifiers: (details in perlre)
 + is "possesive non-greedy".  That is, the modified match is non-greedy, but will be
   long enough to allow the rest of the pattern to match
 
+
+# zero width positive lookahead: (?=).  Eg  "foobar" ~ /foo/ and /foo(?=b)/
