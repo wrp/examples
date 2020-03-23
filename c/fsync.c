@@ -9,7 +9,6 @@
  * Consume stdin and write to a file.
  */
 
-int die(const char *msg) { perror(msg); exit(EXIT_FAILURE); }
 int
 main(int argc, char **argv)
 {
@@ -26,12 +25,12 @@ main(int argc, char **argv)
 
 	while( (c = getchar()) != EOF) {
 		if(fputc(c, ofp) == EOF) {
-			die(tmppath);
+			die("%s", tmppath);
 		}
 	}
-	fflush(ofp) && die("fflush");
-	fsync(fileno(ofp)) && die("fsync");
-	fclose(ofp) && die("close");
-	rename(tmppath, path) && die(path);
+	fflush(ofp) && die("%s", "fflush");
+	fsync(fileno(ofp)) && die("%s", "fsync");
+	fclose(ofp) && die("%s", "close");
+	rename(tmppath, path) && die("%s", path);
 	return 0;
 }
