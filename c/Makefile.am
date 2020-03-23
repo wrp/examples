@@ -7,6 +7,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	pipehup \
 	list \
 	scanf-term \
+	fsync \
 	udp-client \
 	udp-server \
 	dynamic \
