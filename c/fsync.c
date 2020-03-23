@@ -24,13 +24,11 @@ main(int argc, char **argv)
 	int c;
 
 	while( (c = getchar()) != EOF) {
-		if(fputc(c, ofp) == EOF) {
-			die("%s", tmppath);
-		}
+		fputc(c, ofp) == EOF && die("%s", tmppath);
 	}
-	fflush(ofp) && die("%s", "fflush");
-	fsync(fileno(ofp)) && die("%s", "fsync");
-	fclose(ofp) && die("%s", "close");
-	rename(tmppath, path) && die("%s", path);
+	fflush(ofp) && die("fflush %s", tmppath);
+	fsync(fileno(ofp)) && die("fsync %s", tmppath);
+	fclose(ofp) && die("close %s", tmppath);
+	rename(tmppath, path) && die("rename %s->%s", tmppath, path);
 	return 0;
 }
