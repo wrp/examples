@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# trap 'rm -rf $tmpdir' 0
+tmpdir=$(mktemp -d)
+mkdir -p $tmpdir
+yes foo | sed 15q | nl -w1 -s: > $tmpdir/file
+
+rm -f $tmpdir/file.idx
+
+echo $tmpdir
+output=$(./read-indexed $tmpdir/file 1)
+test "$output" = '1:foo' || exit 1
+
+test "$(./read-indexed $tmpdir/file 14)" = 14:foo || exit 1
+test "$(./read-indexed $tmpdir/file 15)" = 15:foo || exit 1
+
+
