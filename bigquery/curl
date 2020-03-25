@@ -1,0 +1,11 @@
+
+
+# You can use bq to disply the config of a dataset:
+bq show --format=prettyjson ${PROJECT?}:$dataset
+
+# And that same information can also be obtained via curl
+curl \
+	-H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+	-H "Content-Type: application/json" \
+	-X GET \
+	https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT:?}/datasets/$dataset
