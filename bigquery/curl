@@ -9,3 +9,7 @@ curl \
 	-H "Content-Type: application/json" \
 	-X GET \
 	https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT:?}/datasets/$dataset
+
+# Note that I was unable to successfully update the defaultEncryptionConfiguration using
+# bq update, but that it worked with the same json using curl -X PATCH.
+# Not sure if that is a bq bug, and don't care to find out.
