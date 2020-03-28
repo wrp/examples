@@ -7,6 +7,7 @@
 void show_bufs(const char *fmt, int count, char a[7][1024]);
 int isstring(const char *s);
 int scan(const char *input, const char *fmt, ...);
+int get_next_type(const char *e, const char **t);
 
 
 void
@@ -32,7 +33,7 @@ main(int argc, char **argv)
 		simple_examples();
 	} else for(argv += 1; *argv; argv++) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
-		printf("(%d) '%s': ", c, *argv);
+		printf("(%d) %20s: ", c, *argv);
 		show_bufs(*argv, c, a);
 
 		ld = ftell(stdin);
@@ -56,13 +57,19 @@ show_bufs(const char *fmt, int count, char b[7][1024])
 	(void)fmt;
 	for(int idx=0; idx < count && idx < 7; idx++) {
 		char *a = b[idx];
+		const char *e;
+		char buf[1024];
 		printf("%d: ", idx + 1);
-		a[1023] = '\0';
-		if(strlen(a) < 60 && isstring(a)) {
-			printf("'%s' ", a);
-		} else {
+		switch(get_next_type(fmt, &e)) {
+		case 's': printf("'%s' ", a); break;
+		case 'g':
+			memcpy(buf, fmt, e - fmt + 1);
+			buf[ e - fmt + 1] = '\0';
+			printf(buf, *(float *)a);
+			break;
+		default:
 			if( isprint(*a) ) {
-				printf("'%c' ", *a);
+				printf("default: '%c' ", *a);
 			}
 			printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
 		}
