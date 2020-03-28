@@ -62,10 +62,16 @@ show_bufs(const char *fmt, int count, char b[7][1024])
 		printf("%d: ", idx + 1);
 		switch(get_next_type(fmt, &e)) {
 		case 's': printf("'%s' ", a); break;
-		case 'g':
-			memcpy(buf, fmt, e - fmt + 1);
-			buf[ e - fmt + 1] = '\0';
-			printf(buf, *(float *)a);
+		case 'g': case 'f': case 'e': case 'G': case 'F': case 'E':
+			memcpy(buf, fmt, e - fmt);
+			buf[ e - fmt] = '\0';
+			if(e[-2] == 'l') {
+				printf(buf, *(double *)a);
+			} else if(e[-2] == 'L') {
+				printf(buf, *(long double *)a);
+			} else {
+				printf(buf, *(float *)a);
+			}
 			break;
 		default:
 			if( isprint(*a) ) {
@@ -116,7 +122,7 @@ get_next_type(const char *e, const char **t)
 			if(t) *t = e + 1;
 			return 's';
 		}
-		if(t) *t = e;
+		if(t) *t = e + 1;
 		return *e;
 	} else {
 		fprintf(stderr, "Invalid format string: %s\n", e);
