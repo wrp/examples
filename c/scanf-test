@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+out=$(printf '27.4 28 78' | ./scanf '%lg' '%Lg' '%e')
+expect="(1)                  %lg: 1: 27.4	next:' '
+(1)                  %Lg: 1: 28	next:' '
+(1)                   %e: 1: 7.800000e+01	next:(EOF)"
+test "$out" = "$expect"
