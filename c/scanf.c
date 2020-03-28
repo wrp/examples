@@ -94,6 +94,29 @@ pretty_print(const char *s)
 }
 
 
+/* Determine the type of the next format string */
+int
+get_next_type(const char *e, const char **t)
+{
+	if( (e = strchr(e, '%')) != NULL ) {
+		e += 1;
+		if( *e == '%' ) {
+			return get_next_type(e+1, t);
+		}
+		e += strspn(e, ".0123456789");
+		if( *e == '[' ) {
+			e += strcspn(e, "]");
+			if(t) *t = e + 1;
+			return 's';
+		}
+		if(t) *t = e;
+		return *e;
+	} else {
+		fprintf(stderr, "Invalid format string: %s\n", e);
+	}
+	return 0;
+}
+
 /* Handy wrapper
  * Incredibly fragile (does not match `[]` accurately, etc.  Just
  * designed to work with all the cases given here. )
@@ -104,28 +127,12 @@ scan(const char *input, const char *fmt, ...)
 	va_list ap;
 	int rv;
 	int type;
-	const char *e;
 	union {
 		char *s;
 		int *d;
 	} buf;
 
-	e = fmt;
-match:
-	if( (e = strchr(e, '%')) != NULL ) {
-		e += 1;
-		if( *e == '%' ) {
-			e += 1;
-			goto match;
-		}
-		e += strspn(e, ".0123456789");
-		if( *e == '[' ) {
-			e = "s";
-		}
-	} else {
-		fprintf(stderr, "Invalid format string: %s\n", fmt);
-	}
-	type = *e;
+	type = get_next_type(fmt, NULL);
 	va_start(ap, fmt);
         rv = vsscanf(input, fmt, ap);
 	va_end(ap);
