@@ -53,20 +53,20 @@ main(int argc, char **argv)
 void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
-	(void) fmt;
+	(void)fmt;
 	for(int idx=0; idx < count && idx < 7; idx++) {
-	char *a = b[idx];
-	printf("%d: ", idx + 1);
-	a[1023] = '\0';
-	if(strlen(a) < 60 && isstring(a)) {
-		printf("'%s' ", a);
-	} else {
-		if( isprint(*a) ) {
-			printf("'%c' ", *a);
+		char *a = b[idx];
+		printf("%d: ", idx + 1);
+		a[1023] = '\0';
+		if(strlen(a) < 60 && isstring(a)) {
+			printf("'%s' ", a);
+		} else {
+			if( isprint(*a) ) {
+				printf("'%c' ", *a);
+			}
+			printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
 		}
-		printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
-	}
-	putchar('\t');
+		putchar('\t');
 	}
 }
 
