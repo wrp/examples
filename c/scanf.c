@@ -42,8 +42,12 @@ main(int argc, char **argv)
 		}
 		c = getchar();
 		ungetc(c, stdin);
-		printf("next char '%c' ", c);
-		printf(c != EOF ? "(0x%02x)" : "(EOF)", c);
+		fputs("next:", stdout);
+		if(isprint(c)) {
+			printf("'%c'", c);
+		} else {
+			printf(c != EOF ? "(0x%02x)" : "(EOF)", c);
+		}
 		putchar('\n');
 		if(feof(stdin) && fseek(stdin, 0L, SEEK_SET) == -1) {
 			break;
