@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-void show_buf(char *a, int);
+void show_bufs(const char *fmt, int count, char a[7][1024]);
 int isstring(const char *s);
 int scan(const char *input, const char *fmt, ...);
 
@@ -33,9 +33,7 @@ main(int argc, char **argv)
 	} else for(argv += 1; *argv; argv++) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
 		printf("(%d) '%s': ", c, *argv);
-		for(int i = 0; i < c && i < 6; i++) {
-			show_buf(a[i], i);
-		}
+		show_bufs(*argv, c, a);
 
 		ld = ftell(stdin);
 		if( ld != -1 ) {
@@ -53,8 +51,11 @@ main(int argc, char **argv)
 }
 
 void
-show_buf(char *a, int idx)
+show_bufs(const char *fmt, int count, char b[7][1024])
 {
+	(void) fmt;
+	for(int idx=0; idx < count && idx < 7; idx++) {
+	char *a = b[idx];
 	printf("%d: ", idx + 1);
 	a[1023] = '\0';
 	if(strlen(a) < 60 && isstring(a)) {
@@ -66,6 +67,7 @@ show_buf(char *a, int idx)
 		printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
 	}
 	putchar('\t');
+	}
 }
 
 int
