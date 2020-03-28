@@ -16,8 +16,8 @@ simple_examples(void)
 	int k;
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
 	scan("input string", "%7s", buf); /* Writes 6 chars; 'input\0' */
-	scan("input string\nline 2", "%[^\n]s", buf); /* Writes first line */
-	scan("input string\nline 2", "%7[^\n]s", buf); /* Write 8 chars */
+	scan("input string\nline 2", "%[^\n]", buf); /* Writes first line */
+	scan("input string\nline 2", "%7[^\n]", buf); /* Write 8 chars */
 	scan("24", "%d", &k);
 }
 
