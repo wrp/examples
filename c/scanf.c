@@ -110,7 +110,7 @@ get_next_type(const char *e, const char **t)
 		if( *e == '%' ) {
 			return get_next_type(e+1, t);
 		}
-		e += strspn(e, ".0123456789");
+		e += strcspn(e, "diouxXaAeEfFgGsScC[pn");
 		if( *e == '[' ) {
 			e += strcspn(e, "]");
 			if(t) *t = e + 1;
