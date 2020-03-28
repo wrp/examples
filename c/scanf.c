@@ -28,10 +28,9 @@ main(int argc, char **argv)
 	long ld;
 	char a[7][1024];
 
-	simple_examples();
-
-	(void)argc;
-	for(argv += 1; *argv; argv++) {
+	if(argc == 1) {
+		simple_examples();
+	} else for(argv += 1; *argv; argv++) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
 		printf("********\n%s\n: ", *argv);
 		printf("scanned %d item%s\n", c, c > 1 ? "s" : "");
@@ -135,12 +134,13 @@ match:
 	pretty_print(input);
 	fputs("' with format '", stdout);
 	pretty_print(fmt);
-	printf("' (type %c): ", type);
+	fputs(", scanned ", stdout);
+
 	va_start(ap, fmt);
 	switch(type) {
 	case 's':
 		buf.s = va_arg(ap, char *);
-		printf("'%s'", buf.s);
+		printf("'%s' (wrote %lu chars)", buf.s, strlen(buf.s) + 1);
 		break;
 	case 'd':
 		buf.d = va_arg(ap, int *);
