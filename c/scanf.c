@@ -82,6 +82,19 @@ isstring(const char *s)
 	return 1;
 }
 
+static void
+pretty_print(const char *s)
+{
+	while( *s ) {
+		switch(*s) {
+		case '\n': fputs("\\n", stdout); break;
+		default: putchar(*s);
+		}
+		s += 1;
+	}
+}
+
+
 /* Handy wrapper
  * Incredibly fragile (does not match `[]` accurately, etc.  Just
  * designed to work with all the cases given here. )
@@ -108,9 +121,8 @@ match:
 		}
 		e += strspn(e, ".0123456789");
 		if( *e == '[' ) {
-			e = strchr(e, ']') + 1; /* HAndle NULL */
+			e = "s";
 		}
-		e += strspn(e, ".0123456789");
 	} else {
 		fprintf(stderr, "Invalid format string: %s\n", fmt);
 	}
@@ -119,7 +131,11 @@ match:
         rv = vsscanf(input, fmt, ap);
 	va_end(ap);
 
-	printf("On input '%s' with format '%s' (type %c): ", input, fmt, type);
+	fputs("On input '", stdout);
+	pretty_print(input);
+	fputs("' with format '", stdout);
+	pretty_print(fmt);
+	printf("' (type %c): ", type);
 	va_start(ap, fmt);
 	switch(type) {
 	case 's':
@@ -132,6 +148,7 @@ match:
 		break;
 	}
 	va_end(ap);
+
 	putchar('\n');
 
 	return rv;
