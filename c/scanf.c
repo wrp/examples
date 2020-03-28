@@ -32,8 +32,7 @@ main(int argc, char **argv)
 		simple_examples();
 	} else for(argv += 1; *argv; argv++) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
-		printf("********\n%s\n: ", *argv);
-		printf("scanned %d item%s\n", c, c > 1 ? "s" : "");
+		printf("(%d) '%s': ", c, *argv);
 		for(int i = 0; i < c && i < 6; i++) {
 			show_buf(a[i], i);
 		}
@@ -45,7 +44,7 @@ main(int argc, char **argv)
 		c = getchar();
 		ungetc(c, stdin);
 		printf("next char '%c' ", c);
-		printf(c != EOF ? "(%x)" : "(EOF)", c);
+		printf(c != EOF ? "(0x%02x)" : "(EOF)", c);
 		putchar('\n');
 		if(feof(stdin) && fseek(stdin, 0L, SEEK_SET) == -1) {
 			break;
@@ -56,17 +55,17 @@ main(int argc, char **argv)
 void
 show_buf(char *a, int idx)
 {
-	printf("item (%d): ", idx);
-	if( isprint(*a) ) {
-		printf("'%c' ", *a);
-	}
+	printf("%d: ", idx + 1);
 	a[1023] = '\0';
 	if(strlen(a) < 60 && isstring(a)) {
 		printf("'%s' ", a);
 	} else {
+		if( isprint(*a) ) {
+			printf("'%c' ", *a);
+		}
 		printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
 	}
-	putchar('\n');
+	putchar('\t');
 }
 
 int
@@ -74,7 +73,6 @@ isstring(const char *s)
 {
 	for( ; *s; s++ ) {
 		if( !isprint(*s) && *s != '\n') {
-			printf("unprintable: %02x\n", *s);
 			return 0;
 		}
 	}
