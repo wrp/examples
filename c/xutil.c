@@ -6,7 +6,8 @@
 FILE *
 xfopen(const char *path, const char *mode)
 {
-	FILE *fp = strcmp(path, "-") ? fopen(path, mode) : stdin;
+	FILE *fp = strcmp(path, "-") ? fopen(path, mode) :
+		*mode == 'r' ? stdin : stdout;
 	if( fp == NULL ) {
 		perror(path);
 		exit(EXIT_FAILURE);
