@@ -1,8 +1,15 @@
 #!/bin/sh
 
+die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
 
 out=$(printf '27.4 28 78' | ./scanf '%lg' '%Lg' '%e')
 expect="(1)                  %lg: 1: 27.4	next:' '
 (1)                  %Lg: 1: 28	next:' '
-(1)                   %e: 1: 7.800000e+01	next:(EOF)"
-test "$out" = "$expect"
+(1)                   %e: 1: 78	next:(EOF)"
+test "$out" = "$expect" || die "expected '$expect', got '$out'"
+
+out=$(echo '12 13 14'| ./scanf '%ld' '%d' '%lld')
+expect="(1)                  %ld: 1: 12	next:' '
+(1)                   %d: 1: 13	next:' '
+(1)                 %lld: 1: 14	next:(0x0a)"
+test "$out" = "$expect" || die "expected '$expect', got '$out'"

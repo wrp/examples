@@ -68,22 +68,34 @@ main(int argc, char **argv)
 void
 print_val(const struct conversion_specifier *f, void *p)
 {
-	char buf[512];
 	float *g = p;
 	double *lg = p;
 	long double *Lg = p;
 	char *s = p;
+	int *d = p;
+	long *ld = p;
+	long long *lld = p;
+
 	switch(*f->conversion) {
 	case 's': case '[':
-		printf("'%s' ", s);
+		printf("'%s'", s);
+		break;
+	case 'd':
+		if(*f->flags == 'l') {
+			if( f->flags[1] == 'l') {
+				printf("%lld", *lld);
+			} else {
+				printf("%ld", *ld);
+			}
+		} else {
+			printf("%d", *d);
+		}
 		break;
 	case 'g': case 'f': case 'e': case 'G': case 'F': case 'E':
-		memcpy(buf, f->s, f->e - f->s);
-		buf[f->e - f->s] = '\0';
 		switch(*f->flags) {
-		case 'l': printf(buf, *lg); break;
-		case 'L': printf(buf, *Lg); break;
-		default : printf(buf, *g);
+		case 'l': printf("%lg", *lg); break;
+		case 'L': printf("%Lg", *Lg); break;
+		default : printf("%g", *g);
 		}
 		break;
 	default:
@@ -94,35 +106,46 @@ print_val(const struct conversion_specifier *f, void *p)
 		}
 }
 
+/* Find the next conversion specifier and parse it.  Return 0
+ * if none found */
+static int
+parse_format_string(const char *fmt, struct conversion_specifier *e)
+{
+	const char *s = strchr(fmt, '%');
+	char *end;
+	if( s == NULL ) {
+		return 0;
+	}
+	if( s[1] == '%' ) {
+		return parse_format_string(s + 2, e);
+	}
+	e->s = s;
+	e->width = strtol(s + 1, &end, 10);
+	s = e->flags = end;
+	s += strcspn(s, "diouxXaAeEfFgGsScC[pn");
+	e->conversion = s;
+	if( *s == '[' ) {
+		s += strcspn(s, "]") + 1;
+	}
+	if( e->conversion == e->flags )
+		e->flags = "";
+	e->e = s + 1;
+	return 1;
+}
+
+
 void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
-	(void)fmt;
 	for(int idx=0; idx < count && idx < 7; idx++) {
 		char *a = b[idx];
-		const char *e;
-		char buf[1024];
+		struct conversion_specifier cs;
+		cs.e = fmt;
 		printf("%d: ", idx + 1);
-		switch(get_next_type(fmt, &e)) {
-		case 's': printf("'%s' ", a); break;
-		case 'g': case 'f': case 'e': case 'G': case 'F': case 'E':
-			memcpy(buf, fmt, e - fmt);
-			buf[ e - fmt] = '\0';
-			if(e[-2] == 'l') {
-				printf(buf, *(double *)a);
-			} else if(e[-2] == 'L') {
-				printf(buf, *(long double *)a);
-			} else {
-				printf(buf, *(float *)a);
-			}
-			break;
-		default:
-			if( isprint(*a) ) {
-				printf("default: '%c' ", *a);
-			}
-			printf("(%02x%02x%02x%02x), ", a[0], a[1], a[2], a[3]);
+		while(parse_format_string(cs.e, &cs)) {
+			print_val(&cs, a);
+			putchar('\t');
 		}
-		putchar('\t');
 	}
 }
 
