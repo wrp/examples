@@ -136,15 +136,19 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
-	for(int idx=0; idx < count && idx < 7; idx++) {
+	struct conversion_specifier cs;
+	int idx=0;
+
+	cs.e = fmt;
+	if(count > 7)
+		count = 7;
+
+	while(parse_format_string(cs.e, &cs) && idx < count) {
 		char *a = b[idx];
-		struct conversion_specifier cs;
-		cs.e = fmt;
 		printf("%d: ", idx + 1);
-		while(parse_format_string(cs.e, &cs)) {
-			print_val(&cs, a);
-			putchar('\t');
-		}
+		print_val(&cs, a);
+		putchar('\t');
+		idx += 1;
 	}
 }
 
