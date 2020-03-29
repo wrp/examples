@@ -8,7 +8,6 @@
 void show_bufs(const char *fmt, int count, char a[7][1024]);
 int isstring(const char *s);
 int scan(const char *input, const char *fmt, ...);
-int get_next_type(const char *e, const char **t);
 
 struct conversion_specifier {
 	const char *s;  /* the % */
@@ -187,29 +186,6 @@ pretty_print(const char *s, ptrdiff_t width)
 }
 
 
-/* Determine the type of the next format string */
-int
-get_next_type(const char *e, const char **t)
-{
-	if( (e = strchr(e, '%')) != NULL ) {
-		e += 1;
-		if( *e == '%' ) {
-			return get_next_type(e+1, t);
-		}
-		e += strcspn(e, "diouxXaAeEfFgGsScC[pn");
-		if( *e == '[' ) {
-			e += strcspn(e, "]");
-			if(t) *t = e + 1;
-			return 's';
-		}
-		if(t) *t = e + 1;
-		return *e;
-	} else {
-		fprintf(stderr, "Invalid format string: %s\n", e);
-	}
-	return 0;
-}
-
 /* Handy wrapper
  * Incredibly fragile (does not match `[]` accurately, etc.  Just
  * designed to work with all the cases given here. )
@@ -217,15 +193,17 @@ get_next_type(const char *e, const char **t)
 int
 scan(const char *input, const char *fmt, ...)
 {
+	struct conversion_specifier cs;
+
 	va_list ap;
 	int rv;
-	int type;
 	union {
 		char *s;
 		int *d;
 	} buf;
 
-	type = get_next_type(fmt, NULL);
+	parse_format_string(fmt, &cs);
+
 	va_start(ap, fmt);
         rv = vsscanf(input, fmt, ap);
 	va_end(ap);
@@ -234,8 +212,9 @@ scan(const char *input, const char *fmt, ...)
 	pretty_print(fmt, 20);
 
 	va_start(ap, fmt);
-	switch(type) {
-	case 's':
+
+	switch(*cs.conversion) {
+	case 's': case '[':
 		buf.s = va_arg(ap, char *);
 		printf("'%s' (wrote %lu chars)", buf.s, strlen(buf.s) + 1);
 		break;

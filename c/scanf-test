@@ -13,3 +13,13 @@ expect="(1)                  %ld: 1: 12	next:' '
 (1)                   %d: 1: 13	next:' '
 (1)                 %lld: 1: 14	next:(0x0a)"
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
+
+
+out=$(./scanf)
+expect="input:                                  format string:      scanned:
+'input string'                          '%3s'               'inp' (wrote 4 chars)
+'input string'                          '%7s'               'input' (wrote 6 chars)
+'input string\nline 2'                  '%[^\n]'            'input string' (wrote 13 chars)
+'input string\nline 2'                  '%7[^\n]'           'input s' (wrote 8 chars)
+'24'                                    '%d'                24"
+test "$out" = "$expect" || die "expected '$expect', got '$out'"
