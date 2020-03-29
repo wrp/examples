@@ -66,6 +66,35 @@ main(int argc, char **argv)
 }
 
 void
+print_val(const struct conversion_specifier *f, void *p)
+{
+	char buf[512];
+	float *g = p;
+	double *lg = p;
+	long double *Lg = p;
+	char *s = p;
+	switch(*f->conversion) {
+	case 's': case '[':
+		printf("'%s' ", s);
+		break;
+	case 'g': case 'f': case 'e': case 'G': case 'F': case 'E':
+		memcpy(buf, f->s, f->e - f->s);
+		buf[f->e - f->s] = '\0';
+		switch(*f->flags) {
+		case 'l': printf(buf, *lg); break;
+		case 'L': printf(buf, *Lg); break;
+		default : printf(buf, *g);
+		}
+		break;
+	default:
+		if( isprint(*s) ) {
+			printf("default: '%c' ", *s);
+		}
+		printf("(%02x%02x%02x%02x), ", s[0], s[1], s[2], s[3]);
+		}
+}
+
+void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
 	(void)fmt;
