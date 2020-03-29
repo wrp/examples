@@ -22,7 +22,7 @@ struct conversion_specifier {
 void
 simple_examples(void)
 {
-	char buf[128] = "XXXXXXXXXXXXx";
+	char buf[128];
 	int k;
 	printf("%-40s\t%-20s\t%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
