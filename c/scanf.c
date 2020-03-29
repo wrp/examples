@@ -10,6 +10,14 @@ int isstring(const char *s);
 int scan(const char *input, const char *fmt, ...);
 int get_next_type(const char *e, const char **t);
 
+struct conversion_specifier {
+	const char *s;  /* the % */
+	const char *e;  /* One past end of format string */
+	const char *flags;
+	const char *conversion;
+	size_t width;
+};
+
 
 void
 simple_examples(void)
