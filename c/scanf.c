@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,13 +23,14 @@ void
 simple_examples(void)
 {
 	char buf[128];
-	int k;
+	int k[10];
 	printf("%-40s%-20s%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
 	scan("input string", "%7s", buf); /* Writes 6 chars; 'input\0' */
 	scan("input string\nline 2", "%[^\n]", buf); /* Writes first line */
 	scan("input string\nline 2", "%7[^\n]", buf); /* Write 8 chars */
-	scan("24", "%d", &k);
+	scan("24", "%d", k);
+	scan("24", "%1d%d", k, k + 1);
 }
 
 int
@@ -123,7 +125,7 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 	s += strcspn(s, "diouxXaAeEfFgGsScC[pn");
 	e->conversion = s;
 	if( *s == '[' ) {
-		s += strcspn(s, "]") + 1;
+		s += strcspn(s, "]");
 	}
 	if( e->conversion == e->flags )
 		e->flags = "";
@@ -200,12 +202,11 @@ scan(const char *input, const char *fmt, ...)
 
 	va_list ap;
 	int rv;
+	int count = 0;
 	union {
 		char *s;
 		int *d;
 	} buf;
-
-	parse_format_string(fmt, &cs);
 
 	va_start(ap, fmt);
         rv = vsscanf(input, fmt, ap);
@@ -216,19 +217,26 @@ scan(const char *input, const char *fmt, ...)
 
 	va_start(ap, fmt);
 
-	switch(*cs.conversion) {
-	case 's': case '[':
-		buf.s = va_arg(ap, char *);
-		printf("'%s' (wrote %lu chars)", buf.s, strlen(buf.s) + 1);
-		break;
-	case 'd':
-		buf.d = va_arg(ap, int *);
-		printf("%d", *buf.d);
-		break;
+	cs.e = fmt;
+	while(parse_format_string(cs.e, &cs)) {
+		if( count++ ) {
+			fputs(", ", stdout);
+		}
+		switch(*cs.conversion) {
+		case 's': case '[':
+			buf.s = va_arg(ap, char *);
+			printf("'%s' (wrote %lu chars)", buf.s, strlen(buf.s) + 1);
+			break;
+		case 'd':
+			buf.d = va_arg(ap, int *);
+			printf("%d", *buf.d);
+			break;
+		}
 	}
 	va_end(ap);
 
 	putchar('\n');
+	assert(count == rv);
 
 	return rv;
 }
