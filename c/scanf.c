@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -15,6 +16,7 @@ simple_examples(void)
 {
 	char buf[128] = "XXXXXXXXXXXXx";
 	int k;
+	printf("%-40s\t%-20s\t%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
 	scan("input string", "%7s", buf); /* Writes 6 chars; 'input\0' */
 	scan("input string\nline 2", "%[^\n]", buf); /* Writes first line */
@@ -99,14 +101,28 @@ isstring(const char *s)
 }
 
 static void
-pretty_print(const char *s)
+pretty_print(const char *s, ptrdiff_t width)
 {
-	while( *s ) {
-		switch(*s) {
+	const char *e = s;
+	putchar('\'');
+	width -= 1;
+	while( *e ) {
+		if(isprint(*e) || isspace(*e)) switch(*e) {
+		case '\f': fputs("\\f", stdout); break;
 		case '\n': fputs("\\n", stdout); break;
-		default: putchar(*s);
+		case '\r': fputs("\\r", stdout); break;
+		case '\t': fputs("\\t", stdout); break;
+		case '\v': fputs("\\v", stdout); break;
+		default: putchar(*e);
+		} else {
+			printf("?%02x", *e);
 		}
-		s += 1;
+		e += 1;
+	}
+	putchar('\'');
+	width -= 1;
+	while( e++ - s < width ) {
+		putchar(' ');
 	}
 }
 
@@ -154,11 +170,10 @@ scan(const char *input, const char *fmt, ...)
         rv = vsscanf(input, fmt, ap);
 	va_end(ap);
 
-	fputs("On input '", stdout);
-	pretty_print(input);
-	fputs("' with format '", stdout);
-	pretty_print(fmt);
-	fputs(", scanned ", stdout);
+	pretty_print(input, 40);
+	putchar('\t');
+	pretty_print(fmt, 20);
+	putchar('\t');
 
 	va_start(ap, fmt);
 	switch(type) {
@@ -168,7 +183,7 @@ scan(const char *input, const char *fmt, ...)
 		break;
 	case 'd':
 		buf.d = va_arg(ap, int *);
-		printf("'%d'", *buf.d);
+		printf("%d", *buf.d);
 		break;
 	}
 	va_end(ap);
