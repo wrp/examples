@@ -25,6 +25,7 @@ TESTS = calc-test \
 	list-test \
 	udp-test \
 	scanf-term-test \
+	scanf-test \
 	poly-test \
 	dynamic-test \
 	pyramid-test \
