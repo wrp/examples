@@ -225,7 +225,8 @@ scan(const char *input, const char *fmt, ...)
 		switch(*cs.conversion) {
 		case 's': case '[':
 			buf.s = va_arg(ap, char *);
-			printf("'%s' (wrote %lu chars)", buf.s, strlen(buf.s) + 1);
+			print_val(&cs, buf.s);
+			printf(" (wrote %lu chars)", strlen(buf.s) + 1);
 			break;
 		case 'd':
 			buf.d = va_arg(ap, int *);
