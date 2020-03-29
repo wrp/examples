@@ -24,7 +24,7 @@ simple_examples(void)
 {
 	char buf[128];
 	int k;
-	printf("%-40s\t%-20s\t%s\n", "input:", "format string:", "scanned:");
+	printf("%-40s%-20s%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
 	scan("input string", "%7s", buf); /* Writes 6 chars; 'input\0' */
 	scan("input string\nline 2", "%[^\n]", buf); /* Writes first line */
@@ -168,11 +168,11 @@ pretty_print(const char *s, ptrdiff_t width)
 	width -= 1;
 	while( *e ) {
 		if(isprint(*e) || isspace(*e)) switch(*e) {
-		case '\f': fputs("\\f", stdout); break;
-		case '\n': fputs("\\n", stdout); break;
-		case '\r': fputs("\\r", stdout); break;
-		case '\t': fputs("\\t", stdout); break;
-		case '\v': fputs("\\v", stdout); break;
+		case '\f': fputs("\\f", stdout); width -= 1; break;
+		case '\n': fputs("\\n", stdout); width -= 1; break;
+		case '\r': fputs("\\r", stdout); width -= 1; break;
+		case '\t': fputs("\\t", stdout); width -= 1; break;
+		case '\v': fputs("\\v", stdout); width -= 1; break;
 		default: putchar(*e);
 		} else {
 			printf("?%02x", *e);
@@ -231,9 +231,7 @@ scan(const char *input, const char *fmt, ...)
 	va_end(ap);
 
 	pretty_print(input, 40);
-	putchar('\t');
 	pretty_print(fmt, 20);
-	putchar('\t');
 
 	va_start(ap, fmt);
 	switch(type) {
