@@ -11,7 +11,7 @@ int scan(const char *input, const char *fmt, ...);
 
 struct conversion_specifier {
 	const char *s;  /* the % */
-	const char *e;  /* One past end of format string */
+	const char *e;  /* One past end of specifier */
 	const char *flags;
 	const char *conversion;
 	size_t width;
@@ -111,7 +111,6 @@ static int
 parse_format_string(const char *fmt, struct conversion_specifier *e)
 {
 	const char *s = strchr(fmt, '%');
-	char *end;
 	if( s == NULL ) {
 		return 0;
 	}
@@ -119,8 +118,8 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 		return parse_format_string(s + 2, e);
 	}
 	e->s = s;
-	e->width = strtol(s + 1, &end, 10);
-	s = e->flags = end;
+	e->width = strtol(s + 1, (char **)&e->flags, 10);
+	s = e->flags;
 	s += strcspn(s, "diouxXaAeEfFgGsScC[pn");
 	e->conversion = s;
 	if( *s == '[' ) {
