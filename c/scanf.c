@@ -5,8 +5,21 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
-#include "scanf.h"
+#include "xutil.h"
 
+struct conversion_specifier {
+	const char *s;  /* the % */
+	const char *e;  /* One past end of specifier */
+	const char *flags;
+	const char *conversion;
+	size_t width;
+};
+
+static void show_bufs(const char *fmt, int count, char a[7][1024]);
+static int isstring(const char *s);
+static int scan(const char *input, const char *fmt, ...);
+static int parse_format_string(const char *fmt, struct conversion_specifier *e);
+static void validate(const char *, size_t, int , const char *, int);
 
 static void
 simple_examples(void)
@@ -22,7 +35,6 @@ simple_examples(void)
 	scan("24", "%1d%d", k, k + 1);
 }
 
-#ifndef UNIT_TEST
 int
 main(int argc, char **argv)
 {
@@ -54,8 +66,12 @@ main(int argc, char **argv)
 			break;
 		}
 	}
+	validate("...%17dX...", 17, 'd', "", 'X');
+	validate("...%17ldX...", 17, 'd', "l", 'X');
+	validate("...%7LgX...", 7, 'g', "L", 'X');
+	validate("...%7s...", 7, 's', "", '.');
+	validate("...%7[^kdj]...", 7, '[', "", '.');
 }
-#endif
 
 void
 print_val(const struct conversion_specifier *f, void *p)
@@ -125,7 +141,7 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 }
 
 
-void
+static void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
 	struct conversion_specifier cs;
@@ -144,7 +160,7 @@ show_bufs(const char *fmt, int count, char b[7][1024])
 	}
 }
 
-int
+static int
 isstring(const char *s)
 {
 	for( ; *s; s++ ) {
@@ -186,7 +202,7 @@ pretty_print(const char *s, ptrdiff_t width)
  * Incredibly fragile (does not match `[]` accurately, etc.  Just
  * designed to work with all the cases given here. )
  */
-int
+static int
 scan(const char *input, const char *fmt, ...)
 {
 	struct conversion_specifier cs;
@@ -231,4 +247,29 @@ scan(const char *input, const char *fmt, ...)
 	assert(count == rv);
 
 	return rv;
+}
+
+static void
+validate(const char *fmt, size_t width, int conv, const char *flags, int end)
+{
+	int k;
+	struct conversion_specifier cs;
+
+	k = parse_format_string(fmt, &cs);
+	if(!k) {
+		die("Failed to parse %s\n", fmt);
+	}
+	if( cs.width != width ) {
+		die("%s: Invalid width:  %zu != %zu\n", fmt, cs.width, width);
+	}
+	if( cs.conversion[0] != conv ) {
+		die("%s: Invalid specifier:  '%c' != '%c'\n",
+			fmt, *cs.conversion, conv);
+	}
+	if( strncmp(flags, cs.flags, strlen(flags)) ) {
+		die("%s: Invalid flags:  '%s' != '%s'\n", fmt, cs.flags, flags);
+	}
+	if( end != *cs.e ) {
+		die("%s: Invalid end:  '%c' != '%c'\n", fmt, *cs.e, end);
+	}
 }

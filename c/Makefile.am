@@ -14,8 +14,7 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	dynamic \
 	arithperm \
 	poly \
-	clean-man \
-	scanf-unit-test
+	clean-man
 
 TESTS = calc-test \
 	fread-test \
@@ -30,11 +29,9 @@ TESTS = calc-test \
 	poly-test \
 	dynamic-test \
 	pyramid-test \
-	scanf-unit-test \
+	scanf \
 	coverage-test
 
-scanf_unit_test_CPPFLAGS = -DUNIT_TEST
-scanf_unit_test_SOURCES = scanf.c scanf-unit-test.c
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
 LDADD=libxutil.la
