@@ -5,21 +5,10 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
-
-void show_bufs(const char *fmt, int count, char a[7][1024]);
-int isstring(const char *s);
-int scan(const char *input, const char *fmt, ...);
-
-struct conversion_specifier {
-	const char *s;  /* the % */
-	const char *e;  /* One past end of specifier */
-	const char *flags;
-	const char *conversion;
-	size_t width;
-};
+#include "scanf.h"
 
 
-void
+static void
 simple_examples(void)
 {
 	char buf[128];
@@ -33,6 +22,7 @@ simple_examples(void)
 	scan("24", "%1d%d", k, k + 1);
 }
 
+#ifndef UNIT_TEST
 int
 main(int argc, char **argv)
 {
@@ -65,6 +55,7 @@ main(int argc, char **argv)
 		}
 	}
 }
+#endif
 
 void
 print_val(const struct conversion_specifier *f, void *p)
