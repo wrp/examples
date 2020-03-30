@@ -16,21 +16,23 @@ bin_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat v
 	poly \
 	clean-man
 
-TESTS = calc-test \
-	fread-test \
-	read-indexed-test \
-	grow-test \
+TESTS = \
 	arithperm-test \
+	calc-test \
 	dynamic-read-test \
+	dynamic-test \
+	fread-test \
+	grow-test \
 	list-test \
-	udp-test \
+	mmap-test \
+	poly-test \
+	pyramid-test \
+	read-indexed-test \
+	scanf \
 	scanf-term-test \
 	scanf-test \
-	poly-test \
-	dynamic-test \
-	pyramid-test \
-	scanf \
-	coverage-test
+	udp-test \
+	coverage-test  # Must run last
 
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
