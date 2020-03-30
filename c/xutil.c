@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <fcntl.h>
 
 FILE *
 xfopen(const char *path, const char *mode)
@@ -45,4 +46,15 @@ die(const char *fmt, ... )
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	exit(EXIT_FAILURE);
+}
+
+int
+xopen(const char *path, int flags)
+{
+	int f = open(path, flags);
+	if( f == -1 ) {
+		perror(path);
+		exit(EXIT_FAILURE);
+	}
+	return f;
 }

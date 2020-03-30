@@ -15,7 +15,6 @@
 #include <unistd.h>
 #include "xutil.h"
 
-int xopen(const char *, int);
 void reverse(char *, char *);
 char * findchr(char *, char *, char);
 
@@ -98,13 +97,4 @@ reverse(char *start, char *end)
 		*end = *start;
 		*start = tmp;
 	}
-}
-
-
-int
-xopen(const char *path, int flag)
-{
-	int fd = open(path, flag);
-	if( fd == -1 ) { perror(path); exit(EXIT_FAILURE); }
-	return fd;
 }

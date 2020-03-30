@@ -1,5 +1,6 @@
 /* Simple example the uses mmap to cat a regular file */
 #include "config.h"
+#include "xutil.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,17 +8,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
-int
-xopen(const char *path, int flags)
-{
-	int f = open(path, flags);
-	if( f == -1 ) {
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return f;
-}
 
 size_t
 getsize(int fd) {

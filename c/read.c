@@ -4,19 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
-
-int
-xopen( const char *path, int mode)
-{
-	int ret;
-	ret = open(path, mode);
-	if( ret == -1 ) {
-		perror(path);
-		exit(1);
-	}
-	return ret;
-}
+#include "xutil.h"
 
 int
 main(int argc, char **argv)
