@@ -16,6 +16,7 @@ run:
 		docker exec -it -e DOCKER=debian -u $(USER) "$$id" bash; \
 	else \
 		docker run -it \
+		--privileged \
 		-p 8125 \
 		-v $(HOME):/home/$(USER) \
 		-e USE_HOME=/$(USER) \
