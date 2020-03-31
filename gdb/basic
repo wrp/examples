@@ -1,0 +1,8 @@
+
+To display data at each breakpoint, useq
+
+To work with a core dump:
+gdb $exe $core_file
+
+To generate a core dump, probably just need to:
+ulimit -c unlimited
