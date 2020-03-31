@@ -68,5 +68,8 @@ main(int argc, char **argv)
 		putchar('\n');
 	}
 
+	free(line);
+	free(A.data);
+
 	return 0;
 }
