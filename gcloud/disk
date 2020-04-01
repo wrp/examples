@@ -31,6 +31,7 @@ gcloud compute disks create ${disk_name?} \
 	--zone=${zone?} \
 	--size=${size-200G}
 gcloud compute instances attach-disk ${instance?} \
+	--zone=${zone?} \
 	--disk=${disk_name?}
 
 Now, describe the instance to figure out which disk it is (probably a better way
