@@ -25,5 +25,5 @@ AC_SEARCH_LIBS([pow],[m])
 
 AC_CHECK_FUNCS([getdelim gettimeofday strtol])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile run.c])
 AC_OUTPUT

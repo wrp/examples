@@ -173,6 +173,7 @@ main(int argc, char **argv)
 	FILE *log_file;
 	if(argc == 1) {
 		printf("usage: %s shell-command\n\n", basename(argv[0]));
+		puts("version: @VERSION@");
 		puts("Run a command with output streams in 2 new tmux panes,");
 		puts("with those streams dup'd to files.");
 		return 0;
