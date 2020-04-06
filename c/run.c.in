@@ -35,6 +35,10 @@ hdr="************************************"
 | perl -pe '$|=1; print localtime . ": "' \
 | tee -a "$stderr" \
 | tmux split-window -l 10 -dI
+
+
+TODO: stop using tmux.  Perhaps pull code out of dvtm and make
+this completely stand alone.
 #endif
 
 void xpipe(int *fd);
