@@ -62,8 +62,6 @@ do_split(FILE *out, int is_err, char **argv)
 			return;
 		}
 		ungetc(c, stdin);
-		tmux_args[2] = "-l";
-		tmux_args[3] = "10";
 	}
 
 	xpipe(fd);
