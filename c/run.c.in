@@ -44,6 +44,7 @@ FILE *xfopen(const char *path, const char *mode);
 FILE *xfdopen(int, const char *mode);
 enum fork_type { parent, child } xfork(void);
 void print_args(FILE* f, char **argv);
+void tee_stdin(FILE *out, FILE *split, const char *msg);
 
 
 void
@@ -51,12 +52,11 @@ do_split(FILE *out, int is_err, char **argv)
 {
 	/* Read stdn, prepend timestamp and write to out and a split pane*/
 	FILE *split;
-	int c;
 	int fd[2];
-	int first = 1;
 	char *tmux_args[] = { "tmux", "split-window", "-p", "50", "-dI", NULL };
 
 	if(is_err) {
+		int c;
 		/* Do not spawn a pane until there is some data to show */
 		if( (c = getchar()) == EOF) {
 			return;
@@ -86,27 +86,7 @@ do_split(FILE *out, int is_err, char **argv)
 	fprintf(split, "%s of: ", is_err ? "errors" : "output");
 	print_args(split, argv);
 
-	while( (c = getchar()) != EOF ) {
-		if(first) {
-			char timestamp[128];
-			struct timeval tp;
-			if( gettimeofday(&tp, NULL) == -1 ) {
-				tp.tv_sec = 0;
-				tp.tv_usec = 0;
-			}
-			fflush(out);
-			fflush(split);
-			fprintf(out, "%6s", is_err ? "error " : "");
-			sprintf(timestamp, "%ld.%ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
-			fputs(timestamp, out);
-			fputs(timestamp, split);
-		}
-		fputc(c, out);
-		fputc(c, split);
-		first = (c == '\n');
-	}
-	fflush(out);
-	fflush(split);
+	tee_stdin(out, split, is_err ? "error" : "");
 	exit(EXIT_SUCCESS);
 }
 
@@ -291,4 +271,34 @@ print_args(FILE* f, char **argv)
 		fprintf(f, " '%s'", *argv++);
 	}
 	fputc('\n', f);
+}
+
+
+
+void
+tee_stdin(FILE *out, FILE *split, const char *msg)
+{
+	int first = 1;
+	int c;
+	while( (c = getchar()) != EOF ) {
+		if(first) {
+			char timestamp[128];
+			struct timeval tp;
+			if( gettimeofday(&tp, NULL) == -1 ) {
+				tp.tv_sec = 0;
+				tp.tv_usec = 0;
+			}
+			fflush(out);
+			fflush(split);
+			fprintf(out, "%-6s", msg);
+			sprintf(timestamp, "%ld.%ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
+			fputs(timestamp, out);
+			fputs(timestamp, split);
+		}
+		fputc(c, out);
+		fputc(c, split);
+		first = (c == '\n');
+	}
+	fflush(out);
+	fflush(split);
 }
