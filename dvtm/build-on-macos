@@ -1,0 +1,10 @@
+
+To build on macos, you must add -D_DARWIN_C_SOURCE to CfLAGS
+
+The brain dead build requires that it be specified in the environment
+to make rather than as an argument, so you end up doing something like:
+
+CFLAGS='-D_DARWIN_C_SOURCE -L/usr/local/opt/ncurses/lib -I/usr/local/opt/ncurses/include' make
+
+
+There is no configure script.  You are expected to hand edit the Makefiles.
