@@ -175,7 +175,12 @@ main(int argc, char **argv)
 		printf("usage: %s shell-command\n\n", basename(argv[0]));
 		puts("version: @VERSION@");
 		puts("Run a command with output streams in 2 new tmux panes,");
-		puts("with those streams dup'd to files.");
+		puts("with those streams dup'd to files.  The pane for stderr");
+		puts("is deferred, and will not appear if no errors are written.");
+		puts("Both streams are also written to a file in RUN_LOG_DIR (or");
+		puts("HOME/.run-output if not set) named 'results-xxxx' where");
+		puts("xxxx is the pid of the calling shell");
+
 		return 0;
 	}
 	log_file = check_env(argv + 1);
