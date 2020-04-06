@@ -1,7 +1,7 @@
 
 bin_PROGRAMS = run
 
-include_HEADERS = xutil.h stack.h
+noinst_HEADERS = xutil.h stack.h
 
 check_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args \
 	access \
