@@ -3,3 +3,11 @@ Order of file lookup:
 	GNUmakefile
 	makefile
 	Makefile
+
+variables:
+
+# With gnu make 3.81, the += construction behaves as follows:
+VAR += val
+# If VAR is passed as an argument to make, then VAR will have the assigned value.
+# If VAR is passed in the environment, then 'val' (the RHS of the +=) is appended
+# to the value with a preceding space.
