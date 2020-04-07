@@ -49,6 +49,7 @@ FILE *xfdopen(int, const char *mode);
 enum fork_type { parent, child } xfork(void);
 void print_args(FILE* f, char **argv);
 void tee_stdin(FILE *out, FILE *split, const char *msg);
+FILE * get_alternate_pane(void);
 
 
 void
@@ -56,8 +57,6 @@ do_split(FILE *out, int is_err, char **argv)
 {
 	/* Read stdn, prepend timestamp and write to out and a split pane*/
 	FILE *split;
-	int fd[2];
-	char *tmux_args[] = { "tmux", "split-window", "-p", "50", "-dI", NULL };
 
 	if(is_err) {
 		int c;
@@ -68,22 +67,8 @@ do_split(FILE *out, int is_err, char **argv)
 		ungetc(c, stdin);
 	}
 
-	xpipe(fd);
-	switch(xfork()) {
-	case child:
-		xdup2(fd[0], STDIN_FILENO);
-		xclose(fd[0]);
-		xclose(fd[1]);
-		execvp(tmux_args[0], tmux_args);
-		perror("execlp tmux");
-		exit(EXIT_FAILURE);
-	case parent:
-		;
-	}
+	split = get_alternate_pane();
 
-	xclose(fd[0]);
-
-	split = xfdopen(fd[1], "w");
 	if(is_err) {
 		setbuf(split, NULL);
 	}
@@ -305,4 +290,30 @@ tee_stdin(FILE *out, FILE *split, const char *msg)
 	}
 	fflush(out);
 	fflush(split);
+}
+
+
+/*
+ * Return a FILE * into which data should be written (this will display
+ * in an alternate pane.
+ */
+FILE *
+get_alternate_pane(void)
+{
+	char *tmux_args[] = { "tmux", "split-window", "-p", "50", "-dI", NULL };
+	int fd[2];
+
+	xpipe(fd);
+	switch(xfork()) {
+	case child:
+		xdup2(fd[0], STDIN_FILENO);
+		xclose(fd[0]);
+		xclose(fd[1]);
+		execvp(tmux_args[0], tmux_args);
+		perror("execlp tmux");
+		exit(EXIT_FAILURE);
+	case parent:
+		xclose(fd[0]);
+		return xfdopen(fd[1], "w");
+	}
 }
