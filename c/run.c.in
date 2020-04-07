@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <sys/stat.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <time.h>
 #include <unistd.h>
 #if 0
 
@@ -87,8 +89,8 @@ check_env(char **argv)
 	FILE *out;
 	char *date;
 	struct timeval tp;
-	if( getenv("TMUX") == NULL ) {
-		fputs("Must be run in tmux\n", stderr);
+	if( getenv("TMUX") == NULL && getenv("DVTM_CMD_FIFO") == NULL) {
+		fputs("Must be run in tmux or dvtm with a cmd fifo\n", stderr);
 		exit(EXIT_FAILURE);
 	}
 	base = getenv("RUN_OUTPUT_FMT");
@@ -292,6 +294,28 @@ tee_stdin(FILE *out, FILE *split, const char *msg)
 	fflush(split);
 }
 
+/* Create path of fifo we will use to get data to cat.  To
+ * be removed on exit.
+ */
+char *
+create_fifo_path(char *path, size_t s)
+{
+	char name[NAME_MAX];
+	if(getcwd(path, s) == NULL) {
+		perror("getcwd");
+		exit(EXIT_FAILURE);
+	}
+	sprintf(name, "/run-dvtm-fifo.%d", getpid());
+	strncat(path, name, s - strlen(path));
+	return path;
+}
+
+void
+delete_fifo(void)
+{
+	char path[PATH_MAX];
+	unlink(create_fifo_path(path, sizeof path));
+}
 
 /*
  * Return a FILE * into which data should be written (this will display
@@ -302,18 +326,34 @@ get_alternate_pane(void)
 {
 	char *tmux_args[] = { "tmux", "split-window", "-p", "50", "-dI", NULL };
 	int fd[2];
+	char *fifo;
 
-	xpipe(fd);
-	switch(xfork()) {
-	case child:
-		xdup2(fd[0], STDIN_FILENO);
-		xclose(fd[0]);
-		xclose(fd[1]);
-		execvp(tmux_args[0], tmux_args);
-		perror("execlp tmux");
-		exit(EXIT_FAILURE);
-	case parent:
-		xclose(fd[0]);
-		return xfdopen(fd[1], "w");
+	if( (fifo = getenv("DVTM_CMD_FIFO")) != NULL) {
+		char path[PATH_MAX];
+		FILE *cmd_fifo;
+		atexit(delete_fifo);
+		if(mkfifo(create_fifo_path(path, sizeof path), 0700) == -1) {
+			perror("mkfifo");
+			exit(EXIT_FAILURE);
+		}
+		cmd_fifo = xfopen(fifo, "a");
+		fprintf(cmd_fifo, "create \"cat < %s; while read; do :; done\"\n", path);
+		fprintf(stderr, "create \"cat < %s\"", path);
+		fclose(cmd_fifo);
+		return xfopen(path, "a");
+	} else {
+		xpipe(fd);
+		switch(xfork()) {
+		case child:
+			xdup2(fd[0], STDIN_FILENO);
+			xclose(fd[0]);
+			xclose(fd[1]);
+			execvp(tmux_args[0], tmux_args);
+			perror("execlp tmux");
+			exit(EXIT_FAILURE);
+		case parent:
+			xclose(fd[0]);
+			return xfdopen(fd[1], "w");
+		}
 	}
 }
