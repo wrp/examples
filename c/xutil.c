@@ -58,3 +58,14 @@ xopen(const char *path, int flags)
 	}
 	return f;
 }
+
+char *
+xstrdup(const char *s1)
+{
+	char *r = strdup(s1);
+	if( r == NULL ) {
+		perror("strdup");
+		exit(EXIT_FAILURE);
+	}
+	return r;
+}

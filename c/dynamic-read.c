@@ -1,9 +1,6 @@
 /*
- * Reverse the lines of input.
+ * Reverse each lines of input.
  * Demonstrates using read and growing the buffer.
- *
- * Note that I continue to see segfaults when
- * running the test on a file that is mutating.
  */
 
 #include <assert.h>
