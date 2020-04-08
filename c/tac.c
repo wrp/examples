@@ -22,11 +22,12 @@ main(int argc, char *argv[])
 			lines = xrealloc(lines, sizeof *lines * siz);
 		}
 	}
+	free(t->b);
 	while( t-- > lines ) {
 		fwrite(t->b, 1, t->s, stdout);
-		/* fputs(t->b, stdout);*/
 		free(t->b);
 	}
 	free(lines);
+	fclose(in);
 	return 0;
 }
