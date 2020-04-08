@@ -2,30 +2,31 @@
 #include <string.h>
 #include "xutil.h"
 
-/* A simple implementation of tac.
- * Reads a file in its entirety, then writes
- * it in reverse order, linewise
+/*
+ * Read a file in its entirety, then write the lines in reverse order.
  */
+
+struct line { char *b; ssize_t s; size_t c; };
 
 int
 main(int argc, char *argv[])
 {
 	FILE *in = argc > 1 ? xfopen(argv[1], "r") : stdin;
-	char **lines = NULL;
-	size_t siz = 0;
-	size_t s = 0;
-	size_t line_number = 0;
-	char *line = NULL;
+	size_t siz = 128;
+	struct line *lines = xmalloc(siz * sizeof *lines);
+	struct line *t = lines;
 
-
-	while( getline(&line, &s, in) != -1) {
-		if( line_number + 1 > siz ) {
-			lines = xrealloc(lines, sizeof *lines * (siz = siz ? siz * 2 : 128));
+	while( t->b = NULL, (t->s = getline(&t->b, &t->c, in)) != -1) {
+		if( ++t > lines + siz ) {
+			siz *= 2;
+			lines = xrealloc(lines, sizeof *lines * siz);
 		}
-		lines[line_number++] = xstrdup( line );
 	}
-	while( line_number > 0 ) {
-		printf("%s",  lines[--line_number]);
+	while( t-- > lines ) {
+		fwrite(t->b, 1, t->s, stdout);
+		/* fputs(t->b, stdout);*/
+		free(t->b);
 	}
+	free(lines);
 	return 0;
 }
