@@ -11,14 +11,15 @@ int
 main(int argc, char *argv[])
 {
 	FILE *in = argc > 1 ? xfopen(argv[1], "r") : stdin;
-	size_t siz = 128;
+	size_t siz = 2;
 	struct line *lines = xmalloc(siz * sizeof *lines);
 	struct line *t = lines;
 
 	while( t->b = NULL, (t->s = getline(&t->b, &t->c, in)) != -1) {
-		if( ++t > lines + siz ) {
+		if( ++t == lines + siz ) {
 			siz *= 2;
 			lines = xrealloc(lines, sizeof *lines * siz);
+			t = lines + siz / 2;
 		}
 	}
 	free(t->b);
