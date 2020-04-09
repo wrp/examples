@@ -27,6 +27,8 @@ NA        unused            8
 reset to default            9
 
 
+change terminal title:
+printf "%s%s%s" "$(tput tsl)" test "$(tput fsl)"
 
 tput:
 
