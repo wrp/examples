@@ -24,8 +24,11 @@ gcloud kms keys create ${key:?} \
 
 
 # Get the service account used for big query:
-service_account=$( bq show --encryption_service_account --project_id ${project:?} \
-	| tr -d ' ' | sed -n 3p )
+service_account=$( bq show \
+	--format=prettyjson \
+	--encryption_service_account \
+	--project_id ${project:?} \
+	| jq -r .ServiceAccountID)
 
 
 # Grant that account permission to use the key
