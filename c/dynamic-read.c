@@ -34,11 +34,10 @@ main(int argc, char **argv)
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
 			if( end > buf + siz ) {
-				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
-				buf = xrealloc(buf, BUFSIZ + siz, sizeof *buf, NULL);
-				eol = end = buf + e_off;
+				buf = xrealloc(buf, BUFSIZ + siz, sizeof *buf, &end);
+				eol = end;
 				prev = buf + p_off;
 			}
 			s = end;
