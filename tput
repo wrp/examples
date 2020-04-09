@@ -28,7 +28,8 @@ reset to default            9
 
 
 change terminal title:
-printf "%s%s%s" "$(tput tsl)" test "$(tput fsl)"
+tput hs && printf "%s%s%s" "$(tput tsl)" test "$(tput fsl)"
+See https://serverfault.com/questions/23978/how-can-one-set-a-terminals-title-with-the-tput-command
 
 tput:
 
