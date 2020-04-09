@@ -46,7 +46,7 @@ void
 Realloc(struct data *V)
 {
 	V->siz = V->siz ? V->siz * 2 : 1024;
-	V->val = xrealloc(V->val, sizeof *V->val, V->siz, NULL);
+	V->val = xrealloc(V->val, V->siz, sizeof *V->val, NULL);
 	return;
 }
 

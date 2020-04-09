@@ -18,21 +18,22 @@ xfopen(const char *path, const char *mode)
 }
 
 void *
-xrealloc(void *buf, size_t s, size_t count, void *iterator)
+xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 {
 	ptrdiff_t offset;
+	void **iterator = offsetp;
 	if( iterator != NULL ) {
-		offset = *(char **)iterator - (char *)buf;
+		offset = *iterator - buf;
 	}
 
-	buf = realloc(buf, s * count);
+	buf = realloc(buf, num * siz);
 	if( buf == NULL ) {
 		perror("realloc");
 		exit(EXIT_FAILURE);
 	}
 
 	if( iterator != NULL ) {
-		*(char **)iterator = (char *)buf + offset;
+		*iterator = buf + offset;
 	}
 	return buf;
 }

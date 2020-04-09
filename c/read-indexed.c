@@ -89,7 +89,7 @@ build_index(struct indexed_file *ifp)
 		if( fread(&ifp->lines, sizeof ifp->lines, 1, idx) != 1 ) {
 			die("Failed to read index: %s", strerror(errno));
 		}
-		ifp->idx = xrealloc(NULL, sizeof *ifp->idx, ifp->lines, NULL);
+		ifp->idx = xrealloc(NULL, ifp->lines, sizeof *ifp->idx, NULL);
 		if( fread(ifp->idx, sizeof *ifp->idx, ifp->lines, idx) != ifp->lines ) {
 			die("Failed to read index: %s", strerror(errno));
 		}
@@ -104,7 +104,7 @@ build_index(struct indexed_file *ifp)
 		if( c == '\n' )
 			ifp->idx[i++] = count;
 		if( i == capacity ) {
-			ifp->idx = xrealloc(ifp->idx, sizeof *ifp->idx, capacity *= 2, NULL);
+			ifp->idx = xrealloc(ifp->idx, capacity *= 2, sizeof *ifp->idx, NULL);
 		}
 	}
 	i -= 1;

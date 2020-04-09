@@ -21,7 +21,7 @@ main(int argc, char **argv)
 	ssize_t rc;
 
 	size_t siz = BUFSIZ;         /* size available to read into */
-	char *buf = xrealloc(NULL, 1, BUFSIZ + siz, NULL); /* Pad the front */
+	char *buf = xrealloc(NULL, BUFSIZ + siz, sizeof *buf, NULL); /* Pad the front */
 	char *s = buf + BUFSIZ;      /* first char of a line */
 	char *prev = s;              /* start of data from previous read */
 	char *end = s;               /* one past last char read from input */
@@ -37,7 +37,7 @@ main(int argc, char **argv)
 				ptrdiff_t e_off = end - buf;
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
-				buf = xrealloc(buf, 1, BUFSIZ + siz, NULL);
+				buf = xrealloc(buf, BUFSIZ + siz, sizeof *buf, NULL);
 				eol = end = buf + e_off;
 				prev = buf + p_off;
 			}
