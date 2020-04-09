@@ -3,24 +3,28 @@ bin_PROGRAMS = run
 
 noinst_HEADERS = xutil.h stack.h
 
-check_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat va_args \
+noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args
+check_PROGRAMS = \
+	calc \
+	fread \
+	scanf \
 	access \
-	grow \
-	pyramid \
+	arithperm \
+	clean-man \
+	dynamic \
 	dynamic-read \
-	pipehup \
-	list \
-	read-indexed \
-	load-matrix \
-	scanf-term \
 	fsync \
+	grow \
+	list \
+	load-matrix \
+	pipehup \
+	poly \
+	pyramid \
+	read-indexed \
+	scanf-term \
 	tac \
 	udp-client \
-	udp-server \
-	dynamic \
-	arithperm \
-	poly \
-	clean-man
+	udp-server
 
 TESTS = \
 	arithperm-test \
