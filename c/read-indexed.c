@@ -22,7 +22,9 @@ main(int argc, char **argv)
 	struct indexed_file ifp[1];
 
 	if( argc < 2 ) {
-		puts("Usage: %s input-file [line-num ...]");
+		char *base = strrchr(argv[0], '/');
+		base = base ? base + 1 : argv[0];
+		printf("usage: %s input-file [line-num ...]\n", base);
 		return EXIT_SUCCESS;
 	}
 	open_indexed(argv[1], ifp);
