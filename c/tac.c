@@ -17,9 +17,7 @@ main(int argc, char *argv[])
 
 	while( t->b = NULL, (t->s = getline(&t->b, &t->c, in)) != -1) {
 		if( ++t == lines + siz ) {
-			siz *= 2;
-			lines = xrealloc(lines, sizeof *lines * siz);
-			t = lines + siz / 2;
+			lines = xrealloc(lines, sizeof *lines, siz *= 2, &t);
 		}
 	}
 	free(t->b);

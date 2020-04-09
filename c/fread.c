@@ -54,6 +54,6 @@ grow(struct buf *b)
 
 	b->capacity = b->capacity ? b->capacity * 2 : BUFSIZ;
 
-	b->data = xrealloc(b->data, b->capacity);
+	b->data = xrealloc(b->data, sizeof *b->data, b->capacity, NULL);
 	b->end = b->data + delta;
 }

@@ -1,5 +1,6 @@
 #include "xutil.h"
 #include <stdlib.h>
+#include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
 #include <fcntl.h>
@@ -17,12 +18,21 @@ xfopen(const char *path, const char *mode)
 }
 
 void *
-xrealloc(void *buf, size_t s)
+xrealloc(void *buf, size_t s, size_t count, void *iterator)
 {
-	buf = realloc(buf, s);
+	ptrdiff_t offset;
+	if( iterator != NULL ) {
+		offset = *(char **)iterator - (char *)buf;
+	}
+
+	buf = realloc(buf, s * count);
 	if( buf == NULL ) {
 		perror("realloc");
 		exit(EXIT_FAILURE);
+	}
+
+	if( iterator != NULL ) {
+		*(char **)iterator = (char *)buf + offset;
 	}
 	return buf;
 }

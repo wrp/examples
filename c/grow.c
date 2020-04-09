@@ -52,7 +52,7 @@ grow(struct buffer *b)
 		siz = b->s * 2;
 		offset = b->end - b->start;
 	}
-	b->start = xrealloc(b->start, siz);
+	b->start = xrealloc(b->start, sizeof *b->start, siz, NULL);
 	b->end = b->start + offset;
 	b->s = siz;
 }
