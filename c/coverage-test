@@ -4,8 +4,17 @@
 # this will likely just get skipped.  (eg, configure with
 # CFLAGS='--coverage -g -O0' to run this test)
 
-progs='calc ring-buffer dynamic list dynamic-read
-	udp-server udp-client grow'
+progs='
+	calc
+	dynamic
+	dynamic-read
+	grow
+	list
+	ring-buffer
+	tac
+	udp-client
+	udp-server
+'
 
 if ! test -f calc.gcda; then
 	exit 77
