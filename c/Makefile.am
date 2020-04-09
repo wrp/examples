@@ -14,6 +14,7 @@ check_PROGRAMS = calc ctime fread getdelim mmap prctl qsort read scanf seek stat
 	load-matrix \
 	scanf-term \
 	fsync \
+	tac \
 	udp-client \
 	udp-server \
 	dynamic \
@@ -36,6 +37,7 @@ TESTS = \
 	scanf \
 	scanf-term-test \
 	scanf-test \
+	tac-test \
 	udp-test \
 	coverage-test  # Must run last
 
