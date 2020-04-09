@@ -1,12 +1,14 @@
 #!/bin/sh
-# Use ' to force digit separators
 
+# Use ' to force digit separators
 printf "%'d\n" "1234567890"  # 1,234,567,890
 	# [CX] [Option Start] Extension to the ISO C standard [Option End]
 	# The functionality described is an extension to the ISO C standard.
 	# Application developers may make use of an extension as it is supported
 	# on all POSIX.1-2017-conforming systems.
 
+# To repeat a string:
+printf 'foo%.0s' a b c  # writes foofoofoo
 
 
 # A field width or precision, or both, may be indicated by an
