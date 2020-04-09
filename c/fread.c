@@ -50,10 +50,6 @@ append(struct buf *b, FILE *fp, size_t n)
 void
 grow(struct buf *b)
 {
-	ptrdiff_t delta = b->end - b->data;
-
 	b->capacity = b->capacity ? b->capacity * 2 : BUFSIZ;
-
-	b->data = xrealloc(b->data, b->capacity, sizeof *b->data, NULL);
-	b->end = b->data + delta;
+	b->data = xrealloc(b->data, b->capacity, sizeof *b->data, &b->end);
 }

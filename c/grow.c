@@ -41,18 +41,12 @@ main(int argc, char **argv)
 void
 grow(struct buffer *b)
 {
-	size_t siz;
-	ptrdiff_t offset;
-
 	if(b->start == NULL) {
-		siz = 8;
-		offset = 0;
+		b->s = 8;
+		b->end = b->start;
 	} else {
 		assert(b->end != NULL);
-		siz = b->s * 2;
-		offset = b->end - b->start;
+		b->s *= 2;
 	}
-	b->start = xrealloc(b->start, siz, sizeof *b->start, NULL);
-	b->end = b->start + offset;
-	b->s = siz;
+	b->start = xrealloc(b->start, b->s, sizeof *b->start, &b->end);
 }
