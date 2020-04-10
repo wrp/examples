@@ -282,7 +282,7 @@ tee_stdin(FILE *out, FILE *split, const char *msg)
 			fflush(out);
 			fflush(split);
 			fprintf(out, "%-7s", msg);
-			sprintf(timestamp, "%10ld.%6ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
+			sprintf(timestamp, "%10ld.%06ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
 			fputs(timestamp, out);
 			fputs(timestamp, split);
 		}
