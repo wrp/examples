@@ -19,7 +19,7 @@ run:
 		--privileged \
 		-p 8125 \
 		-v $(HOME):/home/$(USER) \
-		-e USE_HOME=/$(USER) \
+		-e SAMPLE_ENV=/$(USER) \
 		--label $(USER)-debian \
 		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
 	fi
