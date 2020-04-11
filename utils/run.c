@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+#include "config.h"
 #if 0
 
 The following simple shell script gets munged by bash, and
@@ -151,7 +152,7 @@ main(int argc, char **argv)
 	FILE *out_file;
 	if(argc == 1) {
 		printf("usage: %s shell-command\n\n", basename(argv[0]));
-		puts("version: @VERSION@");
+		puts("version: " VERSION);
 		puts("Run a command with output streams in 2 new panes,");
 		puts("with those streams dup'd to a file.  The pane for stderr");
 		puts("is deferred, and will not appear if no errors are written.");
