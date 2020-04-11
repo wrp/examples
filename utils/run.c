@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 #include "config.h"
@@ -49,7 +50,7 @@ void xclose(int fd);
 void xdup2(int dest, int src);
 FILE *xfopen(const char *path, const char *mode);
 FILE *xfdopen(int, const char *mode);
-enum fork_type { parent, child } xfork(void);
+enum fork_type { parent, child } xfork(pid_t *);
 void print_args(FILE* f, char **argv);
 void tee_stdin(FILE *out, FILE *split, const char *msg);
 FILE * get_alternate_pane(void);
@@ -133,7 +134,7 @@ check_env(char **argv)
 void
 do_kid(int *p1, int *p2, int is_err, char **argv, FILE *out_file)
 {
-	if(xfork() == child) {
+	if(xfork(NULL) == child) {
 		xdup2(p1[0], STDIN_FILENO);
 		xclose(p1[0]);
 		xclose(p1[1]);
@@ -149,6 +150,8 @@ main(int argc, char **argv)
 {
 	int outp[2];
 	int errp[2];
+	int status;
+	pid_t p;
 	FILE *out_file;
 	if(argc == 1) {
 		printf("usage: %s shell-command\n\n", basename(argv[0]));
@@ -170,22 +173,23 @@ main(int argc, char **argv)
 	xpipe(errp);
 	do_kid(errp, outp, 1, argv + 1, out_file);
 	do_kid(outp, errp, 0, argv + 1, out_file);
-	xdup2(outp[1], STDOUT_FILENO);
-	xdup2(errp[1], STDERR_FILENO);
-	xclose(outp[0]);
-	xclose(outp[1]);
-	xclose(errp[0]);
-	xclose(errp[1]);
-	/* Double fork so the called process is not a parent */
-	if(xfork() == parent) {
-		return EXIT_SUCCESS;
+	/* fork so the called process is not the parent of the helper */
+	switch( xfork(&p)) {
+	case child:
+		xdup2(outp[1], STDOUT_FILENO);
+		xdup2(errp[1], STDERR_FILENO);
+		xclose(outp[0]); xclose(outp[1]); xclose(errp[0]); xclose(errp[1]);
+		execvp(argv[1], argv + 1);
+		perror("execvp");
+		status = EXIT_FAILURE;
+	case parent:
+		xclose(outp[0]); xclose(outp[1]); xclose(errp[0]); xclose(errp[1]);
+		waitpid(p, &status, 0);
+		if( WIFSIGNALED(status)) {
+			fprintf(stderr, "Killed by signal %d\n", WTERMSIG(status));
+		}
 	}
-	if(xfork() == parent) {
-		return EXIT_SUCCESS;
-	}
-	execvp(argv[1], argv + 1);
-	perror("execvp");
-	return EXIT_FAILURE;
+	return status;
 }
 
 void
@@ -241,17 +245,23 @@ xfdopen(int fd, const char *mode)
 
 
 enum fork_type
-xfork(void)
+xfork(pid_t *p)
 {
-	switch(fork()) {
+	pid_t pid;
+	enum fork_type r = parent;
+	switch( pid = fork() ) {
 	case -1:
 		perror("fork");
 		exit(EXIT_FAILURE);
 	case 0:
-		return child;
+		r = child;
+		/* Fall thru */
 	default:
-		return parent;
+		if( p ) {
+			*p = pid;
+		}
 	}
+	return r;
 }
 
 
@@ -344,7 +354,7 @@ get_alternate_pane(void)
 		return xfopen(path, "a");
 	} else {
 		xpipe(fd);
-		switch(xfork()) {
+		switch(xfork(NULL)) {
 		case child:
 			xdup2(fd[0], STDIN_FILENO);
 			xclose(fd[0]);
