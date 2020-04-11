@@ -349,7 +349,6 @@ get_alternate_pane(void)
 		}
 		cmd_fifo = xfopen(fifo, "a");
 		fprintf(cmd_fifo, "create \"cat < %s; while read; do :; done\"\n", path);
-		fprintf(stderr, "create \"cat < %s\"", path);
 		fclose(cmd_fifo);
 		return xfopen(path, "a");
 	} else {
