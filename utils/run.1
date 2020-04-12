@@ -1,0 +1,49 @@
+.Dd April 12, 2020
+.Dt WRP_UTILS 1
+.Sh NAME
+.Nm run
+.Nd shell wrapper that splits iostreams into tmux/dvtm panes
+.Sh DESCRIPTION
+.
+.Nm
+is a thin wrapper that spawns two new windows (either tmux panes or dvtm windows)
+for each of the stdio streams, prepending timestamps.  The streams are also
+written intermixed to a log file, with a prefix on lines from the  error stream.
+.
+.Sh USAGE
+.
+.Nm
+cmd [cmd-args]
+.Pp
+without arguments, this page is displayed.  If any arguments are given,
+they are passed verbatim to exec to create the 'runner' process.
+.
+.Sh ENVIRONMENT VARIABLES
+.
+.Bl -tag
+.It Ev RUN_OUTPUT_FMT
+Data written by the runner is stored in the file specified by
+RUN_OUTPUT_FMT.  Occurrences of %p in the format are replaced
+by the pid of the caller (this way, if you execute multiple runners
+from the same shell, they will all be in the same file.)
+If not given, the default is '$HOME/.run-output/result-%p'.  Note
+that there is no way to get the literal string "%p" into the output path.
+.
+.It Ev DVTM_CMD_FIFO
+If
+.Ev DVTM_CMD_FIFO
+is set, alternate panes will be created by writing commands
+to this file.
+.It Ev TMUX
+If
+.Ev DVTM_CMD_FIFO is not set, but
+.Ev TMUX
+is, then alternate panes will be created by invoking
+"tmux split-window -p 50 -dI"
+.
+.El
+.
+.Sh AUTHOR
+.
+wrp-utils are written by
+.An William Pursell
