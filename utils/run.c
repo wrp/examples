@@ -214,14 +214,22 @@ main(int argc, char **argv)
 		execvp(argv[1], argv + 1);
 		perror("execvp");
 		status = EXIT_FAILURE;
-	case parent:
-		xclose(outp[0]); xclose(outp[1]); xclose(errp[0]); xclose(errp[1]);
+	case parent: {
+		char msg[256];
+		int len;
+		xclose(outp[0]);
+		xclose(errp[0]);
+		xclose(errp[1]);
 		waitpid(p, &status, 0);
 		if( WIFSIGNALED(status)) {
-			fprintf(stderr, "Killed by signal %d\n", WTERMSIG(status));
+			len = sprintf(msg, "Killed by signal %d\n", WTERMSIG(status));
 		} else if( WIFEXITED(status)) {
-			fprintf(stderr, "Exited with status %d\n", WEXITSTATUS(status));
+			len = sprintf(msg, "Exited with status %d\n", WEXITSTATUS(status));
 		}
+		fputs(msg, stdout);
+		write(outp[1], msg, len);
+		xclose(outp[1]);
+	} break;
 	}
 	return status;
 }
