@@ -292,6 +292,22 @@ print_args(FILE* f, char **argv)
 }
 
 
+static void
+write_timestamp(FILE *out, FILE *split, const char *msg)
+{
+	char timestamp[128];
+	struct timeval tp;
+	if( gettimeofday(&tp, NULL) == -1 ) {
+		tp.tv_sec = 0;
+		tp.tv_usec = 0;
+	}
+	fflush(out);
+	fflush(split);
+	sprintf(timestamp, "%10ld.%06ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
+	fprintf(out, "%-7s", msg);
+	fputs(timestamp, out);
+	fputs(timestamp, split);
+}
 
 void
 tee_stdin(FILE *out, FILE *split, const char *msg)
@@ -300,18 +316,7 @@ tee_stdin(FILE *out, FILE *split, const char *msg)
 	int c;
 	while( (c = getchar()) != EOF ) {
 		if(first) {
-			char timestamp[128];
-			struct timeval tp;
-			if( gettimeofday(&tp, NULL) == -1 ) {
-				tp.tv_sec = 0;
-				tp.tv_usec = 0;
-			}
-			fflush(out);
-			fflush(split);
-			fprintf(out, "%-7s", msg);
-			sprintf(timestamp, "%10ld.%06ld: ", (long)tp.tv_sec, (long)tp.tv_usec);
-			fputs(timestamp, out);
-			fputs(timestamp, split);
+			write_timestamp(out, split, msg);
 		}
 		fputc(c, out);
 		fputc(c, split);
