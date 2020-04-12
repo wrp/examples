@@ -192,19 +192,9 @@ main(int argc, char **argv)
 	FILE *out_file;
 	ignore(SIGINT);
 	if(argc == 1) {
-		printf("usage: %s shell-command\n\n", basename(argv[0]));
-		puts("version: " VERSION);
-		puts("Run a command with output streams in 2 new panes,");
-		puts("with those streams dup'd to a file.  The pane for stderr");
-		puts("is deferred, and will not appear if no errors are written.");
-		puts("Both streams are also written to the file specified in");
-		puts("$RUN_OUTPUT_FMT[$HOME/.run-output/results-%p].");
-		puts("Occurrences of '%p' in RUN_OUTPUT_FMT will be replaced with");
-		puts("the caller's pid.");
-		puts("Note that %% is not an escape sequence, and there is no way");
-		puts("to create output files with '%p' in the name.");
-
-		return 0;
+		execlp("man", "man", "1", "run", NULL);
+		perror("execl man");
+		return 1;
 	}
 	out_file = check_env(argv + 1);
 	xpipe(outp);
