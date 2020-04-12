@@ -1,4 +1,4 @@
-/* simple example the writes and catches sigpipe and sighup */
+/* simple example the writes and catches sigpipe, sighup, and sigint */
 
 #include <signal.h>
 #include <string.h>
@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+int count = 0;
 void
 handle(int s, siginfo_t *i, void *v)
 {
@@ -15,7 +16,9 @@ handle(int s, siginfo_t *i, void *v)
 	(void)v;
 	len = sprintf( buf, "handle: %d\n", s );
 	write(2, buf, len);
-	_exit(0);
+	if(count++ == 5) {
+		exit(0);
+	}
 	return;
 }
 
@@ -42,7 +45,7 @@ main(void)
 	set_action(&act, SIGHUP);
 	set_action(&act, SIGINT);
 	while(1) {
-		sprintf(buf, "%d.", i++);
+		sprintf(buf, "%d\n", i++);
 		write(1, buf, strlen(buf));
 		sleep(1);
 	}
