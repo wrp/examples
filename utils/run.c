@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <libgen.h>
 #include <limits.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -161,6 +162,20 @@ do_kid(int *p1, int *p2, int is_err, char **argv, FILE *out_file)
 	}
 }
 
+
+static void
+ignore(int sig)
+{
+	struct sigaction act;
+	memset(&act, 0, sizeof act);
+	act.sa_handler = SIG_IGN;
+	if(sigaction( sig, &act, NULL )) {
+		perror("sigaction");
+		exit(1);
+	}
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -169,6 +184,7 @@ main(int argc, char **argv)
 	int status;
 	pid_t p;
 	FILE *out_file;
+	ignore(SIGINT);
 	if(argc == 1) {
 		printf("usage: %s shell-command\n\n", basename(argv[0]));
 		puts("version: " VERSION);
@@ -203,6 +219,8 @@ main(int argc, char **argv)
 		waitpid(p, &status, 0);
 		if( WIFSIGNALED(status)) {
 			fprintf(stderr, "Killed by signal %d\n", WTERMSIG(status));
+		} else if( WIFEXITED(status)) {
+			fprintf(stderr, "Exited with status %d\n", WEXITSTATUS(status));
 		}
 	}
 	return status;
