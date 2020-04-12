@@ -73,15 +73,22 @@ void tee_stdin(FILE *out, FILE *split, const char *msg);
 FILE * get_alternate_pane(void);
 
 
+/*
+ * Read stdn, prepend timestamp and write to out and split
+ * The idea is that there is one split handling each output
+ * stream, but the streams are merged in the out file.  So
+ * lines written to out get an additional string prepended
+ * (which is blank for stdout, and "error" for stderr) so
+ * they can be distinguished.
+ */
 void
 do_split(FILE *out, int is_err, char **argv)
 {
-	/* Read stdn, prepend timestamp and write to out and a split pane*/
 	FILE *split;
 
 	if(is_err) {
 		int c;
-		/* Do not spawn a pane until there is some data to show */
+		/* Do not spawn a pane unless/until there is some data to show */
 		if( (c = getchar()) == EOF) {
 			return;
 		}
@@ -97,7 +104,6 @@ do_split(FILE *out, int is_err, char **argv)
 	print_args(split, argv);
 
 	tee_stdin(out, split, is_err ? "error" : "");
-	exit(EXIT_SUCCESS);
 }
 
 FILE *
