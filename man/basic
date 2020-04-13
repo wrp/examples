@@ -1,0 +1,10 @@
+
+
+# To view a file:
+groff -man -Tascii file.1
+
+
+# To specify a manpath:
+man -M $MANPATH  # MANPATH is colon separated list
+
+
