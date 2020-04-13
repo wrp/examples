@@ -8,3 +8,6 @@ EXTRA_DIST = version build-aux/package-version
 .PHONY: version
 version:
 	git describe --tags --always --dirty > version
+
+run.1: run.txt
+	asciidoctor -b manpage $<

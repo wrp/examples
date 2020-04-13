@@ -1,49 +1,57 @@
-.Dd April 12, 2020
-.Dt WRP_UTILS 1
-.Sh NAME
-.Nm run
-.Nd shell wrapper that splits iostreams into tmux/dvtm panes
-.Sh DESCRIPTION
-.
-.Nm
-is a thin wrapper that spawns two new windows (either tmux panes or dvtm windows)
-for each of the stdio streams, prepending timestamps.  The streams are also
-written intermixed to a log file, with a prefix on lines from the  error stream.
-.
-.Sh USAGE
-.
-.Nm
-cmd [cmd-args]
-.Pp
-without arguments, this page is displayed.  If any arguments are given,
-they are passed verbatim to exec to create the 'runner' process.
-.
-.Sh ENVIRONMENT VARIABLES
-.
-.Bl -tag
-.It Ev RUN_OUTPUT_FMT
-Data written by the runner is stored in the file specified by
-RUN_OUTPUT_FMT.  Occurrences of %p in the format are replaced
-by the pid of the caller (this way, if you execute multiple runners
-from the same shell, they will all be in the same file.)
-If not given, the default is '$HOME/.run-output/result-%p'.  Note
-that there is no way to get the literal string "%p" into the output path.
-.
-.It Ev DVTM_CMD_FIFO
-If
-.Ev DVTM_CMD_FIFO
-is set, alternate panes will be created by writing commands
-to this file.
-.It Ev TMUX
-If
-.Ev DVTM_CMD_FIFO is not set, but
-.Ev TMUX
-is, then alternate panes will be created by invoking
-"tmux split-window -p 50 -dI"
-.
-.El
-.
-.Sh AUTHOR
-.
-wrp-utils are written by
-.An William Pursell
+'\" t
+.\"     Title: run
+.\"    Author: William Pursell
+.\" Generator: Asciidoctor 2.0.10
+.\"      Date: 2020-04-13
+.\"    Manual: run Manual
+.\"    Source: run
+.\"  Language: English
+.\"
+.TH "RUN" "1" "2020-04-13" "run" "run Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+run \- shell wrapper that splits iostreams into tmux/dvtm panes
+.SH "USAGE"
+.sp
+run cmd [cmd\-args]
+.sp
+without arguments, this page is displayed.  If any arguments are given, they are passed verbatim to exec to create the \(aqrunner\(aq process.
+.SH "SYNOPSIS"
+.sp
+\fBexample\fP [\fIOPTION\fP]... \fIFILE\fP...
+.SH "DESCRIPTION"
+.sp
+run is a thin wrapper that spawns two new windows (either tmux panes
+or dvtm windows) for each of the stdio streams, prepending timestamps.
+The streams are also written intermixed to a log file, with a prefix
+on lines from the  error stream.
+.SH "ENVIRONMENT VARIABLES"
+.sp
+RUN_OUTPUT_FMT   Data written by the runner is stored in the file specified by RUN_OUTPUT_FMT.  Occurrences of %p in the format are replaced by the pid
+of the caller (this way, if you execute multiple runners from the same shell, they will all be in the same file.)  If not given, the
+default is \(aq$HOME/.run\-output/result\-%p\(aq.  Note that there is no way to get the literal string "%p" into the output path.
+.sp
+DVTM_CMD_FIFO    If DVTM_CMD_FIFO is set, alternate panes will be created by writing commands to this file.
+.sp
+TMUX             If DVTM_CMD_FIFO is not set, but TMUX is, then alternate panes will be created by invoking "tmux split\-window \-p 50 \-dI"
+.SH "AUTHOR"
+.sp
+William Pursell
