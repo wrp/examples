@@ -107,5 +107,6 @@ RUN aptitude install -y libyaml-perl
 RUN aptitude install -y bc
 RUN aptitude install -y csvtool
 RUN aptitude install -y valgrind
+RUN aptitude install -y asciidoctor
 
 EXPOSE 8125
