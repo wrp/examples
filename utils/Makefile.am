@@ -10,4 +10,4 @@ version:
 	git describe --tags --always --dirty > version
 
 run.1: run.txt
-	asciidoctor -b manpage $<
+	asciidoctor -a ver=${PACKAGE_VERSION} -b manpage $<
