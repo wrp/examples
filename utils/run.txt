@@ -8,14 +8,11 @@ William Pursell
 == NAME
 run - shell wrapper that splits iostreams into dvtm windows or tmux panes
 
-== USAGE
+== SYNOPSIS
 run cmd [cmd-args]
 
 without arguments, this page is displayed.  If any arguments are given,
 they are passed verbatim to exec to create the 'runner' process.
-
-== SYNOPSIS
-*example* [_OPTION_]... _FILE_...
 
 == DESCRIPTION
 run is a thin wrapper that spawns two new windows (either tmux panes
