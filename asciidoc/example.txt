@@ -1,0 +1,9 @@
+============
+asciidoc-example(1)
+============
+
+NAME
+----
+sample
+
+
