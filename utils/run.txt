@@ -1,0 +1,46 @@
+
+= run (1)
+William Pursell
+:doctype: manpage
+:man manual: run Manual
+:man source: run
+
+== NAME
+run - shell wrapper that splits iostreams into dvtm windows or tmux panes
+
+== USAGE
+run cmd [cmd-args]
+
+without arguments, this page is displayed.  If any arguments are given,
+they are passed verbatim to exec to create the 'runner' process.
+
+== SYNOPSIS
+*example* [_OPTION_]... _FILE_...
+
+== DESCRIPTION
+run is a thin wrapper that spawns two new windows (either tmux panes
+or dvtm windows) for each of the stdio streams, prepending timestamps.
+The streams are also written intermixed to a log file, with a prefix
+on lines from the error stream.
+
+== ENVIRONMENT VARIABLES
+=== RUN_OUTPUT_FMT
+Data written by the runner is stored in the file
+specified by RUN_OUTPUT_FMT.  Occurrences of %p in the format are
+replaced by the pid of the caller (this way, if you execute multiple
+runners from the same shell, they will all be in the same file.)
+If not given, the default is '$HOME/.run-output/result-%p'.  Note
+that there is no way to get the literal string "%p" into the output path.
+
+=== DVTM_CMD_FIFO
+If DVTM_CMD_FIFO is set, alternate windows will be created
+by writing dvtm commands to this fifo.
+
+
+=== TMUX
+If TMUX is set and DVTM_CMD_FIFO is not, alternate panes will be
+created by invoking "tmux split-window -p 50 -dI"
+
+
+== SEE ALSO
+tmux(1), dvtm(1)
