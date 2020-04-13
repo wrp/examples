@@ -1,5 +1,5 @@
 
-%.html: %.txt ; asciidoctor $<
+%.html: %.txt ; asciidoctor -b xhtml5 $<
 
 %.xml: %.txt ; asciidoctor -b docbook $<
 
