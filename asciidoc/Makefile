@@ -1,5 +1,7 @@
 
-%.html: %.txt ; asciidoc -b xhtml11 -o $*.html $<
+%.html: %.txt ; asciidoctor $<
 
-%.xml: %.txt ; asciidoc -b docbook -o $*.xml $<
+%.xml: %.txt ; asciidoctor -b docbook $<
+
+%.1: %.txt ; asciidoctor -b manpage $<
 

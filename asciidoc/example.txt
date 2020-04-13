@@ -1,9 +1,14 @@
-============
-asciidoc-example(1)
-============
 
-NAME
-----
-sample
+= example (1)
+William Pursell
+:doctype: manpage
+:man manual: example Manual
+:man source: example 1.2.3
 
+== NAME
+example - does stuff
 
+== SYNOPSIS
+*example* [_OPTION_]... _FILE_...
+
+== DESCRIPTION
