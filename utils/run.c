@@ -190,12 +190,12 @@ main(int argc, char **argv)
 	int status;
 	pid_t p;
 	FILE *out_file;
-	ignore(SIGINT);
 	if(argc == 1) {
 		execlp("man", "man", "1", "run", NULL);
 		perror("execl man");
 		return 1;
 	}
+	ignore(SIGINT);
 	out_file = check_env(argv + 1);
 	xpipe(outp);
 	xpipe(errp);
