@@ -1,6 +1,7 @@
+# For a stack dump:
+jstack ${pid?}
 
-To get a heap dump:
 
-jmap -F -dump:format=b,file=${output_file?} ${pid?}
+# To get a heap dump:
+jmap -F -dump:format=b,file=${output_file?} ${pid?} # (-F may not be necessary)
 
-(-F may not be necessary)
