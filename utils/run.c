@@ -191,9 +191,9 @@ main(int argc, char **argv)
 	pid_t p;
 	FILE *out_file;
 	if(argc == 1) {
-		execlp("man", "man", "1", "run", NULL);
-		perror("execl man");
-		return 1;
+		char *base = strrchr(argv[0], '/');
+		printf("%s-%s\n", base ? base + 1: argv[0], VERSION);
+		return 0;
 	}
 	ignore(SIGINT);
 	out_file = check_env(argv + 1);
