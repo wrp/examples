@@ -23,7 +23,7 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_SEARCH_LIBS([pow],[m])
 
-AC_CHECK_FUNCS([getdelim gettimeofday strtol])
+AC_CHECK_FUNCS([getdelim gettimeofday strtol arc4random_uniform])
 
 AC_CONFIG_FILES([Makefile run.c])
 AC_OUTPUT
