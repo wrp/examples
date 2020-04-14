@@ -1,5 +1,5 @@
 
-/* movitvated by https://stackoverflow.com/questions/61206360/random-word-in-file-without-same-word-twice-c-programming */
+/* motivated by https://stackoverflow.com/questions/61206360/random-word-in-file-without-same-word-twice-c-programming */
 
 #include "config.h"
 #include <stdio.h>
@@ -52,6 +52,7 @@ main(int argc, char **argv)
 				*t++ = '\0';
 				/* this is the first char after a word */
 				if( (i = keep(idx++, count)) != -1 ) {
+					free(words[i]);
 					words[i] = word;
 					word = NULL;
 					capacity = 0;
@@ -63,9 +64,8 @@ main(int argc, char **argv)
 	}
 	for(int i = 0; i < count; i++) {
 		printf("%d: %s\n", i, words[i]);
+		free(words[i]);
 	}
+	free(word);
+	free(words);
 }
-
-
-
-
