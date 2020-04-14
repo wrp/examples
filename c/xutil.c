@@ -80,3 +80,14 @@ xstrdup(const char *s1)
 	}
 	return r;
 }
+
+void *
+xcalloc(size_t count, size_t size)
+{
+	void *r = calloc(count, size);
+	if( r == NULL ) {
+		perror("calloc");
+		exit(EXIT_FAILURE);
+	}
+	return r;
+}
