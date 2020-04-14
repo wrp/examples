@@ -1,5 +1,4 @@
 
-bin_PROGRAMS = run
 
 noinst_HEADERS = xutil.h stack.h
 
