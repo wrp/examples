@@ -15,7 +15,7 @@ example - A program that does stuff
 
 == SYNOPSIS
 
-*example* ['OPTION']... 'FILE'...
+*example* [OPTION] PARAMETER
 
 == OPTIONS
 
