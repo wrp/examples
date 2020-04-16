@@ -2,7 +2,6 @@
 = example (1)
 William Pursell
 :doctype: manpage
-:version: 1.2.3
 :man manual: BSD General Commands Manual
 :man source: example {version}
 :man-linkstyle: blue R <>
