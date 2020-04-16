@@ -1,10 +1,10 @@
 
 = example (1)
 William Pursell
-v1.2.3
 :doctype: manpage
-:man manual: example Manual
-:man source: example 1.2.3
+:version: 1.2.3
+:man manual: BSD General Commands Manual
+:man source: example {version}
 :man-linkstyle: blue R <>
 
 == NAME
@@ -25,7 +25,7 @@ example - A program that does stuff
 
 == DESCRIPTION
 
-This progrm does some really cool things
+This program at version {version}, written by {author} does some really cool things
 
 == EXIT STATUS
 
