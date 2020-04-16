@@ -1,14 +1,47 @@
 
 = example (1)
 William Pursell
+v1.2.3
 :doctype: manpage
 :man manual: example Manual
 :man source: example 1.2.3
+:man-linkstyle: blue R <>
 
 == NAME
-example - does stuff
+
+example - A program that does stuff
 
 == SYNOPSIS
-*example* [_OPTION_]... _FILE_...
+
+*example* ['OPTION']... 'FILE'...
+
+== OPTIONS
+
+*-o, --out-file*=_OUT_FILE_::
+  Write result to _OUT_FILE_.
+
+*-f, --force*::
+  -f is a short option with related long option --force
 
 == DESCRIPTION
+
+This progrm does some really cool things
+
+== EXIT STATUS
+
+*0*::
+  Success.
+  The program worked!
+
+*1*::
+  Failure.
+  Bad things happened
+
+== RESOURCES
+
+*Project web site:* http://example.org
+
+== COPYING
+
+Copyright \(C) 2020 {author}.
+Free use of this software is granted under the terms of the MIT License.
