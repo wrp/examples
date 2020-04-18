@@ -5,3 +5,6 @@
 
 %.1: %.txt ; asciidoctor -a version=0.0.1 -b manpage $<
 
+
+view:
+	groff -man -Tascii example.1
