@@ -5,7 +5,9 @@
 
 void
 report(int c) {
-	printf("'%1$c'(0x%1$02x) is %2$sprintable\n", c, isprint(c) ? "" : "not ");
+	printf("'%1$c'(0x%1$02x)\t%2$sprintable", c, isprint(c) ? "is " : "is not ");
+	printf(",\t%s space", isspace(c) ? "is" : "is not");
+	putchar('\n');
 }
 
 int
