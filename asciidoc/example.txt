@@ -1,6 +1,6 @@
 
 = example (1)
-William Pursell
+Bob Johnson; Allen Schwartz
 :doctype: manpage
 :man manual: BSD General Commands Manual
 :man source: example
