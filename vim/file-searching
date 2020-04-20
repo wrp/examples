@@ -10,3 +10,6 @@ you can make 'gf' work by doing:
 path+=/some/path
 set includeexpr=substitute(v:fname,'$FOO/','','g')
 
+
+To match 'foobar' or 'foobaz':
+/fooba\(r\|z\)
