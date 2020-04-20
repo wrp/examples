@@ -1,8 +1,11 @@
-
-To display data at each breakpoint, useq
+To work with a running process:
+gdb -p $pid $exe
 
 To work with a core dump:
 gdb $exe $core_file
 
 To generate a core dump, probably just need to:
 ulimit -c unlimited
+
+
+To display data at each breakpoint, useq
