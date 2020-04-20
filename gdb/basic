@@ -8,4 +8,8 @@ To generate a core dump, probably just need to:
 ulimit -c unlimited
 
 
-To display data at each breakpoint, useq
+To display data at each breakpoint, use 'display'
+or 'commands'
+
+set follow-fork-mode child
+set follow-fork-mode parent
