@@ -4,21 +4,23 @@
 
 /* Extremely silly example showing a function pointer */
 
+struct x;
+typedef double (op)(const struct x, const struct x);
+
 struct x {
 	double value;
-	double (*op)(struct x, struct x);
+	op *op;
 };
 
-double add(const struct x a, const struct x b);
-double subtract(const struct x a, const struct x b);
-double multiply(const struct x a, const struct x b);
-double divide(const struct x a, const struct x b);
+op add;
+op subtract;
+op multiply;
+op divide;
 double print(const struct x a, const struct x b) {
 	(void)b;
 	printf("%g\n", a.value);
 	return 0;
 }
-
 
 int
 main(void)
