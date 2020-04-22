@@ -15,7 +15,7 @@ gcloud projects --format=json get-iam-policy ${PROJECT?} > ${PROJECT}.iam
 # Set policy  (give service account access)
 gcloud projects set-iam-policy ${PROJECT:?} $PROJECT.iam
 
-# Change acl on a gcs bucket
+# Change acl on a gcs storage bucket
 gsutil acl get gs://${bucket} > ${bucket}.acl
 vi ${bucket}.acl
 gsutil acl set ${bucket}.acl gs://${bucket}
