@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-/* demonstrate that snprintf write n - 1 bytes of data plus a null byte.
+/* demonstrate that snprintf writes n-1 bytes of data plus a null byte.
  * eg, the first argument will be a properly terminated string
  */
 
@@ -9,7 +9,7 @@ main(void)
 {
 	char v[5];
 
-	snprintf( v, 5, "abcdefg" );
+	snprintf( v, 5, "abcdefghijk" );
 	for(unsigned i = 0; i < sizeof v; i++ ) {
 		printf("v[%d] = '%c' == %02x\n", i, v[i], v[i]);
 	}
