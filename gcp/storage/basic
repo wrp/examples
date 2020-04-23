@@ -1,0 +1,7 @@
+# list all buckets in the currently configured project
+gsutil ls
+
+# Change acl on a gcs storage bucket
+gsutil acl get gs://${bucket} > ${bucket}.acl
+vi ${bucket}.acl
+gsutil acl set ${bucket}.acl gs://${bucket}
