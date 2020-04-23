@@ -5,6 +5,9 @@ gcloud iam service-accounts list
 # Google Cloud SDK 285.0.1/beta 2019.05.17/bq 2.0.55/core 2020.03.17/gsutil 4.48 )
 gcloud iam roles list --format=json > $PROJECT.roles
 
+# To get permissions from a role:
+gcloud iam roles describe --format=json
+
 #roles role owner   Show all owners of a project
 gcloud projects --format=json get-iam-policy ${PROJECT?} \
 | jq '.bindings[]|select(.role == "roles/owner")|.members'
