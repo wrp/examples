@@ -1,8 +1,10 @@
 To work with a running process:
-gdb -p $pid $exe
+$ gdb -p $pid $exe
 
 To work with a core dump:
-gdb $exe $core_file
+$ gdb $exe $core_file
+gdb> bt        # Show backtrace
+gdb> frame 2   # Go to frame 2 in the backtrace
 
 To generate a core dump, probably just need to:
 ulimit -c unlimited
