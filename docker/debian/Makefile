@@ -12,9 +12,11 @@ run:
 	@# -v localmnt:mount_in_docker_image
 	-rename-tmux-window debian
 
-	-if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
+	@if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
+		echo "Attaching to docker containter $$id"; \
 		docker exec -it -e DOCKER=debian -u $(USER) "$$id" bash; \
 	else \
+		echo 'Creating new docker container'; \
 		docker run -it \
 		--privileged \
 		-p 8125 \
