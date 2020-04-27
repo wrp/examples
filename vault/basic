@@ -1,0 +1,3 @@
+
+# To see details on secrets
+$ vault secrets list -detailed
