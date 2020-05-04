@@ -1,17 +1,17 @@
 
-= example (1)
+= {name} (1)
 Bob Johnson; Allen Schwartz
 :doctype: manpage
 :man manual: BSD General Commands Manual
-:man source: example
+:man source: {name}
 :man version: {version}
 :man volnum: 1
-:man purpose: example-purpose
+:man purpose: {name}-purpose
 :man-linkstyle: blue R <>
 
 == NAME
 
-example - A program that does stuff
+{name} - A program that does stuff
 
 == SYNOPSIS
 
@@ -41,7 +41,7 @@ This program at version {version}, written by {author} does some really cool thi
 
 == RESOURCES
 
-*Project web site:* http://example.org
+*Project web site:* http://{name}.org
 
 == COPYING
 
