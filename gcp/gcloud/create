@@ -20,7 +20,7 @@ gcloud compute --project=${PROJECT?PROJECT is undefined} \
 	${image_project:+--image-project=${image_project}} \
 	--zone="$zone" \
 	--description="$description" \
-	--network-interface=no-address \
+	--no-address \
 	--maintenance-policy=MIGRATE \
 	--scopes=$( tr \\n , <<-EOF | sed 's/,$//'
 		https://www.googleapis.com/auth/devstorage.read_only
