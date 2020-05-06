@@ -177,7 +177,7 @@ main() {
 			cd "$base_dir"
 			git add $x
 			interactive_commit "$(printf \
-				"Update $orig_type/$host$(
+				"Update $PROJECT:$orig_type/$host$(
 					test "$PROJECT" != gcloud && echo " in $PROJECT"
 					)\n\n%s" \
 					"${FORCE}"
