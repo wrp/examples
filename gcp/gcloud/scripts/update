@@ -188,7 +188,7 @@ main() {
 	done
 	return 0
 }
-if ! ( cd "$base_dir"; git diff-index --exit-code HEAD --); then
+if test -z "$FORCE" && ! ( cd "$base_dir"; git diff-index --exit-code HEAD --); then
 	die repo is dirty
 fi
 
