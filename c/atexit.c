@@ -31,19 +31,24 @@ int
 main(void)
 {
 	struct sigaction act;
+	int child;
 
-	/* Registered functions are not called for an uncaught signal */
+	/* Registered functions are not called for an uncaught signal that
+	causes termination, but are called for (eg) SIGCHLD.
+	*/
 	atexit(foo);
-	atexit(bar);  /* Bar will be called first */
-
+	atexit(bar);  /* bar will be called first */
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
 	if(sigaction( SIGUSR1, &act, NULL )) { perror("sigaction"); exit(1); }
 	if(sigaction( SIGHUP, &act, NULL )) { perror("sigaction"); exit(1); }
-	fork();
+	child = fork() == 0;
 	printf("pid: %d\n", getpid());
 	fflush(stdout);
 	pause();
+	if( child ) {
+		_exit(0);
+	}
 	return 0;
 }
