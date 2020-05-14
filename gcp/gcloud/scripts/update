@@ -21,7 +21,7 @@
 . $(dirname $0)/funcs.sh
 : ${base_dir=$(dirname $0)}
 
-: ${FORCE="update gcp data on $(DATE)"}
+: ${FORCE="update gcp data on $(date)"}
 
 get_column() {
 	awk '$1 == host{print $n}' n="$2" host="$host" "${1%/*}/list"  |
