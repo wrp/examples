@@ -5,7 +5,7 @@
 /* Extremely silly example showing a function pointer */
 
 struct x;
-typedef double (op)(const struct x, const struct x);
+typedef double op(const struct x, const struct x);
 
 struct x {
 	double value;
