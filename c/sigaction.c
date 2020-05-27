@@ -30,9 +30,9 @@ main(void)
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
-	if(sigaction( SIGUSR1, &act, NULL )) { perror("sigaction"); exit(1); }
-	if(sigaction( SIGUSR2, &act, NULL )) { perror("sigaction"); exit(1); }
-	if(sigaction( SIGHUP, &act, NULL )) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGUSR1, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGUSR2, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGHUP, &act, NULL ) ) { perror("sigaction"); exit(1); }
 	pause();
 
 	printf("usr1=%d\n", usr1);
