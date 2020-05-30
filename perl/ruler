@@ -1,0 +1,26 @@
+#!/bin/sh
+
+perl -e '
+	my $c = $ENV{"COLS"};
+	sub draw_horizontal {
+		my $i = 0;
+		while( $i < $c ) {
+			printf "%s", ($i % 10) ? ($i % 10) : "|";
+			$i += 1;
+		}
+	}
+	draw_horizontal();
+	my $i = 1;
+	while( $i < $ENV{"ROWS"} - 2 ) {
+		printf "%-10s", $i;
+		my $len = 10;
+		while( $len + length($i) + 10 < $c ) {
+			printf "%-10s", $len;
+			$len += 10;
+		}
+		my $fmt = sprintf "%%%ds\n", $c - $len;
+		printf $fmt, $i;
+		$i += 1;
+	}
+	draw_horizontal();
+'
