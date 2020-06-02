@@ -2,6 +2,9 @@
 
 use 5.12.0;
 
+# $ARGV[0] is first arg
+# $0 is name
+say '$0 ='. $0;
 foreach my $arg (@ARGV) {
 	say "arg: $arg"
 }
