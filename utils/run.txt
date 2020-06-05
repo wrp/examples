@@ -11,7 +11,7 @@ run - shell wrapper that splits iostreams into dvtm windows or tmux panes
 == SYNOPSIS
 run cmd [cmd-args]
 
-without arguments, this page is displayed.  If any arguments are given,
+without arguments, the version is displayed.  If any arguments are given,
 they are passed verbatim to exec to create the 'runner' process.
 
 == VERSION
