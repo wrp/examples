@@ -3,9 +3,10 @@
 
 /* Nice (?) technique allowing use of ternary operator on the LHS */
 
-struct foo {
-	int x;
-};
+struct foo { int x; };
+void a(void) { printf("In function %s\n", __func__); }
+void b(void) { printf("In function %s\n", __func__); }
+
 int
 main(int argc, char **argv)
 {
@@ -18,5 +19,8 @@ main(int argc, char **argv)
 
 	printf("x = %d, y = %d\n", x, y);
 	printf("f.x = %d, g.x = %d\n", f.x, g.x);
+
+	(x > y ? &a : &b)();
+
 	return 0;
 }
