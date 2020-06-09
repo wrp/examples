@@ -130,7 +130,7 @@ main() {
 					--project=$PROJECT
 			;;
 			iam-policy)
-				execute gcloud projects get-iam-policy $PROJECT
+				execute gcloud projects --format=json get-iam-policy $PROJECT
 			;;
 			esac
 		;;
