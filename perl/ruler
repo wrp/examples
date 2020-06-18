@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-my $c = $ENV{'COLS'} // $ENV{'COLUMNS'};
-my $r = $ENV{'ROWS'} // $ENV{'LINES'};
+my $c = $ENV{"COLS"};
+my $msg = $ARGV[0] // getppid();
 sub draw_horizontal {
 	my $i = 0;
 	while( $i < $c ) {
@@ -14,14 +14,14 @@ sub draw_horizontal {
 }
 draw_horizontal();
 my $i = 1;
-while( $i < $r - 2 ) {
-	my $len = 10;
-	my $s = sprintf "%-${len}s", $i;
-	if( $i == 1 || $i == $r - 3 ) {
+while( $i < $ENV{"ROWS"} - 2 ) {
+	my $s = sprintf "%-10s", $i;
+	if( $i == 1 || $i == $ENV{"ROWS"} - 3 ) {
 		while( length($s) + 10 < $c ) {
 			$s .= sprintf "%-10s", length($s);
-			$len += 10;
 		}
+	} else {
+		$s .= " " . $msg;
 	}
 	my $fmt = sprintf "%%%ds\n", $c - length($s);
 	$s .= sprintf $fmt, $i;
