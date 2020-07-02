@@ -40,7 +40,7 @@ set_group_and_type() {
 	address)
 		group=compute
 		type=addresses
-		region=$(get_column "$1" 2) \
+		region=$(test $host = list || get_column "$1" 2) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
 	forwarding-rule|target-pool)
