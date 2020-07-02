@@ -45,7 +45,7 @@ set_group_and_type() {
 		;;
 	forwarding-rule|target-pool)
 		group=compute
-		region=$(get_column "$1" 2) \
+		region=$(test $host = list || get_column "$1" 2) \
 			|| die "Can't get region for ${orig_type} $host"
 		;;
 	firewall-rule) group=compute ;;
