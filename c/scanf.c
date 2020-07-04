@@ -16,7 +16,6 @@ struct conversion_specifier {
 };
 
 static void show_bufs(const char *fmt, int count, char a[7][1024]);
-static int isstring(const char *s);
 static int scan(const char *input, const char *fmt, ...);
 static int parse_format_string(const char *fmt, struct conversion_specifier *e);
 static void validate(const char *, size_t, int , const char *, int);
@@ -158,17 +157,6 @@ show_bufs(const char *fmt, int count, char b[7][1024])
 		putchar('\t');
 		idx += 1;
 	}
-}
-
-static int
-isstring(const char *s)
-{
-	for( ; *s; s++ ) {
-		if( !isprint(*s) && *s != '\n') {
-			return 0;
-		}
-	}
-	return 1;
 }
 
 static void
