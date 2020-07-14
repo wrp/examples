@@ -47,5 +47,5 @@ git remote set-url ${remote?} --add $(git remote get-url --push github)
 git ls-remote --heads ${remote}
 git branch --list -r "${remote}/*"
 
-# Reset branch to upstread
+# Reset branch to upstream
 git reset --hard @{u}   # @{u} is abbreviation for upstream branch
