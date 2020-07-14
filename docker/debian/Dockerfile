@@ -56,7 +56,7 @@ RUN aptitude install -y jq
 RUN aptitude install -y perl-doc
 
 
-RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list
+RUN printf 'deb http://deb.debian.org/debian sid main\n' >> /etc/apt/sources.list
 RUN apt-get update
 
 # Setup to install docker
