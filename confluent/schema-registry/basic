@@ -5,4 +5,4 @@ curl -kSs http://${host-$(hostname)}:${port-8081}/subjects | jq -r .[]
 curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions; echo
 
 # View a version of the schema
-curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions/1; echo
+curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions/${n-1}; echo
