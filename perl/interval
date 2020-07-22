@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Run a command when the system clock hits the next second
+
+while sleep $(perl -MTime::HiRes=gettimeofday -E '$n=gettimeofday; say 1-($n-int($n))'); do
+date
+done
