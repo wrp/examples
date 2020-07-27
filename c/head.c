@@ -24,6 +24,9 @@ main(int argc, char *const*argv)
 	for( ; *args; args++ ) {
 		int c, line = 0;
 		FILE *in = xfopen(*args,"r");
+		if( argc > 3 ) {
+			printf("******** %s ********\n", *args);
+		}
 		while( line < count && ( c = fgetc(in)) != EOF ) {
 			line += putchar(c) == '\n';
 		}
