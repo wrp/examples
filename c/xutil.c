@@ -8,7 +8,7 @@
 FILE *
 xfopen(const char *path, const char *mode)
 {
-	FILE *fp = strcmp(path, "-") ? fopen(path, mode) :
+	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
 		*mode == 'r' ? stdin : stdout;
 	if( fp == NULL ) {
 		perror(path);
