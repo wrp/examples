@@ -319,7 +319,7 @@ ri      sr      Scroll backward (down) one line
 rin     SR      Scroll backward #1 lines (P)
 rmacs   ae      End alternate character set
 rmam    RA      Turn off automatic margins
-rmcup   te      String to end programs that use `cup'
+rmcup   te      String to stop using alternate screen
 rmdc    ed      End delete mode
 rmir    ei      End insert mode
 rmkx    ke      End keypad transmit mode
@@ -337,7 +337,7 @@ sgr     sa      Define video attributes #1 through #9 (P)
 sgr0    me      Turn off all attributes
 smacs   as      Begin alternate character set
 smam    SA      Turn on automatic margins
-smcup   ti      String to begin programs that use `cup'
+smcup   ti      String to begin using alternate screen
 smdc    dm      Begin delete mode
 smgl    ML      Set soft left margin to #1 (P)
 smgr    MR      Set soft right margin to #1 (P)
