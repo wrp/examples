@@ -1,3 +1,5 @@
+On macos, use lldb (see gdb2lldb)
+
 To work with a running process:
 $ gdb -p $pid $exe
 
