@@ -192,10 +192,12 @@ and
 (gdb) info locals
 (lldb) frame variable
 (lldb) fr v
+
 Show the local variables for the current frame.
-(gdb) info locals
-(lldb) frame variable --no-args
-(lldb) fr v -a
+(gdb) info locals		(lldb) frame variable --no-args
+                                (lldb) fr v -a
+
+
 Show the contents of local variable "bar".
 (gdb) p bar
 (lldb) frame variable bar
@@ -278,37 +280,37 @@ Select thread 1 as the default thread for subsequent commands.
 (lldb) thread select 1
 (lldb) t 1
 Show the stack backtrace for the current thread.
-(gdb) bt
-(lldb) thread backtrace
-(lldb) bt
+(gdb) bt			(lldb) thread backtrace
+                                (lldb) bt
+
 Show the stack backtraces for all threads.
 (gdb) thread apply all bt	(lldb) thread backtrace all
-(lldb) bt all
+				(lldb) bt all
+
 Backtrace the first five frames of the current thread.
 (gdb) bt 5	(lldb) thread backtrace -c 5
 (lldb) bt 5 (lldb-169 and later)
 (lldb) bt -c 5 (lldb-168 and earlier)
 Select a different stack frame by index for the current thread.
-(gdb) frame 12	(lldb) frame select 12
-(lldb) fr s 12
-(lldb) f 12
+(gdb) frame 12			(lldb) frame select 12
+                                (lldb) fr s 12
+                                (lldb) f 12
+
 List information about the currently selected frame in the current thread.
 (lldb) frame info
 Select the stack frame that called the current stack frame.
-(gdb) up	(lldb) up
-(lldb) frame select --relative=1
-Select the stack frame that is called by the current stack frame.
-(gdb) down	(lldb) down
-(lldb) frame select --relative=-1
-(lldb) fr s -r-1
-Select a different stack frame using a relative offset.
-(gdb) up 2
-(gdb) down 3
-(lldb) frame select --relative 2
-(lldb) fr s -r2
+(gdb) up			(lldb) up
+				(lldb) frame select --relative=1
 
-(lldb) frame select --relative -3
-(lldb) fr s -r-3
+Select the stack frame that is called by the current stack frame.
+(gdb) down			(lldb) down
+				(lldb) frame select --relative=-1
+				(lldb) fr s -r-1
+Select a different stack frame using a relative offset.
+(gdb) up 2			(lldb) frame select --relative 2
+(gdb) down 3                    (lldb) fr s -r2
+				(lldb) frame select --relative -3
+				(lldb) fr s -r-3
 Show the general purpose registers for the current thread.
 (gdb) info registers
 (lldb) register read
