@@ -1,7 +1,10 @@
 copied from https://lldb.llvm.org/use/map.html
 
 GDB to LLDB command map
-Below is a table of GDB commands with the LLDB counterparts. The built in GDB-compatibility aliases in LLDB are also listed. The full lldb command names are often long, but any unique short form can be used. Instead of “breakpoint set”, “br se” is also acceptable.
+Below is a table of GDB commands with the LLDB counterparts. The
+built in GDB-compatibility aliases in LLDB are also listed. The
+full lldb command names are often long, but any unique short form
+can be used. Instead of “breakpoint set”, “br se” is also acceptable.
 
 Execution Commands
 Launch a process no arguments.
@@ -101,28 +104,26 @@ Enter your stop hook command(s). Type 'DONE' to end.
 Stop hook #1 added.
 Run until we hit line 12 or control leaves the current function.
 (gdb) until 12	(lldb) thread until 12
+
 Breakpoint Commands
-GDB	LLDB
+GDB				LLDB
 Set a breakpoint at all functions named main.
-(gdb) break main	(lldb) breakpoint set --name main
-(lldb) br s -n main
-(lldb) b main
+(gdb) break main		(lldb) breakpoint set --name main
+				(lldb) br s -n main
+				(lldb) b main
 Set a breakpoint in file test.c at line 12.
-(gdb) break test.c:12	(lldb) breakpoint set --file test.c --line 12
-(lldb) br s -f test.c -l 12
-(lldb) b test.c:12
+(gdb) break test.c:12		(lldb) breakpoint set --file test.c --line 12
+				(lldb) br s -f test.c -l 12
+				(lldb) b test.c:12
 Set a breakpoint at all C++ methods whose basename is main.
-(gdb) break main
-(Hope that there are no C functions named main).	(lldb) breakpoint set --method main
-(lldb) br s -M main
+(gdb) break main		(lldb) breakpoint set --method main
+				(lldb) br s -M main
 Set a breakpoint at and object C function: -[NSString stringWithFormat:].
-(gdb) break -[NSString stringWithFormat:]
-(lldb) breakpoint set --name "-[NSString stringWithFormat:]"
-(lldb) b -[NSString stringWithFormat:]
+(gdb) break -[NSString stringWithFormat:]	(lldb) breakpoint set --name "-[NSString stringWithFormat:]"
+						(lldb) b -[NSString stringWithFormat:]
 Set a breakpoint at all Objective-C methods whose selector is count.
-(gdb) break count
-(Hope that there are no C or C++ functions named count).	(lldb) breakpoint set --selector count
-(lldb) br s -S count
+(gdb) break count 		(lldb) breakpoint set --selector count
+				(lldb) br s -S count
 Set a breakpoint by regular expression on function name.
 (gdb) rbreak regular-expression
 (lldb) breakpoint set --func-regex regular-expression
@@ -199,10 +200,9 @@ Show the local variables for the current frame.
 
 
 Show the contents of local variable "bar".
-(gdb) p bar
-(lldb) frame variable bar
-(lldb) fr v bar
-(lldb) p bar
+(gdb) p bar	 		(lldb) frame variable bar
+				(lldb) fr v bar
+				(lldb) p bar
 Show the contents of local variable "bar" formatted as hex.
 (gdb) p/x bar
 (lldb) frame variable --format x bar

@@ -19,6 +19,7 @@ main(void)
 	/* Use positional arguments.  Mixing positional with non-positional is undefined */
 	printf("%2$15s: %%zd  %1$zd\n", sizeof i, "size_t");
 	printf("%2$*3$s: %%zd  %1$zd\n", sizeof i, "size_t", 15);
+	/* %2$*3$s uses the 3rd arg as the width to print the 2nd arg as %s */
 
 	return 0;
 }

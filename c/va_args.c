@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <limits.h>
 
+#define MAC(...) foo(__VA_ARGS__)
 void die(const char *fmt, ... )  __attribute__ ((format (printf, 1, 2)));
 void
 die(const char *fmt, ... )
@@ -74,6 +75,7 @@ main(void)
 	bar("sdchl", "bar", 5, 'k', 2, k);
 	foo("sddhh", "foo", 5, 'k', 2, k);
 	bar("sddhh", "bar", 5, 'k', 2, k);
+	MAC("sddhh", "macro", 5, 'k', 2, k);
 	die("%d banana %s\n", 5, "foo");
 	return 0;
 }
