@@ -7,9 +7,11 @@ foo(bar)
 foo(`bar')
 
 Use ifdef to produce a default value
-1: ifdef(`qux',`qux',`foo')
+1: ifdef(`qux',`qux',`foo')  # Prints expanded value of foo
+2: ifdef(`qux',`qux',``foo'')  # Prints literal foo
 define(`qux', `quxvalue')dnl
-2: ifdef(`qux',`qux',`foo')
+3: ifdef(`qux',`qux',`foo')
+4: ifdef(`qux',``qux'',`foo')  # Literal qux
 
 define(nl,`'
 )
