@@ -2,7 +2,7 @@
 
 noinst_HEADERS = xutil.h stack.h
 
-noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args
+noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head ncurses
 check_PROGRAMS = \
 	random-word \
 	calc \
@@ -47,6 +47,8 @@ TESTS = \
 
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
+ncurses_LDFLAGS = -lcurses
+ncurses_CPPFLAGS = -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED
 LDADD=libxutil.la
 libringbuf_la_SOURCES = ring-buffer.c
 libstack_la_SOURCES = stack.c

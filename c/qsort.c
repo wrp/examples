@@ -22,7 +22,7 @@ compare_char( const void *a, const void *b )
 }
 
 int
-main( int argc, const char **argv )
+main( int argc, char **argv )
 {
 	/* Sort each argument */
 	puts("Arguments, individually sorted:");

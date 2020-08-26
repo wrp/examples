@@ -21,7 +21,7 @@ child(void)
 }
 
 int
-main(int argc, char *const argv[])
+main(int argc, char *argv[])
 {
 	int status;
 	int fd[2]; /* primary/secondary fd of pty */

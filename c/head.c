@@ -6,7 +6,7 @@
 #include <string.h>
 
 int
-main(int argc, char *const*argv)
+main(int argc, char **argv)
 {
 	char *end = "";
 	int count = argc > 1 ? strtol(argv[1], &end, 10) : 10;
