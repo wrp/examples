@@ -17,8 +17,13 @@ main(void)
 			int y, x;
 			getmaxyx(stdscr, y, x);
 			printw("y = %d; x = %d\n", y, x);
-			doupdate();
+			continue;
 		}
+		char c[128];
+		if( wctomb(c, w) == 1 && w >= 'a' && w <= 'z' ) {
+			printw("%c", toupper(w));
+		}
+		doupdate();
 	}
 	endwin();
 	return 0;
