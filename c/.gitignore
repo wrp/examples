@@ -8,7 +8,7 @@
 .deps
 .gdbinit
 .libs
-Makefile
+./Makefile
 Makefile.in
 aclocal.m4
 ar-lib
