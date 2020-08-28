@@ -20,12 +20,13 @@
 static void grep(int fd, const char *needle);
 
 int
-main(void)
+main(int argc, char **argv)
 {
 	int status;
 	int fd[2];
 	ssize_t s;
 
+	(void) argc;
 	if( openpty(fd, fd + 1, NULL, NULL, NULL) ) {
 		err(EXIT_FAILURE, "openpty");
 	}
@@ -41,9 +42,8 @@ main(void)
 			err(EXIT_FAILURE, "login_tty");
 		}
 		{
-		char *argv[] = { "./show-size", NULL };
-		execv(argv[0], argv);
-		err(EXIT_FAILURE, "execv %s", argv[0]);
+		execv(argv[1], argv + 1);
+		err(EXIT_FAILURE, "execv %s", argv[1]);
 		}
 	}
 
@@ -72,8 +72,7 @@ main(void)
 		}
 	}
 
-	wait(&status);
-	return status;
+	return 0;
 }
 
 /* For synchronization.  Block until needle is read from fd */
