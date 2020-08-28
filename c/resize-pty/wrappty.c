@@ -68,9 +68,6 @@ main(int argc, char **argv)
 		ws.ws_col = 80 + c;
 		char b[2] = {0};
 		b[0] = c;
-		if( ioctl(primary, TIOCSWINSZ, &ws) ) {
-			err(EXIT_FAILURE, "ioctl");
-		}
 		send_msg(primary, b);
 		send_msg(primary, "\e[A");
 	}
