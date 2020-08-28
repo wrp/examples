@@ -50,12 +50,10 @@ main(void)
 	char buf[1024];
 	int c;
 	while( (c = getchar()) != EOF ) {
-		fprintf(stderr, "Read %02x\n", c);
 		struct winsize ws = { .ws_row = 60 + c, .ws_col = 80 + c};
 		if( ioctl(fd[0], TIOCSWINSZ, &ws) ) {
 			err(EXIT_FAILURE, "ioctl");
 		}
-
 		s = read(fd[0], buf, sizeof buf);
 		if( s < 1 ) {
 			err(1, "Read");

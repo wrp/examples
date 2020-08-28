@@ -26,6 +26,9 @@ main(void)
 			getmaxyx(stdscr, y, x);
 			printw("y = %d; x = %d\n", y, x);
 			continue;
+		} else if( w == KEY_UP ) {
+			printw("keyup\n");
+			continue;
 		}
                 char c[128];
 		if( wctomb(c, w) == 1 && w >= 'a' && w <= 'z' ) {
