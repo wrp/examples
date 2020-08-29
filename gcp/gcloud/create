@@ -7,7 +7,11 @@ shift
 # ${image:=debian-9-stretch-v20181011 }
 # ${image_project:=default_project_name}
 if test -z "${image}${image_family}"; then
-	image_family=debian-9
+	# image_family=debian-9
+	image_family=centos-7
+elif test -n "$image" && test -n "$image_family"; then
+	echo "You cannot specify both image and image_family" >&2
+	exit 1
 fi
 
 test -z "$description" &&
