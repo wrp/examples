@@ -17,6 +17,7 @@ fi
 test -z "$description" &&
 	read -p "Enter description: " description
 
+set -x
 gcloud compute --project=${PROJECT?PROJECT is undefined} \
 	instances create \
 	"${instance_name}" \
