@@ -20,7 +20,9 @@ main(void)
 	if( initscr() == NULL ) {
 		err(1, "initscr");
 	}
-	while( (r = get_wch(&w)) != ERR && w != 'q') {
+	noecho();
+	keypad(stdscr, true);
+	while( (r = get_wch(&w)) != ERR ) {
                 char c[MB_LEN_MAX];
 		char s[64];
 		char *d = NULL;
