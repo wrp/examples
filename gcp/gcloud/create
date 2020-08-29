@@ -21,7 +21,10 @@ gcloud compute --project=${PROJECT?PROJECT is undefined} \
 	instances create \
 	"${instance_name}" \
 	${image:+--image=${image}} \
+	${image_family:+--image-family=${image_family}} \
 	${image_project:+--image-project=${image_project}} \
+	${network:+--network=$network} \
+	${subnet:+--subnet=$subnet} \
 	--zone="$zone" \
 	--description="$description" \
 	--no-address \
