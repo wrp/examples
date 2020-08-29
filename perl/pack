@@ -10,8 +10,10 @@ fi |
 perl -ane "print pack('$fmt', @F)" |
 perl -anE "say join(',',unpack('$fmt'))"
 
-
 exit 0
+
+# Print values from 0 to 0xff
+perl -e 'print pack("c", $_) foreach(0..256)'
 
 from perldoc pack:
 
