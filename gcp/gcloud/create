@@ -39,7 +39,7 @@ gcloud compute --project=${PROJECT?PROJECT is undefined} \
 		https://www.googleapis.com/auth/trace.append
 	EOF
 	) \
-	--boot-disk-size=100GB \
+	--boot-disk-size=200GB \
 	--boot-disk-type=pd-standard \
 	"$@"
 
