@@ -63,6 +63,7 @@ main(int argc, char **argv)
 	}
 
 	send_msg(primary, NULL);
+	fcntl(primary, F_SETFL, O_NONBLOCK);
 	while( (c = getchar()) != EOF ) {
 		ws.ws_row = 30 + c;
 		ws.ws_col = 80 + c;
@@ -71,6 +72,8 @@ main(int argc, char **argv)
 		send_msg(primary, b);
 		send_msg(primary, "\e[A");
 	}
+	int saved_flags = fcntl(primary, F_GETFL);
+	fcntl(primary, F_SETFL, primary & ~O_NONBLOCK);
 	while( send_msg(primary, NULL) > 0 )
 		;
 	fputc('\n', stderr);
