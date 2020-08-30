@@ -100,12 +100,16 @@ main(int argc, char **argv)
 	char *expected = "\x1b(B\x1b)0\x1b[?1049h\x1b[1;24r\x1b[m\x0f\x1b[4l"
 		"\x1b[?1h\x1b=\x1b[H\x1b[J";
 	wait_for(primary, expected, strlen(expected));
-	fcntl(primary, F_SETFL, O_NONBLOCK);
+	if( fcntl(primary, F_SETFL, O_NONBLOCK) == -1 ) {
+		perror("fcntl");
+	}
 	while( (c = getchar()) != EOF ) {
 		send_msg(primary, c);
 	}
 	int saved_flags = fcntl(primary, F_GETFL);
-	fcntl(primary, F_SETFL, primary & ~O_NONBLOCK);
+	if( -1 == fcntl(primary, F_SETFL, primary & ~O_NONBLOCK) ) {
+		perror("fcntl");
+	}
 	while( send_msg(primary, EOF) > 0 )
 		;
 	fputc('\n', stderr);
