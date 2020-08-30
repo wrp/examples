@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -110,7 +111,10 @@ main(int argc, char **argv)
 	while( (c = getchar()) != EOF ) {
 		send_msg(primary, c);
 	}
-	alarm(1);
+
+	struct timeval tp = {.tv_sec = 0, .tv_usec = 500000 };
+	struct itimerval t = {.it_interval = tp, .it_value = tp };
+	setitimer(ITIMER_REAL, &t, NULL);
 	struct sigaction act;
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = noop;
