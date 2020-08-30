@@ -22,11 +22,12 @@ handle(int sig, siginfo_t *i, void *v)
 	(void)v;
 	char *n = NULL;
 	switch(sig) {
-	case SIGHUP:  n =  "SIGHUP "; break;
-	case SIGTERM:  n = "SIGTERM"; break;
-	case SIGINT:  n =  "SIGINT "; break;
+	case SIGHUP:  n =  "SIGHUP\n"; break;
+	case SIGTERM:  n = "SIGTERM\n"; break;
+	case SIGINT:  n =  "SIGINT\n"; break;
 	}
-	write(2, n, 7);
+	if(n)
+		write(2, n, strlen(n));
 	return;
 }
 
@@ -81,7 +82,7 @@ main(int argc, char **argv)
 		fflush(stderr);
 	}
 	endwin();
-	fprintf(stderr, "ERR");
+	fprintf(stderr, "ERR\n");
 	return 0;
 }
 
