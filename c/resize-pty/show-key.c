@@ -4,22 +4,49 @@
 #define _XOPEN_SOURCE_EXTENDED
 #define _DARWIN_C_SOURCE
 
-#include <err.h>
-#include <curses.h>
 #include <ctype.h>
-#include <stdlib.h>
+#include <curses.h>
+#include <err.h>
+#include <fcntl.h>
 #include <limits.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <unistd.h>
 
-FILE * xfopen(const char *path, const char *mode);
+int xopen(const char *path, int flags);
+void
+handle(int sig, siginfo_t *i, void *v)
+{
+	(void)i;
+	(void)v;
+	char *n = NULL;
+	switch(sig) {
+	case SIGHUP:  n =  "SIGHUP "; break;
+	case SIGTERM:  n = "SIGTERM"; break;
+	case SIGINT:  n =  "SIGINT "; break;
+	}
+	write(2, n, 7);
+	return;
+}
 
 int
 main(int argc, char **argv)
 {
 	int r;
 	wint_t w = 0;
-	FILE *t = argc > 1 ? xfopen(argv[1], "w") : NULL;
+	if( argc > 1 ) {
+		int fd = xopen(argv[1], O_WRONLY);
+		dup2(fd, STDERR_FILENO);
+	}
 	unsetenv("COLUMNS");
 	unsetenv("LINES");
+	struct sigaction act;
+	memset(&act, 0, sizeof act);
+	act.sa_sigaction = handle;
+	if( sigaction( SIGTERM, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGINT, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGHUP, &act, NULL ) ) { perror("sigaction"); exit(1); }
 	if( initscr() == NULL ) {
 		err(1, "initscr");
 	}
@@ -45,29 +72,26 @@ main(int argc, char **argv)
 		}
 		if( d != NULL ) {
 			printw("(%s)", d);
-			if( t )
-				fprintf(t, "%s", d);
+			fprintf(stderr, "%s", d);
 		} else {
 			printw("%lc", w);
-			if( t )
-				fprintf(t, "%lc", w);
+			fprintf(stderr, "%lc", w);
 		}
 		doupdate();
+		fflush(stderr);
 	}
 	endwin();
-	if( t )
-		fprintf(t, "ERR");
+	fprintf(stderr, "ERR");
 	return 0;
 }
 
-FILE *
-xfopen(const char *path, const char *mode)
+int
+xopen(const char *path, int flags)
 {
-	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
-		*mode == 'r' ? stdin : stdout;
-	if( fp == NULL ) {
+	int f = open(path, flags);
+	if( f == -1 ) {
 		perror(path);
 		exit(EXIT_FAILURE);
 	}
-	return fp;
+	return f;
 }
