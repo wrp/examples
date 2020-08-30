@@ -72,13 +72,13 @@ main(int argc, char **argv)
 		case KEY_LEFT: d = "KEY_LEFT"; break;
 		}
 		if( d != NULL ) {
-			printw("(%s)", d);
+			/*printw("(%s)", d);*/
 			fprintf(stderr, "%s", d);
 		} else {
-			printw("%lc", w);
+			/*printw("%lc", w);*/
 			fprintf(stderr, "%lc", w);
 		}
-		doupdate();
+		/*doupdate();*/
 		fflush(stderr);
 	}
 	endwin();
