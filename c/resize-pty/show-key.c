@@ -23,7 +23,6 @@ main(void)
 	noecho();
 	keypad(stdscr, true);
 	while( (r = get_wch(&w)) != ERR ) {
-                char c[MB_LEN_MAX];
 		char s[64];
 		char *d = NULL;
 		if( r == KEY_CODE_YES ) switch(w) {
@@ -44,12 +43,13 @@ main(void)
 		}
 		if( d != NULL ) {
 			sprintf(s, "(%s)", d);
-		} else if( wctomb(c, w) == 1 && isprint(w) ) {
-			sprintf(s, "%c", toupper(c[0]));
+		} else {
+			sprintf(s, "%lc", w);
 		}
 		printw("%s", s);
 		doupdate();
 	}
+	fprintf(stderr, "ERR");
 	endwin();
 	return 0;
 }
