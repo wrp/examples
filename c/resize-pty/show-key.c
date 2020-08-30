@@ -10,11 +10,14 @@
 #include <stdlib.h>
 #include <limits.h>
 
+FILE * xfopen(const char *path, const char *mode);
+
 int
-main(void)
+main(int argc, char **argv)
 {
 	int r;
 	wint_t w = 0;
+	FILE *t = argc > 1 ? xfopen(argv[1], "w") : NULL;
 	unsetenv("COLUMNS");
 	unsetenv("LINES");
 	if( initscr() == NULL ) {
@@ -23,7 +26,6 @@ main(void)
 	noecho();
 	keypad(stdscr, true);
 	while( (r = get_wch(&w)) != ERR ) {
-		char s[64];
 		char *d = NULL;
 		if( r == KEY_CODE_YES ) switch(w) {
 		case KEY_RESIZE: d = "KEY_RESIZE"; break;
@@ -42,14 +44,30 @@ main(void)
 		case KEY_LEFT: d = "KEY_LEFT"; break;
 		}
 		if( d != NULL ) {
-			sprintf(s, "(%s)", d);
+			printw("(%s)", d);
+			if( t )
+				fprintf(t, "%s", d);
 		} else {
-			sprintf(s, "%lc", w);
+			printw("%lc", w);
+			if( t )
+				fprintf(t, "%lc", w);
 		}
-		printw("%s", s);
 		doupdate();
 	}
-	fprintf(stderr, "ERR");
 	endwin();
+	if( t )
+		fprintf(t, "ERR");
 	return 0;
+}
+
+FILE *
+xfopen(const char *path, const char *mode)
+{
+	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
+		*mode == 'r' ? stdin : stdout;
+	if( fp == NULL ) {
+		perror(path);
+		exit(EXIT_FAILURE);
+	}
+	return fp;
 }

@@ -57,8 +57,9 @@ wait_for(int fd, const char *expect, size_t siz)
 		if( s < 1 || a < e ) {
 			fprintf(stderr, "Ivalid data\nReceived: ");
 			show_data(buf, e - buf);
-			fprintf(stderr, "Expected: ");
+			fprintf(stderr, "\nExpected: ");
 			show_data(expect, siz);
+			fputc('\n', stderr);
 			exit(1);
 		}
 	}
