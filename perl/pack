@@ -15,6 +15,11 @@ exit 0
 # Print values from 0 to 0xff
 perl -e 'print pack("c", $_) foreach(0..256)'
 
+# Print an arbitrary hex value (right padded with a zero nibble)
+perl -e 'print pack("H*", "deadbeefabc")'  -> 0xdeadbeefabc0
+
+
+
 from perldoc pack:
 
 perl -V:{short,int,long{,long}}size   # Get machine sizes
