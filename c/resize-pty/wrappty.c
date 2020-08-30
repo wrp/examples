@@ -3,6 +3,7 @@
 #include <err.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +34,10 @@ send_msg(int fd, int b)
 	if( b != EOF ) {
 		write(fd, &b, 1);
 	}
-	ssize_t s = read(fd, buf, sizeof buf);
+	ssize_t s;
+	while( (s = read(fd, buf, sizeof buf)) == sizeof buf ) {
+		show_data(buf, s);
+	}
 	show_data(buf, s);
 	return s;
 }
@@ -64,6 +68,8 @@ wait_for(int fd, const char *expect, size_t siz)
 		}
 	}
 }
+
+void noop(int sig, siginfo_t *i, void *v) { ; }
 
 int
 main(int argc, char **argv)
@@ -99,19 +105,17 @@ main(int argc, char **argv)
 	/* Initialization sequence from ncurses on macos */
 	char *expected = "\x1b(B\x1b)0\x1b[?1049h\x1b[1;24r\x1b[m\x0f\x1b[4l"
 		"\x1b[?1h\x1b=\x1b[H\x1b[J";
+	alarm(3);
 	wait_for(primary, expected, strlen(expected));
-	if( fcntl(primary, F_SETFL, O_NONBLOCK) == -1 ) {
-		perror("fcntl");
-	}
 	while( (c = getchar()) != EOF ) {
 		send_msg(primary, c);
 	}
-	int saved_flags = fcntl(primary, F_GETFL);
-	if( -1 == fcntl(primary, F_SETFL, primary & ~O_NONBLOCK) ) {
-		perror("fcntl");
-	}
-	while( send_msg(primary, EOF) > 0 )
-		;
+	alarm(1);
+	struct sigaction act;
+	memset(&act, 0, sizeof act);
+	act.sa_sigaction = noop;
+	if( sigaction( SIGALRM, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	send_msg(primary, EOF);
 	fputc('\n', stderr);
 
 	return 0;
