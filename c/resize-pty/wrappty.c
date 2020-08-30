@@ -96,7 +96,7 @@ main(int argc, char **argv)
 		err(EXIT_FAILURE, "close");
 	}
 
-	/* Initialization sequence from pty on macos */
+	/* Initialization sequence from ncurses on macos */
 	char *expected = "\x1b(B\x1b)0\x1b[?1049h\x1b[1;24r\x1b[m\x0f\x1b[4l"
 		"\x1b[?1h\x1b=\x1b[H\x1b[J";
 	wait_for(primary, expected, strlen(expected));
