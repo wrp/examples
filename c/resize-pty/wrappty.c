@@ -23,7 +23,7 @@ show_data(const char *t, ssize_t s)
 {
 	for( ; s > 0; t++, s-- ) {
 		const char *fmt = isprint(*t) ? "%c" : "0x%02x";
-		fprintf(stderr, fmt, *t);
+		fprintf(stderr, fmt, *(unsigned char *)t);
 	}
 	fflush(stderr);
 }
