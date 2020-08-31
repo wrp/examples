@@ -70,13 +70,12 @@ wait_for(int fd, const char *expect, size_t siz)
 	}
 }
 
-void noop(int sig, siginfo_t *i, void *v) { ; }
+void noop(int sig, siginfo_t *i, void *v) { (void)sig; (void)i; (void)v; }
 
 int
 main(int argc, char **argv)
 {
 	int primary, secondary, c;
-	ssize_t s;
 
 	struct winsize ws = { .ws_row = 24, .ws_col = 80 };
 
