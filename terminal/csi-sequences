@@ -1,0 +1,9 @@
+
+
+# Change a title
+printf '\033]2;foobar\007'
+
+# Note that \033] is OSC (operating system command)  parameter 1 with value
+# 2 means to change the title. (parm1 == 0 means also change icon name)
+
+https://www.xfree86.org/current/ctlseqs.html
