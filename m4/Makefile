@@ -1,5 +1,8 @@
 
-.PHONY: foo
+.PHONY: foo all
+all: foo
+	m4 input2
+
 foo:
 	m4 -d -D fatal_if_undef=$$'ifdef(`$$1\',DEFINED,\
 		`errprint(fatal: ``$$1\'\' undefined\n)m4exit(1)\')' \

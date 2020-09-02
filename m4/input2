@@ -1,1 +1,2 @@
-define(`value',defined in __file__@line:__line__)
+define(`value',defined in __file__@line:__line__)dnl
+value
