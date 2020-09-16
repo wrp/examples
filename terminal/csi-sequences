@@ -7,3 +7,4 @@ printf '\033]2;foobar\007'
 # 2 means to change the title. (parm1 == 0 means also change icon name)
 
 https://www.xfree86.org/current/ctlseqs.html
+https://invisible-island.net/xterm/ctlseqs/ctlseqs.html

@@ -9,7 +9,7 @@ main(void)
 {
 	char v[5];
 
-	snprintf( v, 5, "abcdefghijk" );
+	snprintf(v, sizeof v, "abcdefghijk" );
 	for(unsigned i = 0; i < sizeof v; i++ ) {
 		printf("v[%d] = '%c' == %02x\n", i, v[i], v[i]);
 	}

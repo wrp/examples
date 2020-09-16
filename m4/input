@@ -1,6 +1,7 @@
 define(`embed_quote', `Hello, \'world!\'')dnl
 embed_quote
 
+define(bang)
 define(bar, value)
 define(`foo', `Hello' ```3:$1''' ``2:$1'' `1:$1' 0:$1)dnl
 foo(bar)
