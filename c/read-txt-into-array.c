@@ -20,7 +20,7 @@ main(int argc, char **argv)
 	size_t line_count = 0;
 	FILE *fp = argc > 1 ? xfopen(argv[1],"r") : stdin;
 
-	while( append_line(fp, &data, &siz, line_count)) {
+	while( append_line(fp, &data, &siz, line_count) ) {
 		line_count += 1;
 	}
 	for( argv += argc > 2 ? 2 : argc; *argv; argv++ ) {
