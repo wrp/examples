@@ -17,16 +17,18 @@ main(int argc, char **argv)
 {
 	char **data = NULL;
 	size_t siz = 0;
-	size_t idx = 0;
+	size_t line_count = 0;
 	FILE *fp = argc > 1 ? xfopen(argv[1],"r") : stdin;
 
-	while( append_line(fp, &data, &siz, idx++)) {
-		;
+	while( append_line(fp, &data, &siz, line_count)) {
+		line_count += 1;
 	}
 	for( argv += argc > 2 ? 2 : argc; *argv; argv++ ) {
-		unsigned i = strtoul(*argv, NULL, 10);
-		if( i > 0 && i < idx ) {
-			printf("line %d: %s", i, data[i-1]);
+		int i = strtoul(*argv, NULL, 10);
+		if( i > 0 && i <= (int)line_count ) {
+			printf("line %d:\t%s", i, data[i - 1]);
+		} else if( i < 0 && (int)line_count + i >= 0 ) {
+			printf("line %d:\t%s", i, data[line_count + i]);
 		}
 	}
 }
