@@ -8,3 +8,7 @@
 # Recursive.  Execute cmd on lines that match found and
 # do not match notfound
 :g/found/v/notfound/{cmd}
+
+# Globally replace foo with bar
+:g/foo/s//bar/g
+:%s/foo/bar/g
