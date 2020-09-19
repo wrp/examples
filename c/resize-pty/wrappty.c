@@ -108,9 +108,12 @@ main(int argc, char **argv)
 	struct sigaction act;
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = noop;
-	if( sigaction( SIGALRM, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	if( sigaction( SIGALRM, &act, NULL ) ) {
+		perror("sigaction");
+		return EXIT_FAILURE;
+	}
 	struct timeval tp = {.tv_sec = 0, .tv_usec = 500000 };
-	struct itimerval t = {.it_interval = tp, .it_value = tp };
+	struct itimerval t = { .it_interval = tp, .it_value = tp };
 	setitimer(ITIMER_REAL, &t, NULL);
 	wait_for(primary, expected, strlen(expected));
 	while( (c = getchar()) != EOF ) {
