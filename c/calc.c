@@ -6,8 +6,8 @@
  * to enter negative numbers and values like '1e-2'.  Any time a token can be
  * interpreted as a numeric value, it is.  This sometimes gets confusing.  For
  * example, '3 1--5-' will compute (3-1)-(-5), pushing 7 onto the stack.
- * '4,1-8' will simply push 3 values onto the stack, while '4,1- 8' will subtract
- * 1 from 4, leaving 3 and 8 on the stack.
+ * '4,1-8' will simply push 3 values onto the stack, while '4,1- 8' will
+ * subtract 1 from 4, leaving 3 and 8 on the stack.
  *
  * ',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2
  * '_' is an ignored place holder, so 65536 can be written 65_536
@@ -15,6 +15,7 @@
 
 #include "stack.h"
 #include "ring-buffer.h"
+#include <locale.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -57,6 +58,7 @@ struct state {
 	int enquote;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
+	enum { rational, integer } type;
 };
 
 void process_entry( struct state *S, unsigned char c );
@@ -76,9 +78,14 @@ main( int argc, char **argv )
 	int c;
 	struct state S[1];
 
+	if( !setlocale(LC_ALL, "en_US.UTF-8") ) {
+		fprintf(stderr, "Locale not found.\n");
+	}
+
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
+	S->type = rational;
 	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
 	strcpy( S->fmt, "%.3Lg\n" );
@@ -206,7 +213,8 @@ extract_format(struct state *S)
 		}
 		*b = '\0';
 		if( count < 2 ) {
-			fputs( "Warning: output fmt should print a long double (eg '%%Lf')\n", stderr );
+			fputs( "Warning: output fmt should print a long double "
+				"(eg '\%Lf')\n", stderr );
 		}
 	}
 }
@@ -316,14 +324,26 @@ apply_unary( struct state *S, unsigned char c )
 		stack_push(S->values, &val);
 		break;
 	case 'k':
-		snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)val);
+		if( val < 1 ) {
+			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
+			S->type = integer;
+		} else {
+			snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)val);
+			S->type = rational;
+		}
 		break;
 	case 'l':
 		stack_push(S->values, &val);
 		print_stack(S);
 		break;
 	case 'p': stack_push(S->values, &val); /* Fall thru */
-	case 'n': printf(S->fmt, val);
+	case 'n':
+		if( S->type == rational ) {
+			printf(S->fmt, val);
+		} else {
+			long lval = (long)val;
+			printf(S->fmt, lval);
+		}
 		break;
 	}
 }

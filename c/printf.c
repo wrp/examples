@@ -2,6 +2,7 @@
 /* Use _ISOC99_SOURCE to enable positional parameters for width specification (*nn$) */
 #define _ISOC99_SOURCE
 #include <stdio.h>
+#include <locale.h>
 
 
 int
@@ -12,6 +13,14 @@ main(void)
 
 	p = a;
 	q = a + 5;
+
+	if( !setlocale(LC_ALL, "en_US.UTF-8") ) {
+		fprintf(stderr, "Locale not found.\n");
+	}
+
+	printf("%'10d\n", 103957395);
+	printf("%'10f\n", 1039573.95);
+	printf("%'10g\n", 1039);
 
 	printf("%*s: %%zd  %zd\n", 15, "size_t", sizeof i);
 	printf("%*s: %%td  %td\n", 15, "ptrdiff_t", q - p);
