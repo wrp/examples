@@ -1,0 +1,7 @@
+# Sample CONFIG_SITE showing some key features
+
+enable_silent_rules=yes
+prefix=$HOME/$(uname -m)/$(uname -s)
+CFLAGS="-g -O0 -Wall -Wextra${CFLAGS:+ $CFLAGS}"
+LDFLAGS="-L/usr/local/opt/ncurses/lib ${LDFLAGS:+ $LDFLAGS}"
+CPPFLAGS="-D_DARWIN_C_SOURCE -I/usr/local/opt/ncurses/include ${CPPFLAGS:+ $CPPFLAGS}"
