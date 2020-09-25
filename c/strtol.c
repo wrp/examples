@@ -15,7 +15,7 @@ main(int argc, char **argv)
 		n = strtol( *argv, &end, 10);
 		printf("%s parses as %ld", *argv, n);
 		if(*end) {
-			printf(", ending at %c\n", *end);
+			printf(", ending at %c", *end);
 		}
 		putchar('\n');
 	}
