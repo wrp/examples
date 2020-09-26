@@ -1,0 +1,20 @@
+define(`S',`foo')dnl
+define(`T',`bar')dnl
+
+dnl expands to foobar
+S`'T
+dnl
+dnl expands to fooT()
+S()T()
+dnl
+dnl expands to fooT
+S()T
+
+m4exit
+explanation from https://stackoverflow.com/questions/64066166/how-to-rescan-m4-data-for-recursive-macro-inplace-substitution
+ After S() expands to foo, the scan is reset to where the S was
+ encountered, so the input is now foo. That's a single token, and
+ it has no definition. With the original S[]T, after the substitution
+ of S the input was foo[]T; after resetting the scan, m4 sees the
+ token foo, an empty string, and the token T. It expands T to bar
+ and then resets the scan to where the T started. –
