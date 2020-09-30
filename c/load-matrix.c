@@ -46,6 +46,15 @@ push(const char *line, struct array *A)
 }
 
 int
+compare_int( const void *ap, const void *bp )
+{
+	int a = *(int *)ap;
+	int b = *(int *)bp;
+	return a == b ? 0 : a < b ? -1 : 1;
+
+}
+
+int
 main(int argc, char **argv)
 {
 	char *line = NULL;
@@ -54,15 +63,25 @@ main(int argc, char **argv)
 
 	FILE *ifp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 	while( getline(&line, &capacity, ifp) != -1 ) {
-		fflush(stdout);
 		if( A.columns == 0 ) {
 			A.columns = parse_line(line, NULL, 0);
 		}
 		push(line, &A);
 	}
 	int *row = A.data;
-	for(int r=0; r < A.rows; r++, row += A.columns) {
-		for(int c=0; c < A.columns; c++) {
+	for( int r = 0; r < A.rows; r++, row += A.columns ) {
+		for( int c = 0; c < A.columns; c++ ) {
+			printf("%8d\t", row[c]);
+		}
+		putchar('\n');
+	}
+
+	/* Now, for no particular reason (demonstrate qsort?), sort each row */
+	printf("With each row sorted:\n");
+	row = A.data;
+	for( int r = 0; r < A.rows; r++, row += A.columns ) {
+		qsort(row, A.columns, sizeof *row, compare_int);
+		for( int c = 0; c < A.columns; c++ ) {
 			printf("%8d\t", row[c]);
 		}
 		putchar('\n');
