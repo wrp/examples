@@ -1,5 +1,5 @@
 /*
- * Read each line of a file into an array.
+ * Read each line of a file into an array. Sort the lines and output.
  */
 
 #include <assert.h>
@@ -13,6 +13,14 @@ void * xrealloc(void *buf, size_t num, size_t siz);
 FILE * xfopen(const char *path, const char *mode);
 
 int
+compare_line(const void *va, const void *vb)
+{
+	char *a = *(char **)va;
+	char *b = *(char **)vb;
+	return strcmp(a, b);
+}
+
+int
 main(int argc, char **argv)
 {
 	char **data = NULL;
@@ -23,13 +31,10 @@ main(int argc, char **argv)
 	while( append_line(fp, &data, &siz, line_count) ) {
 		line_count += 1;
 	}
-	for( argv += argc > 2 ? 2 : argc; *argv; argv++ ) {
-		int i = strtoul(*argv, NULL, 10);
-		if( i > 0 && i <= (int)line_count ) {
-			printf("line %d:\t%s", i, data[i - 1]);
-		} else if( i < 0 && (int)line_count + i >= 0 ) {
-			printf("line %d:\t%s", i, data[line_count + i]);
-		}
+	qsort(data, line_count, sizeof *data, compare_line);
+
+	for( size_t i = 0; i < line_count; i++ ) {
+		printf("%zd: %s", i, data[i]);
 	}
 }
 
