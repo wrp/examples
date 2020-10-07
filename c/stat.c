@@ -1,14 +1,11 @@
+/* Print the user id of the owner of a file */
+
 #include <sys/stat.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <pwd.h>
 #include <unistd.h>
 #include <stdlib.h>
-#if 0
-#include <uuid/uuid.h>
-#endif
-
-/* Print the user id of the owner of a file */
 
 int
 main( int argc, char **argv )
