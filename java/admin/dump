@@ -3,5 +3,8 @@ jstack ${pid?}
 
 
 # To get a heap dump:
-jmap -F -dump:format=b,file=${output_file?} ${pid?} # (-F may not be necessary)
+jmap -F -dump:format=b,file=${output_path?} ${pid?} # (-F may not be necessary)
+
+# or
+jcmd ${pid?} GC.heap_dump ${output_path?}
 
