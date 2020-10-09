@@ -4,3 +4,6 @@ docker exec -it  ${container?} /bin/bash
 
 # Get list of running containers:
 docker ps
+
+# Copy file from a container:
+docker cp ${container_id}:/path/within/container /host/path/
