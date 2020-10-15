@@ -7,7 +7,7 @@
 static FILE * xfopen(const char *path, const char *mode);
 
 static int
-matches(const char *s, const char *e)
+is_palindrome(const char *s, const char *e)
 {
 	if( s > e ) {
 		return 1;
@@ -21,16 +21,10 @@ matches(const char *s, const char *e)
 	if( s == e ) {
 		return 1;
 	} else if( tolower(*s) == tolower(*e) ){
-		return matches(s + 1, e - 1);
+		return is_palindrome(s + 1, e - 1);
 	} else {
 		return 0;
 	}
-}
-
-static int
-is_palindrome(const char *p)
-{
-	return matches(p, p + strlen(p) - 1);
 }
 
 int
@@ -47,7 +41,7 @@ main(int argc, char **argv)
 		perror(input_path);
 		return EXIT_FAILURE;
 	}
-	if( ! is_palindrome(input) ) {
+	if( ! is_palindrome(input, input + rc) ) {
 		fprintf(stderr, "Input is not a palindrome\n");
 		rv = EXIT_FAILURE;
 	}
