@@ -18,36 +18,34 @@ struct ring_buf {
  * Create an initialized a ring buffer.
  */
 struct ring_buf *
-rb_create( size_t s )
+rb_create(size_t s)
 {
 	struct ring_buf *r;
-	r = malloc( sizeof *r );
+	r = malloc(sizeof *r);
 	if( r != NULL ) {
-		r->end = r->start = r->buf = malloc( r->s = s ? s : 1024 );
+		r->end = r->start = r->buf = malloc(r->s = s ? s : 1024);
 		r->err = 0;
 		if( r->buf == NULL ) {
-			free( r ); /* uncovered */
+			free(r); /* uncovered */
 			r = NULL;  /* uncovered */
 		} /* uncovered */
 	}
 	return r;
 }
 
-
 void
 rb_free(struct ring_buf *r)
 {
-	if(r) {
+	if( r ) {
 		free(r->buf);
 		free(r);
 	}
 }
 
-
 static int
-grow( struct ring_buf *R )
+grow(struct ring_buf *R)
 {
-	unsigned char *tmp = realloc( R->buf, 2 * R->s );
+	unsigned char *tmp = realloc(R->buf, 2 * R->s);
 	assert( R->end == R->start );
 	assert( R->start >= R->buf );
 	assert( R->start < R->buf + R->s );
@@ -60,17 +58,16 @@ grow( struct ring_buf *R )
 		R->end = R->start = tmp + ( R->start - R->buf );
 		R->buf = tmp;
 	}
-	if(R->end != R->buf) {
-		memmove( R->buf + R->s, R->buf, R->end - R->buf );
+	if( R->end != R->buf ) {
+		memmove(R->buf + R->s, R->buf, R->end - R->buf);
 	}
 	R->end = R->start + R->s;
 	R->s *= 2;
 	return 0;
 }
 
-
 int
-rb_push( struct ring_buf *R, unsigned char c )
+rb_push(struct ring_buf *R, unsigned char c)
 {
 	assert( R->start >= R->buf );
 	assert( R->start < R->buf + R->s );
@@ -98,7 +95,7 @@ rb_isempty(struct ring_buf *r)
 
 
 int
-rb_pop( struct ring_buf *R )
+rb_pop(struct ring_buf *R)
 {
 	unsigned char rv;
 	assert( R->start >= R->buf );

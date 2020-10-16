@@ -33,7 +33,8 @@
 #define token_div " \t\n,"
 
 void
-print_help(void) {
+print_help(void)
+{
 	puts(
 		"D    Delete the first register\n"
 		"F    use value from the register as format string\n"
