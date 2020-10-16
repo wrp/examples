@@ -125,15 +125,14 @@ rb_peek(struct ring_buf const *R, size_t idx)
 	if( R->start == R->end ) {
 		;
 	} else if( R->end > R->start ) {
-		if( idx < R->end - R->start ) {
+		if( R->start + idx < R->end ) {
 			retv = R->start + idx;
 		}
 	} else {
-		ptrdiff_t off = R->buf + R->s - R->start;
-		if( idx < off ) {
+		if( R->start + idx < R->buf + R->s ) {
 			retv = R->start + idx;
-		} else if( idx - off < R->end - R->buf ) {
-			retv = R->buf + ( idx - off );
+		} else if( R->start + idx < R->end + R->s ) {
+			retv = R->start + idx - R->s;
 		}
 	}
 	return retv ? *retv : EOF;
