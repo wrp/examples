@@ -136,9 +136,9 @@ stack_get(struct stack *s, int idx)
 {
 	void *v = NULL;
 	char *base = NULL;
-	if( idx >= 0 && idx <= stack_size(s)) {
+	if( idx >= 0 && (unsigned)idx <= stack_size(s)) {
 		base = s->data;
-	} else if( idx < 0 && -idx <= stack_size(s)) {
+	} else if( idx < 0 && (unsigned)-idx <= stack_size(s)) {
 		base = s->top;
 	}
 	if(base != NULL) {
