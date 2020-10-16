@@ -32,7 +32,8 @@
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
-void print_help( void ) {
+void
+print_help(void) {
 	puts(
 		"D    Delete the first register\n"
 		"F    use value from the register as format string\n"
@@ -61,19 +62,18 @@ struct state {
 	enum { rational, integer } type;
 };
 
-void process_entry( struct state *S, unsigned char c );
+void process_entry(struct state *S, unsigned char c);
 void push_it(struct state *, int);
-void apply_binary( struct state *S, unsigned char c );
-void apply_unary( struct state *S, unsigned char c );
-void apply_string_op( struct state *S, unsigned char c );
-void die( const char *msg );
-void write_args_to_stdin( char *const*argv );
+void apply_binary(struct state *S, unsigned char c);
+void apply_unary(struct state *S, unsigned char c);
+void apply_string_op(struct state *S, unsigned char c);
+void die(const char *msg);
+void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
 
-
 int
-main( int argc, char **argv )
+main(int argc, char **argv)
 {
 	int c;
 	struct state S[1];
@@ -116,38 +116,39 @@ push_it(struct state *S, int c)
 	int k;
 	rb_push(S->raw, (unsigned char)c);
 	while( ( k = rb_pop( S->raw )) != EOF ) {
-		process_entry( S, (unsigned char)k );
+		process_entry(S, (unsigned char)k);
 	}
 }
 
 
 void
-process_entry( struct state *S, unsigned char c )
+process_entry(struct state *S, unsigned char c)
 {
 	struct ring_buf *b = S->accum;
 
 	if( S->enquote && c != ']' ) {
 		rb_push(b, c);
-	} else if( strchr( numeric_tok, c )) {
+	} else if( strchr(numeric_tok, c) ) {
 		rb_push(b, c);
-	} else if( strchr( string_ops, c )) {
-		apply_string_op( S, c );
-	} else if( strchr( token_div, c )) {
+	} else if( strchr(string_ops, c) ) {
+		apply_string_op(S, c);
+	} else if( strchr(token_div, c) ) {
 		push_value(S, c);
-	} else if(strchr( binary_ops, c )) {
-		if(!push_value(S, c))
+	} else if( strchr(binary_ops, c) ) {
+		if( !push_value(S, c) ) {
 			apply_binary(S, c);
-	} else if(strchr( unary_ops, c )) {
-		if(!push_value(S, c))
+		}
+	} else if( strchr(unary_ops, c) ) {
+		if( !push_value(S, c) ) {
 			apply_unary(S, c);
-	} else switch(c) {
+		}
+	} else switch( c ) {
 		case '_': break; /* noop */
 		case 'q': exit(0);
 		case 'h': print_help();
 		default: fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
-
 
 /*
  * Parse a number.  If we encounter an unexpected '-',
@@ -164,26 +165,26 @@ push_value(struct state *S, unsigned char c)
 	int i;
 
 	cp = start = s;
-	if(! rb_isempty(b)) {
+	if( ! rb_isempty(b) ) {
 		long double val;
 
 		while( (i = rb_pop(b)) != EOF) {
-			if(cp < end) {
+			if( cp < end ) {
 				*cp++ = i;
 			}
 		}
-		if(cp == end) {
+		if( cp == end ) {
 			fprintf(stderr, "Overflow: Term truncated\n", s);
 			return 0;
 		}
 		val = strtold(start, &cp);
-		while( *cp == '-' && cp != start) {
+		while( *cp == '-' && cp != start ) {
 			stack_push(S->values, &val);
 			start = cp;
 			val = strtold(start, &cp);
 		}
 		if( *cp == '-' ) {
-			apply_binary( S, '-' );
+			apply_binary(S, '-');
 			for( char *t = cp + 1; *t; t++ ) {
 				push_it(S, *t);
 			}
@@ -197,7 +198,6 @@ push_value(struct state *S, unsigned char c)
 	return *cp == '-';
 }
 
-
 void
 extract_format(struct state *S)
 {
@@ -206,7 +206,7 @@ extract_format(struct state *S)
 		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
 		int count = 0;
 
-		for( ; b < e && (*b = rb_peek(rb, b - S->fmt)) != EOF; b++) {
+		for( ; b < e && (*b = rb_peek(rb, b - S->fmt)) != EOF; b++ ) {
 			/* Extremely naive check of format string.  */
 			count += !count && *b == '%';
 			count += count && *b == 'L';
@@ -219,19 +219,18 @@ extract_format(struct state *S)
 	}
 }
 
-
 struct ring_buf *
-select_register( struct state *S )
+select_register(struct state *S)
 {
 	long double val;
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if(stack_pop(S->values, &val) != NULL) {
+	if( stack_pop(S->values, &val) != NULL ) {
 		offset = val;
 	}
 
-	if( (ret = stack_get(S->registers, offset)) == NULL) {
+	if( (ret = stack_get(S->registers, offset)) == NULL ) {
 		fprintf(stderr, "Empty register\n" );
 	}
 
@@ -239,15 +238,15 @@ select_register( struct state *S )
 }
 
 void
-apply_string_op( struct state *S, unsigned char c )
+apply_string_op(struct state *S, unsigned char c)
 {
-	struct ring_buf *Bp;
+	struct ring_buf *rb;
 	void *e;
-	assert( !S->enquote || c == ']');
+	assert( !S->enquote || c == ']' );
 	if( c != ']' ) {
 		push_value(S, c);
 	}
-	switch(c) {
+	switch( c ) {
 	case '[':
 		S->enquote = 1;
 		break;
@@ -273,7 +272,7 @@ apply_string_op( struct state *S, unsigned char c )
 			stack_push(S->registers, b);
 		}
 	break;
-	case 'L': {
+	case 'L':
 		for( int i = 0; i < stack_size(S->registers); i++ ) {
 			int j = 0, c;
 			struct ring_buf *s = stack_get(S->registers, i);
@@ -284,16 +283,15 @@ apply_string_op( struct state *S, unsigned char c )
 			}
 			putchar('\n');
 		}
-	} break;
-	case 'x': {
-		struct ring_buf *rb = select_register(S);
-		if( rb ) {
+	break;
+	case 'x':
+		if( (rb = select_register(S)) != NULL ) {
 			int j=0, c;
 			while( (c = rb_peek(rb, j++)) != EOF ) {
-				rb_push( S->raw, c );
+				rb_push(S->raw, c);
 			}
 		}
-	} break;
+	break;
 	}
 }
 
@@ -301,7 +299,8 @@ void
 print_stack(struct state *S)
 {
 	unsigned i = 0;
-	for(long double * s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
+	long double *s;
+	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
 		printf("%3u: ", i);
 		printf(S->fmt, *s);
 	}
@@ -309,16 +308,16 @@ print_stack(struct state *S)
 
 
 void
-apply_unary( struct state *S, unsigned char c )
+apply_unary(struct state *S, unsigned char c)
 {
 	long double val;
-	assert( strchr( unary_ops, c ));
+	assert( strchr(unary_ops, c) );
 	if( stack_size(S->values) < 1 ) {
 		fputs( "Stack empty (need 1 value)\n", stderr );
 		return;
 	}
 	stack_pop(S->values, &val);
-	switch(c) {
+	switch( c ) {
 	case 'y':
 		stack_push(S->values, &val);
 		stack_push(S->values, &val);
@@ -347,7 +346,6 @@ apply_unary( struct state *S, unsigned char c )
 		break;
 	}
 }
-
 
 void
 apply_binary(struct state *S, unsigned char c)
