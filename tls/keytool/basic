@@ -24,7 +24,6 @@ keytool -certreq \
 # List data in a keystore
 keytool -list -v -keystore ${keystore?}
 
-
 # Export a .der certificate from a keystore:
 keytool -export -keystore ${keystore?} \
 	-alias ${alias?} \
