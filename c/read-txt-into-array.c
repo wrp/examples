@@ -26,7 +26,7 @@ main(int argc, char **argv)
 	char **data = NULL;
 	size_t siz = 0;
 	size_t line_count = 0;
-	FILE *fp = argc > 1 ? xfopen(argv[1],"r") : stdin;
+	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 
 	while( append_line(fp, &data, &siz, line_count) ) {
 		line_count += 1;
@@ -38,13 +38,13 @@ main(int argc, char **argv)
 	}
 }
 
-/* Read one line from fp into data */
+/* Read one line from fp into data[idx] */
 int
 append_line(FILE *fp, char ***data, size_t *siz, size_t idx)
 {
 	size_t cap;
 	if( *siz <= idx ) {
-		*data = xrealloc(*data, *siz += 128, sizeof *data);
+		*data = xrealloc(*data, *siz += 128, sizeof **data);
 	}
 	(*data)[idx] = NULL;
 
