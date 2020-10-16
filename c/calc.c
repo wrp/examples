@@ -174,7 +174,7 @@ push_value(struct state *S, unsigned char c)
 			}
 		}
 		if( cp == end ) {
-			fprintf(stderr, "Overflow: Term truncated\n", s);
+			fprintf(stderr, "Overflow: Term truncated\n");
 			return 0;
 		}
 		val = strtold(start, &cp);
@@ -273,7 +273,7 @@ apply_string_op(struct state *S, unsigned char c)
 		}
 	break;
 	case 'L':
-		for( int i = 0; i < stack_size(S->registers); i++ ) {
+		for( unsigned i = 0; i < stack_size(S->registers); i++ ) {
 			int j = 0, c;
 			struct ring_buf *s = stack_get(S->registers, i);
 
