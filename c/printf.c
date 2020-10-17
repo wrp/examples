@@ -22,7 +22,7 @@ main(void)
 	}
 
 	printf("%'10d\n", 103957395);
-	printf("%'10f\n", 1039573.95);
+	printf("%'2.10f\n", 1039573.95);
 	printf("%'10g\n", 1039.9E3);
 
 	printf("%*s: %%zd  %zd\n", 15, "size_t", sizeof i);

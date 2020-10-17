@@ -328,7 +328,7 @@ apply_unary(struct state *S, unsigned char c)
 			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
-			snprintf(S->fmt, sizeof S->fmt, "%%.%dLg\n", (int)val);
+			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n", (int)val);
 			S->type = rational;
 		}
 		break;
