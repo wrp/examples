@@ -92,7 +92,7 @@ main(int argc, char **argv)
 	strcpy( S->fmt, "%.3Lg\n" );
 
 	if( argc > 1) {
-		for( ; *++argv; push_it(S, ' ')) {
+		for( ; *++argv; push_it(S, ' ') ) {
 			for( char *t = *argv; *t; t++ ) {
 				push_it(S, *t);
 			}
@@ -144,10 +144,10 @@ process_entry(struct state *S, unsigned char c)
 			apply_unary(S, c);
 		}
 	} else switch( c ) {
+		default: fprintf( stderr, "Unexpected: %c\n", c );
 		case '_': break; /* noop */
 		case 'q': exit(0);
 		case 'h': print_help();
-		default: fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
 
