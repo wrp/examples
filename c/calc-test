@@ -54,8 +54,8 @@ long='this string needs to be at least 32 characters long'
 test_string "[$long][bar]L" "(0): ${long}${nl}(1): bar"
 test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
-test_string '[]9x' 'Empty register'
-test_string 'x' 'Empty register'
+test_string '[]9x' 'Register 9 empty'
+test_string 'x' 'Register stack empty'
 test_string '1024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 test_string '1_024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 fmt_warning="Warning: output fmt should print a long double (eg '%Lf')"

@@ -235,7 +235,11 @@ select_register(struct state *S)
 	}
 
 	if( (ret = stack_get(S->registers, offset)) == NULL ) {
-		fprintf(stderr, "Empty register\n" );
+		if( offset == -1 ) {
+			fprintf(stderr, "Register stack empty\n");
+		} else {
+			fprintf(stderr, "Register %d empty\n", offset );
+		}
 	}
 
 	return ret;
