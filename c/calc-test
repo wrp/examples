@@ -41,6 +41,8 @@ test_string '10k10 3/p' '3.3333333333'
 test_string '1y+p' '2'
 test_string '1 2 3np' "3${nl}2"
 test_string '2 4r/p' '2'
+test_string '4,1-8l' "  0: 4${nl}  1: 1${nl}  2: -8"
+test_string '4,1- 8l' "  0: 3${nl}  1: 8"
 
 # Test string registers
 test_string '[2 2+p][1 1+p]1x0x' "2${nl}4"
