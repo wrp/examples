@@ -32,15 +32,25 @@
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
+struct state {
+	struct stack *values;
+	struct stack *registers;
+	char fmt[32];
+	int enquote;
+	struct ring_buf *raw;   /* raw input as entered */
+	struct ring_buf *accum; /* accumulator (used to re-process) */
+	enum { rational, integer } type;
+};
+
 void
-print_help(void)
+print_help(struct state *S)
 {
 	puts(
 		"D    Delete the first register\n"
-		"F    use value from the register as format string\n"
+		"F    use value from the specified register as format string\n"
 		"[s]  push s onto the register stack\n"
 		"h    print this help message\n"
-		"k    set precision of %g format string\n"
+		"k    set precision of format string\n"
 		"l    list elements of the stack\n"
 		"L    list elements of register stack\n"
 		"n    print and pop top value of stack\n"
@@ -51,17 +61,8 @@ print_help(void)
 		"x    execute a string in register\n"
 		"y    duplicate top value of stack\n"
 	);
+	fprintf(stderr, "Output format currently: %s", S->fmt);
 }
-
-struct state {
-	struct stack *values;
-	struct stack *registers;
-	char fmt[32];
-	int enquote;
-	struct ring_buf *raw;   /* raw input as entered */
-	struct ring_buf *accum; /* accumulator (used to re-process) */
-	enum { rational, integer } type;
-};
 
 void process_entry(struct state *S, unsigned char c);
 void push_it(struct state *, int);
@@ -147,7 +148,7 @@ process_entry(struct state *S, unsigned char c)
 		default: fprintf( stderr, "Unexpected: %c\n", c );
 		case '_': break; /* noop */
 		case 'q': exit(0);
-		case 'h': print_help();
+		case 'h': print_help(S);
 	}
 }
 
