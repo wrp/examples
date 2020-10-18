@@ -212,10 +212,13 @@ extract_format(struct state *S)
 			count += !count && *b == '%';
 			count += count && *b == 'L';
 		}
+		if( b > S->fmt && b + 1 < e && b[-1] != '\n' ) {
+			*b++ = '\n';
+		}
 		*b = '\0';
 		if( count < 2 ) {
-			fputs( "Warning: output fmt should print a long double "
-				"(eg '\%Lf')\n", stderr );
+			fputs("Warning: output fmt should print a long double "
+				"(eg '\%Lf')\n", stderr);
 		}
 	}
 }
