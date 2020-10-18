@@ -226,15 +226,18 @@ extract_format(struct state *S)
 struct ring_buf *
 select_register(struct state *S)
 {
-	long double val;
+	long double val = -1.0;
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
 	if( stack_pop(S->values, &val) != NULL ) {
 		offset = val;
 	}
-
-	if( (ret = stack_get(S->registers, offset)) == NULL ) {
+	if( rint(val) != val ) {
+		fprintf(stderr, "Invalid register: %Lg", val);
+		fprintf(stderr, " is not an integer\n");
+		stack_push(S->values, &val);
+	} else if( (ret = stack_get(S->registers, offset)) == NULL ) {
 		if( offset == -1 ) {
 			fprintf(stderr, "Register stack empty\n");
 		} else {

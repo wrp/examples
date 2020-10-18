@@ -82,7 +82,10 @@ test_string '0Xap' 10
 test_string '0XaP2p' 40
 test_string '0Xfp' 15
 test_string '0XfP1p' 30
+test_string '0XfP1p' 30
 
+test_string '4[1 1+]1.2x+p' 'Invalid register: 1.2 is not an integer
+5.2'
 
 # Grow the stack
 s=$(yes 1 | sed -e 128q | tr \\n ' ')
