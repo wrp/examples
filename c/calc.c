@@ -79,8 +79,11 @@ main(int argc, char **argv)
 {
 	int c;
 	struct state S[1];
-	char *lc_num = getenv("LC_NUMERIC");;
+	char *lc_num = getenv("LC_NUMERIC");
 
+	if( lc_num == NULL ) {
+		lc_num = getenv("LC_ALL");
+	}
 	if( lc_num && !setlocale(LC_NUMERIC, lc_num) ) {
 		fprintf(stderr, "Locale not found.\n");
 	}
