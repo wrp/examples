@@ -110,5 +110,6 @@ RUN aptitude install -y csvtool
 RUN aptitude install -y valgrind
 RUN aptitude install -y asciidoctor
 RUN aptitude install libmodern-perl-perl
+RUN aptitude install rcs
 
 EXPOSE 8125

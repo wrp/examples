@@ -1,0 +1,51 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.10.19.16.14.18;	author williamp;	state Exp;
+branches;
+next	;
+
+
+desc
+@A stub Makefile to bootstrap the project
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@# A stub Makefile used to bootstrap.
+# The expectation is that when no Makefile exists,
+# make will invoke co to generate a Makefile from Makefile,v
+# and then use that Makefile to generate a configure script
+# which will be executed.  When the configure script is
+# executed, it should overwrite the Makefile.  That is,
+# this file should only exist for a short time until it is
+# overwritten.  If you are reading this message, something
+# has gone slightly wrong.  You will need to run autoreconf
+# to generate a configure script, then run the configure script
+# to generate a Makefile, and then invoke make to build the project.
+# There is ample documentation of this process available online.
+
+.PHONY: all bootstrap configure build
+all: bootstrap configure build check
+
+bootstrap:
+	autoreconf -ivf
+
+configure:
+	./configure CFLAGS="${CFLAGS} --coverage -g -O0"
+
+build:
+	make all
+
+check:
+	make check
+@
