@@ -32,7 +32,10 @@ main(int argc, char **argv)
 		size_t line = strtol(*argv, NULL, 10);
 		int c;
 		if(line > 0 && line - 1 < ifp->lines) {
-			fseek(ifp->fp, ifp->idx[line - 1], SEEK_SET);
+			if( fseek(ifp->fp, ifp->idx[line - 1], SEEK_SET) == -1 ) {
+				perror("fseek");
+				exit(1);
+			}
 			while( ( c = fgetc(ifp->fp)) != EOF && c != '\n' ) {
 				putchar(c);
 			}
