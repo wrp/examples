@@ -33,7 +33,7 @@ for file in $progs; do
 				)"'\@} /\* end uncovered \*/@d' \
 			-e '/#####/!d' \
 			-e '\@/\* uncovered \*/@d' | grep .; then
-		echo The above lines of $file were not executed during testing
+		echo FAIL: The above lines of $file were not executed during testing
 		RV=1
 	fi >&2
 done
