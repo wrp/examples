@@ -1,8 +1,11 @@
 
 #include "stack.h"
+#include <errno.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+
+#define INITIAL_SIZE 128
 
 struct stack {
 	void *data; /* The base (allocated) */
@@ -10,15 +13,33 @@ struct stack {
 	void *end;  /* One behond last allocated */
 	size_t element_size;
 	unsigned flags;
+	size_t align;
 	int raw;
 };
 
 struct stack *
 stack_xcreate(size_t s) {
 	struct stack *rv;
-	if( (rv = stack_create(s)) == NULL) {
+	if( (rv = stack_create(s)) == NULL ) {
 		perror("stack_create");
 		exit(EXIT_FAILURE);
+	}
+	return rv;
+}
+
+/* Note that using memalign is pretty pointless since we
+ * are going to realloc, which may discard the alignment.
+ */
+static void *
+alloc(size_t alignment, size_t s)
+{
+	void *rv;
+	if( s ) {
+		if( posix_memalign(&rv, alignment, s) ) {
+			rv = NULL;
+		}
+	} else {
+		rv = malloc(s);
 	}
 	return rv;
 }
@@ -27,23 +48,22 @@ struct stack *
 stack_create(size_t s)
 {
 	int initial_size;
-	long align;
 	struct stack *st = NULL;
 
-	align = sysconf(_SC_PAGESIZE);
-	if( align > 0 && (st = malloc( sizeof *st)) != NULL) {
-		st->raw = 0;
-		if( s == 0 ) {
-			st->raw = 1;
-			s = sizeof(void *);
-		}
-		initial_size = 4 * s;
-		st->element_size = s;
-		if (! posix_memalign((void *)&st->data, align, initial_size)) {
-			st->top = st->data;
-			st->end = (char *)st->data + initial_size;
-		} else {
+	if( (st = malloc(sizeof *st)) != NULL ) {
+		long align = sysconf(_SC_PAGESIZE);
+		st->align = align == -1 ? 0 : align;
+		st->raw = !s;
+		st->element_size = s ? s : sizeof st->data;
+		initial_size = INITIAL_SIZE * st->element_size;
+
+		if( !(st->top = st->data = alloc(st->align, initial_size)) ) {
+			int e = errno;
 			free(st);
+			errno = e;
+			st = NULL;
+		} else {
+			st->end = (char *)st->data + initial_size;
 		}
 	}
 	return st;
