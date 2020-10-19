@@ -6,12 +6,12 @@
 RV=0
 test_string() {
 	out=$(echo "$1" | ./calc 2>&1)
-	if test -n "$2" && test "$out" != "$2"; then
+	if test $# -gt 1 && test "$out" != "$2"; then
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
-	out=$( ./calc "$1" 2>&1)
-	if test -n "$2" && test "$out" != "$2"; then
+	out=$(./calc "$1" 2>&1)
+	if test $# -gt 1 && test "$out" != "$2"; then
 		echo "With args:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
@@ -21,7 +21,7 @@ nl='
 '
 test_string 'p' 'Stack empty (need 1 value)'
 test_string "1 $(yes 24 | sed -e 300q | tr -d \\n) 3+p" "Overflow: Term truncated${nl}4"
-test_string 'hq' ''
+test_string 'hq'
 test_string '1 1+p' '2'
 test_string '10 3 1--5-p' '7'  # 2 - (-5)
 test_string '10,3,1-,-5,-+p' '17'
