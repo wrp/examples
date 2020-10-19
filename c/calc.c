@@ -207,8 +207,9 @@ extract_format(struct state *S)
 		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
 		int count = 0;
 
-		for( ; b < e && (*b = rb_peek(rb, b - S->fmt)) != EOF; b++ ) {
+		for( int c = 0; b < e && (c = rb_peek(rb, b - S->fmt)) != EOF; b++ ) {
 			/* Extremely naive check of format string.  */
+			*b = c;
 			count += !count && *b == '%';
 			count += count && *b == 'L';
 		}
