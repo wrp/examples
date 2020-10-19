@@ -13,6 +13,5 @@ int stack_push(struct stack *, void *);
 void stack_xpush(struct stack *, void *);
 void * stack_pop(struct stack *, void *);
 void * stack_get(struct stack *, int);
-void * stack_decr(struct stack *);
 void * stack_base(struct stack *);
 size_t stack_size(struct stack *);
