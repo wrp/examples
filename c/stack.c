@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define INITIAL_SIZE 128
+/* Keep INITIAL_SIZE low to trigger reallocs for coverage test. */
+#define INITIAL_SIZE 4
 
 struct stack {
 	void *data; /* The base (allocated) */
@@ -18,7 +19,8 @@ struct stack {
 };
 
 struct stack *
-stack_xcreate(size_t s) {
+stack_xcreate(size_t s)
+{
 	struct stack *rv;
 	if( (rv = stack_create(s)) == NULL ) {
 		perror("stack_create");
@@ -57,7 +59,8 @@ stack_create(size_t s)
 		st->element_size = s ? s : sizeof st->data;
 		initial_size = INITIAL_SIZE * st->element_size;
 
-		if( !(st->top = st->data = alloc(st->align, initial_size)) ) {
+		st->top = st->data = alloc(st->align, initial_size);
+		if( st->data == NULL ) {
 			int e = errno;
 			free(st);
 			errno = e;
@@ -81,15 +84,17 @@ stack_incr(struct stack *s)
 	char *t = s->top;
 	t += s->element_size;
 	s->top = t;
+	void *tmp = s->top;
 	if( s->top == s->end ) {
 		ptrdiff_t o = t - (char *)s->data;
-		s->end = s->top = s->data = realloc(s->data, 2 * o);
-		if( s->data != NULL ) {
+		void *tmp = realloc(s->data, 2 * o);
+		if( tmp != NULL ) {
+			s->data = tmp;
 			s->top = s->data + o;
 			s->end = s->data + 2 * o;
 		}
 	}
-	return s->top;
+	return tmp;
 }
 
 void *
