@@ -79,8 +79,9 @@ main(int argc, char **argv)
 {
 	int c;
 	struct state S[1];
+	char *lc_num = getenv("LC_NUMERIC");;
 
-	if( !setlocale(LC_ALL, "en_US.UTF-8") ) {
+	if( lc_num && !setlocale(LC_NUMERIC, lc_num) ) {
 		fprintf(stderr, "Locale not found.\n");
 	}
 
