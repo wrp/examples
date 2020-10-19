@@ -1,0 +1,9 @@
+#!/bin/sh
+
+exe=./grow
+
+out="$(echo foo | $exe)"
+if ! test "$out" = 'foo'; then
+	echo unexpected output: got "'$out'" >&2
+	exit 1
+fi
