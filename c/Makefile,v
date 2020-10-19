@@ -33,11 +33,15 @@ text
 # script to generate a Makefile, and then invoke make to build the project.
 # There is ample documentation of this process available online.
 
-.PHONY: bootstrap
+.PHONY: bootstrap all check configure
 
-bootstrap:
+all:
 	autoreconf -ivf
 	./configure CFLAGS="${CFLAGS} --coverage -g -O0"
 	make all
 	make check
+
+bootstrap: all
+check: all
+configure: all
 @
