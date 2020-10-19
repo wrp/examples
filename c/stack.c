@@ -75,16 +75,16 @@ stack_base(struct stack *s)
 	return s->data;
 }
 
-void *
+static void *
 stack_incr(struct stack *s)
 {
 	char *t = s->top;
 	t += s->element_size;
 	s->top = t;
-	if(s->top == s->end) {
+	if( s->top == s->end ) {
 		ptrdiff_t o = t - (char *)s->data;
 		s->end = s->top = s->data = realloc(s->data, 2 * o);
-		if(s->data != NULL) {
+		if( s->data != NULL ) {
 			s->top = s->data + o;
 			s->end = s->data + 2 * o;
 		}
