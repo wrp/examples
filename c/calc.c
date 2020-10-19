@@ -186,6 +186,7 @@ push_value(struct state *S, unsigned char c)
 			val = strtold(start, &cp);
 		}
 		if( *cp == '-' ) {
+			assert( cp == start );
 			apply_binary(S, '-');
 			for( char *t = cp + 1; *t; t++ ) {
 				push_it(S, *t);
@@ -365,9 +366,9 @@ apply_binary(struct state *S, unsigned char c)
 {
 	long double val[2];
 	long double res;
-	assert( strchr( binary_ops, c ) || c == '-' );
+	assert( strchr(binary_ops, c) || c == '-' );
 	if( stack_size(S->values) < 2 ) {
-		fputs( "Stack empty (need 2 values)\n", stderr );
+		fputs("Stack empty (need 2 values)\n", stderr);
 		return;
 	}
 	stack_pop(S->values, val);
