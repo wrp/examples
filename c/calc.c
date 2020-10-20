@@ -237,7 +237,7 @@ select_register(struct state *S)
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_pop(S->values, &val) != NULL ) {
+	if( stack_pop(S->values, &val) ) {
 		offset = val;
 	}
 	if( rint(val) != val ) {

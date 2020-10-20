@@ -121,20 +121,17 @@ stack_push(struct stack *s, void *v)
 }
 
 
-void *
+int
 stack_pop(struct stack *s, void *v)
 {
-	void *rv = NULL;
-	if( s->top > s->data ) {
+	int rv = s->top > s->data;
+	if( rv ) {
 		s->top = (char *)s->top - s->element_size;
 		if( s->raw ) {
-			*(void **) v = rv = *(void **)s->top;
+			*(void **)v = *(void **)s->top;
 		} else {
-			rv = v;
 			memcpy(v, s->top, s->element_size);
 		}
-	} else if( s->raw ){
-		*(void**) v = NULL;
 	}
 	return rv;
 }

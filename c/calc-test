@@ -50,7 +50,7 @@ test_string '5[2 2+n]1[1 1+n]x0xp' "2${nl}4${nl}5"
 test_string '[garbage][2 2+n]5[1 1+n]2x1xn' "2${nl}4${nl}5"
 test_string '[f_oo][bar]L' "(0): f_oo${nl}(1): bar"
 test_string '[foo][bar]RL' "(0): bar${nl}(1): foo"
-test_string '[foo][bar][baz]DL' "(0): foo${nl}(1): bar"
+test_string 'D[foo][bar][baz]DL' "(0): foo${nl}(1): bar"
 test_string '[foo]LRL' "(0): foo${nl}(0): foo"
 long='this string needs to be at least 32 characters long'
 test_string "[$long][bar]L" "(0): ${long}${nl}(1): bar"
