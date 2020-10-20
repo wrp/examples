@@ -284,8 +284,8 @@ apply_string_op(struct state *S, unsigned char c)
 	case 'R':
 		if( stack_size(S->registers) > 1 ) {
 			struct ring_buf *a, *b;
-			a = stack_pop(S->registers, &e);
-			b = stack_pop(S->registers, &e);
+			stack_pop(S->registers, &a);
+			stack_pop(S->registers, &b);
 			stack_push(S->registers, a);
 			stack_push(S->registers, b);
 		}
