@@ -20,8 +20,7 @@ struct ring_buf {
 struct ring_buf *
 rb_create(size_t s)
 {
-	struct ring_buf *r;
-	r = malloc(sizeof *r);
+	struct ring_buf *r = malloc(sizeof *r);
 	if( r != NULL ) {
 		r->end = r->start = r->buf = malloc(r->s = s ? s : 1024);
 		r->err = 0;
@@ -116,7 +115,7 @@ rb_pop(struct ring_buf *R)
 int
 rb_peek(struct ring_buf const *R, size_t idx)
 {
-	unsigned char *retv = NULL;
+	unsigned char *rv = NULL;
 
 	assert( R->start >= R->buf );
 	assert( R->start < R->buf + R->s );
@@ -126,14 +125,14 @@ rb_peek(struct ring_buf const *R, size_t idx)
 		;
 	} else if( R->end > R->start ) {
 		if( R->start + idx < R->end ) {
-			retv = R->start + idx;
+			rv = R->start + idx;
 		}
 	} else {
 		if( R->start + idx < R->buf + R->s ) {
-			retv = R->start + idx;
+			rv = R->start + idx;
 		} else if( R->start + idx < R->end + R->s ) {
-			retv = R->start + idx - R->s;
+			rv = R->start + idx - R->s;
 		}
 	}
-	return retv ? *retv : EOF;
+	return rv ? *rv : EOF;
 }
