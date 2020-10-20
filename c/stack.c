@@ -22,10 +22,10 @@ struct stack *
 stack_xcreate(size_t s)
 {
 	struct stack *rv = stack_create(s);
-	if( rv == NULL ) {
+	if( rv == NULL ) { /* uncovered block */
 		perror("stack_create");
 		exit(EXIT_FAILURE);
-	}
+	} /* end uncovered */
 	return rv;
 }
 
@@ -37,8 +37,8 @@ alloc(size_t alignment, size_t s)
 {
 	void *rv = alignment ? NULL : malloc(s);
 	if( rv == NULL && posix_memalign(&rv, alignment, s) ) {
-		rv = NULL;
-	}
+		rv = NULL; /* uncovered */
+	} /* uncovered */
 	return rv;
 }
 
@@ -56,12 +56,12 @@ stack_create(size_t s)
 		initial_size = INITIAL_SIZE * st->element_size;
 
 		st->top = st->data = alloc(st->align, initial_size);
-		if( st->data == NULL ) {
+		if( st->data == NULL ) { /* uncovered block */
 			int e = errno;
 			free(st);
 			errno = e;
 			st = NULL;
-		} else {
+		} else { /* end uncovered */
 			st->end = (char *)st->data + initial_size;
 		}
 	}

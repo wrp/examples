@@ -1,9 +1,10 @@
 #!/bin/sh
 
 exe=./grow
+string='this is a long enough string to trigger a resize'
 
-out="$(echo foo | $exe)"
-if ! test "$out" = 'foo'; then
+out="$(echo "$string" | $exe)"
+if test "$out" != "$string"; then
 	echo unexpected output: got "'$out'" >&2
 	exit 1
 fi

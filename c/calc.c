@@ -85,8 +85,8 @@ main(int argc, char **argv)
 		lc_num = getenv("LC_ALL");
 	}
 	if( lc_num && !setlocale(LC_NUMERIC, lc_num) ) {
-		fprintf(stderr, "Locale not found.\n");
-	}
+		fprintf(stderr, "Locale not found.\n"); /* uncovered */
+	} /* uncovered */
 
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);

@@ -39,7 +39,7 @@ main( int argc, char **argv )
 			)
 		) {
 			die("sendto"); /* uncovered */
-		}
+		} /* uncovered */
 		if( !strcmp( message, "q\n" )) {
 			break;
 		}
