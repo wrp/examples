@@ -147,9 +147,9 @@ stack_get(struct stack *s, int idx)
 	} else if( idx < 0 && (unsigned)-idx <= stack_size(s)) {
 		base = s->top;
 	}
-	if(base != NULL) {
+	if( base != NULL ) {
 		if( s->raw ) {
-			v = *(void **)(base + idx * (sizeof v));
+			v = *(void **)(base + idx * sizeof v);
 		} else {
 			v = base + idx * s->element_size;
 		}
