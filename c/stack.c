@@ -83,11 +83,12 @@ stack_incr(struct stack *s)
 	void *tmp = s->top;
 	if( s->top == s->end ) {
 		ptrdiff_t o = t - (char *)s->data;
-		void *tmp = realloc(s->data, o + INITIAL_SIZE);
+		size_t siz = o + INITIAL_SIZE * s->element_size;
+		void *tmp = realloc(s->data, siz);
 		if( tmp != NULL ) {
 			s->data = tmp;
 			s->top = s->data + o;
-			s->end = s->data + o + INITIAL_SIZE;
+			s->end = s->data + siz;
 		}
 	}
 	return tmp;
