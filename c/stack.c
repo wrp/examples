@@ -35,13 +35,9 @@ stack_xcreate(size_t s)
 static void *
 alloc(size_t alignment, size_t s)
 {
-	void *rv;
-	if( s ) {
-		if( posix_memalign(&rv, alignment, s) ) {
-			rv = NULL;
-		}
-	} else {
-		rv = malloc(s);
+	void *rv = alignment ? NULL : malloc(s);
+	if( rv == NULL && posix_memalign(&rv, alignment, s) ) {
+		rv = NULL;
 	}
 	return rv;
 }

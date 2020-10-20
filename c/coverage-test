@@ -11,6 +11,7 @@ progs='
 	grow
 	list
 	ring-buffer
+	stack
 	tac
 	udp-client
 	udp-server
