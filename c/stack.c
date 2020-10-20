@@ -21,8 +21,8 @@ struct stack {
 struct stack *
 stack_xcreate(size_t s)
 {
-	struct stack *rv;
-	if( (rv = stack_create(s)) == NULL ) {
+	struct stack *rv = stack_create(s);
+	if( rv == NULL ) {
 		perror("stack_create");
 		exit(EXIT_FAILURE);
 	}
