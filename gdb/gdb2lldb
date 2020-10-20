@@ -6,6 +6,8 @@ built in GDB-compatibility aliases in LLDB are also listed. The
 full lldb command names are often long, but any unique short form
 can be used. Instead of “breakpoint set”, “br se” is also acceptable.
 
+Instead of '-tui' at startup, run "gui" from the prompt.
+
 Execution Commands
 Launch a process no arguments.
 (gdb) run    (lldb) process launch
