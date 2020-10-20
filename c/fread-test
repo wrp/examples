@@ -1,8 +1,9 @@
 #!/bin/sh
 
 exe=./fread
+srcdir=$(dirname $0)
 
 die() { test -n "$*" && echo "$*"; exit 1; } >&2
 
 < $0 $exe | cmp - $0 || die
-< fread.c $exe | cmp - fread.c || die
+< ${srcdir}/fread.c $exe | cmp - ${srcdir}/fread.c || die

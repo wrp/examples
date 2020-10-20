@@ -1,6 +1,6 @@
 #!/bin/sh
 
-exe=${0%-test}
+exe=./list
 args=
 
 RV=0
