@@ -1,5 +1,5 @@
 /*
- * Read each line of a file into an array. Sort the lines by length output.
+ * Read each line of a file into an array. Sort the lines by length and output.
  */
 
 #include <assert.h>
