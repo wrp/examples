@@ -30,6 +30,7 @@ simple_examples(void)
 	scan("input string", "%7s", buf); /* Writes 6 chars; 'input\0' */
 	scan("input string\nline 2", "%[^\n]", buf); /* Writes first line */
 	scan("input string\nline 2", "%7[^\n]", buf); /* Write 8 chars */
+	scan("input stg\nlin", "%3[^\n]%n%7[^\n]%n", buf, k, buf + 3, k + 1);
 	scan("24", "%d", k);
 	scan("24", "%1d%d", k, k + 1);
 }
@@ -41,9 +42,9 @@ main(int argc, char **argv)
 	long ld;
 	char a[7][1024];
 
-	if(argc == 1) {
+	if( argc == 1 ) {
 		simple_examples();
-	} else for(argv += 1; *argv; argv++) {
+	} else for( argv += 1; *argv; argv++ ) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
 		printf("(%d) %20s: ", c, *argv);
 		show_bufs(*argv, c, a);
@@ -55,13 +56,13 @@ main(int argc, char **argv)
 		c = getchar();
 		ungetc(c, stdin);
 		fputs("next:", stdout);
-		if(isprint(c)) {
+		if( isprint(c) ) {
 			printf("'%c'", c);
 		} else {
 			printf(c != EOF ? "(0x%02x)" : "(EOF)", c);
 		}
 		putchar('\n');
-		if(feof(stdin) && fseek(stdin, 0L, SEEK_SET) == -1) {
+		if( feof(stdin) && fseek(stdin, 0L, SEEK_SET) == -1 ) {
 			break;
 		}
 	}
@@ -213,7 +214,7 @@ scan(const char *input, const char *fmt, ...)
 	va_start(ap, fmt);
 
 	cs.e = fmt;
-	while(parse_format_string(cs.e, &cs)) {
+	while( parse_format_string(cs.e, &cs) ) {
 		if( count++ ) {
 			fputs(", ", stdout);
 		}
@@ -221,8 +222,11 @@ scan(const char *input, const char *fmt, ...)
 		case 's': case '[':
 			buf.s = va_arg(ap, char *);
 			print_val(&cs, buf.s);
-			printf(" (wrote %lu chars)", strlen(buf.s) + 1);
+			printf(" (%lu long)", strlen(buf.s));
 			break;
+		case 'n':
+			count -= 1;
+			/* Fall Through */
 		case 'd':
 			buf.d = va_arg(ap, int *);
 			printf("%d", *buf.d);
@@ -244,7 +248,7 @@ validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 	struct conversion_specifier cs;
 
 	k = parse_format_string(fmt, &cs);
-	if(!k) {
+	if( !k ) {
 		die("Failed to parse %s\n", fmt);
 	}
 	if( cs.width != width ) {
