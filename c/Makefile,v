@@ -63,4 +63,7 @@ clean:
 
 distclean:
 	cd $(BUILDDIR) && make distclean
+
+%: %.c
+	cd $(BUILDDIR) && make $@@
 @
