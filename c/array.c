@@ -10,14 +10,21 @@ main(int argc, char *argv[])
 {
 	unsigned idx = argc > 1 ? strtoul(argv[1], NULL, 0) : 0;
 	int a[25] = {
-		[0 ... 3] = 10,
+		[0 ... 24] = -1,
 		[3]       = 3,  /* Valid, but throws warning (1)*/
-		[4]       = 4,
 	};
+#pragma GCC diagnostic ignored "-Woverride-init"
+	int b[25] = {
+		[0 ... 24] = -1,
+		[3]       = 3,  /* Warning suppressed by pragma */
+		[4]       = 4,
+		[24] = 24,
+	};
+#pragma GCC diagnostic pop
 	if( idx > 24 ) {
 		fprintf(stderr, "Out of bounds\n");
 	} else {
-		printf("a[%d] = %d\n", idx, a[idx]);
+		printf("a[%1$d] = %2$d, b[%1$d] = %3$d\n", idx, a[idx], b[idx]);
 	}
 	return 0;
 }
