@@ -86,11 +86,9 @@ test_string '0Xfp' 15
 test_string '0XfP1p' 30
 test_string '0XfP1p' 30
 LC_NUMERIC=en_US.UTF-8 test_string '-1k1456798p' '1,456,798'
-unset LC_NUMERIC
-test_string '-1k2456798p' '2456798'
+LC_NUMERIC=C test_string '-1k2456798p' '2456798'
 LC_ALL=en_US.UTF-8 test_string '-1k3456798p' '3,456,798'
-unset LC_ALL
-test_string '-1k4456798p' '4456798'
+LC_ALL=C test_string '-1k4456798p' '4456798'
 
 test_string '4[1 1+]1.2x+p' 'Invalid register: 1.2 is not an integer
 5.2'

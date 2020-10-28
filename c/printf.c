@@ -17,9 +17,7 @@ main(void)
 	p = a;
 	q = a + 5;
 
-	if( !setlocale(LC_ALL, "en_US.UTF-8") ) {
-		fprintf(stderr, "Locale not found.\n");
-	}
+	setlocale(LC_ALL, "");
 
 	printf("%'10d\n", 103957395);
 	printf("%'2.10f\n", 1039573.95);

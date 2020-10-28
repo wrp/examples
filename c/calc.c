@@ -79,15 +79,8 @@ main(int argc, char **argv)
 {
 	int c;
 	struct state S[1];
-	char *lc_num = getenv("LC_NUMERIC");
 
-	if( lc_num == NULL ) {
-		lc_num = getenv("LC_ALL");
-	}
-	if( lc_num && !setlocale(LC_NUMERIC, lc_num) ) {
-		fprintf(stderr, "Locale not found.\n"); /* uncovered */
-	} /* uncovered */
-
+	setlocale(LC_NUMERIC, "");
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
