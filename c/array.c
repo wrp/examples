@@ -18,6 +18,7 @@ main(int argc, char *argv[])
 		[0 ... 24] = -1,
 		[3]       = 3,  /* Warning suppressed by pragma */
 		[4]       = 4,
+		[4 + 1]   = 5,
 		[24] = 24,
 	};
 #pragma GCC diagnostic pop
