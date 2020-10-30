@@ -24,9 +24,9 @@ int
 main(int argc, char **argv)
 {
 	struct buf b = { 0 };
-	FILE *fp = argc > 1 ? xfopen(argv[1],"r") : stdin;
+	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 
-	while( append(&b, fp, BUFSIZ)) {
+	while( append(&b, fp, BUFSIZ) ) {
 		;
 	}
 	fwrite(b.data, 1, b.end - b.data, stdout);
@@ -38,7 +38,7 @@ append(struct buf *b, FILE *fp, size_t n)
 {
 	size_t rc;
 	assert( b->end <= b->data + b->capacity );
-	while( b->capacity < n + (b->end - b->data)) {
+	while( b->data + b->capacity < b->end + n ) {
 		grow(b);
 	}
 	rc = fread(b->end, 1, n, fp);
