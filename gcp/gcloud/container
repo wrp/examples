@@ -1,3 +1,0 @@
-# activate credentials
-gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
-

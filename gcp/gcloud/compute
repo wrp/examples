@@ -1,2 +1,0 @@
-# list available instances
-gcloud compute instances list

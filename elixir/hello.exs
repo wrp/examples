@@ -1,2 +1,0 @@
-
-IO.puts "Hello, world!"

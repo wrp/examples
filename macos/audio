@@ -1,5 +1,0 @@
-Don't forget that macos is an unstable pos.  Need to reboot every few weeks
-at least.
-
-# When the speakers stop working, try:
-$ sudo killall coreaudiod

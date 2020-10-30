@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# from https://stackoverflow.com/questions/55765192/random-line-using-sed/55765592#55765592
-# Get a single line from stdin in a uniform distribution;
-awk 'BEGIN{srand()} rand() < 1/NR { out=$0 } END { print out }'

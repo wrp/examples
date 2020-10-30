@@ -1,2 +1,0 @@
-
-gcloud compute --project=${PROJECT?} instances get-serial-port-output ${INSTANCE?} --zone=${ZONE?}

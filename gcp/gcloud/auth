@@ -1,5 +1,0 @@
-# Get list of accounts for which you have credentials.
-gcloud auth list
-
-
-gcloud auth activate-service-account # Run as a service account

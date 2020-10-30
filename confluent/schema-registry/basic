@@ -1,8 +1,0 @@
-# Get list of all topics
-curl -kSs http://${host-$(hostname)}:${port-8081}/subjects | jq -r .[]
-
-# View versions for a topic
-curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions; echo
-
-# View a version of the schema
-curl -kSs http://${host-$(hostname)}:${port-8081}/subjects/${topic?}-value/versions/${n-1}; echo

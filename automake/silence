@@ -1,9 +1,0 @@
-
-By default, just do 'make V=0' to get brief output.  eg:
-
-  CCLD     mmap
-  CC       prctl.o
-  CCLD     prctl
-  CC       qsort.o
-  CCLD     qsort
-  CC       read.o

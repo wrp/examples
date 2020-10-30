@@ -1,5 +1,0 @@
-Simple configs intended for use from the network setup in ../docker/network
-Run the makefile there and ~/examples should contain this directory
-in which you can run ansible commands.
-
-eg: ansible-playbook -i hosts ping.yml

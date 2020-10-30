@@ -1,2 +1,0 @@
-
-bq query --format=csv "SELECT * FROM ${dataset:?}.${table:?}"

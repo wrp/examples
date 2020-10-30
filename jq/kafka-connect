@@ -1,3 +1,0 @@
-
-# Show state and id for connectors
-get-status ... | jq -rc '.tasks[] | {state, id}'

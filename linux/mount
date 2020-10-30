@@ -1,9 +1,0 @@
-
-# Make an entry in /etc/fstab for an extant mountpoint
-
-options="$(findmnt -n -o UUID,TARGET,FSTYPE,OPTIONS ${MOUNTPOINT?})"  &&
-printf '/dev/disk/by-uuid/%s %d %d\n' \
-	"${options}" \
-	"${FS_PASSNO-0}" \
-	"${FS_FREQ-0}" \
-	| sudo tee -a /etc/fstab

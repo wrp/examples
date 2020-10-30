@@ -1,5 +1,0 @@
-#!/usr/bin/env python
-
-raise SystemExit('fail') # Fail, and print a message to stderr
-raise SystemExit(False)  # Exit succesfully
-raise SystemExit(0)      # Exit succesfully

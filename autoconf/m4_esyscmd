@@ -1,9 +1,0 @@
-
-
-To get a git version in the repo, you can use the hideous script used
-by autoconf, or just do something like:
-
-AC_INIT([tmux], m4_esyscmd([git describe --tags | tr -d \\n]))
-
-
-

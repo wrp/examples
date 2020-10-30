@@ -1,4 +1,0 @@
-
-# For some absurd reason, --name-only does not only show
-# names.  To get a list of names only, do:
-git show --pretty=format: --name-only $commitish

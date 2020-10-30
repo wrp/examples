@@ -1,9 +1,0 @@
-
-# To see which image is most recent in an image family
-gcloud compute images describe-from-family ${family?}
-
-# To copy an image from one project to another
-gcloud compute images create ${image:?} \
-	--project=${destination_project:?} \
-	--source-image=${image:?} \
-	--source-image-project=${src_project:?}

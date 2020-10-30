@@ -1,9 +1,0 @@
-
-
-# To create a new table, or load data to an existing table:
-bq load ${PROJECT:?}:${dataset:?}.${table:?} data.csv "$schema"
-# For example:
-bq load ${PROJECT:?}:${dataset:?}.${table:?} /dev/stdin 'name:string,id:integer' << EOF
-john,3
-larry,4
-EOF

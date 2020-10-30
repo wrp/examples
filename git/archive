@@ -1,6 +1,0 @@
-# keyword: git-archive
-# Create a .tar.gz from head
-# Type if inferred from output file name
-
-name=$(basename $(git rev-parse --show-toplevel))-$(git describe --tags --dirty)
-git archive --prefix=${name}/ -o $name.tar.gz HEAD

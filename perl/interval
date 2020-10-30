@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# Run a command when the system clock hits the next second
-
-for i in 1 2 3 4 5; do
-	perl -MTime::HiRes=gettimeofday,usleep -w -e '$n=gettimeofday; usleep 1e6*(1-($n-int($n)))'
-	perl -MTime::HiRes=gettimeofday -E 'say scalar(gettimeofday)'
-done

@@ -1,4 +1,0 @@
-#!/bin/sh
-
-python -c 'import yaml; import json; import sys; json.dump(
-	yaml.load(sys.stdin.read()), sys.stdout)'

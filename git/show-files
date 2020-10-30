@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# Show files changed by a given commit
-git diff-tree --no-commit-id --name-only -r ${1:-HEAD}

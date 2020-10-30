@@ -1,2 +1,0 @@
-# Find all regular files and ignore those in .git
-find . -name .git -prune -o -type f | less

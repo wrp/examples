@@ -1,8 +1,0 @@
-# keywords: attributes, metadata
-# Get metadata:
-gcloud compute instances describe ${instance?} \
-	--zone ${zone?} \
-	--format='value(metadata)'
-
-# Change metadata:
-gcloud compute instances add-metadata ${instance?} --metadata=KEY=VALUE

@@ -1,5 +1,0 @@
-#!/bin/sh
-
-c=$( wc -l < Makefile)
-w=$( ./tac Makefile | wc -l)
-test "$c" = "$w" && test "$c" -gt 0

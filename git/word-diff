@@ -1,4 +1,0 @@
-
-
-# Consider ':' as the word boundary
-git show --word-diff-regex='[^:]+'

@@ -1,5 +1,0 @@
-#!/bin/sh
-
-s=$(./mmap $0 | md5sum)
-t=$(cat $0 | md5sum)
-test "$s" = "$t"

@@ -1,5 +1,0 @@
-#!/usr/bin/env perl
-use 5.12.0;
-use Time::HiRes qw(gettimeofday);
-
-say gettimeofday;

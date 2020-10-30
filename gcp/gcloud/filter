@@ -1,7 +1,0 @@
-
-
-# Select all vms with a given network tag:
-$ gcloud compute instances list --filter tags.items=${tag?}
-
-# Select all images from a given family
-$ gcloud compute images list  --filter family=$family

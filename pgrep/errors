@@ -1,9 +1,0 @@
-
-pgrep is a useless tool.  Maybe some day I'll dig in to explain
-the following behavior:
-
-$ pgrep bash | grep $$
-$ ps ax | grep bash | grep $$
-46302 s017  Ss     0:04.15 bash
-
-(That is, grep fails to find the shell which invokes it)

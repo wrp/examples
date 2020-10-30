@@ -1,3 +1,0 @@
-
-# Make --rebase default
-git config --global pull.rebase true

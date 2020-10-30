@@ -1,7 +1,0 @@
-
-params:
-        colors: &colors [red, blue, green]
-        shapes: &sh [cirle, square, triangle]
-
-foo:
-        role: *colors
