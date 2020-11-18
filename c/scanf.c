@@ -24,6 +24,7 @@ static void
 simple_examples(void)
 {
 	char buf[128];
+	char *p;
 	int k[10];
 	printf("%-40s%-20s%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
@@ -33,6 +34,11 @@ simple_examples(void)
 	scan("input stg\nlin", "%3[^\n]%n%7[^\n]%n", buf, k, buf + 3, k + 1);
 	scan("24", "%d", k);
 	scan("24", "%1d%d", k, k + 1);
+
+	/* Dynamic allocation */
+	k[0] = sscanf("this is a string", "%m[^s] %s", &p, buf);
+	printf( "scanned %d items: %s and %s\n", k[0], p, buf);
+	free(p);
 }
 
 int
@@ -444,4 +450,25 @@ BUGS
      The fscanf family of functions do not correctly handle multibyte characters in the format argument.
 
 BSD                             January 4, 2003                            BSD
+
+
+Note from linux manpage:
+       To  use the dynamic allocation conversion specifier, specify m as a length modifier (thus %ms or %m[range]).  The caller must free(3) the returned string, as in the
+       following example:
+
+           char *p;
+           int n;
+
+           errno = 0;
+           n = scanf("%m[a-z]", &p);
+           if (n == 1) {
+               printf("read: %s\n", p);
+               free(p);
+           } else if (errno != 0) {
+               perror("scanf");
+           } else {
+               fprintf(stderr, "No matching characters\n");
+           }
+
+       As shown in the above example, it is necessary to call free(3) only if the scanf() call successfully read a string.
 #endif
