@@ -8,6 +8,7 @@
 # on the content of the file, not the name.
 %.1: %.txt ; asciidoctor -a name=the-name -a version=0.0.1 -b manpage $<
 
+the-name.1: example.1
 
-view:
+view: the-name.1
 	groff -man -Tascii the-name.1
