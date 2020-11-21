@@ -19,26 +19,12 @@ int
 main(void)
 {
 	struct buffer a = {0};
-	struct buffer b = {0};
 	int c;
 
-	while( (c = getchar()) != EOF && !isspace(c) ) {
+	while( (c = getchar()) != EOF ) {
 		push(c, &a);
 	}
-	while(isspace(c = getchar())) {
-		;
-	}
-	ungetc(c, stdin);
-	while( (c = getchar()) != EOF ) {
-		push(c, &b);
-	}
 	while( (c = pop(&a)) != EOF ) {
-		putchar(c);
-		if( (c = pop(&b)) != EOF ) {
-			putchar(c);
-		}
-	}
-	while( (c = pop(&b)) != EOF ) {
 		putchar(c);
 	}
 	return 0;
@@ -54,9 +40,9 @@ void
 push(int c, struct buffer *b)
 {
 	if( b->start == NULL ) {
-		b->end = b->start = xrealloc(NULL, b->cap = 8, 1, NULL);
+		b->end = b->start = xrealloc(NULL, b->cap = 128, 1, NULL);
 	} else if( b->end >= b->start + b->cap ) {
-		b->start = xrealloc(b->start, b->cap *= 2, 1, &b->end);
+		b->start = xrealloc(b->start, b->cap += 128, 1, &b->end);
 	}
 	*b->end++ = c;
 }
