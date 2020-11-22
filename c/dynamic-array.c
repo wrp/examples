@@ -39,9 +39,7 @@ pop(struct buffer *a)
 void
 push(int c, struct buffer *b)
 {
-	if( b->start == NULL ) {
-		b->end = b->start = xrealloc(NULL, b->cap = 128, 1, NULL);
-	} else if( b->end >= b->start + b->cap ) {
+	if( b->start == NULL || b->end >= b->start + b->cap ) {
 		b->start = xrealloc(b->start, b->cap += 128, 1, &b->end);
 	}
 	*b->end++ = c;
@@ -53,7 +51,7 @@ xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 	ptrdiff_t offset;
 	void **iterator = offsetp;
 	if( iterator != NULL ) {
-		offset = *iterator - buf;
+		offset = *iterator ? *iterator - buf : 0;
 	}
 	buf = realloc(buf, num * siz);
 	if( buf == NULL ) {

@@ -23,7 +23,7 @@ xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 	ptrdiff_t offset;
 	void **iterator = offsetp;
 	if( iterator != NULL ) {
-		offset = *iterator - buf;
+		offset = *iterator ? *iterator - buf : 0;
 	}
 
 	buf = realloc(buf, num * siz);
