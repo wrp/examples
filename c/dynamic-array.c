@@ -1,4 +1,4 @@
-/* Grow an array */
+/* Grow an array of char */
 
 #include <stdio.h>
 #include <stddef.h>
