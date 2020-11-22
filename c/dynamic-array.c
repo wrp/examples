@@ -48,11 +48,8 @@ push(int c, struct buffer *b)
 void *
 xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 {
-	ptrdiff_t offset;
 	void **iterator = offsetp;
-	if( iterator != NULL ) {
-		offset = *iterator ? *iterator - buf : 0;
-	}
+	ptrdiff_t offset = iterator && *iterator ? *iterator - buf : 0;
 	buf = realloc(buf, num * siz);
 	if( buf == NULL ) {
 		perror("realloc");
