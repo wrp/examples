@@ -10,7 +10,7 @@ xfopen(const char *path, const char *mode)
 {
 	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
 		*mode == 'r' ? stdin : stdout;
-	if( fp == NULL ) {
+	if( fp == NULL ){
 		perror(path);
 		exit(EXIT_FAILURE);
 	}
@@ -23,11 +23,11 @@ xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 	void **iterator = offsetp;
 	ptrdiff_t offset = iterator && *iterator ? *iterator - buf : 0;
 	buf = realloc(buf, num * siz);
-	if( buf == NULL ) {
+	if( buf == NULL ){
 		perror("realloc");
 		exit(EXIT_FAILURE);
 	}
-	if( iterator != NULL ) {
+	if( iterator != NULL ){
 		*iterator = buf + offset;
 	}
 	return buf;
@@ -37,7 +37,7 @@ void *
 xmalloc(size_t s)
 {
 	void *rv = malloc(s);
-	if(rv == NULL) {
+	if(rv == NULL){
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
@@ -58,7 +58,7 @@ int
 xopen(const char *path, int flags)
 {
 	int f = open(path, flags);
-	if( f == -1 ) {
+	if( f == -1 ){
 		perror(path);
 		exit(EXIT_FAILURE);
 	}
@@ -69,7 +69,7 @@ char *
 xstrdup(const char *s1)
 {
 	char *r = strdup(s1);
-	if( r == NULL ) {
+	if( r == NULL ){
 		perror("strdup");
 		exit(EXIT_FAILURE);
 	}
@@ -80,7 +80,7 @@ void *
 xcalloc(size_t count, size_t size)
 {
 	void *r = calloc(count, size);
-	if( r == NULL ) {
+	if( r == NULL ){
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
