@@ -1,14 +1,14 @@
 
+/* Open a file.  Pause.  Upon receipt of signal, read from the file.
+ * Testing how access time is modified.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
 #include "xutil.h"
-
-/* Open a file.  Pause.  Upon receipt of signal, read from the file.
- * Testing how access time is modified
- */
 
 sig_atomic_t usr1, usr2, hup;
 
@@ -17,7 +17,7 @@ handle(int sig, siginfo_t *i, void *v)
 {
 	(void)i;
 	(void)v;
-	switch(sig) {
+	switch( sig ){
 	case SIGUSR1: usr1=1; break;
 	case SIGUSR2: usr2=1; break;
 	case SIGHUP: hup=1; break;
@@ -38,26 +38,26 @@ main(int argc, char **argv)
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
-	if(sigaction( SIGUSR1, &act, NULL )) { perror("sigaction"); exit(1); }
-	if(sigaction( SIGUSR2, &act, NULL )) { perror("sigaction"); exit(1); }
-	if(sigaction( SIGHUP, &act, NULL )) { perror("sigaction"); exit(1); }
+	if( sigaction(SIGUSR1, &act, NULL) ){ perror("sigaction"); exit(1); }
+	if( sigaction(SIGUSR2, &act, NULL) ){ perror("sigaction"); exit(1); }
+	if( sigaction(SIGHUP, &act, NULL) ){ perror("sigaction"); exit(1); }
 
-	while(1) {
+	while( 1 ){
 		const sigset_t mask = {0};
 		sigsuspend(&mask);
-		if(usr1 || usr2) {
-			if(fseek(fp, 0L, SEEK_SET)) {
+		if( usr1 || usr2 ){
+			if( fseek(fp, 0L, SEEK_SET) ){
 				perror("fseek");
 			}
 			puts("seek");
 		}
-		if(usr2) {
+		if( usr2 ){
 			char b;
-			if(fread(&b, 1, 1, fp) != 1) perror("fread");
+			if( fread(&b, 1, 1, fp) != 1 ) perror("fread");
 			puts("fread");
 		}
-		if(hup) {
-			if(fwrite("f", 1, 1, fp) != 1) perror("fwrite");
+		if( hup ){
+			if( fwrite("f", 1, 1, fp) != 1 ) perror("fwrite");
 			if( fflush(fp)) perror("flush");
 			puts("fwrite");
 		}
