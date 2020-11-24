@@ -58,25 +58,25 @@ compute_fmt(struct element *sp, char *fmt, char op, int flag)
 	char *noparen = "%s";
 	char *template[2] = {noparen, noparen};
 	(void)flag;
-	switch(op) {
+	switch( op ){
 	case '/':
-		if( sp->last != '.' ) {
+		if( sp->last != '.' ){
 			template[0] = paren;
 		}
-		if( sp[1].last != '.' ) {
+		if( sp[1].last != '.' ){
 			template[1] = paren;
 		}
 		break;
 	case '*':
-		if( sp->last != '.' && (strchr("+-", sp->last) || sp->last != op )) {
+		if( sp->last != '.' && (strchr("+-", sp->last) || sp->last != op) ){
 			template[0] = paren;
 		}
-		if( sp[1].last != '.' && (strchr("+-", sp[1].last) || sp[1].last != op )) {
+		if( sp[1].last != '.' && (strchr("+-", sp[1].last) || sp[1].last != op) ){
 			template[1] = paren;
 		}
 		break;
 	case '-':
-		if( sp[1].last != '.' && strchr("+-", sp[1].last) ) {
+		if( sp[1].last != '.' && strchr("+-", sp[1].last) ){
 			template[1] = paren;
 		}
 		break;
@@ -106,8 +106,8 @@ eval(struct expression *exp)
 	char *ops = exp->operators;
 	struct element *sp = exp->stack;
 
-	while( m ) {
-		if( m & 0x1 ) { /* Apply an operator */
+	while( m ){
+		if( m & 0x1 ){ /* Apply an operator */
 			char buf[1024];
 			char fmt[32];
 
@@ -119,7 +119,7 @@ eval(struct expression *exp)
 			sp->last = *ops;
 			snprintf(buf, sizeof buf, fmt, sp->descr, *ops, sp[1].descr);
 			strncpy(sp->descr, buf, sizeof sp->descr);
-			switch(*ops++) {
+			switch( *ops++ ){
 			case '+': sp->val += sp[1].val; break;
 			case '-': sp->val -= sp[1].val; break;
 			case '*': sp->val *= sp[1].val; break;
@@ -180,8 +180,8 @@ next_perm(char *s)
 {
 	size_t len = strlen(s);
 	assert( strspn( s, "+-*/" ) == len );
-	for( int i = 0; i < (int)len; i++ ) {
-		switch(s[i]) {
+	for( int i = 0; i < (int)len; i++ ){
+		switch( s[i] ){
 		case '+': s[i] = '-'; return;
 		case '-': s[i] = '*'; return;
 		case '*': s[i] = '/'; return;
@@ -195,7 +195,7 @@ int
 next_op(struct expression *exp)
 {
 	int N = exp->count - 1;
-	if( strspn(exp->operators, "/") == (unsigned)N ) {
+	if( strspn(exp->operators, "/") == (unsigned)N ){
 		exp->mask = next_mask(exp->mask);
 		assert( exp->mask >= 1 << 2*N );
 	}
@@ -211,7 +211,7 @@ void
 parse_cmd_line(int argc, char **argv, struct expression *exp)
 {
 	double *v;
-	if( argc < 3 || argc > 14 ) {
+	if( argc < 3 || argc > 14 ){
 		errx(EXIT_FAILURE, "Invalid call: must specify between 2 and 14 numeric values");
 	}
 
@@ -220,10 +220,10 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 	exp->operands = v = xmalloc(sizeof *v * argc);
 	exp->count = argc;
 
-	for( ;*argv; argv++, v++ ) {
+	for( ;*argv; argv++, v++ ){
 		char *end;
 		*v = strtod(*argv, &end);
-		if( *end != '\0' ) {
+		if( *end != '\0' ){
 			errx(EXIT_FAILURE, "Invalid input in \"%s\""
 				"at position %ld.  Unexpected value: '%c'",
 				*argv, end - *argv, *end);
@@ -242,7 +242,7 @@ void *
 xmalloc(size_t s)
 {
 	void *r = malloc(s);
-	if( r == NULL ) {
+	if( r == NULL ){
 		err(EXIT_FAILURE, "malloc");
 	}
 	return r;
