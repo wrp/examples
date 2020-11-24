@@ -40,7 +40,7 @@ void
 push(int c, struct buffer *b)
 {
 	if( b->start == NULL || b->end >= b->start + b->cap ) {
-		b->start = xrealloc(b->start, b->cap += 128, 1, &b->end);
+		b->start = xrealloc(b->start, b->cap += BUFSIZ, 1, &b->end);
 	}
 	*b->end++ = c;
 }
