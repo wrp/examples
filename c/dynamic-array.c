@@ -14,14 +14,16 @@ struct buffer {
 void push(int c, struct buffer *);
 int pop(struct buffer *);
 void * xrealloc(void *buf, size_t num, size_t siz, void *offsetp);
+FILE * xfopen(const char *path, const char *mode);
 
 int
-main(void)
+main(int argc, char **argv)
 {
-	struct buffer a = {0};
 	int c;
+	FILE *ifp = argc > 1 ? xfopen(argv[1], "r") : stdin;
+	struct buffer a = {0};
 
-	while( (c = getchar()) != EOF ) {
+	while( (c = fgetc(ifp)) != EOF ) {
 		push(c, &a);
 	}
 	while( (c = pop(&a)) != EOF ) {
@@ -59,4 +61,16 @@ xrealloc(void *buf, size_t num, size_t siz, void *offsetp)
 		*iterator = buf + offset;
 	}
 	return buf;
+}
+
+FILE *
+xfopen(const char *path, const char *mode)
+{
+	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
+		*mode == 'r' ? stdin : stdout;
+	if( fp == NULL ){
+		perror(path);
+		exit(EXIT_FAILURE);
+	}
+	return fp;
 }
