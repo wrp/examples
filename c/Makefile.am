@@ -13,6 +13,7 @@ check_PROGRAMS = \
 	clean-man \
 	dynamic \
 	dynamic-read \
+	dynamic-array \
 	fsync \
 	grow \
 	list \
@@ -29,6 +30,7 @@ check_PROGRAMS = \
 TESTS = \
 	arithperm-test \
 	calc-test \
+	dynamic-array-test \
 	dynamic-read-test \
 	dynamic-test \
 	fread-test \
