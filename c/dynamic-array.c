@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include "xutil.h"
 
 struct buffer {
 	char *start;
@@ -13,8 +14,6 @@ struct buffer {
 
 void push(int c, struct buffer *);
 int pop(struct buffer *);
-void * xrealloc(void *buf, size_t num, size_t siz, void *offsetp);
-FILE * xfopen(const char *path, const char *mode);
 
 int
 main(int argc, char **argv)
@@ -45,32 +44,4 @@ push(int c, struct buffer *b)
 		b->start = xrealloc(b->start, b->cap += BUFSIZ, 1, &b->end);
 	}
 	*b->end++ = c;
-}
-
-void *
-xrealloc(void *buf, size_t num, size_t siz, void *endvp)
-{
-	void **endp = endvp;
-	ptrdiff_t offset = endp && *endp ? *endp - buf : 0;
-	buf = realloc(buf, num * siz);
-	if( buf == NULL ) {
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	}
-	if( endp != NULL ) {
-		*endp = buf + offset;
-	}
-	return buf;
-}
-
-FILE *
-xfopen(const char *path, const char *mode)
-{
-	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
-		*mode == 'r' ? stdin : stdout;
-	if( fp == NULL ){
-		perror(path);
-		exit(EXIT_FAILURE);
-	}
-	return fp;
 }
