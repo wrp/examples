@@ -23,8 +23,7 @@ expect="input:                                  format string:      scanned:
 'input string\nline 2'                  '%7[^\n]'           'input s' (7 long)
 'input stg\nlin'                        '%3[^\n]%n%7[^\n]%n''input stg' (9 long), 3, 'ut stg' (6 long), 9
 '24'                                    '%d'                24
-'24'                                    '%1d%d'             2, 4
-scanned 2 items: thi and s"
+'24'                                    '%1d%d'             2, 4"
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
 
 
