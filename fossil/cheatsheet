@@ -1,0 +1,4 @@
+
+Show the content of an artifact:
+
+fossil diff --checkin ${hash} ${file}
