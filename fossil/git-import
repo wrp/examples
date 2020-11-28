@@ -1,2 +1,12 @@
 #!/bin/sh
-git fast-export --all | fossil import --git $(basename $(git rev-parse --show-toplevel)).fossil
+
+fossil_repo=$(basename $(git rev-parse --show-toplevel)).fossil
+
+if ! test -f "$fossil_repo"; then
+	# Import a full git repo into fossil
+	git fast-export --all | fossil import --git "$fossil_repo"
+else
+	# Incremental import
+	git fast-export --all | fossil import --git  \
+		--incremental "$fossil_repo"
+fi
