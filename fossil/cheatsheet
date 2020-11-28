@@ -1,4 +1,6 @@
 
-Show the content of an artifact:
+# Open a repo:
+fossil open ${path}.fossil
 
+# Show the content of an artifact:
 fossil diff --checkin ${hash} ${file}
