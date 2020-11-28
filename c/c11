@@ -1,0 +1,32 @@
+
+<threads.h>
+_Atomic
+
+<stdatomic.h>
+_Thread_local
+
+quick_exit()
+at_quick_exit()
+
+Anonymous structs:
+struct T { int m; union { char * index; int key; }; };
+struct T t;
+t.key=1300; /* access the union's member directly */
+
+_Generic
+
+<stdalign.h>
+_Alignas
+alignof
+aligned_alloc()
+
+_Noreturn void func(void);
+
+<uchar.h>
+char16_t
+char32_t
+
+strcat_s()
+strncpy_s()
+
+Mode "x" added to fopen()
