@@ -1,0 +1,2 @@
+#!/bin/sh
+git fast-export --all | fossil import --git $(basename $(git rev-parse --show-toplevel)).fossil
