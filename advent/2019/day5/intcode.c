@@ -13,24 +13,6 @@ struct int_buf {
 
 void * xrealloc(void *buf, size_t num, size_t siz, void *endvp);
 
-int
-get(struct int_buf *v, unsigned idx, int val, int parm)
-{
-	char buf[64];
-	if( parm < 1 ) {
-		errx(1, "invalid parm");
-	}
-	val /= 10;
-	for( ; parm; parm -= 1 ){
-		val /= 10;
-	}
-	int len = sprintf(buf, "%d", val);
-	if( len && buf[len - 1] == '1' ){
-		return idx < v->cap ? v->start[idx] : EOF;
-	}
-	return idx < v->cap ? v->start[idx] : EOF;
-}
-
 void
 put(struct int_buf *v, unsigned idx, int val)
 {
@@ -106,7 +88,7 @@ main(int argc, char **argv)
 	while( v.start + cmd < v.end ) {
 		val = v.start[cmd++];
 		int opcode = val % 100;
-		int r;
+		int r, s;
 		char buf[32] = {0};
 		char *mode = buf;
 
@@ -116,27 +98,53 @@ main(int argc, char **argv)
 		case 1:
 			r = getparm(*mode++ == '1', &v, cmd++);
 			r += getparm(*mode++ == '1', &v, cmd++);
+			putparm(*mode == '1', &v, r, cmd++);
 			break;
 		case 2:
 			r = getparm(*mode++ == '1', &v, cmd++);
 			r *= getparm(*mode++ == '1', &v, cmd++);
+			putparm(*mode == '1', &v, r, cmd++);
 			break;
 		case 3:
 			if( scanf("%d", &r) != 1 ){
 				errx(1, "Bad input");
 			}
+			putparm(*mode == '1', &v, r, cmd++);
 			break;
 		case 4:
 			r = getparm(*mode++ == '1', &v, cmd++);
 			printf("%d\n", r);
 			break;
+		case 5:
+			r = getparm(*mode++ == '1', &v, cmd++);
+			s = getparm(*mode++ == '1', &v, cmd++);
+			if( r ) {
+				cmd = s;
+			}
+			break;
+		case 6:
+			r = getparm(*mode++ == '1', &v, cmd++);
+			s = getparm(*mode++ == '1', &v, cmd++);
+			if( !r ) {
+				cmd = s;
+			}
+			break;
+		case 7:
+			r = getparm(*mode++ == '1', &v, cmd++);
+			s = getparm(*mode++ == '1', &v, cmd++);
+			val = r < s;
+			putparm(*mode == '1', &v, val, cmd++);
+			break;
+		case 8:
+			r = getparm(*mode++ == '1', &v, cmd++);
+			s = getparm(*mode++ == '1', &v, cmd++);
+			val = r == s;
+			putparm(*mode == '1', &v, val, cmd++);
+			break;
 		case 99:
 			exit(0);
 		default:
 			errx(1, "Bad opcode: %d", opcode);
-		}
-		if( opcode != 4 ){
-			putparm(*mode == '1', &v, r, cmd++);
 		}
 	}
 }
