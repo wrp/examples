@@ -8,13 +8,19 @@ R75,D30,R83,U83,L12,D49,R71,U7,L72
 U62,R66,U55,R34,D71,R55,D58,R83
 */
 
+struct point {
+	unsigned path;
+	unsigned sum;
+};
+
 int
-trace_path(unsigned *map, unsigned path, size_t S)
+trace_path(struct point *map, unsigned path, size_t S)
 {
 	int x = S/2, y =S/2;
 	int val;
 	int c;
 	int dir;
+	int count = 0;
 	do {
 		switch( dir = getchar() ) {
 		default: errx(1, "Unexpected input: %c\n", dir);
@@ -27,6 +33,7 @@ trace_path(unsigned *map, unsigned path, size_t S)
 			errx(1, "Unexpected value %d\n", val);
 		}
 		for( ; val > 0; val-- ){
+			count += 1;
 			switch( dir ){
 			case 'U': y -= 1; break;
 			case 'D': y += 1; break;
@@ -36,7 +43,10 @@ trace_path(unsigned *map, unsigned path, size_t S)
 			if( y < 0 || y > (int)S-1 || x < 0 || x > (int)S-1 ){
 				errx(1, "out of bounds\n");
 			}
-			map[S * y + x] |= path;
+			if( (map[S * y + x].path & path) == 0 ){
+				map[S * y + x].sum += count;
+			}
+			map[S * y + x].path |= path;
 		}
 	} while( (c = getchar()) == ',' );
 	return c == '\n';
@@ -52,17 +62,17 @@ int
 main(int argc, char *argv[])
 {
 	size_t S = argc > 1 ? strtol(argv[1], NULL, 10) : 512;
-	unsigned *map = calloc(S * S, sizeof *map);
+	struct point *map = calloc(S * S, sizeof *map);
 	unsigned path = 0x1;
-	int min = INT_MAX;
+	unsigned min = UINT_MAX;
 
 	while( trace_path(map, path, S) ) {
 		path <<= 1;
 	}
 	for( int y = 0; y < (int)S; y++ ) {
 		for( int x = 0; x < (int)S; x++ ){
-			if( map[S * y + x] > 2 ){
-				int d = dist(x, y, S);
+			if( map[S * y + x].path > 2 ){
+				unsigned d = map[S * y + x].sum;
 				min = d < min ? d : min;
 			}
 		}
