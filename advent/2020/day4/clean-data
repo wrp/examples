@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Make the input data more sane:
+
+awk '$1=$1' RS= FS='[\n ]' OFS=' ' data > data.clean
