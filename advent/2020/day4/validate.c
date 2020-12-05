@@ -103,17 +103,18 @@ ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
 pid (Passport ID) - a nine-digit number, including leading zeroes.
 cid (Country ID) - ignored, missing or not.
 */
-	if( !strcmp(p->ecl, "amb")
-		|| !strcmp(p->ecl, "blu")
-		|| !strcmp(p->ecl, "brn")
-		|| !strcmp(p->ecl, "gry")
-		|| !strcmp(p->ecl, "grn")
-		|| !strcmp(p->ecl, "hzl")
-		|| !strcmp(p->ecl, "oth") ){
+	if( strcmp(p->ecl, "amb")
+		&& strcmp(p->ecl, "blu")
+		&& strcmp(p->ecl, "brn")
+		&& strcmp(p->ecl, "gry")
+		&& strcmp(p->ecl, "grn")
+		&& strcmp(p->ecl, "hzl")
+		&& strcmp(p->ecl, "oth")
+	){
 		invalid = 1;
 	}
 	d = strtol(p->pid, NULL, 10);
-	if( d < 0 || d > 999999999 ){
+	if( strlen(p->pid) != 9 || d < 0 || d > 999999999 ){
 		invalid = 1;
 	}
 	if( !invalid ){
