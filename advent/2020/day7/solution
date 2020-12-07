@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+# Sample input:
+# dark orange bags contain 3 dark chartreuse bags.
+# striped fuchsia bags contain 5 striped lavender bags.
+# dull gray bags contain 4 muted cyan bags, 3 light maroon bags.
+# dull chartreuse bags contain 3 light tan bags, 3 dotted bronze bags, 4 dark crimson bags, 4 dull gold bags.
+# shiny teal bags contain 3 muted maroon bags, 1 bright salmon bag, 2 dark chartreuse bags.
+
+import sys
+import re
+
+inventory = {}
+class Bag:
+    def __init__(self, color):
+        self.color = color
+        self.contains = []
+
+    def can_hold(self, color):
+        if color in self.contains:
+            return True
+
+        for k in self.contains:
+            if inventory[k].can_hold(color):
+                return True
+        return False
+
+
+int_re = re.compile('[0-9]+')
+
+for x in sys.stdin.readlines():
+
+    color = x[0: x.find("bags") - 1]
+    if color not in inventory:
+        inventory[color] = Bag(x[0: x.find("bags") - 1])
+    bag = inventory[color]
+
+    x = x[x.find("contain") + len('contain') + 1:-1]
+
+    b = int_re.search(x)
+    while b:
+        count = x[b.start():b.end()]
+        x = x[b.end() + 1: ]
+        if x.find("bag"):
+            new = x[0: x.find("bag") - 1]
+        elif x.find("bags"):
+            new = x[0: x.find("bags") - 1]
+        bag.contains.append(new)
+        b = int_re.search(x)
+
+
+
+count = 0
+for bag in inventory.values():
+    if bag.can_hold('shiny gold'):
+        count += 1
+
+print count
+
+
