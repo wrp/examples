@@ -15,6 +15,7 @@ class Bag:
     def __init__(self, color):
         self.color = color
         self.contains = []
+        self.counts = {}
 
     def can_hold(self, color):
         if color in self.contains:
@@ -24,6 +25,13 @@ class Bag:
             if inventory[k].can_hold(color):
                 return True
         return False
+
+    def must_hold(self):
+        ret = 1
+        for k in self.contains:
+            ret += self.counts[k] * (inventory[k].must_hold() + 1)
+
+        return ret - 1
 
 
 int_re = re.compile('[0-9]+')
@@ -46,6 +54,8 @@ for x in sys.stdin.readlines():
         elif x.find("bags"):
             new = x[0: x.find("bags") - 1]
         bag.contains.append(new)
+
+        bag.counts[new] =  int(count)
         b = int_re.search(x)
 
 
@@ -55,6 +65,9 @@ for bag in inventory.values():
     if bag.can_hold('shiny gold'):
         count += 1
 
-print count
+bag = inventory['shiny gold']
+print count, 'bags can hold a shiny gold'
+hold = inventory['shiny gold'].must_hold()
+print 'shiny gold must hold', hold
 
 
