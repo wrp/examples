@@ -1,5 +1,6 @@
 /* from https://stackoverflow.com/questions/65217545 */
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -37,6 +38,15 @@ preorder(struct btree *root)
 		preorder(root->dash);
 	}
 }
+void
+postorder(struct btree *root)
+{
+	if( root ){
+		postorder(root->dot);
+		postorder(root->dash);
+		printf("%c", root->v) ;
+	}
+}
 char *alphamorse[] = {
 	".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", /* A - H */
 	"..", ".---", "-.-", ".-..", "--", "-.", /* I - M */
@@ -49,10 +59,21 @@ char *nummorse[]={
 };
 
 int
-main(void)
+lookup(struct btree *b, const char *s)
+{
+	if( strchr("-.", *s) == NULL ){
+		return -1;
+	}
+
+	return *s ? lookup( *s == '-' ? b->dash : b->dot, s + 1) : b->v;
+}
+
+int
+main(int argc, char **argv)
 {
 	int i;
 	struct btree *root = NULL;
+	(void)argc;
 	/* char characters[] = "ETIANMSURWDKGOHVFLPJBXCYZQ"; */
 
 	insert(&root, alphamorse[4], 'A' + 4);
@@ -62,8 +83,17 @@ main(void)
 	for(i = 0; i < 10; i++ ){
 		insert(&root, nummorse[i], '0' + i);
 	}
-	preorder(root);
-	putchar('\n');
+
+	for( argv += 1; *argv; argv++ ){
+		printf("%20s: ", *argv);
+		int v = lookup(root, *argv);
+		if( v == -1 ){
+			printf("invalid");
+		} else {
+			putchar(v);
+		}
+		putchar('\n');
+	}
 	return 0;
 
 }
