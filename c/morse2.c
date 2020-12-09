@@ -1,4 +1,5 @@
 /* from https://stackoverflow.com/questions/65217545 */
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -68,6 +69,35 @@ lookup(struct btree *b, const char *s)
 	return *s ? lookup( *s == '-' ? b->dash : b->dot, s + 1) : b->v;
 }
 
+static void
+print_tree(struct btree *b, int w, int k, int diff)
+{
+	if( b ) {
+		if( w < 0 ) {
+			char *col = getenv("COLUMNS");
+			w = col ? strtol(col, NULL, 0) / 2: 40;
+			diff = w / 2;
+			fputs("\033[2J", stdout); /* clear screen */
+		}
+		fprintf(stdout, "\033[%d;%dH", k, w);
+		putc(b->v, stdout);
+		print_tree(b->dot, w - diff, k + 1, diff / 2);
+		print_tree(b->dash, w + diff, k + 1, diff / 2);
+	}
+	/*
+	- put the cursor at line L and column C.  \033[<L>;<C>H   # tput cup $L $C
+	- put the cursor at line L and column C.  \033[<L>;<C>f
+	- Move the cursor up N lines:             \033[<N>A       # tput cuu $N
+	- Move the cursor down N lines:           \033[<N>B       # tput cud $N
+	- Move the cursor forward N columns:      \033[<N>C       # tput cuf $N
+	- Move the cursor backward N columns:     \033[<N>D       # tput cub $N
+	- Clear the screen, move to (0,0):        \033[2J
+	- Erase to end of line:                   \033[K          # tput el
+	- Save cursor position:                   \033[s          # tput sc
+	- Restore cursor position:                \033[u          # tput rc
+	*/
+}
+
 int
 main(int argc, char **argv)
 {
@@ -76,7 +106,6 @@ main(int argc, char **argv)
 	(void)argc;
 	/* char characters[] = "ETIANMSURWDKGOHVFLPJBXCYZQ"; */
 
-	insert(&root, alphamorse[4], 'A' + 4);
 	for(i = 0; i < 26; i++ ){
 		insert(&root, alphamorse[i], 'A' + i);
 	}
@@ -94,6 +123,8 @@ main(int argc, char **argv)
 		}
 		putchar('\n');
 	}
+	print_tree(root, -1, 1, 0);
+	putchar('\n');
 	return 0;
 
 }
