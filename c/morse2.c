@@ -9,6 +9,7 @@ void * xcalloc(size_t count, size_t size);
 
 struct btree {
 	char v;
+	char m[32];
 	struct btree *dot, *dash;
 } btree, *tree_ptr;
 
