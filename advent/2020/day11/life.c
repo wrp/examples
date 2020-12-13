@@ -1,54 +1,88 @@
 
-#include <stdio.h>
-#include <string.h>
 #include <assert.h>
+#include <err.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-enum { floor, empty, occupied } typ;
+enum { floor, empty, occupied, out_of_bounds } typ;
+void * xrealloc(void *buf, size_t num, size_t siz, void *endvp);
+void * xcalloc(size_t count, size_t size);
 
 int
-get_type(char map[100][100], int row, int col)
+get_type(char **map, int row, int col, int rows, int cols)
 {
-	if( row < 0 || row > 94 || col < 0 || col > 92 ){
-		return floor;
-	} else switch( map[row][col] ){
+	if( row < 0 || row > rows - 1 || col < 0 || col > cols - 1 ){
+		return out_of_bounds;
+	} else {
+		if( (int)strlen(map[row]) != cols ){
+			printf("row = %d, strlen = %d\n", row, (int)strlen(map[row]));
+			exit (1);
+		}
+		switch( map[row][col] ){
 		case 'L': return empty;
 		case '#': return occupied;
 		case '.': return floor;
 		default: assert(0);
+		}
 	}
 }
 
 int
-count_occ_adjacent(char map[100][100], int row, int col)
+find_type_in_dir(char **map, int row, int col, int dir, int rows, int cols)
+{
+	switch( dir ){
+	case 1: row -= 1; col -= 1; break;
+	case 2: row -= 1; col += 0; break;
+	case 3: row -= 1; col += 1; break;
+	case 4: row += 0; col += 1; break;
+	case 5: row += 1; col += 1; break;
+	case 6: row += 1; col += 0; break;
+	case 7: row += 1; col -= 1; break;
+	case 8: row += 0; col -= 1; break;
+	}
+	if( ( typ = get_type(map, row, col, rows, cols)) == empty ){
+		return find_type_in_dir(map, row, col, dir, rows, cols);
+	} else {
+		return typ;
+	}
+}
+
+int
+count_occ_adjacent(char **map, int row, int col, int rows, int cols)
 {
 	int count = 0;
-	for( int i = -1; i < 2; i++ ){
-		count += get_type(map, row - 1, col + i) == occupied;
-		if( i ){
-			count += get_type(map, row, col + i) == occupied;
-		}
-		count += get_type(map, row + 1, col + i) == occupied;
+	for( int i = 1; i < 9; i++ ){
+		count += find_type_in_dir(map, row, col, i, rows, cols) == occupied;
 	}
 	return count;
 }
 
 int
-grow(char map[100][100], char next[100][100])
+grow(char **map, char **next, int rows, int cols)
 {
 	int change = 0;
 
-	for( int row = 0; row < 95; row++ ){
-		for( int col = 0; col < 93; col++ ){
-			int count = count_occ_adjacent(map, row, col);
-			switch( get_type(map, row, col) ){
+	for( int row = 0; row < rows; row++ ){
+		if( (int)strlen(map[row]) != cols ){
+			printf("row = %d, strlen = %d\n", row, (int)strlen(map[row]));
+			exit (1);
+		}
+		for( int col = 0; col < cols; col++ ){
+			int count = count_occ_adjacent(map, row, col, rows, cols);
+			switch( get_type(map, row, col, rows, cols) ){
 			case occupied:
-				next[row][col] = count > 3 ? 'L' : '#';
+				next[row][col] = count > 4 ? 'L' : '#';
 				break;
 			case empty:
 				next[row][col] = count > 0 ? 'L' : '#';
 				break;
 			case floor:
 				next[row][col] = '.';
+				break;
+			case out_of_bounds:
+				assert( 0 );
 			}
 			if( next[row][col] != map[row][col] ){
 				change += 1;
@@ -61,39 +95,88 @@ grow(char map[100][100], char next[100][100])
 int
 main(int argc, char **argv)
 {
+	int rows = 0;
+	int cols = -1;
+	size_t cap;
+	ssize_t s;
 	const char *path = argc > 1 ? argv[1] : "stdin";
 	FILE *ifp = argc > 1 ? fopen(path, "r") : stdin;
-	char map[2][100][100];
+	char **map[2];
 	int idx = 0;
 	int i = 0;
-	int len = 93;
 	if( ifp == NULL ){
-		perror("path");
+		perror(path);
 		return 1;
 	}
-	while( fgets(map[idx][i], 100, ifp) ){
-		assert( (int)strlen(map[idx][i]) == len + 1);
-		assert( map[idx][i][len] == '\n' );
-		map[idx][i][len] = 0;
-		i += 1;
+	map[0] = xrealloc(NULL, 1, sizeof *map[0], NULL);
+	map[0][0] = NULL;
+
+	while( (s = getline(&map[0][rows], &cap, ifp)) > 0 ){
+		if( cols != -1 && cols != s  - 1){
+			errx(1, "invalid input on line %d", rows + 1);
+		}
+		cols = s - 1;
+		assert( (int)strlen(map[0][rows]) == cols + 1);
+		assert( map[0][rows][cols] == '\n' );
+		map[0][rows][cols] = '\0';
+		rows += 1;
+		map[0] = xrealloc(map[0], rows + 1, sizeof *map[0], NULL);
+		map[0][rows] = NULL;
 	}
-	assert( i == 95 );
-	printf("%d x %d\n", i, (int)strlen(map[0][0]));
-	printf("%s\n", map[idx][0]);
-	printf("%s\n", map[idx][i - 1]);
-	while( (grow(map[idx], map[!idx])) > 0 ){
+	map[1] = xrealloc(NULL, rows + 1, sizeof *map[1], NULL);
+	for( int i = 0; i < rows + 1; i++ ){
+		map[1][i] = xcalloc(cols + 1, sizeof *map[1][i]);
+	}
+	do {
 		idx = !idx;
-	}
+		for( int i = 0; i < rows; i++ ){
+			printf("%s : %zd\n", map[!idx][i],
+				strlen(map[!idx][i]));
+		}
+		putchar('\n');
+	} while( grow(map[!idx], map[idx], rows, cols) > 0 );
 	i = 0;
-	for( int row = 0; row < 95; row++ ){
-		for( int col = 0; col < 93; col++ ){
+	for( int row = 0; row < rows; row++ ){
+		for( int col = 0; col < cols; col++ ){
 			if( map[0][row][col] == '#' ){
 				i += 1;
 			}
 		}
 	}
+	for( int i = 0; i < rows + 1; i++ ){
+		free(map[0][i]);
+		free(map[1][i]);
+	}
+	free(map[0]);
+	free(map[1]);
 	printf("%d\n", i);
 
 	return 0;
+}
 
+void *
+xrealloc(void *buf, size_t num, size_t siz, void *endvp)
+{
+	void **endp = endvp;
+	ptrdiff_t offset = endp && *endp ? *endp - buf : 0;
+	buf = realloc(buf, num * siz);
+	if( buf == NULL ){
+		perror("realloc");
+		exit(EXIT_FAILURE);
+	}
+	if( endp != NULL ){
+		*endp = buf + offset;
+	}
+	return buf;
+}
+
+void *
+xcalloc(size_t count, size_t size)
+{
+	void *r = calloc(count, size);
+	if( r == NULL ){
+		perror("calloc");
+		exit(EXIT_FAILURE);
+	}
+	return r;
 }
