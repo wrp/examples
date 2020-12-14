@@ -28,21 +28,20 @@ int
 find_type_in_dir(const char *map, int row, int col, int dir, int rows, int cols)
 {
 	enum typ t;
-	switch( dir ){
-	case 1: row -= 1; col -= 1; break;
-	case 2: row -= 1; col += 0; break;
-	case 3: row -= 1; col += 1; break;
-	case 4: row += 0; col += 1; break;
-	case 5: row += 1; col += 1; break;
-	case 6: row += 1; col += 0; break;
-	case 7: row += 1; col -= 1; break;
-	case 8: row += 0; col -= 1; break;
-	}
-	if( ( t = get_type(map, row, col, rows, cols)) == empty ){
-		return find_type_in_dir(map, row, col, dir, rows, cols);
-	} else {
-		return t;
-	}
+	do {
+		switch( dir ){
+		case 1: row -= 1; col -= 1; break;
+		case 2: row -= 1; col += 0; break;
+		case 3: row -= 1; col += 1; break;
+		case 4: row += 0; col += 1; break;
+		case 5: row += 1; col += 1; break;
+		case 6: row += 1; col += 0; break;
+		case 7: row += 1; col -= 1; break;
+		case 8: row += 0; col -= 1; break;
+		}
+		t = get_type(map, row, col, rows, cols);
+	} while( t == empty );
+	return t;
 }
 
 int
