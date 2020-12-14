@@ -6,12 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum { floor, empty, occupied, out_of_bounds } typ;
+enum typ { floor, empty, occupied, out_of_bounds };
 void * xrealloc(void *buf, size_t num, size_t siz, void *endvp);
 void * xcalloc(size_t count, size_t size);
 
 int
-get_type(char *map, int row, int col, int rows, int cols)
+get_type(const char *map, int row, int col, int rows, int cols)
 {
 	if( row < 0 || row > rows - 1 || col < 0 || col > cols - 1 ){
 		return out_of_bounds;
@@ -27,8 +27,9 @@ get_type(char *map, int row, int col, int rows, int cols)
 }
 
 int
-find_type_in_dir(char *map, int row, int col, int dir, int rows, int cols)
+find_type_in_dir(const char *map, int row, int col, int dir, int rows, int cols)
 {
+	enum typ t;
 	switch( dir ){
 	case 1: row -= 1; col -= 1; break;
 	case 2: row -= 1; col += 0; break;
@@ -39,15 +40,15 @@ find_type_in_dir(char *map, int row, int col, int dir, int rows, int cols)
 	case 7: row += 1; col -= 1; break;
 	case 8: row += 0; col -= 1; break;
 	}
-	if( ( typ = get_type(map, row, col, rows, cols)) == empty ){
+	if( ( t = get_type(map, row, col, rows, cols)) == empty ){
 		return find_type_in_dir(map, row, col, dir, rows, cols);
 	} else {
-		return typ;
+		return t;
 	}
 }
 
 int
-count_occ_adjacent(char *map, int row, int col, int rows, int cols)
+count_occ_adjacent(const char *map, int row, int col, int rows, int cols)
 {
 	int count = 0;
 	for( int i = 1; i < 9; i++ ){
@@ -57,7 +58,7 @@ count_occ_adjacent(char *map, int row, int col, int rows, int cols)
 }
 
 int
-grow(char *map, char *next, int rows, int cols)
+grow(const char *map, char *next, int rows, int cols)
 {
 	int change = 0;
 	int i = 0;
@@ -109,7 +110,8 @@ main(int argc, char **argv)
 		if( c == '\n' ) {
 			if( cols == -1 ){
 				cols = end - map[0];
-			} else if( cols != end - (map[0] + rows * cols) ){
+			}
+			if( cols != end - (map[0] + rows * cols) ){
 				errx(1, "invalid input on line %d", rows);
 			}
 			rows += 1;
