@@ -7,8 +7,6 @@
 #include <string.h>
 
 enum typ { floor, empty, occupied, out_of_bounds };
-void * xrealloc(void *buf, size_t num, size_t siz, void *endvp);
-void * xcalloc(size_t count, size_t size);
 
 int
 get_type(const char *map, int row, int col, int rows, int cols)
@@ -138,31 +136,4 @@ main()
 	printf("%d\n", i);
 
 	return 0;
-}
-
-void *
-xrealloc(void *buf, size_t num, size_t siz, void *endvp)
-{
-	void **endp = endvp;
-	ptrdiff_t offset = endp && *endp ? *endp - buf : 0;
-	buf = realloc(buf, num * siz);
-	if( buf == NULL ){
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	}
-	if( endp != NULL ){
-		*endp = buf + offset;
-	}
-	return buf;
-}
-
-void *
-xcalloc(size_t count, size_t size)
-{
-	void *r = calloc(count, size);
-	if( r == NULL ){
-		perror("calloc");
-		exit(EXIT_FAILURE);
-	}
-	return r;
 }
