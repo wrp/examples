@@ -16,12 +16,14 @@ get_type(const char *map, int row, int col, int rows, int cols)
 	if( row < 0 || row > rows - 1 || col < 0 || col > cols - 1 ){
 		return out_of_bounds;
 	} else {
-		char c = map[row * rows + col];
+		char c = map[row * cols + col];
 		switch( c ){
 		case 'L': return empty;
 		case '#': return occupied;
 		case '.': return floor;
-		default: assert(0);
+		default: fprintf(stderr, "unexpected char %c(%x)"
+			"at %d,%d of %d,%d\n", c, c, row, col, rows, cols);
+			exit(1);
 		}
 	}
 }
@@ -30,21 +32,20 @@ int
 find_type_in_dir(const char *map, int row, int col, int dir, int rows, int cols)
 {
 	enum typ t;
-	switch( dir ){
-	case 1: row -= 1; col -= 1; break;
-	case 2: row -= 1; col += 0; break;
-	case 3: row -= 1; col += 1; break;
-	case 4: row += 0; col += 1; break;
-	case 5: row += 1; col += 1; break;
-	case 6: row += 1; col += 0; break;
-	case 7: row += 1; col -= 1; break;
-	case 8: row += 0; col -= 1; break;
-	}
-	if( ( t = get_type(map, row, col, rows, cols)) == empty ){
-		return find_type_in_dir(map, row, col, dir, rows, cols);
-	} else {
-		return t;
-	}
+	do {
+		switch( dir ){
+		case 1: row -= 1; col -= 1; break;
+		case 2: row -= 1; col += 0; break;
+		case 3: row -= 1; col += 1; break;
+		case 4: row += 0; col += 1; break;
+		case 5: row += 1; col += 1; break;
+		case 6: row += 1; col += 0; break;
+		case 7: row += 1; col -= 1; break;
+		case 8: row += 0; col -= 1; break;
+		}
+		t = get_type(map, row, col, rows, cols);
+	} while( t == floor );
+	return t;
 }
 
 int
@@ -79,12 +80,30 @@ grow(const char *map, char *next, int rows, int cols)
 			case out_of_bounds:
 				assert( 0 );
 			}
-			if( r[col] != map[ i * rows + col] ){
+			if( r[col] != map[ i * cols + col] ){
 				change += 1;
 			}
 		}
 	}
 	return change;
+}
+
+
+static void
+print_map(const char *m, int r, int c)
+{
+	for( int i = 0; i < r; i++ ){
+		int count = 0;
+		const char *row = m + i * c;
+		for( int j = 0; j < c; j++ ){
+			putchar(row[j]);
+			if( row[j] == '#' ){
+				count += 1;
+			}
+		}
+		printf("  %d\n", count);
+	}
+	putchar('\n');
 }
 
 int
@@ -116,35 +135,32 @@ main(int argc, char **argv)
 			}
 			rows += 1;
 		} else {
-			if( end > map[0] + cap ){
+			if( end >= map[0] + cap ){
 				map[0] = xrealloc(map[0], cap += 128, 1, &end);
 			}
 			*end++ = c;
 		}
 	}
 	map[1] = xrealloc(NULL, cap, sizeof *map[1], NULL);
+
+	printf("rows = %d, cols = %d\n", rows, cols);
 	do {
 		idx = !idx;
-		for( int i = 0; i < rows; i++ ){
-			char *row = map[!idx] + i * cols;
-			for( int j = 0; j < cols; j++ ){
-				putchar(row[j]);
-			}
-			putchar('\n');
-		}
-		putchar('\n');
-	} while( grow(map[!idx], map[idx], rows, cols) > 0 );
-	i = 0;
-	for( char * row = map[idx]; row - map[idx] < rows; row += cols ){
+		print_map(map[!idx], rows, cols);
+	} while( (c = grow(map[!idx], map[idx], rows, cols)) > 0 );
+	c = i = 0;
+	for( ; i < rows; i += 1 ){
 		for( int col = 0; col < cols; col++ ){
-			if( row[col] == '#' ){
-				i += 1;
+			putchar( map[0][i * cols + col]);
+			if( map[0][i * cols + col] == '#' ){
+				c += 1;
 			}
 		}
+		printf(" c = %d\n", c);
 	}
 	free(map[0]);
 	free(map[1]);
-	printf("%d\n", i);
+	printf("occupied = %d\n", c);
 
 	return 0;
 }
