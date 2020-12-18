@@ -40,7 +40,8 @@ find_type_in_dir(const char *map, int row, int col, int dir, int rows, int cols)
 		case 8: row += 0; col -= 1; break;
 		}
 		t = get_type(map, row, col, rows, cols);
-	} while( t == empty );
+		printf("%d(%d,%d)%d;", dir, row, col, t);
+	} while( t == empty || t == floor );
 	return t;
 }
 
@@ -49,8 +50,10 @@ count_occ_adjacent(const char *map, int row, int col, int rows, int cols)
 {
 	int count = 0;
 	for( int i = 1; i < 9; i++ ){
+		printf(" %d:", i);
 		count += find_type_in_dir(map, row, col, i, rows, cols) == occupied;
 	}
+	printf("count %d\n", count);
 	return count;
 }
 
@@ -95,7 +98,7 @@ main()
 	char *end = one;
 	int idx = 0;
 	int i = 0;
-	char *input = "LL\n##\n";
+	char *input = "L..L\nLL.L\nL..L\nLLLL\n";
 
 	for( size_t i = 0; i < strlen(input); i++ ){
 		int c = input[i];
@@ -113,7 +116,7 @@ main()
 	}
 	do {
 		idx = !idx;
-		#if 0
+		#if 1
 		for( int i = 0; i < rows; i++ ){
 			char *row = map[!idx] + i * cols;
 			for( int j = 0; j < cols; j++ ){
