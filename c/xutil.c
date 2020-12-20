@@ -21,6 +21,7 @@ void *
 xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 {
 	void **endp = endvp;
+	assert( !(buf == NULL && endvp != NULL) );
 	ptrdiff_t offset = endp && *endp ? *endp - buf : 0;
 	buf = realloc(buf, num * siz);
 	if( buf == NULL ){
