@@ -4,16 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void
-addi(int a, int b)
-{
-	printf("%d + %d = %d\n", a, b, a + b);
-}
-static void
-addf(double a, double b)
-{
-	printf("%f + %f = %f\n", a, b, a + b);
-}
+static void addi(int a, int b) { printf("%d + %d = %d\n", a, b, a + b); }
+static void addf(double a, double b) { printf("%f + %f = %f\n", a, b, a + b); }
 
 union func {
 	void (*i)(int, int);
