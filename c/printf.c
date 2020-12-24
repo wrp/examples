@@ -23,6 +23,7 @@ main(void)
 	printf("%'2.10f\n", 1039573.95);
 	printf("%'10g\n", 1039.9E3);
 
+	/* Use argument for field width */
 	printf("%*s: %%zd  %zd\n", 15, "size_t", sizeof i);
 	printf("%*s: %%td  %td\n", 15, "ptrdiff_t", q - p);
 
