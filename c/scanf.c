@@ -12,6 +12,7 @@ struct conversion_specifier {
 	const char *e;  /* One past end of specifier */
 	const char *flags;
 	const char *conversion;
+	int suppressed;
 	size_t width;
 };
 
@@ -92,7 +93,7 @@ print_val(const struct conversion_specifier *f, void *p)
 	long *ld = p;
 	long long *lld = p;
 
-	switch(*f->conversion) {
+	switch( *f->conversion ){
 	case 's': case '[':
 		printf("'%s'", s);
 		break;
@@ -135,6 +136,9 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 		return parse_format_string(s + 2, e);
 	}
 	e->s = s;
+	if( 0 != (e->suppressed = (s[1] == '*')) ){
+		s += 1;
+	}
 	e->width = strtol(s + 1, (char **)&e->flags, 10);
 	s = e->flags;
 	s += strcspn(s, "diouxXaAeEfFgGsScC[pn");
@@ -153,18 +157,20 @@ static void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
 	struct conversion_specifier cs;
-	int idx=0;
-
 	cs.e = fmt;
-	if(count > 7)
+	if( count > 7 ){
 		count = 7;
+	}
 
-	while(parse_format_string(cs.e, &cs) && idx < count) {
-		char *a = b[idx];
-		printf("%d: ", idx + 1);
+	for( int i = 0; parse_format_string(cs.e, &cs) && i < count; ) {
+		if( cs.suppressed ){
+			continue;
+		}
+		char *a = b[i];
+		printf("%d: ", i + 1);
 		print_val(&cs, a);
 		putchar('\t');
-		idx += 1;
+		i += 1;
 	}
 }
 
@@ -223,6 +229,9 @@ scan(const char *input, const char *fmt, ...)
 
 	cs.e = fmt;
 	while( parse_format_string(cs.e, &cs) ) {
+		if( cs.suppressed ){
+			continue;
+		}
 		if( count++ ) {
 			fputs(", ", stdout);
 		}
@@ -256,6 +265,9 @@ validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 	struct conversion_specifier cs;
 
 	k = parse_format_string(fmt, &cs);
+	if( cs.suppressed ){
+		return;
+	}
 	if( !k ) {
 		die("Failed to parse %s\n", fmt);
 	}
@@ -275,6 +287,31 @@ validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 }
 
 #if 0
+
+From n1256.pdf
+
+(7.19.6.2.3) "The format shall be a multibyte character sequence, beginning
+and ending in its initial shift state.  The format is composed of zero or
+more directives: one or more whitespace characters, an ordinary multibyte
+character (neither % nor a whitespace character), or a conversion specification.
+Each conversion specification is introduced by the character %.  After the %,
+the following appear in sequence:
+
+    - An optional assignment-suppressing character *.
+    - An optional decimal integer greater than 0 the specifies the maximum
+      field width (in characters).
+    - An optional length modifier that specified the size of the receiving
+      object.
+    - A conversion specifier character the specifies the type of the
+      conversion to be applied.
+
+(7.19.6.2.13) "If a conversion specification is invalid, the
+behavior is undefined."
+
+
+
+
+
 SCANF(3)                 BSD Library Functions Manual                 SCANF(3)
 
 NAME
