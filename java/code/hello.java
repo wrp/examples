@@ -10,7 +10,7 @@ import java.lang.StringBuilder;
 public class hello {
 	public static void main(String args[]) {
 		System.out.println(String.format("hello %s", "world"));
-		System.out.println(
+		System.out.println("Main class is: " +
 			/* hello.getClass() */
 			hello.class
 			.getClassLoader()
