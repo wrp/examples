@@ -19,6 +19,7 @@ run:
 		echo 'Creating new docker container'; \
 		docker run -it \
 		--privileged \
+		-c 2 \
 		-p 8125 \
 		-v $(HOME):/home/$(USER) \
 		-e SAMPLE_ENV=/$(USER) \
