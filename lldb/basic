@@ -1,0 +1,7 @@
+
+See also ../gdb/gdb2lldb
+
+Redirect from file;
+lldb <executable>
+(lldb) settings set target.input-path <file>
+(lldb) process launch
