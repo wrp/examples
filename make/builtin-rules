@@ -1,0 +1,190 @@
+
+From https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html#Catalogue-of-Rules
+
+synopsis:
+n.o: n.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c
+
+n: n.o
+	$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)
+
+10.2 Catalogue of Built-In Rules
+Here is a catalogue of predefined implicit rules which are always
+available unless the makefile explicitly overrides or cancels them.
+See Canceling Implicit Rules, for information on canceling or
+overriding an implicit rule. The ‘-r’ or ‘--no-builtin-rules’ option
+cancels all predefined rules.
+
+This manual only documents the default rules available on POSIX-based
+operating systems. Other operating systems, such as VMS, Windows,
+OS/2, etc. may have different sets of default rules. To see the
+full list of default rules and variables available in your version
+of GNU make, run ‘make -p’ in a directory with no makefile.
+
+Not all of these rules will always be defined, even when the ‘-r’
+option is not given. Many of the predefined implicit rules are
+implemented in make as suffix rules, so which ones will be defined
+depends on the suffix list (the list of prerequisites of the special
+target .SUFFIXES). The default suffix list is: .out, .a, .ln, .o,
+.c, .cc, .C, .cpp, .p, .f, .F, .m, .r, .y, .l, .ym, .lm, .s, .S,
+.mod, .sym, .def, .h, .info, .dvi, .tex, .texinfo, .texi, .txinfo,
+.w, .ch .web, .sh, .elc, .el. All of the implicit rules described
+below whose prerequisites have one of these suffixes are actually
+suffix rules. If you modify the suffix list, the only predefined
+suffix rules in effect will be those named by one or two of the
+suffixes that are on the list you specify; rules whose suffixes
+fail to be on the list are disabled. See Old-Fashioned Suffix Rules,
+for full details on suffix rules.
+
+Compiling C programs
+n.o is made automatically from n.c with a recipe of the form ‘$(CC) $(CPPFLAGS) $(CFLAGS) -c’.
+
+Compiling C++ programs
+n.o is made automatically from n.cc, n.cpp, or n.C with a recipe
+of the form ‘$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c’. We encourage you
+to use the suffix ‘.cc’ for C++ source files instead of ‘.C’.
+
+Compiling Pascal programs
+n.o is made automatically from n.p with the recipe ‘$(PC) $(PFLAGS) -c’.
+
+Compiling Fortran and Ratfor programs
+n.o is made automatically from n.r, n.F or n.f by running the Fortran compiler. The precise recipe used is as follows:
+
+‘.f’
+‘$(FC) $(FFLAGS) -c’.
+
+‘.F’
+‘$(FC) $(FFLAGS) $(CPPFLAGS) -c’.
+
+‘.r’
+‘$(FC) $(FFLAGS) $(RFLAGS) -c’.
+
+Preprocessing Fortran and Ratfor programs
+n.f is made automatically from n.r or n.F. This rule runs just the
+preprocessor to convert a Ratfor or preprocessable Fortran program
+into a strict Fortran program. The precise recipe used is as follows:
+
+‘.F’ ‘$(FC) $(CPPFLAGS) $(FFLAGS) -F’.
+
+‘.r’ ‘$(FC) $(FFLAGS) $(RFLAGS) -F’.
+
+Compiling Modula-2 programs n.sym is made from n.def with a recipe
+of the form ‘$(M2C) $(M2FLAGS) $(DEFFLAGS)’. n.o is made from n.mod;
+the form is: ‘$(M2C) $(M2FLAGS) $(MODFLAGS)’.
+
+Assembling and preprocessing assembler programs n.o is made
+automatically from n.s by running the assembler, as. The precise
+recipe is ‘$(AS) $(ASFLAGS)’.
+
+n.s is made automatically from n.S by running the C preprocessor,
+cpp. The precise recipe is ‘$(CPP) $(CPPFLAGS)’.
+
+Linking a single object file n is made automatically from n.o by
+running the linker (usually called ld) via the C compiler. The
+precise recipe used is ‘$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)’.
+
+This rule does the right thing for a simple program with only one
+source file. It will also do the right thing if there are multiple
+object files (presumably coming from various other source files),
+one of which has a name matching that of the executable file. Thus,
+
+x: y.o z.o when x.c, y.c and z.c all exist will execute:
+
+cc -c x.c -o x.o cc -c y.c -o y.o cc -c z.c -o z.o cc x.o y.o z.o
+-o x rm -f x.o rm -f y.o rm -f z.o In more complicated cases, such
+as when there is no object file whose name derives from the executable
+file name, you must write an explicit recipe for linking.
+
+Each kind of file automatically made into ‘.o’ object files will
+be automatically linked by using the compiler (‘$(CC)’, ‘$(FC)’ or
+‘$(PC)’; the C compiler ‘$(CC)’ is used to assemble ‘.s’ files)
+without the ‘-c’ option. This could be done by using the ‘.o’ object
+files as intermediates, but it is faster to do the compiling and
+linking in one step, so that’s how it’s done.
+
+Yacc for C programs n.c is made automatically from n.y by running
+Yacc with the recipe ‘$(YACC) $(YFLAGS)’.
+
+Lex for C programs n.c is made automatically from n.l by running
+Lex. The actual recipe is ‘$(LEX) $(LFLAGS)’.
+
+Lex for Ratfor programs n.r is made automatically from n.l by running
+Lex. The actual recipe is ‘$(LEX) $(LFLAGS)’.
+
+The convention of using the same suffix ‘.l’ for all Lex files
+regardless of whether they produce C code or Ratfor code makes it
+impossible for make to determine automatically which of the two
+languages you are using in any particular case. If make is called
+upon to remake an object file from a ‘.l’ file, it must guess which
+compiler to use. It will guess the C compiler, because that is more
+common. If you are using Ratfor, make sure make knows this by
+mentioning n.r in the makefile. Or, if you are using Ratfor
+exclusively, with no C files, remove ‘.c’ from the list of implicit
+rule suffixes with:
+
+.SUFFIXES:
+.SUFFIXES: .o .r .f .l …
+Making Lint Libraries from C, Yacc, or Lex programs n.ln is made
+from n.c by running lint. The precise recipe is ‘$(LINT) $(LINTFLAGS)
+$(CPPFLAGS) -i’. The same recipe is used on the C code produced
+from n.y or n.l.
+
+TeX and Web n.dvi is made from n.tex with the recipe ‘$(TEX)’. n.tex
+is made from n.web with ‘$(WEAVE)’, or from n.w (and from n.ch if
+it exists or can be made) with ‘$(CWEAVE)’. n.p is made from n.web
+with ‘$(TANGLE)’ and n.c is made from n.w (and from n.ch if it
+exists or can be made) with ‘$(CTANGLE)’.
+
+Texinfo and Info n.dvi is made from n.texinfo, n.texi, or n.txinfo,
+with the recipe ‘$(TEXI2DVI) $(TEXI2DVI_FLAGS)’. n.info is made
+from n.texinfo, n.texi, or n.txinfo, with the recipe ‘$(MAKEINFO)
+$(MAKEINFO_FLAGS)’.
+
+RCS Any file n is extracted if necessary from an RCS file named
+either n,v or RCS/n,v. The precise recipe used is ‘$(CO) $(COFLAGS)’.
+n will not be extracted from RCS if it already exists, even if the
+RCS file is newer. The rules for RCS are terminal (see Match-Anything
+Pattern Rules), so RCS files cannot be generated from another source;
+they must actually exist.
+
+SCCS Any file n is extracted if necessary from an SCCS file named
+either s.n or SCCS/s.n. The precise recipe used is ‘$(GET) $(GFLAGS)’.
+The rules for SCCS are terminal (see Match-Anything Pattern Rules),
+so SCCS files cannot be generated from another source; they must
+actually exist.
+
+For the benefit of SCCS, a file n is copied from n.sh and made
+executable (by everyone). This is for shell scripts that are checked
+into SCCS. Since RCS preserves the execution permission of a file,
+you do not need to use this feature with RCS.
+
+We recommend that you avoid using of SCCS. RCS is widely held to
+be superior, and is also free. By choosing free software in place
+of comparable (or inferior) proprietary software, you support the
+free software movement.
+
+Usually, you want to change only the variables listed in the table
+above, which are documented in the following section.
+
+However, the recipes in built-in implicit rules actually use variables
+such as COMPILE.c, LINK.p, and PREPROCESS.S, whose values contain
+the recipes listed above.
+
+make follows the convention that the rule to compile a .x source
+file uses the variable COMPILE.x. Similarly, the rule to produce
+an executable from a .x file uses LINK.x; and the rule to preprocess
+a .x file uses PREPROCESS.x.
+
+Every rule that produces an object file uses the variable OUTPUT_OPTION.
+make defines this variable either to contain ‘-o $@’, or to be
+empty, depending on a compile-time option. You need the ‘-o’ option
+to ensure that the output goes into the right file when the source
+file is in a different directory, as when using VPATH (see Directory
+Search). However, compilers on some systems do not accept a ‘-o’
+switch for object files. If you use such a system, and use VPATH,
+some compilations will put their output in the wrong place. A
+possible workaround for this problem is to give OUTPUT_OPTION the
+value ‘; mv $*.o $@’.
+
+Next: Implicit Variables, Previous: Using Implicit, Up: Implicit
+Rules   [Contents][Index]
