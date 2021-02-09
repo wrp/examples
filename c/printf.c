@@ -26,6 +26,8 @@ main(void)
 	/* Use argument for field width */
 	printf("%*s: %%zd  %zd\n", 15, "size_t", sizeof i);
 	printf("%*s: %%td  %td\n", 15, "ptrdiff_t", q - p);
+	printf("                  '0123456789ab'\n");
+	printf("34 with width 12: '%2$*1$d'\n", 12, 34);
 
 	/* Use %p to printf pointer.  PRIxPTR is here just for demonstration. */
 	printf("p = %" PRIxPTR " = %p\n", (uintptr_t)p, p);
