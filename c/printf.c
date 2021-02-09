@@ -28,6 +28,8 @@ main(void)
 	printf("%*s: %%td  %td\n", 15, "ptrdiff_t", q - p);
 	printf("                  '0123456789ab'\n");
 	printf("34 with width 12: '%2$*1$d'\n", 12, 34);
+	printf("1.2345 w prec 2 : '%2$*1$.*3$f'\n", 12, 1.2345, 2);
+	printf("1.2345 w prec 2 : '%12.2f'\n", 1.2345);
 
 	/* Use %p to printf pointer.  PRIxPTR is here just for demonstration. */
 	printf("p = %" PRIxPTR " = %p\n", (uintptr_t)p, p);
