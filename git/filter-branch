@@ -3,14 +3,15 @@
 
 # Note that git-filter-branch is generally considered obsolete.  Instead, look at
 # git://github.com/newren/git-filter-repo
+this="$PWD/$0"
 
 if test -z "$REPLACE_TABS"; then
-	git filter-branch --tree-filter "git ls-files | REPLACE_TABS=1 xargs $0" HEAD
+	git filter-branch --tree-filter "git ls-files | REPLACE_TABS=1 xargs $this" HEAD
 else
 	trap 'rm -f $tmp' 0
 	tmp=$(mktemp)
 	for x; do
-		unexpand -t 8 "$x" > $tmp &&
-		mv $tmp "$x"
+		unexpand -t 8 "$x" > "$tmp" &&
+		mv "$tmp" "$x"
 	done
 fi
