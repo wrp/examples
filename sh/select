@@ -1,0 +1,7 @@
+#!/bin/sh
+
+select word in foo bar baz qux; do
+	break
+done
+
+echo "word is '$word', reply is $REPLY"
