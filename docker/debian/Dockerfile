@@ -113,7 +113,6 @@ RUN aptitude install -y libmodern-perl-perl
 RUN aptitude install -y rcs
 RUN aptitude install -y libev-dev
 RUN aptitude install -y libev4
-RUN aptitude install -y imagemagick
 
 
 EXPOSE 8125
