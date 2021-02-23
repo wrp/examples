@@ -1,2 +1,4 @@
 
-PATH_MAX in limits.h
+PATH_MAX              limits.h
+STDIN_FILENO          unistd.h
+O_RDONLY              fcntl.h
