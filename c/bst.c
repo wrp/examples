@@ -23,11 +23,18 @@ struct entry {
 	struct entry *node[2];
 };
 
-#define T int_buffer
-#include "push.c"
-#define T string
-#include "push.c"
-
+#define expand(T) static void \
+	push_##T(int c, T *b) \
+	{ \
+		if( b->start == NULL || b->end >= b->start + b->cap ) { \
+			b->start = xrealloc(b->start, b->cap += 128, \
+				sizeof *b->start, &b->end); \
+		} \
+		*b->end++ = c; \
+	}
+expand(int_buffer)
+expand(string)
+#undef expand
 #define push(c, X) _Generic((X),        \
 	struct int_buffer *: push_int_buffer, \
 	struct string *: push_string \
