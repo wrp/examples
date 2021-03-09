@@ -39,7 +39,7 @@ $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
 $(BUILDDIR)/smtx: $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && make all
+	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 
 loc:
 	@@s=$$(pwd); cd $(BUILDDIR) && \
@@ -53,17 +53,17 @@ loc:
 	'
 
 install:
-	cd $(BUILDDIR) && make install
+	cd $(BUILDDIR) && make $(MAKEFLGS) install
 
 check:
-	cd $(BUILDDIR) && make check
+	cd $(BUILDDIR) && make $(MAKEFLGS) check
 
 clean:
-	cd $(BUILDDIR) && make clean
+	cd $(BUILDDIR) && make $(MAKEFLGS) clean
 
 distclean:
-	cd $(BUILDDIR) && make distclean
+	cd $(BUILDDIR) && make $(MAKEFLGS) distclean
 
 %: %.c
-	cd $(BUILDDIR) && make $@@
+	cd $(BUILDDIR) && make $(MAKEFLGS) $@@
 @
