@@ -47,6 +47,7 @@ TESTS = \
 	udp-test \
 	coverage-test  # Must run last
 
+# Change this to lib_LTLIBRARIES to create installable libraries
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
 ncurses_LDFLAGS = -lncursesw
