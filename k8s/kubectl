@@ -1,0 +1,2 @@
+
+kubectl cp pod:/p/a/t/h /p/a/t/h
