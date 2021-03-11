@@ -115,8 +115,8 @@ print_table(const struct entry *t)
 static void *
 xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 {
-	void **endp = endvp;
-	ptrdiff_t offset = endp && *endp ? *endp - buf : 0;
+	char **endp = endvp;
+	ptrdiff_t offset = endp && *endp ? *endp - (char *)buf : 0;
 	buf = realloc(buf, num * siz);
 	if( buf == NULL ){
 		perror("realloc");
