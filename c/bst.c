@@ -162,16 +162,16 @@ get_word(struct string *w)
 
 /* Discard all input that is not a word. */
 static int
-skip_non(int *line)
+skip_non(int *line, FILE *ifp)
 {
 	int c;
-	while( (c = getchar()) != EOF && !is_word(c) ){
+	while( (c = fgetc(ifp)) != EOF && !is_word(c) ){
 		if( c == '\n' ) {
 			*line += 1;
 		}
 	}
 	if( c != EOF ){
-		ungetc(c, stdin);
+		ungetc(c, ifp);
 	}
 	return c != EOF;
 }
@@ -179,10 +179,11 @@ skip_non(int *line)
 int
 main(void)
 {
+	FILE *ifp = stdin;
 	struct string word = {0};
 	struct entry *table = NULL;
 	int line = 1;
-	while( skip_non(&line) && get_word(&word) ) {
+	while( skip_non(&line, ifp) && get_word(&word) ) {
 		process_word(&table, line, &word);
 		word.end = word.start;
 	}
