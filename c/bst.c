@@ -131,18 +131,18 @@ xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 int (*is_word)(int) = isalnum;
 
 static int
-get_word(struct string *w)
+get_word(struct string *w, FILE *ifp)
 {
 	int b, c;
-	while( (b = c = getchar()) != EOF && is_word(c)){
+	while( (b = c = fgetc(ifp)) != EOF && is_word(c)){
 		push(tolower(c), w);
 	}
 	/* Handle some edge cases. */
 	if( strchr("-,'", b) ) {
-		c = getchar();
+		c = fgetc(ifp);
 		if( b == '-' && c == '\n' ) {
 			/* hyphen at end of word */
-			return get_word(w);
+			return get_word(w, ifp);
 		} else if(
 			(b == '-' && is_word(c)) /* embedded hyphen in a word */
 			|| (b == ',' && isdigit(index_s(w, -1)) && isdigit(c) )
@@ -150,12 +150,12 @@ get_word(struct string *w)
 		){
 			push(b, w);
 			push(tolower(c), w);
-			return get_word(w);
+			return get_word(w, ifp);
 		}
 	}
 	push('\0', w);
 	if( c != EOF ){
-		ungetc(c, stdin);
+		ungetc(c, ifp);
 	}
 	return c != EOF;
 }
@@ -183,7 +183,7 @@ main(void)
 	struct string word = {0};
 	struct entry *table = NULL;
 	int line = 1;
-	while( skip_non(&line, ifp) && get_word(&word) ) {
+	while( skip_non(&line, ifp) && get_word(&word, ifp) ){
 		process_word(&table, line, &word);
 		word.end = word.start;
 	}
