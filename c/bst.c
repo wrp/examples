@@ -12,6 +12,7 @@
 #include <string.h>
 
 static void * xrealloc(void *buf, size_t num, size_t siz, void *end);
+FILE * xfopen(const char *path, const char *mode);
 
 typedef struct string{ char *start, *end; size_t cap; } string;
 typedef struct int_buffer { int *start, *end; size_t cap; } int_buffer;
@@ -177,9 +178,9 @@ skip_non(int *line, FILE *ifp)
 }
 
 int
-main(void)
+main(int argc, char **argv)
 {
-	FILE *ifp = stdin;
+	FILE *ifp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 	struct string word = {0};
 	struct entry *table = NULL;
 	int line = 1;
@@ -188,4 +189,16 @@ main(void)
 		word.end = word.start;
 	}
 	print_table(table);
+}
+
+FILE *
+xfopen(const char *path, const char *mode)
+{
+	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
+		*mode == 'r' ? stdin : stdout;
+	if( fp == NULL ){
+		perror(path);
+		exit(EXIT_FAILURE);
+	}
+	return fp;
 }
