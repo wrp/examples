@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+use strict;
+use warnings;
+
+my $string = 'this is 0 a string with tw0 zeros';
+my $count = $string =~ tr/0//;
+say "'$string' has $count zeros";
