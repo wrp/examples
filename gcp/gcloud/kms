@@ -22,3 +22,6 @@ gcloud kms encrypt --location ${location:?}
 
 # Show permissions for a key:
 gcloud kms keys get-iam-policy ${key?} --keyring=${keyring?}  --location ${location-us}
+
+# Set permissions for a key:
+gcloud kms keys set-iam-policy ${key?} ${policy_file?} --keyring=${keyring?}  --location ${location-us}
