@@ -20,3 +20,5 @@ gcloud kms encrypt --location ${location:?}
 	--plaintext-file ${inputpath:?} \
 	--ciphertext-file ${outputpath:?}
 
+# Show permissions for a key:
+gcloud kms keys get-iam-policy ${key?} --keyring=${keyring?}  --location ${location-us}
