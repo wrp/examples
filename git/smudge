@@ -5,6 +5,9 @@
 # If no tag is passed, will setup to smudge "%id%" (eg, the string %id%
 # in the file will be replaced with the short hash of the current commit)
 
+# smudge changes what is in the file in the working directory
+# clean modifies the files as it is going into the repo
+
 file=${1?}
 tag=${2-%id%}
 filter_name=${3-$(echo "$tag" | tr -dc '[:alnum:]\n')}
