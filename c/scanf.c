@@ -92,12 +92,15 @@ print_val(const struct conversion_specifier *f, void *p)
 	int *d = p;
 	long *ld = p;
 	long long *lld = p;
+	unsigned *u = p;
+	unsigned long *lu = p;
+	unsigned long long *llu = p;
 
 	switch( *f->conversion ){
 	case 's': case '[':
 		printf("'%s'", s);
 		break;
-	case 'd':
+	case 'd': case 'i':
 		if(*f->flags == 'l') {
 			if( f->flags[1] == 'l') {
 				printf("%lld", *lld);
@@ -106,6 +109,17 @@ print_val(const struct conversion_specifier *f, void *p)
 			}
 		} else {
 			printf("%d", *d);
+		}
+		break;
+	case 'u':
+		if(*f->flags == 'l') {
+			if( f->flags[1] == 'l') {
+				printf("%llu", *llu);
+			} else {
+				printf("%lu", *lu);
+			}
+		} else {
+			printf("%u", *u);
 		}
 		break;
 	case 'g': case 'f': case 'e': case 'G': case 'F': case 'E':
