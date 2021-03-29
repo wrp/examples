@@ -55,7 +55,8 @@ main(int argc, char **argv)
 		simple_examples();
 	} else for( argv += 1; *argv; argv++ ) {
 		c = scanf(*argv, a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
-		printf("(%d) %20s: ", c, *argv);
+		printf("%9s: %20s\n", "# matched", "fmt");
+		printf("%9d: %20s: ", c, *argv);
 		show_bufs(*argv, c, a);
 
 		ld = ftell(stdin);
