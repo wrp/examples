@@ -19,8 +19,7 @@ kubectl describe pods
 # Create a service to make the deployment available
 kubectl expose deployment test-airflow --type LoadBalancer
 
-# List k8s clusters
-kubectl config get-clusters
+kubectl config get-clusters    # List k8s clusters
 
 # Get info about what's running
 kubectl get pods
