@@ -1,4 +1,5 @@
 foo-barh:
+  # a, b, and c are the same
   a: [bar,2]
   b:
   - bar
@@ -7,9 +8,7 @@ foo-barh:
     - bar
     - 2
 
-  # a, b, and c are the same
-
-
+# baz and qux are the same
 baz:
   a: { "bar": "blah", baz}
 
@@ -19,7 +18,13 @@ qux:
       blah
     baz:
 
-# baz and qux are the same
-
+# qax and bar are the same
 qax:
-  a:  bar=blash  foo=kkk
+- blah: a
+  foo: b
+
+bar: [{ "blah": a, "foo": b }]
+
+
+# Select just one
+# make array | jq '.[] | with_entries( select(.key == "bar"))'
