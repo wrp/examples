@@ -18,13 +18,13 @@ qux:
       blah
     baz:
 
-# qax and bar are the same
+# qax, quf, and bar are the same
 qax:
 - blah: a
   foo: b
-
 bar: [{ "blah": a, "foo": b }]
-
+quf:
+- { "blah": a, "foo": b}
 
 # Select just one
 # make array | jq '.[] | with_entries( select(.key == "bar"))'
