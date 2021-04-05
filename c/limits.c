@@ -6,7 +6,7 @@ int
 main(void)
 {
 	long x = 5;
-	char buf[ sizeof(long) * CHAR_BIT ];
+	/* char buf[ sizeof(long) * CHAR_BIT ]; */
 	printf("SIZE_MAX  = %zu\n", SIZE_MAX);
 	printf("INT_MAX   = %d\n", INT_MAX);
 	printf("UINT_MAX  = %u\n", UINT_MAX);
