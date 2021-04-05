@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +36,17 @@ simple_examples(void)
 	scan("input stg\nlin", "%3[^\n]%n%7[^\n]%n", buf, k, buf + 3, k + 1);
 	scan("24", "%d", k);
 	scan("24", "%1d%d", k, k + 1);
+
+	/* %d will be undefined behavior if the input does not fit in
+	an int.  Need to add a width specifier.  Note that this means you
+	are truncating the range. (eg, if INT_MAX is 2147483647,
+	then the format string must be "%9d" to prevent undefined behavior
+	on input 8147483647.)
+	*/
+	k[0] = snprintf(buf, 0, "%d", INT_MAX);
+	printf("k = %d\n", k[0]);
+	sprintf(buf, "%%%dd", k[0] - 1);
+	scan("1234567890123", buf, k);
 
 	/* Dynamic allocation */
 	k[0] = sscanf("this is a string", "%m[^s] %s", &p, buf);
