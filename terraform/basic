@@ -1,0 +1,6 @@
+
+# Create a plan to be executed:
+terraform plan -out=${file}
+
+# Produce human readable output of a plan
+terraform show ${file}
