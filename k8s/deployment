@@ -1,2 +1,4 @@
 
 kubectl scale --replicas=0 deployment/${deployment}
+
+kubectl rollout restart deployment ${deployment}
