@@ -3,6 +3,7 @@ name = "rbe"
 version = "0.1.0"
 authors = ["William Pursell <william.r.pursell@gmail.com>"]
 edition = "2018"
+description = "Sample code for working through https://doc.rust-lang.org/stable/rust-by-example"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
