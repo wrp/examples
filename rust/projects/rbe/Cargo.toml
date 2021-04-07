@@ -12,6 +12,10 @@ name = "print"
 path = "src/print.rs"
 
 [[bin]]
+name = "print-list"
+path = "src/print-list.rs"
+
+[[bin]]
 name = "main"
 path = "src/main.rs"
 
