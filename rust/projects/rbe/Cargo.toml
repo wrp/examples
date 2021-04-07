@@ -19,4 +19,8 @@ path = "src/main.rs"
 name = "debug"
 path = "src/debug.rs"
 
+[[bin]]
+name = "display"
+path = "src/display.rs"
+
 [dependencies]
