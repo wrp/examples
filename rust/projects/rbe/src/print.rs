@@ -38,5 +38,7 @@ fn main() {
 	// handling. This will not work.
 	// println!("This struct `{}` won't print...", Structure(3));
 	// FIXME ^ Comment out this line.
+
+	println!("Pi is approximately {:.3}", 3.141592);
 }
 
