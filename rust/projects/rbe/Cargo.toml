@@ -27,4 +27,8 @@ path = "src/debug.rs"
 name = "display"
 path = "src/display.rs"
 
+[[bin]]
+name = "fmt"
+path = "src/fmt.rs"
+
 [dependencies]
