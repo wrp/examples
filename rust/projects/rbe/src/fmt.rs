@@ -22,11 +22,15 @@ impl Display for City {
 	}
 }
 
-#[derive(Debug)]
 struct Color {
 	red: u8,
 	green: u8,
 	blue: u8,
+}
+impl Display for Color {
+	fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+		write!(f, "r/b/g = {}/{}/{}", self.red, self.green, self.blue)
+	}
 }
 
 fn main() {
@@ -44,7 +48,7 @@ fn main() {
 	].iter() {
 		// Switch this to use {} once you've added an implementation
 		// for fmt::Display.
-		println!("{:?}", *color);
+		println!("{}", *color);
 	}
 }
 
