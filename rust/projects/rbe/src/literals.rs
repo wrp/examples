@@ -23,5 +23,9 @@ fn main() {
 
 	// Use underscores to improve readability!
 	println!("One million can be written as 1_000_000u: {}", 1_000_000u32);
+
+	println!("bin  : {:08b}", 0b01_001_111);
+	println!("octal: {:03o}", 0o117);
+	println!("hex  : {:02x}", 0x4f);
 }
 
