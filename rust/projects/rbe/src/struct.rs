@@ -13,16 +13,21 @@ struct Unit;
 struct Pair(i32, f32);
 
 // A struct with two fields
+#[derive(Debug)]
 struct Point {
 	x: f32,
 	y: f32,
 }
 
 // Structs can be reused as fields of another struct
-#[allow(dead_code)]
+#[derive(Debug)]
 struct Rectangle {
 	top_left: Point,
 	bottom_right: Point,
+}
+
+fn rect_area(r: Rectangle) -> f32 {
+	(r.bottom_right.x - r.top_left.x).abs() * (r.top_left.y - r.bottom_right.y).abs()
 }
 
 fn main() {
@@ -45,11 +50,13 @@ fn main() {
 	// Destructure the point using a `let` binding
 	let Point { x: top_edge, y: left_edge } = point;
 
-	let _rectangle = Rectangle {
+	let r = Rectangle {
 		// struct instantiation is an expression, too
 		top_left: Point { x: left_edge, y: top_edge },
 		bottom_right: bottom_right,
 	};
+	println!("rect: {:?}", r);
+	println!("area: {}", rect_area(r));
 
 	// Instantiate a unit struct
 	let _unit = Unit;
