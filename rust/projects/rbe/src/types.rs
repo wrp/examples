@@ -1,6 +1,11 @@
 // When compiled, this will generate many warnings but does produce an executable
 
+#[allow(unused_variables)]
+#[allow(unused_assignments)]
 fn main() {
+	// By naming the variable with leading _, unused warning is
+	// suppressed.  (WTF?!, this seems like a really stupid idea)
+
 	// Variables can be type annotated.
 	let logical: bool = true;
 
