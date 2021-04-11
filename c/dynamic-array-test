@@ -5,12 +5,13 @@ exe=./dynamic-array
 die() { test -n "$*" && echo "$*"; exit 1; } >&2
 
 expect() {
-	printf "$1" | $exe | perl -w -0777 -e 'my $m = <STDIN>;
-		die "Got \"$m\", expected \"$ARGV[0]\"" if $m ne $ARGV[0]' "$2" || die
-	test "$(printf "$1" | $exe | $exe)" = "$(printf "$1")" \
-		|| die "Failed to invert '$1"
+	o=$(printf "$1" | $exe | md5sum)
+	e=$(printf "$1" | md5sum)
+	if test "$o" != "$e"; then
+		die "Unexpected output for '$1'"
+	fi
 }
 
-nl='
-'
-expect 'foo bar' 'foo bar'
+expect 'foo bar'
+expect 'foo\000bar'
+expect 'foo\377bar'
