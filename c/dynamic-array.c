@@ -7,13 +7,14 @@
 #include "xutil.h"
 
 struct buffer {
-	char *start;
-	char *end;
+	unsigned char *data;
+	unsigned char *start;
+	unsigned char *end;
 	size_t cap;
 };
 
 void push(int c, struct buffer *);
-int pop(struct buffer *);
+int next(struct buffer *);
 
 int
 main(int argc, char **argv)
@@ -25,14 +26,14 @@ main(int argc, char **argv)
 	while( (c = fgetc(ifp)) != EOF ) {
 		push(c, &a);
 	}
-	while( (c = pop(&a)) != EOF ) {
+	while( (c = next(&a)) != EOF ) {
 		putchar(c);
 	}
 	return 0;
 }
 
 int
-pop(struct buffer *a)
+next(struct buffer *a)
 {
 	return (a->start < a->end) ? *a->start++ : EOF;
 }
@@ -40,8 +41,19 @@ pop(struct buffer *a)
 void
 push(int c, struct buffer *b)
 {
-	if( b->start == NULL || b->end >= b->start + b->cap ) {
-		b->start = xrealloc(b->start, b->cap += BUFSIZ, 1, &b->end);
+	if( b->data == NULL || b->end >= b->data + b->cap ) {
+		ptrdiff_t offset[2] = {0, 0};
+		if( b->data != NULL ){
+			offset[0] = b->end - b->data;
+			offset[1] = b->start - b->data;
+		}
+		b->data = realloc(b->data, b->cap += 128);
+		if( b->data == NULL ){
+			perror("realloc");
+			exit(EXIT_FAILURE);
+		}
+		b->end = b->data + offset[0];
+		b->start = b->data + offset[1];
 	}
 	*b->end++ = c;
 }
