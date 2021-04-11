@@ -3,19 +3,20 @@
 die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
 
 out=$(printf '27.4 28 78' | ./scanf '%lg' '%Lg' '%e')
-expect="(1)                  %lg: 1: 27.4	next:' '
-(1)                  %Lg: 1: 28	next:' '
-(1)                   %e: 1: 78	next:(EOF)"
+expect="        1:                  %lg: 1: 27.4	next:' '
+        1:                  %Lg: 1: 28	next:' '
+        1:                   %e: 1: 78	next:(EOF)"
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
 
 out=$(echo '12 13 14'| ./scanf '%ld' '%d' '%lld')
-expect="(1)                  %ld: 1: 12	next:' '
-(1)                   %d: 1: 13	next:' '
-(1)                 %lld: 1: 14	next:(0x0a)"
+expect="        1:                  %ld: 1: 12	next:' '
+        1:                   %d: 1: 13	next:' '
+        1:                 %lld: 1: 14	next:(0x0a)"
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
 
 
 out=$(./scanf)
+
 expect="input:                                  format string:      scanned:
 'input string'                          '%3s'               'inp' (3 long)
 'input string'                          '%7s'               'input' (5 long)
@@ -23,10 +24,13 @@ expect="input:                                  format string:      scanned:
 'input string\nline 2'                  '%7[^\n]'           'input s' (7 long)
 'input stg\nlin'                        '%3[^\n]%n%7[^\n]%n''input stg' (9 long), 3, 'ut stg' (6 long), 9
 '24'                                    '%d'                24
-'24'                                    '%1d%d'             2, 4"
+'24'                                    '%1d%d'             2, 4
+k = 10
+'1234567890123'                         '%9d'               123456789"
+
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
 
 
 out=$(echo '35' | ./scanf '%1d%1d')
-expect="(2)               %1d%1d: 1: 3	2: 5	next:(0x0a)"
+expect="        2:               %1d%1d: 1: 3	2: 5	next:(0x0a)"
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
