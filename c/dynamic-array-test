@@ -15,3 +15,10 @@ expect() {
 expect 'foo bar'
 expect 'foo\000bar'
 expect 'foo\377bar'
+
+all=$(cat * 2> /dev/null | md5sum)
+exp=$(cat * 2> /dev/null | $exe | md5sum)
+
+if test "$all" != "$exp"; then
+	die "Unexpected output on all files in $(pwd)"
+fi
