@@ -30,6 +30,13 @@ fn rect_area(r: Rectangle) -> f32 {
 	(r.bottom_right.x - r.top_left.x).abs() * (r.top_left.y - r.bottom_right.y).abs()
 }
 
+fn square(p: Point, len: f32) -> Rectangle {
+	Rectangle{
+		    top_left: Point{ x: p.x, y: p.y + len },
+		    bottom_right: Point{ x: p.x + len, y: p.y },
+	}
+}
+
 fn main() {
 	// Create struct with field init shorthand
 	let name = String::from("Peter");
@@ -56,6 +63,9 @@ fn main() {
 		bottom_right: bottom_right,
 	};
 	println!("rect: {:?}", r);
+	println!("area: {}", rect_area(r));
+
+	let r = square(Point { x: 1.0, y: 2.0}, 7.2);
 	println!("area: {}", rect_area(r));
 
 	// Instantiate a unit struct
