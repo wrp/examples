@@ -21,6 +21,7 @@ impl List {
 	fn prepend(self, elem: u32) -> List {
 		// `Cons` also has type List
 		Cons(elem, Box::new(self))
+		// Box::new is allocating memory on the heap for self.  Box::new is not List::new
 	}
 
 	// Return the length of the list
