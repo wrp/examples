@@ -15,3 +15,32 @@
     <<: *id001
     spotSize: 2mm                # redefines just this key, refers rest from &id001
 - step: *id002
+
+
+
+---
+foo: &defaults
+  A: 1
+  B: 2
+  C: 3
+
+bar:
+  <<: *defaults
+  B: 4
+
+
+---
+foo:
+-
+  id: bar
+  type: set
+
+- &default
+  id: bar
+  type: pipe
+  name: random name
+  command: "cmd"
+
+- <<: *default
+  name: handler-2
+  command: "echo banana"
