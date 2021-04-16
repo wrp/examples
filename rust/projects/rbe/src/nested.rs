@@ -4,7 +4,7 @@
 #[allow(unused_labels)]
 
 fn main() {
-	'outer: loop {
+	let x = 'outer: loop {
 		println!("Entered the outer loop");
 
 		'inner: loop {
@@ -14,12 +14,12 @@ fn main() {
 			//break;
 
 			// This breaks the outer loop
-			break 'outer;
+			break 'outer 5;
 		}
 
 		println!("This point will never be reached");
-	}
+	};
 
-	println!("Exited the outer loop");
+	println!("Exited the outer loop with avlue {}", x);
 }
 
