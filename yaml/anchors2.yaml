@@ -1,0 +1,17 @@
+
+foo: &base_app
+  application:
+  - &base
+    country : AA
+    username: user
+    passwd: foo
+  - <<: *base
+    country : BB
+
+bar:
+- <<: *base
+- <<: *base
+  country: BB
+
+baz:
+  - <<: *base_app
