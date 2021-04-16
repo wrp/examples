@@ -23,11 +23,12 @@ Read local docs with
 $ rustup doc
 
 
-Notes on what appear to be warts in the language as I go through
-initially.  (Overall, I very much like what I'm seeing, and feel
-no need to express the positives, but I want a record of things that
-feel odd.)
+Notes on the language as I go through initially.
 
 * Allowing the naming convention of a variable to suppress unused variable
-  compiler warnings.  It seems that ought to be reserved for an explicit directive.
+  compiler warnings is weird.  It seems that ought to be reserved for an explicit directive.
   This seems like a convenience that has no real purpose.
+
+* Labelled break/continue! Awesome.  Single quote in the label notation: ick
+
+
