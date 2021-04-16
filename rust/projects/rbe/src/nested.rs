@@ -4,20 +4,23 @@
 #[allow(unused_labels)]
 
 fn main() {
+	let mut z = 1;
 	let x = 'outer: loop {
-		println!("Entered the outer loop");
+		println!("Entered the outer loop. z = {}", z);
 
-		'inner: loop {
-			println!("Entered the inner loop");
+		let y = 'inner: loop {
+			println!("Entered the inner loop. z = {}", z);
 
-			// This would break only the inner loop
-			//break;
+			// This break only the inner loop
+			break z + 1;
 
-			// This breaks the outer loop
+			// This would break the outer loop
 			break 'outer 5;
+		};
+		if y > 7 {
+			break 'outer z;
 		}
-
-		println!("This point will never be reached");
+		z += 1;
 	};
 
 	println!("Exited the outer loop with avlue {}", x);
