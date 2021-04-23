@@ -1,4 +1,5 @@
 // https://doc.rust-lang.org/stable/rust-by-example/flow_control/loop.html
+// https://doc.rust-lang.org/stable/rust-by-example/flow_control/for.html
 
 fn main() {
 	let mut count = 0u32;
@@ -24,6 +25,13 @@ fn main() {
 			// Exit this loop
 			break;
 		}
+	}
+
+	for i in 1..5 {
+		println!("{}: looping 1,2,3,4", i);
+	}
+	for i in 1..=5 {
+		println!("{}: looping 1,2,3,4,5", i);
 	}
 }
 
