@@ -33,7 +33,8 @@ fn main() {
 		// The condition evaluated false. This branch is the default:
 		eprintln!("I don't like letters. Let's go with an emoticon :)!");
 	}
-	main2()
+	main2();
+	main3()
 }
 
 #[derive(Debug)]
@@ -69,5 +70,20 @@ fn main2() {
 	// Binding also works with `if let`
 	if let Foo::Qux(value2 @ 100) = c {
 		println!("value2 is {}", value2);
+	}
+}
+
+// This enum purposely neither implements nor derives PartialEq.
+// That is why comparing Foo::Bar == a fails below.
+#[allow(non_camel_case_types)]
+enum foo3 {Bar}
+
+fn main3() {
+	let a = foo3::Bar;
+
+	// Variable a matches foo3::Bar
+	#[allow(irrefutable_let_patterns)]
+	if let foo3::Bar = a {
+		println!("a is foobar");
 	}
 }

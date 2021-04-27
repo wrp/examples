@@ -31,4 +31,5 @@ Notes on the language as I go through initially.
 
 * Labelled break/continue! Awesome.  Single quote in the label notation: ick
 
-
+* #[warn(non_camel_case_types)] on by default is utterly stupid.  The language
+  should not dictate such style choices.  Especially horrible ones.

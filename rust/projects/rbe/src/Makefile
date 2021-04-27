@@ -3,7 +3,7 @@ EXE = $(patsubst %.rs,%,$(wildcard *.rs))
 .PHONY: last
 last:
 	@f=$$(ls -t *.rs | sed 1q); \
-	rustc -o a.out "$$f"; \
+	rustc -o a.out "$$f" && \
 	./a.out
 
 
@@ -13,4 +13,4 @@ all: $(EXE)
 	rustc $<
 
 clean:
-	rm -f $(EXE)
+	rm -f $(EXE) a.out
