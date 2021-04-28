@@ -53,17 +53,17 @@ loc:
 	'
 
 install:
-	cd $(BUILDDIR) && make $(MAKEFLGS) install
+	cd $(BUILDDIR) && make $(MAKEFLAGS) install
 
 check:
-	cd $(BUILDDIR) && make $(MAKEFLGS) check
+	cd $(BUILDDIR) && make $(MAKEFLAGS) check
 
 clean:
-	cd $(BUILDDIR) && make $(MAKEFLGS) clean
+	cd $(BUILDDIR) && make $(MAKEFLAGS) clean
 
 distclean:
-	cd $(BUILDDIR) && make $(MAKEFLGS) distclean
+	cd $(BUILDDIR) && make $(MAKEFLAGS) distclean
 
 %: %.c
-	cd $(BUILDDIR) && make $(MAKEFLGS) $@@
+	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 @
