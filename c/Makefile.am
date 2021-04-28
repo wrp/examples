@@ -4,6 +4,7 @@ noinst_HEADERS = xutil.h stack.h
 
 noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head ncurses
 check_PROGRAMS = \
+	cat \
 	random-word \
 	calc \
 	fread \
