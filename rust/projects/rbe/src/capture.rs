@@ -11,15 +11,15 @@ fn main() {
 	//
 	// `println!` only requires arguments by immutable reference so it doesn't
 	// impose anything more restrictive.
-	let print = || println!("`color`: {}", color);
+	let print = |x| println!("color: {}  x: {}", color, x);
 
 	// Call the closure using the borrow.
-	print();
+	print(1);
 
 	// `color` can be borrowed immutably again, because the closure only holds
 	// an immutable reference to `color`.
 	let _reborrow = &color;
-	print();
+	print(2);
 
 	// A move or reborrow is allowed after the final use of `print`
 	let _color_moved = color;
@@ -34,7 +34,7 @@ fn main() {
 	// calling the closure mutates the closure which requires a `mut`.
 	let mut inc = || {
 		count += 1;
-		println!("`count`: {}", count);
+		println!("count: {}", count);
 	};
 
 	// Call the closure using a mutable borrow.
@@ -52,14 +52,14 @@ fn main() {
 
 
 	// A non-copy type.
-	let movable = Box::new(3);
+	let movable = Box::new(5);
 
 	// `mem::drop` requires `T` so this must take by value. A copy type
 	// would copy into the closure leaving the original untouched.
 	// A non-copy must move and so `movable` immediately moves into
 	// the closure.
 	let consume = || {
-		println!("`movable`: {:?}", movable);
+		println!("movable: {:?}", movable);
 		mem::drop(movable);
 	};
 
