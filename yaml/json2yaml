@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if test -n "$*"; then
+	echo "$*"
+elif test -t 0; then
+	echo '[{"a":"a1", "b":"b1","c":"c1"},{"a":"a2", "b":"b2","c":"c2"}]'
+else
+	cat
+fi |
+python3 -c 'import yaml; import json; import sys; yaml.dump(
+	json.loads(sys.stdin.read()), sys.stdout)'
