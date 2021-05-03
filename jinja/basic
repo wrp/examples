@@ -16,9 +16,19 @@ conditional {% if b %} conditional is true {% endif %}
 print(t.render(globals()))
 
 
-print('Use {% -%} to strip whitespace before each block:')
-t =  Template('''for loop: {% for item in a -%}       item: {{ item }}      {% endfor %}''')
+print('Use {% -%} to strip whitespace before each item:')
+t =  Template('''for loop:   {% for item in a -%}     item: {{ item }}       {% endfor %}         :''')
+#                                                ^^^^^ removed        ^^^^^^^ retained
+print(t.render(globals()))
+print('Use {%- %} to strip whitespace before the structure:')
+t =  Template('''for loop:   {%- for item in a %}     item: {{ item }}       {% endfor %}         :''')
+#                         ^^^ removed
 print(t.render(globals()))
 print('Use {%- %} (in endfor) to strip whitespace after each block:')
-t =  Template('''for loop: {% for item in a %}        item: {{ item }}      {%- endfor %}''')
+t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {%- endfor %}         :''')
+#                                                                    ^^^^^^^ removed
+print(t.render(globals()))
+print('Use {% -%} (in endfor) to strip whitespace after the structure:')
+t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {% endfor -%}         :''')
+#                                                                                        ^^^^^^^^^ removed
 print(t.render(globals()))
