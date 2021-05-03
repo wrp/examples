@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+from jinja2 import Template
+t = Template("Hello {{ something }}!")
+s = t.render(something="World")
+
+print(s)
+
+a = ('alice', 'bob')
+b = True
+
+t =  Template('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
+comment: {# This is a commment #}
+conditional {% if b %} conditional is true {% endif %}
+''')
+
+print(t.render(globals()))
+
