@@ -13,6 +13,12 @@ t =  Template('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
 comment: {# This is a commment #}
 conditional {% if b %} conditional is true {% endif %}
 ''')
-
 print(t.render(globals()))
 
+
+print('Use {% -%} to strip whitespace before each block:')
+t =  Template('''for loop: {% for item in a -%}       item: {{ item }}      {% endfor %}''')
+print(t.render(globals()))
+print('Use {%- %} (in endfor) to strip whitespace after each block:')
+t =  Template('''for loop: {% for item in a %}        item: {{ item }}      {%- endfor %}''')
+print(t.render(globals()))
