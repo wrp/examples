@@ -11,7 +11,11 @@ b = True
 
 t =  Template('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
 comment: {# This is a commment #}
-conditional {% if b %} conditional is true {% endif %}
+conditional   {%- if b -%}
+{#- the leading %- strips whitespace before the if, trailing strips after -#}
+conditional is true
+{%- endif -%}  {#- test -#}
+foo
 ''')
 print(t.render(globals()))
 
@@ -24,7 +28,7 @@ print('Use {%- %} to strip whitespace before the structure:')
 t =  Template('''for loop:   {%- for item in a %}     item: {{ item }}       {% endfor %}         :''')
 #                         ^^^ removed
 print(t.render(globals()))
-print('Use {%- %} (in endfor) to strip whitespace after each block:')
+print('Use {%- %} (in endfor) to strip whitespace after each item:')
 t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {%- endfor %}         :''')
 #                                                                    ^^^^^^^ removed
 print(t.render(globals()))
@@ -32,3 +36,17 @@ print('Use {% -%} (in endfor) to strip whitespace after the structure:')
 t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {% endfor -%}         :''')
 #                                                                                        ^^^^^^^^^ removed
 print(t.render(globals()))
+
+print(Template('''
+{%- macro foo() -%}
+
+  This macro has no arguments
+{%- endmacro -%}
+
+{%- macro bar(x) -%}
+from bar {{x}} {{ foo() }}
+{% endmacro -%}
+
+{{foo() -}} {{foo()}}
+{{bar('banana')}}
+''').render(globals()))
