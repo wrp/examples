@@ -1,4 +1,3 @@
-
 # This file contains 4 documents (separated by '---')
 # [
 # {'foo': [{'a': 'av', 'b': 'bv'}],
@@ -40,7 +39,7 @@ bar:
 - qux: [{'a':'av', 'b':'bv'}] # Same as foo
 
 ---
-# 
+#
 bar:
 - a: av
   b: bv
