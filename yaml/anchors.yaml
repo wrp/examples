@@ -43,3 +43,24 @@ foo:
     <<: *id001
     spotSize: 2mm                # redefines just this key, refers rest from &id001
 - step: *id002
+
+---
+foo:
+  - &default
+    id: 'foo'
+    name: 'first item'
+  - id: 'bar'
+    name: '2nd item'
+  - <<: *default
+    id: 'override'
+    banan: ding
+
+bar:
+- &default_h
+  id: 'bar'
+  name: 'first item in bar default'
+- <<: *default_h
+  banan: 'default name'
+- <<: *default
+  id: 'override'
+  banan: ding
