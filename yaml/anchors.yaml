@@ -1,3 +1,6 @@
+
+
+
 # select this doc with make anchors | jq .[0]
 ---
 foo: &defaults
@@ -60,7 +63,9 @@ bar:
   id: 'bar'
   name: 'first item in bar default'
 - <<: *default_h
-  banan: 'default name'
+  banan: [ foo > bar ]
 - <<: *default
   id: 'override'
   banan: ding
+
+baz: [<<: *default]
