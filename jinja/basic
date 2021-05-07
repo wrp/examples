@@ -7,8 +7,6 @@ def show(t, **kwargs):
     template = Environment(loader=FileSystemLoader('.')).from_string(t)
     print(template.render(globals(), **kwargs))
 
-    t = Environment(loader=FileSystemLoader('.')).from_string(t)
-
 show('Hello {{ something }}', something = 'World')
 
 show('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
