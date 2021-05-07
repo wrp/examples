@@ -1,43 +1,36 @@
 #!/usr/bin/env python3
 
 from jinja2 import Template
-t = Template("Hello {{ something }}!")
-s = t.render(something="World")
 
-print(s)
+def show(t, **kwargs):
+    print(Template(t).render(globals(), **kwargs))
 
-a = ('alice', 'bob')
-b = True
+show('Hello {{ something }}', something = 'World')
 
-t =  Template('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
+show('''for loop: {% for item in a %} item: {{ item }} {% endfor %}
 comment: {# This is a commment #}
 conditional   {%- if b -%}
 {#- the leading %- strips whitespace before the if, trailing strips after -#}
 conditional is true
 {%- endif -%}  {#- test -#}
-foo
-''')
-print(t.render(globals()))
+foo''', a = ('alice', 'bob'), b = True)
 
 
+a = ('alice', 'bob')
 print('Use {% -%} to strip whitespace before each item:')
-t =  Template('''for loop:   {% for item in a -%}     item: {{ item }}       {% endfor %}         :''')
-#                                                ^^^^^ removed        ^^^^^^^ retained
-print(t.render(globals()))
+show('''for loop:   {% for item in a -%}     item: {{ item }}       {% endfor %}         :''')
+#                                       ^^^^^ removed        ^^^^^^^ retained
 print('Use {%- %} to strip whitespace before the structure:')
-t =  Template('''for loop:   {%- for item in a %}     item: {{ item }}       {% endfor %}         :''')
-#                         ^^^ removed
-print(t.render(globals()))
+show('''for loop:   {%- for item in a %}     item: {{ item }}       {% endfor %}         :''')
+#                ^^^ removed
 print('Use {%- %} (in endfor) to strip whitespace after each item:')
-t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {%- endfor %}         :''')
-#                                                                    ^^^^^^^ removed
-print(t.render(globals()))
+show('''for loop:   {% for item in a %}     item: {{ item }}       {%- endfor %}         :''')
+#                                                           ^^^^^^^ removed
 print('Use {% -%} (in endfor) to strip whitespace after the structure:')
-t =  Template('''for loop:   {% for item in a %}     item: {{ item }}       {% endfor -%}         :''')
-#                                                                                        ^^^^^^^^^ removed
-print(t.render(globals()))
+show('''for loop:   {% for item in a %}     item: {{ item }}       {% endfor -%}         :''')
+#                                                                               ^^^^^^^^^ removed
 
-print(Template('''
+show('''
 {%- macro foo() -%}
 
   This macro has no arguments
@@ -49,4 +42,4 @@ from bar {{x}} {{ foo() }}
 
 {{foo() -}} {{foo()}}
 {{bar('banana')}}
-''').render(globals()))
+''')
