@@ -4,8 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def show(t, **kwargs):
-    template = Environment(loader=FileSystemLoader('.')).from_string(t)
-    print(template.render(globals(), **kwargs))
+    print(Environment(loader=FileSystemLoader('.')).from_string(t).render(globals(), **kwargs))
 
 show('Hello {{ something }}', something = 'World')
 
