@@ -47,3 +47,4 @@ from bar {{x}} {{ foo() }}
 ''')
 
 show('''{% from "foo.j2" import foo  %}{{ foo("hello") }}''')
+show('''{% import "foo.j2" as macro %}{{ macro.foo("banana") }}''')
