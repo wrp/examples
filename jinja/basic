@@ -4,7 +4,8 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def show(t, **kwargs):
-    print(Environment(loader=FileSystemLoader('.')).from_string(t).render(globals(), **kwargs))
+    print(Environment(loader=FileSystemLoader('.')).
+        from_string(t).render(globals(), **kwargs))
 
 show('Hello {{ something }}', something = 'World')
 
@@ -45,4 +46,4 @@ from bar {{x}} {{ foo() }}
 {{bar('banana')}}
 ''')
 
-show('{% include "foo.j2" %}')
+show('''{% from "foo.j2" import foo  %}{{ foo("hello") }}''')
