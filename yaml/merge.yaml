@@ -1,0 +1,28 @@
+
+---
+- &CENTER { x: 1, y: 2 }
+- &LEFT { x: 0, y: 2 }
+- &BIG { r: 10 }
+- &SMALL { r: 1 }
+
+# All the following maps are equal (except for label):
+
+- # Explicit keys
+  x: 1
+  y: 2
+  r: 10
+  label: explicit keys
+
+- # Merge one map
+  << : *CENTER
+  r: 10
+  label: merge one
+
+- # Merge multiple maps
+  << : [ *CENTER, *BIG ]
+  label: merge multi
+
+- # Override
+  << : [ *BIG, *LEFT, *SMALL ]
+  x: 1
+  label: override
