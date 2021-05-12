@@ -7,3 +7,9 @@ cqlsh> describe tables;
 
 # Describe a table:
 cqlsh> describe table [$namespace.]$table_name
+
+# Redirect output to a file:
+cqlsh> capture '/p/a/t/h'
+
+# Stop redirect:
+cqlah> capture OFF
