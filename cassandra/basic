@@ -5,4 +5,5 @@ cqlsh> describe keyspaces;
 # list all tables;
 cqlsh> describe tables;
 
-
+# Describe a table:
+cqlsh> describe table [$namespace.]$table_name

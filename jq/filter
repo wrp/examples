@@ -1,5 +1,8 @@
 #!/bin/sh
 
+exec 2>&1
+set -v
+
 # Select members of a dict which have certain values:
 json='[{"a":"av","b":"bv","c":"cv"},{"a":5,"b":7,"c":9}]'
 echo "$json" | jq -c '.[] | select( .c == 9 )'
@@ -7,7 +10,8 @@ echo "$json" | jq -c '.[] | select( .c == 9 )'
 # Select certain keys:
 json='{"a":"avalue", "b": "bvalue", "c": "cvalue"}'
 echo "$json" | jq '{a,c}'
-echo "$json" | jq '. | with_entries( select(.key == "a" ) )'
+echo "$json" | jq '. | del(.a)'  # Delete the key a
+echo "$json" | jq '. | with_entries( select(.key == "a" ) )'   # same as above
 echo "$json" | jq '. | with_entries( select(.key | contains ("a") ) )'
 
 # Select items in which the key matches a string
