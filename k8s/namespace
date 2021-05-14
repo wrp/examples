@@ -1,0 +1,5 @@
+
+kubectl get namespaces
+
+kubectl get pods --namespace $space
+kubectl get pods -A  # get pods from all namespaces
