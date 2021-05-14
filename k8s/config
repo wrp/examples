@@ -1,2 +1,8 @@
 
-k8s configs reside in $HOME/.kube
+# k8s configs reside in $HOME/.kube
+
+# Get the current context
+kubectl config current-context
+
+# See the available contexts
+kubectl config view
