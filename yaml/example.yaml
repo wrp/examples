@@ -45,3 +45,24 @@ nospace5: >-
 noquotes:
         big\
         query
+
+literal: |
+         It keeps our line breaks but reduces
+         empty lines at the end of the string down
+
+         to a single line break.
+
+keep: |+
+
+        every literal newline
+
+        is retained
+
+
+strip: |-
+         It keeps our line breaks but removes
+         empty lines at the
+
+         end of the string
+
+
