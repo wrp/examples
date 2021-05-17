@@ -6,3 +6,7 @@ gcloud compute instances describe ${instance?} \
 
 # Change metadata:
 gcloud compute instances add-metadata ${instance?} --metadata=KEY=VALUE
+
+
+# To add ssh keys:
+gcloud compute project-info add-metadata --metadata-from-file=ssh-keys=${path}
