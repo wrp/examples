@@ -19,7 +19,7 @@ main( int argc, char **argv )
 	uint16_t port = argc > 2 ? strtol( argv[2], NULL, 10 ) : 7853;
 	struct sockaddr_in serv_addr;
 
-	if( (sock = socket( PF_INET, SOCK_DGRAM, 0 )) == -1 )
+	if( (sock = socket( PF_INET, SOCK_DGRAM, 17 )) == -1 )
 		die("socket"); /* uncovered */
 
 	memset( &serv_addr, 0, sizeof serv_addr );

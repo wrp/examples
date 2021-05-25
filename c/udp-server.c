@@ -22,7 +22,7 @@ main( int argc, char **argv )
 
 	port = argc > 1 ? strtol( argv[1], NULL, 10 ) : 7853;
 
-	serv_sock = socket( PF_INET, SOCK_DGRAM, 0 );
+	serv_sock = socket( PF_INET, SOCK_DGRAM, 17 );
 	if( serv_sock == -1 )
 		die("socket"); /* uncovered */
 
