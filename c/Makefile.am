@@ -25,6 +25,8 @@ check_PROGRAMS = \
 	read-indexed \
 	scanf-term \
 	tac \
+	tcp-client \
+	tcp-server \
 	udp-client \
 	udp-server
 

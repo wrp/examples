@@ -13,6 +13,8 @@ progs='
 	ring-buffer
 	stack
 	tac
+	tcp-client
+	tcp-server
 	udp-client
 	udp-server
 '
