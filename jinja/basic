@@ -48,3 +48,10 @@ from bar {{x}} {{ foo() }}
 
 show('''{% from "foo.j2" import foo  %}{{ foo("hello") }}''')
 show('''{% import "foo.j2" as macro %}{{ macro.foo("banana") }}''')
+
+d = {'alice': 'bob', 'charlie': 'doug'}
+show('''Dictionary as list          : {{ d | list }}''')          # ['alice', 'charlie']
+show('''Dictionary as list of tuples: {{ d.items() | list }}''')  # [('alice', 'bob'), ('charlie', 'doug')]
+show('''{{ d | map("capitalize") | join(',') }}''')
+show('''{{ d.items() | list | join(',') }}''')
+show('''{% for k, v in d | dictsort %} k ={{k}}, v={{v}} {% endfor %}''')
