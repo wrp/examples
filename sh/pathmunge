@@ -1,0 +1,22 @@
+#!/bin/sh
+
+die() { echo "$(basename $0): ${*-Failed}"; exit 1; } >&2
+pathmunge() {
+	case ":${PATH}:" in
+        *:"$1":*) ;;
+        *) PATH=$1:$PATH
+	esac
+}
+
+munge() {
+	eval "case \":\${$1}:\" in
+        *:\"\$2\":*) ;;
+        *) $1=\$2\${$1:+:}\$${1}
+	esac"
+}
+
+unset FOO
+munge FOO foo
+munge FOO foo
+munge FOO bar
+test "$FOO" = bar:foo || die munge failed
