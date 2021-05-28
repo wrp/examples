@@ -34,7 +34,7 @@ main(int argc, char **argv)
 	qsort(data, line_count, sizeof *data, compare_line);
 
 	for( size_t i = 0; i < line_count; i += 1 ){
-		printf("%8zd:\t%s", i, data[i]);
+		printf("%8zd:\t%s", i + 1, data[i]);
 	}
 }
 
