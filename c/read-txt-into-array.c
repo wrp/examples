@@ -28,13 +28,13 @@ main(int argc, char **argv)
 	size_t line_count = 0;
 	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 
-	while( append_line(fp, &data, &siz, line_count) ) {
+	while( append_line(fp, &data, &siz, line_count) ){
 		line_count += 1;
 	}
 	qsort(data, line_count, sizeof *data, compare_line);
 
-	for( size_t i = 0; i < line_count; i++ ) {
-		printf("%zd: %s", i, data[i]);
+	for( size_t i = 0; i < line_count; i += 1 ){
+		printf("%8zd:\t%s", i, data[i]);
 	}
 }
 
@@ -42,8 +42,8 @@ main(int argc, char **argv)
 int
 append_line(FILE *fp, char ***data, size_t *siz, size_t idx)
 {
-	size_t cap;
-	if( *siz <= idx ) {
+	size_t cap = 0;
+	if( *siz <= idx ){
 		*data = xrealloc(*data, *siz += 128, sizeof **data);
 	}
 	(*data)[idx] = NULL;
@@ -56,7 +56,7 @@ xfopen(const char *path, const char *mode)
 {
 	FILE *fp = path[0] != '-' || path[1] != '\0' ? fopen(path, mode) :
 		*mode == 'r' ? stdin : stdout;
-	if( fp == NULL ) {
+	if( fp == NULL ){
 		perror(path);
 		exit(EXIT_FAILURE);
 	}
@@ -67,7 +67,7 @@ void *
 xrealloc(void *buf, size_t num, size_t siz)
 {
 	buf = realloc(buf, num * siz);
-	if( buf == NULL ) {
+	if( buf == NULL ){
 		perror("realloc");
 		exit(EXIT_FAILURE);
 	}
