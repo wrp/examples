@@ -1,0 +1,20 @@
+# gawk only
+# by default, array is traversed in random order
+awk 'BEGIN{a["z"]=1; a["x"]=12; a["b"]=42; for(i in a) print i, a[i]}'
+# x 12
+# z 1
+# b 42
+
+# index (i.e. keys) sorted in ascending order as strings
+awk 'BEGIN{PROCINFO["sorted_in"] = "@ind_str_asc";
+       a["z"]=1; a["x"]=12; a["b"]=42; for(i in a) print i, a[i]}'
+#       b 42
+#       x 12
+#       z 1
+
+#       $ # value sorted in ascending order as numbers
+awk 'BEGIN{PROCINFO["sorted_in"] = "@val_num_asc";
+              a["z"]=1; a["x"]=12; a["b"]=42; for(i in a) print i, a[i]}'
+#	      z 1
+#	      x 12
+#	      b 42
