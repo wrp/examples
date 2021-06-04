@@ -135,8 +135,10 @@ static int
 get_word(struct string *w, FILE *ifp)
 {
 	int b, c;
+	int rv = 0;
 	while( (b = c = fgetc(ifp)) != EOF && is_word(c)){
 		push(tolower(c), w);
+		rv = 1;
 	}
 	/* Handle some edge cases. */
 	if( strchr("-,'", b) ) {
@@ -158,7 +160,7 @@ get_word(struct string *w, FILE *ifp)
 	if( c != EOF ){
 		ungetc(c, ifp);
 	}
-	return c != EOF;
+	return rv;
 }
 
 /* Discard all input that is not a word. */

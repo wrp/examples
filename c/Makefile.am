@@ -4,6 +4,7 @@ noinst_HEADERS = xutil.h stack.h
 
 noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head ncurses
 check_PROGRAMS = \
+	bst \
 	cat \
 	random-word \
 	calc \
@@ -31,6 +32,7 @@ check_PROGRAMS = \
 	udp-server
 
 TESTS = \
+	bst-test \
 	arithperm-test \
 	calc-test \
 	dynamic-array-test \

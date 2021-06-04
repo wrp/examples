@@ -1,0 +1,12 @@
+#!/bin/sh
+
+out=$( printf 'foo bar baz' | ./bst )
+expect='bar: {1:1}
+baz: {1:1}
+foo: {1:1}'
+
+if ! test "$out" = "$expect"; then
+	echo out ="$out" >&2
+	echo exptect ="$expect" >&2
+	exit 1
+fi
