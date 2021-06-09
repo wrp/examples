@@ -1,0 +1,10 @@
+#!/bin/sh
+
+die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
+
+( die 'Test with
+multiline
+arg' )
+echo 'Testing die without arguments...'
+( die )
+die Terminating
