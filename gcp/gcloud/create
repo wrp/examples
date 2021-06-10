@@ -4,8 +4,9 @@ instance_name=${1?Give name of instance as first param}
 shift
 
 : ${zone:=us-central1-b}
-# ${image:=debian-9-stretch-v20181011 }
-# ${image_project:=default_project_name}
+# : ${image:=debian-10-buster-v20210316}
+: ${image_project=debian-cloud}
+: ${image_family:=debian-10}
 if test -z "${image}${image_family}"; then
 	# image_family=debian-9
 	image_family=centos-7
