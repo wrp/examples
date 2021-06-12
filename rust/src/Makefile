@@ -1,6 +1,11 @@
 
+SOURCES := $(wildcard *.rs)
+EXE := $(patsubst %.rs,%,$(SOURCES))
+
+all: $(EXE)
+
 %: %.rs
 	rustc $<
 
 clean:
-	for i in *.rs; rm -f $$i; done
+	rm -f $(EXE)
