@@ -14,3 +14,10 @@ Host pfx-host1
 Host specific-host
 	ProxyJump pfx-host1
 	Hostname N.N.N.N   # <--- an ip of specific-host
+
+# Auto copy dotfiles: from http://klaig.blogspot.com/2013/04/make-your-dotfiles-follow-you.html
+# See ssh_config(5).  %n expands to the original remote host name
+Host *
+	PermitLocalCommand yes
+	LocalCommand tar c -C${HOME} .bashrc .vim .vimrc .tmux.conf \
+                     | ssh -o PermitLocalCommand=no %n "tar mx -C${HOME}"
