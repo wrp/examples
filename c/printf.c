@@ -39,6 +39,36 @@ main(void)
 	printf("%2$*3$s: %%zd  %1$zd\n", sizeof i, "size_t", 15);
 	/* %2$*3$s uses the 3rd arg as the width to print the 2nd arg as %s */
 
+#define show(x) printf(#x" = %s\n", x);
+	show(PRIo32);
+	show(PRIu32);
+	show(PRIx32);
+	show(PRIX32);
+	show(PRIoLEAST32);
+	show(PRIuLEAST32);
+	show(PRIxLEAST32);
+	show(PRIXLEAST32);
+	show(PRIoLEAST64);
+	show(PRIuLEAST64);
+	show(PRIxLEAST64);
+	show(PRIXLEAST64);
+	show(PRIoFAST32);
+	show(PRIuFAST32);
+	show(PRIxFAST32);
+	show(PRIXFAST32);
+	show(PRIoFAST64);
+	show(PRIuFAST64);
+	show(PRIxFAST64);
+	show(PRIXFAST64);
+	show(PRIoMAX);
+	show(PRIuMAX);
+	show(PRIxMAX);
+	show(PRIXMAX);
+	show(PRIoPTR);
+	show(PRIuPTR);
+	show(PRIxPTR);
+	show(PRIXPTR);
+
 	return 0;
 }
 
