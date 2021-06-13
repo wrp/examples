@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <stddef.h>
+#include <inttypes.h>  /* SCNdMAX, etc. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -56,12 +57,23 @@ simple_examples(void)
 	}
 }
 
+#define show(x) printf(#x" = %s\n", x);
+
 int
 main(int argc, char **argv)
 {
 	int c;
 	long ld;
 	char a[7][1024];
+
+	show(SCNdPTR);
+	show(SCNdMAX);
+	show(SCNd64);
+	show(SCNd32);
+	show(SCNdLEAST32);
+	show(SCNdLEAST64);
+	show(SCNdFAST32);
+	show(SCNdFAST64);
 
 	if( argc == 1 ) {
 		simple_examples();
