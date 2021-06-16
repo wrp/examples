@@ -2,6 +2,7 @@
 // From the book: ch05-03-method-syntax.html
 
 use std::env;
+// use structopt::StructOpt;
 
 #[derive(Debug)]
 struct Rectangle {
@@ -17,8 +18,8 @@ impl Rectangle {
 
 fn main() {
 	let args: Vec<String> = env::args().collect();
-	let width = args[1].parse::<u32>().unwrap();
-	let height = args[2].parse::<u32>().unwrap();
+	let width = if args.len() > 1 { args[1].parse::<u32>().unwrap()} else {5};
+	let height = if args.len() > 2 { args[2].parse::<u32>().unwrap()} else {10};
 
 	let rect1 = Rectangle {
 		width,
