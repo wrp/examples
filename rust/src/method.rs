@@ -21,8 +21,8 @@ fn main() {
 	let height = args[2].parse::<u32>().unwrap();
 
 	let rect1 = Rectangle {
-		width: width,
-		height: height,
+		width,
+		height,
 	};
 
 	println!("The area of the rectangle is {} square pixels.", rect1.area());
