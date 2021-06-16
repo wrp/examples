@@ -1,0 +1,24 @@
+#!/usr/bin/env perl
+#Sort subsections of text
+
+use 5.12.0;
+use strict;
+use warnings;
+local $/ = "";
+
+my @f;
+while(<DATA>) {
+	my @b = split "\n", $_;
+	push @f, join "\n", shift @b, sort @b;
+}
+say "$_" foreach sort @f;
+
+
+__DATA__
+config server 'server'
+        option url 'https://chef.libremesh.org'
+
+config client 'client'
+        option upgrade_packages '1'
+        option auto_search '0'
+        option advanced_mode '0'
