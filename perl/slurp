@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Use nul byte as record separator
+printf 'foo\000bar' | perl -0x00 -ne 'print if $. == 1'; echo
+printf 'foo\000bar' | perl -0ne 'print if $. == 1'; echo
+printf 'foo\000bar' | perl -0 -ne 'print if $. == 1'; echo
+
+# slurp mode
+printf 'foo\000bar\nfinal line slurpped by -0000\n' | perl -0000 -ne 'print if $. == 1'
+printf 'foo\000bar\nfinal line slurpped by -000\n' | perl -000 -ne 'print if $. == 1'
+
+# paragraph mode (both newlines are retained)
+printf 'blay\n\n2nd paragraph retains two newlines\n\nbar' | perl -00 -ne 'print if $. == 2'
