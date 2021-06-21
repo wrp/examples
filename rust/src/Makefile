@@ -2,10 +2,13 @@
 SOURCES := $(wildcard *.rs)
 EXE := $(patsubst %.rs,%,$(SOURCES))
 
-all: $(EXE)
+all: $(EXE) libmisc.rlib
 
-%: %.rs
-	rustc $<
+%: %.rs libmisc.rlib
+	rustc --extern misc=libmisc.rlib $<
+
+lib%.rlib: %.rs
+	rustc --crate-type=lib  $<
 
 clean:
 	rm -f $(EXE)
