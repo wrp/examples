@@ -2,9 +2,7 @@
  * Read each line of a file into memory. Sort the lines and output.
  */
 
-#include <assert.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
 
