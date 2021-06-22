@@ -38,7 +38,7 @@ void *
 xmalloc(size_t s)
 {
 	void *rv = malloc(s);
-	if(rv == NULL){
+	if( rv == NULL ){
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
