@@ -152,7 +152,7 @@ get_word(struct string *w, FILE *ifp)
 			|| (b == '\'' && isalpha(c))
 		){
 			push(b, w);
-			push(tolower(c), w);
+			ungetc(c, ifp);
 			return get_word(w, ifp);
 		}
 	}
