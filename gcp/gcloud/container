@@ -1,3 +1,9 @@
 # activate credentials
 gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
 
+
+# To setup k8s
+gcloud auth login
+gcloud config set project ${project?}
+gcloud container clusters get-credentials ${cluster?} --zone=${zone?}
+
