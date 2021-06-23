@@ -9,18 +9,25 @@
 #include <ctype.h>
 #include "xutil.h"
 
-struct conversion_specifier {
+/* A "conversion specification" is introduced by '%' and consists of
+   - an optional assignment-suppressing character '*'
+   - an optional decimal integer > 0 which specified "maximum field width"
+   - an optional  "length modifier"  (eg, 'l' in %ld)
+   - a conversion specifier
+*/
+
+struct specification {
 	const char *s;  /* the % */
 	const char *e;  /* One past end of specifier */
 	const char *flags;
-	const char *conversion;
+	const char *specifier;
 	int suppressed;
 	size_t width;
 };
 
 static void show_bufs(const char *fmt, int count, char a[7][1024]);
 static int scan(const char *input, const char *fmt, ...);
-static int parse_format_string(const char *fmt, struct conversion_specifier *e);
+static int parse_format_string(const char *fmt, struct specification *e);
 static void validate(const char *, size_t, int , const char *, int);
 
 static void
@@ -107,7 +114,7 @@ main(int argc, char **argv)
 }
 
 void
-print_val(const struct conversion_specifier *f, void *p)
+print_val(const struct specification *f, void *p)
 {
 	float *g = p;
 	double *lg = p;
@@ -120,7 +127,7 @@ print_val(const struct conversion_specifier *f, void *p)
 	unsigned long *lu = p;
 	unsigned long long *llu = p;
 
-	switch( *f->conversion ){
+	switch( *f->specifier ){
 	case 's': case '[':
 		printf("'%s'", s);
 		break;
@@ -161,10 +168,10 @@ print_val(const struct conversion_specifier *f, void *p)
 		}
 }
 
-/* Find the next conversion specifier and parse it.  Return 0
+/* Find the next conversion specification and parse it.  Return 0
  * if none found */
 static int
-parse_format_string(const char *fmt, struct conversion_specifier *e)
+parse_format_string(const char *fmt, struct specification *e)
 {
 	const char *s = strchr(fmt, '%');
 	if( s == NULL ) {
@@ -180,11 +187,11 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 	e->width = strtol(s + 1, (char **)&e->flags, 10);
 	s = e->flags;
 	s += strcspn(s, "diouxXaAeEfFgGsScC[pn");
-	e->conversion = s;
+	e->specifier = s;
 	if( *s == '[' ) {
 		s += strcspn(s, "]");
 	}
-	if( e->conversion == e->flags )
+	if( e->specifier == e->flags )
 		e->flags = "";
 	e->e = s + 1;
 	return 1;
@@ -194,7 +201,7 @@ parse_format_string(const char *fmt, struct conversion_specifier *e)
 static void
 show_bufs(const char *fmt, int count, char b[7][1024])
 {
-	struct conversion_specifier cs;
+	struct specification cs;
 	cs.e = fmt;
 	if( count > 7 ){
 		count = 7;
@@ -246,7 +253,7 @@ pretty_print(const char *s, ptrdiff_t width)
 static int
 scan(const char *input, const char *fmt, ...)
 {
-	struct conversion_specifier cs;
+	struct specification cs;
 
 	va_list ap;
 	int rv;
@@ -273,7 +280,7 @@ scan(const char *input, const char *fmt, ...)
 		if( count++ ) {
 			fputs(", ", stdout);
 		}
-		switch(*cs.conversion) {
+		switch(*cs.specifier) {
 		case 's': case '[':
 			buf.s = va_arg(ap, char *);
 			print_val(&cs, buf.s);
@@ -300,7 +307,7 @@ static void
 validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 {
 	int k;
-	struct conversion_specifier cs;
+	struct specification cs;
 
 	k = parse_format_string(fmt, &cs);
 	if( cs.suppressed ){
@@ -312,9 +319,9 @@ validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 	if( cs.width != width ) {
 		die("%s: Invalid width:  %zu != %zu\n", fmt, cs.width, width);
 	}
-	if( cs.conversion[0] != conv ) {
+	if( cs.specifier[0] != conv ) {
 		die("%s: Invalid specifier:  '%c' != '%c'\n",
-			fmt, *cs.conversion, conv);
+			fmt, *cs.specifier, conv);
 	}
 	if( strncmp(flags, cs.flags, strlen(flags)) ) {
 		die("%s: Invalid flags:  '%s' != '%s'\n", fmt, cs.flags, flags);
