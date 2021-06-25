@@ -12,7 +12,7 @@ ${project}/src/main.rs
 apparently using user information from git. (Cargo.toml gets email
 and author name, and seems to get it from the git config).
 
-From inside ${project}/ , run "cargo run"
+From inside ${project}, run "cargo run"
 
 =========
 The above is fairly high level.  Just do:

@@ -52,6 +52,9 @@ TESTS = \
 	udp-test \
 	coverage-test  # Must run last
 
+lib_LTLIBRARIES = libwrp-bindgen.la
+libwrp_bindgen_la_SOURCES = libwrp-bindgen.c
+
 # Change this to lib_LTLIBRARIES to create installable libraries
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
