@@ -1,6 +1,7 @@
 
 
 noinst_HEADERS = xutil.h stack.h
+include_HEADERS = wrp-bindgen.h
 
 noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head ncurses
 check_PROGRAMS = \
