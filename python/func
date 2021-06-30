@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+def foo(a = 'default a', /, b = 'default b', *, c = ['default c']):
+    print("a is a positional arg:", a)
+    print("b is a keyword or positional arg:", b)
+    print("c is a keyword arg:", c)
+    c.append(a)  # Modifies the default value for subsequent calls
+
+foo(1)
+foo(2, 5)
+foo(3, b = 6)
+a = ['foo']
+print("a = ", a)
+foo(4, c = a) # appends 4 to a
+print("a = ", a)
+foo(5)
+
+
