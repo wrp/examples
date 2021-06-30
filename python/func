@@ -14,5 +14,7 @@ print("a = ", a)
 foo(4, c = a) # appends 4 to a
 print("a = ", a)
 foo(5)
-
-
+try:
+    foo(a = 5, b = 6, c = 7)
+except TypeError as e:
+    print('caught', e)
