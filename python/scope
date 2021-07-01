@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+a = 'global a'
+
+def foo(a = 'a in foo'):
+    def bar():
+        nonlocal a
+        a = 'change nonlocal in bar' # Refers to a in foo()
+        def baz():
+            global a
+            a = 'change global a in bar'
+        def qux():
+            nonlocal a
+            a = 'change a in qux' # Refers to a in foo()
+        baz()
+        qux()
+
+    print(f'in foo before call: {a}')
+    bar()
+    print(f'in foo after call: {a}')
+
+print(f'in main before call: {a}')
+foo()
+print(f'in main after call: {a}')
+
