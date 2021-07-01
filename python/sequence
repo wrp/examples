@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+'''
+https://docs.python.org/3/glossary.html#term-sequence
+
+An iterable which supports efficient element access using integer
+indices via the __getitem__() special method and defines a __len__()
+method that returns the length of the sequence. Some built-in
+sequence types are list, str, tuple, and bytes.
+'''
+
+a = 'abcdef'
+
+for i, c in enumerate(a):
+    print(f'i = {i}, c = {c}')
