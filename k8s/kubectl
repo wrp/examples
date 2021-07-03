@@ -1,2 +1,9 @@
 
+# Copy a file from a pod to local
 kubectl cp pod:/p/a/t/h /p/a/t/h
+
+# list pods:
+kubectl get pods ${selector+-l ${selector}}
+
+# list pods in json format
+kubectl get pods -o json ${selector+-l ${selector}}
