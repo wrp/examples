@@ -1,0 +1,14 @@
+
+a:
+  - b: 5
+    c: 5
+
+---
+# Same as above
+a:
+- b: 5
+  c: 5
+
+---
+# Same as above
+a: [{"b": 5, "c": 5}]
