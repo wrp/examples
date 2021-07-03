@@ -8,6 +8,9 @@ kubectl get pods ${selector+-l ${selector}}
 # list pods in json format
 kubectl get pods -o json ${selector+-l ${selector}}
 
+# list all the containers in a pod
+kubectl get pod ${pod?} -o jsonpath="{.spec.containers[*].name}" ; echo
+
 
 
 kubectl controls the Kubernetes cluster manager.
