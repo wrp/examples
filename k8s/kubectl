@@ -9,9 +9,11 @@ kubectl get pods ${selector+-l ${selector}}
 kubectl get pods -o json ${selector+-l ${selector}}
 
 # list all the containers in a pod
+# https://kubernetes.io/docs/reference/kubectl/jsonpath/
 kubectl get pod ${pod?} -o jsonpath="{.spec.containers[*].name}" ; echo
 
 # Show the images used for each container in a pod
+# https://golang.org/pkg/text/template/
 kubectl get pods -o go-template --template="{{range .spec.containers}}{{.image}} {{end}}" ${pod?}; echo
 
 
