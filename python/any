@@ -3,9 +3,7 @@
 # Demonstrate any and all
 import sys
 
-# Must use 'list' or this becomes a generator object which
-# can only be iterated over once!
-x = list(int(a) for a in sys.argv[1:])
+x = [int(a) for a in sys.argv[1:]]
 
 if any(a > 7 for a in x):
     print("Some greater than 7")
