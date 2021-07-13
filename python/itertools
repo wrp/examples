@@ -12,3 +12,6 @@ for i in zip(a, b):
 # Fill in short lists with NULL (in python3, this is izip_longest)
 for i in itertools.zip_longest(a, b):
     print( i )
+
+for i, (a, b) in enumerate(zip(a, b)):
+    print( i, a, b )
