@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+"""
+Demonstrate basic timeit in idle
+
+>>> import timeit
+>>> def f(x): return x * x
+...
+>>> timeit.repeat('for x in range(5): f(x)', 'from __main__ import f', number=3)
+[1.0712999937823042e-05, 8.26599989522947e-06, 7.765999953335267e-06, 7.72300018070382e-06, 2.7385000066715293e-05]
+>>>
+"""
+
+
+import timeit
+from functools import partial, reduce
+import operator
+
+def to_time(items):
+    return reduce(operator.mul, items, 1)
+
+test_items = [1, 2, 3]
+times = timeit.Timer(partial(to_time, test_items)).repeat(3, 1000)
+
+# Divide by the number of repeats
+time_taken = min(times) / 1000
+
+print(f'avg: {time_taken}')
