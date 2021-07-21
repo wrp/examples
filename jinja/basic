@@ -55,3 +55,5 @@ show('''Dictionary as list of tuples: {{ d.items() | list }}''')  # [('alice', '
 show('''{{ d | map("capitalize") | join(',') }}''')
 show('''{{ d.items() | list | join(',') }}''')
 show('''{% for k, v in d | dictsort %} k ={{k}}, v={{v}} {% endfor %}''')
+
+show('''Testing a dict: {% set a = {'foo': 'bar', 'baz': 'qux'} %} foo={{ a['foo'] }} non={{ a['non'] }} baz={{ a['baz'] }}''')
