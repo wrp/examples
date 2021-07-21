@@ -43,7 +43,7 @@ on the instance, run 'lsblk' and check /dev/disk to confirm the tables before cr
 #sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/${device?}
 sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,discard /dev/${device?}
 
-Then mount the device
+Then mount the device  (mount_path must already exist)
 sudo mount -o discard,defaults /dev/${device?} ${mount_path?}
 
 
