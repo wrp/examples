@@ -6,6 +6,9 @@ gcloud components install kubectl
 # To set up a cluster:
 gcloud container clusters create test-cluster
 
+# To create config in $HOME/.config/k8s:
+gcloud container clusters get-credentials ${cluster?} --region ${region?}
+
 # Create a deployment
 kubectl run ${deployment_name-test_deployment} \
 	--image us.gcr.io/${project?}/${image?} \
