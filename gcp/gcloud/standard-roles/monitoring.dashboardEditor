@@ -1,0 +1,11 @@
+description: Read/write access to dashboard configurations.
+etag: AA==
+includedPermissions:
+- monitoring.dashboards.create
+- monitoring.dashboards.delete
+- monitoring.dashboards.get
+- monitoring.dashboards.list
+- monitoring.dashboards.update
+name: roles/monitoring.dashboardEditor
+stage: BETA
+title: Monitoring Dashboard Configuration Editor

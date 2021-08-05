@@ -1,0 +1,7 @@
+description: Can enable the service.
+etag: AA==
+includedPermissions:
+- servicemanagement.services.bind
+name: roles/servicemanagement.serviceConsumer
+stage: GA
+title: Service Consumer

@@ -1,0 +1,8 @@
+description: Editor of OsConfig resources
+etag: AA==
+includedPermissions:
+- resourcemanager.projects.get
+- resourcemanager.projects.list
+name: roles/osconfig.osConfigEditor
+stage: BETA
+title: OsConfig Editor

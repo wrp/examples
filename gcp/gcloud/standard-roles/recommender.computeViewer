@@ -1,0 +1,18 @@
+description: Viewer of compute recommendations.
+etag: AA==
+includedPermissions:
+- recommender.computeDiskIdleResourceRecommendations.get
+- recommender.computeDiskIdleResourceRecommendations.list
+- recommender.computeInstanceGroupManagerMachineTypeRecommendations.get
+- recommender.computeInstanceGroupManagerMachineTypeRecommendations.list
+- recommender.computeInstanceIdleResourceRecommendations.get
+- recommender.computeInstanceIdleResourceRecommendations.list
+- recommender.computeInstanceMachineTypeRecommendations.get
+- recommender.computeInstanceMachineTypeRecommendations.list
+- recommender.locations.get
+- recommender.locations.list
+- resourcemanager.projects.get
+- resourcemanager.projects.list
+name: roles/recommender.computeViewer
+stage: GA
+title: Compute Recommender Viewer

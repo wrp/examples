@@ -1,0 +1,9 @@
+description: Ability to get and list API keys for a project.
+etag: AA==
+includedPermissions:
+- serviceusage.apiKeys.get
+- serviceusage.apiKeys.getProjectForKey
+- serviceusage.apiKeys.list
+name: roles/serviceusage.apiKeysViewer
+stage: BETA
+title: API Keys Viewer
