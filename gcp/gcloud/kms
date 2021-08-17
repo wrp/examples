@@ -3,9 +3,11 @@ location=us-central1
 # List available keyrings
 gcloud kms keyrings list --location ${location:?} ${PROJECT:+--project "$PROJECT"}
 
+# List keys in a keyring:
+gcloud kms keys list --keyring ${keyring:?} --location ${location:-us}
+
 # Create a keyring
 gcloud kms keyrings create ${keyring:?} --location ${location:?}
-
 
 # Create an encryption key (see https://cloud.google.com/kms/docs/algorithms#key_purposes)
 gcloud kms keys create ${key:?} --location ${location:?} --keyring ${keyring:?} \
