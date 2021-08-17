@@ -1,7 +1,7 @@
 location=us-central1
 
 # List available keyrings
-gcloud kms keyrings list --location ${location:?}
+gcloud kms keyrings list --location ${location:?} ${PROJECT:+--project "$PROJECT"}
 
 # Create a keyring
 gcloud kms keyrings create ${keyring:?} --location ${location:?}
