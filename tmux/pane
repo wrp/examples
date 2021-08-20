@@ -54,7 +54,7 @@ Copy a pane:
 	    start of the history and to -E the end of the visi- ble
 	    pane.  The default is to capture only the visible
 	    contents of the pane.
-tmux capture-pane -p -S -10000 -t :0
+tmux capture-pane -p -S -10000 -t :0    # scrape
 
 # misc. cmds
 :setw synchronize-panes    # Send keystrokes to multiple panes
