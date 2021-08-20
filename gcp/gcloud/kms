@@ -1,13 +1,13 @@
 location=us-central1
 
 # List available keyrings
-gcloud kms keyrings list --location ${location:?} ${PROJECT:+--project "$PROJECT"}
+gcloud kms keyrings list --location ${location:-us} ${PROJECT:+--project "$PROJECT"}
 
 # List keys in a keyring:
-gcloud kms keys list --keyring ${keyring:?} --location ${location:-us}
+gcloud kms keys list --keyring ${keyring:?} --location ${location:-us} ${PROJECT:+--project "$PROJECT"}
 
 # Create a keyring
-gcloud kms keyrings create ${keyring:?} --location ${location:?}
+gcloud kms keyrings create ${keyring:?} --location ${location:-us} ${PROJECT:+--project "$PROJECT"}
 
 # Create an encryption key (see https://cloud.google.com/kms/docs/algorithms#key_purposes)
 gcloud kms keys create ${key:?} --location ${location:?} --keyring ${keyring:?} \
@@ -22,8 +22,13 @@ gcloud kms encrypt --location ${location:?}
 	--plaintext-file ${inputpath:?} \
 	--ciphertext-file ${outputpath:?}
 
+# Show permissions for a keyring:
+gcloud kms keyrings get-iam-policy ${keyring?} --location ${location:-us} \
+	${PROJECT:+--project "$PROJECT"} --format=json
+
 # Show permissions for a key:
-gcloud kms keys get-iam-policy ${key?} --keyring=${keyring?}  --location ${location-us}
+gcloud kms keys get-iam-policy ${key?} --keyring=${keyring?} --location ${location:-us} \
+	${PROJECT:+--project "$PROJECT"} --format=json
 
 # Set permissions for a key:
-gcloud kms keys set-iam-policy ${key?} ${policy_file?} --keyring=${keyring?}  --location ${location-us}
+gcloud kms keys set-iam-policy ${key?} ${policy_file?} --keyring=${keyring?} --location ${location:-us} ${PROJECT:+--project "$PROJECT"}
