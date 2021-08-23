@@ -1,0 +1,3 @@
+
+{% set a = ('alice', 'bob') %}
+for loop:   {% for item in a -%}     item: {{ item }}       {% endfor %}
