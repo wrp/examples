@@ -1,0 +1,9 @@
+
+
+{%- macro foo(x) -%}
+from primary macro foo: {{x}}
+{%- endmacro -%}
+
+{{ foo("first") }}
+{% from "included.j2" import foo with context -%}
+{{- foo("second") }}

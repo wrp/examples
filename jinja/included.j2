@@ -1,0 +1,7 @@
+This file is included, and defines macro foo
+
+{% macro foo(x) -%}
+from included macro foo: {{x}}
+{% endmacro -%}
+
+foo('in included file')
