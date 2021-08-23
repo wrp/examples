@@ -11,5 +11,3 @@ def do_file(name):
 
 for i in sys.argv[1:]:
     do_file(i)
-
-
