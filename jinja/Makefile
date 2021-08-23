@@ -1,5 +1,5 @@
 
 all: for-loop-output
 
-%-output: %
+%-output: %.j2
 	./driver $< > $@
