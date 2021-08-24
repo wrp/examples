@@ -1,0 +1,18 @@
+
+{%- set a = 'this is some text
+   that spans lines and
+       has different leading space' -%}
+
+first line picks up extra indent:
+       {{ a }}
+
+first line does not get extra indent:
+{# necessary to retain previous neline #}
+       {{- a }}
+
+
+indent the whole string
+{{ a | indent(16, True) }}
+
+indent all lines but the first
+{{ a | indent(16, False) }}
