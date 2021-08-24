@@ -54,7 +54,7 @@ literal: |
 
 keep: |+
 
-        every literal newline
+        test: every literal newline
 
         is retained
 
