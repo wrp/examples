@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+from jinja2 import Environment, FileSystemLoader
+import sys
+
+def do_file(name):
+    with open(name) as f:
+        t = f.read()
+        print(Environment(loader=FileSystemLoader('.'),
+            trim_blocks=True, lstrip_blocks=True).
+            from_string(t).render(globals()))
+
+for i in sys.argv[1:]:
+    do_file(i)
