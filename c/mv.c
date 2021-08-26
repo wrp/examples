@@ -22,12 +22,8 @@ main(int argc, char **argv)
 		fprintf(stderr, "Unexpected arguments\n");
 		return EXIT_FAILURE;
 	}
-	if( link(argv[1], argv[2]) ){
+	if( rename(argv[1], argv[2]) ){
 		perror(argv[2]);
-		return EXIT_FAILURE;
-	}
-	if( unlink(argv[1]) ){
-		perror(argv[1]);
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
