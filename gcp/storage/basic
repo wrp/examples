@@ -2,9 +2,9 @@
 gsutil ls
 
 # Change acl on a gcs storage bucket
-gsutil acl get gs://${bucket} > ${bucket}.acl
+gsutil acl get gs://${bucket?} > ${bucket}.acl
 # or
-gsutil acl get $bucket > $(echo "${bucket#gs}" | tr -d '/:' )
+gsutil acl get ${bucket?} > $(echo "${bucket#gs}" | tr -d '/:' )
 
 vi ${bucket}.acl
-gsutil acl set ${bucket}.acl gs://${bucket}
+gsutil acl set ${bucket?}.acl gs://${bucket}
