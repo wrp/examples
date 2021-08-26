@@ -13,6 +13,7 @@ check_PROGRAMS = \
 	scanf \
 	access \
 	arithperm \
+	check-dups \
 	clean-man \
 	dynamic \
 	dynamic-read \
@@ -36,6 +37,7 @@ TESTS = \
 	bst-test \
 	arithperm-test \
 	calc-test \
+	check-dups-test \
 	dynamic-array-test \
 	dynamic-read-test \
 	dynamic-test \
