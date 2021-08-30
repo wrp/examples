@@ -3,6 +3,7 @@ A simple list of simple best practices.
 
 *) Fail loudly (but tersely), succeed quietly
    -) When an error occurs, a process should write a simple, concise, accurate
-      error message and terminate.
+      error message to stderr and terminate.
 *) Don't use logs as metrics
 *) A usage statement is not an error message
+*) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
