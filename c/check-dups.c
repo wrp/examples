@@ -28,25 +28,22 @@ int
 insert(struct node **table, int data)
 {
 	struct node *t = *table;
-	if( t ) {
-		if( data == t->data ) {
-			return 1;
-		} else {
-			return insert(&t->child[data < t->data], data);
-		}
-	} else {
+	if( !t ){
 		*table = new_node(data);
 		return 0;
 	}
+	if( data == t->data ){
+		return 1;
+	}
+	return insert(&t->child[data < t->data], data);
 }
-
 
 int
 main(void)
 {
 	int rv, v;
 	struct node *table = NULL;
-	while( ( rv = scanf("%d", &v)) == 1 ){
+	while( (rv = scanf("%d", &v)) == 1 ){
 		if( insert(&table, v) ){
 			fprintf(stderr, "%d is duplicated\n", v);
 			return EXIT_FAILURE;
