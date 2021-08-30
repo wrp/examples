@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <limits.h>
 
 /* Demonstrate that snprintf writes n-1 bytes of data plus a null byte.
  * That is, the first argument will be a properly terminated string.
@@ -27,6 +28,9 @@ main(void)
 	printf("len += snprintf(v, siz - len \"abcdefghijk\" );\n");
 	*/
 	printf("diff = %d, len = %zd\n", x, len);
+
+	int s = snprintf(NULL, 0, "%d", INT_MAX);
+	printf("len = %d, maxs = %d\n", s, INT_MAX);
 
 	return 0;
 }
