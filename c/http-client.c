@@ -14,7 +14,6 @@ main(int argc, char **argv)
 {
 	int sock;
 	int count;
-	int blocking = 1;
 	struct sockaddr_in serv_addr;
 	struct sockaddr *sa = (void*)&serv_addr;
 	char *hostname = argc > 1 ? argv[1] : "www.google.com";
@@ -24,7 +23,9 @@ main(int argc, char **argv)
 
 	snprintf(request,
 		sizeof request,
-		"GET / HTTP/1.1\r\nHost: %s\r\n\r\n",
+		"GET / HTTP/1.1\r\n"
+		"Host: %s\r\n"
+		"Connection: close\r\n\r\n",
 		hostname
 	);
 
@@ -50,17 +51,9 @@ main(int argc, char **argv)
 	}
 	send(sock, request, strlen(request), 0);
 
-loop:
 	/* See also: use recvfrom */
-	count = read(sock, buffer, sizeof buffer);
-	/* Set non-blocking only after the first read.  Terrible hack; */
-	if( blocking && fcntl(sock, F_SETFL, O_NONBLOCK) == -1 ){
-		err(EXIT_FAILURE, "fcntl");
-	}
-	blocking = 0;
-	if( count > 0 ) {
+	while( (count = read(sock, buffer, sizeof buffer)) > 0 ){
 		fwrite(buffer, 1, count, stdout);
-		goto loop;
 	}
 	putchar('\n');
 	return 0;
