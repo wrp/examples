@@ -1,0 +1,9 @@
+#!/bin/sh
+
+until read c; test "$c" = bar; do
+	echo $c;
+done << EOF
+foo
+bar
+baz
+EOF
