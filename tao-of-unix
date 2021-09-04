@@ -8,3 +8,6 @@ A simple list of simple best practices.
 *) A usage statement is not an error message
 *) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 *) Version everything; do not hardcode version numbers in a file, but derive from VCS
+
+Slogans:
+Plan for failure, automate, test extensively.
