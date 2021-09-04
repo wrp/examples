@@ -30,6 +30,11 @@ kubectl rollout status deployment ${deployment}
 kubectl config current-context # Get the current context
 kubectl config view            # See the available contexts
 
+# namespaces
+kubectl get namespaces
+kubectl get pods --namespace "${namespace}"
+kubectl get pods -A  # get pods from all namespaces
+
 # Misc handy functions
 # List all pods in all clusters
 pods () {
