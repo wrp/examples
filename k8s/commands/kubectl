@@ -30,6 +30,16 @@ kubectl rollout status deployment ${deployment}
 kubectl config current-context # Get the current context
 kubectl config view            # See the available contexts
 
+# Misc handy functions
+# List all pods in all clusters
+pods () {
+	local cluster location
+        gcloud container clusters list | awk 'NR > 1{print $1, $2}' | while read cluster location; do
+                gcloud container clusters get-credentials $cluster --region $location;
+                kubectl get pods > ${cluster}-pods;
+        done
+}
+
  Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
 
 Basic Commands (Beginner):
