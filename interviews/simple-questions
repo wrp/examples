@@ -2,3 +2,10 @@
 What is the difference between a vm and a container?
 
 What's the difference between a load balancer and a reverse proxy?
+	A reverse proxy does more.  It may also provide:
+		*) load balancing
+		*) caching
+		*) security
+		*) TLS acceleration (terminates TLS)
+		*) connection pooling
+		*) compression
