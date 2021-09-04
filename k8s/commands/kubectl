@@ -1,3 +1,4 @@
+kubectl controls the Kubernetes cluster manager.
 
 # Copy a file from a pod to local
 kubectl cp pod:/p/a/t/h /p/a/t/h
@@ -25,7 +26,9 @@ kubectl scale --replicas=0 deployment/${deployment}
 kubectl rollout restart deployment ${deployment}
 kubectl rollout status deployment ${deployment}
 
-kubectl controls the Kubernetes cluster manager.
+# CONFIGS  k8s configs reside in $HOME/.kube
+kubectl config current-context # Get the current context
+kubectl config view            # See the available contexts
 
  Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
 
