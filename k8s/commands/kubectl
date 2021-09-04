@@ -11,7 +11,7 @@ kubectl get pod ${pod?} -o jsonpath='{.spec.containers[*].name}' ; echo
 # Show the images used for each container in a pod   # https://golang.org/pkg/text/template/
 kubectl get pods -o go-template --template='{{range .spec.containers}}{{.image}} {{end}}' ${pod?}; echo
 
-# Manipulate a deployment
+# DEPLOYMENTS
 kubectl scale deployment ${deployment?} --replicas=${n-3} # Set the number of pods
 kubectl rollout restart deployment ${deployment}  # Rolling restart
 kubectl rollout status deployment ${deployment}   # Show status of rollout
@@ -20,10 +20,20 @@ kubectl rollout status deployment ${deployment}   # Show status of rollout
 kubectl config current-context # Get the current context
 kubectl config view            # See the available contexts
 
-# namespaces
+# NAMESPACES
 kubectl get namespaces
 kubectl get pods --namespace "${namespace}"
 kubectl get pods -A  # get pods from all namespaces
+
+# NODES
+kubectl cordon $NODENAME  # Mark a node unschduleable (untested)
+kubectl patch node $NODENAME -p '{"spec":{"unschedulable":true}}'  # edit a node (untested)
+
+kubectl get pods --all-namespaces  $( : Show which pods are running on a node
+	) -o jsonpath="{range .items[?(.spec.nodeName==\"${NODENAME?}\")]}{.metadata.name} {end}"
+
+# On which node is a pod running?
+kubectl describe pod ${name?}  | grep Node:
 
 # Misc handy functions
 # List all pods in all clusters
