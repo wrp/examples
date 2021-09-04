@@ -1,0 +1,12 @@
+
+control plane:
+	kube-apiserver: front end for the control plane
+	etcd: key value store of all cluster data
+	kube-scheduler: selects node on which to run pods
+	kube-controller-manager: runs controller processes
+	cloud-controller-manager: gloud specific logic
+
+node componentes (run on each node):
+	kubelet: manage containers on a node
+	kube-proxy: maintain network rules on node
+	container runtime (eg docker, cri-o, containerd)
