@@ -43,6 +43,12 @@ kubectl get pods --all-namespaces  $( : Show which pods are running on a node
 # On which node is a pod running?
 kubectl describe pod ${name?}  | grep Node:
 
+# NETWORK
+# https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer
+kubectl run nginx --image=nginx --port=80   # Run a deployment
+kubectl expose deployment nginx --target-port=80 --type=NodePort  # Create a service
+kubectl apply -f basic-ingress.yaml   # Create an ingress
+
 # Misc handy functions
 # List all pods in all clusters
 pods () {
