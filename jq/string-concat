@@ -1,0 +1,5 @@
+#!/bin/sh
+
+jq -r '.foo | "hello" + .' << EOF
+{"foo": "world"}
+EOF
