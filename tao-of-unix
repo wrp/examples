@@ -7,3 +7,4 @@ A simple list of simple best practices.
 *) Don't use logs as metrics
 *) A usage statement is not an error message
 *) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
+*) Version everything; do not hardcode version numbers in a file, but derive from VCS
