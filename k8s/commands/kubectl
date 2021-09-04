@@ -1,30 +1,20 @@
 kubectl controls the Kubernetes cluster manager.
 
-# Copy a file from a pod to local
-kubectl cp pod:/p/a/t/h /p/a/t/h
+# PODS
+kubectl cp pod:/p/a/t/h /p/a/t/h                    # Copy a file from a pod to local
+kubectl get pods ${selector+-l ${selector}}         # list pods
+kubectl get pods -o json ${selector+-l ${selector}} # list pods in json format
 
-# list pods:
-kubectl get pods ${selector+-l ${selector}}
+# list all the containers in a pod  https://kubernetes.io/docs/reference/kubectl/jsonpath/
+kubectl get pod ${pod?} -o jsonpath='{.spec.containers[*].name}' ; echo
 
-# list pods in json format
-kubectl get pods -o json ${selector+-l ${selector}}
-
-# list all the containers in a pod
-# https://kubernetes.io/docs/reference/kubectl/jsonpath/
-kubectl get pod ${pod?} -o jsonpath="{.spec.containers[*].name}" ; echo
-
-# Show the images used for each container in a pod
-# https://golang.org/pkg/text/template/
-kubectl get pods -o go-template --template="{{range .spec.containers}}{{.image}} {{end}}" ${pod?}; echo
-
-# Set the number of pods
-kubectl scale deployment ${deployment?} --replicas=${n-3}
+# Show the images used for each container in a pod   # https://golang.org/pkg/text/template/
+kubectl get pods -o go-template --template='{{range .spec.containers}}{{.image}} {{end}}' ${pod?}; echo
 
 # Manipulate a deployment
-kubectl scale --replicas=0 deployment/${deployment}
-
-kubectl rollout restart deployment ${deployment}
-kubectl rollout status deployment ${deployment}
+kubectl scale deployment ${deployment?} --replicas=${n-3} # Set the number of pods
+kubectl rollout restart deployment ${deployment}  # Rolling restart
+kubectl rollout status deployment ${deployment}   # Show status of rollout
 
 # CONFIGS  k8s configs reside in $HOME/.kube
 kubectl config current-context # Get the current context
