@@ -19,6 +19,11 @@ kubectl get pods -o go-template --template="{{range .spec.containers}}{{.image}}
 # Set the number of pods
 kubectl scale deployment ${deployment?} --replicas=${n-3}
 
+# Manipulate a deployment
+kubectl scale --replicas=0 deployment/${deployment}
+
+kubectl rollout restart deployment ${deployment}
+kubectl rollout status deployment ${deployment}
 
 kubectl controls the Kubernetes cluster manager.
 
