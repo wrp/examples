@@ -1,2 +1,4 @@
 
-velero: backup/migration tool
+velero: backup/migration tool https://velero.io/
+ctr:    containerd cli
+crictl: cli tool for container runtime
