@@ -1,0 +1,3 @@
+
+# Find all extant files that are being ignored
+find . -print0 | git check-ignore -z --stdin | tr '\0' \\n
