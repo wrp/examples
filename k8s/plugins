@@ -1,0 +1,3 @@
+
+CNI:
+	cilium: uses eBPF
