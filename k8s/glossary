@@ -1,4 +1,5 @@
 
-CRD - custom resource defnition
-CRI - container runtime interface
-CSI - container storage interface
+CRD	custom resource defnition
+CRI	container runtime interface
+CSI	container storage interface
+IPAM	ip address management
