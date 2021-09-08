@@ -1,0 +1,4 @@
+
+For a pod to get have information about itself, use the downward API:
+
+https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/
