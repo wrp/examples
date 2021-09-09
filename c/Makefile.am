@@ -27,6 +27,7 @@ check_PROGRAMS = \
 	pyramid \
 	read-indexed \
 	scanf-term \
+	sqlite \
 	tac \
 	tcp-client \
 	tcp-server \
@@ -63,6 +64,7 @@ noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
 ncurses_LDFLAGS = -lncursesw
 ncurses_CPPFLAGS = -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED
+sqlite_LDFLAGS = -lsqlite3
 LDADD=libxutil.la
 libringbuf_la_SOURCES = ring-buffer.c
 libstack_la_SOURCES = stack.c
