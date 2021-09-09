@@ -15,6 +15,7 @@ A simple list of simple best practices.
 *) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 *) Don't use logs as metrics
 *) Version everything; do not hardcode version numbers in a file, but derive from VCS
+*) Rigidly enforce commit message formats from the first commit.
 
 Slogans:
 Plan for failure, automate, test extensively.
