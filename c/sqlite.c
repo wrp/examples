@@ -6,28 +6,41 @@
 /* https://www.sqlite.org/cintro.html */
 
 
-int
-foo(void *f, int x, char **a, char **b)
+static int
+callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
-	printf("foo called with %d\n", x);
+	(void)NotUsed;
+	int i;
+	for( i = 0; i < argc; i++ ){
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+	}
+	putchar('\n');
+	return 0;
 }
+
 int
 main(int argc, char **argv)
 {
-	const char *path = argc > 1 ? argv[1] : "sample-sqlite";
-	sqlite3 *s;
-	char *err;
-	int exist;
+	sqlite3 *db;
+	char *zErrMsg = 0;
+	int rc;
 
-
-	exist = !access(path, R_OK);
-	sqlite3_open(path, &s);
-
-	if( exist ){
-		sqlite3_exec( s, "blay", foo, NULL, &err);
-	} else {
-		sqlite3_exec( s, "blob", foo, NULL, &err);
+	if( argc != 3 ){
+		fprintf(stderr, "Usage: %s db sql-statement\n", argv[0]);
+		return 1 ;
 	}
-	printf("err = %s\n", err);
+	rc = sqlite3_open(argv[1], &db);
+	if( rc ){
+		fprintf(stderr, "%s: %s\n", argv[1], sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1 ;
+	}
+	rc = sqlite3_exec(db, argv[2], callback, 0, &zErrMsg);
+	if( rc != SQLITE_OK ){
+		fprintf(stderr, "SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+		return 1;
+	}
+	sqlite3_close(db);
+	return 0;
 }
-
