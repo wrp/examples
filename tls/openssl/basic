@@ -11,3 +11,9 @@ openssl x509 -in ${pemfile?} -text
 
 # Show/list contents of a csr
 openssl req -in ${file}.csr -text
+
+# Get the keys from a .p12
+$ openssl pkcs12 -in ${file?}.p12 -nodes -nocerts -out ${file?}.key
+
+# Get the certs from a .p12
+$ openssl pkcs12 -in ${file?}.p12 -nodes -nokeys -out ${file?}.pem
