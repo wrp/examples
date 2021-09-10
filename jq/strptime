@@ -7,3 +7,8 @@ date +%s \
 	date: (. | strptime("%s") | todate[0:10 ]),
 	time: (. | strptime("%s") | todate[11:19])
 })'
+
+echo '"Fri Sep 10 22:24:51 IST 2021"' | jq 'strptime("%a %b %d %H:%M:%S IST %Y") | mktime'
+
+# Convoluted way to get epoch time:
+date +'"%a, %d %b %Y %T %z"' |  jq 'strptime("%a, %d %b %Y %T %z") | mktime'
