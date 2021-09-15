@@ -1,7 +1,7 @@
 
 A simple list of simple best practices.
 
-*) Fail loudly (but tersely), succeed quietly
+*) Fail loudly (but tersely), succeed quietly.
    -) When an error occurs, a process should write a simple, concise, accurate error
       message to stderr and terminate.  Error messages should *not* offer suggestions.  eg:
       "The connection to the server localhost:8080 was refused - did you specify the right host or port?"
@@ -9,13 +9,13 @@ A simple list of simple best practices.
       "localhost:8080: connection refused"
       The rest is line noise.  Perhaps include the name of the executable.  Maybe include the
       uid or human readable name of the process owner.
-*) A usage statement is not an error message
-*) A stack trace is not an error message; it is an embarassment.  Devs should be ashamed if
-   their code throws an uncaught exception.
+*) A usage statement is not an error message.
+*) A stack trace is not an error message; it is an embarassment.
 *) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
-*) Don't use logs as metrics
-*) Version everything; do not hardcode version numbers in a file, but derive from VCS
+*) Don't use logs as metrics.
+*) Version everything!  Do not hardcode version numbers in a file; derive them from a VCS.
 *) Rigidly enforce commit message formats from the first commit.
+*) Don't use '.sh' suffixes on shell scripts.
 
 Slogans:
 Plan for failure, automate, test extensively.
