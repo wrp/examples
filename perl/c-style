@@ -6,7 +6,7 @@ use warnings;
 my $rv = 0;
 sub fail {
 	my ($msg) = @_;
-	printf STDERR "%25s on line %4d of $ARGV: %s", $msg, $., $_;
+	printf STDERR "%-25s on line %4d of $ARGV: %s", $msg, $., $_;
 	$rv = 1;
 }
 
@@ -14,8 +14,8 @@ sub fail {
 while(<>) {
 	fail 'Trailing whitespace' if( m/\s\n/m );
 	foreach my $x ("if", "for", "while") {
-		fail 'bad spacing after if' if( m/\W$x \(/ );       # reject  "if ("
-		fail 'bad spacing after if' if( m/\W$x\([^ \n]/ );  # enforce "if( "
+		fail "bad spacing after $x" if( m/\W$x \(/ );       # reject  "if ("
+		fail "bad spacing after $x" if( m/\W$x\([^ \n]/ );  # enforce "if( "
 	}
 }
 
