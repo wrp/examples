@@ -5,7 +5,7 @@ use warnings;
 
 my $c = $ENV{"COLS"};
 my $msg = $ARGV[0] // getppid();
-sub draw_horizontal {
+sub draw_horizontal {  # function/subroutine
 	my $i = 0;
 	while( $i < $c ) {
 		printf "%s", ($i % 10) ? ($i % 10) : "|";
