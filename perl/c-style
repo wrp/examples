@@ -18,6 +18,7 @@ while(<>) {
 		fail "bad spacing in $x" if( m/\W$x \(/ );
 		fail "bad spacing in $x" if( m/\W$x\([^ \n]/ );
 	}
+	fail 'Bad indent' unless( m/^\t*[\S]/ or m/^$/ or m/^ \*/ );
 }
 
 exit $rv
