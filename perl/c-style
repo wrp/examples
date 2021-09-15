@@ -6,7 +6,8 @@ use warnings;
 my $rv = 0;
 sub fail {
 	my ($msg) = @_;
-	printf STDERR "%-25s on line %4d of $ARGV: %s", $msg, $., $_;
+	s/^\s+|\s+$//g; # Trim whitespace
+	printf STDERR "%-25s %4d:$ARGV %s\n", $msg, $., $_;
 	$rv = 1;
 }
 
