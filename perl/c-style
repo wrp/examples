@@ -15,8 +15,8 @@ sub fail {
 while(<>) {
 	fail 'Trailing whitespace' if( m/\s\n/m );
 	foreach my $x ("if", "for", "while") {
-		fail "bad spacing after $x" if( m/\W$x \(/ );       # reject  "if ("
-		fail "bad spacing after $x" if( m/\W$x\([^ \n]/ );  # enforce "if( "
+		fail "bad spacing in $x" if( m/\W$x \(/ );
+		fail "bad spacing in $x" if( m/\W$x\([^ \n]/ );
 	}
 }
 
