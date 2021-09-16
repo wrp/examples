@@ -1,12 +1,28 @@
 #!/usr/bin/env perl
 
-use strict;
+use 5.12.0;
 use warnings;
 
-my $hash = {};
-foreach my $x ( 1 .. 10 ) {
-	$main::hash{$x} = $x;
-	print "$x\t";
-	print scalar(%main::hash) . "\n"; # Shows buckets used/allocated
-}
+my $hashref = {}; # $hashref is a reference to a hash
+my %hash;
 
+$hash{"foo"} = "bar";
+
+foreach my $x ( 1 .. 5 ) {
+	$hash{$x} = $x;            # Add entry to %hash
+	$hashref->{$x + 10} = $x;  # Add entry to $hashref
+}
+# Shows buckets used/allocated
+print "buckets allocated for hash:". scalar(%hash) . "\n";
+print "buckets allocated for hashref:" . scalar(%$hashref) . "\n";
+
+foreach my $k( keys %hash ){
+	print "key = $k, value = $hash{$k}\n";
+}
+foreach my $k( keys %{ $hashref }){
+	print "key = $k, value = $hashref->{$k}\n";
+}
+while( my ($k, $v) = each %$hashref ) {
+	say $k, '->', $hashref->{$k};
+	delete $hashref->{$k};   # This is safe
+}
