@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 # perldoc -f  each
+# perldoc perlref
 # perldoc perldsc
 
 use 5.12.0;
