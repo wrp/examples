@@ -7,9 +7,8 @@ use 5.12.0;
 use warnings;
 
 my $hashref = {}; # $hashref is a reference to an anonymous hash
-my %hash;
-
-$hash{"foo"} = "bar";
+my %hash = ( 'foo' => 'bar' );
+$hash{"baz"} = "qux";
 
 foreach my $x ( 1 .. 5 ) {
 	$hash{$x} = $x;            # Add entry to %hash
