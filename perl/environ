@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+use warnings;
+
+my $c = $ENV{"FOO"} || "";
+
+say "FOO = ", $c ? $c : "unset";
+while( my ($k, $v) = each %ENV ){
+	say "$k = $v";
+}
