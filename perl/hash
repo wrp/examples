@@ -1,9 +1,12 @@
 #!/usr/bin/env perl
 
+# perldoc -f  each
+# perldoc perldsc
+
 use 5.12.0;
 use warnings;
 
-my $hashref = {}; # $hashref is a reference to a hash
+my $hashref = {}; # $hashref is a reference to an anonymous hash
 my %hash;
 
 $hash{"foo"} = "bar";
@@ -22,7 +25,7 @@ foreach my $k( keys %hash ){
 foreach my $k( keys %{ $hashref }){
 	print "key = $k, value = $hashref->{$k}\n";
 }
-while( my ($k, $v) = each %$hashref ) {
+while( my ($k, $v) = each %$hashref ){
 	say $k, '->', $hashref->{$k};
 	delete $hashref->{$k};   # This is safe
 }
