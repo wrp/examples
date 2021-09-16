@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+use warnings;
+
+# main::var is a different variable than the local var
+$main::var = 7;
+my $var = 6;
+
+say "var is $var";
+say "mainvar is $main::var";
