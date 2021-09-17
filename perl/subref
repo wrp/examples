@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+use 5.12.0;
+
+sub foo {
+	foreach my $x ( @_ ){
+		say "foo: ", $x;
+	}
+}
+
+my $b = sub {
+	foreach my $x ( @_ ){
+		say "bar: ", $x;
+	}
+};
+
+foo 'called', 'directly';
+
+my $r = \&foo;
+$r->('called', 'thru', '->');
+&$r('called', 'with', '&$');
+
+$b->('called', 'via', '->');
