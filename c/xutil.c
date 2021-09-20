@@ -46,7 +46,7 @@ xmalloc(size_t s)
 }
 
 int
-die(const char *fmt, ... )
+die(const char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
