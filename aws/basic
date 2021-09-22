@@ -1,0 +1,8 @@
+
+aws eks list-nodegroups --cluster-name ${cluster?}
+aws eks describe-nodegroup --cluster-name ${cluster?} --nodegroup-name $nodegroup?}
+aws eks delete-nodegroup --cluster-name ${cluster?} --nodegroup-name $nodegroup?}
+aws eks describe-cluster --name ${cluster?}
+aws eks delete-cluster --name ${cluster?}
+
+aws cloudformation list-stacks
