@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# RANDOM is non-standard. You can use:
+awk -v max=${1-65536} 'BEGIN{srand; printf "%d\n", rand * max}'
