@@ -7,7 +7,7 @@ trap 'kill $pgid; rm -f $fifo' 0
 fifo=$(mktemp)
 rm $fifo
 mkfifo $fifo
-: < $fifo &  
+: < $fifo &
 exec 4> $fifo
 exec 5< $fifo
 
@@ -24,13 +24,13 @@ run() {
 }
 
 {
-run 
-run 
-run 
-run 
-run 
+run
+run
+run
+run
+run
 while read -u 5 status; do
-	run $status 
+	run $status
 done
 wait
 }
