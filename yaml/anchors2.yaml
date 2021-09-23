@@ -15,3 +15,14 @@ bar:
 
 baz:
   - <<: *base_app
+
+---
+
+metadata:
+  labels: &labels { app: nginx }
+spec:
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
