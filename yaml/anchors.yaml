@@ -8,9 +8,14 @@ foo: &defaults
     B: 2
     C: 3
 
+# <<: merges in the mapping on the RHS
 bar:
     <<: *defaults
     B: 4
+
+# baz cannot be modified, as we have no merge
+baz: *defaults
+
 
 # select this doc with make anchors | jq .[1]
 ---
