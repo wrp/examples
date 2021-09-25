@@ -17,6 +17,7 @@ A simple list of simple best practices.
 *) Rigidly enforce commit message formats from the first commit.
 *) Don't use '.sh' suffixes on shell scripts.
 *) Never deploy the tip of a branch; deploy a specific commit
+*) Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 
 Slogans:
 Plan for failure, automate, test extensively.
