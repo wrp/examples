@@ -1,0 +1,3 @@
+#!/bin/sh
+
+perl -MYAML -MJSON -0777 -wnl -e 'print YAML::Dump(decode_json($_))'
