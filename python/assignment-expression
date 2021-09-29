@@ -6,3 +6,19 @@ b = 5
 
 if (a := b) == 5:
     print(a)
+
+class Foo():
+    def __init__(self, b = True, v = 0):
+        self.b = b;
+        self.v = v;
+    def __bool__(self):
+        return self.b
+
+if a := False:
+    pass
+elif a := Foo(False):
+    a.v = 5
+elif a := Foo(True, 10):
+    pass
+
+print(a.v)
