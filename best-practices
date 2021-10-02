@@ -9,6 +9,13 @@ A simple list of simple best practices.
       "localhost:8080: connection refused"
       The rest is line noise.  Perhaps include the name of the executable.  Maybe include the
       uid or human readable name of the process owner.
+
+      Examples of line noise:
+      $ for i in *.c; do git ls-files --error-unmatch "$i" > /dev/null 2>&1 || echo "$i"; done
+      You should not have to discard stderr here, or stdout.  `git ls-files` should output nothing, or just the name.  Instead
+      it writes a slew of messages like:
+	      error: pathspec 'foo.c' did not match any file(s) known to git
+	      Did you forget to 'git add'?
 *) A usage statement is not an error message.
 *) A stack trace is not an error message; it is an embarassment.
 *) Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
