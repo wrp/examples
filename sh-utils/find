@@ -1,2 +1,5 @@
 # Find all regular files and ignore those in .git
 find . -name .git -prune -o -type f | less
+
+# Arghh! in -exec,  + must immediately follow {}.  Otherwise, it does
+# not terminate the command
