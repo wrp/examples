@@ -1,0 +1,194 @@
+Simple notes on setting up a k8s cluster
+
+To setup the service, begin by following the instructions at:
+	https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+	https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html
+
+
+We'll assume you have already installed the aws command line tool and kubectl
+
+Begin by creating a vpc:
+
+$ aws cloudformation create-stack \
+	--region us-west-2 \
+	--stack-name ${vpc_name?} \
+	--template-url https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-10-29/amazon-eks-vpc-private-subnets.yaml
+
+Then create an iam-role:
+
+$ aws iam create-role \
+	--role-name ${role_name?} \
+	--assume-role-policy-document file://cluster-role-trust-policy.json
+
+
+And a policy
+$ aws iam attach-role-policy \
+	--policy-arn arn:aws:iam::aws:policy/AmazonEKSClusterPolicy \
+	--role-name ${role_name?}
+
+
+Then create a cluster in the aws console.
+This could be done with 'aws eks create-cluster', but it seems faster to use the UI.
+To automate this process, we sould simply need to ascertain the proper arguments
+to pass to `aws eks create-cluster`.
+
+
+$ KUBECONFIG= aws eks update-kubeconfig --region us-west-2 --name ${cluster_name?}
+
+Note that the instructions simply state that the update-kubeconfig command will modify
+the config in ~/.kube "by default", and this simply means that will be the location of
+the configs if KUBECONFIG is not set.  To avoid cluttering any other configs that may be
+set, we execute this command with an empty KUBECONFIG.
+
+
+create roles and policy
+cat > /tmp/role_file.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::NNNNNNNNNNNN:oidc-provider/oidc.eks.us-west-2.amazonaws.com/id/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.eks.us-west-2.amazonaws.com/id/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:sub": "system:serviceaccount:kube-system:aws-node"
+        }
+      }
+    }
+  ]
+}
+EOF
+$ aws iam create-role --role-name ${cluster_role?} --assume-role-policy-document file:///tmp/role_file.json
+$ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy --role-name ${cluster_role?}
+$ aws eks update-addon --cluster-name ${cluster_name?} --addon-name vpc-cni --service-account-role-arn arn:aws:iam::NNNNNNNNNNNN:role/${cluster_role?}
+
+
+cat > /tmp/node-role-trust-policy.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+$ aws iam create-role --role-name ${node_role?} --assume-role-policy-document file:///tmp/node-role-trust-policy.json
+$ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy --role-name ${node_role?}
+$ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly --role-name ${node_role?}
+
+# cluster is up.  Create deployment
+cat > /tmp/nginx-deployment.yaml << EOF
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+          listen       80;
+          server_name  localhost;
+          location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+      }
+    }
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels: { app: nginx }
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: nginx }
+  template:
+    metadata:
+      labels: { app: nginx }
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21.3
+        ports:
+        - containerPort: 80
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - sh
+              - -c
+              - '{
+                   printf "Pod: "; cat /etc/podinfo/metadata/name;
+                   printf "\nNode: ${NODE_NAME}\n";
+                   printf "Namespace: "; cat /etc/podinfo/metadata/namespace;
+                   printf "\nIP: $POD_IP\n";
+                 } > /usr/share/nginx/html/index.html'
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            - name: podinfo
+              mountPath: /etc/podinfo
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: metadata/name
+              fieldRef:
+                fieldPath: metadata.name
+            - path: metadata/namespace
+              fieldRef:
+                fieldPath: metadata.namespace
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+EOF
+$ kubectl apply -f /tmp/nginx-deployment.yaml
