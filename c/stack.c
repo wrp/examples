@@ -126,9 +126,9 @@ int
 stack_pop(struct stack *s, void *v)
 {
 	int rv = s->top > s->data;
-	if( rv ) {
+	if( rv ){
 		s->top = (char *)s->top - s->element_size;
-		if( s->raw ) {
+		if( s->raw ){
 			*(void **)v = *(void **)s->top;
 		} else {
 			memcpy(v, s->top, s->element_size);

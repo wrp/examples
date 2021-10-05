@@ -133,18 +133,18 @@ process_entry(struct state *S, unsigned char c)
 
 	if( S->enquote && c != ']' ) {
 		rb_push(b, c);
-	} else if( strchr(numeric_tok, c) ) {
+	} else if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
-	} else if( strchr(string_ops, c) ) {
+	} else if( strchr(string_ops, c) ){
 		apply_string_op(S, c);
-	} else if( strchr(token_div, c) ) {
+	} else if( strchr(token_div, c) ){
 		push_value(S, c);
-	} else if( strchr(binary_ops, c) ) {
+	} else if( strchr(binary_ops, c) ){
 		if( !push_value(S, c) ) {
 			apply_binary(S, c);
 		}
-	} else if( strchr(unary_ops, c) ) {
-		if( !push_value(S, c) ) {
+	} else if( strchr(unary_ops, c) ){
+		if( !push_value(S, c) ){
 			apply_unary(S, c);
 		}
 	} else switch( c ) {
