@@ -277,7 +277,7 @@ apply_string_op(struct state *S, unsigned char c)
 		if( stack_size(S->registers) > 0 ) {
 			stack_pop(S->registers, &e);
 		}
-	break;
+		break;
 	case 'F':
 		extract_format(S);
 		break;
@@ -289,7 +289,7 @@ apply_string_op(struct state *S, unsigned char c)
 			stack_push(S->registers, a);
 			stack_push(S->registers, b);
 		}
-	break;
+		break;
 	case 'L':
 		for( unsigned i = 0; i < stack_size(S->registers); i++ ) {
 			int j = 0, c;
@@ -301,7 +301,7 @@ apply_string_op(struct state *S, unsigned char c)
 			}
 			putchar('\n');
 		}
-	break;
+		break;
 	case 'x':
 		if( (rb = select_register(S)) != NULL ) {
 			int j=0, c;
@@ -309,7 +309,7 @@ apply_string_op(struct state *S, unsigned char c)
 				rb_push(S->raw, c);
 			}
 		}
-	break;
+		break;
 	}
 }
 
