@@ -19,7 +19,7 @@ main(void)
 
 	setlocale(LC_ALL, "");
 
-	printf("%'10d\n", 103957395);
+	printf("%'10d\n", 103957395); /* 103,957,395 : print commas */
 	printf("%'2.10f\n", 1039573.95);
 	printf("%'10g\n", 1039.9E3);
 
