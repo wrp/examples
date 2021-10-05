@@ -212,12 +212,13 @@ extract_format(struct state *S)
 	if( rb ) {
 		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
 		int count = 0;
+		int c = 0;
 
-		for( int c = 0; b < e && (c = rb_peek(rb, b - S->fmt)) != EOF; b++ ) {
+		while( b < e && (c = rb_peek(rb, b - S->fmt)) != EOF ){
 			/* Extremely naive check of format string.  */
-			*b = c;
-			count += !count && *b == '%';
-			count += count && *b == 'L';
+			*b++ = c;
+			count += !count && c == '%';
+			count += count && c == 'L';
 		}
 		if( b > S->fmt && b + 1 < e && b[-1] != '\n' ) {
 			*b++ = '\n';
