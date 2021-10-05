@@ -217,6 +217,24 @@ extract_format(struct state *S)
 		while( b < e && (c = rb_peek(rb, b - S->fmt)) != EOF ){
 			/* Extremely naive check of format string.  */
 			*b++ = c;
+			if( count == 2 ){
+				switch( c ){
+				case 'd':
+				case 'i':
+				case 'o':
+				case 'u':
+				case 'x':
+				case 'X':
+					S->type = integer;
+					break;
+				case 'f':
+				case 'e':
+				case 'g':
+				case 'a':
+					S->type = rational;
+
+				}
+			}
 			count += !count && c == '%';
 			count += count && c == 'L';
 		}
@@ -225,7 +243,7 @@ extract_format(struct state *S)
 		}
 		*b = '\0';
 		if( count < 2 ) {
-			fputs("Warning: output fmt should print a long double "
+			fputs("Warning: output fmt should print a long value "
 				"(eg '\%Lf')\n", stderr);
 		}
 	}

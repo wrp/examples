@@ -60,7 +60,7 @@ test_string '[]9x' 'Register 9 empty'
 test_string 'x' 'Register stack empty'
 test_string '1024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 test_string '1_024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
-fmt_warning="Warning: output fmt should print a long double (eg '%Lf')"
+fmt_warning="Warning: output fmt should print a long value (eg '%Lf')"
 test_string '[%.0f]F' "$fmt_warning"
 test_string '[L%.0f]F' "$fmt_warning"
 long_string="1 $( yes "1+" | sed 1049q )"
@@ -92,6 +92,8 @@ LC_ALL=C test_string '-1k4456798p' '4456798'
 
 test_string '4[1 1+]1.2x+p' 'Invalid register: 1.2 is not an integer
 5.2'
+
+test_string '[%04Ld]F23p' '0023'
 
 # Grow the stack
 s=$(yes 1 | sed -e 128q | tr \\n ' ')
