@@ -331,11 +331,10 @@ apply_unary(struct state *S, unsigned char c)
 {
 	long double val;
 	assert( strchr(unary_ops, c) );
-	if( stack_size(S->values) < 1 ) {
-		fputs( "Stack empty (need 1 value)\n", stderr );
+	if( !stack_pop(S->values, &val) ){
+		fputs("Stack empty (need 1 value)\n", stderr);
 		return;
 	}
-	stack_pop(S->values, &val);
 	switch( c ) {
 	case 'y':
 		stack_push(S->values, &val);
