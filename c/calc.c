@@ -96,13 +96,13 @@ main(int argc, char **argv)
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
 
-	if( argc > 1) {
-		for( ; *++argv; push_it(S, ' ') ) {
-			for( char *t = *argv; *t; t++ ) {
+	if( argc > 1 ){
+		for( ; *++argv; push_it(S, ' ') ){
+			for( char *t = *argv; *t; t++ ){
 				push_it(S, *t);
 			}
 		}
-	} else while( (c=getchar()) != EOF ) {
+	} else while( (c=getchar()) != EOF ){
 		push_it(S, c);
 	}
 	rb_free(S->raw);
@@ -121,7 +121,7 @@ push_it(struct state *S, int c)
 {
 	int k;
 	rb_push(S->raw, (unsigned char)c);
-	while( ( k = rb_pop( S->raw )) != EOF ) {
+	while( (k = rb_pop( S->raw )) != EOF ){
 		process_entry(S, (unsigned char)k);
 	}
 }
@@ -132,7 +132,7 @@ process_entry(struct state *S, unsigned char c)
 {
 	struct ring_buf *b = S->accum;
 
-	if( S->enquote && c != ']' ) {
+	if( S->enquote && c != ']' ){
 		rb_push(b, c);
 	} else if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
@@ -141,7 +141,7 @@ process_entry(struct state *S, unsigned char c)
 	} else if( strchr(token_div, c) ){
 		push_value(S, c);
 	} else if( strchr(binary_ops, c) ){
-		if( !push_value(S, c) ) {
+		if( !push_value(S, c) ){
 			apply_binary(S, c);
 		}
 	} else if( strchr(unary_ops, c) ){
@@ -172,32 +172,32 @@ push_value(struct state *S, unsigned char c)
 	int i;
 
 	cp = start = s;
-	if( ! rb_isempty(b) ) {
+	if( ! rb_isempty(b) ){
 		long double val;
 
-		while( (i = rb_pop(b)) != EOF) {
-			if( cp < end ) {
+		while( (i = rb_pop(b)) != EOF ){
+			if( cp < end ){
 				*cp++ = i;
 			}
 		}
-		if( cp == end ) {
+		if( cp == end ){
 			fprintf(stderr, "Overflow: Term truncated\n");
 			return 0;
 		}
 		val = strtold(start, &cp);
-		while( *cp == '-' && cp != start ) {
+		while( *cp == '-' && cp != start ){
 			stack_push(S->values, &val);
 			start = cp;
 			val = strtold(start, &cp);
 		}
-		if( *cp == '-' ) {
+		if( *cp == '-' ){
 			assert( cp == start );
 			apply_binary(S, '-');
-			for( char *t = cp + 1; *t; t++ ) {
+			for( char *t = cp + 1; *t; t++ ){
 				push_it(S, *t);
 			}
 			push_it(S, c);
-		} else if( *cp ) {
+		} else if( *cp ){
 			fprintf(stderr, "Garbled (discarded): %s\n", s);
 		} else {
 			stack_push(S->values, &val);
@@ -210,7 +210,7 @@ void
 extract_format(struct state *S)
 {
 	struct ring_buf *rb = select_register(S);
-	if( rb ) {
+	if( rb ){
 		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
 		int count = 0;
 		int c = 0;
@@ -239,11 +239,11 @@ extract_format(struct state *S)
 			count += !count && c == '%';
 			count += count && c == 'L';
 		}
-		if( b > S->fmt && b + 1 < e && b[-1] != '\n' ) {
+		if( b > S->fmt && b + 1 < e && b[-1] != '\n' ){
 			*b++ = '\n';
 		}
 		*b = '\0';
-		if( count < 2 ) {
+		if( count < 2 ){
 			fputs("Warning: output fmt should print a long value "
 				"(eg '\%Lf')\n", stderr);
 		}
@@ -257,18 +257,18 @@ select_register(struct state *S)
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_pop(S->values, &val) ) {
+	if( stack_pop(S->values, &val) ){
 		offset = val;
 	}
-	if( rint(val) != val ) {
+	if( rint(val) != val ){
 		fprintf(stderr, "Invalid register: %Lg", val);
 		fprintf(stderr, " is not an integer\n");
 		stack_push(S->values, &val);
-	} else if( (ret = stack_get(S->registers, offset)) == NULL ) {
-		if( offset == -1 ) {
+	} else if( (ret = stack_get(S->registers, offset)) == NULL ){
+		if( offset == -1 ){
 			fprintf(stderr, "Register stack empty\n");
 		} else {
-			fprintf(stderr, "Register %d empty\n", offset );
+			fprintf(stderr, "Register %d empty\n", offset);
 		}
 	}
 
@@ -281,10 +281,10 @@ apply_string_op(struct state *S, unsigned char c)
 	struct ring_buf *rb;
 	void *e;
 	assert( !S->enquote || c == ']' );
-	if( c != ']' ) {
+	if( c != ']' ){
 		push_value(S, c);
 	}
-	switch( c ) {
+	switch( c ){
 	case '[':
 		S->enquote = 1;
 		break;
@@ -294,7 +294,7 @@ apply_string_op(struct state *S, unsigned char c)
 		S->accum = rb_create(32);
 		break;
 	case 'D':
-		if( stack_size(S->registers) > 0 ) {
+		if( stack_size(S->registers) > 0 ){
 			stack_pop(S->registers, &e);
 		}
 		break;
@@ -302,7 +302,7 @@ apply_string_op(struct state *S, unsigned char c)
 		extract_format(S);
 		break;
 	case 'R':
-		if( stack_size(S->registers) > 1 ) {
+		if( stack_size(S->registers) > 1 ){
 			struct ring_buf *a, *b;
 			stack_pop(S->registers, &a);
 			stack_pop(S->registers, &b);
@@ -311,21 +311,21 @@ apply_string_op(struct state *S, unsigned char c)
 		}
 		break;
 	case 'L':
-		for( unsigned i = 0; i < stack_size(S->registers); i++ ) {
+		for( unsigned i = 0; i < stack_size(S->registers); i++ ){
 			int j = 0, c;
 			struct ring_buf *s = stack_get(S->registers, i);
 
 			printf("(%d): ", i);
-			while( (c = rb_peek(s, j++)) != EOF ) {
+			while( (c = rb_peek(s, j++)) != EOF ){
 				putchar(c);
 			}
 			putchar('\n');
 		}
 		break;
 	case 'x':
-		if( (rb = select_register(S)) != NULL ) {
+		if( (rb = select_register(S)) != NULL ){
 			int j=0, c;
-			while( (c = rb_peek(rb, j++)) != EOF ) {
+			while( (c = rb_peek(rb, j++)) != EOF ){
 				rb_push(S->raw, c);
 			}
 		}
@@ -338,7 +338,7 @@ print_stack(struct state *S)
 {
 	unsigned i = 0;
 	long double *s;
-	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++) {
+	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++ ){
 		printf("%3u: ", i);
 		printf(S->fmt, *s);
 	}
@@ -354,13 +354,13 @@ apply_unary(struct state *S, unsigned char c)
 		fputs("Stack empty (need 1 value)\n", stderr);
 		return;
 	}
-	switch( c ) {
+	switch( c ){
 	case 'y':
 		stack_push(S->values, &val);
 		stack_push(S->values, &val);
 		break;
 	case 'k':
-		if( val < 1 ) {
+		if( val < 1 ){
 			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
@@ -374,7 +374,7 @@ apply_unary(struct state *S, unsigned char c)
 		break;
 	case 'p': stack_push(S->values, &val); /* Fall thru */
 	case 'n':
-		if( S->type == rational ) {
+		if( S->type == rational ){
 			printf(S->fmt, val);
 		} else {
 			long lval = (long)val;
@@ -390,7 +390,7 @@ apply_binary(struct state *S, unsigned char c)
 	long double val[2];
 	long double res;
 	assert( strchr(binary_ops, c) || c == '-' );
-	if( stack_size(S->values) < 2 ) {
+	if( stack_size(S->values) < 2 ){
 		fputs("Stack empty (need 2 values)\n", stderr);
 		return;
 	}
