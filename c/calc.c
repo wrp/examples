@@ -27,6 +27,7 @@ const char *help[] = {
 #include <math.h>
 #include <unistd.h>
 
+#define DEFAULT_FMT "%.3'Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
 #define string_ops "[]FxLRD"
 #define binary_ops "*+/^r"
@@ -93,7 +94,7 @@ main(int argc, char **argv)
 	S->type = rational;
 	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
-	strcpy( S->fmt, "%.3Lg\n" );
+	strcpy(S->fmt, DEFAULT_FMT);
 
 	if( argc > 1) {
 		for( ; *++argv; push_it(S, ' ') ) {
