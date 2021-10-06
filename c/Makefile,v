@@ -39,9 +39,9 @@ $(BUILDDIR)/Makefile: configure $(BUILDDIR)
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
-check clean distclen install:
+check clean distclen install: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 
-%: %.c
+%: %.c $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 @
