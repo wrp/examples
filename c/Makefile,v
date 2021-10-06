@@ -26,7 +26,8 @@ text
 BUILDDIR = build/$(shell uname -s)/$(shell uname -m)
 
 .PHONY: all check clean distclean loc install
-all: $(BUILDDIR)/smtx
+all: $(BUILDDIR)/Makefile
+	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 
 configure:
 	autoreconf -ivf
@@ -37,20 +38,6 @@ $(BUILDDIR)/Makefile: configure $(BUILDDIR)
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
-
-$(BUILDDIR)/smtx: $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && make $(MAKEFLAGS) all
-
-loc:
-	@@s=$$(pwd); cd $(BUILDDIR) && \
-	for file in $${s}/*.c; do \
-		f=$${file##*/}; \
-		test -f ".libs/$${f%.c}.gcda" && gcov $${f} -o .libs; \
-	done | tr -d "'" | awk ' \
-		/^File/ {file=$$2; gsub(".*/", "", file)} \
-		/Lines executed/{printf "%32s:\t%s\n", file, $$4; t+= $$4} \
-		END{printf "%32s:\t%s\n", "Total", t} \
-	'
 
 install:
 	cd $(BUILDDIR) && make $(MAKEFLAGS) install
