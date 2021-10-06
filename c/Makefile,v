@@ -33,7 +33,7 @@ configure:
 	autoreconf -ivf
 
 $(BUILDDIR)/Makefile: configure $(BUILDDIR)
-	s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} --coverage -g -O0"
+	s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
 	echo '$(BUILDDIR) configured'
 
 $(BUILDDIR):
