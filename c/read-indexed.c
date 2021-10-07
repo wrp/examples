@@ -13,7 +13,7 @@ struct indexed_file {
 	size_t lines;  /* Number of lines in file */
 };
 
-void build_index(struct indexed_file *ifp);
+void read_index(struct indexed_file *ifp);
 void open_indexed(const char *path, struct indexed_file *ifp);
 void xfseek(struct indexed_file *, long);
 
@@ -45,11 +45,11 @@ open_indexed(const char *path, struct indexed_file *ifp)
 {
 	ifp->fp = xfopen(path, "r");
 	ifp->path = path;
-	build_index(ifp);
+	read_index(ifp);
 }
 
 void
-build_index(struct indexed_file *ifp)
+read_index(struct indexed_file *ifp)
 {
 	FILE *idx;
 	int c;
