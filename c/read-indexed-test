@@ -3,15 +3,21 @@
 trap 'rm -rf $tmpdir' 0
 tmpdir=$(mktemp -d)
 mkdir -p $tmpdir
+file="$tmpdir"/file
+rm -f "$file".idx
 perl -E 'while(++$i < 16) { printf("%2d:foo ", $i);
-	say map { (q(a)..q(z))[rand(26)] } 1 .. rand(10)+8 }' > $tmpdir/file
+	say map { (q(a)..q(z))[rand(26)] } 1 .. rand(10)+8 }' > "$file"
 
-rm -f $tmpdir/file.idx
 
 validate_line() {
-	output="$(./read-indexed $tmpdir/file $1 | awk '{print $1}')"
-	if ! test "$output" = $1:foo; then
-		printf "Unexepected output for line %d: %s\n", "$1" "$output" >&2
+	_field=1
+	if test -n "$2"; then
+		_field=0
+	fi
+	output="$(./read-indexed "$file" $1 | awk '{print $f}' f=$_field)"
+
+	if ! test "$output" = "${2-$1:foo}"; then
+		printf "Unexepected output for line %d: %s\n" "$1" "$output" >&2
 		exit 1
 	fi
 }
@@ -20,7 +26,13 @@ yes | nl | sed 15q | while read i y; do
 	validate_line $i
 done
 
-./read-indexed $tmpdir/file 16 2> /dev/null && exit 1
-./read-indexed $tmpdir/file 0 2> /dev/null && exit 1
+./read-indexed "$file" 16 2> /dev/null && exit 1
+./read-indexed "$file" 0 2> /dev/null && exit 1
+
+# update the file to force a rebuild of the index
+line16="This is line 16"
+echo "$line16" >> "$file"
+
+validate_line 16 "$line16"
 
 exit 0
