@@ -11,10 +11,12 @@ struct indexed_file {
 	const char *path;
 	int *idx;
 	size_t lines;  /* Number of lines in file */
+	char *index;
 };
 
-void read_index(struct indexed_file *ifp);
-void open_indexed(const char *path, struct indexed_file *ifp);
+static void read_index(struct indexed_file *ifp);
+static void build_index(struct indexed_file *ifp);
+static void open_indexed(const char *path, struct indexed_file *ifp);
 void xfseek(struct indexed_file *, long);
 
 int
@@ -40,7 +42,7 @@ main(int argc, char **argv)
 	}
 }
 
-void
+static void
 open_indexed(const char *path, struct indexed_file *ifp)
 {
 	ifp->fp = xfopen(path, "r");
@@ -48,40 +50,39 @@ open_indexed(const char *path, struct indexed_file *ifp)
 	read_index(ifp);
 }
 
-void
+static void
 read_index(struct indexed_file *ifp)
 {
-	FILE *idx;
-	int c;
-	char *idx_path;
 	int index_newer = 0;
 	struct stat idx_stat, main_stat;
 	const char *path = ifp->path;
-	size_t capacity;
-	size_t count = 0;
-	size_t i = 0;
 
-	idx_path = xmalloc(strlen(path) + 5);
-	sprintf(idx_path, "%s.idx", path);
+	ifp->index = xmalloc(strlen(path) + 5);
+	sprintf(ifp->index, "%s.idx", path);
 
 	if( fstat(fileno(ifp->fp), &main_stat) ){
 		die("stat %s: %s", ifp->path, strerror(errno));
 	}
 
-	if( stat(idx_path, &idx_stat) ){
+	if( stat(ifp->index, &idx_stat) ){
 		if( errno != ENOENT ){
-			die("stat %s: %s", idx_path, strerror(errno));
+			die("stat %s: %s", ifp->index, strerror(errno));
 		}
+		/* Index does not exist */
+		build_index(ifp);
 	} else if(
 #if HAVE_STRUCT_STAT_ST_MTIM
-		idx_stat.st_mtim.tv_sec > main_stat.st_mtim.tv_sec
+		idx_stat.st_mtim.tv_sec <= main_stat.st_mtim.tv_sec
 #else
-		idx_stat.st_mtimespec.tv_sec > main_stat.st_mtimespec.tv_sec
+		idx_stat.st_mtimespec.tv_sec <= main_stat.st_mtimespec.tv_sec
 #endif
 	){
-		/* Index is fresh, no need to rebuild */
+		/* Index is stal; rebuild it */
+		build_index(ifp);
+	} else {
+		/* Index is fresh; read it */
 		index_newer = 1;
-		idx = xfopen(idx_path, "r");
+		FILE *idx = xfopen(ifp->index, "r");
 		/* TODO: read some magic numbers, maybe a hash of the input file */
 		if( fread(&ifp->lines, sizeof ifp->lines, 1, idx) != 1 ){
 			die("Failed to read index: %s", strerror(errno));
@@ -90,10 +91,20 @@ read_index(struct indexed_file *ifp)
 		if( fread(ifp->idx, sizeof *ifp->idx, ifp->lines, idx) != ifp->lines ){
 			die("Failed to read index: %s", strerror(errno));
 		}
-		goto end;
+		if( fclose(idx) ){
+			die("close %s: %s\n", ifp->index, strerror(errno));
+		}
 	}
-	/* Index does not exist or is stale: rebuild */
-	idx = xfopen(idx_path, "w");
+}
+
+static void
+build_index(struct indexed_file *ifp)
+{
+	size_t capacity;
+	size_t count = 0;
+	int c;
+	size_t i = 0;
+	FILE *idx = xfopen(ifp->index, "w");
 	ifp->idx = xrealloc(NULL, capacity = 256, sizeof *ifp->idx, NULL);
 	ifp->idx[i++] = count;
 	while( (c = fgetc(ifp->fp)) != EOF ){
@@ -102,20 +113,21 @@ read_index(struct indexed_file *ifp)
 			ifp->idx[i++] = count;
 		}
 		if( i == capacity ){
-			ifp->idx = xrealloc(ifp->idx, capacity *= 2, sizeof *ifp->idx, NULL);
+			ifp->idx = xrealloc(ifp->idx, capacity *= 2,
+				sizeof *ifp->idx, NULL
+			);
 		}
 	}
 	i -= 1;
 	ifp->lines = i;
 	if( fwrite(&i, sizeof i, 1, idx) != 1 ){
-		die("fwrite %s: %s\n", idx_path, strerror(errno));
+		die("fwrite %s: %s\n", ifp->index, strerror(errno));
 	}
 	if( fwrite(ifp->idx, sizeof *ifp->idx, i, idx) != i ){
-		die("fwrite %s: %s\n", idx_path, strerror(errno));
+		die("fwrite %s: %s\n", ifp->index, strerror(errno));
 	}
-end:
 	if( fclose(idx) ){
-		die("close %s: %s\n", idx_path, strerror(errno));
+		die("close %s: %s\n", ifp->index, strerror(errno));
 	}
 }
 
