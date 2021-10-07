@@ -9,7 +9,7 @@
 struct indexed_file {
 	FILE *fp;
 	const char *path;
-	int *idx;
+	off_t *idx;
 	size_t lines;  /* Number of lines in file */
 	char *index;
 };
