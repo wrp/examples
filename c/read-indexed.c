@@ -96,7 +96,7 @@ build_index(struct indexed_file *ifp)
 	idx = xfopen(idx_path, "w");
 	ifp->idx = xrealloc(NULL, capacity = 256, sizeof *ifp->idx, NULL);
 	ifp->idx[i++] = count;
-	while( ( c = fgetc(ifp->fp)) != EOF ){
+	while( (c = fgetc(ifp->fp)) != EOF ){
 		count += 1;
 		if( c == '\n' ){
 			ifp->idx[i++] = count;
@@ -114,7 +114,7 @@ build_index(struct indexed_file *ifp)
 		die("fwrite %s: %s\n", idx_path, strerror(errno));
 	}
 end:
-	if( fclose(idx)){
+	if( fclose(idx) ){
 		die("close %s: %s\n", idx_path, strerror(errno));
 	}
 }
