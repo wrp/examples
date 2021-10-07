@@ -42,6 +42,7 @@ main(int argc, char **argv)
 			putchar('\n');
 		} else {
 			fputs("outside bounds\n", stderr);
+			exit(1);
 		}
 	}
 }

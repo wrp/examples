@@ -20,6 +20,7 @@ yes | nl | sed 15q | while read i y; do
 	validate_line $i
 done
 
-./read-indexed $tmpdir/file 16 2> /dev/null
+./read-indexed $tmpdir/file 16 2> /dev/null && exit 1
+./read-indexed $tmpdir/file 0 2> /dev/null && exit 1
 
 exit 0
