@@ -15,13 +15,14 @@ struct indexed_file {
 
 void build_index(struct indexed_file *ifp);
 void open_indexed(const char *path, struct indexed_file *ifp);
+void xfseek(struct indexed_file *, long);
 
 int
 main(int argc, char **argv)
 {
 	struct indexed_file ifp[1];
 
-	if( argc < 2 ) {
+	if( argc < 2 ){
 		char *base = strrchr(argv[0], '/');
 		base = base ? base + 1 : argv[0];
 		printf("usage: %s input-file [line-num ...]\n", base);
@@ -31,19 +32,11 @@ main(int argc, char **argv)
 	for( argv += 2; *argv; argv++ ){
 		size_t line = strtol(*argv, NULL, 10);
 		int c;
-		if(line > 0 && line - 1 < ifp->lines) {
-			if( fseek(ifp->fp, ifp->idx[line - 1], SEEK_SET) == -1 ){
-				perror("fseek");
-				exit(1);
-			}
-			while( ( c = fgetc(ifp->fp)) != EOF && c != '\n' ) {
-				putchar(c);
-			}
-			putchar('\n');
-		} else {
-			fputs("outside bounds\n", stderr);
-			exit(1);
+		xfseek(ifp, line);
+		while( (c = fgetc(ifp->fp)) != EOF && c != '\n' ){
+			putchar(c);
 		}
+		putchar('\n');
 	}
 }
 
@@ -123,5 +116,18 @@ build_index(struct indexed_file *ifp)
 end:
 	if( fclose(idx)){
 		die("close %s: %s\n", idx_path, strerror(errno));
+	}
+}
+
+void
+xfseek(struct indexed_file *ifp, long line)
+{
+	line -= 1;
+	if( line < 0 || ifp->lines - line <= 0 ){
+		fputs("outside bounds\n", stderr);
+		exit(1);
+	} else if( fseek(ifp->fp, ifp->idx[line], SEEK_SET) == -1 ){
+		perror(ifp->path);
+		exit(1);
 	}
 }
