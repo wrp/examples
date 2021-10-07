@@ -32,12 +32,10 @@ all: $(BUILDDIR)/Makefile
 configure:
 	autoreconf -ivf
 
-$(BUILDDIR)/Makefile: configure $(BUILDDIR)
+$(BUILDDIR)/Makefile: configure
+	@@mkdir -p $(BUILDDIR)
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
 	@@echo '$(BUILDDIR) configured'
-
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
 
 check clean distclen install: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
