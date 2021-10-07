@@ -78,8 +78,8 @@ build_index(struct indexed_file *ifp)
 #else
 		idx_stat.st_mtimespec.tv_sec > main_stat.st_mtimespec.tv_sec
 #endif
-			){
-		/* Index is newer, no need to rebuild */
+	){
+		/* Index is fresh, no need to rebuild */
 		index_newer = 1;
 		idx = xfopen(idx_path, "r");
 		/* TODO: read some magic numbers, maybe a hash of the input file */
