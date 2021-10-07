@@ -3,14 +3,23 @@
 trap 'rm -rf $tmpdir' 0
 tmpdir=$(mktemp -d)
 mkdir -p $tmpdir
-yes foo | sed 15q | nl -w2 -s: > $tmpdir/file
+perl -E 'while(++$i < 16) { printf("%2d:foo ", $i);
+	say map { (q(a)..q(z))[rand(26)] } 1 .. rand(10)+8 }' > $tmpdir/file
 
 rm -f $tmpdir/file.idx
 
-output=$(./read-indexed $tmpdir/file 1)
-test "$output" = ' 1:foo' || exit 1
+validate_line() {
+	output="$(./read-indexed $tmpdir/file $1 | awk '{print $1}')"
+	if ! test "$output" = $1:foo; then
+		printf "Unexepected output for line %d: %s\n", "$1" "$output" >&2
+		exit 1
+	fi
+}
 
-test "$(./read-indexed $tmpdir/file 14)" = 14:foo || exit 1
-test "$(./read-indexed $tmpdir/file 15)" = 15:foo || exit 1
+yes | nl | sed 15q | while read i y; do
+	validate_line $i
+done
+
+./read-indexed $tmpdir/file 16 2> /dev/null
 
 exit 0
