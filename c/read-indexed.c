@@ -77,18 +77,19 @@ read_index(struct indexed_file *ifp)
 		idx_stat.st_mtimespec.tv_sec <= main_stat.st_mtimespec.tv_sec
 #endif
 	){
-		/* Index is stal; rebuild it */
+		/* Index is stale; rebuild it */
 		build_index(ifp);
 	} else {
 		/* Index is fresh; read it */
 		index_newer = 1;
 		FILE *idx = xfopen(ifp->index, "r");
-		/* TODO: read some magic numbers, maybe a hash of the input file */
+		/* TODO: read some magic numbers, maybe a hash of the input */
 		if( fread(&ifp->lines, sizeof ifp->lines, 1, idx) != 1 ){
 			die("Failed to read index: %s", strerror(errno));
 		}
 		ifp->idx = xrealloc(NULL, ifp->lines, sizeof *ifp->idx, NULL);
-		if( fread(ifp->idx, sizeof *ifp->idx, ifp->lines, idx) != ifp->lines ){
+		if( fread(ifp->idx, sizeof *ifp->idx, ifp->lines, idx)
+				!= ifp->lines ){
 			die("Failed to read index: %s", strerror(errno));
 		}
 		if( fclose(idx) ){
