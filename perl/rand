@@ -13,3 +13,14 @@ if( @ARGV == 0) {
 		say substr ($arg, rand length $arg, 1)
 	}
 }
+
+
+__DATA__
+# print a string of random lower case letter with lenth 10
+$ perl -le 'print map { (q(a)..q(z))[rand(26)] } 1 .. 10'
+
+# print a string of random hex digits with random length between 8 and 12
+$ perl -le 'print map { sprintf q|%X|, rand(16) } 1 .. rand(5) + 8'
+
+# Generate an md5sum of a file
+$ perl -MDigest::MD5=md5_hex -le 'print md5_hex(qq|@ARGV|)' foo
