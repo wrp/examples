@@ -100,7 +100,7 @@ build_index(struct indexed_file *ifp)
 	}
 	/* Index does not exist or is stale: rebuild */
 	idx = xfopen(idx_path, "w");
-	ifp->idx = realloc(NULL, capacity = 256);
+	ifp->idx = xrealloc(NULL, capacity = 256, sizeof *ifp->idx, NULL);
 	ifp->idx[i++] = count;
 	while( ( c = fgetc(ifp->fp)) != EOF ){
 		count += 1;
