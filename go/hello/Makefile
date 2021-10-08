@@ -15,3 +15,4 @@ go.mod:
 install: go.mod
 	@ go install
 	@ echo $(package_name) installed in $${GOBIN-$${GOPATH-$$HOME/go}/bin}
+	go list -f '{{.Target}}'
