@@ -1,11 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"bytes"
+)
 
 func main() {
 	arrays()
 	slices()
 	maps()
+	modify_slice()
 }
 
 func maps() {
@@ -64,4 +68,20 @@ func arrays() {
 	}
 	whatAmI(sb) /* is a slice */
 	whatAmI(b)  /* is an array */
+}
+
+
+type path []byte
+
+func (p *path) dirname() {
+	i := bytes.LastIndex(*p, []byte("/"))
+	if i >= 0 {
+		*p = (*p)[0:i]
+	}
+}
+
+func modify_slice() {
+    pathName := path("/usr/bin/tso")
+    pathName.dirname()
+    fmt.Printf("%s\n", pathName)
 }
