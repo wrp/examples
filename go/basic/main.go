@@ -5,4 +5,5 @@ func main() {
 	slices()
 	maps()
 	modify_slice()
+	variadic()
 }
