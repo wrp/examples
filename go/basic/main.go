@@ -38,4 +38,13 @@ func arrays() {
 	fmt.Println("Arrays");
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
+
+	sb := b[:]
+	whatAmI := func(i interface{}) {
+		switch t := i.(type) {
+		default: fmt.Printf("%v is of type %T\n", i, t)
+		}
+	}
+	whatAmI(sb)  /* is a slice */
+	whatAmI(b)   /* is an array */
 }
