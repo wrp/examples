@@ -12,6 +12,7 @@ func slices() {
 	var a []int
 	a = make([]int, 5, 10) /* Make slice with length 5, capacity 10 */
 	a[3] = 3
+	a = append(a, 9)      /* Append data to a slice */
 	b := []int{1, 2, 3,}  /* An initialized slice */
 	var c []int = []int{6, 7, 8, 9, 10} /* An initialized array */
 	var d [][]int = [][]int{{1,2,3}, {4,5,6}}
