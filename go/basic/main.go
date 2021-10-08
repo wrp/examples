@@ -10,8 +10,8 @@ func main() {
 
 func slices() {
 	var a []int
-	a = make([]int, 5, 5)
-	a[3] = 5
+	a = make([]int, 5, 10) /* Make slice with length 5, capacity 10 */
+	a[3] = 3
 	b := []int{1, 2, 3,}  /* An initialized slice */
 	var c []int = []int{6, 7, 8, 9, 10} /* An initialized array */
 	var d [][]int = [][]int{{1,2,3}, {4,5,6}}
@@ -22,9 +22,9 @@ func slices() {
 	fmt.Printf("b=%v\n", b);
 	fmt.Printf("b[0:]=%v\n", b[0:]);
 	fmt.Printf("b[len(b)-2:]=%v\n", b[len(b)-2:]);
-	fmt.Printf("%v: len=%d cap=%d\n", a, len(a), cap(a),)
-	fmt.Printf("%v: len=%d cap=%d\n", c, len(c), cap(c),)
-	fmt.Printf("%v: len=%d cap=%d\n", d, len(d), cap(d),) /* len == cap == 2 */
+	fmt.Printf("a = %v: len=%d cap=%d\n", a, len(a), cap(a),)
+	fmt.Printf("c = %v: len=%d cap=%d\n", c, len(c), cap(c),)
+	fmt.Printf("d = %v: len=%d cap=%d\n", d, len(d), cap(d),) /* len == cap == 2 */
 }
 
 func arrays() {
