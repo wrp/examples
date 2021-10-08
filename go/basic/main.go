@@ -15,6 +15,9 @@ func slices() {
 
 	_, _, _ = b, c, d
 
+	fmt.Printf("b=%v\n", b);
+	fmt.Printf("b[0:]=%v\n", b[0:]);
+	fmt.Printf("b[len(b)-2:]=%v\n", b[len(b)-2:]);
 	fmt.Printf("len=%d cap=%d %v\n", len(c), cap(c), c)
 	fmt.Printf("len=%d cap=%d %v\n", len(d), cap(d), d) /* len == cap == 2 */
 }
