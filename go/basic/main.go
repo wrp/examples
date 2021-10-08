@@ -28,6 +28,7 @@ func maps() {
 }
 
 func slices() {
+	fmt.Println("Slices")
 	var a []int
 	a = make([]int, 5, 10) /* Make slice with length 5, capacity 10 */
 	a[3] = 3
@@ -36,9 +37,13 @@ func slices() {
 	var c []int = []int{6, 7, 8, 9, 10} /* An initialized array */
 	var d [][]int = [][]int{{1, 2, 3}, {4, 5, 6}}
 
-	_, _, _ = b, c, d
+	/* Iterate over a slice */
+	sum := 0
+	for i := range a {
+		sum += a[i]
+	}
+	fmt.Println("Sum of elments in a: ", sum)
 
-	fmt.Println("Slices")
 	fmt.Printf("b=%v\n", b)
 	fmt.Printf("b[0:]=%v\n", b[0:])
 	fmt.Printf("b[len(b)-2:]=%v\n", b[len(b)-2:])
