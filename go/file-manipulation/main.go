@@ -41,11 +41,22 @@ func main() {
 	check(err)
 	fmt.Print(string(dat))
 
-	do_it(name)
+	err = do_it(name)
+	check(err)
 }
 
-func do_it(name string) {
+
+
+
+func do_it(name string) (err error) {
 	f, err := os.Open(name)
+
+	defer func() {
+		cerr := f.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
 	check(err)
 
 	b1 := make([]byte, 5)
@@ -75,6 +86,5 @@ func do_it(name string) {
 	b4, err := r4.Peek(5)
 	check(err)
 	fmt.Printf("5 bytes: %s\n", string(b4))
-
-	f.Close()
+	return
 }
