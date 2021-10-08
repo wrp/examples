@@ -41,6 +41,10 @@ func main() {
 	check(err)
 	fmt.Print(string(dat))
 
+	do_it(name)
+}
+
+func do_it(name string) {
 	f, err := os.Open(name)
 	check(err)
 
