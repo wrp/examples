@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
+	"os"
 	"reflect"
 )
 
@@ -32,10 +33,20 @@ func main() {
 		"variadic": variadic,
 		"closure": closure,
 	}
-	call(f, "arrays")
-	call(f, "slices")
-	call(f, "maps")
-	call(f, "modify_slice")
-	call(f, "variadic")
-	call(f, "closure")
+	args := os.Args[1:]
+	if len(args) == 0 {
+		args = make([]string, len(f))
+		i := 0
+		for k := range f {
+			args[i] = k
+			i += 1
+		}
+	}
+	for i := range args {
+		if _, ok := f[args[i]]; ok {
+			call(f, args[i])
+		} else {
+			fmt.Fprintln(os.Stderr, args[i], ": unkown")
+		}
+	}
 }
