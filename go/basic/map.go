@@ -12,6 +12,7 @@ func maps() {
 	}
 	fmt.Println("Maps")
 	fmt.Println(m["Google"])
+	for k, v := range m { fmt.Printf("%s -> %s\n", k, v) }
 
 	p := make(map[string]int, 10)
 	p["foo"] = 5
