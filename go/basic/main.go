@@ -6,4 +6,5 @@ func main() {
 	maps()
 	modify_slice()
 	variadic()
+	closure()
 }
