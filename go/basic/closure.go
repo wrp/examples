@@ -12,8 +12,6 @@ func intSeq() func() int {
 }
 
 func closure(){
-	show_func_name()
-
 	nextInt := intSeq()
 
 	fmt.Printf("%d, ", nextInt())

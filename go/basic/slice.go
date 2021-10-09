@@ -6,7 +6,6 @@ import (
 )
 
 func slices() {
-	fmt.Println("Slices")
 	var a []int
 	a = make([]int, 5, 10) /* Make slice with length 5, capacity 10 */
 	a[3] = 3

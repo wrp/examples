@@ -10,7 +10,6 @@ func maps() {
 		"Bell Labs": Vertex{40.68433, -74.39967},
 		"Google":    Vertex{37.42202, -122.08408},
 	}
-	fmt.Println("Maps")
 	fmt.Println(m["Google"])
 	for k, v := range m { fmt.Printf("%s -> %s\n", k, v) }
 

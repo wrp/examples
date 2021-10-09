@@ -12,7 +12,6 @@ func arrays() {
 	var d [2][3]int = [2][3]int{{1, 2, 3}, {4, 5, 6}}
 	_, _, _, _ = a, b, c, d
 
-	fmt.Println("Arrays")
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
