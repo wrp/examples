@@ -1,0 +1,24 @@
+
+Some random thoughts.
+
+The language designers misspelled "while".  Instead of using 'for' as the
+looping keyword, they should have dumped it and kept 'while'.
+
+gofmt is stupid.  The whole notion of having the language dictate style
+issues is brain dead.  I can appreciate the idea that it may improve tooling,
+but it is horribly misguided.  For example, I just ran go fmt on the
+code tree here and part of the generated diff is:
+
+@@ -29,7 +28,7 @@ func closure(){
+                        r = n
+                } else {
+                        p := fib(n - 2)
+-                       r = fib(n - 1) + p
++                       r = fib(n-1) + p
+                }
+                return
+
+
+There is no excuse for removing the whitespace around the -, and
+the inconsistency here with it failing to modify the whitespace
+in the := line is .... inconsistent.
