@@ -32,6 +32,7 @@ func main() {
 		"modify_slice": modify_slice,
 		"variadic": variadic,
 		"closure": closure,
+		"scope": scope,
 	}
 	args := os.Args[1:]
 	if len(args) == 0 {
