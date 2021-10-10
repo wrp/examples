@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"sort"
 )
 
 func call(m map[string]interface{}, name string, params ... interface{}) (result []reflect.Value, err error) {
@@ -34,7 +35,7 @@ func main() {
 		"closure": closure,
 		"scope": scope,
 	}
-	args := os.Args[1:]
+	var args []string
 	if len(args) == 0 {
 		args = make([]string, len(f))
 		i := 0
@@ -42,6 +43,9 @@ func main() {
 			args[i] = k
 			i += 1
 		}
+		sort.Strings(args)
+	} else {
+		args = os.Args[1:]
 	}
 	for i := range args {
 		if _, ok := f[args[i]]; ok {
