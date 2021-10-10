@@ -1,4 +1,3 @@
-
 package main
 
 import "fmt"
@@ -11,7 +10,7 @@ func intSeq() func() int {
 	}
 }
 
-func closure(){
+func closure() {
 	nextInt := intSeq()
 
 	fmt.Printf("%d, ", nextInt())
@@ -29,7 +28,7 @@ func closure(){
 			r = n
 		} else {
 			p := fib(n - 2)
-			r = fib(n - 1) + p
+			r = fib(n-1) + p
 		}
 		return
 	}

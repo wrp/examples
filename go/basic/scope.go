@@ -1,4 +1,3 @@
-
 package main
 
 import (
@@ -17,7 +16,7 @@ func scope() {
 
 	scope := pkg.Scope()
 	for _, name := range scope.Names() {
-		fmt.Printf("name = %s:\t", name);
+		fmt.Printf("name = %s:\t", name)
 		obj := scope.Lookup(name)
 		if tn, ok := obj.Type().(*types.Named); ok {
 			fmt.Printf("method count: %#v", tn.NumMethods())

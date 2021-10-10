@@ -28,10 +28,9 @@ func check(e error) {
 	}
 }
 
-
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "missing argument");
+		fmt.Fprintln(os.Stderr, "missing argument")
 		os.Exit(1)
 	}
 
@@ -44,9 +43,6 @@ func main() {
 	err = do_it(name)
 	check(err)
 }
-
-
-
 
 func do_it(name string) (err error) {
 	f, err := os.Open(name)

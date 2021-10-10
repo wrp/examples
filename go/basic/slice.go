@@ -1,8 +1,8 @@
-
 package main
+
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 )
 
 func slices() {
@@ -29,7 +29,6 @@ func slices() {
 	fmt.Printf("d = %v: len=%d cap=%d\n", d, len(d), cap(d)) /* len == cap == 2 */
 }
 
-
 type path []byte
 
 func (p *path) dirname() {
@@ -40,7 +39,7 @@ func (p *path) dirname() {
 }
 
 func modify_slice() {
-    pathName := path("/usr/bin/tso")
-    pathName.dirname()
-    fmt.Printf("%s\n", pathName)
+	pathName := path("/usr/bin/tso")
+	pathName.dirname()
+	fmt.Printf("%s\n", pathName)
 }
