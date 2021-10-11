@@ -26,13 +26,14 @@ func call(m map[string]interface{}, name string, params ...interface{}) (result 
 func main() {
 	f := map[string]interface{}{
 		"arrays":       arrays,
-		"slices":       slices,
+		"closure":      closure,
 		"interface":    interface_examples,
 		"maps":         maps,
 		"modify_slice": modify_slice,
-		"variadic":     variadic,
-		"closure":      closure,
+		"reflect":      reflect_set,
 		"scope":        scope,
+		"slices":       slices,
+		"variadic":     variadic,
 	}
 	args := os.Args[1:]
 	if len(args) == 0 {
