@@ -21,13 +21,14 @@ Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 Don't use logs as metrics.
 Version everything!  Do not hardcode version numbers in a file; derive them from a VCS.
 Rigidly enforce commit message formats from the first commit.
-Don't use '.sh' suffixes on shell scripts.
 Never deploy the tip of a branch; deploy a specific commit.
 Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 Don't use the implementation as a basis for the name of a service.
     Humans should not care about the underlying implementation.  If you name your
     message queue "kafka", then it will be extremely difficult to migrate to KubeMQ.
     This is the same rationale for avoiding '.sh' suffixes on your shell scripts.
+Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339)
+    eg, never display or write "07:18".  Always write "07:18:00-06:00" or "13:18:00Z".  Always
 
 Slogans:
 Plan for failure, automate, test extensively.
