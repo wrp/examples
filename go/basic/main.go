@@ -27,13 +27,14 @@ func main() {
 	f := map[string]interface{}{
 		"arrays":       arrays,
 		"slices":       slices,
+		"interface":    interface_examples,
 		"maps":         maps,
 		"modify_slice": modify_slice,
 		"variadic":     variadic,
 		"closure":      closure,
 		"scope":        scope,
 	}
-	var args []string
+	args := os.Args[1:]
 	if len(args) == 0 {
 		args = make([]string, len(f))
 		i := 0
@@ -42,8 +43,6 @@ func main() {
 			i += 1
 		}
 		sort.Strings(args)
-	} else {
-		args = os.Args[1:]
 	}
 	for i := range args {
 		if _, ok := f[args[i]]; ok {
