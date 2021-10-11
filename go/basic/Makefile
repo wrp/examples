@@ -3,7 +3,7 @@ package_name = example/${USER}/$(base)
 
 .PHONY: all install
 all: go.mod
-	go run .
+	go run . $(ARGS)
 
 $(base):
 	go build .
