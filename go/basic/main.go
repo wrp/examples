@@ -27,6 +27,7 @@ func main() {
 	f := map[string]interface{}{
 		"arrays":       arrays,
 		"closure":      closure,
+		"defer":        defer_example,
 		"interface":    interface_examples,
 		"maps":         maps,
 		"modify_slice": modify_slice,
