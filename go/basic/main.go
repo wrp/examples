@@ -33,6 +33,7 @@ func main() {
 		"reflect":      reflect_set,
 		"scope":        scope,
 		"slices":       slices,
+		"struct":       structs,
 		"variadic":     variadic,
 	}
 	args := os.Args[1:]
