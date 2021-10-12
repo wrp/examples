@@ -5,6 +5,22 @@ import (
 	"math"
 )
 
+func interface_examples() {
+	r := rect{width: 3, height: 4}
+	c := circle{radius: 5}
+	z := cube{side: 4}
+	var w geo2d
+	var y geo3d
+	w = z
+	y = w.(geo3d) // type assertion
+
+	measure(r)
+	measure(c)
+	measure(z)
+	measure(w)
+	measure(y)
+}
+
 type geo3d interface {
 	geo2d
 	volume() float64
@@ -35,20 +51,4 @@ func measure(g geo2d) {
 	fmt.Println(g)
 	fmt.Println(g.area())
 	fmt.Println(g.perim())
-}
-
-func interface_examples() {
-	r := rect{width: 3, height: 4}
-	c := circle{radius: 5}
-	z := cube{side: 4}
-	var w geo2d
-	var y geo3d
-	w = z
-	y = w.(geo3d) // type assertion
-
-	measure(r)
-	measure(c)
-	measure(z)
-	measure(w)
-	measure(y)
 }
