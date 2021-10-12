@@ -29,6 +29,7 @@ func main() {
 		"closure":      closure,
 		"defer":        defer_example,
 		"interface":    interface_examples,
+		"make":         make_example,
 		"maps":         maps,
 		"modify_slice": modify_slice,
 		"reflect":      reflect_set,
