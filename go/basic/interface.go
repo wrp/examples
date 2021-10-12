@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"reflect"
+	"strconv"
 )
 
 func interface_examples() {
@@ -19,6 +21,18 @@ func interface_examples() {
 	measure(z)
 	measure(w)
 	measure(y)
+}
+
+
+func ToString(any interface{}) string {
+	if v, ok := any.(Stringer); ok {
+		return v.string()
+	}
+	switch v := any.(type) {
+	case int:
+		return strconv.Itoa(v)
+	}
+	return "???"
 }
 
 type geo3d interface {
@@ -46,9 +60,21 @@ type cube struct{ side float64 }
 func (c cube) area() float64   { return c.side * c.side * 6 }
 func (c cube) perim() float64  { return c.side * 12 }
 func (c cube) volume() float64 { return c.side * c.side * c.side }
+func (c cube) string() string { return fmt.Sprintf("A cube with side %v", c.side) }
 
 func measure(g geo2d) {
-	fmt.Println(g)
-	fmt.Println(g.area())
-	fmt.Println(g.perim())
+	if v, ok := g.(Stringer); ok {
+		fmt.Printf("%s: %s %s\n",
+			v.string(),
+			reflect.TypeOf(g),
+			reflect.ValueOf(&g).Elem().Interface(),
+		)
+	} else {
+		fmt.Println(g)
+		fmt.Println(g.area())
+		fmt.Println(g.perim())
+	}
+}
+type Stringer interface {
+	string() string
 }
