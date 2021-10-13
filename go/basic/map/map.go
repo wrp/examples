@@ -31,7 +31,8 @@ func Example() {
 		"Bell Labs": vertex{40.68433, -74.39967},
 		"Google":    vertex{37.42202, -122.08408},
 	}
-	b := []string{"Google", "not here"} // Missing index returns 0
+	b := []string{"Google", "Bell Labs"} // Missing index returns 0
+	delete(m, "Bell Labs")  // Remove entry from a map
 	for _, v := range b {
 		if loc, ok := m[v]; ok {
 			fmt.Println(v, "is at", loc)
