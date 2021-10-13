@@ -18,12 +18,19 @@ import (
 	"fmt"
 )
 
+type Vertex struct{ Lat, Long float64 }
+
+func map_foo(x map[string]Vertex) {
+	x["Google"] = Vertex{5, 6}
+}
+
 func maps() {
-	type Vertex struct{ Lat, Long float64 }
 	var m = map[string]Vertex{
 		"Bell Labs": Vertex{40.68433, -74.39967},
 		"Google":    Vertex{37.42202, -122.08408},
 	}
+	fmt.Println(m["Google"])
+	map_foo(m)
 	fmt.Println(m["Google"])
 	for k, v := range m {
 		fmt.Printf("%s -> %s\n", k, v)
