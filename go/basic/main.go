@@ -1,6 +1,7 @@
 package main
 
 import (
+	"example/williamp/basic/map"
 	"errors"
 	"fmt"
 	"os"
@@ -30,7 +31,7 @@ func main() {
 		"defer":        defer_example,
 		"interface":    interface_examples,
 		"make":         make_example,
-		"maps":         maps,
+		"maps":         maps.Example,
 		"modify_slice": modify_slice,
 		"reflect":      reflect_set,
 		"scope":        scope,
