@@ -9,8 +9,19 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime"
 	"sort"
 )
+
+
+func init() {
+	s := ""
+	if _, fileName, fileLine, ok := runtime.Caller(0); ok {
+		s = fmt.Sprintf("%s:%d", fileName, fileLine)
+	}
+	fmt.Println("init in ", s, "called")
+}
+
 
 func call(m map[string]interface{}, name string, params ...interface{}) (result []reflect.Value, err error) {
 	fmt.Printf("**** %s ****\n", name)
