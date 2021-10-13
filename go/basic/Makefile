@@ -1,5 +1,5 @@
 base = $(shell basename $$(pwd))
-package_name = example/${USER}/$(base)
+package_name = example/$(base)
 
 .PHONY: all install
 all: go.mod

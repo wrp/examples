@@ -1,9 +1,9 @@
 package main
 
 import (
-	"example/williamp/basic/map"
-	"example/williamp/basic/scope"
-	"example/williamp/basic/wprint"
+	"example/basic/map"
+	"example/basic/scope"
+	"example/basic/wprint"
 	"errors"
 	"fmt"
 	"os"
