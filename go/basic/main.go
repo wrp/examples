@@ -4,6 +4,7 @@ import (
 	"example/basic/map"
 	"example/basic/scope"
 	"example/basic/wprint"
+	"example/basic/iota"
 	"errors"
 	"fmt"
 	"os"
@@ -32,6 +33,7 @@ func main() {
 		"closure":      closure,
 		"defer":        defer_example,
 		"interface":    interface_examples,
+		"iota":         iota.Example,
 		"make":         make_example,
 		"maps":         maps.Example,
 		"modify_slice": modify_slice,
