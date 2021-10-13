@@ -22,3 +22,6 @@ code tree here and part of the generated diff is:
 There is no excuse for removing the whitespace around the -, and
 the inconsistency here with it failing to modify the whitespace
 in the := line is .... inconsistent.
+
+
+log.Println prints to stderr by default.  This is fucking stupid.
