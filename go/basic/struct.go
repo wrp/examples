@@ -18,6 +18,8 @@ func structs() {
 	t := T{23, "skidoo", 3.5}
 	s := reflect.ValueOf(&t).Elem()
 	typeOfT := s.Type()
+	// Use %+v to print elements of the struct  (this seems identical to %v)
+	fmt.Printf("%%v vs: %%+v: %v --> %+v\n", t, t)
 
 	// Iterate over the members of a struct, printing their names/values
 	for i := 0; i < s.NumField(); i++ {
