@@ -3,6 +3,7 @@ package main
 import (
 	"example/williamp/basic/map"
 	"example/williamp/basic/scope"
+	"example/williamp/basic/wprint"
 	"errors"
 	"fmt"
 	"os"
@@ -34,6 +35,7 @@ func main() {
 		"make":         make_example,
 		"maps":         maps.Example,
 		"modify_slice": modify_slice,
+		"print":        wprint.Example,
 		"reflect":      reflect_set,
 		"scope":        scope.Example,
 		"slices":       slices,
