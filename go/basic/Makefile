@@ -13,3 +13,8 @@ go.mod:
 
 install: go.mod
 	@ go install -v
+
+check:
+	for i in \
+		map \
+	; do cd "$$i" && go test; done

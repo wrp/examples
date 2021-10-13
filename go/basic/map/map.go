@@ -20,8 +20,10 @@ import (
 
 type Vertex struct{ Lat, Long float64 }
 
-func map_foo(x map[string]Vertex) {
-	x["Google"] = Vertex{5, 6}
+func map_incr(x map[int]int) {
+	for k := range x {
+		x[k] += 1
+	}
 }
 
 func Example() {
@@ -30,10 +32,15 @@ func Example() {
 		"Google":    Vertex{37.42202, -122.08408},
 	}
 	fmt.Println(m["Google"])
-	map_foo(m)
-	fmt.Println(m["Google"])
+	k := map[int]int{
+		1: 10,
+		2: 12,
+		5: 13,
+	}
+	map_incr(k)
+	fmt.Println(k)
 	for k, v := range m {
-		fmt.Printf("%s -> %s\n", k, v)
+		fmt.Printf("%s -> %v\n", k, v)
 	}
 
 	p := make(map[string]int, 10)
