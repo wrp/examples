@@ -31,7 +31,14 @@ func Example() {
 		"Bell Labs": vertex{40.68433, -74.39967},
 		"Google":    vertex{37.42202, -122.08408},
 	}
-	fmt.Println(m["Google"])
+	b := []string{"Google", "not here"} // Missing index returns 0
+	for _, v := range b {
+		if loc, ok := m[v]; ok {
+			fmt.Println(v, "is at", loc)
+		} else {
+			fmt.Println(v, "is not in the map")
+		}
+	}
 	k := map[int]int{
 		1: 10,
 		2: 12,
