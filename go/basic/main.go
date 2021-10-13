@@ -2,6 +2,7 @@ package main
 
 import (
 	"example/williamp/basic/map"
+	"example/williamp/basic/scope"
 	"errors"
 	"fmt"
 	"os"
@@ -34,7 +35,7 @@ func main() {
 		"maps":         maps.Example,
 		"modify_slice": modify_slice,
 		"reflect":      reflect_set,
-		"scope":        scope,
+		"scope":        scope.Example,
 		"slices":       slices,
 		"struct":       structs,
 		"variadic":     variadic,

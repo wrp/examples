@@ -1,4 +1,4 @@
-package main
+package scope
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func scope() {
+func Example() {
 	pkg, err := importer.Default().Import("time")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err.Error())
