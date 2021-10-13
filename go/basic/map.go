@@ -1,5 +1,19 @@
 package main
 
+/*
+From https://golang.org/doc/effective_go:
+Maps are a convenient and powerful built-in data structure that
+associate values of one type (the key) with values of another type
+(the element or value). The key can be of any type for which the
+equality operator is defined, such as integers, floating point and
+complex numbers, strings, pointers, interfaces (as long as the
+dynamic type supports equality), structs and arrays. Slices cannot
+be used as map keys, because equality is not defined on them. Like
+slices, maps hold references to an underlying data structure. If
+you pass a map to a function that changes the contents of the map,
+the changes will be visible in the caller
+*/
+
 import (
 	"fmt"
 )
