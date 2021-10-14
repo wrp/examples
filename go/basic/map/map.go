@@ -20,10 +20,6 @@ import (
 	"fmt"
 )
 
-func init() {
-	fmt.Println("init in maps called")
-}
-
 type vertex struct{ Lat, Long float64 }
 
 func map_incr(x map[int]int) {
