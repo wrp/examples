@@ -3,6 +3,7 @@ package main
 import (
 	"example/basic/lock"
 	"example/basic/map"
+	wrun "example/basic/runtime"
 	"example/basic/scope"
 	"example/basic/wprint"
 	"example/basic/iota"
@@ -52,6 +53,7 @@ func main() {
 		"modify_slice": modify_slice,
 		"print":        wprint.Example,
 		"reflect":      reflect_set,
+		"runtime":      wrun.Example,
 		"scope":        scope.Example,
 		"slices":       slices,
 		"struct":       structs,
