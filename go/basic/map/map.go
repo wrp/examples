@@ -12,6 +12,8 @@ be used as map keys, because equality is not defined on them. Like
 slices, maps hold references to an underlying data structure. If
 you pass a map to a function that changes the contents of the map,
 the changes will be visible in the caller
+
+Concurrent read/write is undefined behavior.
 */
 
 import (
