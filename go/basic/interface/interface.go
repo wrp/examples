@@ -74,6 +74,11 @@ func measure(g geo2d) {
 		fmt.Println(g.area())
 		fmt.Println(g.perim())
 	}
+	if _, ok := g.(geo3d); ok {
+		fmt.Printf("value %v of type %T implements geo3d\n", g, g)
+	} else {
+		fmt.Printf("value %v of type %T does not implement geo3d\n", g, g)
+	}
 }
 type Stringer interface {
 	string() string
