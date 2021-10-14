@@ -2,6 +2,7 @@ package main
 
 import (
 	"example/basic/array"
+	"example/basic/closure"
 	"example/basic/iota"
 	"example/basic/lock"
 	"example/basic/map"
@@ -44,7 +45,7 @@ func call(m map[string]interface{}, name string, params ...interface{}) (result 
 func main() {
 	f := map[string]interface{}{
 		"arrays":       array.Example,
-		"closure":      closure,
+		"closure":      closure.Example,
 		"defer":        defer_example,
 		"interface":    interface_examples,
 		"iota":         iota.Example,
