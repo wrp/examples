@@ -3,6 +3,7 @@ package main
 import (
 	"example/basic/array"
 	"example/basic/closure"
+	"example/basic/Defer"
 	"example/basic/iota"
 	"example/basic/Interface"
 	"example/basic/lock"
@@ -47,7 +48,7 @@ func main() {
 	f := map[string]interface{}{
 		"arrays":       array.Example,
 		"closure":      closure.Example,
-		"defer":        defer_example,
+		"defer":        Defer.Example,
 		"interface":    Interface.Example,
 		"iota":         iota.Example,
 		"lock":	        lock.Example,
