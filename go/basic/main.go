@@ -1,6 +1,7 @@
 package main
 
 import (
+	"example/basic/lock"
 	"example/basic/map"
 	"example/basic/scope"
 	"example/basic/wprint"
@@ -45,6 +46,7 @@ func main() {
 		"defer":        defer_example,
 		"interface":    interface_examples,
 		"iota":         iota.Example,
+		"lock":	        lock.Example,
 		"make":         make_example,
 		"maps":         maps.Example,
 		"modify_slice": modify_slice,
