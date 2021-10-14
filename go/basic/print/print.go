@@ -1,5 +1,5 @@
 
-package wprint
+package print
 
 import "fmt"
 

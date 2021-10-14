@@ -5,7 +5,7 @@ import (
 	"example/basic/map"
 	wrun "example/basic/runtime"
 	"example/basic/scope"
-	"example/basic/wprint"
+	"example/basic/print"
 	"example/basic/iota"
 	"errors"
 	"fmt"
@@ -51,7 +51,7 @@ func main() {
 		"make":         make_example,
 		"maps":         maps.Example,
 		"modify_slice": modify_slice,
-		"print":        wprint.Example,
+		"print":        print.Example,
 		"reflect":      reflect_set,
 		"runtime":      wrun.Example,
 		"scope":        scope.Example,
