@@ -1,12 +1,13 @@
 package main
 
 import (
+	"example/basic/array"
+	"example/basic/iota"
 	"example/basic/lock"
 	"example/basic/map"
+	"example/basic/print"
 	wrun "example/basic/runtime"
 	"example/basic/scope"
-	"example/basic/print"
-	"example/basic/iota"
 	"errors"
 	"fmt"
 	"os"
@@ -42,7 +43,7 @@ func call(m map[string]interface{}, name string, params ...interface{}) (result 
 
 func main() {
 	f := map[string]interface{}{
-		"arrays":       arrays,
+		"arrays":       array.Example,
 		"closure":      closure,
 		"defer":        defer_example,
 		"interface":    interface_examples,

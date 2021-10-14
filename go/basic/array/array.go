@@ -1,10 +1,10 @@
-package main
+package array
 
 import (
 	"fmt"
 )
 
-func arrays() {
+func Example() {
 	var a [5]int                          /* An array of 5 integers, initialized to 0 */
 	b := [5]int{1, 2, 3}                  /* An initialized array, unset values go to 0 */
 	e := [...]int{1, 2, 3}                /* An initialized array */
