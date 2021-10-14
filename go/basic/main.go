@@ -4,6 +4,7 @@ import (
 	"example/basic/array"
 	"example/basic/closure"
 	"example/basic/iota"
+	"example/basic/Interface"
 	"example/basic/lock"
 	"example/basic/map"
 	"example/basic/print"
@@ -47,7 +48,7 @@ func main() {
 		"arrays":       array.Example,
 		"closure":      closure.Example,
 		"defer":        defer_example,
-		"interface":    interface_examples,
+		"interface":    Interface.Example,
 		"iota":         iota.Example,
 		"lock":	        lock.Example,
 		"make":         make_example,

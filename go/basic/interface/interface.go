@@ -1,4 +1,4 @@
-package main
+package Interface
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func interface_examples() {
+func Example() {
 	r := rect{width: 3, height: 4}
 	c := circle{radius: 5}
 	z := cube{side: 4}
