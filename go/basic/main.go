@@ -4,6 +4,7 @@ import (
 	"example/basic/array"
 	"example/basic/closure"
 	"example/basic/Defer"
+	"example/basic/Error"
 	"example/basic/iota"
 	"example/basic/Interface"
 	"example/basic/lock"
@@ -49,6 +50,7 @@ func main() {
 		"arrays":       array.Example,
 		"closure":      closure.Example,
 		"defer":        Defer.Example,
+		"error":	Error.Example,
 		"interface":    Interface.Example,
 		"iota":         iota.Example,
 		"lock":	        lock.Example,
