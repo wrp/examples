@@ -98,7 +98,7 @@ RUN printf "root ALL=(ALL) ALL\n" > /etc/sudoers
 RUN printf "$user ALL=(ALL) NOPASSWD:ALL\n" >> /etc/sudoers
 RUN printf '\nDefaults env_keep += "SSH_CLIENT SSH_USER"\n' >> /etc/sudoers
 
-RUN adduser --quiet $user
+RUN adduser --quiet --force-badname $user
 ENV USER=$user
 CMD sudo DOCKER=debian -u "$USER" bash
 
