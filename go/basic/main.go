@@ -77,7 +77,7 @@ func main() {
 		if _, ok := f[args[i]]; ok {
 			call(f, args[i])
 		} else {
-			fmt.Fprintln(os.Stderr, args[i], ": unkown")
+			fmt.Fprintln(os.Stderr, args[i], ": unknown")
 		}
 	}
 }
