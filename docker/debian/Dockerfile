@@ -34,7 +34,7 @@ RUN aptitude install -y collectd collectd-utils
 RUN aptitude install -y curl
 RUN aptitude install -y python3
 RUN aptitude install -y python3-yaml
-RUN aptitude install -y python-yaml
+# RUN aptitude install -y python-yaml
 RUN aptitude install -y dtach
 RUN aptitude install -y tmux
 RUN aptitude install -y ansible
