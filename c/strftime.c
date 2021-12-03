@@ -8,7 +8,7 @@ main(int argc, char **argv)
 	int rv = EXIT_SUCCESS;
 	struct timeval tv;
 	struct tm *tm;
-	char *default_args[] = { "%k:%M:%S %B %d, %Y", NULL };
+	char *default_args[] = { " %H:%M:%S:%3N", NULL };
 	if( gettimeofday(&tv, NULL) == -1 ){
 		perror("gettimeofday");
 		exit(1);
