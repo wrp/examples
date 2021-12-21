@@ -12,7 +12,7 @@ def main(args):
 
     for x in args:
         try:
-            json.dump(yaml.load(open(x,'r').read()), sys.stdout, indent = 8)
+            json.dump(yaml.load(open(x,'r').read(), Loader=yaml.SafeLoader), sys.stdout, indent = 8)
         except IOError as e:
             if e.errno in [2,63]:
                 json.dump(yaml.load(x), sys.stdout, indent = 8)
