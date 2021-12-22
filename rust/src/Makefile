@@ -1,5 +1,5 @@
 
-SOURCES := $(wildcard *.rs)
+SOURCES := $(filter-out misc.rs, $(wildcard *.rs))
 EXE := $(patsubst %.rs,%,$(SOURCES))
 
 all: $(EXE) libmisc.rlib
@@ -11,4 +11,4 @@ lib%.rlib: %.rs
 	rustc --crate-type=lib  $<
 
 clean:
-	rm -f $(EXE)
+	rm -f $(EXE) *.rlib
