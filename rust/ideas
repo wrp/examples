@@ -1,0 +1,5 @@
+
+
+Quick list of ideas of things to implement for practice.
+
+sort -t: -k3,3n /etc/passwd | head -n10 | cut -d: -f1 > ten.txt
