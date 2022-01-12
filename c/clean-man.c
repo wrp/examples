@@ -4,6 +4,7 @@
  * Discard all between 0x1b and 'm'
  */
 #include <assert.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include "xutil.h"
@@ -25,7 +26,10 @@ main( int argc, char **argv )
 	char **args = argc > 1 ? ++argv : defaults;
 
 	for( char **arg = args; *arg; arg++ ){
+		char tmpname[PATH_MAX];
 		FILE *ifp = xfopen(*arg, "r");
+		FILE *ofp = ifp == stdin ? stdout :
+			xtmpfile(tmpname, sizeof tmpname, "w");
 
 		int prev = 0x08;
 		int state = 1;
@@ -36,7 +40,7 @@ main( int argc, char **argv )
 				state = 0;
 			}
 			if( state && c != 0x08 && prev != 0x08 ){
-				putc(prev, stdout);
+				putc(prev, ofp);
 			}
 			if( prev == 'm' ){
 				state = 1;
@@ -44,5 +48,9 @@ main( int argc, char **argv )
 			prev = c;
 		} while( c != EOF );
 		fclose(ifp);
+		if( ofp != stdout ){
+			fclose(ofp);
+			xrename(tmpname, *arg);
+		}
 	}
 }

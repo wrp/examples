@@ -9,4 +9,5 @@ void * xcalloc(size_t, size_t);
 int die(const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
 int xopen(const char *path, int flags);
 char * xstrdup(const char *s1);
-
+FILE * xtmpfile(char *tempname, size_t size, const char *mode);
+void xrename(const char *old, const char *new);

@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <fcntl.h>
+#include <errno.h>
 
 FILE *
 xfopen(const char *path, const char *mode)
@@ -86,4 +87,45 @@ xcalloc(size_t count, size_t size)
 		exit(EXIT_FAILURE);
 	}
 	return r;
+}
+
+FILE *
+xtmpfile(char *tempname, size_t siz, const char *mode)
+{
+	const char *template = "xutil.XXXXXXXXX";
+	int fd;
+	char *tmpdir = getenv("TMPDIR");
+	int length = 0;
+
+	if( tmpdir ){
+		length = snprintf(tempname, siz - 1, "%s", tmpdir);
+		if( length < siz - 1 && tempname[length - 1] != '/' ){
+			tempname[length++] = '/';
+		}
+	}
+	tempname[length] = '\0';
+
+	strncat(tempname, template, siz - length);
+
+	if( (fd = mkstemp(tempname)) == -1 ){
+		perror(tempname);
+		exit(EXIT_FAILURE);
+	}
+	FILE *fp = fdopen(fd, mode);
+	if( fp == NULL ){
+		perror(tempname);
+		exit(EXIT_FAILURE);
+	}
+	return fp;
+}
+
+void
+xrename(const char *old, const char *new)
+{
+	if( rename(old, new) ){
+		int errno_sav = errno;
+		fprintf(stderr, "rename: %s -> ", old);
+		perror(new);
+		exit(EXIT_FAILURE);
+	}
 }
