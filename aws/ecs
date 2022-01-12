@@ -26,116 +26,59 @@ DESCRIPTION
        also don't need to worry about scaling your management  infrastructure.
 
 AVAILABLE COMMANDS
-       o create-capacity-provider
-
-       o create-cluster
-
-       o create-service
-
-       o create-task-set
-
-       o delete-account-setting
-
-       o delete-attributes
-
-       o delete-capacity-provider
-
-       o delete-cluster
-
-       o delete-service
-
-       o delete-task-set
-
-       o deploy
-
-       o deregister-container-instance
-
-       o deregister-task-definition
-
-       o describe-capacity-providers
-
-       o describe-clusters
-
-       o describe-container-instances
-
-       o describe-services
-
-       o describe-task-definition
-
-       o describe-task-sets
-
-       o describe-tasks
-
-       o discover-poll-endpoint
-
-       o execute-command
-
-       o help
-
-       o list-account-settings
-
-       o list-attributes
-
-       o list-clusters
-
-       o list-container-instances
-
-       o list-services
-
-       o list-tags-for-resource
-
-       o list-task-definition-families
-
-       o list-task-definitions
-
-       o list-tasks
-
-       o put-account-setting
-
-       o put-account-setting-default
-
-       o put-attributes
-
-       o put-cluster-capacity-providers
-
-       o register-container-instance
-
-       o register-task-definition
-
-       o run-task
-
-       o start-task
-
-       o stop-task
-
-       o submit-attachment-state-changes
-
-       o submit-container-state-change
-
-       o submit-task-state-change
-
-       o tag-resource
-
-       o untag-resource
-
-       o update-capacity-provider
-
-       o update-cluster
-
-       o update-cluster-settings
-
-       o update-container-agent
-
-       o update-container-instances-state
-
-       o update-service
-
-       o update-service-primary-task-set
-
-       o update-task-set
-
-       o wait
-
-
-
+       create-capacity-provider
+       create-cluster
+       create-service
+       create-task-set
+       delete-account-setting
+       delete-attributes
+       delete-capacity-provider
+       delete-cluster
+       delete-service
+       delete-task-set
+       deploy
+       deregister-container-instance
+       deregister-task-definition
+       describe-capacity-providers
+       describe-clusters
+       describe-container-instances
+       describe-services
+       describe-task-definition
+       describe-task-sets
+       describe-tasks
+       discover-poll-endpoint
+       execute-command
+       help
+       list-account-settings
+       list-attributes
+       list-clusters
+       list-container-instances
+       list-services
+       list-tags-for-resource
+       list-task-definition-families
+       list-task-definitions
+       list-tasks
+       put-account-setting
+       put-account-setting-default
+       put-attributes
+       put-cluster-capacity-providers
+       register-container-instance
+       register-task-definition
+       run-task
+       start-task
+       stop-task
+       submit-attachment-state-changes
+       submit-container-state-change
+       submit-task-state-change
+       tag-resource
+       untag-resource
+       update-capacity-provider
+       update-cluster
+       update-cluster-settings
+       update-container-agent
+       update-container-instances-state
+       update-service
+       update-service-primary-task-set
+       update-task-set
+       wait
                                                                          ECS()
