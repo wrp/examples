@@ -32,144 +32,72 @@ DESCRIPTION
        __ .
 
 AVAILABLE COMMANDS
-       o activate-type
-
-       o batch-describe-type-configurations
-
-       o cancel-update-stack
-
-       o continue-update-rollback
-
-       o create-change-set
-
-       o create-stack
-
-       o create-stack-instances
-
-       o create-stack-set
-
-       o deactivate-type
-
-       o delete-change-set
-
-       o delete-stack
-
-       o delete-stack-instances
-
-       o delete-stack-set
-
-       o deploy
-
-       o deregister-type
-
-       o describe-account-limits
-
-       o describe-change-set
-
-       o describe-publisher
-
-       o describe-stack-drift-detection-status
-
-       o describe-stack-events
-
-       o describe-stack-instance
-
-       o describe-stack-resource
-
-       o describe-stack-resource-drifts
-
-       o describe-stack-resources
-
-       o describe-stack-set
-
-       o describe-stack-set-operation
-
-       o describe-stacks
-
-       o describe-type
-
-       o describe-type-registration
-
-       o detect-stack-drift
-
-       o detect-stack-resource-drift
-
-       o detect-stack-set-drift
-
-       o estimate-template-cost
-
-       o execute-change-set
-
-       o get-stack-policy
-
-       o get-template
-
-       o get-template-summary
-
-       o help
-
-       o import-stacks-to-stack-set
-
-       o list-change-sets
-
-       o list-exports
-
-       o list-imports
-
-       o list-stack-instances
-
-       o list-stack-resources
-
-       o list-stack-set-operation-results
-
-       o list-stack-set-operations
-
-       o list-stack-sets
-
-       o list-stacks
-
-       o list-type-registrations
-
-       o list-type-versions
-
-       o list-types
-
-       o package
-
-       o publish-type
-
-       o record-handler-progress
-
-       o register-publisher
-
-       o register-type
-
-       o rollback-stack
-
-       o set-stack-policy
-
-       o set-type-configuration
-
-       o set-type-default-version
-
-       o signal-resource
-
-       o stop-stack-set-operation
-
-       o test-type
-
-       o update-stack
-
-       o update-stack-instances
-
-       o update-stack-set
-
-       o update-termination-protection
-
-       o validate-template
-
-       o wait
-
-
-
-                                                              CLOUDFORMATION()
+       activate-type
+       batch-describe-type-configurations
+       cancel-update-stack
+       continue-update-rollback
+       create-change-set
+       create-stack
+       create-stack-instances
+       create-stack-set
+       deactivate-type
+       delete-change-set
+       delete-stack
+       delete-stack-instances
+       delete-stack-set
+       deploy
+       deregister-type
+       describe-account-limits
+       describe-change-set
+       describe-publisher
+       describe-stack-drift-detection-status
+       describe-stack-events
+       describe-stack-instance
+       describe-stack-resource
+       describe-stack-resource-drifts
+       describe-stack-resources
+       describe-stack-set
+       describe-stack-set-operation
+       describe-stacks
+       describe-type
+       describe-type-registration
+       detect-stack-drift
+       detect-stack-resource-drift
+       detect-stack-set-drift
+       estimate-template-cost
+       execute-change-set
+       get-stack-policy
+       get-template
+       get-template-summary
+       help
+       import-stacks-to-stack-set
+       list-change-sets
+       list-exports
+       list-imports
+       list-stack-instances
+       list-stack-resources
+       list-stack-set-operation-results
+       list-stack-set-operations
+       list-stack-sets
+       list-stacks
+       list-type-registrations
+       list-type-versions
+       list-types
+       package
+       publish-type
+       record-handler-progress
+       register-publisher
+       register-type
+       rollback-stack
+       set-stack-policy
+       set-type-configuration
+       set-type-default-version
+       signal-resource
+       stop-stack-set-operation
+       test-type
+       update-stack
+       update-stack-instances
+       update-stack-set
+       update-termination-protection
+       validate-template
+       wait
