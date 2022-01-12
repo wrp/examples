@@ -21,82 +21,41 @@ DESCRIPTION
        tion to Amazon EKS without any code modification required.
 
 AVAILABLE COMMANDS
-       o associate-encryption-config
-
-       o associate-identity-provider-config
-
-       o create-addon
-
-       o create-cluster
-
-       o create-fargate-profile
-
-       o create-nodegroup
-
-       o delete-addon
-
-       o delete-cluster
-
-       o delete-fargate-profile
-
-       o delete-nodegroup
-
-       o deregister-cluster
-
-       o describe-addon
-
-       o describe-addon-versions
-
-       o describe-cluster
-
-       o describe-fargate-profile
-
-       o describe-identity-provider-config
-
-       o describe-nodegroup
-
-       o describe-update
-
-       o disassociate-identity-provider-config
-
-       o get-token
-
-       o help
-
-       o list-addons
-
-       o list-clusters
-
-       o list-fargate-profiles
-
-       o list-identity-provider-configs
-
-       o list-nodegroups
-
-       o list-tags-for-resource
-
-       o list-updates
-
-       o register-cluster
-
-       o tag-resource
-
-       o untag-resource
-
-       o update-addon
-
-       o update-cluster-config
-
-       o update-cluster-version
-
-       o update-kubeconfig
-
-       o update-nodegroup-config
-
-       o update-nodegroup-version
-
-       o wait
-
-
-
-                                                                         EKS()
+       associate-encryption-config
+       associate-identity-provider-config
+       create-addon
+       create-cluster
+       create-fargate-profile
+       create-nodegroup
+       delete-addon
+       delete-cluster
+       delete-fargate-profile
+       delete-nodegroup
+       deregister-cluster
+       describe-addon
+       describe-addon-versions
+       describe-cluster
+       describe-fargate-profile
+       describe-identity-provider-config
+       describe-nodegroup
+       describe-update
+       disassociate-identity-provider-config
+       get-token
+       help
+       list-addons
+       list-clusters
+       list-fargate-profiles
+       list-identity-provider-configs
+       list-nodegroups
+       list-tags-for-resource
+       list-updates
+       register-cluster
+       tag-resource
+       untag-resource
+       update-addon
+       update-cluster-config
+       update-cluster-version
+       update-kubeconfig
+       update-nodegroup-config
+       update-nodegroup-version
+       wait
