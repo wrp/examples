@@ -4,6 +4,7 @@
  * Discard all between 0x1b and 'm'
  */
 #include <assert.h>
+#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
@@ -47,7 +48,9 @@ main( int argc, char **argv )
 			}
 			prev = c;
 		} while( c != EOF );
-		fclose(ifp);
+		if( ifp != stdin && fclose(ifp) ){
+			die("%s: %s\n", *arg, strerror(errno));
+		}
 		if( ofp != stdout ){
 			fclose(ofp);
 			xrename(tmpname, *arg);
