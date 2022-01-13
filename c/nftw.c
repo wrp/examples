@@ -27,7 +27,7 @@ int
 main(int argc, char **argv)
 {
 	(void)argc;
-	while( *++argv ) {
+	while( *++argv ){
 		if( nftw(*argv, rm, OPEN_MAX, FTW_DEPTH) ){
 			perror(*argv);
 			return EXIT_FAILURE;
