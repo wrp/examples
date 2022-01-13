@@ -6,28 +6,42 @@ use std::{
 	path::Path,
 };
 
-fn lines_from_file(path: impl AsRef<Path> + std::fmt::Display) -> Vec<String> {
+fn lines_from_file(path: impl AsRef<Path> + std::fmt::Display) -> Result<Vec<String>, std::io::Error> {
 
 
 	// Open the path in read-only mode, returns `io::Result<File>`
-	let file = match File::open(&path) {
-		Err(why) => panic!("couldn't open {}: {}", path, why),
-		Ok(file) => file,
-	};
+	let file = File::open(&path)?;
+
 	let buf = BufReader::new(file);
 
-	buf.lines()
+	Ok(buf.lines()
 		.map(|l| l.expect("Could not read line"))
 		.collect()
+	)
 }
 
 // ---
 
-fn main() {
+fn run_app() -> Result<(), std::io::Error> {
 	let args: Vec<String> = env::args().collect();
-	let mut lines = lines_from_file(&args[1]);
+	let mut lines = lines_from_file(&args[1])?;
 	lines.sort();
 	for line in lines {
 		println!("{}", line);
 	}
+
+	Ok(())
+}
+
+// boiler plate from https://doc.rust-lang.org/std/process/fn.exit.html
+fn main() {
+	std::process::exit(
+		match run_app() {
+			Ok(_) => 0,
+			Err(err) => {
+				eprintln!("error: {:?}", err.to_string());
+				1
+			}
+		}
+	);
 }
