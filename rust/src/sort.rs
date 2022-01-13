@@ -1,6 +1,7 @@
 
 use std::{
 	env,
+	error::Error,
 	fs::File,
 	io::{prelude::*, BufReader},
 	path::Path,
@@ -34,14 +35,7 @@ fn run_app() -> Result<(), std::io::Error> {
 }
 
 // boiler plate from https://doc.rust-lang.org/std/process/fn.exit.html
-fn main() {
-	std::process::exit(
-		match run_app() {
-			Ok(_) => 0,
-			Err(err) => {
-				eprintln!("error: {:?}", err.to_string());
-				1
-			}
-		}
-	);
+fn main() -> Result<(), Box<dyn Error>> {
+	run_app()?;
+	Ok(())
 }
