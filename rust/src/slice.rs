@@ -1,5 +1,7 @@
 // Example from section 4.3 of the book
 
+use std::env;
+
 // Use string slice to find first word in a string
 fn first_word(s: &str) -> &str {
 	let bytes = s.as_bytes();
@@ -19,7 +21,8 @@ fn first_word(s: &str) -> &str {
 }
 
 fn main() {
-	let s = String::from("     hello world");
+	let args: Vec<String> = env::args().collect();
+	let s = String::from( if args.len() > 1 { &args[1][..] } else { "     hello world"} );
 
 	let word = first_word(&s);
 
