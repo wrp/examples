@@ -1,7 +1,7 @@
 // Example from section 4.3 of the book
 
 // Use string slice to find first word in a string
-fn first_word(s: &String) -> &str {
+fn first_word(s: &str) -> &str {
 	let bytes = s.as_bytes();
 	let mut start : usize = 0;
 	let mut seen : bool = false;
