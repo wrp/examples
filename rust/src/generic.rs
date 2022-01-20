@@ -1,11 +1,13 @@
 
 use std::fmt::{self, Formatter, Display};
 
-struct Point<T: Display> {
+// T is any arbitrary type
+struct Point<T> {
 	x: T,
 	y: T,
 }
 
+// T1 and T2 are bound; each must implement the std::fmt::Display trait
 struct Point2<T1: Display, T2: Display> {
 	x: T1,
 	y: T2,
