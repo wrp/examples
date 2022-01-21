@@ -4,20 +4,29 @@ version = "0.1.0"
 authors = ["William Pursell <william.r.pursell@gmail.com>"]
 edition = "2018"
 description = "Sample code for working through https://doc.rust-lang.org/stable/rust-by-example"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "alias"
+path = "src/alias.rs"
 
 [[bin]]
-name = "print"
-path = "src/print.rs"
+name = "array"
+path = "src/array.rs"
 
 [[bin]]
-name = "print-list"
-path = "src/print-list.rs"
+name = "capture"
+path = "src/capture.rs"
 
 [[bin]]
-name = "main"
-path = "src/main.rs"
+name = "cast"
+path = "src/cast.rs"
+
+[[bin]]
+name = "closures"
+path = "src/closures.rs"
+
+[[bin]]
+name = "constants"
+path = "src/constants.rs"
 
 [[bin]]
 name = "debug"
@@ -28,7 +37,87 @@ name = "display"
 path = "src/display.rs"
 
 [[bin]]
+name = "enum"
+path = "src/enum.rs"
+
+[[bin]]
 name = "fmt"
 path = "src/fmt.rs"
+
+[[bin]]
+name = "hof"
+path = "src/hof.rs"
+
+[[bin]]
+name = "if-let"
+path = "src/if-let.rs"
+
+[[bin]]
+name = "inference"
+path = "src/inference.rs"
+
+[[bin]]
+name = "input-parameters"
+path = "src/input-parameters.rs"
+
+[[bin]]
+name = "into"
+path = "src/into.rs"
+
+[[bin]]
+name = "linked-list"
+path = "src/linked-list.rs"
+
+[[bin]]
+name = "literals"
+path = "src/literals.rs"
+
+[[bin]]
+name = "loop"
+path = "src/loop.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "methods"
+path = "src/methods.rs"
+
+[[bin]]
+name = "nested"
+path = "src/nested.rs"
+
+[[bin]]
+name = "print-list"
+path = "src/print-list.rs"
+
+[[bin]]
+name = "print"
+path = "src/print.rs"
+
+[[bin]]
+name = "struct"
+path = "src/struct.rs"
+
+[[bin]]
+name = "ternary"
+path = "src/ternary.rs"
+
+[[bin]]
+name = "tryinto"
+path = "src/tryinto.rs"
+
+[[bin]]
+name = "tuple"
+path = "src/tuple.rs"
+
+[[bin]]
+name = "types"
+path = "src/types.rs"
+
+[[bin]]
+name = "use"
+path = "src/use.rs"
 
 [dependencies]
