@@ -2,6 +2,7 @@
 use std::fmt::{self, Formatter, Display};
 
 // &'a   single apostrophe represents a generic lifetime parameter
+// See 10.3 of the book: html/book/ch10-03-lifetime-syntax.html
 
 // T is any arbitrary type
 struct Point<T> {
