@@ -1,6 +1,8 @@
 
 use std::fmt::{self, Formatter, Display};
 
+// &'a   single apostrophe represents a generic lifetime parameter
+
 // T is any arbitrary type
 struct Point<T> {
 	x: T,
