@@ -1,4 +1,5 @@
 // Todo: look at std::fs::OpenOptions;
+// https://doc.rust-lang.org/std/fs/struct.OpenOptions.html
 
 use std::{
 	env,
