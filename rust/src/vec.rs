@@ -9,5 +9,10 @@ fn main() -> io::Result<()> {
 	for i in &v {
 		println!("{}", i);
 	}
+
+	for i in &mut v {
+		*i += 5;
+		println!("{}", i);
+	}
 	Ok(())
 }
