@@ -1,4 +1,8 @@
-/* Read a stream of integers */
+/* Read a stream of integers
+ * Expected input is an opening [ followed by a comma separated
+ * list of integers followed by a ].  For example: [ 3, 5, 6]
+ * Input after the final `]` is ignored.
+ */
 
 #include <stdio.h>
 #include <stddef.h>
@@ -32,7 +36,7 @@ main(int argc, char **argv)
 	while( 1 == fscanf(ifp, "%d , ", &c) ){
 		push(c, &a);
 	}
-	c = scanf(" %c ", &k); /* Read up to final [ */
+	c = scanf(" %c ", &k); /* Read up to final ] */
 	if( c != 1 || k != ']' ){
 		fprintf(stderr, "invalid input\n");
 		return EXIT_FAILURE;
