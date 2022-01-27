@@ -42,7 +42,7 @@ main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	printf("[%d", pop(&a));
-	while( (c = pop(&a)) != EOF ) {
+	while( (c = pop(&a)) != EOF ){
 		printf(", %d", c);
 	}
 	puts("]");
@@ -58,7 +58,7 @@ pop(struct int_buf *a)
 void
 push(int c, struct int_buf *b)
 {
-	if( b->start == NULL || b->end >= b->start + b->cap ) {
+	if( b->start == NULL || b->end >= b->start + b->cap ){
 		b->start = xrealloc(b->start, b->cap += BUFSIZ, 1, &b->end);
 	}
 	*b->end++ = c;
@@ -92,4 +92,3 @@ xfopen(const char *path, const char *mode)
 	}
 	return fp;
 }
-
