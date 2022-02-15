@@ -4,11 +4,11 @@
 
 
 trait Foo  {
-	fn bar(&self) -> &str;
+	fn bar(&self) -> String;
 }
 
 impl Foo for u8 {
-	fn bar(&self) -> &str { "bar for u8" }
+	fn bar(&self) -> String { format!("bar for {}", self) }
 }
 
 fn do_foo<T: Foo>(item: T){
