@@ -5,17 +5,23 @@
 struct Rectangle {
     width: u32,
     height: u32,
+    name: String,
 }
 
 // Use "Field Init Shorthand
-fn demo_field_init( height: u32, width: u32, ) -> Rectangle { Rectangle { height, width } }
+fn demo_field_init( height: u32, width: u32, name: String) -> Rectangle { Rectangle { height, width, name } }
 
 
 fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-    let rect2 = demo_field_init(5, 10);
+    let rect1 = Rectangle { width: 30, height: 50, name: "Bob".to_string() };
+    let rect2 = demo_field_init(5, 10, String::from("Amy"));
+
+    // Use struct update.  Since all the copied fields implement the copy trait, this
+    // does not borrow rect1
+    let rect3 = Rectangle { name: String::from("Copied"), ..rect1 };
 
     println!("rect1 is {:?}", rect1);
     println!("rect1 is {:?}", rect2);
+    println!("rect1 is {:?}", rect3);
     println!("height is {:#?}", rect1.height);
 }
