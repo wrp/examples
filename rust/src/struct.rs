@@ -20,7 +20,7 @@ fn main() {
     let rect2 = demo_field_init(5, 10, String::from("Amy"));
 
     let a = Point(2, 4, 5);
-    println!("point is {:?}", a);
+    println!("point is {:?}.  Middle is {}", a, a.1);
 
     // Use struct update.  Since all the copied fields implement the copy trait, this
     // does not borrow rect1
