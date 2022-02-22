@@ -15,7 +15,7 @@ fn main() {
 
 	println!("p:{}: {:?}", "Mercury", solar_distance.get("Mercury").unwrap());
 	for x in args {
-		match solar_distance.get(&*x){
+		match solar_distance.get(x.as_str()){
 		Some(d) => println!("{}: {}", x, d),
 		None => println!("{} not in map", x),
 		}
