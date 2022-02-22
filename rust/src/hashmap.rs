@@ -13,8 +13,8 @@ fn main() {
 		("Mars", 1.5),
 	]);
 
-	println!("p:{}: {:?}", "Mercury", solar_distance.get("Mercury").unwrap());
-	for x in args {
+	println!(":{}: {:?}", "Mercury", solar_distance.get("Mercury").unwrap());
+	for x in &args[1..] {
 		match solar_distance.get(x.as_str()){
 		Some(d) => println!("{}: {}", x, d),
 		None => println!("{} not in map", x),
