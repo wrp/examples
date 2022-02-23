@@ -23,5 +23,8 @@ fn main() -> io::Result<()> {
 	let s = String::from("Hello, World!");
 	let w = &s[7..];
 	println!("w = {}", w);
+
+	println!("{:?}", (1..11).collect::<Vec<_>>());  // Print 1 thru 10
+	println!("{}", (1..11).fold(0, |a, b| a + b));  // Sum 1 thru 10
 	Ok(())
 }
