@@ -14,6 +14,12 @@ struct Point ( i32, i32, i32 );  // A tuple-struct
 // Use "Field Init Shorthand
 fn demo_field_init( height: u32, width: u32, name: String) -> Rectangle { Rectangle { height, width, name } }
 
+impl Drop for Rectangle {
+	fn drop(&mut self) {
+		println!("Dropping Rectangle ({}, {}, {})", self.width, self.height, self.name);
+	}
+}
+
 
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50, name: "Bob".to_string() };
