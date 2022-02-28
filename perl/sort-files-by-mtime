@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+
+# Taken from https://stackoverflow.com/a/4651487/140750
+
+use strict;
+use warnings;
+
+sub get_sorted_files {
+	my $path = shift;
+	opendir my($dir), $path or die "can't opendir $path: $!";
+	my %hash = map {$_ => (stat($_))[9] || undef} # avoid empty list
+		map  { "$path$_" }
+		readdir $dir;
+	closedir $dir;
+	return %hash;
+}
+
+my %files = get_sorted_files("./");
+foreach my $key (sort{$files{$a} <=> $files{$b}} keys %files) {
+	print "$key\t", scalar localtime($files{$key}), "\n";
+}
