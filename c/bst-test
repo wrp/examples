@@ -1,6 +1,6 @@
 #!/bin/sh
-
-out=$( printf 'foo bar baz' | ./bst )
+BUILDDIR=build/$(uname -s)/$(uname -m)
+out=$( printf 'foo bar baz' | "${BUILDDIR}"/bst )
 expect='bar: {1:1}
 baz: {1:1}
 foo: {1:1}'
