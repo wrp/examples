@@ -40,19 +40,14 @@ main(int argc, char **argv)
 	}
 }
 
-/* Read one line from fp into t
- */
+/* Read one line from fp into t */
 int
 append_line(FILE *fp, struct text_array *t)
 {
 	size_t cap = 0;
 	if( t->cap <= t->len ){
 		t->data = xrealloc(t->data, t->cap += 128, sizeof *t->data);
-		for( size_t i = t->cap - 128; i < t->cap; i++ ){
-			t->data[i] = NULL;
-		}
 	}
-	free(t->data[t->len]);
 	t->data[t->len] = NULL;
 
 	return getline(t->data + t->len, &cap, fp) != -1;
