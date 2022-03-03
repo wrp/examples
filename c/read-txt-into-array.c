@@ -6,7 +6,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-int append_line(FILE *fp, char ***data, size_t *siz, size_t idx);
+struct text_array {
+	char **data;
+	size_t len; /* length */
+	size_t cap; /* capacity */
+};
+
+int append_line(FILE *fp, struct text_array *);
 void * xrealloc(void *buf, size_t num, size_t siz);
 FILE * xfopen(const char *path, const char *mode);
 
@@ -21,32 +27,35 @@ compare_line(const void *va, const void *vb)
 int
 main(int argc, char **argv)
 {
-	char **data = NULL;
-	size_t siz = 0;
-	size_t line_count = 0;
+	struct text_array t = { 0 };
 	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 
-	while( append_line(fp, &data, &siz, line_count) ){
-		line_count += 1;
+	while( append_line(fp, &t) ){
+		t.len += 1;
 	}
-	qsort(data, line_count, sizeof *data, compare_line);
+	qsort(t.data, t.len, sizeof *t.data, compare_line);
 
-	for( size_t i = 0; i < line_count; i += 1 ){
-		printf("%8zd:\t%s", i + 1, data[i]);
+	for( size_t i = 0; i < t.len; i += 1 ){
+		printf("%8zd:\t%s", i + 1, t.data[i]);
 	}
 }
 
-/* Read one line from fp into data[idx] */
+/* Read one line from fp into t
+ */
 int
-append_line(FILE *fp, char ***data, size_t *siz, size_t idx)
+append_line(FILE *fp, struct text_array *t)
 {
 	size_t cap = 0;
-	if( *siz <= idx ){
-		*data = xrealloc(*data, *siz += 128, sizeof **data);
+	if( t->cap <= t->len ){
+		t->data = xrealloc(t->data, t->cap += 128, sizeof *t->data);
+		for( size_t i = t->cap - 128; i < t->cap; i++ ){
+			t->data[i] = NULL;
+		}
 	}
-	(*data)[idx] = NULL;
+	free(t->data[t->len]);
+	t->data[t->len] = NULL;
 
-	return getline((*data) + idx, &cap, fp) != -1;
+	return getline(t->data + t->len, &cap, fp) != -1;
 }
 
 FILE *
