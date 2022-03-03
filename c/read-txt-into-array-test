@@ -1,0 +1,13 @@
+#!/bin/sh
+
+builddir=build/$(uname -s)/$(uname -m)
+exe=$builddir/read-txt-into-array
+
+
+die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
+actual=$(printf 'foo\nbar\nbaz\n' | $exe)
+expect='       1:	bar
+       2:	baz
+       3:	foo'
+
+test "$actual" = "$expect" || die "got $actual, expected $expect"
