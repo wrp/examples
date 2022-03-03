@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+key_to_match=${1-default_key}
+# Select security group IDs for which a given tag is set to the value "True"
+aws ec2 describe-security-groups | jq -r '
+	.SecurityGroups[] |
+	select(has("Tags")) |
+	select(.Tags[] | select(.Key == "'"$key_to_match"'") | select(.Value == "True")) | .GroupId'
