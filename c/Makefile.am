@@ -49,6 +49,7 @@ TESTS = \
 	poly-test \
 	pyramid-test \
 	read-indexed-test \
+	read-txt-into-array-test \
 	scanf \
 	scanf-term-test \
 	scanf-test \
