@@ -31,7 +31,7 @@ main(int argc, char **argv)
 	FILE *fp = argc > 1 ? xfopen(argv[1], "r") : stdin;
 
 	while( append_line(fp, &t) ){
-		t.len += 1;
+		;
 	}
 	qsort(t.data, t.len, sizeof *t.data, compare_line);
 
@@ -44,13 +44,18 @@ main(int argc, char **argv)
 int
 append_line(FILE *fp, struct text_array *t)
 {
+	ssize_t status;
 	size_t cap = 0;
 	if( t->cap <= t->len ){
 		t->data = xrealloc(t->data, t->cap += 128, sizeof *t->data);
 	}
 	t->data[t->len] = NULL;
 
-	return getline(t->data + t->len, &cap, fp) != -1;
+	status = getline(t->data + t->len, &cap, fp);
+	if( status != -1 ){
+		t->len += 1;
+	}
+	return status != -1;
 }
 
 FILE *
