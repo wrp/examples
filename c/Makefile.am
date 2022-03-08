@@ -3,7 +3,7 @@
 noinst_HEADERS = xutil.h stack.h
 include_HEADERS = wrp-bindgen.h
 
-noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head ncurses
+noinst_PROGRAMS = ctime getdelim mmap prctl qsort read seek stat va_args head
 check_PROGRAMS = \
 	bst \
 	cat \
@@ -63,8 +63,8 @@ libwrp_bindgen_la_SOURCES = libwrp-bindgen.c
 # Change this to lib_LTLIBRARIES to create installable libraries
 noinst_LTLIBRARIES = libringbuf.la libstack.la libxutil.la
 calc_LDADD = libringbuf.la libstack.la
-ncurses_LDFLAGS = -lncursesw
-ncurses_CPPFLAGS = -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED
+# ncurses_LDFLAGS = -lncursesw
+# ncurses_CPPFLAGS = -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED
 sqlite_LDFLAGS = -lsqlite3
 LDADD=libxutil.la
 libringbuf_la_SOURCES = ring-buffer.c
