@@ -1,9 +1,16 @@
 
-use std::{env, fs::File, process, io::BufReader, io::BufRead};
+use std::{
+	env,
+	process,
+	io::BufReader,
+	io::BufRead,
+	fs::OpenOptions,
+};
+
 
 fn main() {
 	for filename in env::args().skip(1).collect::<Vec<String>>() {
-		let r = File::open(&filename).unwrap_or_else(|err| {
+		let r = OpenOptions::new().read(true).open(&filename).unwrap_or_else(|err| {
 			println!("unable to open '{}': {}", filename, err);
 			process::exit(1);
 		});
