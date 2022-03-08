@@ -10,7 +10,7 @@ struct ring_buf {
 	int err;
 	unsigned char *buf;   /* Allocated base */
 	unsigned char *start; /* First byte of data */
-	unsigned char *end;   /* One last final byte of data */
+	unsigned char *end;   /* One past final byte of data */
 	size_t s;             /* Total allocated size */
 };
 
@@ -21,12 +21,13 @@ struct ring_buf *
 rb_create(size_t s)
 {
 	struct ring_buf *r = malloc(sizeof *r);
-	if( r != NULL ) {
-		r->end = r->start = r->buf = malloc(r->s = s ? s : 1024);
+	if( r != NULL ){
+		r->s = s ? s : 1024;
+		r->end = r->start = r->buf = malloc(r->s);
 		r->err = 0;
-		if( r->buf == NULL ) {
+		if( r->buf == NULL ){
 			free(r); /* uncovered */
-			r = NULL;  /* uncovered */
+			r = NULL; /* uncovered */
 		} /* uncovered */
 	}
 	return r;
@@ -35,7 +36,7 @@ rb_create(size_t s)
 void
 rb_free(struct ring_buf *r)
 {
-	if( r ) {
+	if( r ){
 		free(r->buf);
 		free(r);
 	}
@@ -50,14 +51,14 @@ grow(struct ring_buf *R)
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
-	if( tmp == NULL ) {
+	if( tmp == NULL ){
 		return 1; /* uncovered */
 	}
-	if( R->buf != tmp ) {
-		R->end = R->start = tmp + ( R->start - R->buf );
+	if( R->buf != tmp ){
+		R->end = R->start = tmp + (R->start - R->buf);
 		R->buf = tmp;
 	}
-	if( R->end != R->buf ) {
+	if( R->end != R->buf ){
 		memmove(R->buf + R->s, R->buf, R->end - R->buf);
 	}
 	R->end = R->start + R->s;
@@ -72,13 +73,13 @@ rb_push(struct ring_buf *R, unsigned char c)
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
-	if( R->err == 0 ) {
+	if( R->err == 0 ){
 		*R->end++ = c;
-		if( R->end == R->buf + R->s ) {
+		if( R->end == R->buf + R->s ){
 			R->end = R->buf;
 		}
-		if( R->end == R->start ) {
-			R->err = grow( R );
+		if( R->end == R->start ){
+			R->err = grow(R);
 		}
 	}
 	assert( R->end != R->start || R->err == 1 );
@@ -101,11 +102,11 @@ rb_pop(struct ring_buf *R)
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
-	if( R->start == R->end ) {
+	if( R->start == R->end ){
 		return EOF;
 	}
 	rv = (int)*R->start++;
-	if( R->start == R->buf + R->s ) {
+	if( R->start == R->buf + R->s ){
 		R->start = R->buf;
 	}
 	return rv;
@@ -121,16 +122,16 @@ rb_peek(struct ring_buf const *R, size_t idx)
 	assert( R->start < R->buf + R->s );
 	assert( R->end >= R->buf );
 	assert( R->end < R->buf + R->s );
-	if( R->start == R->end ) {
+	if( R->start == R->end ){
 		;
-	} else if( R->end > R->start ) {
-		if( R->start + idx < R->end ) {
+	} else if( R->end > R->start ){
+		if( R->start + idx < R->end ){
 			rv = R->start + idx;
 		}
 	} else {
-		if( R->start + idx < R->buf + R->s ) {
+		if( R->start + idx < R->buf + R->s ){
 			rv = R->start + idx;
-		} else if( R->start + idx < R->end + R->s ) {
+		} else if( R->start + idx < R->end + R->s ){
 			rv = R->start + idx - R->s;
 		}
 	}
