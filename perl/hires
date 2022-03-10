@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+use strict;
+use warnings;
+
+# use Time::Format qw/%time/;
+use Time::HiRes qw/gettimeofday/;
+
+my $time = gettimeofday; # Returns ssssssssss.uuuuuu in scalar context
+say $time;
+
+# print qq|$time{'yyyymmdd hh:mm:ss.mmm', $time}\n|;
