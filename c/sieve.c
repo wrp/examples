@@ -21,8 +21,8 @@ main(int argc, char **argv)
 				c % 8 == 7 ? "\n" : "");
 			c += 1;
 		}
-		for( long m = 2; m * p < max; m += 1 ){
-			x[p * m] = 1;
+		for( long m = 2 * p; m < max; m += p ){
+			x[m] = 1;
 		}
 	}
 	if( c % 8 ){
