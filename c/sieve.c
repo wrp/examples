@@ -21,7 +21,8 @@ main(int argc, char **argv)
 			x[p * m] = 1;
 		}
 	}
-	for( long i = 2, c = 0; i < max; i++ ){
+	unsigned long c = 0;
+	for( long i = 2; i < max; i++ ){
 		if( x[i] == 0 ){
 			printf("%s%8ld", c % 8 ? "\t" : "", i);
 			if( ++c % 8 == 0 ){
@@ -29,7 +30,9 @@ main(int argc, char **argv)
 			}
 		}
 	}
-	putchar('\n');
+	if( c % 8 ){
+		putchar('\n');
+	}
 	return 0;
 }
 
