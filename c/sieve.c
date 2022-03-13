@@ -11,23 +11,18 @@ int
 main(int argc, char **argv)
 {
 	long max = argc > 1 ? strtol(argv[1], NULL, 10) : 100;
-
+	int c = 0;
 	char *x = xcalloc(max);
 	for( long p = 2; p < max; p += 1 ){
 		if( x[p] ){
 			continue;
+		} else {
+			printf("%s%8ld%s", c % 8 ? "\t" : "", p,
+				c % 8 == 7 ? "\n" : "");
+			c += 1;
 		}
 		for( long m = 2; m * p < max; m += 1 ){
 			x[p * m] = 1;
-		}
-	}
-	unsigned long c = 0;
-	for( long i = 2; i < max; i++ ){
-		if( x[i] == 0 ){
-			printf("%s%8ld", c % 8 ? "\t" : "", i);
-			if( ++c % 8 == 0 ){
-				putchar('\n');
-			}
 		}
 	}
 	if( c % 8 ){
