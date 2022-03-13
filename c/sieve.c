@@ -14,6 +14,9 @@ main(int argc, char **argv)
 
 	char *x = xcalloc(max);
 	for( long p = 2; p < max; p += 1 ){
+		if( x[p] ){
+			continue;
+		}
 		for( long m = 2; m * p < max; m += 1 ){
 			x[p * m] = 1;
 		}
