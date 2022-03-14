@@ -1,6 +1,11 @@
 
 /* Sieve of Eratosthenes */
 
+/*
+ * Todo: figure out how to properly omit the run time bounds checks.
+ * At the moment, this runs about 2.5x slower than the C version, which
+ * is probably due to run time bounds checks.
+ */
 
 use std::env;
 
