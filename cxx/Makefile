@@ -1,2 +1,3 @@
 
-CXXFLAGS = -fno-elide-constructors
+
+CXXFLAGS = -fno-elide-constructors -std=c++11
