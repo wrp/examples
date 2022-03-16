@@ -5,10 +5,29 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct word {
+	char *d;
+	struct word *next;
+};
+
+static void
+push(struct word **root, char *d)
+{
+	struct word *n = malloc(sizeof *n);
+	if( n == NULL ){
+		perror("malloc");
+		exit(1);
+	}
+	n->d = d;
+	n->next = *root;
+	*root = n;
+}
+
 int
 main(int argc, char **argv)
 {
 	char str[512];
+	struct word *words = NULL;
 
 	ENTRY item;
 
@@ -29,6 +48,7 @@ main(int argc, char **argv)
 				exit(1);
 			}
 			item.key = strdup(str);
+			push(&words, item.key);
 			item.data = x;
 			*x = 1;
 			if( hsearch(item, ENTER) == NULL ){
@@ -39,13 +59,13 @@ main(int argc, char **argv)
 	}
 
 	/* Access table. */
-	for(int i = 0; i < argc; i++ ){
-		item.key = argv[i];
+	for( ; words; words = words->next ){
+		item.key = words->d;
 		ENTRY *e;
 		if( (e = hsearch(item, FIND)) != NULL ){
-			printf("%s: %d\n", argv[i], *(int *)e->data);
+			printf("%s: %d\n", words->d, *(int *)e->data);
 		} else {
-			printf("%s was not found\n", argv[i]);
+			printf("%s was not found\n", words->d);
 		}
 	}
 	hdestroy();
