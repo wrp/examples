@@ -14,8 +14,8 @@ class foo(object):
         print 'my o is', o
         return baz
 
-
-
+# Decorating bar causes a foo object to be instantiaed (with 3 for __init__)
+# and called (with bar as an argument)
 @foo(3)
 def bar(arg):
     return baz
@@ -28,19 +28,25 @@ print 'bar returned:', k
 
 def wr2(func):
     def rv(arg):
-        print "in wr2 rv"
-        return func(arg) + 1
+        print "in wr2s rv, arg = ", arg
+        return func(arg + 1)
+    print 'in wr2, func = ', func, ' rv = ', rv
     return rv
 
 def wr1(func):
     def rv(arg):
-        print "in wr1 rv"
-        return func(arg) + 3
+        print "in wr1s rv, arg = ", arg
+        return func(arg + 2)
+    print 'in wr1, func = ', func, ' rv = ', rv
     return rv
 
+# Decorating sum causes wr1 to be called with sum as an argument.
+# The function returned by wr1 is then passed as an argument to wr2
+# and the function returned by wr2 becomes bound to sum
 @wr2
 @wr1
 def sum(arg):
-    return arg + 2
+    print 'in original sum, arg = ', arg
+    return arg + 3
 
 print sum(1)
