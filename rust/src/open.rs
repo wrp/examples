@@ -11,7 +11,7 @@ use std::{
 fn main() {
 	for filename in env::args().skip(1).collect::<Vec<String>>() {
 		let r = OpenOptions::new().read(true).open(&filename).unwrap_or_else(|err| {
-			println!("unable to open '{}': {}", filename, err);
+			eprintln!("unable to open '{}': {}", filename, err);
 			process::exit(1);
 		});
 		let r = BufReader::new(r);
