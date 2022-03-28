@@ -7,14 +7,20 @@ use std::{
 	fs::OpenOptions,
 };
 
+fn open_file(path: &str) -> std::fs::File {
+	OpenOptions::new()
+		.read(true)
+		.open(path)
+		.unwrap_or_else(|err| {
+			eprintln!("unable to open '{}': {}", path, err);
+			process::exit(1);
+			}
+		)
+}
 
 fn main() {
 	for filename in env::args().skip(1).collect::<Vec<String>>() {
-		let r = OpenOptions::new().read(true).open(&filename).unwrap_or_else(|err| {
-			eprintln!("unable to open '{}': {}", filename, err);
-			process::exit(1);
-		});
-		let r = BufReader::new(r);
+		let r = BufReader::new(open_file(&filename));
 		println!("succesfully opened {}", filename);
 		println!("contents:");
 		for line in r.lines() {
