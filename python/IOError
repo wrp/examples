@@ -4,9 +4,9 @@ import sys
 
 while True:
     try:
-        sys.stdout.write("Hello, world!");
+        sys.stdout.write("Hello, world!")
     except IOError as e:
-        if e.errno == 32: # Broken pipe
+        if e.errno == 32:  # Broken pipe
             raise SystemExit(e)
         else:
             raise e

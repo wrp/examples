@@ -3,10 +3,11 @@
 import signal
 from subprocess import Popen, STDOUT, PIPE
 
+
 def restore_signals():
-    if hasattr(signal, 'SIGPIPE'):
+    if hasattr(signal, "SIGPIPE"):
         signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
-p = Popen(['bash','-c','yes | head'], preexec_fn=restore_signals)
+p = Popen(["bash", "-c", "yes | head"], preexec_fn=restore_signals)
 p.wait()

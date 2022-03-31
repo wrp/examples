@@ -4,5 +4,5 @@
 # tuple contains the ith item from each of its args.
 # Stops when any of the iterables in the arguments are exhausted
 
-a = zip([1,2,3], [4,5])  # Returns [(1,4), (2,5)]
-print (list(a))
+a = zip([1, 2, 3], [4, 5])  # Returns [(1,4), (2,5)]
+print(list(a))

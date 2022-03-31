@@ -3,13 +3,12 @@
 import traceback
 
 # Build module with -O to disable (eg, python -O $file)
-print('debug =', __debug__)
+print("debug =", __debug__)
 try:
-    assert(False)
+    assert False
 except AssertionError as e:
-    print('caught:', e.__repr__())
-    print('caught:', e.__traceback__)
+    print("caught:", e.__repr__())
+    print("caught:", e.__traceback__)
     print(dir(e.__traceback__))
 
     print(traceback.extract_tb(e.__traceback__))
-

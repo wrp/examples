@@ -3,15 +3,15 @@
 import itertools
 
 a = (1, 2, 3, 4)
-b = ('a', 'b', 'c')
+b = ("a", "b", "c")
 
 # Stop when b is exhausted (similar to python2's itertools.izip)
 for i in zip(a, b):
-    print( i )
+    print(i)
 
 # Fill in short lists with NULL (in python3, this is izip_longest)
 for i in itertools.zip_longest(a, b):
-    print( i )
+    print(i)
 
 for i, (a, b) in enumerate(zip(a, b)):
-    print( i, a, b )
+    print(i, a, b)

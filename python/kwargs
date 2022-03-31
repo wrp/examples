@@ -2,16 +2,17 @@
 
 
 def foo(f, *args, **kwargs):
-	print('in f, kwargs = {}'.format(kwargs))
-	print('in f, args = {}'.format(args))
-	f(5, *args, **kwargs)
+    print("in f, kwargs = {}".format(kwargs))
+    print("in f, args = {}".format(args))
+    f(5, *args, **kwargs)
 
-def bar(a, b = 3, *args, **kwargs):
-	print('in bar, a = {}, b = {}, args = {}, kwargs = {}'.format(
-		a, b, args, kwargs))
 
-def baz(a, b = 2, *args, **kwargs):
-	print('in baz, a = {}, b = {}, args = {}, kwargs = {}'.format(
-		a, b, args, kwargs))
+def bar(a, b=3, *args, **kwargs):
+    print("in bar, a = {}, b = {}, args = {}, kwargs = {}".format(a, b, args, kwargs))
 
-foo(bar, 7, 8, c = 9, d = 10)
+
+def baz(a, b=2, *args, **kwargs):
+    print("in baz, a = {}, b = {}, args = {}, kwargs = {}".format(a, b, args, kwargs))
+
+
+foo(bar, 7, 8, c=9, d=10)

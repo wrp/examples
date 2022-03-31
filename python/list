@@ -3,16 +3,18 @@
 a = []  # An empty list
 
 # lists are passed by reference
-def mutate(b,x=5):
-  b.append(x)
+def mutate(b, x=5):
+    b.append(x)
 
-mutate(a,5)         # A is mutated by the call
-mutate(list(a),9)   # Pass a copy to avoid mutation
+
+mutate(a, 5)  # A is mutated by the call
+mutate(list(a), 9)  # Pass a copy to avoid mutation
 
 # list comprehension:
 # [expression(i) for i in list if filter(i)]
-a = [1,2,3]
-print([x for x in a if x%2 ])
+a = [1, 2, 3]
+print([x for x in a if x % 2])
+
 
 def length(x):
     c = 0
@@ -20,12 +22,13 @@ def length(x):
         c += 1
     return c
 
-x = (a for a in [1,2,3])  # x is a generator object ...
-print('{} can only be iterated over once'.format(type(x)))
-print(f'x has {length(x)} elements')
-print(f'now, x has {length(x)} elements')
 
-x = [a for a in [1,2,3]]
-print('{} can be iterated over multiple times'.format(type(x)))
-print(f'x has {length(x)} elements')
-print(f'now, x has {length(x)} elements')
+x = (a for a in [1, 2, 3])  # x is a generator object ...
+print("{} can only be iterated over once".format(type(x)))
+print(f"x has {length(x)} elements")
+print(f"now, x has {length(x)} elements")
+
+x = [a for a in [1, 2, 3]]
+print("{} can be iterated over multiple times".format(type(x)))
+print(f"x has {length(x)} elements")
+print(f"now, x has {length(x)} elements")

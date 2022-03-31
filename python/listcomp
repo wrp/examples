@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-a = [(x,y) for x in (1, 2, 3) if x != 2 for y in [2,3]]
+a = [(x, y) for x in (1, 2, 3) if x != 2 for y in [2, 3]]
 
 # Equivalent to:
 b = []
-for x in (1,2,3):
-  if x != 2:
-    for y in [2,3]:
-      b.append((x,y))
+for x in (1, 2, 3):
+    if x != 2:
+        for y in [2, 3]:
+            b.append((x, y))
 
 print(a)
 print(b)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-raise SystemExit('fail', code=7) # Fail with 7, and print a message to stderr
-raise SystemExit('fail') # Fail (status 1), and print a message to stderr
-raise SystemExit(5)      # Exit with status 5
+raise SystemExit("fail", code=7)  # Fail with 7, and print a message to stderr
+raise SystemExit("fail")  # Fail (status 1), and print a message to stderr
+raise SystemExit(5)  # Exit with status 5
 raise SystemExit(False)  # Exit succesfully
-raise SystemExit(0)      # Exit succesfully
+raise SystemExit(0)  # Exit succesfully

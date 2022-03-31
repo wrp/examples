@@ -8,10 +8,9 @@ x = [int(a) for a in sys.argv[1:]]
 if any(a > 7 for a in x):
     print("Some greater than 7")
 else:
-    print('All less than or equal to 7')
+    print("All less than or equal to 7")
 
 if all(a > 7 for a in x):
     print("All greater than 7")
 else:
-    print('Some less than or equal to 7')
-
+    print("Some less than or equal to 7")
