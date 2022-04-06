@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+use POSIX qw/ WIFEXITED WEXITSTATUS /;
+
+if(! defined($pid = fork()) ){
+	die "fork: $!";
+} elsif( $pid == 0 ){
+	print "child is pid $$\n";
+	exit 17;
+} else {
+	$rv = wait;
+	printf "parent received %d : %d\n", $rv, $?;
+	if( WIFEXITED $? ){
+		printf "status: %d\n", WEXITSTATUS $?;
+	}
+}
