@@ -11,7 +11,12 @@ else
 qaz := foo is not foo
 endif
 
+
+
+ND ?= $(notdir /this/is/a/path)
+
 all:
+	echo not dir =  $(ND)
 	echo Running rules in Makefile
 	#
 	# Whitespace is preserved in both expansions here:

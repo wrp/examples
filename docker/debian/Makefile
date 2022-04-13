@@ -14,7 +14,7 @@ run:
 
 	@if id=$$(docker ps --filter label=$(USER)-debian -q | grep .); then \
 		echo "Attaching to docker containter $$id"; \
-		docker exec -it -e DOCKER=debian -u $(USER) "$$id" bash; \
+		docker exec -it  -u $(USER) "$$id" bash; \
 	else \
 		echo 'Creating new docker container'; \
 		docker run -it \
