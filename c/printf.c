@@ -19,9 +19,9 @@ main(void)
 
 	setlocale(LC_ALL, "");
 
-	printf("%'10d\n", 103957395); /* 103,957,395 : print commas */
-	printf("%'2.10f\n", 1039573.95);
-	printf("%'10g\n", 1039.9E3);
+	printf("%'10d\n", 103957395);    /* 103,957,395 : print commas */
+	printf("%'2.10f\n", 1039573.95); /* 1,039,573.9500000000 */
+	printf("%'10g\n", 1039.9E3);     /* 1.0399e+06 */
 
 	/* Use argument for field width */
 	printf("%*s: %%zd  %zd\n", 15, "size_t", sizeof i);
