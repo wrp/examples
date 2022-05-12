@@ -47,7 +47,9 @@ main(int argc, char **argv)
 	try {
 		main2(argc, argv);
 	} catch( std::system_error &e ) {
-		std::cerr << e.code().message() << std::endl;
+		// e.code().message() is strerror(errno)
+		// e.what() is "path: strerror(errno)"
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 	return 0;
