@@ -24,3 +24,6 @@ print(b)
 a.bar = 9
 a.baz = 11
 print(a)
+
+print(a.bar)
+print([x for x in a.get('kk', None)])
