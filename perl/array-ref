@@ -19,3 +19,8 @@ foreach my $word (@words) {
 foreach my $k( keys %$sorted_words_by_first_letter ){
 	say "$k: ", join ',', @{ $sorted_words_by_first_letter->{$k} };
 }
+
+say "a: ", join ',', @{ $sorted_words_by_first_letter->{'a'} };
+
+# Use an anonymous array ref when the entry is not in the hash
+say "m: ", join ',',  @{ $sorted_words_by_first_letter->{'m'} // [] };
