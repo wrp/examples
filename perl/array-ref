@@ -5,7 +5,6 @@ use 5.12.0;
 
 my $sorted_words_by_first_letter;
 my @words = qw/ banana apple astronaut yoyo buttons /;
-my %keys;
 
 foreach my $word (@words) {
 
@@ -14,10 +13,9 @@ foreach my $word (@words) {
 
 	# put it at the end of the array for the appropriate letter
 	push @{ $sorted_words_by_first_letter->{$1} }, $word;
-	$keys{$1} = 1;
 }
 
 
-foreach my $k (keys %keys) {
+foreach my $k( keys %$sorted_words_by_first_letter ){
 	say "$k: ", join ',', @{ $sorted_words_by_first_letter->{$k} };
 }
