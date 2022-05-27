@@ -10,13 +10,11 @@
 #include <sys/stat.h>
 #include <time.h>
 
-struct entry {
-	char *name;
-	size_t siz;
-};
-
 struct entries {
-	struct entry *data;
+	struct namsiz {
+		char *name;
+		size_t siz;
+	} *data;
 	size_t cap;
 	size_t len;
 };
@@ -31,7 +29,7 @@ push(struct entries *e, char *name, size_t siz)
 			exit(EXIT_FAILURE);
 		}
 	}
-	struct entry *t = e->data + e->len++;
+	typeof(e->data) t = e->data + e->len++;
 	t->name = strdup(name);
 	t->siz = siz;
 	if( t->name == NULL ){
@@ -44,8 +42,8 @@ push(struct entries *e, char *name, size_t siz)
 int
 comp(const void *va, const void *vb)
 {
-	const struct entry *a = va;
-	const struct entry *b = vb;
+	const struct namsiz *a = va;
+	const struct namsiz *b = vb;
 	return a->siz - b->siz;
 }
 
@@ -61,7 +59,6 @@ sort_dir(char *path, int print_name)
 	if( print_name ){
 		printf("%s:\n", path);
 	}
-
 	if( d == NULL ){
 		perror(path);
 		return -1;
@@ -82,9 +79,11 @@ sort_dir(char *path, int print_name)
 		push(&ent, f->d_name, s.st_size);
 	}
 	qsort(ent.data, ent.len, sizeof *ent.data, comp);
-	for( struct entry *t = ent.data; t < ent.data + ent.len; t++ ){
-		printf("%20s: %zu\n", t->name, t->siz);
+	for( struct namsiz *t = ent.data; t < ent.data + ent.len; t++ ){
+		printf("%40s: %zu\n", t->name, t->siz);
+		free(t->name);
 	}
+	free(ent.data);
 
 	*e = '\0';
 	if( closedir(d) ) {
@@ -105,7 +104,7 @@ main(int argc, char **argv)
 
 	for( ; *path; path += 1 ){
 		strncpy(name, *path, sizeof name);
-		if( sort_dir(name, argc > 1) ){
+		if( sort_dir(name, argc > 2) ){
 			return 1;
 		}
 	}
