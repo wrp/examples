@@ -9,48 +9,52 @@
 #include <string.h>
 #include <sys/stat.h>
 
-struct entries {
-	struct namsiz {
-		char *name;
-		size_t siz;
-	} *data;
-	size_t cap;
-	size_t len;
+struct entry {
+	char *name;
+	size_t siz;
+	struct entry *n[2];  /* Child nodes */
 };
 
 static void
-push(struct entries *e, char *name, size_t siz)
+insert(struct entry **root, char *name, size_t siz)
 {
-	while( e->cap <= e->len ){
-		e->data = realloc(e->data, sizeof *e->data * (e->cap += 128));
-		if( e->data == NULL ){
-			perror("realloc");
+	if( *root ){
+		struct entry *t = *root;
+		insert(t->n + (t->siz < siz), name, siz);
+	} else {
+		struct entry *t = *root = malloc(sizeof *t);
+		if( t == NULL ){
+			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
-	}
-	typeof(e->data) t = e->data + e->len++;
-	t->name = strdup(name);
-	t->siz = siz;
-	if( t->name == NULL ){
-		perror("strdup");
-		exit(EXIT_FAILURE);
+		t->name = strdup(name);
+		t->siz = siz;
 	}
 }
 
-
-int
-comp(const void *va, const void *vb)
+static void
+display(void *v)
 {
-	const struct namsiz *a = va;
-	const struct namsiz *b = vb;
-	return a->siz - b->siz;
+	struct entry *t = v;
+	printf("%40s: %zu\n", t->name, t->siz);
 }
+
+static void
+traverse(struct entry *e, void (*f)(void *))
+{
+	if( e ){
+		traverse(e->n[0], f);
+		f(e);
+		traverse(e->n[1], f);
+	}
+}
+
 
 int
 sort_dir(char *path, int print_name)
 {
 	struct dirent *f;
-	struct entries ent = {0};
+	struct entry *root = NULL;
 	int rv = 0;
 	char *e = strchr(path, '\0');
 	DIR *d = opendir(path);
@@ -73,16 +77,12 @@ sort_dir(char *path, int print_name)
 		if( lstat(path, &s) ){
 			perror(path);
 			rv = -1;
-			break;
+			continue;
 		}
-		push(&ent, f->d_name, s.st_size);
+		insert(&root, f->d_name, s.st_size);
 	}
-	qsort(ent.data, ent.len, sizeof *ent.data, comp);
-	for( struct namsiz *t = ent.data; t < ent.data + ent.len; t++ ){
-		printf("%40s: %zu\n", t->name, t->siz);
-		free(t->name);
-	}
-	free(ent.data);
+	traverse(root, display);
+	traverse(root, free);
 
 	*e = '\0';
 	if( closedir(d) ) {
