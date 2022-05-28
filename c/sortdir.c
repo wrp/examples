@@ -43,9 +43,11 @@ static void
 traverse(struct entry *e, void (*f)(void *))
 {
 	if( e ){
+		/* Save entry so e can be freed */
+		struct entry *n = e->n[1];
 		traverse(e->n[0], f);
 		f(e);
-		traverse(e->n[1], f);
+		traverse(n, f);
 	}
 }
 
