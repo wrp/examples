@@ -40,15 +40,15 @@ display(void *v)
 }
 
 static void
-traverse(struct entry *e, void (*f)(void *))
+inorder(struct entry *e, void (*f)(void *))
 {
-	if( e ){
-		/* Save entry so e can be freed */
-		struct entry *n = e->n[1];
-		traverse(e->n[0], f);
-		f(e);
-		traverse(n, f);
-	}
+	if( e ){ inorder(e->n[0], f); f(e); inorder(e->n[1], f); }
+}
+
+static void
+postorder(struct entry *e, void (*f)(void *))
+{
+	if( e ){ postorder(e->n[0], f); postorder(e->n[1], f); f(e); }
 }
 
 
@@ -83,8 +83,8 @@ sort_dir(char *path, int print_name)
 		}
 		insert(&root, f->d_name, s.st_size);
 	}
-	traverse(root, display);
-	traverse(root, free);
+	inorder(root, display);
+	postorder(root, free);
 
 	*e = '\0';
 	if( closedir(d) ) {
