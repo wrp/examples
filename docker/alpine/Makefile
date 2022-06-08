@@ -1,5 +1,4 @@
 
-
 image ?= alpine
 
 all: build run
@@ -15,7 +14,7 @@ run:
 
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id"; \
-		docker exec -it  -u $(USER) "$$id" bash; \
+		docker exec -it -u $(USER) "$$id" /bin/sh; \
 	else \
 		echo 'Creating new docker container'; \
 		docker run -it \
