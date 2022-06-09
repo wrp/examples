@@ -1,5 +1,5 @@
 
-image ?= alpine
+image ?= myalpine
 
 all: build run
 build:

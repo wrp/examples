@@ -1,5 +1,5 @@
 
-image ?= debian
+image ?= mydebian
 
 all: build run
 build:
