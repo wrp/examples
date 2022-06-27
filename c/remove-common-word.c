@@ -39,7 +39,7 @@ get_word(char *str)
 		w = this->data;
 	} else {
 		w = item.data = xrealloc(NULL, 1,  sizeof *w);
-		w->text = item.key = strdup(str);
+		w->text = item.key = str;
 		w->len = strlen(str);
 		w->position.data = NULL;
 		w->position.count = 0;
@@ -67,6 +67,8 @@ main(int argc, char **argv)
 
 	while( (c = getchar()) != EOF ){
 		if( isspace(c) && ! isspace(p)){
+			char_push(&i, '\0');
+
 			struct word *w = get_word(i.data + word_start);
 			off_push(&w->position, word_start);
 			if( most_frequent == NULL || w->position.count >
@@ -86,7 +88,7 @@ main(int argc, char **argv)
 			out += m->len;
 			k += 1;
 		}
-		if( out < i.data + i.len ){
+		if( out < i.data + i.len && *out ){
 			putchar(*out);
 		}
 	}
@@ -98,11 +100,10 @@ main(int argc, char **argv)
 void
 char_push(struct char_buf *k, int c)
 {
-	while( k->len + 1 >= k->cap ){
+	while( k->len >= k->cap ){
 		k->data = xrealloc(k->data, k->cap += 1024, sizeof *k->data);
 	}
 	k->data[k->len++] = c;
-	k->data[k->len] = '\0';
 }
 
 void
