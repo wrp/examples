@@ -4,8 +4,11 @@ https://superuser.com/questions/1105090/move-a-tmux-pane-to-another-session
 
 **************************
 How to identify a pane:  (from man-page)
-     target-pane (or src-pane or dst-pane) may be a pane ID or takes a similar form to target-window but with the optional addition of a period followed by a pane index or pane ID, for example: `mysession:mywindow.1'.  If the
-     pane index is omitted, the currently active pane in the specified window is used.  The following special tokens are available for the pane index:
+     target-pane (or src-pane or dst-pane) may be a pane ID or takes a similar
+     form to target-window but with the optional addition of a period followed
+     by a pane index or pane ID, for example: `mysession:mywindow.1'.  If the
+     pane index is omitted, the currently active pane in the specified window
+     is used.  The following special tokens are available for the pane index:
 
      Token                  Meaning
      {last}            !    The last (previously active) pane
@@ -54,7 +57,10 @@ Copy a pane:
 	    start of the history and to -E the end of the visi- ble
 	    pane.  The default is to capture only the visible
 	    contents of the pane.
-tmux capture-pane -p -S -10000 -t $TARGET_PANE    # scrape
+
+tmux capture-pane -p -t $TMUX_PANE                # scrape currenly visible pane
+tmux capture-pane -p -S - -t $TMUX_PANE           # scrape all history of current pane
+tmux capture-pane -p -S -10000 -t $TARGET_PANE    # scrape 10000 lines of history(and currently visible)
 
 # misc. cmds
 :setw synchronize-panes    # Send keystrokes to multiple panes
@@ -83,7 +89,7 @@ tmux split-window -p 80 -b cmd with args
 
 
 **************************
-Cool trick:  run a command with output to a new pane:
+Run a command with output to a new pane:
 $ cmd | tmux splitw -dI    # split-window
 
 Now, run another command with output to that same pane:
