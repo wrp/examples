@@ -62,7 +62,7 @@ main(int argc, char **argv)
 	struct char_buf i = {0};
 	size_t word_start = 0;
 	int c, p = ' ';
-	struct word *most_frequent = NULL;
+	struct word *m = NULL;  /* Most frequently seen word */
 
 	if( ! hcreate(65536) ){
 		perror("hcreate");
@@ -75,9 +75,8 @@ main(int argc, char **argv)
 
 			struct word *w = get_word(i.data + word_start);
 			off_push(&w->position, word_start);
-			if( most_frequent == NULL || w->position.count >
-					most_frequent->position.count ){
-				most_frequent = w;
+			if( !m || w->position.count > m->position.count ){
+				m = w;
 			}
 		}
 		if( ! isspace(c) && isspace(p) ){
@@ -85,7 +84,6 @@ main(int argc, char **argv)
 		}
 		char_push(&i, p = c);
 	}
-	struct word *m = most_frequent;
 	int k = 0;
 	for( char *out = i.data; out < i.data + i.len; out += 1 ){
 		if( out - i.data == m->position.data[k] ){
