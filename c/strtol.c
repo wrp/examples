@@ -5,14 +5,14 @@
 #include <string.h>
 
 static void
-display(const char *arg, int base)
+display(const char *s, int base)
 {
 	char *end;
 	long n;
 	int i;
-	errno = 0;
-	i = n = strtol(arg, &end, base);
-	int errno_save = errno;
+	unsigned long un;
+	unsigned int ui;
+	int errno_save;
 	/*
 
      The strtol(), strtoll(), strtoimax(), and strtoq() functions
@@ -31,7 +31,23 @@ display(const char *arg, int base)
            strtoq()       LLONG_MIN     LLONG_MAX
 
 	*/
-	printf("%s in base %d as (long)%ld and (int)%d", arg, base, n, i);
+	errno = 0;
+	i = n = strtol(s, &end, base);
+	errno_save = errno;
+	printf("strtol : %s in base %d as (long)%ld and (int)%d", s, base, n, i);
+	if( *end ){
+		printf(", ending at %c", *end);
+	}
+	if( errno_save ){
+		printf("; err: %s", strerror(errno_save));
+	}
+	putchar('\n');
+
+	errno = 0;
+	ui = un = strtoul(s, &end, base);
+	errno_save = errno;
+	printf("strtoul: %s in base %d as (ulong)%lu and (uint)%u", s, base,
+		un, ui);
 	if( *end ){
 		printf(", ending at %c", *end);
 	}
@@ -49,6 +65,7 @@ main(int argc, char **argv)
 	printf("longmax = %ld\n", LONG_MAX);
 	printf("ulongmax = %lu\n", ULONG_MAX);
 	for( argv += 1; *argv; argv += 1 ){
+		display(*argv, 0);
 		display(*argv, 8);
 		display(*argv, 10);
 		display(*argv, 16);
