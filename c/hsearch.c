@@ -28,10 +28,11 @@ main(int argc, char **argv)
 {
 	char str[512];
 	struct word *words = NULL;
+	unsigned long max = argc > 1 ? strtoul(argv[1], NULL, 10) : 65536;
 
 	ENTRY item;
 
-	if( ! hcreate(65536) ){
+	if( ! hcreate(max) ){
 		perror("hcreate");
 		return 1;
 	}
