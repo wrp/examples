@@ -1,4 +1,8 @@
-/* Remove most common word from the input stream */
+/*
+ * Remove most common word from the input stream
+ * Motivated by https://stackoverflow.com/questions/72758127
+ */
+
 #include <ctype.h>
 #include <search.h>
 #include <stdlib.h>
