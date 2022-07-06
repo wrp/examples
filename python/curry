@@ -21,3 +21,12 @@ g = curry(f)
 
 a = g(2)(4)(6)
 print(f'a = {a}')
+
+
+@curry
+def sum(a, b, c, d):
+    return a + b + c + d
+
+print(sum(1)(2, 4)(3))
+print(sum(1, 2, 3)(4))
+print(sum(1, 2, 3, 4))
