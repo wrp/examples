@@ -39,14 +39,16 @@ display(void *v)
 	printf("%40s: %zu\n", t->name, t->siz);
 }
 
+typedef void (*callback)(void *);
+
 static void
-inorder(struct entry *e, void (*f)(void *))
+inorder(struct entry *e, callback f)
 {
 	if( e ){ inorder(e->n[0], f); f(e); inorder(e->n[1], f); }
 }
 
 static void
-postorder(struct entry *e, void (*f)(void *))
+postorder(struct entry *e, callback f)
 {
 	if( e ){ postorder(e->n[0], f); postorder(e->n[1], f); f(e); }
 }
