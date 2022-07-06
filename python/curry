@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+from inspect import signature
+
+def curry(fn):
+    num_args = len(signature(fn).parameters)
+    def init(*args, **kwargs):
+        def call(*more_args, **more_kwargs):
+            all_args = args + more_args
+            all_kwargs = dict(**kwargs, **more_kwargs)
+            if len(all_args) + len(all_kwargs) >= num_args:
+                return fn(*all_args, **all_kwargs)
+            else:
+                return init(*all_args, **all_kwargs)
+        return call
+    return init()
+
+def f(a, b, c):
+    return a + b + c
+
+g = curry(f)
+
+a = g(2)(4)(6)
+print(f'a = {a}')
