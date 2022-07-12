@@ -2,6 +2,7 @@
  * Clean up man pages.
  * Discard octet before 0x08.
  * Discard all between 0x1b and 'm'
+ * This is pointless: use col -bx
  */
 #include <assert.h>
 #include <errno.h>
