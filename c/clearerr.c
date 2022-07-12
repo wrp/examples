@@ -5,8 +5,6 @@
  * Demonstrate the behavior of feof on a tty.  In particular,
  * running in bash and dash, closing the input stream is not final.
  * The stream from a tty is reopened and more data is sent.
- *
- * Is this a feature of the tty or the shell?
  */
 int
 main(void)
