@@ -1,13 +1,10 @@
 
-# Copy the files from foo to bar
+# Copy files in foo to bar, deleting unmatched files in bar
 $ rsync -zva --delete foo/ bar
 
 # Copy the directory foo into bar  (will copy to bar/foo/*)
 $ rsync -zva --delete foo bar
 
 # Copy files in foo to bar, deleting unmatched files in bar
-rsync -zva --delete foo/ bar
-
-# Copy files in foo to bar, deleting unmatched files in bar
-# but keeping bar/file-to-keep
-rsync -zva --delete --filter 'P file-to-keep' foo/ bar
+# but keeping bar/file-to-keep  (P == protect)
+$ rsync -zva --delete --filter 'P file-to-keep' foo/ bar
