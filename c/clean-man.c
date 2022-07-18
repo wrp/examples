@@ -23,6 +23,8 @@ main( int argc, char **argv )
 		puts("\n\nRemove all bytes preceding 0x08 and all between");
 		puts("0x1b and the next 'm'.  Useful for naive clean up of");
 		puts("manpages.");
+		puts("");
+		puts("But don't use this.  Use col -bx instead");
 		return 0;
 	}
 	char **args = argc > 1 ? ++argv : defaults;
