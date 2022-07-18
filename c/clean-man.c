@@ -4,6 +4,7 @@
  * Discard all between 0x1b and 'm'
  * This is pointless: use col -bx
  */
+#include "config.h"
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
@@ -12,14 +13,17 @@
 #include "xutil.h"
 
 int
-main( int argc, char **argv )
+main(int argc, char **argv)
 {
 	int c;
 	char *defaults[] = { "-", NULL };
 
 	if( argc > 1 && strcmp(argv[1], "-h") == 0 ){
 		char *base = strrchr(argv[0], '/');
-		printf("usage: %s [file ... ]", base ? base + 1 : argv[0]);
+		char *name = base ? base + 1 : argv[0];
+		printf("usage: %s [file ... ]", name);
+		puts("");
+		printf("%s version: %s\n", name, PACKAGE_VERSION);
 		puts("\n\nRemove all bytes preceding 0x08 and all between");
 		puts("0x1b and the next 'm'.  Useful for naive clean up of");
 		puts("manpages.");
@@ -27,6 +31,7 @@ main( int argc, char **argv )
 		puts("But don't use this.  Use col -bx instead");
 		return 0;
 	}
+
 	char **args = argc > 1 ? ++argv : defaults;
 
 	for( char **arg = args; *arg; arg++ ){
