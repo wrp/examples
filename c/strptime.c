@@ -61,3 +61,15 @@ main(int argc, char **argv)
 		printf("%s%s", asctime(&tp), ctime(&tt));
 	}
 }
+/*
+elements of struct tm:
+	tm_sec seconds passed since last minute
+	tm_min minutes passed since hour
+	tm_hour hours passed since midnight
+	tm_mday day of the month
+	tm_mon months passed since January
+	tm_year year passed since 1900
+	tm_wday days since Sunday
+	tm_yday days since first day of the year
+	tm_isdst  is daylight savings
+*/
