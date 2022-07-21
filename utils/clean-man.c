@@ -1,7 +1,7 @@
 /*
  * Clean up man pages.
  * Discard octet before backspace(0x08).
- * Discard all between 0x1b and 'm'
+ * Discard all between '\e' and 'm'
  */
 #include "config.h"
 #include <assert.h>
@@ -31,8 +31,8 @@ main(int argc, char **argv)
 		puts("");
 		printf("%s version: %s\n", name, PACKAGE_VERSION);
 		puts("Remove all bytes preceding backspace and all between");
-		puts("0x1b and the next 'm'.  Useful for naive clean up of");
-		puts("manpages.  Also trim dos newlines.");
+		puts("\\e(0x1b) and the next 'm'.  Useful for naive clean up");
+		puts("of manpages.  Also trim dos newlines.");
 		return 0;
 	}
 
@@ -44,21 +44,21 @@ main(int argc, char **argv)
 		FILE *ofp = ifp == stdin ? stdout :
 			xtmpfile(tmpname, sizeof tmpname, "w");
 
-		int prev = '\b';
+		int p = '\b';
 		int state = 1;
 		assert( EOF != '\b' );
 		do {
 			c = getc(ifp);
-			if( prev == 0x1b ){
+			if( p == '\e' ){
 				state = 0;
 			}
-			if( state && c != '\b' && prev != '\b' && c != '\r' ){
-				putc(prev, ofp);
+			if( state && c != '\b' && p != '\b' && p != '\r' ){
+				putc(p, ofp);
 			}
-			if( prev == 'm' ){
+			if( p == 'm' ){
 				state = 1;
 			}
-			prev = c;
+			p = c;
 		} while( c != EOF );
 		if( ifp != stdin && fclose(ifp) ){
 			die("%s: %s\n", *arg, strerror(errno));
