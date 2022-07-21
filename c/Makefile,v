@@ -37,7 +37,7 @@ $(BUILDDIR)/Makefile: configure
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
 	@@echo '$(BUILDDIR) configured'
 
-check clean distclen install: $(BUILDDIR)/Makefile
+check clean distclean install: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 
 %: %.c $(BUILDDIR)/Makefile
