@@ -1,6 +1,6 @@
 /*
  * Clean up man pages.
- * Discard octet before 0x08.
+ * Discard octet before backspace(0x08).
  * Discard all between 0x1b and 'm'
  */
 #include "config.h"
@@ -30,7 +30,7 @@ main(int argc, char **argv)
 		printf("usage: %s [file ... ]\n", name);
 		puts("");
 		printf("%s version: %s\n", name, PACKAGE_VERSION);
-		puts("Remove all bytes preceding 0x08 and all between");
+		puts("Remove all bytes preceding backspace and all between");
 		puts("0x1b and the next 'm'.  Useful for naive clean up of");
 		puts("manpages.  Also trim dos newlines.");
 		return 0;
@@ -44,15 +44,15 @@ main(int argc, char **argv)
 		FILE *ofp = ifp == stdin ? stdout :
 			xtmpfile(tmpname, sizeof tmpname, "w");
 
-		int prev = 0x08;
+		int prev = '\b';
 		int state = 1;
-		assert( EOF != 0x08 );
+		assert( EOF != '\b' );
 		do {
 			c = getc(ifp);
 			if( prev == 0x1b ){
 				state = 0;
 			}
-			if( state && c != 0x08 && prev != 0x08 && c != '\r' ){
+			if( state && c != '\b' && prev != '\b' && c != '\r' ){
 				putc(prev, ofp);
 			}
 			if( prev == 'm' ){
