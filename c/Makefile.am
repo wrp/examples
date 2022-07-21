@@ -14,7 +14,6 @@ check_PROGRAMS = \
 	access \
 	arithperm \
 	check-dups \
-	clean-man \
 	dynamic \
 	dynamic-read \
 	dynamic-array \

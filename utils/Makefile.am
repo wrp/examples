@@ -1,5 +1,5 @@
 
-bin_PROGRAMS = run
+bin_PROGRAMS = run clean-man
 man1_MANS = run.1
 
 CLEANFILES = *.gcda *.gcno *.gcov
