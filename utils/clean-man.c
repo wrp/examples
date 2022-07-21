@@ -26,9 +26,7 @@ main(int argc, char **argv)
 		printf("%s version: %s\n", name, PACKAGE_VERSION);
 		puts("Remove all bytes preceding 0x08 and all between");
 		puts("0x1b and the next 'm'.  Useful for naive clean up of");
-		puts("manpages.");
-		puts("");
-		puts("But don't use this.  Use col -bx instead");
+		puts("manpages.  Also trim dos newlines.");
 		return 0;
 	}
 
@@ -45,10 +43,10 @@ main(int argc, char **argv)
 		assert( EOF != 0x08 );
 		do {
 			c = getc(ifp);
-			if( prev == 0x1b ) {
+			if( prev == 0x1b ){
 				state = 0;
 			}
-			if( state && c != 0x08 && prev != 0x08 ){
+			if( state && c != 0x08 && prev != 0x08 && c != '\r' ){
 				putc(prev, ofp);
 			}
 			if( prev == 'm' ){
