@@ -25,7 +25,7 @@ text
 
 BUILDDIR = build/$(shell uname -s)/$(shell uname -m)
 
-.PHONY: all check clean distclean install
+.PHONY: all check clean distclean install version
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 
@@ -37,7 +37,7 @@ $(BUILDDIR)/Makefile: configure
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
 	@@echo '$(BUILDDIR) configured'
 
-check clean distclen install: $(BUILDDIR)/Makefile
+check clean distclen install version: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 
 %: %.c $(BUILDDIR)/Makefile
