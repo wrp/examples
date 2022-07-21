@@ -25,7 +25,7 @@ text
 
 BUILDDIR = build/$(shell uname -s)/$(shell uname -m)
 
-.PHONY: all check clean distclean install version
+.PHONY: all check clean distclean install version release
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 
@@ -43,9 +43,11 @@ check clean distclean install version: $(BUILDDIR)/Makefile
 %: %.c $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 
-version:
+release:
 	autoreconf -ivf
 	make $(BUILDDIR)/Makefile  # Do not specify as dependency...
 	#               ... since we want to run after autoreconf
 	cd $(BUILDDIR) && make $(MAKEFLAGS) version
+	cd $(BUILDDIR) && make $(MAKEFLAGS)
+	cd $(BUILDDIR) && make $(MAKEFLAGS) dist
 @
