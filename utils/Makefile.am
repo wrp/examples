@@ -3,6 +3,7 @@ bin_PROGRAMS = run clean-man
 man1_MANS = run.1
 
 CLEANFILES = *.gcda *.gcno *.gcov
+DISTCLEANFILES = version
 
 EXTRA_DIST = version build-aux/package-version run.txt run.1
 .PHONY: version
