@@ -42,4 +42,10 @@ check clean distclean install version: $(BUILDDIR)/Makefile
 
 %: %.c $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
+
+version:
+	autoreconf -ivf
+	make $(BUILDDIR)/Makefile  # Do not specify as dependency...
+	#               ... since we want to run after autoreconf
+	cd $(BUILDDIR) && make $(MAKEFLAGS) version
 @
