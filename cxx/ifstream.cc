@@ -8,7 +8,7 @@ main(int argc, char **argv)
 {
 	const char *path = argc > 1 ? argv[1] : "foo";
 	std::ifstream f(path);
-	if( ! f.is_open() ){
+	if( ! f ){
 		std::perror(path);
 	}
 	return 0;
