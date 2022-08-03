@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-
-
 import itertools
 
 def foo():
@@ -11,17 +9,10 @@ def foo():
 		yield 1
 		yield 1
 
-k = []
-for i in foo():
-    k.append(i)
-    if len(k) > 9:
-        break
-
-print( "k = {}", k)
-
-#m = itertools.islice(foo(), 10)
-
 x = foo()
-m = [next(x) for _ in xrange(10)]
-
+m = [next(x) for _ in xrange(9)]
+k = itertools.islice(foo(), 9)
 print( "m = {}", m)
+
+# a = k[0:9]
+# print( "a = {}", a)
