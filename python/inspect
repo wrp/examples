@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+import sys
+import inspect
+
+
+def main():
+    """docstring for main"""
+    name = inspect.getframeinfo(inspect.currentframe()).function
+    doc = eval(name + '.__doc__')
+    print(f'name: {name}, doc: {doc}')
+
+if __name__ == "__main__":
+    main()
