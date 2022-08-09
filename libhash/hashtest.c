@@ -78,10 +78,15 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 		hashmap_set(map, this);
 		count -= 1;
 	}
-	for( ; count > 0; count -= 1 ){
+	for( char *t = base; count > 0; count -= 1 ){
 		struct user d = { .name = strdup(base), .age = count };
 		hashmap_set(map, &d);
-		base[0] = base[0] + 1;
+		while( *t == 'Z' || *t == 'z'){
+			t += 1;
+		}
+		if( *t ){
+			*t += 1;
+		}
 	}
 }
 
