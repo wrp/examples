@@ -57,8 +57,8 @@ main(void)
 {
 	/* Create a new hash map. The second argument is the initial capacity.
 	 * The third and fourth arguments are optional seeds that are passed to
-	 * the hash function.  Fourth arg is hash function, 5th is comparison,
-	 * 6th is free function, 7th is pointer passed to compar func
+	 * the hash function.  Fifit arg is hash function, 6th is comparison,
+	 * 7th is free function, 8th is pointer passed to compar func
 	 */
 	int fail = 0;
 	struct user *user;
