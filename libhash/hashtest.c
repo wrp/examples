@@ -40,7 +40,7 @@ user_hash(const void *item, uint64_t seed0, uint64_t seed1)
 
 static int malloc_allow = 0;
 static void *
-bad_malloc(size_t size)
+my_malloc(size_t size)
 {
 	void *v;
 	if( ! malloc_allow ){
@@ -53,11 +53,16 @@ bad_malloc(size_t size)
 }
 
 static void
+my_free(void *v)
+{
+	free(v);
+	malloc_allow += 1;
+}
+
+static void
 free_el(void *s)
 {
-	struct user *t = s;
-	free(t->name);
-	malloc_allow += 1;
+	free(((struct user *)s)->name);
 }
 
 /*
@@ -161,10 +166,9 @@ main(void)
 	hashmap_clear(map, true);
 
 	hashmap_free(map);
-	expect( malloc_allow == 16 );
 	malloc_allow = 0;
 	map = hashmap_new_with_allocator(
-		bad_malloc, NULL, NULL,
+		my_malloc, NULL, NULL,
 		sizeof *user,
 		0, 0, 0, user_hash, user_compare,
 		NULL, NULL
@@ -172,7 +176,7 @@ main(void)
 	expect( map == NULL );
 	malloc_allow = 1;
 	map = hashmap_new_with_allocator(
-		bad_malloc, NULL, NULL,
+		my_malloc, NULL, NULL,
 		sizeof *user,
 		0, 0, 0, user_hash, user_compare,
 		NULL, NULL
