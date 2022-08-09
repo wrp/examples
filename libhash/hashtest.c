@@ -51,6 +51,12 @@ bad_malloc(size_t size)
 	return v;
 }
 
+static void
+increment_allow(void *s)
+{
+	(void)s;
+	malloc_allow += 1;
+}
 
 int
 main(void)
@@ -70,7 +76,7 @@ main(void)
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
 		0, 0, 0, user_hash, user_compare,
-		NULL, NULL
+		increment_allow, NULL
 	);
 
 	// Here we'll load some users into the hash map. Each set operation
@@ -100,6 +106,7 @@ main(void)
 	expect( i == 3 );
 
 	/* Load enough data to trigger a resize */
+	expect( malloc_allow == 0 );
 	hashmap_set(map, &(struct user){ .name="Aale", .age=44 });
 	hashmap_set(map, &(struct user){ .name="Bale", .age=44 });
 	hashmap_set(map, &(struct user){ .name="Cale", .age=44 });
@@ -114,6 +121,8 @@ main(void)
 	hashmap_set(map, &(struct user){ .name="Lale", .age=44 });
 	hashmap_set(map, &(struct user){ .name="Male", .age=44 });
 	hashmap_set(map, &(struct user){ .name="Nale", .age=44 });
+	/* resize does not free elements */
+	expect( malloc_allow == 0 );
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
 	expect( i == 16 );
@@ -121,6 +130,8 @@ main(void)
 	expect( user->age == 99 );
 
 	hashmap_free(map);
+	expect( malloc_allow == 16 );
+	malloc_allow = 0;
 	map = hashmap_new_with_allocator(
 		bad_malloc, NULL, NULL,
 		sizeof *user,
