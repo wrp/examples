@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "hashmap.h"
 
@@ -46,6 +47,11 @@ main(void)
 	 */
 	int fail = 0;
 	struct user *user;
+
+	/* hashmap_set_allocator is deprecated.  Adding here only to get
+	 * coverage before deleting entirely
+	 */
+	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
 		sizeof *user, 0, 0, 0, user_hash, user_compare,
 		NULL, NULL
