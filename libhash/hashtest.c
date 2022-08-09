@@ -53,7 +53,8 @@ main(void)
 	 */
 	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
-		sizeof *user, 0, 0, 0, user_hash, user_compare,
+		sizeof *user + 1, /* Use wonky size to trigger code */
+		0, 0, 0, user_hash, user_compare,
 		NULL, NULL
 	);
 
