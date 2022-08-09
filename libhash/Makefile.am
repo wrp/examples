@@ -1,0 +1,12 @@
+
+include_HEADERS = hashmap.h
+check_PROGRAMS = hash-test
+TESTS = hash-test
+
+lib_LTLIBRARIES = libhash.la
+LDADD=libhash.la
+libhash_la_SOURCES = hashmap.c
+
+hash_test_SOURCES = hashtest.c
+
+CLEANFILES = *.gcda *.gcno *.gcov *.o
