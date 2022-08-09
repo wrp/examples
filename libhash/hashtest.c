@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,18 +59,46 @@ increment_allow(void *s)
 	malloc_allow += 1;
 }
 
+/*
+ * load some users into the hash map. Each set operation
+ * performs a copy of the data that is pointed to in the second argument.
+ */
+static void
+load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
+{
+	struct user data[] = {
+		{ .name="Dale", .age=44 },
+		{ .name="Roger", .age=68 },
+		{ .name="Jane", .age=47 },
+	};
+	assert( start <= sizeof data / sizeof *data );
+	struct user *end = data + sizeof data / sizeof *data;
+	struct user *this = data + start;
+	for( ; this < end; this += 1 ){
+		hashmap_set(map, this);
+		count -= 1;
+	}
+	for( ; count > 0; count -= 1 ){
+		struct user d = { .name = strdup(base), .age = count };
+		hashmap_set(map, &d);
+		base[0] = base[0] + 1;
+	}
+}
+
 int
 main(void)
 {
-	/* Create a new hash map. The second argument is the initial capacity.
+	/*
+	 * Create a new hash map. The second argument is the initial capacity.
 	 * The third and fourth arguments are optional seeds that are passed to
 	 * the hash function.  Fifit arg is hash function, 6th is comparison,
 	 * 7th is free function, 8th is pointer passed to compar func
 	 */
-	int fail = 0;
+	int fail = 0;  /* Count of failed tests */
 	struct user *user;
 
-	/* hashmap_set_allocator is deprecated.  Adding here only to get
+	/*
+	 * hashmap_set_allocator is deprecated.  Adding here only to get
 	 * coverage before deleting entirely
 	 */
 	hashmap_set_allocator(malloc, free);
@@ -79,11 +108,7 @@ main(void)
 		increment_allow, NULL
 	);
 
-	// Here we'll load some users into the hash map. Each set operation
-	// performs a copy of the data that is pointed to in the second argument.
-	hashmap_set(map, &(struct user){ .name="Dale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Roger", .age=68 });
-	hashmap_set(map, &(struct user){ .name="Jane", .age=47 });
+	load_data(map, 3, 0, NULL);
 
 	user = hashmap_get(map, &(struct user){ .name="Jane" });
 	expect( strcmp(user->name, "Jane") == 0 );
@@ -107,27 +132,16 @@ main(void)
 
 	/* Load enough data to trigger a resize */
 	expect( malloc_allow == 0 );
-	hashmap_set(map, &(struct user){ .name="Aale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Bale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Cale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Dale", .age=99 });
-	hashmap_set(map, &(struct user){ .name="Eale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Fale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Gale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Hale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Iale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Jale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Kale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Lale", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Male", .age=44 });
-	hashmap_set(map, &(struct user){ .name="Nale", .age=44 });
+	char name[] = "Aale";
+	load_data(map, 14, 3, name);
+
 	/* resize does not free elements */
 	expect( malloc_allow == 0 );
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
 	expect( i == 16 );
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
-	expect( user->age == 99 );
+	expect( user != NULL && user->age == 11 );
 
 	hashmap_free(map);
 	expect( malloc_allow == 16 );
