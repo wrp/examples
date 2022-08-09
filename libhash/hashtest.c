@@ -53,9 +53,10 @@ bad_malloc(size_t size)
 }
 
 static void
-increment_allow(void *s)
+free_el(void *s)
 {
-	(void)s;
+	struct user *t = s;
+	free(t->name);
 	malloc_allow += 1;
 }
 
@@ -67,9 +68,9 @@ static void
 load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 {
 	struct user data[] = {
-		{ .name="Dale", .age=44 },
-		{ .name="Roger", .age=68 },
-		{ .name="Jane", .age=47 },
+		{ .name=strdup("Dale"), .age=44 },
+		{ .name=strdup("Roger"), .age=68 },
+		{ .name=strdup("Jane"), .age=47 },
 	};
 	assert( start <= sizeof data / sizeof *data );
 	struct user *end = data + sizeof data / sizeof *data;
@@ -110,7 +111,7 @@ main(void)
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
 		0, 0, 0, user_hash, user_compare,
-		increment_allow, NULL
+		free_el, NULL
 	);
 
 	load_data(map, 3, 0, NULL);
