@@ -39,9 +39,11 @@ user_hash(const void *item, uint64_t seed0, uint64_t seed1)
 int
 main(void)
 {
-	// create a new hash map where each item is a `struct user`. The second
-	// argument is the initial capacity. The third and fourth arguments are
-	// optional seeds that are passed to the following hash function.
+	/* Create a new hash map. The second argument is the initial capacity.
+	 * The third and fourth arguments are optional seeds that are passed to
+	 * the hash function.  Fourth arg is hash function, 5th is comparison,
+	 * 6th is free function, 7th is pointer passed to compar func
+	 */
 	int fail = 0;
 	struct user *user;
 	struct hashmap *map = hashmap_new(
@@ -54,7 +56,6 @@ main(void)
 	hashmap_set(map, &(struct user){ .name="Dale", .age=44 });
 	hashmap_set(map, &(struct user){ .name="Roger", .age=68 });
 	hashmap_set(map, &(struct user){ .name="Jane", .age=47 });
-
 
 	user = hashmap_get(map, &(struct user){ .name="Jane" });
 	expect( strcmp(user->name, "Jane") == 0 );
