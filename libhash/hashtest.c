@@ -75,7 +75,28 @@ main(void)
 	/* terate over all users  */
 	int i = 0;
 	hashmap_scan(map, user_iter, &i);
-	expect( i == 3);
+	expect( i == 3 );
+
+	/* Load enough data to trigger a resize */
+	hashmap_set(map, &(struct user){ .name="Aale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Bale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Cale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Dale", .age=99 });
+	hashmap_set(map, &(struct user){ .name="Eale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Fale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Gale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Hale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Iale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Jale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Kale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Lale", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Male", .age=44 });
+	hashmap_set(map, &(struct user){ .name="Nale", .age=44 });
+	i = 0;
+	hashmap_scan(map, user_iter, &i);
+	expect( i == 16 );
+	user = hashmap_get(map, &(struct user){ .name="Dale" });
+	expect( user->age == 99 );
 
 	hashmap_free(map);
 	if( fail ){
