@@ -156,6 +156,8 @@ main(void)
 	expect( user != NULL && user->age == 11 );
 
 	hashmap_clear(map, false);
+	user = hashmap_get(map, &(struct user){ .name="Dale" });
+	expect( user == NULL );
 	hashmap_clear(map, true);
 
 	hashmap_free(map);
