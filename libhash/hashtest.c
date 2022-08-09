@@ -37,6 +37,21 @@ user_hash(const void *item, uint64_t seed0, uint64_t seed1)
 		__FILE__, __LINE__, #x); \
 	}
 
+static int malloc_allow = 0;
+static void *
+bad_malloc(size_t size)
+{
+	void *v;
+	if( ! malloc_allow ){
+		v = NULL;
+	} else {
+		malloc_allow -= 1;
+		v = malloc(size);
+	}
+	return v;
+}
+
+
 int
 main(void)
 {
@@ -106,6 +121,22 @@ main(void)
 	expect( user->age == 99 );
 
 	hashmap_free(map);
+	map = hashmap_new_with_allocator(
+		bad_malloc, NULL, NULL,
+		sizeof *user,
+		0, 0, 0, user_hash, user_compare,
+		NULL, NULL
+	);
+	expect( map == NULL );
+	malloc_allow = 1;
+	map = hashmap_new_with_allocator(
+		bad_malloc, NULL, NULL,
+		sizeof *user,
+		0, 0, 0, user_hash, user_compare,
+		NULL, NULL
+	);
+	expect( map == NULL );
+
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
 	}
