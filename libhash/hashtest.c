@@ -68,15 +68,16 @@ static void
 load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 {
 	struct user data[] = {
-		{ .name=strdup("Dale"), .age=44 },
-		{ .name=strdup("Roger"), .age=68 },
-		{ .name=strdup("Jane"), .age=47 },
+		{ .name="Dale", .age=44 },
+		{ .name="Roger", .age=68 },
+		{ .name="Jane", .age=47 },
 	};
 	assert( start <= sizeof data / sizeof *data );
 	struct user *end = data + sizeof data / sizeof *data;
-	struct user *this = data + start;
-	for( ; this < end; this += 1 ){
-		hashmap_set(map, this);
+	struct user *t = data + start;
+	for( ; t < end; t += 1 ){
+		struct user d = { .name = strdup(t->name), .age = t->age };
+		hashmap_set(map, &d);
 		count -= 1;
 	}
 	for( char *t = base; count > 0; count -= 1 ){
