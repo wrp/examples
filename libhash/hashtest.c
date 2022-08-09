@@ -88,6 +88,11 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 		}
 		if( *t ){
 			*t += 1;
+		} else {
+			for( t = base; *t; t++ ){
+				*t = 'a';
+			}
+			*(t = base) = 'A';
 		}
 	}
 }
