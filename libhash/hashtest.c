@@ -42,6 +42,7 @@ identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
 	return *(int *)int_pointer;
 }
 
+typedef uint64_t(*hash_func)(const void *item, uint64_t seed0, uint64_t seed1);
 
 uint64_t
 user_hash_sip(const void *item, uint64_t seed0, uint64_t seed1)
@@ -138,7 +139,7 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 }
 
 static void
-test_allocator_failures(void)
+test_allocator_failures(hash_func h)
 {
 	struct user *user;
 	struct hashmap *map;
@@ -147,7 +148,7 @@ test_allocator_failures(void)
 		map = hashmap_new_with_allocator(
 			my_malloc, NULL, NULL,
 			sizeof *user,
-			0, 0, 0, user_hash_sip, user_compare,
+			0, 0, 0, h, user_compare,
 			NULL, NULL
 		);
 		expect( map == NULL );
@@ -158,7 +159,7 @@ test_allocator_failures(void)
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
 		my_malloc, NULL, NULL, sizeof *user,
-		0, 0, 0, user_hash_murmur, user_compare, NULL, NULL
+		0, 0, 0, h, user_compare, NULL, NULL
 	);
 	load_data(map, 16, 0, NULL);
 	expect( hashmap_oom(map) );
@@ -167,14 +168,14 @@ test_allocator_failures(void)
 }
 
 static void
-test_probe(struct hashmap *m)
+test_probe(struct hashmap *m, hash_func hf)
 {
 	hashmap_clear(m, false);
 
 	struct user d = { .name = strdup("Barry"), .age = 5 };
 	hashmap_set(m, &d);
 
-	uint64_t h = user_hash_sip(&d, 0, 0) & 0xf;
+	uint64_t h = hf(&d, 0, 0) & 0xf;
 
 	struct user *a = hashmap_probe(m, h);
 	struct user *u = hashmap_probe(m, !h);
@@ -241,8 +242,8 @@ test_deletion(struct hashmap *m)
 	}
 }
 
-int
-main(void)
+static void
+test_hash(hash_func h)
 {
 	/*
 	 * Create a new hash map. The second argument is the initial capacity.
@@ -262,7 +263,7 @@ main(void)
 	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
-		0, 0, 0, user_hash_sip, user_compare,
+		0, 0, 0, h, user_compare,
 		free_el, NULL
 	);
 
@@ -303,7 +304,7 @@ main(void)
 	load_data(map, 1, 3, name);
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
-	expect( i != 16 );
+	expect( i != 17 );
 
 	/* Load a longer name to getsip coverage */
 	strcpy(name, "Xxseven");
@@ -317,20 +318,19 @@ main(void)
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
 
-	test_probe(map);
+	test_probe(map, h);
 	hashmap_free(map);
 
-	test_allocator_failures();
+	test_allocator_failures(h);
 
-	/* Load up a map using murmur to cover the hash functions */
 	map = hashmap_new(
-		sizeof *user,
-		0, 0, 0, user_hash_murmur, user_compare,
-		free_el, NULL
+	        sizeof *user,
+	        0, 0, 0, h, user_compare,
+	        free_el, NULL
 	);
 	char big_name[256];
 	for( int i = 1; i < 255; i++ ){
-		big_name[i] = 'k';
+	        big_name[i] = 'k';
 	}
 	big_name[0] = 'A';
 	big_name[255] = '\0';
@@ -338,7 +338,13 @@ main(void)
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user && user->age == 44 );
 	hashmap_free(map);
+}
 
+int
+main(void)
+{
+	test_hash(user_hash_murmur);
+	test_hash(user_hash_sip);
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
 	}
