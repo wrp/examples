@@ -252,6 +252,7 @@ test_hash(hash_func h)
 	 * 7th is free function, 8th is pointer passed to compar function.
 	 */
 	struct user *user;
+	struct user d = { .name = strdup(""), .age = 5 };
 
 	/*
 	 * hashmap_set_allocator is deprecated.  Adding here only to get
@@ -266,6 +267,11 @@ test_hash(hash_func h)
 		0, 0, 0, h, user_compare,
 		free_el, NULL
 	);
+
+	hashmap_set(map, &d);
+	user = hashmap_get(map, &(struct user){ .name="" });
+	expect( user && user->age == 5 );
+	hashmap_clear(map, false);
 
 	load_data(map, 3, 0, NULL);
 
@@ -304,21 +310,25 @@ test_hash(hash_func h)
 	load_data(map, 1, 3, name);
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
+	expect( hashmap_count(map) == 17 );
 	expect( i != 17 );
 
-	/* Load a longer name to getsip coverage */
+	/* Load a longer name to get coverage */
 	strcpy(name, "Xxseven");
 	load_data(map, 10, 3, name);
 	user = hashmap_get(map, &(struct user){ .name="Xxseven" });
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map);
+	test_probe(map, h);
 
+	load_data(map, 14, 0, NULL);
 	hashmap_clear(map, false);
+	load_data(map, 14, 0, NULL);
+	hashmap_clear(map, true);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
 
-	test_probe(map, h);
 	hashmap_clear(map, true);
 	hashmap_free(map);
 
