@@ -56,13 +56,30 @@ static void
 my_free(void *v)
 {
 	free(v);
-	malloc_allow += 1;
+	malloc_allow += (v != NULL);
 }
 
 static void
 free_el(void *s)
 {
 	free(((struct user *)s)->name);
+}
+
+/*
+ * Roll a string through permutations (preserve case):
+ * eg: abcd -> bbcd -> cbcd -> ... -> zbcd -> accd -> ... ->
+ *     zzzy -> aaaz -> baaz -> ... -> yzzz -> zzzz -> aaaa
+ */
+static void
+increment(char *t)
+{
+	while( *t == 'Z' || *t == 'z' ){
+		*t = *t == 'Z' ? 'A' : 'a';
+		t += 1;
+	}
+	if( *t ){
+		*t += 1;
+	}
 }
 
 /*
@@ -79,28 +96,18 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 	};
 	assert( start <= sizeof data / sizeof *data );
 	struct user *end = data + sizeof data / sizeof *data;
-	struct user *t = data + start;
-	for( ; t < end; t += 1 ){
+	for( struct user *t = data + start; t < end; t += 1 ){
 		struct user d = { .name = strdup(t->name), .age = t->age };
 		hashmap_set(map, &d);
 		count -= 1;
 	}
-	for( char *t = base; count > 0; count -= 1 ){
-		struct user d = { .name = strdup(base), .age = count };
+	while( count > 0 ){
+		struct user d = { .name = strdup(base), .age = count-- };
 		hashmap_set(map, &d);
-		while( *t == 'Z' || *t == 'z'){
-			t += 1;
-		}
-		if( *t ){
-			*t += 1;
-		} else {
-			for( t = base; *t; t++ ){
-				*t = 'a';
-			}
-			*(t = base) = 'A';
-		}
+		increment(base);
 	}
 }
+
 
 int
 main(void)
