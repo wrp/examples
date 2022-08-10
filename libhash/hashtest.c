@@ -157,6 +157,26 @@ test_probe(struct hashmap *m)
 	expect( u == NULL );
 }
 
+
+static void
+test_deletion(struct hashmap *m)
+{
+	struct user u = { .name = "kjljk", .age = 17 };
+	struct user *up;
+
+	hashmap_set(m, &u);
+	up = hashmap_delete(m, &u);
+	expect( up != NULL && up->age == 17 );
+
+	/* Verify that get returns NULL */
+	up = hashmap_get(m, &u);
+	expect( up == NULL );
+
+	/* delete a non-extant entry */
+	up = hashmap_delete(m, &u);
+	expect( up == NULL );
+}
+
 int
 main(void)
 {
@@ -214,6 +234,8 @@ main(void)
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user != NULL && user->age == 11 );
 
+	test_deletion(map);
+
 	hashmap_clear(map, false);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
@@ -228,5 +250,3 @@ main(void)
 	}
 	return fail;
 }
-
-
