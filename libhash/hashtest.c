@@ -44,10 +44,17 @@ identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
 
 
 uint64_t
-user_hash(const void *item, uint64_t seed0, uint64_t seed1)
+user_hash_sip(const void *item, uint64_t seed0, uint64_t seed1)
 {
 	const struct user *user = item;
 	return hashmap_sip(user->name, strlen(user->name), seed0, seed1);
+}
+
+uint64_t
+user_hash_murmur(const void *item, uint64_t seed0, uint64_t seed1)
+{
+	const struct user *user = item;
+	return hashmap_murmur(user->name, strlen(user->name), seed0, seed1);
 }
 
 #define expect(x) if( !(x) ){ \
@@ -140,7 +147,7 @@ test_allocator_failures(void)
 		map = hashmap_new_with_allocator(
 			my_malloc, NULL, NULL,
 			sizeof *user,
-			0, 0, 0, user_hash, user_compare,
+			0, 0, 0, user_hash_sip, user_compare,
 			NULL, NULL
 		);
 		expect( map == NULL );
@@ -151,10 +158,11 @@ test_allocator_failures(void)
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
 		my_malloc, NULL, NULL, sizeof *user,
-		0, 0, 0, user_hash, user_compare, NULL, NULL
+		0, 0, 0, user_hash_murmur, user_compare, NULL, NULL
 	);
 	load_data(map, 16, 0, NULL);
 	expect( hashmap_oom(map) );
+	hashmap_free(map);
 }
 
 static void
@@ -165,7 +173,7 @@ test_probe(struct hashmap *m)
 	struct user d = { .name = strdup("Barry"), .age = 5 };
 	hashmap_set(m, &d);
 
-	uint64_t h = user_hash(&d, 0, 0) & 0xf;
+	uint64_t h = user_hash_sip(&d, 0, 0) & 0xf;
 
 	struct user *a = hashmap_probe(m, h);
 	struct user *u = hashmap_probe(m, !h);
@@ -253,7 +261,7 @@ main(void)
 	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
-		0, 0, 0, user_hash, user_compare,
+		0, 0, 0, user_hash_sip, user_compare,
 		free_el, NULL
 	);
 
