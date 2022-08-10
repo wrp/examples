@@ -163,6 +163,7 @@ test_allocator_failures(void)
 	load_data(map, 16, 0, NULL);
 	expect( hashmap_oom(map) );
 	hashmap_free(map);
+	hashmap_set_allocator(malloc, free);
 }
 
 static void
@@ -315,6 +316,23 @@ main(void)
 	hashmap_free(map);
 
 	test_allocator_failures();
+
+	/* Load up a map using murmur to cover the hash functions */
+	map = hashmap_new(
+		sizeof *user,
+		0, 0, 0, user_hash_murmur, user_compare,
+		free_el, NULL
+	);
+	char big_name[256];
+	for( int i = 1; i < 255; i++ ){
+		big_name[i] = 'k';
+	}
+	big_name[0] = 'A';
+	big_name[255] = '\0';
+	load_data(map, 128, 0, big_name);
+	user = hashmap_get(map, &(struct user){ .name="Dale" });
+	expect( user && user->age == 44 );
+	hashmap_free(map);
 
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
