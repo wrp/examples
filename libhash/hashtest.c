@@ -189,12 +189,9 @@ main(void)
 	expect( i == 3 );
 
 	/* Load enough data to trigger a resize */
-	expect( malloc_allow == 0 );
 	char name[] = "Aale";
 	load_data(map, 14, 3, name);
 
-	/* resize does not free elements */
-	expect( malloc_allow == 0 );
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
 	expect( i == 16 );
