@@ -141,6 +141,24 @@ test_allocator_failures(void)
 	expect( hashmap_oom(map) );
 }
 
+static void
+test_probe(struct hashmap *m)
+{
+	hashmap_clear(m, false);
+
+	struct user d = { .name = "Barry", .age = 5 };
+	struct user *a = hashmap_probe(m, 0);
+	struct user *u = hashmap_probe(m, 0);
+	for( uint64_t i = 1; i < 32; i++ ){
+		u = hashmap_probe(m, i);
+		if( u && !a || !u && a ){
+			break;
+		}
+	}
+	expect( !a || !strcmp(a->name, "Barry") );
+	expect( !u || !strcmp(u->name, "Barry") );
+}
+
 int
 main(void)
 {
@@ -201,8 +219,8 @@ main(void)
 	hashmap_clear(map, false);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
-	hashmap_clear(map, true);
 
+	test_probe(map);
 	hashmap_free(map);
 
 	test_allocator_failures();
