@@ -213,6 +213,20 @@ test_deletion(struct hashmap *m)
 	/* Delete one of the entries */
 	tp = hashmap_delete(m, &t);
 	expect( tp && tp->y == 2);
+
+	/* Add 16 entries to trigger a resize, then delete 15 to trigger
+	 * a shrink.
+	 */
+	 for(int i = 0; i < 16; i++ ){
+		t.x = i;
+		t.y = i + 20;
+		hashmap_set(m, &t);
+	}
+	for(int i = 1; i < 16; i++ ){
+		t.x = i;
+		tp = hashmap_delete(m, &t);
+		expect( tp && tp->y == i + 20 );
+	}
 }
 
 int
