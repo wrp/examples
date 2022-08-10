@@ -305,6 +305,11 @@ main(void)
 	hashmap_scan(map, user_iter, &i);
 	expect( i != 16 );
 
+	/* Load a longer name to getsip coverage */
+	strcpy(name, "Xxseven");
+	load_data(map, 10, 3, name);
+	user = hashmap_get(map, &(struct user){ .name="Xxseven" });
+	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map);
 
