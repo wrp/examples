@@ -146,17 +146,15 @@ test_probe(struct hashmap *m)
 {
 	hashmap_clear(m, false);
 
-	struct user d = { .name = "Barry", .age = 5 };
-	struct user *a = hashmap_probe(m, 0);
-	struct user *u = hashmap_probe(m, 0);
-	for( uint64_t i = 1; i < 32; i++ ){
-		u = hashmap_probe(m, i);
-		if( u && !a || !u && a ){
-			break;
-		}
-	}
-	expect( !a || !strcmp(a->name, "Barry") );
-	expect( !u || !strcmp(u->name, "Barry") );
+	struct user d = { .name = strdup("Barry"), .age = 5 };
+	hashmap_set(m, &d);
+
+	uint64_t h = user_hash(&d, 0, 0) & 0xf;
+
+	struct user *a = hashmap_probe(m, h);
+	struct user *u = hashmap_probe(m, !h);
+	expect( a && !strcmp(a->name, "Barry") );
+	expect( u == NULL );
 }
 
 int
