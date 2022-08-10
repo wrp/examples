@@ -19,6 +19,7 @@ for file in \
 	fi
 	gcov "$file" $arg
 	if < "$file".c.gcov sed \
+		-e '/panic/d' \
 		-e '\@{ /\* uncovered block \*/@,'"$( :
 			)"'\@} /\* end uncovered \*/@d' \
 		-e '/#####/!d' \
