@@ -319,6 +319,7 @@ test_hash(hash_func h)
 	expect( user == NULL );
 
 	test_probe(map, h);
+	hashmap_clear(map, true);
 	hashmap_free(map);
 
 	test_allocator_failures(h);
