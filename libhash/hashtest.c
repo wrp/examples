@@ -6,10 +6,8 @@
 
 int fail = 0;  /* Count of failed tests */
 
-struct user {
-	char *name;
-	int age;
-};
+struct user { char *name; int age; };
+struct two_ints { int x, y; };
 
 int
 user_compare(const void *a, const void *b, void *udata)
@@ -26,6 +24,21 @@ user_iter(const void *item, void *udata)
 	*(int *)udata += 1;
 	return true;
 }
+
+
+int
+int_compare(const void *a, const void *b, void *udata)
+{
+	return *(int *)a - *(int *)b;
+}
+
+
+uint64_t
+identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
+{
+	return *(int *)int_pointer;
+}
+
 
 uint64_t
 user_hash(const void *item, uint64_t seed0, uint64_t seed1)
@@ -175,6 +188,31 @@ test_deletion(struct hashmap *m)
 	/* delete a non-extant entry */
 	up = hashmap_delete(m, &u);
 	expect( up == NULL );
+
+	/* Create a new map with trivial hash to test collisions */
+	struct two_ints t = { 1, 2 };
+	struct two_ints *tp;
+	m = hashmap_new_with_allocator(
+		malloc, realloc, free,
+		sizeof t,
+		0, 0, 0, identity_hash, int_compare,
+		NULL, NULL
+	);
+	hashmap_set(m, &t);
+	t.x = 17;
+	t.y = 3;
+	hashmap_set(m, &t);  /* collision */
+	t.x = 1;
+	tp = hashmap_get(m, &t);
+	expect( tp && tp->y == 2);
+	t.x = 17;
+	tp = hashmap_get(m, &t);
+	expect( tp && tp->y == 3);
+
+	t.x = 1;
+	/* Delete one of the entries */
+	tp = hashmap_delete(m, &t);
+	expect( tp && tp->y == 2);
 }
 
 int
