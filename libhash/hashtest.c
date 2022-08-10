@@ -20,9 +20,12 @@ user_compare(const void *a, const void *b, void *udata)
 bool
 user_iter(const void *item, void *udata)
 {
-	const struct user *user = item;
-	*(int *)udata += 1;
-	return true;
+	const struct user *u = item;
+	bool rv = strcmp(u->name, "Abort") == 0 ? false : true;
+	if( rv ){
+		*(int *)udata += 1;
+	}
+	return rv;
 }
 
 
@@ -277,7 +280,7 @@ main(void)
 	expect( i == 3 );
 
 	/* Load enough data to trigger a resize */
-	char name[] = "Aale";
+	char name[32] = "Aale";
 	load_data(map, 14, 3, name);
 
 	i = 0;
@@ -285,6 +288,14 @@ main(void)
 	expect( i == 16 );
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user != NULL && user->age == 11 );
+
+	/* Insert "Abort" to terminate scan early */
+	strcpy(name, "Abort");
+	load_data(map, 1, 3, name);
+	i = 0;
+	hashmap_scan(map, user_iter, &i);
+	expect( i != 16 );
+
 
 	test_deletion(map);
 
