@@ -129,6 +129,16 @@ test_allocator_failures(void)
 		);
 		expect( map == NULL );
 	}
+
+	/* With only two successful allocations, resize should fail */
+	hashmap_set_allocator(my_malloc, my_free);
+	malloc_allow = 2;
+	map = hashmap_new_with_allocator(
+		my_malloc, NULL, NULL, sizeof *user,
+		0, 0, 0, user_hash, user_compare, NULL, NULL
+	);
+	load_data(map, 16, 0, NULL);
+	expect( hashmap_oom(map) );
 }
 
 int
@@ -144,7 +154,10 @@ main(void)
 
 	/*
 	 * hashmap_set_allocator is deprecated.  Adding here only to get
-	 * coverage before deleting entirely
+	 * coverage before deleting entirely.  Note this is not true:
+	 * currently, resize of a hashmap that has a custom allocator
+	 * fails to use the allocator, so we must set it with
+	 * hashmap_set_allocator.
 	 */
 	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
