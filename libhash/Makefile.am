@@ -1,7 +1,7 @@
 
 include_HEADERS = hashmap.h
 check_PROGRAMS = hash-test
-TESTS = hash-test
+TESTS = hash-test coverage-test
 
 lib_LTLIBRARIES = libhash.la
 LDADD=libhash.la
