@@ -91,6 +91,10 @@ increment(char *t)
 static void
 load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 {
+	char b[] = "Aaaa";
+	if( base == NULL ){
+		base = b;
+	}
 	struct user data[] = {
 		{ .name="Dale", .age=44 },
 		{ .name="Roger", .age=68 },
