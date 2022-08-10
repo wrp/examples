@@ -4,6 +4,8 @@
 #include <string.h>
 #include "hashmap.h"
 
+int fail = 0;  /* Count of failed tests */
+
 struct user {
 	char *name;
 	int age;
@@ -108,6 +110,22 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 	}
 }
 
+static void
+test_allocator_failures(void)
+{
+	struct user *user;
+	struct hashmap *map;
+	for( int i = 0; i < 2; i += 1 ){
+		malloc_allow = i;
+		map = hashmap_new_with_allocator(
+			my_malloc, NULL, NULL,
+			sizeof *user,
+			0, 0, 0, user_hash, user_compare,
+			NULL, NULL
+		);
+		expect( map == NULL );
+	}
+}
 
 int
 main(void)
@@ -118,7 +136,6 @@ main(void)
 	 * the hash function.  Fifth arg is hash function, 6th is comparison,
 	 * 7th is free function, 8th is pointer passed to compar function.
 	 */
-	int fail = 0;  /* Count of failed tests */
 	struct user *user;
 
 	/*
@@ -173,22 +190,8 @@ main(void)
 	hashmap_clear(map, true);
 
 	hashmap_free(map);
-	malloc_allow = 0;
-	map = hashmap_new_with_allocator(
-		my_malloc, NULL, NULL,
-		sizeof *user,
-		0, 0, 0, user_hash, user_compare,
-		NULL, NULL
-	);
-	expect( map == NULL );
-	malloc_allow = 1;
-	map = hashmap_new_with_allocator(
-		my_malloc, NULL, NULL,
-		sizeof *user,
-		0, 0, 0, user_hash, user_compare,
-		NULL, NULL
-	);
-	expect( map == NULL );
+
+	test_allocator_failures();
 
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
