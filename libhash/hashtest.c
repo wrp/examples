@@ -73,7 +73,7 @@ user_hash_murmur(const void *item, uint64_t seed0, uint64_t seed1)
 
 static int malloc_allow = 0;
 static void *
-my_malloc(size_t size)
+malloc_fail(size_t size)
 {
 	void *v;
 	if( ! malloc_allow ){
@@ -86,7 +86,7 @@ my_malloc(size_t size)
 }
 
 static void
-my_free(void *v)
+free_fail(void *v)
 {
 	free(v);
 	malloc_allow += (v != NULL);
@@ -154,7 +154,7 @@ test_allocator_failures(hash_func h, size_t cap)
 	for( int i = 0; i < 2; i += 1 ){
 		malloc_allow = i;
 		map = hashmap_new_with_allocator(
-			my_malloc, NULL, NULL,
+			malloc_fail, realloc, free_fail,
 			sizeof *user,
 			0, 0, 0, h, user_compare,
 			NULL, NULL
@@ -163,10 +163,10 @@ test_allocator_failures(hash_func h, size_t cap)
 	}
 
 	/* With only two successful allocations, resize should fail */
-	hashmap_set_allocator(my_malloc, my_free);
+	hashmap_set_allocator(malloc_fail, free_fail);
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
-		my_malloc, NULL, NULL, sizeof *user,
+		malloc_fail, NULL, free_fail, sizeof *user,
 		0, 0, 0, h, user_compare, NULL, NULL
 	);
 	load_data(map, 16, NULL);
