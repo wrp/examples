@@ -147,7 +147,7 @@ load_data(struct hashmap *map, unsigned count, char *base)
 }
 
 static void
-test_allocator_failures(hash_func h)
+test_allocator_failures(hash_func h, size_t cap)
 {
 	struct user *user;
 	struct hashmap *map;
@@ -171,6 +171,11 @@ test_allocator_failures(hash_func h)
 	);
 	load_data(map, 16, NULL);
 	expect( hashmap_oom(map) );
+
+	malloc_allow = cap ? cap * 2 : 16;
+	load_data(map, cap ? cap * 2 : 16, NULL);
+	expect( ! hashmap_oom(map) );
+
 	hashmap_free(map);
 	hashmap_set_allocator(malloc, free);
 }
@@ -343,7 +348,7 @@ test_hash(hash_func h, size_t cap)
 	hashmap_clear(map, true);
 	hashmap_free(map);
 
-	test_allocator_failures(h);
+	test_allocator_failures(h, cap);
 
 	map = hashmap_new(
 	        sizeof *user,
