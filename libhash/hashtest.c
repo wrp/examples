@@ -245,23 +245,23 @@ test_deletion(struct hashmap *m)
 static void
 test_hash(hash_func h)
 {
+	struct user *user;
+	struct user d = { .name = strdup(""), .age = 5 };
+
+	/*
+	 * hashmap_set_allocator is allegedly deprecated, but this is not true:
+	 * currently, resize of a hashmap that has a custom allocator
+	 * fails to use the allocator, so we must set it with
+	 * hashmap_set_allocator.
+	 */
+	hashmap_set_allocator(malloc, free);
+
 	/*
 	 * Create a new hash map. The second argument is the initial capacity.
 	 * The third and fourth arguments are optional seeds that are passed to
 	 * the hash function.  Fifth arg is hash function, 6th is comparison,
 	 * 7th is free function, 8th is pointer passed to compar function.
 	 */
-	struct user *user;
-	struct user d = { .name = strdup(""), .age = 5 };
-
-	/*
-	 * hashmap_set_allocator is deprecated.  Adding here only to get
-	 * coverage before deleting entirely.  Note this is not true:
-	 * currently, resize of a hashmap that has a custom allocator
-	 * fails to use the allocator, so we must set it with
-	 * hashmap_set_allocator.
-	 */
-	hashmap_set_allocator(malloc, free);
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
 		0, 0, 0, h, user_compare,
