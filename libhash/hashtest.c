@@ -123,16 +123,15 @@ increment(char *t)
  * performs a copy of the data that is pointed to in the second argument.
  */
 static void
-load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
+load_data(struct hashmap *map, unsigned count, char *base)
 {
 	char b[] = "Aaaa";
 	if( base == NULL ){
 		base = b;
-	}
-	assert( start <= sizeof testdata / sizeof *testdata );
-	for( struct user *t = testdata + start; t->name && count; t += 1 ){
-		hashmap_set(map, t);
-		count -= 1;
+		for( struct user *t = testdata; t->name && count; t += 1 ){
+			hashmap_set(map, t);
+			count -= 1;
+		}
 	}
 	while( count > 0 ){
 		struct user d = {
@@ -141,7 +140,9 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 			.free = 1
 		};
 		hashmap_set(map, &d);
-		increment(base);
+		if( count ){
+			increment(base);
+		}
 	}
 }
 
@@ -168,7 +169,7 @@ test_allocator_failures(hash_func h)
 		my_malloc, NULL, NULL, sizeof *user,
 		0, 0, 0, h, user_compare, NULL, NULL
 	);
-	load_data(map, 16, 0, NULL);
+	load_data(map, 16, NULL);
 	expect( hashmap_oom(map) );
 	hashmap_free(map);
 	hashmap_set_allocator(malloc, free);
@@ -290,7 +291,7 @@ test_hash(hash_func h, size_t cap)
 	/*
 	 * Load all the test data and verify
 	 */
-	load_data(map, testdata_size, 0, NULL);
+	load_data(map, testdata_size, NULL);
 	for( struct user *u = testdata; u->name; u += 1 ){
 		user = hashmap_get(map, u);
 		expect( strcmp(user->name, u->name) == 0 );
@@ -306,7 +307,7 @@ test_hash(hash_func h, size_t cap)
 	/* Load enough data to trigger a resize */
 	char name[32] = "Aale";
 	unsigned load = 128; /* Amount of elements to load */
-	load_data(map, load, testdata_size, name);
+	load_data(map, load, name);
 
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
@@ -317,7 +318,7 @@ test_hash(hash_func h, size_t cap)
 
 	/* Insert "Abort" to terminate scan early */
 	strcpy(name, "Abort");
-	load_data(map, 1, testdata_size, name);
+	load_data(map, 1, name);
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
 	expect( hashmap_count(map) == testdata_size + load );
@@ -325,16 +326,16 @@ test_hash(hash_func h, size_t cap)
 
 	/* Load a longer name to get coverage */
 	strcpy(name, "Xxseven");
-	load_data(map, 10, testdata_size, name);
+	load_data(map, 10, name);
 	user = hashmap_get(map, &(struct user){ .name="Xxseven" });
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map);
 	test_probe(map, h, cap);
 
-	load_data(map, load, 0, NULL);
+	load_data(map, load, NULL);
 	hashmap_clear(map, false);
-	load_data(map, load, 0, NULL);
+	load_data(map, load, NULL);
 	hashmap_clear(map, true);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
@@ -355,9 +356,9 @@ test_hash(hash_func h, size_t cap)
 	}
 	big_name[0] = 'A';
 	big_name[255] = '\0';
-	load_data(map, 128, 0, big_name);
-	user = hashmap_get(map, &(struct user){ .name="Dale" });
-	expect( user && user->age == 44 );
+	load_data(map, 128, big_name);
+	user = hashmap_get(map, &(struct user){ .name=big_name });
+	expect( user && user->age == 1 );
 	hashmap_free(map);
 }
 
