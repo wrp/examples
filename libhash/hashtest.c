@@ -210,10 +210,14 @@ test_probe(struct hashmap *m, hash_func hf, size_t cap)
 
 
 static void
-test_deletion(struct hashmap *m)
+test_deletion(struct hashmap *m, size_t cap)
 {
 	struct user u = { .name = "kjljk", .age = 17 };
 	struct user *up;
+
+	if( cap == 0 ){
+		cap = 16;
+	}
 
 	hashmap_set(m, &u);
 	up = hashmap_delete(m, &u);
@@ -237,13 +241,13 @@ test_deletion(struct hashmap *m)
 		NULL, NULL
 	);
 	hashmap_set(m, &t);
-	t.x = 17;
+	t.x += cap;
 	t.y = 3;
 	hashmap_set(m, &t);  /* collision */
 	t.x = 1;
 	tp = hashmap_get(m, &t);
 	expect( tp && tp->y == 2);
-	t.x = 17;
+	t.x += cap;
 	tp = hashmap_get(m, &t);
 	expect( tp && tp->y == 3);
 
@@ -335,7 +339,7 @@ test_hash(hash_func h, size_t cap)
 	user = hashmap_get(map, &(struct user){ .name="Xxseven" });
 	expect( user != NULL && user->age == 10 );
 
-	test_deletion(map);
+	test_deletion(map, cap);
 	test_probe(map, h, cap);
 
 	load_data(map, load, NULL);
