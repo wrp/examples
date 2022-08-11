@@ -6,7 +6,7 @@
 
 int fail = 0;  /* Count of failed tests */
 
-struct user { char *name; int age; };
+struct user { char *name; int age; char free; };
 struct two_ints { int x, y; };
 struct user testdata[] = {
 	{ .name="", .age=5 },
@@ -95,7 +95,10 @@ my_free(void *v)
 static void
 free_el(void *s)
 {
-	free(((struct user *)s)->name);
+	struct user *u = s;
+	if( u->free ){
+		free(u->name);
+	}
 }
 
 /*
@@ -128,12 +131,15 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 	}
 	assert( start <= sizeof testdata / sizeof *testdata );
 	for( struct user *t = testdata + start; t->name && count; t += 1 ){
-		struct user d = { .name = strdup(t->name), .age = t->age };
-		hashmap_set(map, &d);
+		hashmap_set(map, t);
 		count -= 1;
 	}
 	while( count > 0 ){
-		struct user d = { .name = strdup(base), .age = count-- };
+		struct user d = {
+			.name = strdup(base),
+			.age = count--,
+			.free = 1
+		};
 		hashmap_set(map, &d);
 		increment(base);
 	}
