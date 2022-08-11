@@ -8,6 +8,13 @@ int fail = 0;  /* Count of failed tests */
 
 struct user { char *name; int age; };
 struct two_ints { int x, y; };
+struct user testdata[] = {
+	{ .name="", .age=5 },
+	{ .name="Dale", .age=44 },
+	{ .name="Roger", .age=68 },
+	{ .name="Jane", .age=47 },
+	{ .name=NULL, .age=0},
+};
 
 int
 user_compare(const void *a, const void *b, void *udata)
@@ -119,14 +126,8 @@ load_data(struct hashmap *map, unsigned count, unsigned start, char *base)
 	if( base == NULL ){
 		base = b;
 	}
-	struct user data[] = {
-		{ .name="Dale", .age=44 },
-		{ .name="Roger", .age=68 },
-		{ .name="Jane", .age=47 },
-	};
-	assert( start <= sizeof data / sizeof *data );
-	struct user *end = data + sizeof data / sizeof *data;
-	for( struct user *t = data + start; t < end; t += 1 ){
+	assert( start <= sizeof testdata / sizeof *testdata );
+	for( struct user *t = testdata + start; t->name && count; t += 1 ){
 		struct user d = { .name = strdup(t->name), .age = t->age };
 		hashmap_set(map, &d);
 		count -= 1;
@@ -258,7 +259,7 @@ static void
 test_hash(hash_func h, size_t cap)
 {
 	struct user *user;
-	struct user d = { .name = strdup(""), .age = 5 };
+	size_t testdata_size = sizeof testdata / sizeof *testdata - 1;
 
 	/*
 	 * hashmap_set_allocator is allegedly deprecated, but this is not true:
@@ -280,63 +281,54 @@ test_hash(hash_func h, size_t cap)
 		free_el, NULL
 	);
 
-	hashmap_set(map, &d);
-	user = hashmap_get(map, &(struct user){ .name="" });
-	expect( user && user->age == 5 );
-	hashmap_clear(map, false);
-
-	load_data(map, 3, 0, NULL);
-
-	user = hashmap_get(map, &(struct user){ .name="Jane" });
-	expect( strcmp(user->name, "Jane") == 0 );
-	expect( user->age == 47 );
-
-	user = hashmap_get(map, &(struct user){ .name="Roger" });
-	expect( strcmp(user->name, "Roger") == 0 );
-	expect( user->age == 68 );
-
-	user = hashmap_get(map, &(struct user){ .name="Dale" });
-	expect( strcmp(user->name, "Dale") == 0 );
-	expect( user->age == 44 );
-
+	/*
+	 * Load all the test data and verify
+	 */
+	load_data(map, testdata_size, 0, NULL);
+	for( struct user *u = testdata; u->name; u += 1 ){
+		user = hashmap_get(map, u);
+		expect( strcmp(user->name, u->name) == 0 );
+		expect( user->age == u->age );
+	}
 	user = hashmap_get(map, &(struct user){ .name="Tom" });
 	expect( user == NULL );
-
 	/* terate over all users  */
 	int i = 0;
 	hashmap_scan(map, user_iter, &i);
-	expect( i == 3 );
+	expect( i == testdata_size );
 
 	/* Load enough data to trigger a resize */
 	char name[32] = "Aale";
-	load_data(map, 14, 3, name);
+	unsigned load = 128; /* Amount of elements to load */
+	load_data(map, load, testdata_size, name);
 
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
-	expect( i == 16 );
+	/* We expect "Dale" to be a duplicate, so subtract 1 */
+	expect( i == testdata_size + load - 1);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
-	expect( user != NULL && user->age == 11 );
+	expect( user != NULL && user->age == load - 3 );
 
 	/* Insert "Abort" to terminate scan early */
 	strcpy(name, "Abort");
-	load_data(map, 1, 3, name);
+	load_data(map, 1, testdata_size, name);
 	i = 0;
 	hashmap_scan(map, user_iter, &i);
-	expect( hashmap_count(map) == 17 );
-	expect( i != 17 );
+	expect( hashmap_count(map) == testdata_size + load );
+	expect( i != testdata_size + load );
 
 	/* Load a longer name to get coverage */
 	strcpy(name, "Xxseven");
-	load_data(map, 10, 3, name);
+	load_data(map, 10, testdata_size, name);
 	user = hashmap_get(map, &(struct user){ .name="Xxseven" });
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map);
 	test_probe(map, h, cap);
 
-	load_data(map, 14, 0, NULL);
+	load_data(map, load, 0, NULL);
 	hashmap_clear(map, false);
-	load_data(map, 14, 0, NULL);
+	load_data(map, load, 0, NULL);
 	hashmap_clear(map, true);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
