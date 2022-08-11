@@ -102,7 +102,7 @@ free_el(void *s)
 }
 
 /*
- * Roll a string through permutations (preserve case):
+ * Roll a string through permutations:
  * eg: abcd -> bbcd -> cbcd -> ... -> zbcd -> accd -> ... ->
  *     zzzy -> aaaz -> baaz -> ... -> yzzz -> zzzz -> aaaa
  */
@@ -110,11 +110,11 @@ static void
 increment(char *t)
 {
 	while( *t == 'Z' || *t == 'z' ){
-		*t = *t == 'Z' ? 'A' : 'a';
+		*t = ' ';
 		t += 1;
 	}
 	if( *t ){
-		*t += 1;
+		*t = *t == ' ' ? 'a' : *t + 1;
 	}
 }
 
@@ -125,7 +125,7 @@ increment(char *t)
 static void
 load_data(struct hashmap *map, unsigned count, char *base)
 {
-	char b[] = "Aaaa";
+	char b[] = "This is a relatively long string";
 	if( base == NULL ){
 		base = b;
 		for( struct user *t = testdata; t->name && count; t += 1 ){
