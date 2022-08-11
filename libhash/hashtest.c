@@ -167,15 +167,27 @@ test_allocator_failures(hash_func h)
 	hashmap_set_allocator(malloc, free);
 }
 
+
+uint64_t
+mask(size_t cap)
+{
+	uint64_t ncap = 16;
+	while( ncap < cap ){
+		ncap *= 2;
+	}
+	return ncap - 1;
+}
+
+
 static void
-test_probe(struct hashmap *m, hash_func hf)
+test_probe(struct hashmap *m, hash_func hf, size_t cap)
 {
 	hashmap_clear(m, false);
 
 	struct user d = { .name = strdup("Barry"), .age = 5 };
 	hashmap_set(m, &d);
 
-	uint64_t h = hf(&d, 0, 0) & 0xf;
+	uint64_t h = hf(&d, 0, 0) & mask(cap);
 
 	struct user *a = hashmap_probe(m, h);
 	struct user *u = hashmap_probe(m, !h);
@@ -243,7 +255,7 @@ test_deletion(struct hashmap *m)
 }
 
 static void
-test_hash(hash_func h)
+test_hash(hash_func h, size_t cap)
 {
 	struct user *user;
 	struct user d = { .name = strdup(""), .age = 5 };
@@ -264,7 +276,7 @@ test_hash(hash_func h)
 	 */
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
-		0, 0, 0, h, user_compare,
+		cap, 0, 0, h, user_compare,
 		free_el, NULL
 	);
 
@@ -320,7 +332,7 @@ test_hash(hash_func h)
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map);
-	test_probe(map, h);
+	test_probe(map, h, cap);
 
 	load_data(map, 14, 0, NULL);
 	hashmap_clear(map, false);
@@ -336,7 +348,7 @@ test_hash(hash_func h)
 
 	map = hashmap_new(
 	        sizeof *user,
-	        0, 0, 0, h, user_compare,
+	        cap, 0, 0, h, user_compare,
 	        free_el, NULL
 	);
 	char big_name[256];
@@ -354,8 +366,12 @@ test_hash(hash_func h)
 int
 main(void)
 {
-	test_hash(user_hash_murmur);
-	test_hash(user_hash_sip);
+	size_t sizes[] = { 0, 63, 237, 256 };
+	size_t *end = sizes + sizeof sizes / sizeof *sizes;
+	for( size_t *cap = sizes; cap < end; cap += 1 ){
+		test_hash(user_hash_murmur, *cap);
+		test_hash(user_hash_sip, *cap);
+	}
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
 	}
