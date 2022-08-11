@@ -232,7 +232,9 @@ test_deletion(struct hashmap *m, size_t cap)
 	expect( up == NULL );
 
 	/* Create a new map with trivial hash to test collisions */
+	/* TODO: this should be in a separate test */
 	struct two_ints t = { 1, 2 };
+	int index[] = { 1, 1 + cap };
 	struct two_ints *tp;
 	m = hashmap_new_with_allocator(
 		malloc, realloc, free,
@@ -244,29 +246,29 @@ test_deletion(struct hashmap *m, size_t cap)
 	t.x += cap;
 	t.y = 3;
 	hashmap_set(m, &t);  /* collision */
-	t.x = 1;
-	tp = hashmap_get(m, &t);
+	tp = hashmap_get(m, index);
 	expect( tp && tp->y == 2);
-	t.x += cap;
-	tp = hashmap_get(m, &t);
+	tp = hashmap_get(m, index + 1);
 	expect( tp && tp->y == 3);
 
-	t.x = 1;
 	/* Delete one of the entries */
-	tp = hashmap_delete(m, &t);
+	tp = hashmap_delete(m, index);
 	expect( tp && tp->y == 2);
 
-	/* Add 16 entries to trigger a resize, then delete 15 to trigger
+	/* Ensure we can still get the other one */
+	tp = hashmap_get(m, index + 1);
+	expect( tp && tp->y == 3);
+
+	/* Add entries to trigger a resize, then delete to trigger
 	 * a shrink.
 	 */
-	 for(int i = 0; i < 16; i++ ){
+	 for(int i = 0; i < cap; i++ ){
 		t.x = i;
 		t.y = i + 20;
 		hashmap_set(m, &t);
 	}
-	for(int i = 1; i < 16; i++ ){
-		t.x = i;
-		tp = hashmap_delete(m, &t);
+	for(int i = 1; i < cap; i++ ){
+		tp = hashmap_delete(m, &i);
 		expect( tp && tp->y == i + 20 );
 	}
 }
