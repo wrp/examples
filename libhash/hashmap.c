@@ -49,8 +49,11 @@ static void *bucket_item(struct bucket *entry) {
     return ((char*)entry)+sizeof(struct bucket);
 }
 
-static uint64_t get_hash(struct hashmap *map, const void *key) {
-	return map->hash.func(key, map->hash.seed[0], map->hash.seed[1]) << 16 >> 16;
+static uint64_t
+get_hash(struct hashmap *map, const void *key)
+{
+	uint64_t *seed = map->hash.seed;
+	return map->hash.func(key, seed[0], seed[1]) & 0x0000ffffffffffff;
 }
 
 // hashmap_new_with_allocator returns a new hash map using a custom allocator.
