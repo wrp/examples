@@ -24,6 +24,7 @@ struct user testdata[] = {
 int
 user_compare(const void *a, const void *b, void *udata)
 {
+	(void)udata;
 	const struct user *ua = a;
 	const struct user *ub = b;
 	return strcmp(ua->name, ub->name);
@@ -35,7 +36,7 @@ user_iter(const void *item, void *udata)
 	const struct user *u = item;
 	bool rv = strcmp(u->name, "Abort") == 0 ? false : true;
 	if( rv ){
-		*(int *)udata += 1;
+		*(size_t *)udata += 1;
 	}
 	return rv;
 }
@@ -44,6 +45,7 @@ user_iter(const void *item, void *udata)
 int
 int_compare(const void *a, const void *b, void *udata)
 {
+	(void)udata;
 	return *(int *)a - *(int *)b;
 }
 
@@ -51,6 +53,8 @@ int_compare(const void *a, const void *b, void *udata)
 uint64_t
 identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
 {
+	(void)seed0;
+	(void)seed1;
 	return *(int *)int_pointer;
 }
 
@@ -246,7 +250,7 @@ test_collisions(struct hashmap *m, size_t cap)
 		malloc, free,
 		sizeof t,
 		cap,
-		&(struct hash_method){identity_hash, 0, 0},
+		&(struct hash_method){identity_hash, {0, 0}},
 		int_compare,
 		NULL, NULL
 	);
@@ -270,12 +274,12 @@ test_collisions(struct hashmap *m, size_t cap)
 	/* Add entries to trigger a resize, then delete to trigger
 	 * a shrink.
 	 */
-	 for(int i = 0; i < cap; i++ ){
+	 for(size_t i = 0; i < cap; i++ ){
 		t.x = i;
 		t.y = i + 20;
 		hashmap_set(m, &t);
 	}
-	for(int i = 1; i < cap; i++ ){
+	for(int i = 1; i < (int)cap; i++ ){
 		tp = hashmap_delete(m, &i);
 		expect( tp && tp->y == i + 20 );
 	}
@@ -312,7 +316,7 @@ test_hash(struct hash_method *h, size_t cap)
 	user = hashmap_get(map, &(struct user){ .name="Tom" });
 	expect( user == NULL );
 	/* terate over all users  */
-	int i = 0;
+	size_t i = 0;
 	hashmap_scan(map, user_iter, &i);
 	expect( i == testdata_size );
 
@@ -326,7 +330,7 @@ test_hash(struct hash_method *h, size_t cap)
 	/* We expect "Dale" to be a duplicate, so subtract 1 */
 	expect( i == testdata_size + load - 1);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
-	expect( user != NULL && user->age == load - 3 );
+	expect( user != NULL && user->age == (int)load - 3 );
 
 	/* Insert "Abort" to terminate scan early */
 	strcpy(name, "Abort");
@@ -380,9 +384,12 @@ main(void)
 {
 	size_t sizes[] = { 0, 63, 237, 256 };
 	size_t *end = sizes + sizeof sizes / sizeof *sizes;
+	struct hash_method h = { NULL, { 0, 0 } };
 	for( size_t *cap = sizes; cap < end; cap += 1 ){
-		test_hash(&(struct hash_method){ user_hash_murmur, 0, 0}, *cap);
-		test_hash(&(struct hash_method){ user_hash_sip, 0, 0}, *cap);
+		h.func = user_hash_murmur;
+		test_hash(&h, *cap);
+		h.func = user_hash_sip;
+		test_hash(&h, *cap);
 	}
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);

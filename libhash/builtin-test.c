@@ -50,16 +50,14 @@ static bool iter_ints(const void *item, void *udata) {
     return true;
 }
 
-static int compare_ints(const void *a, const void *b) {
-    return *(int*)a - *(int*)b;
-}
-
 static int compare_ints_udata(const void *a, const void *b, void *udata) {
+	(void)udata;
     return *(int*)a - *(int*)b;
 }
 
 static int compare_strs(const void *a, const void *b, void *udata) {
-    return strcmp(*(char**)a, *(char**)b);
+	(void)udata;
+	return strcmp(*(char**)a, *(char**)b);
 }
 
 static uint64_t hash_int(const void *item, uint64_t seed0, uint64_t seed1) {
@@ -78,7 +76,7 @@ int
 main(void)
 {
     int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
-    int N = getenv("N")?atoi(getenv("N")):2000;
+    unsigned N = getenv("N")?atoi(getenv("N")):2000;
     printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
     srand(seed);
 
@@ -90,18 +88,18 @@ main(void)
 
     int *vals;
     while (!(vals = xmalloc(N * sizeof(int)))) {}
-    for (int i = 0; i < N; i++) {
-        vals[i] = i;
+    for( unsigned i = 0; i < N; i++) {
+        vals[i] = (int)i;
     }
 
     struct hashmap *map;
-    struct hash_method hash = { hash_int, seed, seed };
+    struct hash_method hash = { hash_int, { seed, seed } };
 
     while (!(map = hashmap_new_with_allocator( xmalloc, xfree,
     	sizeof(int), 0, &hash,
                                compare_ints_udata, NULL, NULL))) {}
     shuffle(vals, N, sizeof(int));
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < (unsigned)N; i++) {
         assert(i == hashmap_count(map));
         int *v;
         assert(!hashmap_get(map, &vals[i]));
@@ -113,7 +111,7 @@ main(void)
             }
         }
 
-        for (int j = 0; j < i; j++) {
+        for (unsigned j = 0; j < i; j++) {
             v = hashmap_get(map, &vals[j]);
             assert(v && *v == vals[j]);
         }
@@ -142,25 +140,25 @@ main(void)
     while (!(vals2 = xmalloc(N * sizeof(int)))) {}
     memset(vals2, 0, N * sizeof(int));
     assert(hashmap_scan(map, iter_ints, &vals2));
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         assert(vals2[i] == 1);
     }
     xfree(vals2);
 
     shuffle(vals, N, sizeof(int));
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         int *v;
         v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
         assert(!hashmap_get(map, &vals[i]));
         assert(N - i - 1 == hashmap_count(map));
-        for (int j = N-1; j > i; j--) {
+        for (unsigned j = N-1; j > i; j--) {
             v = hashmap_get(map, &vals[j]);
             assert(v && *v == vals[j]);
         }
     }
 
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         while (true) {
             assert(!hashmap_set(map, &vals[i]));
             if (!hashmap_oom(map)) {
@@ -175,7 +173,7 @@ main(void)
     assert(hashmap_count(map) == 0);
 
 
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         while (true) {
             assert(!hashmap_set(map, &vals[i]));
             if (!hashmap_oom(map)) {
@@ -198,7 +196,7 @@ main(void)
 	&hash,
 	compare_strs, free_str, NULL)));
 
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         char *str;
         while (!(str = xmalloc(16)));
         sprintf(str, "s%i", i);
@@ -208,7 +206,7 @@ main(void)
     hashmap_clear(map, false);
     assert(hashmap_count(map) == 0);
 
-    for (int i = 0; i < N; i++) {
+    for (unsigned i = 0; i < N; i++) {
         char *str;
         while (!(str = xmalloc(16)));
         sprintf(str, "s%i", i);

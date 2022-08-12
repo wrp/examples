@@ -18,6 +18,7 @@ hash_int(const void *item, uint64_t seed0, uint64_t seed1)
 static int
 compare_ints_udata(const void *a, const void *b, void *udata)
 {
+	(void)udata;
 	return *(int*)a - *(int*)b;
 }
 
@@ -81,7 +82,7 @@ main(int argc, char **argv) /* benchmarks */
 	struct hashmap *map;
 	shuffle(vals, N, sizeof *vals);
 
-	struct hash_method hash = {hash_int, seed, seed};
+	struct hash_method hash = {hash_int, {seed, seed} };
 	map = hashmap_new_with_allocator(
 		malloc, free,
 		sizeof *vals,
