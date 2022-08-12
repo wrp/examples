@@ -1,0 +1,121 @@
+15 sample runs of the benchmark at 44688ac98c3da3b78e2c4b1f145dc0b8
+Running hashmap.c benchmarks...
+seed=1660276052, count=5000000, item_size=4
+set            5000000 ops in 0.804 secs, 161 ns/op, 6215094 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.317 secs, 63 ns/op, 15752695 op/sec
+delete         5000000 ops in 0.539 secs, 108 ns/op, 9269920 op/sec
+set (cap)      5000000 ops in 0.459 secs, 92 ns/op, 10892107 op/sec
+get (cap)      5000000 ops in 0.315 secs, 63 ns/op, 15889612 op/sec
+delete (cap)   5000000 ops in 0.447 secs, 89 ns/op, 11191541 op/sec
+Running hashmap.c benchmarks...
+seed=1660276056, count=5000000, item_size=4
+set            5000000 ops in 0.799 secs, 160 ns/op, 6254730 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.312 secs, 62 ns/op, 16043021 op/sec
+delete         5000000 ops in 0.532 secs, 106 ns/op, 9407037 op/sec
+set (cap)      5000000 ops in 0.439 secs, 88 ns/op, 11397856 op/sec
+get (cap)      5000000 ops in 0.311 secs, 62 ns/op, 16073501 op/sec
+delete (cap)   5000000 ops in 0.436 secs, 87 ns/op, 11460136 op/sec
+Running hashmap.c benchmarks...
+seed=1660276059, count=5000000, item_size=4
+set            5000000 ops in 0.784 secs, 157 ns/op, 6373811 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.313 secs, 63 ns/op, 15985064 op/sec
+delete         5000000 ops in 0.534 secs, 107 ns/op, 9371702 op/sec
+set (cap)      5000000 ops in 0.445 secs, 89 ns/op, 11232144 op/sec
+get (cap)      5000000 ops in 0.313 secs, 63 ns/op, 15993500 op/sec
+delete (cap)   5000000 ops in 0.438 secs, 88 ns/op, 11425881 op/sec
+Running hashmap.c benchmarks...
+seed=1660276063, count=5000000, item_size=4
+set            5000000 ops in 0.792 secs, 158 ns/op, 6312175 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.309 secs, 62 ns/op, 16162191 op/sec
+delete         5000000 ops in 0.532 secs, 106 ns/op, 9391647 op/sec
+set (cap)      5000000 ops in 0.452 secs, 90 ns/op, 11057079 op/sec
+get (cap)      5000000 ops in 0.308 secs, 62 ns/op, 16259687 op/sec
+delete (cap)   5000000 ops in 0.439 secs, 88 ns/op, 11386150 op/sec
+Running hashmap.c benchmarks...
+seed=1660276067, count=5000000, item_size=4
+set            5000000 ops in 0.783 secs, 157 ns/op, 6385133 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.308 secs, 62 ns/op, 16241465 op/sec
+delete         5000000 ops in 0.539 secs, 108 ns/op, 9275577 op/sec
+set (cap)      5000000 ops in 0.436 secs, 87 ns/op, 11456040 op/sec
+get (cap)      5000000 ops in 0.306 secs, 61 ns/op, 16351251 op/sec
+delete (cap)   5000000 ops in 0.424 secs, 85 ns/op, 11779978 op/sec
+Running hashmap.c benchmarks...
+seed=1660276070, count=5000000, item_size=4
+set            5000000 ops in 0.789 secs, 158 ns/op, 6338341 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.313 secs, 63 ns/op, 15950184 op/sec
+delete         5000000 ops in 0.539 secs, 108 ns/op, 9276937 op/sec
+set (cap)      5000000 ops in 0.446 secs, 89 ns/op, 11205034 op/sec
+get (cap)      5000000 ops in 0.308 secs, 62 ns/op, 16228813 op/sec
+delete (cap)   5000000 ops in 0.440 secs, 88 ns/op, 11354501 op/sec
+Running hashmap.c benchmarks...
+seed=1660276074, count=5000000, item_size=4
+set            5000000 ops in 0.796 secs, 159 ns/op, 6283223 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.306 secs, 61 ns/op, 16339762 op/sec
+delete         5000000 ops in 0.533 secs, 107 ns/op, 9382659 op/sec
+set (cap)      5000000 ops in 0.452 secs, 90 ns/op, 11065276 op/sec
+get (cap)      5000000 ops in 0.312 secs, 62 ns/op, 16023998 op/sec
+delete (cap)   5000000 ops in 0.446 secs, 89 ns/op, 11209104 op/sec
+Running hashmap.c benchmarks...
+seed=1660276077, count=5000000, item_size=4
+set            5000000 ops in 0.790 secs, 158 ns/op, 6328433 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.314 secs, 63 ns/op, 15935899 op/sec
+delete         5000000 ops in 0.527 secs, 105 ns/op, 9483959 op/sec
+set (cap)      5000000 ops in 0.446 secs, 89 ns/op, 11212070 op/sec
+get (cap)      5000000 ops in 0.309 secs, 62 ns/op, 16185315 op/sec
+delete (cap)   5000000 ops in 0.440 secs, 88 ns/op, 11354527 op/sec
+Running hashmap.c benchmarks...
+seed=1660276081, count=5000000, item_size=4
+set            5000000 ops in 0.791 secs, 158 ns/op, 6317630 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.311 secs, 62 ns/op, 16077842 op/sec
+delete         5000000 ops in 0.526 secs, 105 ns/op, 9503300 op/sec
+set (cap)      5000000 ops in 0.446 secs, 89 ns/op, 11206842 op/sec
+get (cap)      5000000 ops in 0.312 secs, 62 ns/op, 16011887 op/sec
+delete (cap)   5000000 ops in 0.433 secs, 87 ns/op, 11545611 op/sec
+Running hashmap.c benchmarks...
+seed=1660276084, count=5000000, item_size=4
+set            5000000 ops in 0.798 secs, 160 ns/op, 6265350 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.319 secs, 64 ns/op, 15697306 op/sec
+delete         5000000 ops in 0.553 secs, 111 ns/op, 9035791 op/sec
+set (cap)      5000000 ops in 0.453 secs, 91 ns/op, 11047917 op/sec
+get (cap)      5000000 ops in 0.318 secs, 64 ns/op, 15708106 op/sec
+delete (cap)   5000000 ops in 0.447 secs, 89 ns/op, 11175932 op/sec
+Running hashmap.c benchmarks...
+seed=1660276088, count=5000000, item_size=4
+set            5000000 ops in 0.793 secs, 159 ns/op, 6302420 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.310 secs, 62 ns/op, 16140383 op/sec
+delete         5000000 ops in 0.531 secs, 106 ns/op, 9413678 op/sec
+set (cap)      5000000 ops in 0.435 secs, 87 ns/op, 11498350 op/sec
+get (cap)      5000000 ops in 0.309 secs, 62 ns/op, 16179921 op/sec
+delete (cap)   5000000 ops in 0.432 secs, 86 ns/op, 11567567 op/sec
+Running hashmap.c benchmarks...
+seed=1660276092, count=5000000, item_size=4
+set            5000000 ops in 0.809 secs, 162 ns/op, 6177522 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.343 secs, 69 ns/op, 14572926 op/sec
+delete         5000000 ops in 0.540 secs, 108 ns/op, 9260357 op/sec
+set (cap)      5000000 ops in 0.452 secs, 90 ns/op, 11053706 op/sec
+get (cap)      5000000 ops in 0.317 secs, 63 ns/op, 15796640 op/sec
+delete (cap)   5000000 ops in 0.442 secs, 88 ns/op, 11320362 op/sec
+Running hashmap.c benchmarks...
+seed=1660276095, count=5000000, item_size=4
+set            5000000 ops in 0.791 secs, 158 ns/op, 6319251 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.319 secs, 64 ns/op, 15673637 op/sec
+delete         5000000 ops in 0.525 secs, 105 ns/op, 9522141 op/sec
+set (cap)      5000000 ops in 0.447 secs, 89 ns/op, 11175507 op/sec
+get (cap)      5000000 ops in 0.317 secs, 63 ns/op, 15763323 op/sec
+delete (cap)   5000000 ops in 0.430 secs, 86 ns/op, 11614699 op/sec
+Running hashmap.c benchmarks...
+seed=1660276099, count=5000000, item_size=4
+set            5000000 ops in 0.777 secs, 155 ns/op, 6433168 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.307 secs, 61 ns/op, 16287706 op/sec
+delete         5000000 ops in 0.583 secs, 117 ns/op, 8580067 op/sec
+set (cap)      5000000 ops in 0.551 secs, 110 ns/op, 9079980 op/sec
+get (cap)      5000000 ops in 0.323 secs, 65 ns/op, 15491723 op/sec
+delete (cap)   5000000 ops in 0.461 secs, 92 ns/op, 10847375 op/sec
+Running hashmap.c benchmarks...
+seed=1660276103, count=5000000, item_size=4
+set            5000000 ops in 0.857 secs, 171 ns/op, 5834476 op/sec, 26.84 bytes/op
+get            5000000 ops in 0.317 secs, 63 ns/op, 15792250 op/sec
+delete         5000000 ops in 0.526 secs, 105 ns/op, 9507330 op/sec
+set (cap)      5000000 ops in 0.513 secs, 103 ns/op, 9755812 op/sec
+get (cap)      5000000 ops in 0.355 secs, 71 ns/op, 14101588 op/sec
+delete (cap)   5000000 ops in 0.436 secs, 87 ns/op, 11461029 op/sec
