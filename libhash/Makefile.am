@@ -13,8 +13,6 @@ hash_test_SOURCES = hashtest.c
 builtin_test_CPPFLAGS = -DHASHMAP_TEST=1
 builtin_test_SOURCES = hashmap.c
 
-hash_bench_CPPFLAGS = -DNDEBUG
-hash_bench_CFLAGS = -O2
 hash_bench_SOURCES = benchmark.c
 
 bench: hash-bench
