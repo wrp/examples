@@ -83,35 +83,34 @@ hashmap_new_with_allocator(
 	size_t bucketsz = sizeof(struct bucket) + el->size;
 
 	/* Ensure that buckets are aligned well enough for uintptr_t */
-	while (bucketsz & (sizeof(uintptr_t)-1)) {
+	while( bucketsz & (sizeof(uintptr_t) - 1)) {
 		bucketsz++;
 	}
-    // hashmap + spare + edata
-    size_t size = sizeof(struct hashmap)+bucketsz*2;
-    struct hashmap *map = _malloc(size);
-    if (!map) {
-        return NULL;
-    }
-    memset(map, 0, sizeof(struct hashmap));
-    map->el = *el;
-    map->hash = *hash;
-    map->bucketsz = bucketsz;
-    map->spare = ((char*)map)+sizeof(struct hashmap);
-    map->edata = (char*)map->spare+bucketsz;
-    map->cap = cap;
-    map->nbuckets = cap;
-    map->mask = map->nbuckets-1;
-    map->buckets = _malloc(map->bucketsz*map->nbuckets);
-    if (!map->buckets) {
-        _free(map);
-        return NULL;
-    }
-    memset(map->buckets, 0, map->bucketsz*map->nbuckets);
-    map->growat = map->nbuckets*0.75;
-    map->shrinkat = map->nbuckets*0.10;
-    map->malloc = _malloc;
-    map->free = _free;
-    return map;
+	/* hashmap + spare + edata */
+	struct hashmap *map = _malloc(sizeof *map  + 2 * bucketsz);
+	if( !map ){
+		return NULL;
+	}
+	memset(map, 0, sizeof *map);
+	map->el = *el;
+	map->hash = *hash;
+	map->bucketsz = bucketsz;
+	map->spare = ((char*)map)+sizeof(struct hashmap);
+	map->edata = (char*)map->spare+bucketsz;
+	map->cap = cap;
+	map->nbuckets = cap;
+	map->mask = map->nbuckets-1;
+	map->buckets = _malloc(map->bucketsz * map->nbuckets);
+	if( !map->buckets ){
+		_free(map);
+		return NULL;
+	}
+	memset(map->buckets, 0, map->bucketsz*map->nbuckets);
+	map->growat = map->nbuckets * 0.75;
+	map->shrinkat = map->nbuckets * 0.10;
+	map->malloc = _malloc;
+	map->free = _free;
+	return map;
 }
 
 
