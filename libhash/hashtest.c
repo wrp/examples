@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "hashmap.h"
 
 int fail = 0;  /* Count of failed tests */
@@ -375,12 +376,19 @@ test_hash(struct hash_method *h, size_t cap)
 }
 
 int
-main(void)
+main(int argc, char **argv)
 {
+	int seed = argc > 1 ? strtol(argv[1], NULL, 10) : time(NULL);
 	size_t sizes[] = { 0, 63, 237, 256 };
 	size_t *end = sizes + sizeof sizes / sizeof *sizes;
-	struct hash_method h = { NULL, { 0, 0 } };
+
+	srand(seed);
+
 	for( size_t *cap = sizes; cap < end; cap += 1 ){
+		struct hash_method h;
+		h.seed[0] = rand();
+		h.seed[1] = rand();
+
 		h.func = user_hash_murmur;
 		test_hash(&h, *cap);
 		h.func = user_hash_sip;
