@@ -673,9 +673,7 @@ main(void)
                                compare_ints_udata, NULL, NULL))) {}
     shuffle(vals, N, sizeof(int));
     for (int i = 0; i < N; i++) {
-        // // printf("== %d ==\n", vals[i]);
-        assert(map->count == i);
-        assert(map->count == hashmap_count(map));
+        assert(i == hashmap_count(map));
         assert(map->count == deepcount(map));
         int *v;
         assert(!hashmap_get(map, &vals[i]));
@@ -709,9 +707,8 @@ main(void)
         assert(!hashmap_get(map, &vals[i]));
         assert(!hashmap_delete(map, &vals[i]));
         assert(!hashmap_set(map, &vals[i]));
-        assert(map->count == i+1);
-        assert(map->count == hashmap_count(map));
-        assert(map->count == deepcount(map));
+        assert(i + 1 == hashmap_count(map));
+        assert(i + 1 == deepcount(map));
     }
 
     int *vals2;
@@ -729,9 +726,8 @@ main(void)
         v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
         assert(!hashmap_get(map, &vals[i]));
-        assert(map->count == N-i-1);
-        assert(map->count == hashmap_count(map));
-        assert(map->count == deepcount(map));
+        assert(N - i - 1 == hashmap_count(map));
+        assert(N - i - 1 == deepcount(map));
         for (int j = N-1; j > i; j--) {
             v = hashmap_get(map, &vals[j]);
             assert(v && *v == vals[j]);
@@ -747,11 +743,12 @@ main(void)
         }
     }
 
-    assert(map->count != 0);
+    assert(hashmap_count(map) != 0);
+
     size_t prev_cap = map->cap;
     hashmap_clear(map, true);
     assert(prev_cap < map->cap);
-    assert(map->count == 0);
+    assert(hashmap_count(map) == 0);
 
 
     for (int i = 0; i < N; i++) {
