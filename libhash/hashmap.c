@@ -816,24 +816,28 @@ setup_benchmark(const char *name)
 }
 
 
-#define unbench { \
-    clock_t end = clock(); \
-    double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC; \
-    printf("%d ops in %.3f secs, %.0f ns/op, %.0f op/sec", \
-        N, elapsed_secs, \
-        elapsed_secs/(double)N*1e9, \
-        (double)N/elapsed_secs \
-    ); \
-    if (total_mem > tmem) { \
-        size_t used_mem = total_mem-tmem; \
-        printf(", %.2f bytes/op", (double)used_mem/N); \
-    } \
-    if (total_allocs > tallocs) { \
-        size_t used_allocs = total_allocs-tallocs; \
-        printf(", %.2f allocs/op", (double)used_allocs/N); \
-    } \
-    printf("\n"); \
-    }
+static void
+unbench(void)
+{
+	clock_t end = clock();
+	double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC;
+	printf(
+		"%d ops in %.3f secs, %.0f ns/op, %.0f op/sec",
+		N,
+		elapsed_secs,
+		elapsed_secs / (double)N*1e9,
+		(double)N / elapsed_secs
+	);
+	if( total_mem > tmem ){
+		size_t used_mem = total_mem - tmem;
+		printf(", %.2f bytes/op", (double)used_mem / N);
+	}
+	if( total_allocs > tallocs ){
+		size_t used_allocs = total_allocs - tallocs;
+		printf(", %.2f allocs/op", (double)used_allocs / N);
+	}
+	putchar('\n');
+}
 
 
 static void benchmarks() {
@@ -863,18 +867,21 @@ static void benchmarks() {
     setup_benchmark("set"); for( int i = 0; i < N; i++ ){
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
-    } unbench
+    }
+    unbench();
 
     shuffle(vals, N, sizeof(int));
     setup_benchmark("get"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
-    } unbench
+    }
+    unbench();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("delete"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
-    } unbench
+    }
+    unbench();
     hashmap_free(map);
 
     map = hashmap_new_with_allocator(xmalloc, xfree,
@@ -884,17 +891,20 @@ static void benchmarks() {
     setup_benchmark("set (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
-    } unbench
+    }
+    unbench();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("get (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
-    } unbench
+    }
+    unbench();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("delete (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
-    } unbench
+    }
+    unbench();
 
     hashmap_free(map);
 
