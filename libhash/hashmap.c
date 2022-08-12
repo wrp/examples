@@ -68,15 +68,11 @@ hashmap_new_with_allocator(
 ) {
     _malloc = _malloc ? _malloc : malloc;
     _free = _free ? _free : free;
-    size_t ncap = 16;
-    if (cap < ncap) {
-        cap = ncap;
-    } else {
-        while (ncap < cap) {
-            ncap *= 2;
-        }
-        cap = ncap;
-    }
+	size_t ncap = 16;
+	while( ncap < cap ){
+		ncap *= 2;
+	}
+	cap = ncap;
     size_t bucketsz = sizeof(struct bucket) + elsize;
     while (bucketsz & (sizeof(uintptr_t)-1)) {
         bucketsz++;
