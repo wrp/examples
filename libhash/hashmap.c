@@ -136,7 +136,7 @@ struct hashmap *
 hashmap_new(
 	size_t elsize,
 	size_t cap,
-	struct hash_method *hash,
+	const struct hash_method *hash,
                             int (*compare)(const void *a, const void *b,
                                            void *udata),
                             void (*elfree)(void *item),

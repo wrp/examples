@@ -16,12 +16,12 @@ struct hash_method {
 };
 
 struct hashmap * hashmap_new(
-	size_t,               /* Size of each element */
-	size_t,               /* Minimum initial capacity */
-	struct hash_method *, /* Hash method, with seeds */
+	size_t,                     /* Size of each element */
+	size_t,                     /* Minimum initial capacity */
+	const struct hash_method *, /* Hash method, with seeds */
 	int (*compare)(const void *, const void *, void *udata),
 	void (*elfree)(void *item),
-	void *udata           /* Data passed to comparison function */
+	void *udata                 /* Data passed to comparison function */
 );
 struct hashmap *hashmap_new_with_allocator(
 	void *(*malloc)(size_t),
