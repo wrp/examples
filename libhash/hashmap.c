@@ -801,7 +801,7 @@ static void all() {
     }
 }
 
-#define bench(name, N, code) {{ \
+#define bench(name) {{ \
     if (strlen(name) > 0) { \
         printf("%-14s ", name); \
     } \
@@ -809,9 +809,10 @@ static void all() {
     size_t tallocs = total_allocs; \
     uint64_t bytes = 0; \
     clock_t begin = clock(); \
-    for (int i = 0; i < N; i++) { \
-        (code); \
-    } \
+    for (int i = 0; i < N; i++)
+
+
+#define unbench \
     clock_t end = clock(); \
     double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC; \
     double bytes_sec = (double)bytes/elapsed_secs; \
@@ -832,7 +833,8 @@ static void all() {
         printf(", %.2f allocs/op", (double)used_allocs/N); \
     } \
     printf("\n"); \
-}}
+    }}
+
 
 static void benchmarks() {
     int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
@@ -858,40 +860,41 @@ static void benchmarks() {
 	&hash,
 	compare_ints_udata,
                       NULL, NULL);
-    bench("set", N, {
+    bench("set") {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
-    })
+    } unbench
+
     shuffle(vals, N, sizeof(int));
-    bench("get", N, {
+    bench("get") {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
-    })
+    } unbench
     shuffle(vals, N, sizeof(int));
-    bench("delete", N, {
+    bench("delete") {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
-    })
+    } unbench
     hashmap_free(map);
 
     map = hashmap_new_with_allocator(xmalloc, xfree,
     	sizeof(int), N,
 	&hash, compare_ints_udata,
                       NULL, NULL);
-    bench("set (cap)", N, {
+    bench("set (cap)") {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
-    })
+    } unbench
     shuffle(vals, N, sizeof(int));
-    bench("get (cap)", N, {
+    bench("get (cap)") {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
-    })
+    } unbench
     shuffle(vals, N, sizeof(int));
-    bench("delete (cap)" , N, {
+    bench("delete (cap)") {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
-    })
+    } unbench
 
     hashmap_free(map);
 
