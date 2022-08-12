@@ -802,9 +802,7 @@ static void all() {
 }
 
 #define bench(name) {{ \
-    if (strlen(name) > 0) { \
-        printf("%-14s ", name); \
-    } \
+    printf("%-14s ", name); \
     size_t tmem = total_mem; \
     size_t tallocs = total_allocs; \
     uint64_t bytes = 0; \
