@@ -95,8 +95,8 @@ hashmap_new_with_allocator(
 	map->el = *el;
 	map->hash = *hash;
 	map->bucketsz = bucketsz;
-	map->spare = ((char*)map)+sizeof(struct hashmap);
-	map->edata = (char*)map->spare+bucketsz;
+	map->spare = ((char*)map) + sizeof *map;
+	map->edata = (char*)map->spare + bucketsz;
 	map->cap = cap;
 	map->nbuckets = cap;
 	map->mask = map->nbuckets-1;
@@ -105,7 +105,7 @@ hashmap_new_with_allocator(
 		_free(map);
 		return NULL;
 	}
-	memset(map->buckets, 0, map->bucketsz*map->nbuckets);
+	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 	map->growat = map->nbuckets * 0.75;
 	map->shrinkat = map->nbuckets * 0.10;
 	map->malloc = _malloc;
