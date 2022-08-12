@@ -73,10 +73,11 @@ static void free_str(void *item) {
 }
 
 int
-main(void)
+main(int argc, char **argv)
 {
-    int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
-    unsigned N = getenv("N")?atoi(getenv("N")):2000;
+	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
+	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
+
     printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
     srand(seed);
 
