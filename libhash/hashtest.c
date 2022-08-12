@@ -5,7 +5,12 @@
 #include "hashmap.h"
 
 int fail = 0;  /* Count of failed tests */
-
+#define expect(x) if( !(x) ){ \
+	fail += 1; \
+	fprintf(stderr, "Test failure in %s at line %d: %s\n", \
+		__FILE__, __LINE__, #x); \
+	}
+#define max(x, y) ( (x) > (y) ? (x) : (y) )
 struct user { char *name; int age; char free; };
 struct two_ints { int x, y; };
 struct user testdata[] = {
@@ -65,11 +70,6 @@ user_hash_murmur(const void *item, uint64_t seed0, uint64_t seed1)
 	return hashmap_murmur(user->name, strlen(user->name), seed0, seed1);
 }
 
-#define expect(x) if( !(x) ){ \
-	fail += 1; \
-	fprintf(stderr, "Test failure in %s at line %d: %s\n", \
-		__FILE__, __LINE__, #x); \
-	}
 
 static int malloc_allow = 0;
 static void *
@@ -215,9 +215,7 @@ test_deletion(struct hashmap *m, size_t cap)
 	struct user u = { .name = "kjljk", .age = 17 };
 	struct user *up;
 
-	if( cap == 0 ){
-		cap = 16;
-	}
+	(void)cap;
 
 	hashmap_set(m, &u);
 	up = hashmap_delete(m, &u);
@@ -230,12 +228,21 @@ test_deletion(struct hashmap *m, size_t cap)
 	/* delete a non-extant entry */
 	up = hashmap_delete(m, &u);
 	expect( up == NULL );
+}
 
+
+static void
+test_collisions(struct hashmap *m, size_t cap)
+{
 	/* Create a new map with trivial hash to test collisions */
 	/* TODO: this should be in a separate test */
+
+	cap = max(cap, 16);
+
 	struct two_ints t = { 1, 2 };
 	int index[] = { 1, 1 + cap };
 	struct two_ints *tp;
+
 	m = hashmap_new_with_allocator(
 		malloc, realloc, free,
 		sizeof t,
@@ -342,6 +349,7 @@ test_hash(hash_func h, size_t cap)
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map, cap);
+	test_collisions(map, cap);
 	test_probe(map, h, cap);
 
 	load_data(map, load, NULL);
