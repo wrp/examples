@@ -163,7 +163,6 @@ test_allocator_failures(hash_func h, size_t cap)
 	}
 
 	/* With only two successful allocations, resize should fail */
-	hashmap_set_allocator(malloc_fail, free_fail);
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
 		malloc_fail, free_fail, sizeof *user,
@@ -178,7 +177,6 @@ test_allocator_failures(hash_func h, size_t cap)
 	expect( ! hashmap_oom(map) );
 
 	hashmap_free(map);
-	hashmap_set_allocator(malloc, free);
 }
 
 
@@ -287,14 +285,6 @@ test_hash(hash_func h, size_t cap)
 {
 	struct user *user;
 	size_t testdata_size = sizeof testdata / sizeof *testdata - 1;
-
-	/*
-	 * hashmap_set_allocator is allegedly deprecated, but this is not true:
-	 * currently, resize of a hashmap that has a custom allocator
-	 * fails to use the allocator, so we must set it with
-	 * hashmap_set_allocator.
-	 */
-	hashmap_set_allocator(malloc, free);
 
 	/*
 	 * Create a new hash map. The second argument is the initial capacity.

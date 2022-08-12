@@ -12,15 +12,6 @@
 static void *(*_malloc)(size_t) = NULL;
 static void (*_free)(void *) = NULL;
 
-// hashmap_set_allocator allows for configuring a custom allocator for
-// all hashmap library operations. This function, if needed, should be called
-// only once at startup and a prior to calling hashmap_new().
-void hashmap_set_allocator(void *(*malloc)(size_t), void (*free)(void*))
-{
-    _malloc = malloc;
-    _free = free;
-}
-
 #define panic(_msg_) { \
     fprintf(stderr, "panic: %s (%s:%d)\n", (_msg_), __FILE__, __LINE__); \
     exit(1); \
