@@ -743,9 +743,7 @@ main(void)
 
     assert(hashmap_count(map) != 0);
 
-    size_t prev_cap = map->cap;
     hashmap_clear(map, true);
-    assert(prev_cap < map->cap);
     assert(hashmap_count(map) == 0);
 
 
@@ -758,9 +756,7 @@ main(void)
         }
     }
 
-    prev_cap = map->cap;
     hashmap_clear(map, false);
-    assert(prev_cap == map->cap);
 
     hashmap_free(map);
 
