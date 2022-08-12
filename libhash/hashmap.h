@@ -29,12 +29,9 @@ struct hashmap * hashmap_new(
 struct hashmap *hashmap_new_with_allocator(
 	void *(*malloc)(size_t),
 	void (*free)(void*),
-	size_t elsize,
-	size_t cap,
+	const struct hash_element *,
 	const struct hash_method *,
-	int (*compare)(const void *a, const void *b, void *udata),
-	void (*elfree)(void *item),
-	void *udata
+	size_t cap
 );
 
 void hashmap_free(struct hashmap *map);

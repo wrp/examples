@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -95,10 +96,9 @@ main(int argc, char **argv)
 
     struct hashmap *map;
     struct hash_method hash = { hash_int, { seed, seed } };
+    struct hash_element el = { sizeof *vals, compare_ints_udata };
 
-    while (!(map = hashmap_new_with_allocator( xmalloc, xfree,
-    	sizeof(int), 0, &hash,
-                               compare_ints_udata, NULL, NULL))) {}
+    while( !(map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0))){}
     shuffle(vals, N, sizeof(int));
     for (unsigned i = 0; i < (unsigned)N; i++) {
         assert(i == hashmap_count(map));
@@ -191,11 +191,11 @@ main(int argc, char **argv)
 
     hash.func = hash_str;
 
-    while (!(map = hashmap_new_with_allocator(
-    	xmalloc, xfree,
-	sizeof(char*), 0,
-	&hash,
-	compare_strs, free_str, NULL)));
+    el.compare = compare_strs;
+    el.free = free_str;
+    el.size = sizeof(char *);
+    while (!(map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0)))
+    	;
 
     for (unsigned i = 0; i < N; i++) {
         char *str;

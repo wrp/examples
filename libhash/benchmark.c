@@ -83,13 +83,9 @@ main(int argc, char **argv) /* benchmarks */
 	shuffle(vals, N, sizeof *vals);
 
 	struct hash_method hash = {hash_int, {seed, seed} };
+	struct hash_element el = { sizeof *vals, compare_ints_udata, 0, 0 };
 	map = hashmap_new_with_allocator(
-		malloc, free,
-		sizeof *vals,
-		0,
-		&hash,
-		compare_ints_udata,
-		NULL, NULL
+		malloc, free, &el, &hash, 0
 	);
 	if( map == NULL ){
 		perror("out of memory");
@@ -121,12 +117,7 @@ main(int argc, char **argv) /* benchmarks */
 	show_bench_results();
 	hashmap_free(map);
 
-	map = hashmap_new_with_allocator(
-		malloc, free,
-		sizeof *vals, N,
-		&hash, compare_ints_udata,
-		NULL, NULL
-	);
+	map = hashmap_new_with_allocator( malloc, free, &el, &hash, N);
 	if( map == NULL ){
 		perror("out of memory");
 		exit(1);

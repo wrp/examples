@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,23 +157,19 @@ test_allocator_failures(struct hash_method *h, size_t cap)
 {
 	struct user *user;
 	struct hashmap *map;
+	struct hash_element el = { sizeof *user, user_compare, 0, 0 };
 	for( int i = 0; i < 2; i += 1 ){
 		malloc_allow = i;
 		map = hashmap_new_with_allocator(
 			malloc_fail, free_fail,
-			sizeof *user,
-			cap, h, user_compare,
-			NULL, NULL
+			&el, h, cap
 		);
 		expect( map == NULL );
 	}
 
 	/* With only two successful allocations, resize should fail */
 	malloc_allow = 2;
-	map = hashmap_new_with_allocator(
-		malloc_fail, free_fail, sizeof *user,
-		cap, h, user_compare, NULL, NULL
-	);
+	map = hashmap_new_with_allocator(malloc_fail, free_fail, &el, h, cap);
 	cap = max(cap, 16);
 	load_data(map, cap, NULL);
 	expect( hashmap_oom(map) );
@@ -245,14 +243,13 @@ test_collisions(struct hashmap *m, size_t cap)
 	struct two_ints t = { 1, 2 };
 	int index[] = { 1, 1 + cap };
 	struct two_ints *tp;
+	struct hash_element el = { .size = sizeof t, .compare = int_compare };
+	struct hash_method hash = { identity_hash };
 
 	m = hashmap_new_with_allocator(
 		malloc, free,
-		sizeof t,
-		cap,
-		&(struct hash_method){identity_hash, {0, 0}},
-		int_compare,
-		NULL, NULL
+		&el, &hash,
+		cap
 	);
 	hashmap_set(m, &t);
 	t.x += cap;
