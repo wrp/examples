@@ -817,7 +817,7 @@ setup_benchmark(const char *name)
 
 
 static void
-unbench(void)
+show_bench_results(void)
 {
 	clock_t end = clock();
 	double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -868,20 +868,20 @@ static void benchmarks() {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
     }
-    unbench();
+    show_bench_results();
 
     shuffle(vals, N, sizeof(int));
     setup_benchmark("get"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
     }
-    unbench();
+    show_bench_results();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("delete"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
     }
-    unbench();
+    show_bench_results();
     hashmap_free(map);
 
     map = hashmap_new_with_allocator(xmalloc, xfree,
@@ -892,19 +892,19 @@ static void benchmarks() {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
     }
-    unbench();
+    show_bench_results();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("get (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
     }
-    unbench();
+    show_bench_results();
     shuffle(vals, N, sizeof(int));
     setup_benchmark("delete (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
     }
-    unbench();
+    show_bench_results();
 
     hashmap_free(map);
 
