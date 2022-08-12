@@ -346,9 +346,20 @@ void *hashmap_delete(struct hashmap *map, void *key) {
 	}
 }
 
-// hashmap_count returns the number of items in the hash map.
-size_t hashmap_count(struct hashmap *map) {
-    return map->count;
+/* Return the number of items in the hash map. */
+size_t
+hashmap_count(struct hashmap *map)
+{
+#ifndef NDEBUG
+	size_t count = 0;
+	for( size_t i = 0; i < map->nbuckets; i += 1 ){
+		if( bucket_at(map, i)->dib ){
+			count++;
+		}
+	}
+	assert(count == map->count);
+#endif
+	return map->count;
 }
 
 // hashmap_free frees the hash map
@@ -558,16 +569,6 @@ uint64_t hashmap_murmur(const void *data, size_t len,
 //==============================================================================
 #ifdef HASHMAP_TEST
 
-static size_t deepcount(struct hashmap *map) {
-    size_t count = 0;
-    for (size_t i = 0; i < map->nbuckets; i++) {
-        if (bucket_at(map, i)->dib) {
-            count++;
-        }
-    }
-    return count;
-}
-
 
 #pragma GCC diagnostic ignored "-Wextra"
 #include <stdlib.h>
@@ -674,7 +675,6 @@ main(void)
     shuffle(vals, N, sizeof(int));
     for (int i = 0; i < N; i++) {
         assert(i == hashmap_count(map));
-        assert(map->count == deepcount(map));
         int *v;
         assert(!hashmap_get(map, &vals[i]));
         assert(!hashmap_delete(map, &vals[i]));
@@ -708,7 +708,6 @@ main(void)
         assert(!hashmap_delete(map, &vals[i]));
         assert(!hashmap_set(map, &vals[i]));
         assert(i + 1 == hashmap_count(map));
-        assert(i + 1 == deepcount(map));
     }
 
     int *vals2;
@@ -727,7 +726,6 @@ main(void)
         assert(v && *v == vals[i]);
         assert(!hashmap_get(map, &vals[i]));
         assert(N - i - 1 == hashmap_count(map));
-        assert(N - i - 1 == deepcount(map));
         for (int j = N-1; j > i; j--) {
             v = hashmap_get(map, &vals[j]);
             assert(v && *v == vals[j]);
