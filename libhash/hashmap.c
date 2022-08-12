@@ -911,12 +911,8 @@ int main() {
     } else {
         printf("Running hashmap.c tests...\n");
         all();
-        printf("PASSED\n");
+        printf("PASSED\n");  /* Assertions abort on a test failure */
     }
+    return 0;
 }
-
-
 #endif
-
-
-
