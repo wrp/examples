@@ -103,8 +103,8 @@ free_el(void *s)
 
 /*
  * Roll a string through permutations:
- * eg: abcd -> bbcd -> cbcd -> ... -> zbcd -> accd -> ... ->
- *     zzzy -> aaaz -> baaz -> ... -> yzzz -> zzzz -> aaaa
+ * eg: abcd, bbcd, cbcd, ..., zbcd,  ccd, accd, ...,
+ *     zzzy,    z, a  z, ..., yzzz, zzzz,     , a  , ...
  */
 static void
 increment(char *t)
