@@ -124,13 +124,17 @@ hashmap_new(
 	return hashmap_new_with_allocator(malloc, free, el, hash, cap);
 }
 
-static void free_elements(struct hashmap *map) {
-    if (map->el.free) {
-        for (size_t i = 0; i < map->nbuckets; i++) {
-            struct bucket *bucket = bucket_at(map, i);
-            if (bucket->dib) map->el.free(bucket_item(bucket));
-        }
-    }
+static void
+free_elements(struct hashmap *map)
+{
+	if( map->el.free ){
+		for( size_t i = 0; i < map->nbuckets; i += 1 ){
+			struct bucket *b = bucket_at(map, i);
+			if( b->dib ){
+				map->el.free(bucket_item(b));
+			}
+		}
+	}
 }
 
 
