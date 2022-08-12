@@ -934,15 +934,14 @@ benchmarks(void)
 	}
 }
 
-int main(void) {
-    if (getenv("BENCH")) {
-        printf("Running hashmap.c benchmarks...\n");
-        benchmarks();
-    } else {
-        printf("Running hashmap.c tests...\n");
-        all();
-        printf("PASSED\n");  /* Assertions abort on a test failure */
-    }
-    return 0;
+int
+main(void)
+{
+	if (getenv("BENCH")) {
+		benchmarks();
+	} else {
+		all();
+	}
+	return 0;
 }
 #endif
