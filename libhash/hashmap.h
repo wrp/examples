@@ -11,18 +11,18 @@
 
 struct hashmap;
 struct hash_method {
-	uint64_t seed[2];
 	uint64_t (*func)(const void *, uint64_t, uint64_t);
+	uint64_t seed[2];
 };
 
-struct hashmap *hashmap_new(size_t elsize, size_t cap,
-                            uint64_t seed0, uint64_t seed1,
-                            uint64_t (*hash)(const void *item,
-                                             uint64_t seed0, uint64_t seed1),
-                            int (*compare)(const void *a, const void *b,
-                                           void *udata),
-                            void (*elfree)(void *item),
-                            void *udata);
+struct hashmap * hashmap_new(
+	size_t,               /* Size of each element */
+	size_t,               /* Minimum initial capacity */
+	struct hash_method *, /* Hash method, with seeds */
+	int (*compare)(const void *, const void *, void *udata),
+	void (*elfree)(void *item),
+	void *udata
+);
 struct hashmap *hashmap_new_with_allocator(
                             void *(*malloc)(size_t),
                             void (*free)(void*),

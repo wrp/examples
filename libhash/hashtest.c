@@ -147,7 +147,7 @@ load_data(struct hashmap *map, unsigned count, char *base)
 }
 
 static void
-test_allocator_failures(hash_func h, size_t cap)
+test_allocator_failures(struct hash_method *h, size_t cap)
 {
 	struct user *user;
 	struct hashmap *map;
@@ -156,7 +156,7 @@ test_allocator_failures(hash_func h, size_t cap)
 		map = hashmap_new_with_allocator(
 			malloc_fail, free_fail,
 			sizeof *user,
-			cap, 0, 0, h, user_compare,
+			cap, h->seed[0], h->seed[1], h->func, user_compare,
 			NULL, NULL
 		);
 		expect( map == NULL );
@@ -166,7 +166,7 @@ test_allocator_failures(hash_func h, size_t cap)
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
 		malloc_fail, free_fail, sizeof *user,
-		cap, 0, 0, h, user_compare, NULL, NULL
+		cap, h->seed[0], h->seed[1], h->func, user_compare, NULL, NULL
 	);
 	cap = max(cap, 16);
 	load_data(map, cap, NULL);
@@ -192,14 +192,14 @@ mask(size_t cap)
 
 
 static void
-test_probe(struct hashmap *m, hash_func hf, size_t cap)
+test_probe(struct hashmap *m, struct hash_method *hf, size_t cap)
 {
 	hashmap_clear(m, false);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
 
-	uint64_t h = hf(&d, 0, 0) & mask(cap);
+	uint64_t h = hf->func(&d, hf->seed[0], hf->seed[1]) & mask(cap);
 
 	struct user *a = hashmap_probe(m, h);
 	struct user *u = hashmap_probe(m, !h);
@@ -281,7 +281,7 @@ test_collisions(struct hashmap *m, size_t cap)
 }
 
 static void
-test_hash(hash_func h, size_t cap)
+test_hash(struct hash_method *h, size_t cap)
 {
 	struct user *user;
 	size_t testdata_size = sizeof testdata / sizeof *testdata - 1;
@@ -294,7 +294,7 @@ test_hash(hash_func h, size_t cap)
 	 */
 	struct hashmap *map = hashmap_new(
 		sizeof *user + 1, /* Use wonky size to trigger code */
-		cap, 0, 0, h, user_compare,
+		cap, h, user_compare,
 		free_el, NULL
 	);
 
@@ -358,7 +358,7 @@ test_hash(hash_func h, size_t cap)
 
 	map = hashmap_new(
 	        sizeof *user,
-	        cap, 0, 0, h, user_compare,
+	        cap, h, user_compare,
 	        free_el, NULL
 	);
 	char big_name[256];
@@ -379,8 +379,8 @@ main(void)
 	size_t sizes[] = { 0, 63, 237, 256 };
 	size_t *end = sizes + sizeof sizes / sizeof *sizes;
 	for( size_t *cap = sizes; cap < end; cap += 1 ){
-		test_hash(user_hash_murmur, *cap);
-		test_hash(user_hash_sip, *cap);
+		test_hash(&(struct hash_method){ user_hash_murmur, 0, 0}, *cap);
+		test_hash(&(struct hash_method){ user_hash_sip, 0, 0}, *cap);
 	}
 	if( fail ){
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
