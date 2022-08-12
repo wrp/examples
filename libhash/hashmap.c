@@ -55,18 +55,17 @@ static uint64_t get_hash(struct hashmap *map, const void *key) {
 
 // hashmap_new_with_allocator returns a new hash map using a custom allocator.
 // See hashmap_new for more information information
-struct hashmap *hashmap_new_with_allocator(
-                            void *(*_malloc)(size_t),
-                            void (*_free)(void*),
-                            size_t elsize, size_t cap,
-                            uint64_t seed0, uint64_t seed1,
-                            uint64_t (*hash)(const void *item,
-                                             uint64_t seed0, uint64_t seed1),
-                            int (*compare)(const void *a, const void *b,
-                                           void *udata),
-                            void (*elfree)(void *item),
-                            void *udata)
-{
+struct hashmap *
+hashmap_new_with_allocator(
+	void *(*_malloc)(size_t),
+	void (*_free)(void*),
+	size_t elsize,
+	size_t cap,
+	const struct hash_method *hash,
+	int (*compare)(const void *a, const void *b, void *udata),
+	void (*elfree)(void *item),
+	void *udata
+) {
     _malloc = _malloc ? _malloc : malloc;
     _free = _free ? _free : free;
     int ncap = 16;
@@ -91,9 +90,9 @@ struct hashmap *hashmap_new_with_allocator(
     memset(map, 0, sizeof(struct hashmap));
     map->elsize = elsize;
     map->bucketsz = bucketsz;
-    map->hash.seed[0] = seed0;
-    map->hash.seed[1] = seed1;
-    map->hash.func = hash;
+    map->hash.seed[0] = hash->seed[0];
+    map->hash.seed[1] = hash->seed[1];
+    map->hash.func = hash->func;
     map->compare = compare;
     map->elfree = elfree;
     map->udata = udata;
@@ -146,7 +145,7 @@ hashmap_new(
     return hashmap_new_with_allocator(
         (_malloc?_malloc:malloc),
         (_free?_free:free),
-        elsize, cap, hash->seed[0], hash->seed[1], hash->func,
+        elsize, cap, hash,
 	compare, elfree, udata
     );
 }
@@ -190,9 +189,8 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 static bool resize(struct hashmap *map, size_t new_cap) {
     struct hashmap *map2 = hashmap_new_with_allocator(
         map->malloc, map->free,
-        map->elsize, new_cap, map->hash.seed[0],
-        map->hash.seed[1], map->hash.func, map->compare,
-                                       map->elfree, map->udata);
+        map->elsize, new_cap, &map->hash,
+        map->compare, map->elfree, map->udata);
     if (!map2) {
         return false;
     }

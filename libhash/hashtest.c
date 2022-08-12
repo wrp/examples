@@ -156,7 +156,7 @@ test_allocator_failures(struct hash_method *h, size_t cap)
 		map = hashmap_new_with_allocator(
 			malloc_fail, free_fail,
 			sizeof *user,
-			cap, h->seed[0], h->seed[1], h->func, user_compare,
+			cap, h, user_compare,
 			NULL, NULL
 		);
 		expect( map == NULL );
@@ -166,7 +166,7 @@ test_allocator_failures(struct hash_method *h, size_t cap)
 	malloc_allow = 2;
 	map = hashmap_new_with_allocator(
 		malloc_fail, free_fail, sizeof *user,
-		cap, h->seed[0], h->seed[1], h->func, user_compare, NULL, NULL
+		cap, h, user_compare, NULL, NULL
 	);
 	cap = max(cap, 16);
 	load_data(map, cap, NULL);
@@ -245,7 +245,9 @@ test_collisions(struct hashmap *m, size_t cap)
 	m = hashmap_new_with_allocator(
 		malloc, free,
 		sizeof t,
-		cap, 0, 0, identity_hash, int_compare,
+		cap,
+		&(struct hash_method){identity_hash, 0, 0},
+		int_compare,
 		NULL, NULL
 	);
 	hashmap_set(m, &t);
