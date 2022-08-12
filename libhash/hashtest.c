@@ -198,7 +198,7 @@ test_probe(struct hashmap *m, hash_func hf, size_t cap)
 {
 	hashmap_clear(m, false);
 
-	struct user d = { .name = strdup("Barry"), .age = 5 };
+	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
 
 	uint64_t h = hf(&d, 0, 0) & mask(cap);
@@ -279,6 +279,7 @@ test_collisions(struct hashmap *m, size_t cap)
 		tp = hashmap_delete(m, &i);
 		expect( tp && tp->y == i + 20 );
 	}
+	hashmap_free(m);
 }
 
 static void
