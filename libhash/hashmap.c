@@ -56,8 +56,10 @@ get_hash(struct hashmap *map, const void *key)
 	return map->hash.func(key, seed[0], seed[1]) & 0x0000ffffffffffff;
 }
 
-// hashmap_new_with_allocator returns a new hash map using a custom allocator.
-// See hashmap_new for more information information
+/*
+ * return a new hash map using a custom allocator.
+ * See hashmap_new for more details
+ */
 struct hashmap *
 hashmap_new_with_allocator(
 	void *(*_malloc)(size_t),
@@ -66,17 +68,24 @@ hashmap_new_with_allocator(
 	const struct hash_method *hash,
 	size_t cap
 ) {
-    _malloc = _malloc ? _malloc : malloc;
-    _free = _free ? _free : free;
+	_malloc = _malloc ? _malloc : malloc;
+	_free = _free ? _free : free;
 	size_t ncap = 16;
 	while( ncap < cap ){
 		ncap *= 2;
 	}
 	cap = ncap;
-    size_t bucketsz = sizeof(struct bucket) + el->size;
-    while (bucketsz & (sizeof(uintptr_t)-1)) {
-        bucketsz++;
-    }
+
+	/*
+	 * bucketsz is the size of a single bucket: enough
+	 * to hold one element plus metadata in a leading struct bucket
+	 */
+	size_t bucketsz = sizeof(struct bucket) + el->size;
+
+	/* Ensure that buckets are aligned well enough for uintptr_t */
+	while (bucketsz & (sizeof(uintptr_t)-1)) {
+		bucketsz++;
+	}
     // hashmap + spare + edata
     size_t size = sizeof(struct hashmap)+bucketsz*2;
     struct hashmap *map = _malloc(size);
