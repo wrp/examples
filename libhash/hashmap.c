@@ -586,7 +586,10 @@ static void *xmalloc(size_t size) {
         return NULL;
     }
     void *mem = malloc(sizeof(uintptr_t)+size);
-    assert(mem);
+	if( mem == NULL ){
+		perror("malloc");
+		exit(1);
+	}
     *(uintptr_t*)mem = size;
     total_allocs++;
     total_mem += size;
