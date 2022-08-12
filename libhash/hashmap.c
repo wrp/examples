@@ -801,15 +801,22 @@ static void all() {
     }
 }
 
-#define bench(name) {{ \
-    printf("%-14s ", name); \
-    size_t tmem = total_mem; \
-    size_t tallocs = total_allocs; \
-    clock_t begin = clock(); \
-    for (int i = 0; i < N; i++)
+size_t tmem;
+size_t tallocs;
+clock_t begin;
+int N;
+
+static clock_t
+bench(const char *name)
+{
+	printf("%-14s ", name);
+	tmem = total_mem;
+	tallocs = total_allocs;
+	return begin = clock();
+}
 
 
-#define unbench \
+#define unbench { \
     clock_t end = clock(); \
     double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC; \
     printf("%d ops in %.3f secs, %.0f ns/op, %.0f op/sec", \
@@ -826,12 +833,12 @@ static void all() {
         printf(", %.2f allocs/op", (double)used_allocs/N); \
     } \
     printf("\n"); \
-    }}
+    }
 
 
 static void benchmarks() {
     int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
-    int N = getenv("N")?atoi(getenv("N")):5000000;
+    N = getenv("N")?atoi(getenv("N")):5000000;
     printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
     srand(seed);
 
@@ -853,18 +860,18 @@ static void benchmarks() {
 	&hash,
 	compare_ints_udata,
                       NULL, NULL);
-    bench("set") {
+    bench("set"); for( int i = 0; i < N; i++ ){
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
     } unbench
 
     shuffle(vals, N, sizeof(int));
-    bench("get") {
+    bench("get"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
     } unbench
     shuffle(vals, N, sizeof(int));
-    bench("delete") {
+    bench("delete"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
     } unbench
@@ -874,17 +881,17 @@ static void benchmarks() {
     	sizeof(int), N,
 	&hash, compare_ints_udata,
                       NULL, NULL);
-    bench("set (cap)") {
+    bench("set (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_set(map, &vals[i]);
         assert(!v);
     } unbench
     shuffle(vals, N, sizeof(int));
-    bench("get (cap)") {
+    bench("get (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
     } unbench
     shuffle(vals, N, sizeof(int));
-    bench("delete (cap)") {
+    bench("delete (cap)"); for( int i = 0; i < N; i++ ) {
         int *v = hashmap_delete(map, &vals[i]);
         assert(v && *v == vals[i]);
     } unbench
