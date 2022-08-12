@@ -99,7 +99,7 @@ hashmap_new_with_allocator(
 	map->edata = (char*)map->spare + bucketsz;
 	map->cap = cap;
 	map->nbuckets = cap;
-	map->mask = map->nbuckets-1;
+	map->mask = map->nbuckets - 1;
 	map->buckets = _malloc(map->bucketsz * map->nbuckets);
 	if( !map->buckets ){
 		_free(map);
@@ -114,23 +114,7 @@ hashmap_new_with_allocator(
 }
 
 
-// hashmap_new returns a new hash map.
-// Param `el.size` is the size of each element in the tree. Every element that
-// is inserted, deleted, or retrieved will be this size.
-// Param `cap` is the default lower capacity of the hashmap. Setting this to
-// zero will default to 16.
-// Params `seed0` and `seed1` are optional seed values that are passed to the
-// following `hash` function. These can be any value you wish but it's often
-// best to use randomly generated values.
-// Param `hash` is a function that generates a hash value for an item. It's
-// important that you provide a good hash function, otherwise it will perform
-// poorly or be vulnerable to Denial-of-service attacks. This implementation
-// comes with two helper functions `hashmap_sip()` and `hashmap_murmur()`.
-// Param `compare` is a function that compares items in the tree. See the
-// qsort stdlib function for an example of how this function works.
-// The hashmap must be freed with hashmap_free().
-// Param `el.free` is a function that frees a specific item. This should be NULL
-// unless you're storing some kind of reference data in the hash.
+/* Create a new hash map. */
 struct hashmap *
 hashmap_new(
 	const struct hash_element *el,

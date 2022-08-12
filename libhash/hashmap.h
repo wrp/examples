@@ -28,16 +28,16 @@ struct hash_element {
 };
 
 struct hashmap * hashmap_new(
-	const struct hash_element *,
-	const struct hash_method *, /* Hash method, with seeds */
-	size_t                      /* Minimum initial capacity */
+	const struct hash_element *, /* Items stored in the map */
+	const struct hash_method *,  /* Hash method, with seeds */
+	size_t                       /* Minimum initial capacity */
 );
 struct hashmap *hashmap_new_with_allocator(
 	void *(*malloc)(size_t),
 	void (*free)(void*),
-	const struct hash_element *,
-	const struct hash_method *,
-	size_t cap
+	const struct hash_element *, /* Items stored in the map */
+	const struct hash_method *,  /* Hash method, with seeds */
+	size_t                       /* Minimum initial capacity */
 );
 
 void hashmap_free(struct hashmap *map);
@@ -51,9 +51,7 @@ void *hashmap_probe(struct hashmap *map, uint64_t position);
 bool hashmap_scan(struct hashmap *map,
                   bool (*iter)(const void *item, void *udata), void *udata);
 
-uint64_t hashmap_sip(const void *data, size_t len,
-                     uint64_t seed0, uint64_t seed1);
-uint64_t hashmap_murmur(const void *data, size_t len,
-                        uint64_t seed0, uint64_t seed1);
+uint64_t hashmap_sip(const void *, size_t, uint64_t, uint64_t);
+uint64_t hashmap_murmur(const void *, size_t, uint64_t, uint64_t);
 
 #endif
