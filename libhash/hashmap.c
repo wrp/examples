@@ -845,10 +845,10 @@ show_bench_results(void)
 
 
 int
-main(void) /* benchmarks */
+main(int argc, char **argv) /* benchmarks */
 {
-	int seed = getenv("SEED") ? atoi(getenv("SEED")) : time(NULL);
-	N = getenv("N") ? atoi(getenv("N")) : 5000000;
+	N = argc > 1 ? strtol(argv[1], NULL, 10) : 5000000;
+	int seed = argc > 2 ? strtol(argv[2], NULL, 10) : time(NULL);
 	printf("seed = %d, count = %d, item_size = %zu\n", seed, N, sizeof N);
 	srand(seed);
 
