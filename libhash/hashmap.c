@@ -16,9 +16,6 @@
 #include <stddef.h>
 #include "hashmap.h"
 
-static void *(*_malloc)(size_t) = NULL;
-static void (*_free)(void *) = NULL;
-
 struct bucket {
     uint64_t hash:48;
     uint64_t dib:16;
@@ -132,11 +129,7 @@ hashmap_new(
 	const struct hash_method *hash, /* Hash method, with seeds */
 	size_t cap                      /* Minimum initial capacity */
 ) {
-	return hashmap_new_with_allocator(
-		_malloc ? _malloc : malloc,
-		_free ? _free : free,
-		el, hash, cap
-	);
+	return hashmap_new_with_allocator(malloc, free, el, hash, cap);
 }
 
 static void free_elements(struct hashmap *map) {
