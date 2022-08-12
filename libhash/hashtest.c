@@ -61,8 +61,6 @@ identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
 	return *(int *)int_pointer;
 }
 
-typedef uint64_t(*hash_func)(const void *item, uint64_t seed0, uint64_t seed1);
-
 uint64_t
 user_hash_sip(const void *item, uint64_t seed0, uint64_t seed1)
 {
