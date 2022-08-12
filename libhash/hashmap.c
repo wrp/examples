@@ -206,7 +206,9 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 
 
 static bool resize(struct hashmap *map, size_t new_cap) {
-    struct hashmap *map2 = hashmap_new(map->elsize, new_cap, map->seed1, 
+    struct hashmap *map2 = hashmap_new_with_allocator(
+        map->malloc, map->realloc, map->free,
+        map->elsize, new_cap, map->seed1,
                                        map->seed1, map->hash, map->compare,
                                        map->elfree, map->udata);
     if (!map2) {
