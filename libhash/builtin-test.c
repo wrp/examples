@@ -1,8 +1,3 @@
-
-
-
-
-#pragma GCC diagnostic ignored "-Wextra"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
