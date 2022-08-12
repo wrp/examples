@@ -663,9 +663,11 @@ static void all() {
     }
 
     struct hashmap *map;
+    struct hash_method hash = { hash_int, seed, seed };
 
-    while (!(map = hashmap_new(sizeof(int), 0, seed, seed,
-                               hash_int, compare_ints_udata, NULL, NULL))) {}
+    while (!(map = hashmap_new_with_allocator( xmalloc, xfree,
+    	sizeof(int), 0, &hash,
+                               compare_ints_udata, NULL, NULL))) {}
     shuffle(vals, N, sizeof(int));
     for (int i = 0; i < N; i++) {
         // // printf("== %d ==\n", vals[i]);
@@ -766,9 +768,13 @@ static void all() {
 
     xfree(vals);
 
+    hash.func = hash_str;
 
-    while (!(map = hashmap_new(sizeof(char*), 0, seed, seed,
-                               hash_str, compare_strs, free_str, NULL)));
+    while (!(map = hashmap_new_with_allocator(
+    	xmalloc, xfree,
+	sizeof(char*), 0,
+	&hash,
+	compare_strs, free_str, NULL)));
 
     for (int i = 0; i < N; i++) {
         char *str;
@@ -845,7 +851,12 @@ static void benchmarks() {
     struct hashmap *map;
     shuffle(vals, N, sizeof(int));
 
-    map = hashmap_new(sizeof(int), 0, seed, seed, hash_int, compare_ints_udata,
+    struct hash_method hash = {hash_int, seed, seed};
+    map = hashmap_new_with_allocator(
+    	xmalloc, xfree,
+    	sizeof(int), 0,
+	&hash,
+	compare_ints_udata,
                       NULL, NULL);
     bench("set", N, {
         int *v = hashmap_set(map, &vals[i]);
@@ -863,7 +874,9 @@ static void benchmarks() {
     })
     hashmap_free(map);
 
-    map = hashmap_new(sizeof(int), N, seed, seed, hash_int, compare_ints_udata,
+    map = hashmap_new_with_allocator(xmalloc, xfree,
+    	sizeof(int), N,
+	&hash, compare_ints_udata,
                       NULL, NULL);
     bench("set (cap)", N, {
         int *v = hashmap_set(map, &vals[i]);
@@ -892,8 +905,6 @@ static void benchmarks() {
 }
 
 int main() {
-    hashmap_set_allocator(xmalloc, xfree);
-
     if (getenv("BENCH")) {
         printf("Running hashmap.c benchmarks...\n");
         benchmarks();
