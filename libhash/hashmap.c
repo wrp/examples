@@ -24,12 +24,9 @@ struct hashmap {
     void *(*malloc)(size_t);
     void (*free)(void *);
     bool oom;
-    size_t elsize;
+    struct hash_element el;
     size_t cap;
     struct hash_method hash;
-    int (*compare)(const void *a, const void *b, void *udata);
-    void (*elfree)(void *item);
-    void *udata;
     size_t bucketsz;
     size_t nbuckets;
     size_t count;
@@ -84,14 +81,11 @@ hashmap_new_with_allocator(
         return NULL;
     }
     memset(map, 0, sizeof(struct hashmap));
-    map->elsize = el->size;
+    map->el = *el;
     map->bucketsz = bucketsz;
     map->hash.seed[0] = hash->seed[0];
     map->hash.seed[1] = hash->seed[1];
     map->hash.func = hash->func;
-    map->compare = el->compare;
-    map->elfree = el->free;
-    map->udata = el->udata;
     map->spare = ((char*)map)+sizeof(struct hashmap);
     map->edata = (char*)map->spare+bucketsz;
     map->cap = cap;
@@ -112,7 +106,7 @@ hashmap_new_with_allocator(
 
 
 // hashmap_new returns a new hash map.
-// Param `elsize` is the size of each element in the tree. Every element that
+// Param `el.size` is the size of each element in the tree. Every element that
 // is inserted, deleted, or retrieved will be this size.
 // Param `cap` is the default lower capacity of the hashmap. Setting this to
 // zero will default to 16.
@@ -126,7 +120,7 @@ hashmap_new_with_allocator(
 // Param `compare` is a function that compares items in the tree. See the
 // qsort stdlib function for an example of how this function works.
 // The hashmap must be freed with hashmap_free().
-// Param `elfree` is a function that frees a specific item. This should be NULL
+// Param `el.free` is a function that frees a specific item. This should be NULL
 // unless you're storing some kind of reference data in the hash.
 struct hashmap *
 hashmap_new(
@@ -142,10 +136,10 @@ hashmap_new(
 }
 
 static void free_elements(struct hashmap *map) {
-    if (map->elfree) {
+    if (map->el.free) {
         for (size_t i = 0; i < map->nbuckets; i++) {
             struct bucket *bucket = bucket_at(map, i);
-            if (bucket->dib) map->elfree(bucket_item(bucket));
+            if (bucket->dib) map->el.free(bucket_item(bucket));
         }
     }
 }
@@ -178,15 +172,9 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 
 
 static bool resize(struct hashmap *map, size_t new_cap) {
-	struct hash_element el = {
-		.size = map->elsize,
-		.compare = map->compare,
-		.free = map->elfree,
-		.udata = map->udata
-	};
     struct hashmap *map2 = hashmap_new_with_allocator(
         map->malloc, map->free,
-	&el, &map->hash, new_cap);
+	&map->el, &map->hash, new_cap);
     if (!map2) {
         return false;
     }
@@ -240,7 +228,7 @@ void *hashmap_set(struct hashmap *map, void *item) {
     struct bucket *entry = map->edata;
     entry->hash = get_hash(map, item);
     entry->dib = 1;
-    memcpy(bucket_item(entry), item, map->elsize);
+    memcpy(bucket_item(entry), item, map->el.size);
 
     size_t i = entry->hash & map->mask;
 	for (;;) {
@@ -251,11 +239,11 @@ void *hashmap_set(struct hashmap *map, void *item) {
 			return NULL;
 		}
         if (entry->hash == bucket->hash &&
-            map->compare(bucket_item(entry), bucket_item(bucket),
-                         map->udata) == 0)
+            map->el.compare(bucket_item(entry), bucket_item(bucket),
+                         map->el.udata) == 0)
         {
-            memcpy(map->spare, bucket_item(bucket), map->elsize);
-            memcpy(bucket_item(bucket), bucket_item(entry), map->elsize);
+            memcpy(map->spare, bucket_item(bucket), map->el.size);
+            memcpy(bucket_item(bucket), bucket_item(entry), map->el.size);
             return map->spare;
 		}
         if (bucket->dib < entry->dib) {
@@ -280,7 +268,7 @@ void *hashmap_get(struct hashmap *map, const void *key) {
 			return NULL;
 		}
 		if (bucket->hash == hash &&
-            map->compare(key, bucket_item(bucket), map->udata) == 0)
+            map->el.compare(key, bucket_item(bucket), map->el.udata) == 0)
         {
             return bucket_item(bucket);
 		}
@@ -314,9 +302,9 @@ void *hashmap_delete(struct hashmap *map, void *key) {
 			return NULL;
 		}
 		if (bucket->hash == hash &&
-            map->compare(key, bucket_item(bucket), map->udata) == 0)
+            map->el.compare(key, bucket_item(bucket), map->el.udata) == 0)
         {
-            memcpy(map->spare, bucket_item(bucket), map->elsize);
+            memcpy(map->spare, bucket_item(bucket), map->el.size);
             bucket->dib = 0;
             for (;;) {
                 struct bucket *prev = bucket;
