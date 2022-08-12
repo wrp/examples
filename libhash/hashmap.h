@@ -10,6 +10,10 @@
 #include <stdint.h>
 
 struct hashmap;
+struct hash_method {
+	uint64_t seed[2];
+	uint64_t (*func)(const void *, uint64_t, uint64_t);
+};
 
 struct hashmap *hashmap_new(size_t elsize, size_t cap,
                             uint64_t seed0, uint64_t seed1,

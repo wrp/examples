@@ -18,6 +18,7 @@ struct bucket {
     uint64_t dib:16;
 };
 
+
 // hashmap is an open addressed hash map using robinhood hashing.
 struct hashmap {
     void *(*malloc)(size_t);
@@ -25,9 +26,7 @@ struct hashmap {
     bool oom;
     size_t elsize;
     size_t cap;
-    uint64_t seed0;
-    uint64_t seed1;
-    uint64_t (*hash)(const void *item, uint64_t seed0, uint64_t seed1);
+    struct hash_method hash;
     int (*compare)(const void *a, const void *b, void *udata);
     void (*elfree)(void *item);
     void *udata;
@@ -51,7 +50,7 @@ static void *bucket_item(struct bucket *entry) {
 }
 
 static uint64_t get_hash(struct hashmap *map, const void *key) {
-    return map->hash(key, map->seed0, map->seed1) << 16 >> 16;
+	return map->hash.func(key, map->hash.seed[0], map->hash.seed[1]) << 16 >> 16;
 }
 
 // hashmap_new_with_allocator returns a new hash map using a custom allocator.
@@ -92,9 +91,9 @@ struct hashmap *hashmap_new_with_allocator(
     memset(map, 0, sizeof(struct hashmap));
     map->elsize = elsize;
     map->bucketsz = bucketsz;
-    map->seed0 = seed0;
-    map->seed1 = seed1;
-    map->hash = hash;
+    map->hash.seed[0] = seed0;
+    map->hash.seed[1] = seed1;
+    map->hash.func = hash;
     map->compare = compare;
     map->elfree = elfree;
     map->udata = udata;
@@ -189,8 +188,8 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 static bool resize(struct hashmap *map, size_t new_cap) {
     struct hashmap *map2 = hashmap_new_with_allocator(
         map->malloc, map->free,
-        map->elsize, new_cap, map->seed1,
-                                       map->seed1, map->hash, map->compare,
+        map->elsize, new_cap, map->hash.seed[0],
+        map->hash.seed[1], map->hash.func, map->compare,
                                        map->elfree, map->udata);
     if (!map2) {
         return false;
