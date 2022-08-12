@@ -1,6 +1,12 @@
-// Copyright 2020 Joshua J Baker. All rights reserved.
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file.
+/*
+ * Copyright:
+ *   2020 Joshua J Baker
+ *   2022 William R. Pursell
+ * All rights reserved.
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file.
+ */
 
 #ifndef HASHMAP_H
 #define HASHMAP_H
