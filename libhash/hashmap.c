@@ -840,84 +840,101 @@ show_bench_results(void)
 }
 
 
-static void benchmarks() {
-    int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
-    N = getenv("N")?atoi(getenv("N")):5000000;
-    printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
-    srand(seed);
+static void
+benchmarks(void)
+{
+	int seed = getenv("SEED") ? atoi(getenv("SEED")) : time(NULL);
+	N = getenv("N") ? atoi(getenv("N")) : 5000000;
+	printf("seed = %d, count = %d, item_size = %zu\n", seed, N, sizeof N);
+	srand(seed);
 
+	int *vals = xmalloc(N * sizeof *vals);
+	for( int i = 0; i < N; i += 1 ){
+		vals[i] = i;
+	}
 
-    int *vals = xmalloc(N * sizeof(int));
-    for (int i = 0; i < N; i++) {
-        vals[i] = i;
-    }
+	shuffle(vals, N, sizeof *vals);
 
-    shuffle(vals, N, sizeof(int));
+	struct hashmap *map;
+	shuffle(vals, N, sizeof *vals);
 
-    struct hashmap *map;
-    shuffle(vals, N, sizeof(int));
+	struct hash_method hash = {hash_int, seed, seed};
+	map = hashmap_new_with_allocator(
+		xmalloc, xfree,
+		sizeof *vals,
+		0,
+		&hash,
+		compare_ints_udata,
+		NULL, NULL
+	);
 
-    struct hash_method hash = {hash_int, seed, seed};
-    map = hashmap_new_with_allocator(
-    	xmalloc, xfree,
-    	sizeof(int), 0,
-	&hash,
-	compare_ints_udata,
-                      NULL, NULL);
-    setup_benchmark("set"); for( int i = 0; i < N; i++ ){
-        int *v = hashmap_set(map, &vals[i]);
-        assert(!v);
-    }
-    show_bench_results();
+	setup_benchmark("set");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_set(map, &vals[i]);
+		assert(!v);
+	}
+	show_bench_results();
 
-    shuffle(vals, N, sizeof(int));
-    setup_benchmark("get"); for( int i = 0; i < N; i++ ) {
-        int *v = hashmap_get(map, &vals[i]);
-        assert(v && *v == vals[i]);
-    }
-    show_bench_results();
-    shuffle(vals, N, sizeof(int));
-    setup_benchmark("delete"); for( int i = 0; i < N; i++ ) {
-        int *v = hashmap_delete(map, &vals[i]);
-        assert(v && *v == vals[i]);
-    }
-    show_bench_results();
-    hashmap_free(map);
+	shuffle(vals, N, sizeof *vals);
 
-    map = hashmap_new_with_allocator(xmalloc, xfree,
-    	sizeof(int), N,
-	&hash, compare_ints_udata,
-                      NULL, NULL);
-    setup_benchmark("set (cap)"); for( int i = 0; i < N; i++ ) {
-        int *v = hashmap_set(map, &vals[i]);
-        assert(!v);
-    }
-    show_bench_results();
-    shuffle(vals, N, sizeof(int));
-    setup_benchmark("get (cap)"); for( int i = 0; i < N; i++ ) {
-        int *v = hashmap_get(map, &vals[i]);
-        assert(v && *v == vals[i]);
-    }
-    show_bench_results();
-    shuffle(vals, N, sizeof(int));
-    setup_benchmark("delete (cap)"); for( int i = 0; i < N; i++ ) {
-        int *v = hashmap_delete(map, &vals[i]);
-        assert(v && *v == vals[i]);
-    }
-    show_bench_results();
+	setup_benchmark("get");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_get(map, &vals[i]);
+		assert(v && *v == vals[i]);
+	}
+	show_bench_results();
 
-    hashmap_free(map);
+	shuffle(vals, N, sizeof *vals);
+	setup_benchmark("delete");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_delete(map, &vals[i]);
+		assert(v && *v == vals[i]);
+	}
+	show_bench_results();
+	hashmap_free(map);
 
+	map = hashmap_new_with_allocator(
+		xmalloc, xfree,
+		sizeof *vals, N,
+		&hash, compare_ints_udata,
+		NULL, NULL
+	);
+	setup_benchmark("set (cap)");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_set(map, &vals[i]);
+		assert(!v);
+	}
+	show_bench_results();
 
-    xfree(vals);
+	shuffle(vals, N, sizeof *vals);
+	setup_benchmark("get (cap)");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_get(map, &vals[i]);
+		assert(v && *v == vals[i]);
+	}
+	show_bench_results();
 
-    if (total_allocs != 0) {
-        fprintf(stderr, "total_allocs: expected 0, got %lu\n", total_allocs);
-        exit(1);
-    }
+	shuffle(vals, N, sizeof *vals);
+	setup_benchmark("delete (cap)");
+	for( int i = 0; i < N; i++ ){
+		int *v = hashmap_delete(map, &vals[i]);
+		assert(v && *v == vals[i]);
+	}
+	show_bench_results();
+
+	hashmap_free(map);
+
+	xfree(vals);
+
+	if( total_allocs != 0 ){
+		fprintf(stderr,
+			"total_allocs: expected 0, got %lu\n", total_allocs
+		);
+		exit(1);
+	}
 }
 
-int main() {
+int main(void) {
     if (getenv("BENCH")) {
         printf("Running hashmap.c benchmarks...\n");
         benchmarks();
