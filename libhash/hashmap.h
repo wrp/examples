@@ -14,14 +14,17 @@ struct hash_method {
 	uint64_t (*func)(const void *, uint64_t, uint64_t);
 	uint64_t seed[2];
 };
+struct hash_element {
+	size_t size;  /* Size in bytes of each element */
+	int (*compare)(const void *a, const void *b, void *udata);
+	void (*free)(void *item);
+	void *udata;  /* Data passed to comparison function */
+};
 
 struct hashmap * hashmap_new(
-	size_t,                     /* Size of each element */
-	size_t,                     /* Minimum initial capacity */
+	const struct hash_element *,
 	const struct hash_method *, /* Hash method, with seeds */
-	int (*compare)(const void *, const void *, void *udata),
-	void (*elfree)(void *item),
-	void *udata                 /* Data passed to comparison function */
+	size_t                      /* Minimum initial capacity */
 );
 struct hashmap *hashmap_new_with_allocator(
 	void *(*malloc)(size_t),

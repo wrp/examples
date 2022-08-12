@@ -133,19 +133,15 @@ hashmap_new_with_allocator(
 // unless you're storing some kind of reference data in the hash.
 struct hashmap *
 hashmap_new(
-	size_t elsize,
-	size_t cap,
-	const struct hash_method *hash,
-                            int (*compare)(const void *a, const void *b,
-                                           void *udata),
-                            void (*elfree)(void *item),
-                            void *udata)
-{
+	const struct hash_element *el,
+	const struct hash_method *hash, /* Hash method, with seeds */
+	size_t cap                      /* Minimum initial capacity */
+) {
     return hashmap_new_with_allocator(
         (_malloc?_malloc:malloc),
         (_free?_free:free),
-        elsize, cap, hash,
-	compare, elfree, udata
+        el->size, cap, hash,
+	el->compare, el->free, el->udata
     );
 }
 

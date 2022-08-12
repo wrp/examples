@@ -298,11 +298,13 @@ test_hash(struct hash_method *h, size_t cap)
 	 * the hash function.  Fifth arg is hash function, 6th is comparison,
 	 * 7th is free function, 8th is pointer passed to compar function.
 	 */
-	struct hashmap *map = hashmap_new(
-		sizeof *user + 1, /* Use wonky size to trigger code */
-		cap, h, user_compare,
-		free_el, NULL
-	);
+	struct hash_element el = {
+		.size = sizeof *user + 1, /* Use wonky size to trigger code */
+		.compare = user_compare,
+		.free = free_el,
+		.udata = NULL
+	};
+	struct hashmap *map = hashmap_new(&el, h, cap);
 
 	/*
 	 * Load all the test data and verify
@@ -362,11 +364,7 @@ test_hash(struct hash_method *h, size_t cap)
 
 	test_allocator_failures(h, cap);
 
-	map = hashmap_new(
-	        sizeof *user,
-	        cap, h, user_compare,
-	        free_el, NULL
-	);
+	map = hashmap_new(&el, h, cap);
 	char big_name[256];
 	for( int i = 1; i < 255; i++ ){
 	        big_name[i] = 'k';
