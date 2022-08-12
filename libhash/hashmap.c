@@ -82,10 +82,8 @@ hashmap_new_with_allocator(
     }
     memset(map, 0, sizeof(struct hashmap));
     map->el = *el;
+    map->hash = *hash;
     map->bucketsz = bucketsz;
-    map->hash.seed[0] = hash->seed[0];
-    map->hash.seed[1] = hash->seed[1];
-    map->hash.func = hash->func;
     map->spare = ((char*)map)+sizeof(struct hashmap);
     map->edata = (char*)map->spare+bucketsz;
     map->cap = cap;
