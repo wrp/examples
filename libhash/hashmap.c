@@ -553,8 +553,8 @@ uint64_t hashmap_murmur(const void *data, size_t len,
 
 //==============================================================================
 // TESTS AND BENCHMARKS
-// $ cc -DHASHMAP_TEST hashmap.c && ./a.out              # run tests
-// $ cc -DHASHMAP_TEST -O3 hashmap.c && BENCH=1 ./a.out  # run benchmarks
+// $ cc -DHASHMAP_TEST=1 hashmap.c && ./a.out      # run tests
+// $ cc -DHASHMAP_TEST=2 -O3 hashmap.c && ./a.out  # run benchmarks
 //==============================================================================
 #ifdef HASHMAP_TEST
 
@@ -570,8 +570,6 @@ static size_t deepcount(struct hashmap *map) {
 
 
 #pragma GCC diagnostic ignored "-Wextra"
-
-
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -644,7 +642,10 @@ static void free_str(void *item) {
     xfree(*(char**)item);
 }
 
-static void all() {
+#if HASHMAP_TEST == 1
+int
+main(void)
+{
     int seed = getenv("SEED")?atoi(getenv("SEED")):time(NULL);
     int N = getenv("N")?atoi(getenv("N")):2000;
     printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
@@ -799,7 +800,10 @@ static void all() {
         fprintf(stderr, "total_allocs: expected 0, got %lu\n", total_allocs);
         exit(1);
     }
+    return 0;
 }
+
+#elif HASHMAP_TEST == 2 /* benchmarks */
 
 size_t tmem;
 size_t tallocs;
@@ -840,8 +844,8 @@ show_bench_results(void)
 }
 
 
-static void
-benchmarks(void)
+int
+main(void) /* benchmarks */
 {
 	int seed = getenv("SEED") ? atoi(getenv("SEED")) : time(NULL);
 	N = getenv("N") ? atoi(getenv("N")) : 5000000;
@@ -932,16 +936,7 @@ benchmarks(void)
 		);
 		exit(1);
 	}
-}
-
-int
-main(void)
-{
-	if (getenv("BENCH")) {
-		benchmarks();
-	} else {
-		all();
-	}
 	return 0;
 }
+#endif
 #endif
