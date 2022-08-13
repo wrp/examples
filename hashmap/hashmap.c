@@ -159,6 +159,15 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 }
 
 
+static void
+swap(void *a, void *b, void *tmp, size_t s)
+{
+	memcpy(tmp, a, s);
+	memcpy(a, b, s);
+	memcpy(b, tmp, s);
+}
+
+
 static bool resize(struct hashmap *map, size_t new_cap) {
     struct hashmap *map2 = hashmap_new_with_allocator(
         map->malloc, map->free,
@@ -180,9 +189,7 @@ static bool resize(struct hashmap *map, size_t new_cap) {
                 break;
             }
             if (bucket->dib < entry->dib) {
-                memcpy(map2->spare, bucket, map->bucketsz);
-                memcpy(bucket, entry, map->bucketsz);
-                memcpy(entry, map2->spare, map->bucketsz);
+		swap(bucket, entry, map2->spare, map->bucketsz);
             }
             j = (j + 1) & map2->mask;
             entry->dib += 1;
@@ -196,6 +203,7 @@ static bool resize(struct hashmap *map, size_t new_cap) {
     map->free(map2);
     return true;
 }
+
 
 // hashmap_set inserts or replaces an item in the hash map. If an item is
 // replaced then it is returned otherwise NULL is returned. This operation
@@ -241,9 +249,7 @@ void *hashmap_set(struct hashmap *map, void *item) {
 		 * in the sequence.
 		 */
         if (bucket->dib < entry->dib) {
-            memcpy(map->spare, bucket, map->bucketsz);
-            memcpy(bucket, entry, map->bucketsz);
-            memcpy(entry, map->spare, map->bucketsz);
+		swap(bucket, entry, map->spare, map->bucketsz);
 		}
 		i = (i + 1) & map->mask;
         entry->dib += 1;
