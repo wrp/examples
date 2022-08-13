@@ -232,6 +232,14 @@ void *hashmap_set(struct hashmap *map, void *item) {
             memcpy(bucket->data, entry->data, map->el.size);
             return map->spare;
 		}
+		/* This is the crux of Robinhood.  dib (I'm not sure
+		 * what the original author intended this to mean, as
+		 * dib seems to be what is commonly referred to as
+		 * Probe Sequency Length (PSL)) is compared, and the
+		 * item with the higher value gets inserted, while
+		 * the entry with the lower value gets pushed back
+		 * in the sequence.
+		 */
         if (bucket->dib < entry->dib) {
             memcpy(map->spare, bucket, map->bucketsz);
             memcpy(bucket, entry, map->bucketsz);
