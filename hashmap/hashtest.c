@@ -393,6 +393,7 @@ main(int argc, char **argv)
 		test_hash(&h, *cap);
 	}
 	if( fail ){
+		fprintf(stderr, "seed = %d: ", seed);
 		fprintf(stderr, "%d test%s failed\n", fail, &"s"[fail == 1]);
 	}
 	return fail;
