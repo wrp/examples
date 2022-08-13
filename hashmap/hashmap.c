@@ -19,6 +19,7 @@
 struct bucket {
     uint64_t hash:48;
     uint64_t dib:16;
+    char data[0];
 };
 
 
@@ -45,7 +46,10 @@ static struct bucket *bucket_at(struct hashmap *map, size_t index) {
 }
 
 static void *bucket_item(struct bucket *entry) {
-    return ((char*)entry)+sizeof(struct bucket);
+
+    void *v = ((char*)entry)+sizeof(struct bucket);
+    assert( v == entry->data );
+    return v;
 }
 
 static uint64_t
@@ -129,7 +133,7 @@ free_elements(struct hashmap *map)
 		for( size_t i = 0; i < map->nbuckets; i += 1 ){
 			struct bucket *b = bucket_at(map, i);
 			if( b->dib ){
-				map->el.free(bucket_item(b));
+				map->el.free(b->data);
 			}
 		}
 	}
@@ -217,7 +221,7 @@ void *hashmap_set(struct hashmap *map, void *item) {
     struct bucket *entry = map->edata;
     entry->hash = get_hash(map, item);
     entry->dib = 1;
-    memcpy(bucket_item(entry), item, map->el.size);
+    memcpy(entry->data, item, map->el.size);
 
     size_t i = entry->hash & map->mask;
 	for (;;) {
@@ -228,11 +232,10 @@ void *hashmap_set(struct hashmap *map, void *item) {
 			return NULL;
 		}
         if (entry->hash == bucket->hash &&
-            map->el.compare(bucket_item(entry), bucket_item(bucket),
-                         map->el.udata) == 0)
+            map->el.compare(entry->data, bucket->data, map->el.udata) == 0)
         {
-            memcpy(map->spare, bucket_item(bucket), map->el.size);
-            memcpy(bucket_item(bucket), bucket_item(entry), map->el.size);
+            memcpy(map->spare, (bucket->data), map->el.size);
+            memcpy((bucket->data), (entry->data), map->el.size);
             return map->spare;
 		}
         if (bucket->dib < entry->dib) {
@@ -257,9 +260,9 @@ void *hashmap_get(struct hashmap *map, const void *key) {
 			return NULL;
 		}
 		if (bucket->hash == hash &&
-            map->el.compare(key, bucket_item(bucket), map->el.udata) == 0)
+            map->el.compare(key, bucket->data, map->el.udata) == 0)
         {
-            return bucket_item(bucket);
+            return bucket->data;
 		}
 		i = (i + 1) & map->mask;
 	}
@@ -274,7 +277,7 @@ void *hashmap_probe(struct hashmap *map, uint64_t position) {
     if (!bucket->dib) {
 		return NULL;
 	}
-    return bucket_item(bucket);
+    return bucket->data;
 }
 
 
@@ -291,9 +294,9 @@ void *hashmap_delete(struct hashmap *map, void *key) {
 			return NULL;
 		}
 		if (bucket->hash == hash &&
-            map->el.compare(key, bucket_item(bucket), map->el.udata) == 0)
+            map->el.compare(key, bucket->data, map->el.udata) == 0)
         {
-            memcpy(map->spare, bucket_item(bucket), map->el.size);
+            memcpy(map->spare, bucket->data, map->el.size);
             bucket->dib = 0;
             for (;;) {
                 struct bucket *prev = bucket;
@@ -354,7 +357,7 @@ bool hashmap_scan(struct hashmap *map,
     for (size_t i = 0; i < map->nbuckets; i++) {
         struct bucket *bucket = bucket_at(map, i);
         if (bucket->dib) {
-            if (!iter(bucket_item(bucket), udata)) {
+            if (!iter(bucket->data, udata)) {
                 return false;
             }
         }
