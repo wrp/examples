@@ -228,8 +228,8 @@ void *hashmap_set(struct hashmap *map, void *item) {
         if (entry->hash == bucket->hash &&
             map->el.compare(entry->data, bucket->data, map->el.udata) == 0)
         {
-            memcpy(map->spare, (bucket->data), map->el.size);
-            memcpy((bucket->data), (entry->data), map->el.size);
+            memcpy(map->spare, bucket->data, map->el.size);
+            memcpy(bucket->data, entry->data, map->el.size);
             return map->spare;
 		}
         if (bucket->dib < entry->dib) {
