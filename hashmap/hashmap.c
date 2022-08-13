@@ -45,12 +45,6 @@ static struct bucket *bucket_at(struct hashmap *map, size_t index) {
     return (struct bucket*)(((char*)map->buckets)+(map->bucketsz*index));
 }
 
-static void *bucket_item(struct bucket *entry) {
-
-    void *v = ((char*)entry)+sizeof(struct bucket);
-    assert( v == entry->data );
-    return v;
-}
 
 static uint64_t
 get_hash(struct hashmap *map, const void *key)
