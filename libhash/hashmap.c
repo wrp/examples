@@ -35,7 +35,6 @@ struct hashmap {
     size_t count;
     size_t mask;
     size_t growat;
-    size_t shrinkat;
     void *buckets;
     void *spare;
     void *edata;
@@ -107,7 +106,6 @@ hashmap_new_with_allocator(
 	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 	map->growat = map->nbuckets * 0.75;
-	map->shrinkat = map->nbuckets * 0.10;
 	map->malloc = _malloc;
 	map->free = _free;
 	return map;
@@ -160,7 +158,6 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
     memset(map->buckets, 0, map->bucketsz*map->nbuckets);
     map->mask = map->nbuckets-1;
     map->growat = map->nbuckets*0.75;
-    map->shrinkat = map->nbuckets*0.10;
 }
 
 
@@ -198,7 +195,6 @@ static bool resize(struct hashmap *map, size_t new_cap) {
     map->nbuckets = map2->nbuckets;
     map->mask = map2->mask;
     map->growat = map2->growat;
-    map->shrinkat = map2->shrinkat;
     map->free(map2);
     return true;
 }
@@ -311,12 +307,6 @@ void *hashmap_delete(struct hashmap *map, void *key) {
                 prev->dib--;
             }
             map->count--;
-            if (map->nbuckets > map->cap && map->count <= map->shrinkat) {
-                // Ignore the return value. It's ok for the resize operation to
-                // fail to allocate enough memory because a shrink operation
-                // does not change the integrity of the data.
-                resize(map, map->nbuckets/2);
-            }
 			return map->spare;
 		}
 		i = (i + 1) & map->mask;
