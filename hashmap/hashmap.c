@@ -209,38 +209,44 @@ static bool resize(struct hashmap *map, size_t new_cap) {
 // replaced then it is returned otherwise NULL is returned. This operation
 // may allocate memory. If the system is unable to allocate additional
 // memory then NULL is returned and hashmap_oom() returns true.
-void *hashmap_set(struct hashmap *map, void *item) {
-    assert( item != NULL );
-    map->oom = false;
-    if (map->count == map->growat) {
-        if (!resize(map, map->nbuckets*2)) {
-            map->oom = true;
-            return NULL;
-        }
-    }
-
-
-    struct bucket *entry = map->edata;
-    entry->hash = get_hash(map, item);
-    entry->dib = 1;
-    memcpy(entry->data, item, map->el.size);
-
-    size_t i = entry->hash & map->mask;
-	for (;;) {
-        struct bucket *bucket = bucket_at(map, i);
-        if (bucket->dib == 0) {
-            memcpy(bucket, entry, map->bucketsz);
-            map->count++;
+void *
+hashmap_set(struct hashmap *map, void *item)
+{
+	assert( item != NULL );
+	map->oom = false;
+	if( map->count == map->growat ){
+		if( !resize(map, 2 * map->nbuckets) ){
+			map->oom = true;
 			return NULL;
 		}
-        if (entry->hash == bucket->hash &&
-            map->el.compare(entry->data, bucket->data, map->el.udata) == 0)
-        {
-            memcpy(map->spare, bucket->data, map->el.size);
-            memcpy(bucket->data, entry->data, map->el.size);
-            return map->spare;
+	}
+
+	int (*cmp)(const void *, const void *, void *) = map->el.compare;
+	struct bucket *entry = map->edata;
+	entry->hash = get_hash(map, item);
+	entry->dib = 1;
+	memcpy(entry->data, item, map->el.size);
+
+	size_t i = entry->hash & map->mask;
+	for (;;) {
+		struct bucket *bucket = bucket_at(map, i);
+		/* Empty bucket found; insert */
+		if( bucket->dib == 0 ){
+			memcpy(bucket, entry, map->bucketsz);
+			map->count++;
+			return NULL;
 		}
-		/* This is the crux of Robinhood.  dib (I'm not sure
+		/* Entry found; replace */
+		if( entry->hash == bucket->hash &&
+			! cmp(entry->data, bucket->data, map->el.udata)
+		){
+			memcpy(map->spare, bucket->data, map->el.size);
+			memcpy(bucket->data, entry->data, map->el.size);
+			return map->spare;
+		}
+		/*
+		 * Bucket full; find an empty hash slot
+		 * This is the crux of Robinhood.  dib (I'm not sure
 		 * what the original author intended this to mean, as
 		 * dib seems to be what is commonly referred to as
 		 * Probe Sequency Length (PSL)) is compared, and the
@@ -248,11 +254,11 @@ void *hashmap_set(struct hashmap *map, void *item) {
 		 * the entry with the lower value gets pushed back
 		 * in the sequence.
 		 */
-        if (bucket->dib < entry->dib) {
-		swap(bucket, entry, map->spare, map->bucketsz);
+		if( bucket->dib < entry->dib ){
+			swap(bucket, entry, map->spare, map->bucketsz);
 		}
 		i = (i + 1) & map->mask;
-        entry->dib += 1;
+		entry->dib += 1;
 	}
 }
 
