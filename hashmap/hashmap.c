@@ -329,11 +329,17 @@ hashmap_delete(struct hashmap *map, void *key)
 		bucket = bucket_at(map, i);
 
 		if( bucket->dib <= 1 ){
+			/* This is the tail of the filled probe sequence.
+			 * As a minor optimization, avoid the unnecessary
+			 * memcpy and just decrement to zero.  ie, this
+			 * is really bucket->dib = 0 followed by memcpy.
+			 */
 			prev->dib = 0;
 			break;
 		}
+		bucket->dib -= 1;
 		memcpy(prev, bucket, map->bucketsz);
-		prev->dib -= 1;
+		assert(prev->dib != 0);
 	}
 	map->count -= 1;
 	return map->spare;
