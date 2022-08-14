@@ -296,8 +296,10 @@ void *hashmap_probe(struct hashmap *map, uint64_t position) {
 }
 
 
-// hashmap_delete removes an item from the hash map and returns it. If the
-// item is not found then NULL is returned.
+/*
+ * Remove an item from the hash map and return it.  If the
+ * item is not found return NULL.
+ */
 void *
 hashmap_delete(struct hashmap *map, void *key)
 {
@@ -305,19 +307,17 @@ hashmap_delete(struct hashmap *map, void *key)
 	assert( map != NULL );
 	map->oom = false;
 	uint64_t hash = get_hash(map, key);
-	size_t i;
-	struct bucket *bucket;
+	size_t i = hash & map->mask;
+	struct bucket *bucket = bucket_at(map, i);
 
-	for( i = hash & map->mask;; i = (i + 1) & map->mask ){
-		bucket = bucket_at(map, i);
-		if( !bucket->dib ){
-			return NULL;
-		}
-		if( bucket->hash == hash &&
-			map->el.compare(key, bucket->data, map->el.udata) == 0
-		) {
-			break;
-		}
+	while(
+		bucket->dib && ( bucket->hash != hash ||
+		map->el.compare(key, bucket->data, map->el.udata) )
+	){
+		bucket = bucket_at(map, i = (i + 1) & map->mask);
+	}
+	if( !bucket->dib ){
+		return NULL;
 	}
 
 	memcpy(map->spare, bucket->data, map->el.size);
