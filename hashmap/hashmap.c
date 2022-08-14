@@ -268,22 +268,24 @@ hashmap_set(struct hashmap *map, void *item)
 	}
 }
 
-// hashmap_get returns the item based on the provided key. If the item is not
-// found then NULL is returned.
-void *hashmap_get(struct hashmap *map, const void *key) {
-    assert( key != NULL );
-    uint64_t hash = get_hash(map, key);
+/*
+ * Return the item based that matches the key, or NULL.
+ */
+void *
+hashmap_get(struct hashmap *map, const void *key)
+{
+	assert( key != NULL );
+	uint64_t hash = get_hash(map, key);
 	size_t i = hash & map->mask;
-	for (;;) {
-        struct bucket *bucket = bucket_at(map, i);
-		if (!bucket->dib) {
-			return NULL;
-		}
+	struct bucket *bucket = bucket_at(map, i);
+	while( bucket->dib ){
 		if( hash_match(map, bucket, hash, key) ){
 			return bucket->data;
 		}
-		i = (i + 1) & map->mask;
+		/* TODO: implement a clean iterator function */
+		bucket = bucket_at(map, i = (i + 1) & map->mask);
 	}
+	return NULL;
 }
 
 // hashmap_probe returns the item in the bucket at position or NULL if an item
