@@ -411,9 +411,11 @@ bool hashmap_scan(struct hashmap *map,
 //
 // default: SipHash-2-4
 //-----------------------------------------------------------------------------
-static uint64_t SIP64(const uint8_t *in, const size_t inlen,
-                      uint64_t seed0, uint64_t seed1)
+uint64_t
+hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 {
+	const uint8_t *in = data;
+
 #define U8TO64_LE(p) \
     {  (((uint64_t)((p)[0])) | ((uint64_t)((p)[1]) << 8) | \
         ((uint64_t)((p)[2]) << 16) | ((uint64_t)((p)[3]) << 24) | \
@@ -550,11 +552,4 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
     ((uint32_t*)out)[2] = h3;
     ((uint32_t*)out)[3] = h4;
     return *(uint64_t*)out;
-}
-
-// hashmap_sip returns a hash value for `data` using SipHash-2-4.
-uint64_t hashmap_sip(const void *data, size_t len,
-                     uint64_t seed0, uint64_t seed1)
-{
-    return SIP64((uint8_t*)data, len, seed0, seed1);
 }
