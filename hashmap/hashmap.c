@@ -205,6 +205,14 @@ static bool resize(struct hashmap *map, size_t new_cap) {
 }
 
 
+static inline int
+hash_match(const struct hashmap *m, const struct bucket *a,
+	uint64_t h, const void *data)
+{
+	return a->hash == h && ! m->el.compare(a->data, data, m->el.udata);
+}
+
+
 // hashmap_set inserts or replaces an item in the hash map. If an item is
 // replaced then it is returned otherwise NULL is returned. This operation
 // may allocate memory. If the system is unable to allocate additional
@@ -222,7 +230,6 @@ hashmap_set(struct hashmap *map, void *item)
 		}
 	}
 
-	int (*cmp)(const void *, const void *, void *) = map->el.compare;
 	struct bucket *entry = map->edata;
 	entry->hash = get_hash(map, item);
 	entry->dib = 1;
@@ -238,9 +245,7 @@ hashmap_set(struct hashmap *map, void *item)
 			return NULL;
 		}
 		/* Entry found; replace */
-		if( entry->hash == bucket->hash &&
-			! cmp(entry->data, bucket->data, map->el.udata)
-		){
+		if( hash_match(map, entry, bucket->hash, bucket->data) ){
 			memcpy(map->spare, bucket->data, map->el.size);
 			memcpy(bucket->data, entry->data, map->el.size);
 			return map->spare;
@@ -274,10 +279,8 @@ void *hashmap_get(struct hashmap *map, const void *key) {
 		if (!bucket->dib) {
 			return NULL;
 		}
-		if (bucket->hash == hash &&
-            map->el.compare(key, bucket->data, map->el.udata) == 0)
-        {
-            return bucket->data;
+		if( hash_match(map, bucket, hash, key) ){
+			return bucket->data;
 		}
 		i = (i + 1) & map->mask;
 	}
@@ -310,12 +313,10 @@ hashmap_delete(struct hashmap *map, void *key)
 	size_t i = hash & map->mask;
 	struct bucket *bucket = bucket_at(map, i);
 
-	while(
-		bucket->dib && ( bucket->hash != hash ||
-		map->el.compare(key, bucket->data, map->el.udata) )
-	){
+	while( bucket->dib && ! hash_match(map, bucket, hash, key) ){
 		bucket = bucket_at(map, i = (i + 1) & map->mask);
 	}
+
 	if( !bucket->dib ){
 		return NULL;
 	}
