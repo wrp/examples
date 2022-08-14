@@ -212,6 +212,7 @@ static bool resize(struct hashmap *map, size_t new_cap) {
 void *
 hashmap_set(struct hashmap *map, void *item)
 {
+	assert( map != NULL );
 	assert( item != NULL );
 	map->oom = false;
 	if( map->count == map->growat ){
@@ -297,37 +298,45 @@ void *hashmap_probe(struct hashmap *map, uint64_t position) {
 
 // hashmap_delete removes an item from the hash map and returns it. If the
 // item is not found then NULL is returned.
-void *hashmap_delete(struct hashmap *map, void *key) {
-    assert( key != NULL );
-    map->oom = false;
-    uint64_t hash = get_hash(map, key);
-	size_t i = hash & map->mask;
-	for (;;) {
-        struct bucket *bucket = bucket_at(map, i);
-		if (!bucket->dib) {
+void *
+hashmap_delete(struct hashmap *map, void *key)
+{
+	assert( key != NULL );
+	assert( map != NULL );
+	map->oom = false;
+	uint64_t hash = get_hash(map, key);
+	size_t i;
+	struct bucket *bucket;
+
+	for( i = hash & map->mask;; i = (i + 1) & map->mask ){
+		bucket = bucket_at(map, i);
+		if( !bucket->dib ){
 			return NULL;
 		}
-		if (bucket->hash == hash &&
-            map->el.compare(key, bucket->data, map->el.udata) == 0)
-        {
-            memcpy(map->spare, bucket->data, map->el.size);
-            bucket->dib = 0;
-            for (;;) {
-                struct bucket *prev = bucket;
-                i = (i + 1) & map->mask;
-                bucket = bucket_at(map, i);
-                if (bucket->dib <= 1) {
-                    prev->dib = 0;
-                    break;
-                }
-                memcpy(prev, bucket, map->bucketsz);
-                prev->dib--;
-            }
-            map->count--;
-			return map->spare;
+		if( bucket->hash == hash &&
+			map->el.compare(key, bucket->data, map->el.udata) == 0
+		) {
+			break;
 		}
-		i = (i + 1) & map->mask;
 	}
+
+	memcpy(map->spare, bucket->data, map->el.size);
+
+	/* Walk the  probe sequence and move buckets */
+	for( ;; ){
+		struct bucket *prev = bucket;
+		i = (i + 1) & map->mask;
+		bucket = bucket_at(map, i);
+
+		if( bucket->dib <= 1 ){
+			prev->dib = 0;
+			break;
+		}
+		memcpy(prev, bucket, map->bucketsz);
+		prev->dib -= 1;
+	}
+	map->count -= 1;
+	return map->spare;
 }
 
 /* Return the number of items in the hash map. */

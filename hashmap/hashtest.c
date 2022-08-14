@@ -261,11 +261,11 @@ test_collisions(struct hashmap *m, size_t cap)
 
 	/* Delete one of the entries */
 	tp = hashmap_delete(m, index);
-	expect( tp && tp->y == 2);
+	expect( tp && tp->y == 2 );
 
 	/* Ensure we can still get the other one */
 	tp = hashmap_get(m, index + 1);
-	expect( tp && tp->y == 3);
+	expect( tp && tp->y == 3 );
 
 	/* Add entries to trigger a resize, then delete to trigger
 	 * a shrink.
