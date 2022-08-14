@@ -288,16 +288,14 @@ hashmap_get(struct hashmap *map, const void *key)
 	return NULL;
 }
 
-// hashmap_probe returns the item in the bucket at position or NULL if an item
-// is not set for that bucket. The position is 'moduloed' by the number of
-// buckets in the hashmap.
-void *hashmap_probe(struct hashmap *map, uint64_t position) {
-    size_t i = position & map->mask;
-    struct bucket *bucket = bucket_at(map, i);
-    if (!bucket->dib) {
-		return NULL;
-	}
-    return bucket->data;
+/*
+ * Return the item in the bucket at position or NULL.
+ */
+void *
+hashmap_probe(struct hashmap *map, uint64_t position)
+{
+	struct bucket *bucket = bucket_at(map, position & map->mask);
+	return bucket->dib ? bucket->data : NULL;
 }
 
 
