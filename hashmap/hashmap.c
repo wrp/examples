@@ -159,6 +159,7 @@ void hashmap_clear(struct hashmap *map, bool update_cap) {
 }
 
 
+/* Exchange data from a to b, leaving a in tmp */
 static void
 swap(void *a, void *b, void *tmp, size_t s)
 {
@@ -213,10 +214,11 @@ hash_match(const struct hashmap *m, const struct bucket *a,
 }
 
 
-// hashmap_set inserts or replaces an item in the hash map. If an item is
-// replaced then it is returned otherwise NULL is returned. This operation
-// may allocate memory. If the system is unable to allocate additional
-// memory then NULL is returned and hashmap_oom() returns true.
+/*
+ * Insert or replace an item in the hash map.  Return NULL or the
+ * replaced item.  This operation may allocate memory; if memory is
+ * not available, NULL is returned and hashmap_oom() will return true.
+ */
 void *
 hashmap_set(struct hashmap *map, void *item)
 {
