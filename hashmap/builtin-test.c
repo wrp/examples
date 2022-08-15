@@ -1,10 +1,16 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
 #include "hashmap.h"
+
+int fail = 0;  /* Count of failed tests */
+#define assert(x) if( !(x) ){ \
+	fail += 1; \
+	fprintf(stderr, "Test failure in %s at line %d: %s\n", \
+		__FILE__, __LINE__, #x); \
+	}
 
 static bool rand_alloc_fail = false;
 static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
@@ -220,5 +226,5 @@ main(int argc, char **argv)
         fprintf(stderr, "total_allocs: expected 0, got %lu\n", total_allocs);
         exit(1);
     }
-    return 0;
+    return fail;
 }
