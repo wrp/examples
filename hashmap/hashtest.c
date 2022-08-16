@@ -232,7 +232,7 @@ test_deletion(struct hashmap *m, size_t cap)
 
 
 static void
-test_collisions(struct hashmap *m, size_t cap)
+test_collisions(size_t cap)
 {
 	/* Create a new map with trivial hash to test collisions */
 	/* TODO: this should be in a separate test */
@@ -245,7 +245,7 @@ test_collisions(struct hashmap *m, size_t cap)
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
 	struct hash_method hash = { identity_hash };
 
-	m = hashmap_new_with_allocator(
+	struct hashmap *m = hashmap_new_with_allocator(
 		malloc, free,
 		&el, &hash,
 		cap
@@ -266,8 +266,19 @@ test_collisions(struct hashmap *m, size_t cap)
 	/* Ensure we can still get the other one */
 	tp = hashmap_get(m, index + 1);
 	expect( tp && tp->y == 3 );
+}
 
-	/* Add entries to trigger a resize, then delete to trigger
+static void
+test_resize(size_t cap)
+{
+	struct two_ints t;
+	struct two_ints *tp;
+	struct hash_method h = { identity_hash, rand(), rand() };
+	struct hash_element el = { .size = sizeof t, .compare = int_compare };
+	struct hashmap *m = hashmap_new(&el, &h, cap);
+
+	/*
+	 * Add entries to trigger a resize, then delete to trigger
 	 * a shrink.
 	 */
 	 for(size_t i = 0; i < cap; i++ ){
@@ -345,7 +356,8 @@ test_hash(struct hash_method *h, size_t cap)
 	expect( user != NULL && user->age == 10 );
 
 	test_deletion(map, cap);
-	test_collisions(map, cap);
+	test_collisions(cap);
+	test_resize(cap);
 	test_probe(map, h, cap);
 
 	load_data(map, load, NULL);
