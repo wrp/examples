@@ -247,7 +247,9 @@ hashmap_set(struct hashmap *map, void *item)
 			return NULL;
 		}
 		/* Entry found; replace */
-		if( hash_match(map, entry, bucket->hash, bucket->data) ){
+		if( hash_match(map, bucket, entry->hash, entry->data) ){
+			assert(entry->dib ==  bucket->dib);
+			assert(entry->hash ==  bucket->hash);
 			memcpy(map->spare, bucket->data, map->el.size);
 			memcpy(bucket->data, entry->data, map->el.size);
 			return map->spare;
