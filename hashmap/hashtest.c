@@ -235,7 +235,6 @@ static void
 test_collisions(size_t cap)
 {
 	/* Create a new map with trivial hash to test collisions */
-	/* TODO: this should be in a separate test */
 
 	cap = max(cap, 16);
 
@@ -244,12 +243,8 @@ test_collisions(size_t cap)
 	struct two_ints *tp;
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
 	struct hash_method hash = { identity_hash };
+	struct hashmap *m = hashmap_new(&el, &hash, cap);
 
-	struct hashmap *m = hashmap_new_with_allocator(
-		malloc, free,
-		&el, &hash,
-		cap
-	);
 	hashmap_set(m, &t);
 	t.x += cap;
 	t.y = 3;
@@ -266,6 +261,40 @@ test_collisions(size_t cap)
 	/* Ensure we can still get the other one */
 	tp = hashmap_get(m, index + 1);
 	expect( tp && tp->y == 3 );
+
+	/* Create a cluster */
+	for( int i = 0; i < 4; i ++ ){
+		t.x = 10 + i * cap;
+		t.y = i;
+		hashmap_set(m, &t);
+	}
+	/* Insert one bucket before the cluster */
+	t.x = 9;
+	t.y = 4;
+	hashmap_set(m, &t);
+	/* 2nd insert one before the cluster should cause a cascade */
+	t.x = 9 + cap;
+	t.y = 5;
+	hashmap_set(m, &t);
+
+	index[0] = 9;
+	tp = hashmap_get(m, index);
+	expect( tp && tp->y == 4 );
+
+	index[0] = 9 + cap;
+	tp = hashmap_get(m, index);
+	expect( tp && tp->y == 5 );
+
+	/* Key 10 should now be at end of the cluster; replace it */
+	index[0] = 10;
+	tp = hashmap_get(m, index);
+	expect( tp && tp->y == 0 );
+	t.x = 10;
+	t.y = 15;
+	hashmap_set(m, &t);
+	tp = hashmap_get(m, index);
+	expect( tp && tp->y == 15 );
+
 }
 
 static void
