@@ -232,26 +232,30 @@ hashmap_set(struct hashmap *map, void *item)
 		}
 	}
 
-	struct bucket *entry = map->edata;
-	entry->hash = get_hash(map, item);
-	entry->dib = 1;
-	memcpy(entry->data, item, map->el.size);
+	struct bucket *entry = NULL;
+	uint64_t hash = get_hash(map, item);
+	uint64_t dib = 1;
+	/* entry->hash = get_hash(map, item); */
+	/* entry->dib = 1; */
+	/* memcpy(entry->data, item, map->el.size); */
 
-	size_t i = entry->hash & map->mask;
-	for (;;) {
+	size_t i = hash & map->mask;
+	for( ;; ){
 		struct bucket *bucket = bucket_at(map, i);
 		/* Empty bucket found; insert */
 		if( bucket->dib == 0 ){
-			memcpy(bucket, entry, map->bucketsz);
+			bucket->dib = dib;
+			bucket->hash = hash;
+			memcpy(bucket->data, item, map->el.size);
 			map->count++;
 			return NULL;
 		}
 		/* Entry found; replace */
-		if( hash_match(map, bucket, entry->hash, entry->data) ){
-			assert(entry->dib ==  bucket->dib);
-			assert(entry->hash ==  bucket->hash);
+		if( hash_match(map, bucket, hash, item) ){
+			assert(entry == NULL || entry->dib == bucket->dib);
+			assert(entry == NULL || entry->hash ==  bucket->hash);
 			memcpy(map->spare, bucket->data, map->el.size);
-			memcpy(bucket->data, entry->data, map->el.size);
+			memcpy(bucket->data, item, map->el.size);
 			return map->spare;
 		}
 		/*
@@ -264,11 +268,20 @@ hashmap_set(struct hashmap *map, void *item)
 		 * the entry with the lower value gets pushed back
 		 * in the sequence.
 		 */
-		if( bucket->dib < entry->dib ){
+		if( bucket->dib < dib ){
+			if( entry == NULL ){
+				entry = map->edata;
+				entry->hash = hash;
+				memcpy(entry->data, item, map->el.size);
+			}
+			entry->dib = dib;
 			swap(bucket, entry, map->spare, map->bucketsz);
+			item = entry->data;
+			dib = entry->dib++;
+			hash = entry->hash;
 		}
+		dib += 1;
 		i = (i + 1) & map->mask;
-		entry->dib += 1;
 	}
 }
 
