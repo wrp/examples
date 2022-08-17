@@ -235,12 +235,8 @@ hashmap_set(struct hashmap *map, void *item)
 	struct bucket *entry = NULL;
 	uint64_t hash = get_hash(map, item);
 	uint64_t dib = 1;
-	/* entry->hash = get_hash(map, item); */
-	/* entry->dib = 1; */
-	/* memcpy(entry->data, item, map->el.size); */
 
-	size_t i = hash & map->mask;
-	for( ;; ){
+	for( size_t i = hash & map->mask; ; i = (i + 1) & map->mask ){
 		struct bucket *bucket = bucket_at(map, i);
 		/* Empty bucket found; insert */
 		if( bucket->dib == 0 ){
@@ -281,7 +277,6 @@ hashmap_set(struct hashmap *map, void *item)
 			hash = entry->hash;
 		}
 		dib += 1;
-		i = (i + 1) & map->mask;
 	}
 }
 
