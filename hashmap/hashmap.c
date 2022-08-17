@@ -165,13 +165,14 @@ hashmap_clear(struct hashmap *map, size_t new_cap)
 }
 
 
-/* Exchange data from a to b, leaving a in tmp */
+/* Exchange data from bucket a to b, leaving a in m->spare */
 static void
-swap(void *a, void *b, void *tmp, size_t s)
+swap(struct hashmap *m, void *a, void *b)
 {
-	memcpy(tmp, a, s);
+	size_t s = m->bucketsz;
+	memcpy(m->spare, a, s);
 	memcpy(a, b, s);
-	memcpy(b, tmp, s);
+	memcpy(b, m->spare, s);
 }
 
 
@@ -200,15 +201,15 @@ resize(struct hashmap *map, size_t new_cap)
 		}
 		entry->dib = 1;
 		size_t j = entry->hash & map2->mask;
-		struct bucket *bucket = bucket_at(map2, j);
-		for( ; 0 != (bucket = bucket_at(map2, j))->dib; ){
-			if( bucket->dib < entry->dib ){
-				swap(bucket, entry, map2->spare, map->bucketsz);
+		struct bucket *b = bucket_at(map2, j);
+		while( 0 != (b = bucket_at(map2, j))->dib ){
+			if( b->dib < entry->dib ){
+				swap(map2, b, entry);
 			}
 			j = (j + 1) & map2->mask;
 			entry->dib += 1;
 		}
-                memcpy(bucket, entry, map->bucketsz);
+                memcpy(b, entry, map->bucketsz);
 
 	}
 	map->free(map->buckets);
@@ -286,7 +287,7 @@ hashmap_set(struct hashmap *map, void *item)
 				memcpy(entry->data, item, map->el.size);
 			}
 			entry->dib = dib;
-			swap(bucket, entry, map->spare, map->bucketsz);
+			swap(map, bucket, entry);
 			item = entry->data;
 			dib = entry->dib++;
 			hash = entry->hash;
