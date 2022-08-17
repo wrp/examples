@@ -161,12 +161,12 @@ hashmap_clear(struct hashmap *map, size_t new_cap)
 		if( new_buckets ){
 			map->free(map->buckets);
 			map->buckets = new_buckets;
-			map->nbuckets = map->cap;
-			map->mask = map->nbuckets - 1;
-			map->growat = map->nbuckets * 0.75;
 		}
+		map->nbuckets = map->cap;
 	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
+	map->mask = map->nbuckets - 1;
+	map->growat = map->nbuckets * 0.75;
 }
 
 
