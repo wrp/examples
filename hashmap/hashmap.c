@@ -175,40 +175,49 @@ swap(void *a, void *b, void *tmp, size_t s)
 }
 
 
-static bool resize(struct hashmap *map, size_t new_cap) {
-    struct hashmap *map2 = hashmap_new_with_allocator(
-        map->malloc, map->free,
-	&map->el, &map->hash, new_cap);
-    if (!map2) {
-        return false;
-    }
-    for (size_t i = 0; i < map->nbuckets; i++) {
-        struct bucket *entry = bucket_at(map, i);
-        if (!entry->dib) {
-            continue;
-        }
-        entry->dib = 1;
-        size_t j = entry->hash & map2->mask;
-        for (;;) {
-            struct bucket *bucket = bucket_at(map2, j);
-            if (bucket->dib == 0) {
-                memcpy(bucket, entry, map->bucketsz);
-                break;
-            }
-            if (bucket->dib < entry->dib) {
-		swap(bucket, entry, map2->spare, map->bucketsz);
-            }
-            j = (j + 1) & map2->mask;
-            entry->dib += 1;
-        }
+static bool
+resize(struct hashmap *map, size_t new_cap)
+{
+	struct hashmap *map2 = hashmap_new_with_allocator(
+		map->malloc,
+		map->free,
+		&map->el,
+		&map->hash,
+		new_cap
+	);
+	if( !map2 ){
+		return false;
 	}
-    map->free(map->buckets);
-    map->buckets = map2->buckets;
-    map->nbuckets = map2->nbuckets;
-    map->mask = map2->mask;
-    map->growat = map2->growat;
-    map->free(map2);
-    return true;
+	/* Insert each element from map into map2.  We know that there
+	 * are no duplicates, so we can avoid checking for that.  TODO:
+	 * clean this up; there is much redundant code here that overlaps
+	 * hashmap_set()
+	 */
+	for( size_t i = 0; i < map->nbuckets; i += 1 ){
+		struct bucket *entry = bucket_at(map, i);
+		if( !entry->dib ){
+			continue;
+		}
+		entry->dib = 1;
+		size_t j = entry->hash & map2->mask;
+		struct bucket *bucket = bucket_at(map2, j);
+		for( ; 0 != (bucket = bucket_at(map2, j))->dib; ){
+			if( bucket->dib < entry->dib ){
+				swap(bucket, entry, map2->spare, map->bucketsz);
+			}
+			j = (j + 1) & map2->mask;
+			entry->dib += 1;
+		}
+                memcpy(bucket, entry, map->bucketsz);
+
+	}
+	map->free(map->buckets);
+	map->buckets = map2->buckets;
+	map->nbuckets = map2->nbuckets;
+	map->mask = map2->mask;
+	map->growat = map2->growat;
+	map->free(map2);
+	return true;
 }
 
 
