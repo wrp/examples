@@ -19,9 +19,9 @@
 #include "hashmap.h"
 
 struct bucket {
-    uint64_t hash:48;
-    uint64_t dib:16;
-    char data[0];
+	uint64_t hash:48;
+	uint64_t dib:16;
+	char data[0];
 };
 
 struct hashmap {
@@ -57,8 +57,7 @@ get_hash(struct hashmap *map, const void *key)
 }
 
 /*
- * return a new hash map using a custom allocator.
- * See hashmap_new for more details
+ * Return a new hash map.
  */
 struct hashmap *
 hashmap_new_with_allocator(
@@ -77,15 +76,14 @@ hashmap_new_with_allocator(
 	cap = ncap;
 
 	/*
-	 * bucketsz is the size of a single bucket: enough
-	 * to hold one element plus metadata in a leading struct bucket
+	 * bucketsz is the size of a single bucket (padded to align a
+	 * uintptr_t) and is large enough to hold one element plus metadata
 	 */
 	size_t bucketsz = sizeof(struct bucket) + el->size;
-
-	/* Ensure that buckets are aligned well enough for uintptr_t */
-	while( bucketsz & (sizeof(uintptr_t) - 1)) {
+	while( bucketsz & (sizeof(uintptr_t) - 1) ){
 		bucketsz++;
 	}
+
 	/* hashmap + spare + edata */
 	struct hashmap *map = _malloc(sizeof *map  + 2 * bucketsz);
 	if( !map ){
