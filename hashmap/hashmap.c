@@ -29,7 +29,6 @@ struct hashmap {
 	void (*free)(void *);
 	bool oom;
 	struct hash_element el;
-	size_t cap;              /* Initial capacity, padded to a power of 2 */
 	struct hash_method hash; /* User defined hash method */
 	size_t bucketsz;         /* Size of each bucket, padded for alignment */
 	size_t nbuckets;         /* Total number of buckets in the table */
@@ -70,6 +69,12 @@ hashmap_new_with_allocator(
 	_malloc = _malloc ? _malloc : malloc;
 	_free = _free ? _free : free;
 
+	/* Ensure cap is a power of 2 */
+	size_t ncap = 16;
+	while( ncap < cap ){
+		ncap *= 2;
+	}
+
 	/*
 	 * bucketsz is the size of a single bucket (padded to align a
 	 * uintptr_t) and is large enough to hold one element plus metadata
@@ -88,13 +93,9 @@ hashmap_new_with_allocator(
 	map->free = _free;
 	map->oom = false;;
 	map->el = *el;
-	map->cap = 16;
-	while( map->cap < cap ){
-		map->cap *= 2;
-	}
 	map->hash = *hash;
 	map->bucketsz = bucketsz;
-	map->nbuckets = map->cap;
+	map->nbuckets = ncap;
 	map->count = 0;
 	map->mask = map->nbuckets - 1;
 	map->growat = map->nbuckets * 0.75;
@@ -144,17 +145,17 @@ hashmap_clear(struct hashmap *map, size_t new_cap)
 {
 	map->count = 0;
 	free_elements(map);
-	map->cap = new_cap ? 16 : map->nbuckets;
-	while( map->cap < new_cap ){
-		map->cap *= 2;
+	size_t cap = new_cap ? 16 : map->nbuckets;
+	while( cap < new_cap ){
+		cap *= 2;
 	}
 
-	if( map->nbuckets != map->cap ){
-		void *new_buckets = map->malloc(map->bucketsz * map->cap);
+	if( map->nbuckets != cap ){
+		void *new_buckets = map->malloc(map->bucketsz * cap);
 		if( new_buckets ){
 			map->free(map->buckets);
 			map->buckets = new_buckets;
-			map->nbuckets = map->cap;
+			map->nbuckets = cap;
 			map->mask = map->nbuckets - 1;
 			map->growat = map->nbuckets * 0.75;
 		}
