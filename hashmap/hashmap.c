@@ -41,8 +41,11 @@ struct hashmap {
     void *edata;              /* Work space used during insertion */
 };
 
-static struct bucket *bucket_at(struct hashmap *map, size_t index) {
-    return (struct bucket*)(((char*)map->buckets)+(map->bucketsz*index));
+static struct bucket *
+bucket_at(struct hashmap *map, size_t index)
+{
+	char *b = map->buckets;
+	return (struct bucket*)(b + map->bucketsz * index);
 }
 
 
