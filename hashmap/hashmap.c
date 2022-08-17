@@ -120,6 +120,8 @@ hashmap_new(
 	return hashmap_new_with_allocator(malloc, free, el, hash, cap);
 }
 
+
+/* Free every element in the map. */
 static void
 free_elements(struct hashmap *map)
 {
@@ -341,12 +343,8 @@ hashmap_delete(struct hashmap *map, void *key)
 		i = (i + 1) & map->mask;
 		bucket = bucket_at(map, i);
 
-		if( bucket->dib <= 1 ){
-			/* This is the tail of the filled probe sequence.
-			 * As a minor optimization, avoid the unnecessary
-			 * memcpy and just decrement to zero.  ie, this
-			 * is really bucket->dib = 0 followed by memcpy.
-			 */
+		if( bucket->dib < 2 ){
+			/* This is the end of the cluster.  */
 			prev->dib = 0;
 			break;
 		}
@@ -374,14 +372,17 @@ hashmap_count(struct hashmap *map)
 	return map->count;
 }
 
-// hashmap_free frees the hash map
-// Every item is called with the element-freeing function given in hashmap_new,
-// if present, to free any data referenced in the elements of the hashmap.
-void hashmap_free(struct hashmap *map) {
-    if (!map) return;
-    free_elements(map);
-    map->free(map->buckets);
-    map->free(map);
+/*
+ * Free the hash map, and every element.
+ */
+void
+hashmap_free(struct hashmap *map)
+{
+	if( map != NULL ){
+		free_elements(map);
+		map->free(map->buckets);
+		map->free(map);
+	}
 }
 
 // hashmap_oom returns true if the last hashmap_set() call failed due to the
