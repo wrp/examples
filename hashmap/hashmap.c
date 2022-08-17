@@ -144,13 +144,9 @@ hashmap_clear(struct hashmap *map, size_t new_cap)
 {
 	map->count = 0;
 	free_elements(map);
-	if( new_cap ){
-		map->cap = 16;
-		while( map->cap < new_cap ){
-			map->cap *= 2;
-		}
-	} else {
-		map->cap = map->nbuckets;
+	map->cap = new_cap ? 16 : map->nbuckets;
+	while( map->cap < new_cap ){
+		map->cap *= 2;
 	}
 
 	if( map->nbuckets != map->cap ){
