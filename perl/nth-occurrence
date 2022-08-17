@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+use 5.12.0;
+
+my $count = 0;
+
+# From faq: https://perldoc.perl.org/perlfaq4#How-do-I-change-the-Nth-occurrence-of-something?
+my $str = "whoever why whoever they";
+
+for ($str) {
+
+s{((whom?)ever)}{
+++$count == 2       # is it the 2nd?
+    ? "${2}soever"  # yes, swap
+    : $1            # renege and leave it there
+    }ige;
+
+say
+
+}
+
+$str = "In this string, we replace the 3rd occurrence of 'this' with 'this'";
+my $c = 0;
+for ($str) {
+	s{this}{++$c == 3 ? "that" : $&}ige;
+	say
+}
