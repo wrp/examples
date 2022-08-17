@@ -25,20 +25,20 @@ struct bucket {
 
 // hashmap is an open addressed hash map using robinhood hashing.
 struct hashmap {
-    void *(*malloc)(size_t);
-    void (*free)(void *);
-    bool oom;
-    struct hash_element el;
-    size_t cap;               /* Initial capacity, padded to a power of 2 */
-    struct hash_method hash;  /* User defined hash method */
-    size_t bucketsz;          /* Size of each bucket, padded for alignment */
-    size_t nbuckets;          /* Total number of buckets in the table */
-    size_t count;             /* Number of full buckets */
-    size_t mask;              /* nbuckets - 1 */
-    size_t growat;            /* Threshold at which to grow the table */
-    void *buckets;            /* The actual buckets */
-    void *spare;              /* Work space used to return values */
-    void *edata;              /* Work space used during insertion */
+	void *(*malloc)(size_t);
+	void (*free)(void *);
+	bool oom;
+	struct hash_element el;
+	size_t cap;              /* Initial capacity, padded to a power of 2 */
+	struct hash_method hash; /* User defined hash method */
+	size_t bucketsz;         /* Size of each bucket, padded for alignment */
+	size_t nbuckets;         /* Total number of buckets in the table */
+	size_t count;            /* Number of full buckets */
+	size_t mask;             /* nbuckets - 1 */
+	size_t growat;           /* Threshold at which to grow the table */
+	void *buckets;           /* The actual buckets */
+	void *spare;             /* Work space used to return values */
+	void *edata;             /* Work space used during insertion */
 };
 
 static struct bucket *
