@@ -159,6 +159,7 @@ hashmap_clear(struct hashmap *map, size_t new_cap)
 			map->mask = map->nbuckets - 1;
 			map->growat = map->nbuckets * 0.75;
 		}
+		/* TODO: set map->oom here if malloc fails? */
 	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 }
