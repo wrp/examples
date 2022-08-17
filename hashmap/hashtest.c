@@ -1,9 +1,5 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
-/*
-This test is failing for seed 1660753981 and 1660754151
-*/
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -199,7 +195,8 @@ mask(size_t cap)
 static void
 test_probe(struct hashmap *m, struct hash_method *hf, size_t cap)
 {
-	hashmap_clear(m, 16);
+	cap = cap ? cap : 16;
+	hashmap_clear(m, cap);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
