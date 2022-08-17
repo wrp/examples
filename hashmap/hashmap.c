@@ -69,11 +69,6 @@ hashmap_new_with_allocator(
 ) {
 	_malloc = _malloc ? _malloc : malloc;
 	_free = _free ? _free : free;
-	size_t ncap = 16;
-	while( ncap < cap ){
-		ncap *= 2;
-	}
-	cap = ncap;
 
 	/*
 	 * bucketsz is the size of a single bucket (padded to align a
@@ -95,8 +90,11 @@ hashmap_new_with_allocator(
 	map->bucketsz = bucketsz;
 	map->spare = ((char*)map) + sizeof *map;
 	map->edata = (char*)map->spare + bucketsz;
-	map->cap = cap;
-	map->nbuckets = cap;
+	map->cap = 16;
+	while( map->cap < cap ){
+		map->cap *= 2;
+	}
+	map->nbuckets = map->cap;
 	map->mask = map->nbuckets - 1;
 	map->buckets = _malloc(map->bucketsz * map->nbuckets);
 	if( !map->buckets ){
