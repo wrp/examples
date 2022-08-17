@@ -210,14 +210,23 @@ resize(struct hashmap *map, size_t new_cap)
 			entry->dib += 1;
 		}
                 memcpy(b, entry, map->bucketsz);
+#ifndef NDEBUG
+		map2->count += 1;
+#endif
 
 	}
+	assert( map2->count == map->count );
+	assert( map2->malloc == map->malloc );
+	assert( map2->free == map->free );
+	assert( map2->bucketsz == map->bucketsz );
+
 	map->free(map->buckets);
 	map->buckets = map2->buckets;
 	map->nbuckets = map2->nbuckets;
 	map->mask = map2->mask;
 	map->growat = map2->growat;
 	map->free(map2);
+
 	return true;
 }
 
