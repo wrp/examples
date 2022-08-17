@@ -84,27 +84,28 @@ hashmap_new_with_allocator(
 	if( !map ){
 		return NULL;
 	}
-	memset(map, 0, sizeof *map);
+	map->malloc = _malloc;
+	map->free = _free;
+	map->oom = false;;
 	map->el = *el;
-	map->hash = *hash;
-	map->bucketsz = bucketsz;
-	map->spare = ((char*)map) + sizeof *map;
-	map->edata = (char*)map->spare + bucketsz;
 	map->cap = 16;
 	while( map->cap < cap ){
 		map->cap *= 2;
 	}
+	map->hash = *hash;
+	map->bucketsz = bucketsz;
 	map->nbuckets = map->cap;
+	map->count = 0;
 	map->mask = map->nbuckets - 1;
+	map->growat = map->nbuckets * 0.75;
 	map->buckets = _malloc(map->bucketsz * map->nbuckets);
 	if( !map->buckets ){
 		_free(map);
 		return NULL;
 	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
-	map->growat = map->nbuckets * 0.75;
-	map->malloc = _malloc;
-	map->free = _free;
+	map->spare = ((char*)map) + sizeof *map;
+	map->edata = (char*)map->spare + bucketsz;
 	return map;
 }
 
