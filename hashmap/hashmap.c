@@ -1,4 +1,6 @@
 /*
+ * Open addressed hash map using robinhood hashing.
+ *
  * Copyright:
  *   2020 Joshua J Baker
  *   2022 William R. Pursell
@@ -22,8 +24,6 @@ struct bucket {
     char data[0];
 };
 
-
-// hashmap is an open addressed hash map using robinhood hashing.
 struct hashmap {
 	void *(*malloc)(size_t);
 	void (*free)(void *);
