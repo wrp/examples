@@ -195,7 +195,7 @@ mask(size_t cap)
 static void
 test_probe(struct hashmap *m, struct hash_method *hf, size_t cap)
 {
-	hashmap_clear(m, false);
+	hashmap_clear(m, 16);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
@@ -390,13 +390,14 @@ test_hash(struct hash_method *h, size_t cap)
 	test_probe(map, h, cap);
 
 	load_data(map, load, NULL);
-	hashmap_clear(map, false);
+	/* TODO add actual test of hashmap_clear */
+	hashmap_clear(map, 64);
 	load_data(map, load, NULL);
-	hashmap_clear(map, true);
+	hashmap_clear(map, 0);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
 
-	hashmap_clear(map, true);
+	hashmap_clear(map, 0);
 	hashmap_free(map);
 
 	test_allocator_failures(h, cap);

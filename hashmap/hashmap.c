@@ -136,28 +136,34 @@ free_elements(struct hashmap *map)
 }
 
 
-// hashmap_clear quickly clears the map.
-// Every item is called with the element-freeing function given in hashmap_new,
-// if present, to free any data referenced in the elements of the hashmap.
-// When the update_cap is provided, the map's capacity will be updated to match
-// the currently number of allocated buckets. This is an optimization to ensure
-// that this operation does not perform any allocations.
-void hashmap_clear(struct hashmap *map, bool update_cap) {
-    map->count = 0;
-    free_elements(map);
-    if (update_cap) {
-        map->cap = map->nbuckets;
-    } else if (map->nbuckets != map->cap) {
-        void *new_buckets = map->malloc(map->bucketsz*map->cap);
-        if (new_buckets) {
-            map->free(map->buckets);
-            map->buckets = new_buckets;
-        }
-        map->nbuckets = map->cap;
-    }
-    memset(map->buckets, 0, map->bucketsz*map->nbuckets);
-    map->mask = map->nbuckets-1;
-    map->growat = map->nbuckets*0.75;
+/*
+ * Delete all entries in the map.  Optionally reset the minimum capacity.
+ */
+void
+hashmap_clear(struct hashmap *map, size_t new_cap)
+{
+	map->count = 0;
+	free_elements(map);
+	if( new_cap ){
+		map->cap = 16;
+		while( map->cap < new_cap ){
+			map->cap *= 2;
+		}
+	} else {
+		map->cap = map->nbuckets;
+	}
+
+	if( map->nbuckets != map->cap ){
+		void *new_buckets = map->malloc(map->bucketsz * map->cap);
+		if( new_buckets ){
+			map->free(map->buckets);
+			map->buckets = new_buckets;
+			map->nbuckets = map->cap;
+			map->mask = map->nbuckets - 1;
+			map->growat = map->nbuckets * 0.75;
+		}
+	}
+	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 }
 
 
