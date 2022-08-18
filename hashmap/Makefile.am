@@ -10,6 +10,11 @@ libhash_la_SOURCES = hashmap.c
 
 hash_test_SOURCES = hashtest.c
 
+benchmark_SOURCES = hashmap.c
+benchmark_CPPFLAGS = -DNDEBUG -DHASHMAP_TEST
+benchmark_CFLAGS = -O3
+
+
 bench: benchmark
 	./benchmark
 
