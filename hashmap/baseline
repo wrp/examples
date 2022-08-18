@@ -119,3 +119,110 @@ delete         5000000 ops in 0.526 secs, 105 ns/op, 9507330 op/sec
 set (cap)      5000000 ops in 0.513 secs, 103 ns/op, 9755812 op/sec
 get (cap)      5000000 ops in 0.355 secs, 71 ns/op, 14101588 op/sec
 delete (cap)   5000000 ops in 0.436 secs, 87 ns/op, 11461029 op/sec
+
+15 sample runs of the benchmark at cbf7b0287b90c3209bcddd362245a339bd788e83
+seed = 1660830962, count = 5000000, item_size = 4
+set            5000000 ops in 0.964 secs, 193 ns/op, 5187561 op/sec
+get            5000000 ops in 0.476 secs, 95 ns/op, 10506939 op/sec
+delete         5000000 ops in 0.680 secs, 136 ns/op, 7355927 op/sec
+set (cap)      5000000 ops in 0.695 secs, 139 ns/op, 7189755 op/sec
+get (cap)      5000000 ops in 0.474 secs, 95 ns/op, 10558324 op/sec
+delete (cap)   5000000 ops in 0.690 secs, 138 ns/op, 7243973 op/sec
+seed = 1660830967, count = 5000000, item_size = 4
+set            5000000 ops in 0.932 secs, 186 ns/op, 5365031 op/sec
+get            5000000 ops in 0.450 secs, 90 ns/op, 11107680 op/sec
+delete         5000000 ops in 0.669 secs, 134 ns/op, 7472055 op/sec
+set (cap)      5000000 ops in 0.676 secs, 135 ns/op, 7396067 op/sec
+get (cap)      5000000 ops in 0.457 secs, 91 ns/op, 10944439 op/sec
+delete (cap)   5000000 ops in 0.687 secs, 137 ns/op, 7278995 op/sec
+seed = 1660830971, count = 5000000, item_size = 4
+set            5000000 ops in 0.944 secs, 189 ns/op, 5295713 op/sec
+get            5000000 ops in 0.467 secs, 93 ns/op, 10704621 op/sec
+delete         5000000 ops in 0.677 secs, 135 ns/op, 7386419 op/sec
+set (cap)      5000000 ops in 0.686 secs, 137 ns/op, 7289235 op/sec
+get (cap)      5000000 ops in 0.476 secs, 95 ns/op, 10496968 op/sec
+delete (cap)   5000000 ops in 0.681 secs, 136 ns/op, 7346405 op/sec
+seed = 1660830976, count = 5000000, item_size = 4
+set            5000000 ops in 0.955 secs, 191 ns/op, 5238004 op/sec
+get            5000000 ops in 0.457 secs, 91 ns/op, 10935583 op/sec
+delete         5000000 ops in 0.688 secs, 138 ns/op, 7267875 op/sec
+set (cap)      5000000 ops in 0.676 secs, 135 ns/op, 7401245 op/sec
+get (cap)      5000000 ops in 0.458 secs, 92 ns/op, 10927982 op/sec
+delete (cap)   5000000 ops in 0.683 secs, 137 ns/op, 7322939 op/sec
+seed = 1660830980, count = 5000000, item_size = 4
+set            5000000 ops in 0.967 secs, 193 ns/op, 5172294 op/sec
+get            5000000 ops in 0.452 secs, 90 ns/op, 11055612 op/sec
+delete         5000000 ops in 0.682 secs, 136 ns/op, 7330003 op/sec
+set (cap)      5000000 ops in 0.675 secs, 135 ns/op, 7406387 op/sec
+get (cap)      5000000 ops in 0.458 secs, 92 ns/op, 10912146 op/sec
+delete (cap)   5000000 ops in 0.698 secs, 140 ns/op, 7166486 op/sec
+seed = 1660830985, count = 5000000, item_size = 4
+set            5000000 ops in 0.953 secs, 191 ns/op, 5244972 op/sec
+get            5000000 ops in 0.463 secs, 93 ns/op, 10801679 op/sec
+delete         5000000 ops in 0.686 secs, 137 ns/op, 7290288 op/sec
+set (cap)      5000000 ops in 0.673 secs, 135 ns/op, 7431751 op/sec
+get (cap)      5000000 ops in 0.442 secs, 88 ns/op, 11310707 op/sec
+delete (cap)   5000000 ops in 0.676 secs, 135 ns/op, 7396395 op/sec
+seed = 1660830990, count = 5000000, item_size = 4
+set            5000000 ops in 0.958 secs, 192 ns/op, 5216587 op/sec
+get            5000000 ops in 0.470 secs, 94 ns/op, 10630608 op/sec
+delete         5000000 ops in 0.683 secs, 137 ns/op, 7324108 op/sec
+set (cap)      5000000 ops in 0.689 secs, 138 ns/op, 7256599 op/sec
+get (cap)      5000000 ops in 0.459 secs, 92 ns/op, 10884946 op/sec
+delete (cap)   5000000 ops in 0.664 secs, 133 ns/op, 7526369 op/sec
+seed = 1660830994, count = 5000000, item_size = 4
+set            5000000 ops in 0.966 secs, 193 ns/op, 5173343 op/sec
+get            5000000 ops in 0.468 secs, 94 ns/op, 10693014 op/sec
+delete         5000000 ops in 0.672 secs, 134 ns/op, 7434944 op/sec
+set (cap)      5000000 ops in 0.685 secs, 137 ns/op, 7299078 op/sec
+get (cap)      5000000 ops in 0.452 secs, 90 ns/op, 11054414 op/sec
+delete (cap)   5000000 ops in 0.672 secs, 134 ns/op, 7442436 op/sec
+seed = 1660830999, count = 5000000, item_size = 4
+set            5000000 ops in 0.953 secs, 191 ns/op, 5247746 op/sec
+get            5000000 ops in 0.457 secs, 91 ns/op, 10935607 op/sec
+delete         5000000 ops in 0.700 secs, 140 ns/op, 7140236 op/sec
+set (cap)      5000000 ops in 0.683 secs, 137 ns/op, 7315942 op/sec
+get (cap)      5000000 ops in 0.466 secs, 93 ns/op, 10721814 op/sec
+delete (cap)   5000000 ops in 0.692 secs, 138 ns/op, 7220842 op/sec
+seed = 1660831003, count = 5000000, item_size = 4
+set            5000000 ops in 0.947 secs, 189 ns/op, 5281677 op/sec
+get            5000000 ops in 0.477 secs, 95 ns/op, 10484224 op/sec
+delete         5000000 ops in 0.706 secs, 141 ns/op, 7083608 op/sec
+set (cap)      5000000 ops in 0.684 secs, 137 ns/op, 7307388 op/sec
+get (cap)      5000000 ops in 0.459 secs, 92 ns/op, 10898019 op/sec
+delete (cap)   5000000 ops in 0.715 secs, 143 ns/op, 6997166 op/sec
+seed = 1660831008, count = 5000000, item_size = 4
+set            5000000 ops in 0.956 secs, 191 ns/op, 5232123 op/sec
+get            5000000 ops in 0.495 secs, 99 ns/op, 10101194 op/sec
+delete         5000000 ops in 0.671 secs, 134 ns/op, 7446050 op/sec
+set (cap)      5000000 ops in 0.695 secs, 139 ns/op, 7193541 op/sec
+get (cap)      5000000 ops in 0.463 secs, 93 ns/op, 10799393 op/sec
+delete (cap)   5000000 ops in 0.684 secs, 137 ns/op, 7310861 op/sec
+seed = 1660831013, count = 5000000, item_size = 4
+set            5000000 ops in 0.978 secs, 196 ns/op, 5113102 op/sec
+get            5000000 ops in 0.457 secs, 91 ns/op, 10946332 op/sec
+delete         5000000 ops in 0.687 secs, 137 ns/op, 7278497 op/sec
+set (cap)      5000000 ops in 0.649 secs, 130 ns/op, 7701134 op/sec
+get (cap)      5000000 ops in 0.413 secs, 83 ns/op, 12091898 op/sec
+delete (cap)   5000000 ops in 0.652 secs, 130 ns/op, 7668959 op/sec
+seed = 1660831017, count = 5000000, item_size = 4
+set            5000000 ops in 0.946 secs, 189 ns/op, 5285932 op/sec
+get            5000000 ops in 0.580 secs, 116 ns/op, 8619709 op/sec
+delete         5000000 ops in 0.709 secs, 142 ns/op, 7053072 op/sec
+set (cap)      5000000 ops in 0.800 secs, 160 ns/op, 6246244 op/sec
+get (cap)      5000000 ops in 0.468 secs, 94 ns/op, 10679493 op/sec
+delete (cap)   5000000 ops in 0.696 secs, 139 ns/op, 7179978 op/sec
+seed = 1660831022, count = 5000000, item_size = 4
+set            5000000 ops in 0.937 secs, 187 ns/op, 5335957 op/sec
+get            5000000 ops in 0.530 secs, 106 ns/op, 9436401 op/sec
+delete         5000000 ops in 0.656 secs, 131 ns/op, 7626322 op/sec
+set (cap)      5000000 ops in 0.656 secs, 131 ns/op, 7624148 op/sec
+get (cap)      5000000 ops in 0.445 secs, 89 ns/op, 11247809 op/sec
+delete (cap)   5000000 ops in 0.670 secs, 134 ns/op, 7464046 op/sec
+seed = 1660831027, count = 5000000, item_size = 4
+set            5000000 ops in 0.934 secs, 187 ns/op, 5356123 op/sec
+get            5000000 ops in 0.462 secs, 92 ns/op, 10818600 op/sec
+delete         5000000 ops in 0.680 secs, 136 ns/op, 7352811 op/sec
+set (cap)      5000000 ops in 0.642 secs, 128 ns/op, 7791123 op/sec
+get (cap)      5000000 ops in 0.394 secs, 79 ns/op, 12678771 op/sec
+delete (cap)   5000000 ops in 0.614 secs, 123 ns/op, 8145644 op/sec
