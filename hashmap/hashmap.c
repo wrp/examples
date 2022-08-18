@@ -65,7 +65,8 @@ hashmap_new_with_allocator(
 	const struct hash_element *el,
 	const struct hash_method *hash,
 	size_t cap
-) {
+)
+{
 	_malloc = _malloc ? _malloc : malloc;
 	_free = _free ? _free : free;
 
@@ -117,7 +118,8 @@ hashmap_new(
 	const struct hash_element *el,
 	const struct hash_method *hash, /* Hash method, with seeds */
 	size_t cap                      /* Minimum initial capacity */
-) {
+)
+{
 	return hashmap_new_with_allocator(malloc, free, el, hash, cap);
 }
 
