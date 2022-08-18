@@ -300,7 +300,7 @@ hashmap_set(struct hashmap *map, void *item)
 			entry->dib = dib;
 			swap(map, bucket, entry);
 			item = entry->data;
-			dib = entry->dib++;
+			dib = entry->dib;
 			hash = entry->hash;
 		}
 		dib += 1;
