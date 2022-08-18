@@ -69,10 +69,10 @@ hashmap_new_with_allocator(
 	_malloc = _malloc ? _malloc : malloc;
 	_free = _free ? _free : free;
 
-	/* Ensure cap is a power of 2 */
-	size_t ncap = 16;
-	while( ncap < cap ){
-		ncap *= 2;
+	/* Ensure number of buckets is a power of 2 at least as big as cap */
+	size_t nbuckets = 16;
+	while( nbuckets < cap ){
+		nbuckets *= 2;
 	}
 
 	/*
@@ -95,7 +95,7 @@ hashmap_new_with_allocator(
 	map->el = *el;
 	map->hash = *hash;
 	map->bucketsz = bucketsz;
-	map->nbuckets = ncap;
+	map->nbuckets = nbuckets;
 	map->count = 0;
 	map->mask = map->nbuckets - 1;
 	map->growat = map->nbuckets * 0.75;
