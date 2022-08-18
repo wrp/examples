@@ -33,12 +33,12 @@ user_compare(const void *a, const void *b, void *udata)
 	return strcmp(ua->name, ub->name);
 }
 
-bool
+static int
 user_iter(const void *item, void *udata)
 {
 	const struct user *u = item;
-	bool rv = strcmp(u->name, "Abort") == 0 ? false : true;
-	if( rv ){
+	bool rv = strcmp(u->name, "Abort") == 0 ? 1 : 0;
+	if( rv == 0 ){
 		*(size_t *)udata += 1;
 	}
 	return rv;

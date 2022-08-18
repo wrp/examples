@@ -48,7 +48,7 @@ void * hashmap_get(struct hashmap *, const void *key);
 void * hashmap_set(struct hashmap *, void *item);
 void * hashmap_delete(struct hashmap *, void *key);
 void * hashmap_probe(struct hashmap *, uint64_t position);
-bool hashmap_scan(struct hashmap *, bool (*)(const void *item, void *), void *);
+int hashmap_scan(struct hashmap *, int (*)(const void *item, void *), void *);
 
 uint64_t hashmap_sip(const void *, size_t, uint64_t, uint64_t);
 uint64_t hashmap_murmur(const void *, size_t, uint64_t, uint64_t);

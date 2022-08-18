@@ -51,10 +51,12 @@ static void shuffle(void *array, size_t numels, size_t elsize) {
     }
 }
 
-static bool iter_ints(const void *item, void *udata) {
-    int *vals = *(int**)udata;
-    vals[*(int*)item] = 1;
-    return true;
+static int
+iter_ints(const void *item, void *udata)
+{
+	int *vals = *(int**)udata;
+	vals[*(int*)item] = 1;
+	return 0;
 }
 
 static int compare_ints_udata(const void *a, const void *b, void *udata) {
@@ -146,7 +148,7 @@ main(int argc, char **argv)
     int *vals2;
     while (!(vals2 = xmalloc(N * sizeof(int)))) {}
     memset(vals2, 0, N * sizeof(int));
-    assert(hashmap_scan(map, iter_ints, &vals2));
+    assert(0 == hashmap_scan(map, iter_ints, &vals2));
     for (unsigned i = 0; i < N; i++) {
         assert(vals2[i] == 1);
     }

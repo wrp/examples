@@ -414,21 +414,30 @@ bool hashmap_oom(struct hashmap *map) {
     return map->oom;
 }
 
-// hashmap_scan iterates over all items in the hash map
-// Param `iter` can return false to stop iteration early.
-// Returns false if the iteration has been stopped early.
-bool hashmap_scan(struct hashmap *map,
-                  bool (*iter)(const void *item, void *udata), void *udata)
+/*
+ * Iterate over all items in the hash map.
+ * iter() can return non-zero to stop iteration early
+ * That value is returned.  (Zero return indicates that iter was called
+ * on all items.)
+ */
+int
+hashmap_scan(struct hashmap *map,
+	int (*iter)(const void *item, void *udata), void *udata)
 {
-    for (size_t i = 0; i < map->nbuckets; i++) {
-        struct bucket *bucket = bucket_at(map, i);
-        if (bucket->dib) {
-            if (!iter(bucket->data, udata)) {
-                return false;
-            }
-        }
-    }
-    return true;
+	/* TODO: For sparse maps, it doesn't make sense to iterate
+	 * over all buckets, since they are mostly empty.  Maybe store
+	 * first and last and just iterate over that interval, or count
+	 * buckets that are full and terminate when we've done map->count
+	 * buckets.
+	 */
+	int rv = 0;
+	for( size_t i = 0; rv == 0 && i < map->nbuckets; i += 1 ){
+		struct bucket *b = bucket_at(map, i);
+		if( b->dib ){
+			rv = iter(b->data, udata);
+		}
+	}
+	return rv;
 }
 
 //-----------------------------------------------------------------------------
