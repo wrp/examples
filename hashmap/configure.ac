@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libhash], m4_esyscmd([{ git describe --tags --dirty || echo unknown; } | tr -d \\n]),
+AC_INIT([hashmap], m4_esyscmd([{ git describe --tags --dirty || echo unknown; } | tr -d \\n]),
 	[william.r.pursell@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
