@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import tempfile
+
+# the temp diretory and all contents are unlinked
+# when the context manager exits
+with tempfile.TemporaryDirectory() as t:
+	print(f't = {t}')
