@@ -34,7 +34,10 @@ configure:
 
 $(BUILDDIR)/Makefile: configure
 	@@mkdir -p $(BUILDDIR)
-	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
+	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
+		CFLAGS="${CFLAGS} -g -O0" \
+		CPPFLAGS="${CPPFLAGS}"
+
 	@@echo '$(BUILDDIR) configured'
 
 bench check clean distclean install: $(BUILDDIR)/Makefile
