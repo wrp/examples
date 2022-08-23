@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use 5.12.0;
 use Time::Piece;
+use Time::Seconds qw(ONE_DAY);
 
 $_ = sprintf "%d", scalar time;
 print "now: ", $_;
@@ -17,6 +18,16 @@ print $n;
 my $t = Time::Piece->strptime($n, "%m/%d/%y %H:%M:%S\n");
 say $t;
 say $t->yday;   # Day of the year
+
+my $gm = gmtime;
+say "today: ", $gm->datetime;  # ISO 8601 format
+
+my $yesterday = $gm - ONE_DAY; # subtract 1 day (constant from Time::Seconds)
+
+say "yesterday: ", $yesterday->datetime; # ISO 8601 format
+
+say "last week: ", ($gm - 7 * ONE_DAY)->datetime;
+
 
 
 __DATA__
@@ -303,4 +314,3 @@ SEE ALSO
 
 BUGS
     The test harness leaves much to be desired. Patches welcome.
-
