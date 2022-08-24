@@ -13,3 +13,7 @@ while(<>) {
 	print;
 }
 
+
+
+# shell:
+# three_days_ago=$( perl -MTime::Piece -MTime::Seconds=ONE_DAY -E 'my $g=gmtime; $g -= 3* ONE_DAY; say $g->datetime' )
