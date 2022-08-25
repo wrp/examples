@@ -178,7 +178,7 @@ main(int argc, char **argv)
 
     assert(hashmap_count(map) != 0);
 
-    hashmap_clear(map, 0);
+    hashmap_clear(map);
     assert(hashmap_count(map) == 0);
 
 
@@ -191,7 +191,7 @@ main(int argc, char **argv)
         }
     }
 
-    hashmap_clear(map, 16);
+    hashmap_clear(map);
 
     hashmap_free(map);
 
@@ -212,7 +212,7 @@ main(int argc, char **argv)
         while(!hashmap_set(map, &str));
     }
 
-    hashmap_clear(map, 16);
+    hashmap_clear(map);
     assert(hashmap_count(map) == 0);
 
     for (unsigned i = 0; i < N; i++) {

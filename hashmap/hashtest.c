@@ -193,10 +193,16 @@ mask(size_t cap)
 
 
 static void
-test_probe(struct hashmap *m, struct hash_method *hf, size_t cap)
+test_probe(struct hash_method *hf, size_t cap)
 {
-	cap = cap ? cap : 16;
-	hashmap_clear(m, cap);
+	struct user *user;
+	struct hash_element el = {
+		.size = sizeof *user,
+		.compare = user_compare,
+		.free = free_el,
+		.udata = NULL
+	};
+	struct hashmap *m = hashmap_new(&el, hf, cap);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
@@ -388,17 +394,17 @@ test_hash(struct hash_method *h, size_t cap)
 	test_deletion(map, cap);
 	test_collisions(cap);
 	test_resize(cap);
-	test_probe(map, h, cap);
+	test_probe(h, cap);
 
 	load_data(map, load, NULL);
 	/* TODO add actual test of hashmap_clear */
-	hashmap_clear(map, 64);
+	hashmap_clear(map);
 	load_data(map, load, NULL);
-	hashmap_clear(map, 0);
+	hashmap_clear(map);
 	user = hashmap_get(map, &(struct user){ .name="Dale" });
 	expect( user == NULL );
 
-	hashmap_clear(map, 0);
+	hashmap_clear(map);
 	hashmap_free(map);
 
 	test_allocator_failures(h, cap);

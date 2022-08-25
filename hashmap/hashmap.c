@@ -144,29 +144,13 @@ free_elements(struct hashmap *map)
 
 
 /*
- * Delete all entries in the map.  Optionally reset the minimum capacity.
+ * Delete all entries in the map.
  */
 void
-hashmap_clear(struct hashmap *map, size_t new_cap)
+hashmap_clear(struct hashmap *map)
 {
 	map->count = 0;
 	free_elements(map);
-	size_t cap = new_cap ? 16 : map->nbuckets;
-	while( cap < new_cap ){
-		cap *= 2;
-	}
-
-	if( map->nbuckets != cap ){
-		void *new_buckets = map->malloc(map->bucketsz * cap);
-		if( new_buckets ){
-			map->free(map->buckets);
-			map->buckets = new_buckets;
-			map->nbuckets = cap;
-			map->mask = map->nbuckets - 1;
-			map->growat = map->nbuckets * 0.75;
-		}
-		/* TODO: set map->oom here if malloc fails? */
-	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 }
 

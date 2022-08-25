@@ -41,7 +41,7 @@ struct hashmap *hashmap_new_with_allocator(
 );
 
 void hashmap_free(struct hashmap *);
-void hashmap_clear(struct hashmap *, size_t new_cap);
+void hashmap_clear(struct hashmap *);
 size_t hashmap_count(struct hashmap *);
 bool hashmap_oom(struct hashmap *);
 void * hashmap_get(struct hashmap *, const void *key);
