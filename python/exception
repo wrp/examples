@@ -9,7 +9,7 @@ class bar(Exception): pass
 try:
     raise foo ("help")
 except (foo, bar) as e:   # Use parens to group multiple exceptions
-    print("Raised", e)
+    print(f"Raised {e}, with size {e.__sizeof__()}")
     """ At this point, attributes of e (output of dir)
     dir ['__class__', '__delattr__', '__dict__', '__doc__',
         '__format__', '__getattribute__', '__getitem__', '__getslice__',
