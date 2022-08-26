@@ -9,7 +9,7 @@ class bar(Exception): pass
 try:
     raise foo ("help")
 except (foo, bar) as e:   # Use parens to group multiple exceptions
-    print "Raised", e
+    print("Raised", e)
     """ At this point, attributes of e (output of dir)
     dir ['__class__', '__delattr__', '__dict__', '__doc__',
         '__format__', '__getattribute__', '__getitem__', '__getslice__',
@@ -23,13 +23,13 @@ except (foo, bar) as e:   # Use parens to group multiple exceptions
 
 
 def reraise():
-    print 're raise a foo'
+    print('re raise a foo')
     try:
         raise foo("raised foo")
     except Exception as e:
         raise e
     finally:
-        print 'finally in re-raised foo'
+        print('finally in re-raised foo')
 
 try:
     reraise()
@@ -38,13 +38,13 @@ except Exception:
 
 def f(flag=False):
     try:
-        print 'try'
+        print('try')
         if flag: raise foo('bar')
         return 5
     except:
-        print 'except'
+        print('except')
     finally:
-        print 'finally'
+        print('finally')
         # If there is an exception before return in try, then
         # the function returns None unless the finally clause returns a value.
         # If not, it returns 5 and executes the finally clause
@@ -52,14 +52,14 @@ def f(flag=False):
         # clause returns.  Returning something from a finally clause is bad practice
 
 rv = f()
-print 'f without exception returns:', rv
+print('f without exception returns:', rv)
 rv = f(True)
-print 'f with exception returns:', rv
+print('f with exception returns:', rv)
 
 try:
-    print 'try/finally with no except',
+    print('try/finally with no except'),
 finally:
-    print 'is ok'
+    print('is ok')
 
 
 # Demonstrate getting IO error messages
