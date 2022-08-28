@@ -1,0 +1,27 @@
+#!/usr/bin/env perl
+#
+# Sort timestamps
+
+use 5.12.10;
+use Time::Piece;
+
+my $fmt='%Y-%m-%d_%H:%M:%S';
+my @t;
+while( <DATA> ){
+	if( $_ !~ m@\d{4}-\d{1,2}-\d{1,2}_\d{1,2}:\d{2}:\d{2}@ ){
+		say STDERR "Invalid format $_";
+		next
+	}
+	chop;  # Delete newline
+	push @t, Time::Piece->strptime($_, $fmt);
+}
+
+say $_->strftime($fmt) foreach sort @t;
+
+__DATA__
+2022-08-25_22:55:01
+2022-08-25_20:23:24
+2022-08-25_22:53:07
+2022-08-25_21:53:30
+2022-08-25_20:23:33
+2022-08-25_20:22:14
