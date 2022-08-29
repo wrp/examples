@@ -2,8 +2,6 @@
 #Sort subsections of text
 
 use 5.12.0;
-use strict;
-use warnings;
 local $/ = "";
 
 my @f;
