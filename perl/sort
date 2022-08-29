@@ -14,7 +14,7 @@ say "$_" foreach sort @f;
 
 __DATA__
 config server 'server'
-        option url 'https://chef.libremesh.org'
+        option url 'https://foo.org'
 
 config client 'client'
         option upgrade_packages '1'
