@@ -13,7 +13,7 @@ while( <DATA> ){
 		next
 	}
 	chop;  # Delete newline
-	push @t, Time::Piece->strptime($_, $fmt);
+	eval { push @t, Time::Piece->strptime($_, $fmt) } or say "Unexpected input: $_";
 }
 
 say $_->strftime($fmt) foreach sort @t;
