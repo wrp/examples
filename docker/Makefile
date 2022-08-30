@@ -1,4 +1,4 @@
 
-.PHONY: debian
-debian:
-	cd debian && make
+.PHONY: debian alpine
+debian alpine:
+	cd $@ && make
