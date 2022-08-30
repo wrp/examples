@@ -2,9 +2,18 @@
 
 grade=${1-65}
 case 1 in
-	$((grade > 100)) ) echo "impossible" ;;
-	$((grade >= 70)) ) echo "distinction" ;;
-	$((grade >= 60)) ) echo "merit" ;;
-	$((grade >= 40)) ) echo "pass" ;;
-	*) echo "fail" ;;
+$((grade > 100)) ) echo "impossible" ;;
+$((grade >= 70)) ) echo "distinction" ;;
+$((grade >= 60)) ) echo "merit" ;;
+$((grade >= 40)) ) echo "pass" ;;
+*) echo "fail" ;;
+esac
+
+server=db-23.host.com
+echo $server | egrep "ws-[0-9]+\.host\.com"
+case $server in
+$(awk '{a=0}/ws-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "Web Server";;
+$(awk '{a=0}/db-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "DB Server";;
+$(awk '{a=0}/bk-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "Backup Server";;
+*)echo "Unknown server";;
 esac
