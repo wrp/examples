@@ -12,8 +12,8 @@ esac
 server=db-23.host.com
 echo $server | egrep "ws-[0-9]+\.host\.com"
 case $server in
-$(awk '{a=0}/ws-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "Web Server";;
-$(awk '{a=0}/db-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "DB Server";;
-$(awk '{a=0}/bk-[0-9]*.host.com/{a=1}a' <<<${server=}) ) echo "Backup Server";;
+$(awk '/ws-[0-9]*.host.com/' <<<${server}) ) echo "Web Server";;
+$(awk '/db-[0-9]*.host.com/' <<<${server}) ) echo "DB Server";;
+$(awk '/bk-[0-9]*.host.com/' <<<${server}) ) echo "Backup Server";;
 *)echo "Unknown server";;
 esac
