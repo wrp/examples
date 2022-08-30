@@ -22,8 +22,8 @@ impl Drop for Rectangle {
 
 
 fn main() {
-    let rect1 = Rectangle { width: 30, height: 50, name: "Bob".to_string() };
-    let rect2 = demo_field_init(5, 10, String::from("Amy"));
+    let rect1 = Rectangle { width: 30, height: 50, name: "rect1".to_string() };
+    let mut rect2 = demo_field_init(5, 10, String::from("rect2"));
 
     let a = Point(2, 4, 5);
     println!("point is {:?}.  Middle is {}", a, a.1);
@@ -33,7 +33,11 @@ fn main() {
     let rect3 = Rectangle { name: String::from("Copied"), ..rect1 };
 
     println!("rect1 is {:?}", rect1);
-    println!("rect1 is {:?}", rect2);
-    println!("rect1 is {:?}", rect3);
+    println!("rect2 is {:?}", rect2);
+    println!("rect3 is {:?}", rect3);
     println!("height is {:#?}", rect1.height);
+
+    println!("Assigning rect2 = rect1 to demonstrate drop is called for rect2");
+    rect2 = rect1;  // Th
+    println!("After assignment, rect2 is {:?}", rect2);
 }
