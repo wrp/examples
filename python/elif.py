@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Demonstrat that it is 'elif', not 'else', or 'else if'
+# Demonstrate 'elif', not 'elsif', or 'else if'
 import sys
 if len(sys.argv) == 1:
     print 1
