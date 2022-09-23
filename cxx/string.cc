@@ -12,5 +12,8 @@ int main()
 	if( foo == "bar" ){
 		std::cout << "yes" << endl;
 	}
+	std::cout << "Enter a string: ";
+	std::cin >> foo;
+	std::cout << "foo = '" << foo << "'" << endl;
 	return 0;
 }
