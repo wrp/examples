@@ -1,0 +1,8 @@
+#!/usr/bin/python3
+def foo(a, b, c=5):
+    print(f"foo called with {a}, {b}, {c}")
+
+foo(1, 2)
+a = (3,4)
+foo(*a)
+foo(*[8,4,1])
