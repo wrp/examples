@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+
+use 5.12.0;
+my $string = '[ this is a bracket ] foo';
+
+say "string is: '$string'";
+print "After applying =~: ";
+$string =~ s/^ *[[][^]]*[]] *//;
+say "string is changed to '$string'";
