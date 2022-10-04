@@ -5,11 +5,16 @@ my @n = ("foo", "bar", "baz");
 my $arrayref = [];
 
 $arrayref->[0] = "first entry";
+my @b = @$arrayref;  # Copy the array
+push @$arrayref, "2nd entry";
 
 say "size of array is " . @n;
 foreach my $v (@n) { say $v }
 
-say "size of array isref " . @$arrayref;
+say "size of b array is " . @b;
+foreach my $v (@b) { say $v }
+
+say "size of arrayref is " . @$arrayref;
 foreach my $v (@$arrayref) { say $v }
 
 
