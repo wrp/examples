@@ -1,8 +1,9 @@
 #!/bin/sh
 
 perl -MYAML -MJSON -0777 -wnl -e 'print YAML::Dump(decode_json($_))' << EOF
-[
-	{ "Hello": "World" },
-	[ "Bye", "Bye", 5 ],
-	10
-]
+{
+	"Hello": "World",
+	"a": [ "Bye", "Bye", 5 ],
+	"foo": { "a":[1, 2, 3], "b":2, "c":3}
+}
+EOF
