@@ -6,7 +6,7 @@ my $string = "\t[ this is a bra\tcket ]  \t\n foo";
 say "string is: '$string'";
 print "After applying =~: ";
 
-my $a = $string =~ s/^\s*[[][^]]*[]]\s*//;
+my $a = $string =~ s/^\s*\[[^]]*\]\s*//;
 
 say "string is changed to '$string'";
 say "the =~ operator returned $a";
