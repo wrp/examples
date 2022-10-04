@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+# Sort a hash with integer values
+
+use 5.12.0;
+
+my $c = {};   # Anonymous hash ref
+
+$c->{"foo"} = 12;
+$c->{"bar"} = 7;
+$c->{"baz"} = 2;
+$c->{"qux"} = -5;
+
+while( my ($k, $v) = each %$c ){
+	print "c{$k} = $v\n";
+}
+
+say "Keys by ascending value:";
+my @sorted = sort{%$c{$a} <=> %$c{$b}} keys %$c;
+foreach my $k (@sorted) {
+	say $k;
+}
