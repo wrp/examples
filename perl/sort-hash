@@ -19,3 +19,8 @@ my @sorted = sort{%$c{$a} <=> %$c{$b}} keys %$c;
 foreach my $k (@sorted) {
 	say $k;
 }
+
+say "Keys by descending value:";
+foreach my $k ( sort{%$c{$b} <=> %$c{$a}} keys %$c ){
+	say $k;
+}
