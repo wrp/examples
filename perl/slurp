@@ -11,3 +11,15 @@ printf 'foo\000bar\nfinal line slurpped by -000\n' | perl -000 -ne 'print if $. 
 
 # paragraph mode (both newlines are retained)
 printf 'blay\n\n2nd paragraph retains two newlines\n\nbar' | perl -00 -ne 'print if $. == 2'
+
+
+# From perldoc perlvar:
+# To read a complete file:
+
+# open my $fh, "<", "foo" or die "foo: $!\n";
+# my $content = '';
+# {
+#     local $/;   # enable localized slurp mode
+#     $content = <$fh>;
+# }
+# close $fh;
