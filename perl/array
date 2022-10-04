@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+use 5.12.0;
+
+my @n = ("foo", "bar", "baz");
+foreach my $v (@n) {
+	say $v
+}
+
+say "size is " . @n;
+
+foreach my $v (@ARGV) {
+	say "arg:", $v
+}
