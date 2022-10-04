@@ -2,12 +2,15 @@
 use 5.12.0;
 
 my @n = ("foo", "bar", "baz");
-foreach my $v (@n) {
-	say $v
-}
+my $arrayref = [];
 
-say "size is " . @n;
+$arrayref->[0] = "first entry";
 
-foreach my $v (@ARGV) {
-	say "arg:", $v
-}
+say "size of array is " . @n;
+foreach my $v (@n) { say $v }
+
+say "size of array isref " . @$arrayref;
+foreach my $v (@$arrayref) { say $v }
+
+
+foreach my $v (@ARGV) { say "arg:", $v }
