@@ -25,6 +25,10 @@ foreach my $k( keys %hash ){
 foreach my $k( keys %{ $hashref }){
 	print "key = $k, value = $hashref->{$k}\n";
 }
+print "Iterate with each\n";
+while( my ($k, $v) = each %$hashref ){
+	print "key = $k, value = $v\n";
+}
 while( my ($k, $v) = each %$hashref ){
 	say $k, '->', $hashref->{$k};
 	delete $hashref->{$k};   # This is safe
