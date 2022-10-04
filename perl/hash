@@ -11,6 +11,9 @@ my $hashref = {}; # $hashref is a reference to an anonymous hash
 my %hash = ( 'foo' => 'bar' );
 $hash{"baz"} = "qux";
 
+say "hashref: ", $hashref; # eg "hashref: HASH(0x7f8e4480bc10)"
+say "hash: ", %hash;       # eg "hash: foobarbazqux"
+
 foreach my $x ( 1 .. 5 ) {
 	$hash{$x} = $x;            # Add entry to %hash
 	$hashref->{$x + 10} = $x;  # Add entry to $hashref
