@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if test $# = 0; then
+	echo no args
+elif test $# = 1; then
+	echo one arg
+else
+	echo many args
+fi
+
