@@ -19,3 +19,8 @@ foreach my $v (@$arrayref) { say $v }
 
 
 foreach my $v (@ARGV) { say "arg:", $v }
+
+__DATA__
+
+# Read entire input into a single array and sort it numerically
+printf '1\n10\n15\n2\n' | perl -0777 -aE 'say foreach sort { $a <=> $b } @F'
