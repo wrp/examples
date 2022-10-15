@@ -138,6 +138,79 @@ main(int argc, char **argv)
 		assert( hashmap_murmur("hello", 5, s, 2) == expect_murmur[i]);
 	}
 
+	for( int i = 0; i < 64; i += 1 ){
+		uint64_t expect_sip[] = {
+			0xcdd75081c4b09890,
+			0x290a1607eb437896,
+			0xc3234417737fac59,
+			0x1f8b017da43b8b5e,
+			0x4e1b26753c9f6e6f,
+			0x1ba14d2dd45ba859,
+			0x344f8047b85cbfcf,
+			0x37f51adb9f7f4157,
+			0xbc37e68f7535a7a0,
+			0xa4ffe50b9a7b95af,
+			0x8693b1ee579e0168,
+			0x8c9c4996848b6d0a,
+			0xb267994f6a2533ff,
+			0xb99e0683f3babc0c,
+			0x733d90f26bb10854,
+			0x177a98eaf7dcd11d,
+			0xf7207f15e487c71b,
+			0x4dc46ad05454e929,
+			0x702699880f1b7a94,
+			0x64013c136ed649d1,
+			0x4c476287ecc453ab,
+			0x8b10d5e9d432baa2,
+			0x2d614d0fc2f12fe9,
+			0xb0b28abdf7345e38,
+			0x1fca97d22010bbce,
+			0x91de15642ee6ff72,
+			0x52faf4743575e735,
+			0x9d23dea622a05efd,
+			0x88c2715a4e0edf1f,
+			0x3a6d4cde98c816f0,
+			0x64bcb59fc4d4d582,
+			0x6e4081dab8374af6,
+			0xcdd75081c4b09890,
+			0x290a1607eb437896,
+			0xc3234417737fac59,
+			0x1f8b017da43b8b5e,
+			0x4e1b26753c9f6e6f,
+			0x1ba14d2dd45ba859,
+			0x344f8047b85cbfcf,
+			0x37f51adb9f7f4157,
+			0xbc37e68f7535a7a0,
+			0xa4ffe50b9a7b95af,
+			0x8693b1ee579e0168,
+			0x8c9c4996848b6d0a,
+			0xb267994f6a2533ff,
+			0xb99e0683f3babc0c,
+			0x733d90f26bb10854,
+			0x177a98eaf7dcd11d,
+			0xf7207f15e487c71b,
+			0x4dc46ad05454e929,
+			0x702699880f1b7a94,
+			0x64013c136ed649d1,
+			0x4c476287ecc453ab,
+			0x8b10d5e9d432baa2,
+			0x2d614d0fc2f12fe9,
+			0xb0b28abdf7345e38,
+			0x1fca97d22010bbce,
+			0x91de15642ee6ff72,
+			0x52faf4743575e735,
+			0x9d23dea622a05efd,
+			0x88c2715a4e0edf1f,
+			0x3a6d4cde98c816f0,
+			0x64bcb59fc4d4d582,
+			0x6e4081dab8374af6,
+		};
+
+		uint64_t s = 1 << i;
+		const char *msg = "hello";
+		assert( hashmap_sip(msg, 5, 1, s) == expect_sip[i]);
+		assert( hashmap_murmur(msg, 5, 1, s) == 0x1759b52feba4da84 );
+	}
 
     int *vals;
     while (!(vals = xmalloc(N * sizeof(int)))) {}
