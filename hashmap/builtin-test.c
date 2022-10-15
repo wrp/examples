@@ -250,7 +250,9 @@ main(int argc, char **argv)
     struct hash_method hash = { hash_int, { seed, seed } };
     struct hash_element el = { sizeof *vals, compare_ints_udata };
 
-    while( !(map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0))){}
+	do map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0);
+	while( map == NULL );
+
     shuffle(vals, N, sizeof(int));
     for (unsigned i = 0; i < (unsigned)N; i++) {
         assert(i == hashmap_count(map));
