@@ -238,9 +238,8 @@ main(int argc, char **argv)
 	test_exact_hashes();
 
 	int *vals;
-	rand_alloc_fail = false;
-	vals = xmalloc(N * sizeof *vals);
-	rand_alloc_fail = true;
+	do vals = xmalloc(N * sizeof *vals);
+	while( vals == NULL );
 
 	for( unsigned i = 0; i < N; i += 1 ){
 		vals[i] = (int)i;
