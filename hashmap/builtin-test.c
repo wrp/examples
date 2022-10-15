@@ -242,9 +242,9 @@ main(int argc, char **argv)
 	vals = xmalloc(N * sizeof *vals);
 	rand_alloc_fail = true;
 
-    for( unsigned i = 0; i < N; i++) {
-        vals[i] = (int)i;
-    }
+	for( unsigned i = 0; i < N; i += 1 ){
+		vals[i] = (int)i;
+	}
 
     struct hashmap *map;
     struct hash_method hash = { hash_int, { seed, seed } };
