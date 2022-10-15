@@ -327,14 +327,10 @@ main(int argc, char **argv)
 		}
 	}
 
-    for (unsigned i = 0; i < N; i++) {
-        while (true) {
-            assert(!hashmap_set(map, &vals[i]));
-            if (!hashmap_oom(map)) {
-                break;
-            }
-        }
-    }
+	for( unsigned i = 0; i < N; i += 1 ){
+		do assert( !hashmap_set(map, vals + i) );
+		while( hashmap_oom(map) );
+	}
 
     assert(hashmap_count(map) != 0);
 
