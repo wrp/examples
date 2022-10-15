@@ -525,18 +525,23 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 	(void)seed1;
 
 #define	ROTL32(x, r) ((x << r) | (x >> (32 - r)))
-#define FMIX32(h) h^=h>>16; h*=0x85ebca6b; h^=h>>13; h*=0xc2b2ae35; h^=h>>16;
-    const uint8_t * data = (const uint8_t*)key;
-    const int nblocks = len / 16;
-    uint32_t h1 = seed;
-    uint32_t h2 = seed;
-    uint32_t h3 = seed;
-    uint32_t h4 = seed;
-    uint32_t c1 = 0x239b961b;
-    uint32_t c2 = 0xab0e9789;
-    uint32_t c3 = 0x38b34ae5;
-    uint32_t c4 = 0xa1e38b93;
-    const uint32_t * blocks = (const uint32_t *)(data + nblocks*16);
+#define FMIX32(h) h^=h>>16; \
+	h *= 0x85ebca6b; \
+	h ^= h>>13; \
+	h *= 0xc2b2ae35; \
+	h ^= h>>16;
+
+	const uint8_t * data = (const uint8_t*)key;
+	const int nblocks = len / 16;
+	uint32_t h1 = seed;
+	uint32_t h2 = seed;
+	uint32_t h3 = seed;
+	uint32_t h4 = seed;
+	uint32_t c1 = 0x239b961b;
+	uint32_t c2 = 0xab0e9789;
+	uint32_t c3 = 0x38b34ae5;
+	uint32_t c4 = 0xa1e38b93;
+	const uint32_t * blocks = (const uint32_t *)(data + nblocks * 16);
     for (int i = -nblocks; i; i++) {
         uint32_t k1 = blocks[i*4+0];
         uint32_t k2 = blocks[i*4+1];
