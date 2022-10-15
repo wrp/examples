@@ -2,6 +2,8 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file.
 
+/* Copyright 2022 William R. Pursell */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
