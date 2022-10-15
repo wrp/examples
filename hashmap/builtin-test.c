@@ -17,19 +17,22 @@ static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
 static uintptr_t total_allocs = 0;
 static uintptr_t total_mem = 0;
 
-static void *xmalloc(size_t size) {
-    if (rand_alloc_fail && rand()%rand_alloc_fail_odds == 0) {
-        return NULL;
-    }
-    void *mem = malloc(sizeof(uintptr_t)+size);
+static void *
+xmalloc(size_t size)
+{
+	size_t *header;
+	if( rand_alloc_fail && rand()%rand_alloc_fail_odds == 0 ){
+		return NULL;
+	}
+	void *mem = header = malloc(sizeof header + size );
 	if( mem == NULL ){
 		perror("malloc");
 		exit(1);
 	}
-    *(uintptr_t*)mem = size;
-    total_allocs++;
-    total_mem += size;
-    return (char*)mem+sizeof(uintptr_t);
+	*header = size;
+	total_allocs++;
+	total_mem += size;
+	return (char*)mem + sizeof header;
 }
 
 static void xfree(void *ptr) {
