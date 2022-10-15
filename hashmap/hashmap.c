@@ -502,15 +502,19 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 	case 2: b |= ((uint64_t)in[1]) << 8;
 	case 1: b |= ((uint64_t)in[0]);
 	}
-    v3 ^= b;
-    SIPROUND; SIPROUND;
-    v0 ^= b;
-    v2 ^= 0xff;
-    SIPROUND; SIPROUND; SIPROUND; SIPROUND;
-    b = v0 ^ v1 ^ v2 ^ v3;
-    uint64_t out = 0;
-    U64TO8_LE((uint8_t*)&out, b);
-    return out;
+	v3 ^= b;
+	SIPROUND;
+	SIPROUND;
+	v0 ^= b;
+	v2 ^= 0xff;
+	SIPROUND;
+	SIPROUND;
+	SIPROUND;
+	SIPROUND;
+	b = v0 ^ v1 ^ v2 ^ v3;
+	uint64_t out = 0;
+	U64TO8_LE((uint8_t*)&out, b);
+	return out;
 }
 
 //-----------------------------------------------------------------------------
