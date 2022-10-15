@@ -374,20 +374,23 @@ main(int argc, char **argv)
 	hashmap_clear(map);
 	assert( total_allocs == allocs - N );
 
-    assert(hashmap_count(map) == 0);
+	assert( hashmap_count(map) == 0 );
 
-    for (unsigned i = 0; i < N; i++) {
-        char *str;
-        while (!(str = xmalloc(16)));
-        sprintf(str, "s%i", i);
-        while(!hashmap_set(map, &str));
-    }
+	for( unsigned i = 0; i < N; i += 1 ){
+		char *str;
+		void *v;
+		do str = xmalloc(16);
+		while( str == NULL );
+		sprintf(str, "s%i", i);
+		do v = hashmap_set(map, &str);
+		while( v == NULL);
+	}
 
-    hashmap_free(map);
+	hashmap_free(map);
 
-    if (total_allocs != 0) {
-        fprintf(stderr, "total_allocs: expected 0, got %u\n", total_allocs);
-        exit(1);
-    }
-    return fail;
+	assert( total_allocs == 0 );
+	if( fail > 0 ){
+		fprintf(stderr, "%d total test failures\n", fail);
+	}
+	return !!fail;
 }
