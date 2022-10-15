@@ -336,6 +336,21 @@ test_1(unsigned N, unsigned seed)
     xfree(vals);
 }
 
+
+static void
+populate_map(struct hashmap *map, unsigned N)
+{
+	for( unsigned i = 0; i < N; i += 1 ){
+		char *str;
+		void *v;
+		do str = xmalloc(16);
+		while( str == NULL );
+		snprintf(str, 16, "s%i", i);
+		do v = hashmap_set(map, &str);
+		while( v == NULL);
+	}
+}
+
 int
 main(int argc, char **argv)
 {
@@ -358,33 +373,14 @@ main(int argc, char **argv)
 	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0);
 	while( map == NULL );
 
-	for( unsigned i = 0; i < N; i += 1 ){
-		char *str;
-		void *v;
-		do str = xmalloc(16);
-		while( str == NULL );
-
-		sprintf(str, "s%i", i);
-
-		do v = hashmap_set(map, &str);
-		while( v == NULL);
-	}
+	populate_map(map, N);
 
 	unsigned allocs = total_allocs;
 	hashmap_clear(map);
 	assert( total_allocs == allocs - N );
 
 	assert( hashmap_count(map) == 0 );
-
-	for( unsigned i = 0; i < N; i += 1 ){
-		char *str;
-		void *v;
-		do str = xmalloc(16);
-		while( str == NULL );
-		sprintf(str, "s%i", i);
-		do v = hashmap_set(map, &str);
-		while( v == NULL);
-	}
+	populate_map(map, N);
 
 	hashmap_free(map);
 
