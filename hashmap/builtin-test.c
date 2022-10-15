@@ -258,37 +258,40 @@ main(int argc, char **argv)
 		assert(i == hashmap_count(map));
 
 		int *v;
-		assert( ! hashmap_get(map, vals + i) );
-		assert( ! hashmap_delete(map, vals + i) );
+		int *t = vals + i;
+		assert( ! hashmap_get(map, t) );
+		assert( ! hashmap_delete(map, t) );
 
 		/* Insert the value into the map, looping to allow
 		 * for random malloc failures */
-		do assert( !hashmap_set(map, &vals[i]) );
+		do assert( !hashmap_set(map, t) );
 		while( hashmap_oom(map) );
 
 		for( unsigned j = 0; j < i; j += 1 ){
-			v = hashmap_get(map, &vals[j]);
-			assert( v && *v == vals[j] );
+			int *tj = vals + j;
+			v = hashmap_get(map, tj);
+			assert( v && *v == *tj );
 		}
 
 		do {
-			v = hashmap_set(map, &vals[i]);
+			v = hashmap_set(map, t);
 			if( !v ){
 				assert( hashmap_oom(map) );
 			} else {
 				assert( !hashmap_oom(map) );
-				assert( v && *v == vals[i] );
+				assert( v && *v == *t );
 			}
 		} while( hashmap_oom(map) );
-        v = hashmap_get(map, &vals[i]);
-        assert(v && *v == vals[i]);
-        v = hashmap_delete(map, &vals[i]);
-        assert(v && *v == vals[i]);
-        assert(!hashmap_get(map, &vals[i]));
-        assert(!hashmap_delete(map, &vals[i]));
-        assert(!hashmap_set(map, &vals[i]));
-        assert(i + 1 == hashmap_count(map));
-    }
+
+		v = hashmap_get(map, t);
+		assert( v && *v == *t );
+		v = hashmap_delete(map, t);
+		assert( v && *v == *t );
+		assert( !hashmap_get(map, t) );
+		assert( !hashmap_delete(map, t) );
+		assert( !hashmap_set(map, t) );
+		assert( i + 1 == hashmap_count(map) );
+	}
 
     int *vals2;
     while (!(vals2 = xmalloc(N * sizeof(int)))) {}
