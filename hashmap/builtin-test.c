@@ -46,15 +46,17 @@ xfree(void *ptr)
 	}
 }
 
-static void shuffle(void *array, size_t numels, size_t elsize) {
-    char tmp[elsize];
-    char *arr = array;
-    for (size_t i = 0; i < numels - 1; i++) {
-        int j = i + rand() / (RAND_MAX / (numels - i) + 1);
-        memcpy(tmp, arr + j * elsize, elsize);
-        memcpy(arr + j * elsize, arr + i * elsize, elsize);
-        memcpy(arr + i * elsize, tmp, elsize);
-    }
+static void
+shuffle(void *array, size_t numels, size_t elsize)
+{
+	char tmp[elsize];
+	char *arr = array;
+	for( size_t i = 0; i < numels - 1; i += 1 ){
+		int j = i + rand() / (RAND_MAX / (numels - i) + 1);
+		memcpy(tmp, arr + j * elsize, elsize);
+		memcpy(arr + j * elsize, arr + i * elsize, elsize);
+		memcpy(arr + i * elsize, tmp, elsize);
+	}
 }
 
 static int
