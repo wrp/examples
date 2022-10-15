@@ -332,10 +332,9 @@ main(int argc, char **argv)
 		while( hashmap_oom(map) );
 	}
 
-    assert(hashmap_count(map) != 0);
-
-    hashmap_clear(map);
-    assert(hashmap_count(map) == 0);
+	assert( hashmap_count(map) == N );
+	hashmap_clear(map);
+	assert( hashmap_count(map) == 0 );
 
 
     for (unsigned i = 0; i < N; i++) {
