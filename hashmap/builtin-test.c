@@ -358,12 +358,17 @@ main(int argc, char **argv)
 	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0);
 	while( map == NULL );
 
-    for (unsigned i = 0; i < N; i++) {
-        char *str;
-        while (!(str = xmalloc(16)));
-        sprintf(str, "s%i", i);
-        while(!hashmap_set(map, &str));
-    }
+	for( unsigned i = 0; i < N; i += 1 ){
+		char *str;
+		void *v;
+		do str = xmalloc(16);
+		while( str == NULL );
+
+		sprintf(str, "s%i", i);
+
+		do v = hashmap_set(map, &str);
+		while( v == NULL);
+	}
 
     hashmap_clear(map);
     assert(hashmap_count(map) == 0);
