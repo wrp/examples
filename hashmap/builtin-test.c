@@ -99,20 +99,13 @@ free_str(void *item) {
 	xfree(*(char**)item);
 }
 
-int
-main(int argc, char **argv)
+static void
+test_exact_hashes(void)
 {
-	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
-	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
+    /* Some specific values */
 
-	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
-	srand(seed);
-
-	rand_alloc_fail = true;
-
-    // test sip and murmur hashes
-    assert(hashmap_sip("hello", 5, 1, 2) == 2957200328589801622);
-    assert(hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884);
+	assert(hashmap_sip("hello", 5, 1, 2) == 2957200328589801622);
+	assert(hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884);
 
 	for( int i = 0; i < 16; i += 1 ){
 		uint64_t expect_sip[] = {
@@ -229,6 +222,21 @@ main(int argc, char **argv)
 		assert( hashmap_sip(msg, 5, 1, s) == expect_sip[i]);
 		assert( hashmap_murmur(msg, 5, 1, s) == 0x1759b52feba4da84 );
 	}
+}
+
+int
+main(int argc, char **argv)
+{
+	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
+	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
+
+	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
+	srand(seed);
+
+	rand_alloc_fail = true;
+
+	test_exact_hashes();
+
 
     int *vals;
     while (!(vals = xmalloc(N * sizeof(int)))) {}
