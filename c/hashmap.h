@@ -53,9 +53,4 @@ bool hashmap_scan(
 
 uint64_t hashmap_sip(const void *, size_t , uint64_t, uint64_t);
 uint64_t hashmap_murmur(const void *, size_t, uint64_t, uint64_t);
-
-
-// DEPRECATED: use `hashmap_new_with_allocator`
-void hashmap_set_allocator(void *(*malloc)(size_t), void (*free)(void*));
-
 #endif
