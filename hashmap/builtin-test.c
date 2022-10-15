@@ -14,8 +14,8 @@ int fail = 0;  /* Count of failed tests */
 
 static bool rand_alloc_fail = false;
 static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
-static uintptr_t total_allocs = 0;
-static uintptr_t total_mem = 0;
+static unsigned total_allocs = 0;
+static unsigned total_mem = 0;
 
 static void *
 xmalloc(size_t size)
@@ -383,7 +383,7 @@ main(int argc, char **argv)
     hashmap_free(map);
 
     if (total_allocs != 0) {
-        fprintf(stderr, "total_allocs: expected 0, got %lu\n", total_allocs);
+        fprintf(stderr, "total_allocs: expected 0, got %u\n", total_allocs);
         exit(1);
     }
     return fail;
