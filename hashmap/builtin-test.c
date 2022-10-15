@@ -98,13 +98,13 @@ free_str(void *item) {
 	xfree(*(char**)item);
 }
 
+/* Test some specific values. */
 static void
 test_exact_hashes(void)
 {
-    /* Some specific values */
 
-	assert(hashmap_sip("hello", 5, 1, 2) == 2957200328589801622);
-	assert(hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884);
+	assert( hashmap_sip("hello", 5, 1, 2) == 2957200328589801622 );
+	assert( hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884 );
 
 	for( int i = 0; i < 16; i += 1 ){
 		uint64_t expect_sip[] = {
