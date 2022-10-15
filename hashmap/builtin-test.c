@@ -270,17 +270,16 @@ main(int argc, char **argv)
 			v = hashmap_get(map, &vals[j]);
 			assert( v && *v == vals[j] );
 		}
-        while (true) {
-            v = hashmap_set(map, &vals[i]);
-            if (!v) {
-                assert(hashmap_oom(map));
-                continue;
-            } else {
-                assert(!hashmap_oom(map));
-                assert(v && *v == vals[i]);
-                break;
-            }
-        }
+
+		do {
+			v = hashmap_set(map, &vals[i]);
+			if( !v ){
+				assert( hashmap_oom(map) );
+			} else {
+				assert( !hashmap_oom(map) );
+				assert( v && *v == vals[i] );
+			}
+		} while( hashmap_oom(map) );
         v = hashmap_get(map, &vals[i]);
         assert(v && *v == vals[i]);
         v = hashmap_delete(map, &vals[i]);
