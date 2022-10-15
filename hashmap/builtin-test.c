@@ -12,7 +12,6 @@ int fail = 0;  /* Count of failed tests */
 		__FILE__, __LINE__, #x); \
 	} } while(0)
 
-static bool rand_alloc_fail = false;
 static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
 static unsigned total_allocs = 0;
 static unsigned total_mem = 0;
@@ -21,7 +20,7 @@ static void *
 xmalloc(size_t size)
 {
 	size_t *header;
-	if( rand_alloc_fail && rand()%rand_alloc_fail_odds == 0 ){
+	if( rand() % rand_alloc_fail_odds == 0 ){
 		return NULL;
 	}
 	void *mem = header = malloc(sizeof header + size );
@@ -359,8 +358,6 @@ main(int argc, char **argv)
 
 	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
 	srand(seed);
-
-	rand_alloc_fail = true;
 
 	test_exact_hashes();
 
