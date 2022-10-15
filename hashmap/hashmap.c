@@ -555,7 +555,8 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 		h1 ^= k1;
 		h1 = ROTL32(h1, 19);
 		h1 += h2;
-		h1 = h1 * 5 + 0x561ccd1b;
+		h1 *= 5;
+		h1 += 0x561ccd1b;
 
         k2 *= c2; k2  = ROTL32(k2,16); k2 *= c3; h2 ^= k2;
         h2 = ROTL32(h2,17); h2 += h3; h2 = h2*5+0x0bcaa747;
