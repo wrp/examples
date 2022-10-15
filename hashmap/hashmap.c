@@ -542,13 +542,21 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 	uint32_t c3 = 0x38b34ae5;
 	uint32_t c4 = 0xa1e38b93;
 	const uint32_t * blocks = (const uint32_t *)(data + nblocks * 16);
-    for (int i = -nblocks; i; i++) {
-        uint32_t k1 = blocks[i*4+0];
-        uint32_t k2 = blocks[i*4+1];
-        uint32_t k3 = blocks[i*4+2];
-        uint32_t k4 = blocks[i*4+3];
-        k1 *= c1; k1  = ROTL32(k1,15); k1 *= c2; h1 ^= k1;
-        h1 = ROTL32(h1,19); h1 += h2; h1 = h1*5+0x561ccd1b;
+	for( int i = -nblocks; i; i += 1 ){
+		uint32_t k1 = blocks[ i * 4 + 0 ];
+		uint32_t k2 = blocks[ i * 4 + 1 ];
+		uint32_t k3 = blocks[ i * 4 + 2 ];
+		uint32_t k4 = blocks[ i * 4 + 3 ];
+
+		k1 *= c1;
+		k1 = ROTL32(k1, 15);
+		k1 *= c2;
+
+		h1 ^= k1;
+		h1 = ROTL32(h1, 19);
+		h1 += h2;
+		h1 = h1 * 5 + 0x561ccd1b;
+
         k2 *= c2; k2  = ROTL32(k2,16); k2 *= c3; h2 ^= k2;
         h2 = ROTL32(h2,17); h2 += h3; h2 = h2*5+0x0bcaa747;
         k3 *= c3; k3  = ROTL32(k3,17); k3 *= c4; h3 ^= k3;
