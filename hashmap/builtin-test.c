@@ -96,6 +96,49 @@ main(int argc, char **argv)
     assert(hashmap_sip("hello", 5, 1, 2) == 2957200328589801622);
     assert(hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884);
 
+	for( int i = 0; i < 16; i += 1 ){
+		uint64_t expect_sip[] = {
+			0x8164b3f5d5f2a815,
+			0x322130e9204fa827,
+			0xa7c3dc82f3d3b138,
+			0x725c97ff4b92866f,
+			0x45dc70ae16a8ded5,
+			0x2e98c26b5cbba9d5,
+			0x9e74b6bf0d2a3ffc,
+			0x3bcc5f49a24fa146,
+			0xbd69d6c2d0d4963a,
+			0x25072a3d8909dc87,
+			0x6902037ffa456b82,
+			0xa1138ae1d55d5ea8,
+			0xd63ba52c7e065c3e,
+			0x7b2f3531a3d29caf,
+			0xe87af9a49a49bb13,
+			0x290a1607eb437896
+		};
+		uint64_t expect_murmur[] = {
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb91def72b2444a0,
+			0xdb25bad6f630f4d5,
+			0x0b33f35188c7bcf2,
+			0x672b90fb170eaed5,
+			0x99fc51a9bf19dfa7,
+			0xe00628d98b377b44,
+			0xdcf199cb36f7ef9f,
+			0x34f85a99aa572bad,
+			0x1759b52feba4da84
+		};
+		uint64_t s = 0x1000000000000000 >> 4 * i;
+		assert( hashmap_sip("hello", 5, s, 2) == expect_sip[i]);
+		assert( hashmap_murmur("hello", 5, s, 2) == expect_murmur[i]);
+	}
+
+
     int *vals;
     while (!(vals = xmalloc(N * sizeof(int)))) {}
     for( unsigned i = 0; i < N; i++) {
