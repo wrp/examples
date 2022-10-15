@@ -266,10 +266,10 @@ main(int argc, char **argv)
 		do assert( !hashmap_set(map, &vals[i]) );
 		while( hashmap_oom(map) );
 
-        for (unsigned j = 0; j < i; j++) {
-            v = hashmap_get(map, &vals[j]);
-            assert(v && *v == vals[j]);
-        }
+		for( unsigned j = 0; j < i; j += 1 ){
+			v = hashmap_get(map, &vals[j]);
+			assert( v && *v == vals[j] );
+		}
         while (true) {
             v = hashmap_set(map, &vals[i]);
             if (!v) {
