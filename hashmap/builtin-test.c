@@ -224,6 +224,24 @@ test_exact_hashes(void)
 	}
 }
 
+/* exercise the scan */
+static void
+test_scan(unsigned N, struct hashmap *map)
+{
+	int *v;
+
+	do v = xmalloc(N * sizeof *v);
+	while( v == NULL);
+
+	memset(v, 0, N * sizeof *v);
+	assert( 0 == hashmap_scan(map, iter_ints, &v) );
+	for( unsigned i = 0; i < N; i += 1 ){
+		assert(v[i] == 1);
+	}
+	xfree(v);
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -293,14 +311,7 @@ main(int argc, char **argv)
 		assert( i + 1 == hashmap_count(map) );
 	}
 
-    int *vals2;
-    while (!(vals2 = xmalloc(N * sizeof(int)))) {}
-    memset(vals2, 0, N * sizeof(int));
-    assert(0 == hashmap_scan(map, iter_ints, &vals2));
-    for (unsigned i = 0; i < N; i++) {
-        assert(vals2[i] == 1);
-    }
-    xfree(vals2);
+	test_scan(N, map);
 
     shuffle(vals, N, sizeof(int));
     for (unsigned i = 0; i < N; i++) {
