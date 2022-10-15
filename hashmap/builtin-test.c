@@ -94,8 +94,9 @@ hash_str(const void *vitem, uint64_t seed0, uint64_t seed1)
 	return hashmap_murmur(item, strlen(item), seed0, seed1);
 }
 
-static void free_str(void *item) {
-    xfree(*(char**)item);
+static void
+free_str(void *item) {
+	xfree(*(char**)item);
 }
 
 int
@@ -104,10 +105,10 @@ main(int argc, char **argv)
 	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
 	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
 
-    printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
-    srand(seed);
+	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
+	srand(seed);
 
-    rand_alloc_fail = true;
+	rand_alloc_fail = true;
 
     // test sip and murmur hashes
     assert(hashmap_sip("hello", 5, 1, 2) == 2957200328589801622);
