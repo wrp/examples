@@ -241,20 +241,9 @@ test_scan(unsigned N, struct hashmap *map)
 	xfree(v);
 }
 
-
-int
-main(int argc, char **argv)
+static void
+test_1(unsigned N, unsigned seed)
 {
-	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
-	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
-
-	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
-	srand(seed);
-
-	rand_alloc_fail = true;
-
-	test_exact_hashes();
-
 	int *vals;
 	do vals = xmalloc(N * sizeof *vals);
 	while( vals == NULL );
@@ -343,13 +332,28 @@ main(int argc, char **argv)
         }
 
     hashmap_clear(map);
-
     hashmap_free(map);
-
     xfree(vals);
+}
 
-    hash.func = hash_str;
+int
+main(int argc, char **argv)
+{
+	unsigned N = argc > 1 ? strtoul(argv[1], NULL, 10) : 2000;
+	unsigned seed = argc > 2 ? strtoul(argv[2], NULL, 10) : time(NULL);
 
+	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
+	srand(seed);
+
+	rand_alloc_fail = true;
+
+	test_exact_hashes();
+
+	test_1(N, seed);
+
+	struct hashmap *map;
+	struct hash_method hash = { hash_str, { seed, seed } };
+	struct hash_element el;
     el.compare = compare_strs;
     el.free = free_str;
     el.size = sizeof(char *);
