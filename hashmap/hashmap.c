@@ -475,19 +475,22 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
       v3 ^= v0; \
       v2 += v1; v1 = ROTL(v1, 17); \
       v1 ^= v2; v2 = ROTL(v2, 32); }
-    uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
-    uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
-    uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
-    uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
-    uint64_t v1 = UINT64_C(0x646f72616e646f6d) ^ k1;
-    uint64_t v0 = UINT64_C(0x736f6d6570736575) ^ k0;
-    const uint8_t *end = in + inlen - (inlen % sizeof(uint64_t));
-    for (; in != end; in += 8) {
-        uint64_t m = U8TO64_LE(in);
-        v3 ^= m;
-        SIPROUND; SIPROUND;
-        v0 ^= m;
-    }
+	uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
+	uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
+	uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
+	uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
+	uint64_t v1 = UINT64_C(0x646f72616e646f6d) ^ k1;
+	uint64_t v0 = UINT64_C(0x736f6d6570736575) ^ k0;
+	const uint8_t *end = in + inlen - (inlen % sizeof(uint64_t));
+
+	while( in != end ){
+		uint64_t m = U8TO64_LE(in);
+		v3 ^= m;
+		SIPROUND;
+		SIPROUND;
+		v0 ^= m;
+		in += 8;
+	}
     const int left = inlen & 7;
     uint64_t b = ((uint64_t)inlen) << 56;
     switch (left) {
