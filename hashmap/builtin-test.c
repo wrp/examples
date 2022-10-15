@@ -67,22 +67,31 @@ iter_ints(const void *item, void *udata)
 	return 0;
 }
 
-static int compare_ints_udata(const void *a, const void *b, void *udata) {
+static int
+compare_ints_udata(const void *a, const void *b, void *udata)
+{
 	(void)udata;
-    return *(int*)a - *(int*)b;
+	return *(int*)a - *(int*)b;
 }
 
-static int compare_strs(const void *a, const void *b, void *udata) {
+static int
+compare_strs(const void *a, const void *b, void *udata)
+{
 	(void)udata;
 	return strcmp(*(char**)a, *(char**)b);
 }
 
-static uint64_t hash_int(const void *item, uint64_t seed0, uint64_t seed1) {
-    return hashmap_murmur(item, sizeof(int), seed0, seed1);
+static uint64_t
+hash_int(const void *item, uint64_t seed0, uint64_t seed1)
+{
+	return hashmap_murmur(item, sizeof(int), seed0, seed1);
 }
 
-static uint64_t hash_str(const void *item, uint64_t seed0, uint64_t seed1) {
-    return hashmap_murmur(*(char**)item, strlen(*(char**)item), seed0, seed1);
+static uint64_t
+hash_str(const void *vitem, uint64_t seed0, uint64_t seed1)
+{
+	char *item = *(char **)vitem;
+	return hashmap_murmur(item, strlen(item), seed0, seed1);
 }
 
 static void free_str(void *item) {
