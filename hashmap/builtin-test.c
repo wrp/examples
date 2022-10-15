@@ -35,12 +35,15 @@ xmalloc(size_t size)
 	return (char*)mem + sizeof header;
 }
 
-static void xfree(void *ptr) {
-    if (ptr) {
-        total_mem -= *(uintptr_t*)((char*)ptr-sizeof(uintptr_t));
-        free((char*)ptr-sizeof(uintptr_t));
-        total_allocs--;
-    }
+static void
+xfree(void *ptr)
+{
+	if( ptr ){
+		size_t *header = (void *)((char *)ptr - sizeof header);
+		total_mem -= *header;
+		free(header);
+		total_allocs--;
+	}
 }
 
 static void shuffle(void *array, size_t numels, size_t elsize) {
