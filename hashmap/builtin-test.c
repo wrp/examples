@@ -246,9 +246,9 @@ main(int argc, char **argv)
 		vals[i] = (int)i;
 	}
 
-    struct hashmap *map;
-    struct hash_method hash = { hash_int, { seed, seed } };
-    struct hash_element el = { sizeof *vals, compare_ints_udata };
+	struct hashmap *map;
+	struct hash_method hash = { hash_int, { seed, seed } };
+	struct hash_element el = { sizeof *vals, compare_ints_udata };
 
 	do map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0);
 	while( map == NULL );
