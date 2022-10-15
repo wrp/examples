@@ -6,11 +6,11 @@
 #include "hashmap.h"
 
 int fail = 0;  /* Count of failed tests */
-#define assert(x) if( !(x) ){ \
+#define assert(x) do { if( !(x) ){ \
 	fail += 1; \
 	fprintf(stderr, "Test failure in %s at line %d: %s\n", \
 		__FILE__, __LINE__, #x); \
-	}
+	} } while(0)
 
 static bool rand_alloc_fail = false;
 static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
@@ -263,7 +263,7 @@ main(int argc, char **argv)
 
 		/* Insert the value into the map, looping to allow
 		 * for random malloc failures */
-		do assert( !hashmap_set(map, &vals[i]) )
+		do assert( !hashmap_set(map, &vals[i]) );
 		while( hashmap_oom(map) );
 
         for (unsigned j = 0; j < i; j++) {
