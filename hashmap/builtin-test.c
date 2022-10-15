@@ -355,8 +355,8 @@ main(int argc, char **argv)
 	struct hash_method hash = { hash_str, { seed, seed } };
 	struct hash_element el = { sizeof(char *), compare_strs, free_str };
 
-    while (!(map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0)))
-    	;
+	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0);
+	while( map == NULL );
 
     for (unsigned i = 0; i < N; i++) {
         char *str;
