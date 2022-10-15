@@ -313,18 +313,19 @@ main(int argc, char **argv)
 
 	test_scan(N, map);
 
-    shuffle(vals, N, sizeof(int));
-    for (unsigned i = 0; i < N; i++) {
-        int *v;
-        v = hashmap_delete(map, &vals[i]);
-        assert(v && *v == vals[i]);
-        assert(!hashmap_get(map, &vals[i]));
-        assert(N - i - 1 == hashmap_count(map));
-        for (unsigned j = N-1; j > i; j--) {
-            v = hashmap_get(map, &vals[j]);
-            assert(v && *v == vals[j]);
-        }
-    }
+	shuffle(vals, N, sizeof *vals);
+	for( unsigned i = 0; i < N; i += 1 ){
+		int *t = vals + i;
+		int *v;
+		v = hashmap_delete(map, t);
+		assert( v && *v == *t );
+		assert( !hashmap_get(map, t) );
+		assert( N - i - 1 == hashmap_count(map) );
+		for( unsigned j = N - 1; j > i; j -= 1 ){
+			v = hashmap_get(map, vals + j);
+			assert( v && *v == vals[j] );
+		}
+	}
 
     for (unsigned i = 0; i < N; i++) {
         while (true) {
