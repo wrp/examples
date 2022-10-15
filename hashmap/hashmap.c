@@ -568,12 +568,26 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 		h2 *= 5;
 		h2 += 0x0bcaa747;
 
+		k3 *= c3;
+		ROTL32(k3, 17);
+		k3 *= c4;
 
-        k3 *= c3; ROTL32(k3,17); k3 *= c4; h3 ^= k3;
-        ROTL32(h3,15); h3 += h4; h3 = h3*5+0x96cd1c35;
-        k4 *= c4; ROTL32(k4,18); k4 *= c1; h4 ^= k4;
-        ROTL32(h4,13); h4 += h1; h4 = h4*5+0x32ac3b17;
-    }
+		h3 ^= k3;
+		ROTL32(h3, 15);
+		h3 += h4;
+		h3 *= 5;
+		h3 += 0x96cd1c35;
+
+		k4 *= c4;
+		ROTL32(k4, 18);
+		k4 *= c1;
+
+		h4 ^= k4;
+		ROTL32(h4, 13);
+		h4 += h1;
+		h4 *= 5;
+		h4 += 0x32ac3b17;
+	}
     const uint8_t * tail = (const uint8_t*)(data + nblocks*16);
     uint32_t k1 = 0;
     uint32_t k2 = 0;
