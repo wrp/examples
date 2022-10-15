@@ -370,7 +370,10 @@ main(int argc, char **argv)
 		while( v == NULL);
 	}
 
-    hashmap_clear(map);
+	unsigned allocs = total_allocs;
+	hashmap_clear(map);
+	assert( total_allocs == allocs - N );
+
     assert(hashmap_count(map) == 0);
 
     for (unsigned i = 0; i < N; i++) {
