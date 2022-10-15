@@ -252,18 +252,19 @@ main(int argc, char **argv)
 	do map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0);
 	while( map == NULL );
 
-    shuffle(vals, N, sizeof(int));
-    for (unsigned i = 0; i < (unsigned)N; i++) {
-        assert(i == hashmap_count(map));
-        int *v;
-        assert(!hashmap_get(map, &vals[i]));
-        assert(!hashmap_delete(map, &vals[i]));
-        while (true) {
-            assert(!hashmap_set(map, &vals[i]));
-            if (!hashmap_oom(map)) {
-                break;
-            }
-        }
+	shuffle(vals, N, sizeof(int));
+
+	for( unsigned i = 0; i < N; i += 1 ){
+		assert(i == hashmap_count(map));
+
+		int *v;
+		assert( ! hashmap_get(map, vals + i) );
+		assert( ! hashmap_delete(map, vals + i) );
+
+		/* Insert the value into the map, looping to allow
+		 * for random malloc failures */
+		do assert( !hashmap_set(map, &vals[i]) )
+		while( hashmap_oom(map) );
 
         for (unsigned j = 0; j < i; j++) {
             v = hashmap_get(map, &vals[j]);
