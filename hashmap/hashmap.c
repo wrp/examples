@@ -463,8 +463,8 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 	((uint64_t)((p)[6]) << 48) | ((uint64_t)((p)[7]) << 56) \
 )
 #define U64TO8_LE(p, v) \
-    { U32TO8_LE((p), (uint32_t)((v))); \
-      U32TO8_LE((p) + 4, (uint32_t)((v) >> 32)); }
+	U32TO8_LE((p) + 0, (uint32_t)((v))); \
+	U32TO8_LE((p) + 4, (uint32_t)((v) >> 32))
 #define U32TO8_LE(p, v) \
     { (p)[0] = (uint8_t)((v)); \
       (p)[1] = (uint8_t)((v) >> 8); \
