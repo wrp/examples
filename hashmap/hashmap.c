@@ -645,18 +645,34 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 	/**/     k1 *= c2;
 	/**/     h1 ^= k1;
 	};
-    h1 ^= len; h2 ^= len; h3 ^= len; h4 ^= len;
-    h1 += h2; h1 += h3; h1 += h4;
-    h2 += h1; h3 += h1; h4 += h1;
-    FMIX32(h1); FMIX32(h2); FMIX32(h3); FMIX32(h4);
-    h1 += h2; h1 += h3; h1 += h4;
-    h2 += h1; h3 += h1; h4 += h1;
-    ((uint32_t*)out)[0] = h1;
-    ((uint32_t*)out)[1] = h2;
-    ((uint32_t*)out)[2] = h3;
-    ((uint32_t*)out)[3] = h4;
-    return *(uint64_t*)out;
+	h1 ^= len;
+	h2 ^= len;
+	h3 ^= len;
+	h4 ^= len;
+	h1 += h2;
+	h1 += h3;
+	h1 += h4;
+	h2 += h1;
+	h3 += h1;
+	h4 += h1;
+	FMIX32(h1);
+	FMIX32(h2);
+	FMIX32(h3);
+	FMIX32(h4);
+	h1 += h2;
+	h1 += h3;
+	h1 += h4;
+	h2 += h1;
+	h3 += h1;
+	h4 += h1;
+	((uint32_t*)out)[0] = h1;
+	((uint32_t*)out)[1] = h2;
+	((uint32_t*)out)[2] = h3;
+	((uint32_t*)out)[3] = h4;
+	return *(uint64_t*)out;
 }
+
+
 #ifdef HASHMAP_TEST
 
 clock_t begin;
