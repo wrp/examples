@@ -294,7 +294,7 @@ hashmap_set(struct hashmap *map, void *item)
 }
 
 /*
- * Return the item based that matches the key, or NULL.
+ * Return the item that matches the key, or NULL
  */
 void *
 hashmap_get(struct hashmap *map, const void *key)
