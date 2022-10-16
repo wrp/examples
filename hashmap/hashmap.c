@@ -29,6 +29,8 @@
 #define HASH_MASK ( (1LU << HASH_BITS) - 1 )
 
 static_assert(HASH_BITS + PSL_BITS == 64, "Invalid bucket sizes");
+static_assert(HASH_BITS < 60, "Invalid bucket sizes");
+static_assert(HASH_BITS > 4, "Invalid bucket sizes");
 
 struct bucket {
 	uint64_t hash:HASH_BITS;
