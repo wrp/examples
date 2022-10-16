@@ -157,7 +157,7 @@ hashmap_clear(struct hashmap *map)
 
 /* Exchange data from bucket a to b, leaving a in m->spare */
 static void
-swap(struct hashmap *m, void *a, void *b)
+swap(const struct hashmap *m, void *a, void *b)
 {
 	size_t s = m->bucketsz;
 	memcpy(m->spare, a, s);
