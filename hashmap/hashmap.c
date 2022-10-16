@@ -488,6 +488,8 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 	v2 = ROTL(v2, 32)
 
 	uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
+	fprintf(stderr, "k0 = %0llx  seed0 = %0llx  htonl = %0llx\n",
+		k0, seed0, htonll(seed0));
 	uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
 	uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
 	uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
@@ -605,32 +607,44 @@ hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
 		h4 *= 5;
 		h4 += 0x32ac3b17;
 	}
-    const uint8_t * tail = (const uint8_t*)(data + nblocks*16);
-    uint32_t k1 = 0;
-    uint32_t k2 = 0;
-    uint32_t k3 = 0;
-    uint32_t k4 = 0;
-    switch(len & 15) {
-    case 15: k4 ^= tail[14] << 16;
-    case 14: k4 ^= tail[13] << 8;
-    case 13: k4 ^= tail[12] << 0;
-             k4 *= c4; ROTL32(k4,18); k4 *= c1; h4 ^= k4;
-    case 12: k3 ^= tail[11] << 24;
-    case 11: k3 ^= tail[10] << 16;
-    case 10: k3 ^= tail[ 9] << 8;
-    case  9: k3 ^= tail[ 8] << 0;
-             k3 *= c3; ROTL32(k3,17); k3 *= c4; h3 ^= k3;
-    case  8: k2 ^= tail[ 7] << 24;
-    case  7: k2 ^= tail[ 6] << 16;
-    case  6: k2 ^= tail[ 5] << 8;
-    case  5: k2 ^= tail[ 4] << 0;
-             k2 *= c2; ROTL32(k2,16); k2 *= c3; h2 ^= k2;
-    case  4: k1 ^= tail[ 3] << 24;
-    case  3: k1 ^= tail[ 2] << 16;
-    case  2: k1 ^= tail[ 1] << 8;
-    case  1: k1 ^= tail[ 0] << 0;
-             k1 *= c1; ROTL32(k1,15); k1 *= c2; h1 ^= k1;
-    };
+	const uint8_t * tail = (const uint8_t*)(data + nblocks * 16);
+	uint32_t k1 = 0;
+	uint32_t k2 = 0;
+	uint32_t k3 = 0;
+	uint32_t k4 = 0;
+	switch( len & 15 ){
+	case 15: k4 ^= tail[14] << 16;
+	case 14: k4 ^= tail[13] << 8;
+	case 13: k4 ^= tail[12] << 0;
+	/**/     k4 *= c4;
+	/**/     ROTL32(k4,18);
+	/**/     k4 *= c1;
+	/**/     h4 ^= k4;
+	case 12: k3 ^= tail[11] << 24;
+	case 11: k3 ^= tail[10] << 16;
+	case 10: k3 ^= tail[ 9] << 8;
+	case  9: k3 ^= tail[ 8] << 0;
+	/**/     k3 *= c3;
+	/**/     ROTL32(k3,17);
+	/**/     k3 *= c4;
+	/**/     h3 ^= k3;
+	case  8: k2 ^= tail[ 7] << 24;
+	case  7: k2 ^= tail[ 6] << 16;
+	case  6: k2 ^= tail[ 5] << 8;
+	case  5: k2 ^= tail[ 4] << 0;
+	/**/     k2 *= c2;
+	/**/     ROTL32(k2,16);
+	/**/     k2 *= c3;
+	/**/     h2 ^= k2;
+	case  4: k1 ^= tail[ 3] << 24;
+	case  3: k1 ^= tail[ 2] << 16;
+	case  2: k1 ^= tail[ 1] << 8;
+	case  1: k1 ^= tail[ 0] << 0;
+	/**/     k1 *= c1;
+	/**/     ROTL32(k1,15);
+	/**/     k1 *= c2;
+	/**/     h1 ^= k1;
+	};
     h1 ^= len; h2 ^= len; h3 ^= len; h4 ^= len;
     h1 += h2; h1 += h3; h1 += h4;
     h2 += h1; h3 += h1; h4 += h1;
