@@ -37,7 +37,7 @@ struct hashmap {
 	size_t bucketsz;         /* Size of each bucket, padded for alignment */
 	size_t nbuckets;         /* Total number of buckets in the table */
 	size_t count;            /* Number of full buckets */
-	size_t mask;             /* nbuckets - 1 */
+	size_t mask;             /* nbuckets - 1, used to bound index */
 	size_t growat;           /* Threshold at which to grow the table */
 	void *buckets;           /* The actual buckets */
 	void *spare;             /* Work space used to return values */
@@ -179,6 +179,8 @@ resize(struct hashmap *map, size_t new_cap)
 	if( !map2 ){
 		return false;
 	}
+	const typeof(map->mask) mask = map2->mask;
+
 	/* Insert each element from map into map2.  We know that there
 	 * are no duplicates, so we can avoid checking for that.  TODO:
 	 * clean this up; there is much redundant code here that overlaps
@@ -190,13 +192,13 @@ resize(struct hashmap *map, size_t new_cap)
 			continue;
 		}
 		entry->psl = 1;
-		size_t j = entry->hash & map2->mask;
+		size_t j = entry->hash & mask;
 		struct bucket *b = bucket_at(map2, j);
 		while( 0 != (b = bucket_at(map2, j))->psl ){
 			if( b->psl < entry->psl ){
 				swap(map2, b, entry);
 			}
-			j = (j + 1) & map2->mask;
+			j = (j + 1) & mask;
 			entry->psl += 1;
 		}
                 memcpy(b, entry, map->bucketsz);
@@ -209,11 +211,12 @@ resize(struct hashmap *map, size_t new_cap)
 	assert( map2->malloc == map->malloc );
 	assert( map2->free == map->free );
 	assert( map2->bucketsz == map->bucketsz );
+	assert( map2->mask == mask );
 
 	map->free(map->buckets);
 	map->buckets = map2->buckets;
 	map->nbuckets = map2->nbuckets;
-	map->mask = map2->mask;
+	map->mask = mask;
 	map->growat = map2->growat;
 	map->free(map2);
 
@@ -250,8 +253,9 @@ hashmap_set(struct hashmap *map, void *item)
 	struct bucket *entry = NULL;
 	uint64_t hash = get_hash(map, item);
 	uint64_t psl = 1; /* probe sequence length */
+	const typeof(map->mask) mask = map->mask;
 
-	for( size_t i = hash & map->mask; ; i = (i + 1) & map->mask ){
+	for( size_t i = hash & mask; ; i = (i + 1) & mask ){
 		struct bucket *bucket = bucket_at(map, i);
 		/* Empty bucket found; insert */
 		if( bucket->psl == 0 ){
@@ -301,14 +305,15 @@ hashmap_get(struct hashmap *map, const void *key)
 {
 	assert( key != NULL );
 	uint64_t hash = get_hash(map, key);
-	size_t i = hash & map->mask;
+	const typeof(map->mask) mask = map->mask;
+	size_t i = hash & mask;
 	struct bucket *bucket = bucket_at(map, i);
 	while( bucket->psl ){
 		if( hash_match(map, bucket, hash, key) ){
 			return bucket->data;
 		}
 		/* TODO: implement a clean iterator function */
-		bucket = bucket_at(map, i = (i + 1) & map->mask);
+		bucket = bucket_at(map, i = (i + 1) & mask);
 	}
 	return NULL;
 }
@@ -335,11 +340,12 @@ hashmap_delete(struct hashmap *map, void *key)
 	assert( map != NULL );
 	map->oom = false;
 	uint64_t hash = get_hash(map, key);
-	size_t i = hash & map->mask;
+	const typeof(map->mask) mask = map->mask;
+	size_t i = hash & mask;
 	struct bucket *bucket = bucket_at(map, i);
 
 	while( bucket->psl && ! hash_match(map, bucket, hash, key) ){
-		bucket = bucket_at(map, i = (i + 1) & map->mask);
+		bucket = bucket_at(map, i = (i + 1) & mask);
 	}
 
 	if( !bucket->psl ){
@@ -351,7 +357,7 @@ hashmap_delete(struct hashmap *map, void *key)
 	/* Walk the  probe sequence and move buckets */
 	for( ;; ){
 		struct bucket *prev = bucket;
-		i = (i + 1) & map->mask;
+		i = (i + 1) & mask;
 		bucket = bucket_at(map, i);
 
 		if( bucket->psl < 2 ){
