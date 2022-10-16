@@ -503,9 +503,8 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 		v0 ^= m;
 		in += 8;
 	}
-	const int left = inlen & 7;
 	uint64_t b = ((uint64_t)inlen) << 56;
-	switch (left) {
+	switch( inlen & 7 ){
 	case 7: b |= ((uint64_t)in[6]) << 48;
 	case 6: b |= ((uint64_t)in[5]) << 40;
 	case 5: b |= ((uint64_t)in[4]) << 32;
