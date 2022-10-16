@@ -210,7 +210,7 @@ test_probe(struct hash_method *hf, size_t cap)
 	uint64_t h = hf->func(&d, hf->seed[0], hf->seed[1]) & mask(cap);
 
 	struct user *a = hashmap_probe(m, h);
-	struct user *u = hashmap_probe(m, !h);
+	struct user *u = hashmap_probe(m, h ^ 0x1);
 	expect( a && !strcmp(a->name, "Barry") );
 	expect( u == NULL );
 }
