@@ -22,9 +22,15 @@
 #include <time.h>
 #endif
 
+#define HASH_BITS 48
+#define PSL_BITS 16
+#define HASH_MASK ( (1LU << HASH_BITS) - 1 )
+
+static_assert(HASH_BITS + PSL_BITS == 64, "Invalid bucket sizes");
+
 struct bucket {
-	uint64_t hash:48;
-	uint64_t psl:16;  /* Probe Sequence Length */
+	uint64_t hash:HASH_BITS;
+	uint64_t psl:PSL_BITS;  /* Probe Sequence Length */
 	char data[0];
 };
 
@@ -57,7 +63,7 @@ static uint64_t
 get_hash(struct hashmap *map, const void *key)
 {
 	uint64_t *seed = map->hash.seed;
-	return map->hash.func(key, seed[0], seed[1]) & 0x0000ffffffffffff;
+	return map->hash.func(key, seed[0], seed[1]) & HASH_MASK;
 }
 
 /*
