@@ -48,6 +48,7 @@ static struct bucket *
 bucket_at(struct hashmap *map, size_t index)
 {
 	char *b = map->buckets;
+	assert( index < map->nbuckets );
 	return (struct bucket*)(b + map->bucketsz * index);
 }
 
