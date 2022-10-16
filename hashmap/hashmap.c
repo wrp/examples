@@ -263,8 +263,8 @@ hashmap_set(struct hashmap *map, void *item)
 		}
 		/* Entry found; replace */
 		if( hash_match(map, bucket, hash, item) ){
-			assert(entry == NULL || entry->psl == bucket->psl);
-			assert(entry == NULL || entry->hash ==  bucket->hash);
+			assert( entry == NULL || entry->psl == bucket->psl );
+			assert( entry == NULL || entry->hash ==  bucket->hash );
 			memcpy(map->spare, bucket->data, map->el.size);
 			memcpy(bucket->data, item, map->el.size);
 			return map->spare;
