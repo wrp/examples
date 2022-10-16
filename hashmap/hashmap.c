@@ -22,8 +22,10 @@
 #include <time.h>
 #endif
 
+#ifndef HASH_BITS
 #define HASH_BITS 48
-#define PSL_BITS 16
+#endif
+#define PSL_BITS (64 - HASH_BITS)
 #define HASH_MASK ( (1LU << HASH_BITS) - 1 )
 
 static_assert(HASH_BITS + PSL_BITS == 64, "Invalid bucket sizes");
@@ -741,7 +743,11 @@ main(int argc, char **argv) /* benchmarks */
 	N = argc > 1 ? strtol(argv[1], NULL, 10) : 5000000;
 	int seed = argc > 2 ? strtol(argv[2], NULL, 10) : time(NULL);
 
-	printf("seed = %d, count = %d, item_size = %zu\n", seed, N, sizeof N);
+	printf("seed = %d", seed);
+	printf(", count = %d", N);
+	printf(", hash_bits = %d", HASH_BITS);
+	printf(", item_size = %zu", sizeof N);
+	putchar('\n');
 	srand(seed);
 
 	int *vals = malloc(N * sizeof *vals);
