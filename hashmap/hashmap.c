@@ -24,7 +24,7 @@
 
 struct bucket {
 	uint64_t hash:48;
-	uint64_t dib:16;
+	uint64_t psl:16;  /* Probe Sequence Length */
 	char data[0];
 };
 
@@ -135,7 +135,7 @@ free_elements(struct hashmap *map)
 	if( map->el.free ){
 		for( size_t i = 0; i < map->nbuckets; i += 1 ){
 			struct bucket *b = bucket_at(map, i);
-			if( b->dib ){
+			if( b->psl ){
 				map->el.free(b->data);
 			}
 		}
@@ -186,18 +186,18 @@ resize(struct hashmap *map, size_t new_cap)
 	 */
 	for( size_t i = 0; i < map->nbuckets; i += 1 ){
 		struct bucket *entry = bucket_at(map, i);
-		if( !entry->dib ){
+		if( !entry->psl ){
 			continue;
 		}
-		entry->dib = 1;
+		entry->psl = 1;
 		size_t j = entry->hash & map2->mask;
 		struct bucket *b = bucket_at(map2, j);
-		while( 0 != (b = bucket_at(map2, j))->dib ){
-			if( b->dib < entry->dib ){
+		while( 0 != (b = bucket_at(map2, j))->psl ){
+			if( b->psl < entry->psl ){
 				swap(map2, b, entry);
 			}
 			j = (j + 1) & map2->mask;
-			entry->dib += 1;
+			entry->psl += 1;
 		}
                 memcpy(b, entry, map->bucketsz);
 #ifndef NDEBUG
@@ -249,13 +249,13 @@ hashmap_set(struct hashmap *map, void *item)
 
 	struct bucket *entry = NULL;
 	uint64_t hash = get_hash(map, item);
-	uint64_t dib = 1;
+	uint64_t psl = 1; /* probe sequence length */
 
 	for( size_t i = hash & map->mask; ; i = (i + 1) & map->mask ){
 		struct bucket *bucket = bucket_at(map, i);
 		/* Empty bucket found; insert */
-		if( bucket->dib == 0 ){
-			bucket->dib = dib;
+		if( bucket->psl == 0 ){
+			bucket->psl = psl;
 			bucket->hash = hash;
 			memcpy(bucket->data, item, map->el.size);
 			map->count++;
@@ -263,7 +263,7 @@ hashmap_set(struct hashmap *map, void *item)
 		}
 		/* Entry found; replace */
 		if( hash_match(map, bucket, hash, item) ){
-			assert(entry == NULL || entry->dib == bucket->dib);
+			assert(entry == NULL || entry->psl == bucket->psl);
 			assert(entry == NULL || entry->hash ==  bucket->hash);
 			memcpy(map->spare, bucket->data, map->el.size);
 			memcpy(bucket->data, item, map->el.size);
@@ -271,27 +271,25 @@ hashmap_set(struct hashmap *map, void *item)
 		}
 		/*
 		 * Bucket full; find an empty hash slot
-		 * This is the crux of Robinhood.  dib (I'm not sure
-		 * what the original author intended this to mean, as
-		 * dib seems to be what is commonly referred to as
+		 * This is the crux of Robinhood.
 		 * Probe Sequency Length (PSL)) is compared, and the
 		 * item with the higher value gets inserted, while
 		 * the entry with the lower value gets pushed back
 		 * in the sequence.
 		 */
-		if( bucket->dib < dib ){
+		if( bucket->psl < psl ){
 			if( entry == NULL ){
 				entry = map->edata;
 				entry->hash = hash;
 				memcpy(entry->data, item, map->el.size);
 			}
-			entry->dib = dib;
+			entry->psl = psl;
 			swap(map, bucket, entry);
 			item = entry->data;
-			dib = entry->dib;
+			psl = entry->psl;
 			hash = entry->hash;
 		}
-		dib += 1;
+		psl += 1;
 	}
 }
 
@@ -305,7 +303,7 @@ hashmap_get(struct hashmap *map, const void *key)
 	uint64_t hash = get_hash(map, key);
 	size_t i = hash & map->mask;
 	struct bucket *bucket = bucket_at(map, i);
-	while( bucket->dib ){
+	while( bucket->psl ){
 		if( hash_match(map, bucket, hash, key) ){
 			return bucket->data;
 		}
@@ -322,7 +320,7 @@ void *
 hashmap_probe(struct hashmap *map, uint64_t position)
 {
 	struct bucket *bucket = bucket_at(map, position & map->mask);
-	return bucket->dib ? bucket->data : NULL;
+	return bucket->psl ? bucket->data : NULL;
 }
 
 
@@ -340,11 +338,11 @@ hashmap_delete(struct hashmap *map, void *key)
 	size_t i = hash & map->mask;
 	struct bucket *bucket = bucket_at(map, i);
 
-	while( bucket->dib && ! hash_match(map, bucket, hash, key) ){
+	while( bucket->psl && ! hash_match(map, bucket, hash, key) ){
 		bucket = bucket_at(map, i = (i + 1) & map->mask);
 	}
 
-	if( !bucket->dib ){
+	if( !bucket->psl ){
 		return NULL;
 	}
 
@@ -356,14 +354,14 @@ hashmap_delete(struct hashmap *map, void *key)
 		i = (i + 1) & map->mask;
 		bucket = bucket_at(map, i);
 
-		if( bucket->dib < 2 ){
+		if( bucket->psl < 2 ){
 			/* This is the end of the cluster.  */
-			prev->dib = 0;
+			prev->psl = 0;
 			break;
 		}
-		bucket->dib -= 1;
+		bucket->psl -= 1;
 		memcpy(prev, bucket, map->bucketsz);
-		assert(prev->dib != 0);
+		assert(prev->psl != 0);
 	}
 	map->count -= 1;
 	return map->spare;
@@ -376,7 +374,7 @@ hashmap_count(struct hashmap *map)
 #ifndef NDEBUG
 	size_t count = 0;
 	for( size_t i = 0; i < map->nbuckets; i += 1 ){
-		if( bucket_at(map, i)->dib ){
+		if( bucket_at(map, i)->psl ){
 			count++;
 		}
 	}
@@ -423,7 +421,7 @@ hashmap_scan(struct hashmap *map,
 	int rv = 0;
 	for( size_t i = 0; rv == 0 && i < map->nbuckets; i += 1 ){
 		struct bucket *b = bucket_at(map, i);
-		if( b->dib ){
+		if( b->psl ){
 			rv = iter(b->data, udata);
 		}
 	}
