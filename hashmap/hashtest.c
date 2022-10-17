@@ -73,7 +73,7 @@ user_hash_murmur(const void *item, const void *seed)
 {
 	const struct { int a, b; } *s = seed;
 	const struct user *user = item;
-	return hashmap_murmur(user->name, strlen(user->name), s->a, s->b);
+	return hashmap_murmur(user->name, strlen(user->name), s->a);
 }
 
 

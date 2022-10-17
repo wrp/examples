@@ -51,6 +51,6 @@ void * hashmap_probe(struct hashmap *, uint64_t position);
 int hashmap_scan(struct hashmap *, int (*)(const void *item, void *), void *);
 
 uint64_t hashmap_sip(const void *, size_t, uint64_t, uint64_t);
-uint64_t hashmap_murmur(const void *, size_t, uint64_t, uint64_t);
+uint64_t hashmap_murmur(const void *, size_t, uint64_t);
 
 #endif

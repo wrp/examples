@@ -84,7 +84,7 @@ static uint64_t
 hash_int(const void *item, const void *seeds)
 {
 	const struct { int a, b; } *s = seeds;
-	return hashmap_murmur(item, sizeof(int), s->a, s->b);
+	return hashmap_murmur(item, sizeof(int), s->a);
 }
 
 static uint64_t
@@ -92,7 +92,7 @@ hash_str(const void *vitem, const void *seeds)
 {
 	char *item = *(char **)vitem;
 	const struct { int a, b; } *s = seeds;
-	return hashmap_murmur(item, strlen(item), s->a, s->b);
+	return hashmap_murmur(item, strlen(item), s->a);
 }
 
 static void
@@ -106,7 +106,7 @@ test_exact_hashes(void)
 {
 
 	assert( hashmap_sip("hello", 5, 1, 2) == 2957200328589801622 );
-	assert( hashmap_murmur("hello", 5, 1, 2) == 1682575153221130884 );
+	assert( hashmap_murmur("hello", 5, 1) == 1682575153221130884 );
 
 	for( int i = 0; i < 16; i += 1 ){
 		uint64_t expect_sip[] = {
@@ -147,7 +147,7 @@ test_exact_hashes(void)
 		};
 		uint64_t s = 0x1000000000000000 >> 4 * i;
 		assert( hashmap_sip("hello", 5, s, 2) == expect_sip[i]);
-		assert( hashmap_murmur("hello", 5, s, 2) == expect_murmur[i]);
+		assert( hashmap_murmur("hello", 5, s) == expect_murmur[i]);
 	}
 
 	for( int i = 0; i < 64; i += 1 ){
@@ -291,7 +291,7 @@ test_exact_hashes(void)
 		};
 
 		assert( hashmap_sip(msg, 32, s, t) == expect_sip[i] );
-		assert( hashmap_murmur(msg, 32, s, t) == expect_murmur[i] );
+		assert( hashmap_murmur(msg, 32, s) == expect_murmur[i] );
 	}
 
 	for( int i = 0; i < 64; i += 1 ){
@@ -365,7 +365,7 @@ test_exact_hashes(void)
 		uint64_t s = 1 << i;
 		const char *msg = "hello";
 		assert( hashmap_sip(msg, 5, 1, s) == expect_sip[i]);
-		assert( hashmap_murmur(msg, 5, 1, s) == 0x1759b52feba4da84 );
+		assert( hashmap_murmur(msg, 5, 1) == 0x1759b52feba4da84 );
 	}
 }
 

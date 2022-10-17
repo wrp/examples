@@ -551,11 +551,9 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 // Murmur3_86_128
 //-----------------------------------------------------------------------------
 uint64_t
-hashmap_murmur(const void *key, size_t len, uint64_t seed, uint64_t seed1)
+hashmap_murmur(const void *key, size_t len, uint64_t seed)
 {
 	char out[16];
-
-	(void)seed1;
 
 #define	ROTL32(x, r) (x = (((x << r) | (x >> (32 - r)))))
 #define FMIX32(h) h^=h>>16; \
@@ -696,7 +694,7 @@ static uint64_t
 hash_int(const void *item, const void *seed)
 {
 	const struct { int a, b; } *s = seed;
-	return hashmap_murmur(item, sizeof(int), s->a, s->b);
+	return hashmap_murmur(item, sizeof(int), s->a);
 }
 
 static int
