@@ -41,7 +41,7 @@ def f(flag=False):
         print('try')
         if flag: raise foo('bar')
         return 5
-    except:
+    except:  # bare exception DO NOT EVER DO THIS
         print('except')
     finally:
         print('finally')
