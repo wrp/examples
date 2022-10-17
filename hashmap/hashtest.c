@@ -99,7 +99,7 @@ free_fail(void *v)
 }
 
 static void
-free_el(void *s)
+free_user(void *s)
 {
 	struct user *u = s;
 	if( u->free ){
@@ -200,7 +200,7 @@ test_probe(hash_function hf, void *seed, size_t cap)
 	struct hash_element el = {
 		.size = sizeof *user,
 		.compare = user_compare,
-		.free = free_el,
+		.free = free_user,
 		.udata = NULL
 	};
 	struct hashmap *m = hashmap_new_with_allocator(malloc, free,
@@ -344,7 +344,7 @@ test_hash(hash_function h, void * seed, size_t cap)
 	struct hash_element el = {
 		.size = sizeof *user + 1, /* Use wonky size to trigger code */
 		.compare = user_compare,
-		.free = free_el,
+		.free = free_user,
 		.udata = NULL
 	};
 	struct hashmap *map = hashmap_new_with_allocator(malloc, free,
