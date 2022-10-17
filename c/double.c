@@ -21,7 +21,10 @@
 static void
 show(unsigned long d)
 {
-	double *xp = (void *)&d;
+	double xp = *(double *)&d;
+
+	static_assert(sizeof d == sizeof xp, "Invalid sizes");
+
 	char mantissa[55] = "1.";
 	int exp = (d >> 52 & 0x7ffLU) - 1023LU;
 
@@ -30,9 +33,8 @@ show(unsigned long d)
 		exp = -1022;
 	}
 
-	static_assert(sizeof d == sizeof *xp, "Invalid sizes");
 	printf("%16lx", d);
-	printf("\t%20g", *xp);
+	printf("\t%20g", xp);
 
 	/* printf("\tsign = %c", d & (0x1LU << 63) ? '-' : '+'); */
 
@@ -52,20 +54,32 @@ main(int argc, char **argv)
 {
 	unsigned long d;
 
-	d = 0x8000000000000000;
-	for( int i = 0; i < 30; i += 1 ){
-		show(d);
-		d >>= 1;
-	}
+	if( argc < 2 ){
+		d = 0x8000000000000000;
+		for( int i = 0; i < 30; i += 1 ){
+			show(d);
+			d >>= 1;
+		}
 
-	show(0x7ff0000000000000);  /* inf */
-	show(0x7ff000000ae00000);  /* NaN */
-	show(0x3ff0000000000000);  /* 1 */
-	show(0x3fe0000000000000);  /* 1 E -1 ( .5 ) */
-	show(0x3ffa000000000000);  /* 1 + .5 + .125 */
-	show(0x3fea000000000000);  /* ( 1 + .5 + .125 ) E -1 */
-	show(0x4000000000000000);  /* 2 */
-	show(0x4024000000000000);  /* 10   (1.0100E2) */
+		show(0x7ff0000000000000);  /* inf */
+		show(0x7ff000000ae00000);  /* NaN */
+		show(0x3ff0000000000000);  /* 1 */
+		show(0x3fe0000000000000);  /* 1 E -1 ( .5 ) */
+		show(0x3ffa000000000000);  /* 1 + .5 + .125 */
+		show(0x3fea000000000000);  /* ( 1 + .5 + .125 ) E -1 */
+		show(0x4000000000000000);  /* 2 */
+		show(0x4024000000000000);  /* 10   (1.0100E2) */
+	}
+	for( argv += 1; *argv; argv += 1 ){
+		char *end;
+		printf("%20s ==> ", *argv);
+		double x = strtod(*argv, &end);
+		if(*end) {
+			puts("invalid");
+		} else {
+			show(*(unsigned long *)&x);
+		}
+	}
 
 
 	return 0;
