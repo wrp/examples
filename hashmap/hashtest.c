@@ -54,25 +54,26 @@ int_compare(const void *a, const void *b, void *udata)
 
 
 uint64_t
-identity_hash(const void *int_pointer, uint64_t seed0, uint64_t seed1)
+identity_hash(const void *int_pointer, const void *seed)
 {
-	(void)seed0;
-	(void)seed1;
+	(void)seed;
 	return *(int *)int_pointer;
 }
 
 uint64_t
-user_hash_sip(const void *item, uint64_t seed0, uint64_t seed1)
+user_hash_sip(const void *item, const void *seed)
 {
 	const struct user *user = item;
-	return hashmap_sip(user->name, strlen(user->name), seed0, seed1);
+	const struct { int a, b; } *s = seed;
+	return hashmap_sip(user->name, strlen(user->name), s->a, s->b);
 }
 
 uint64_t
-user_hash_murmur(const void *item, uint64_t seed0, uint64_t seed1)
+user_hash_murmur(const void *item, const void *seed)
 {
+	const struct { int a, b; } *s = seed;
 	const struct user *user = item;
-	return hashmap_murmur(user->name, strlen(user->name), seed0, seed1);
+	return hashmap_murmur(user->name, strlen(user->name), s->a, s->b);
 }
 
 
@@ -152,7 +153,7 @@ load_data(struct hashmap *map, unsigned count, char *base)
 }
 
 static void
-test_allocator_failures(struct hash_method *h, size_t cap)
+test_allocator_failures(hash_function h, void *s, size_t cap)
 {
 	struct user *user;
 	struct hashmap *map;
@@ -161,14 +162,14 @@ test_allocator_failures(struct hash_method *h, size_t cap)
 		malloc_allow = i;
 		map = hashmap_new_with_allocator(
 			malloc_fail, free_fail,
-			&el, h, cap
+			&el, h, s, cap
 		);
 		expect( map == NULL );
 	}
 
 	/* With only two successful allocations, resize should fail */
 	malloc_allow = 2;
-	map = hashmap_new_with_allocator(malloc_fail, free_fail, &el, h, cap);
+	map = hashmap_new_with_allocator(malloc_fail, free_fail, &el, h, s, cap);
 	cap = max(cap, 16);
 	load_data(map, cap, NULL);
 	expect( hashmap_oom(map) );
@@ -193,7 +194,7 @@ mask(size_t cap)
 
 
 static void
-test_probe(struct hash_method *hf, size_t cap)
+test_probe(hash_function hf, void *seed, size_t cap)
 {
 	struct user *user;
 	struct hash_element el = {
@@ -202,12 +203,13 @@ test_probe(struct hash_method *hf, size_t cap)
 		.free = free_el,
 		.udata = NULL
 	};
-	struct hashmap *m = hashmap_new(&el, hf, cap);
+	struct hashmap *m = hashmap_new_with_allocator(malloc, free,
+		&el, hf, seed, cap);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
 
-	uint64_t h = hf->func(&d, hf->seed[0], hf->seed[1]) & mask(cap);
+	uint64_t h = hf(&d, seed) & mask(cap);
 
 	struct user *a = hashmap_probe(m, h);
 	struct user *u = hashmap_probe(m, h ^ 0x1);
@@ -249,8 +251,7 @@ test_collisions(size_t cap)
 	int index[] = { 1, 1 + cap };
 	struct two_ints *tp;
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
-	struct hash_method hash = { identity_hash };
-	struct hashmap *m = hashmap_new(&el, &hash, cap);
+	struct hashmap *m = hashmap_new(&el, identity_hash, cap);
 
 	hashmap_set(m, &t);
 	t.x += cap;
@@ -309,9 +310,8 @@ test_resize(size_t cap)
 {
 	struct two_ints t;
 	struct two_ints *tp;
-	struct hash_method h = { identity_hash, rand(), rand() };
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
-	struct hashmap *m = hashmap_new(&el, &h, cap);
+	struct hashmap *m = hashmap_new(&el, &identity_hash, cap);
 
 	/*
 	 * Add entries to trigger a resize, then delete to trigger
@@ -330,7 +330,7 @@ test_resize(size_t cap)
 }
 
 static void
-test_hash(struct hash_method *h, size_t cap)
+test_hash(hash_function h, void * seed, size_t cap)
 {
 	struct user *user;
 	size_t testdata_size = sizeof testdata / sizeof *testdata - 1;
@@ -347,7 +347,8 @@ test_hash(struct hash_method *h, size_t cap)
 		.free = free_el,
 		.udata = NULL
 	};
-	struct hashmap *map = hashmap_new(&el, h, cap);
+	struct hashmap *map = hashmap_new_with_allocator(malloc, free,
+		&el, h, seed, cap);
 
 	/*
 	 * Load all the test data and verify
@@ -394,7 +395,7 @@ test_hash(struct hash_method *h, size_t cap)
 	test_deletion(map, cap);
 	test_collisions(cap);
 	test_resize(cap);
-	test_probe(h, cap);
+	test_probe(h, seed, cap);
 
 	load_data(map, load, NULL);
 	/* TODO add actual test of hashmap_clear */
@@ -407,9 +408,9 @@ test_hash(struct hash_method *h, size_t cap)
 	hashmap_clear(map);
 	hashmap_free(map);
 
-	test_allocator_failures(h, cap);
+	test_allocator_failures(h, seed, cap);
 
-	map = hashmap_new(&el, h, cap);
+	map = hashmap_new_with_allocator(malloc, free, &el, h, seed, cap);
 	char big_name[256];
 	for( int i = 1; i < 255; i++ ){
 	        big_name[i] = 'k';
@@ -432,14 +433,10 @@ main(int argc, char **argv)
 	srand(seed);
 
 	for( size_t *cap = sizes; cap < end; cap += 1 ){
-		struct hash_method h;
-		h.seed[0] = rand();
-		h.seed[1] = rand();
+		struct { int a, b; } s = { rand(), rand() };
 
-		h.func = user_hash_murmur;
-		test_hash(&h, *cap);
-		h.func = user_hash_sip;
-		test_hash(&h, *cap);
+		test_hash(user_hash_murmur, &s, *cap);
+		test_hash(user_hash_sip, &s, *cap);
 	}
 	if( fail ){
 		fprintf(stderr, "seed = %d: ", seed);

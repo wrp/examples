@@ -81,16 +81,18 @@ compare_strs(const void *a, const void *b, void *udata)
 }
 
 static uint64_t
-hash_int(const void *item, uint64_t seed0, uint64_t seed1)
+hash_int(const void *item, const void *seeds)
 {
-	return hashmap_murmur(item, sizeof(int), seed0, seed1);
+	const struct { int a, b; } *s = seeds;
+	return hashmap_murmur(item, sizeof(int), s->a, s->b);
 }
 
 static uint64_t
-hash_str(const void *vitem, uint64_t seed0, uint64_t seed1)
+hash_str(const void *vitem, const void *seeds)
 {
 	char *item = *(char **)vitem;
-	return hashmap_murmur(item, strlen(item), seed0, seed1);
+	const struct { int a, b; } *s = seeds;
+	return hashmap_murmur(item, strlen(item), s->a, s->b);
 }
 
 static void
@@ -395,11 +397,12 @@ test_1(unsigned N, unsigned seed)
 		vals[i] = (int)i;
 	}
 
+	struct { int a, b; } seeds = { seed, seed };
 	struct hashmap *map;
-	struct hash_method hash = { hash_int, { seed, seed } };
 	struct hash_element el = { sizeof *vals, compare_ints_udata };
 
-	do map = hashmap_new_with_allocator(xmalloc, xfree, &el, &hash, 0);
+	do map = hashmap_new_with_allocator(xmalloc, xfree, &el,
+		hash_int, &seeds, 0);
 	while( map == NULL );
 
 	shuffle(vals, N, sizeof(int));
@@ -502,16 +505,17 @@ main(int argc, char **argv)
 
 	printf("seed=%d, count=%d, item_size=%zu\n", seed, N, sizeof(int));
 	srand(seed);
+	struct { int a, b; } seeds = { seed, seed };
 
 	test_exact_hashes();
 
 	test_1(N, seed);
 
 	struct hashmap *map;
-	struct hash_method hash = { hash_str, { seed, seed } };
 	struct hash_element el = { sizeof(char *), compare_strs, free_str };
 
-	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, &hash, 0);
+	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, hash_str,
+		&seeds, 0);
 	while( map == NULL );
 
 	populate_map(map, N);

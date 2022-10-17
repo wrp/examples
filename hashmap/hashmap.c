@@ -43,7 +43,8 @@ struct hashmap {
 	void (*free)(void *);
 	bool oom;
 	struct hash_element el;
-	struct hash_method hash; /* User defined hash method */
+	hash_function h;         /* User defined hash method */
+	const void *seed;        /* Passed as 2nd arg to h */
 	size_t bucketsz;         /* Size of each bucket, padded for alignment */
 	size_t nbuckets;         /* Total number of buckets in the table */
 	size_t count;            /* Number of full buckets */
@@ -66,8 +67,7 @@ bucket_at(struct hashmap *map, size_t index)
 static uint64_t
 get_hash(struct hashmap *map, const void *key)
 {
-	uint64_t *seed = map->hash.seed;
-	return map->hash.func(key, seed[0], seed[1]) & HASH_MASK;
+	return map->h(key, map->seed) & HASH_MASK;
 }
 
 /*
@@ -78,7 +78,8 @@ hashmap_new_with_allocator(
 	void *(*_malloc)(size_t),
 	void (*_free)(void*),
 	const struct hash_element *el,
-	const struct hash_method *hash,
+	hash_function h,
+	const void *seed,
 	size_t cap
 )
 {
@@ -109,7 +110,8 @@ hashmap_new_with_allocator(
 	map->free = _free;
 	map->oom = false;;
 	map->el = *el;
-	map->hash = *hash;
+	map->h = *h;
+	map->seed = seed;
 	map->bucketsz = bucketsz;
 	map->nbuckets = nbuckets;
 	map->count = 0;
@@ -131,11 +133,11 @@ hashmap_new_with_allocator(
 struct hashmap *
 hashmap_new(
 	const struct hash_element *el,
-	const struct hash_method *hash, /* Hash method, with seeds */
+	hash_function h,
 	size_t cap                      /* Minimum initial capacity */
 )
 {
-	return hashmap_new_with_allocator(malloc, free, el, hash, cap);
+	return hashmap_new_with_allocator(malloc, free, el, h, NULL, cap);
 }
 
 
@@ -184,7 +186,8 @@ resize(struct hashmap *map, size_t new_cap)
 		map->malloc,
 		map->free,
 		&map->el,
-		&map->hash,
+		map->h,
+		map->seed,
 		new_cap
 	);
 	if( !map2 ){
@@ -690,9 +693,10 @@ clock_t begin;
 int N;
 
 static uint64_t
-hash_int(const void *item, uint64_t seed0, uint64_t seed1)
+hash_int(const void *item, const void *seed)
 {
-	return hashmap_murmur(item, sizeof(int), seed0, seed1);
+	const struct { int a, b; } *s = seed;
+	return hashmap_murmur(item, sizeof(int), s->a, s->b);
 }
 
 static int
@@ -745,6 +749,8 @@ main(int argc, char **argv) /* benchmarks */
 	N = argc > 1 ? strtol(argv[1], NULL, 10) : 5000000;
 	int seed = argc > 2 ? strtol(argv[2], NULL, 10) : time(NULL);
 
+	struct { int a; int b; } seeds = { seed, seed };
+
 	printf("seed = %d", seed);
 	printf(", count = %d", N);
 	printf(", hash_bits = %d", HASH_BITS);
@@ -766,10 +772,9 @@ main(int argc, char **argv) /* benchmarks */
 	struct hashmap *map;
 	shuffle(vals, N, sizeof *vals);
 
-	struct hash_method hash = {hash_int, {seed, seed} };
 	struct hash_element el = { sizeof *vals, compare_ints_udata, 0, 0 };
 	map = hashmap_new_with_allocator(
-		malloc, free, &el, &hash, 0
+		malloc, free, &el, hash_int, &seeds, 0
 	);
 	if( map == NULL ){
 		perror("out of memory");
@@ -801,7 +806,7 @@ main(int argc, char **argv) /* benchmarks */
 	show_bench_results();
 	hashmap_free(map);
 
-	map = hashmap_new_with_allocator( malloc, free, &el, &hash, N);
+	map = hashmap_new_with_allocator(malloc, free, &el, hash_int, &seeds, N);
 	if( map == NULL ){
 		perror("out of memory");
 		exit(1);

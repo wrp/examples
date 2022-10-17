@@ -16,10 +16,9 @@
 #include <stdint.h>
 
 struct hashmap;
-struct hash_method {
-	uint64_t (*func)(const void *, uint64_t, uint64_t);
-	uint64_t seed[2];
-};
+
+typedef uint64_t (*hash_function)(const void *, const void *);
+
 struct hash_element {
 	size_t size;  /* Size in bytes of each element */
 	int (*compare)(const void *a, const void *b, void *udata);
@@ -28,16 +27,17 @@ struct hash_element {
 };
 
 struct hashmap * hashmap_new(
-	const struct hash_element *, /* Items stored in the map */
-	const struct hash_method *,  /* Hash method, with seeds */
-	size_t                       /* Minimum initial capacity */
+	const struct hash_element *,  /* Items stored in the map */
+	hash_function,
+	size_t                        /* Minimum initial capacity */
 );
 struct hashmap *hashmap_new_with_allocator(
 	void *(*malloc)(size_t),
 	void (*free)(void*),
-	const struct hash_element *, /* Items stored in the map */
-	const struct hash_method *,  /* Hash method, with seeds */
-	size_t                       /* Minimum initial capacity */
+	const struct hash_element *,  /* Items stored in the map */
+	hash_function,
+	const void *seed,             /* passed as 2nd arg to hash_function */
+	size_t                        /* Minimum initial capacity */
 );
 
 void hashmap_free(struct hashmap *);
