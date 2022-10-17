@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 /*
@@ -49,6 +50,8 @@ show(unsigned long d)
 	putchar('\n');
 }
 
+static void show_str(const char *s);
+
 int
 main(int argc, char **argv)
 {
@@ -71,16 +74,28 @@ main(int argc, char **argv)
 		show(0x4024000000000000);  /* 10   (1.0100E2) */
 	}
 	for( argv += 1; *argv; argv += 1 ){
-		char *end;
-		printf("%20s ==> ", *argv);
-		double x = strtod(*argv, &end);
-		if(*end) {
-			puts("invalid");
+		if( 0 == strcmp(*argv, "-" ) ){
+			char buf[1024];
+			while( 1 == scanf("%1023s", buf) ){
+				show_str(buf);
+			}
 		} else {
-			show(*(unsigned long *)&x);
+			show_str(*argv);
 		}
 	}
 
-
 	return 0;
+}
+
+static void
+show_str(const char *s)
+{
+	char *end;
+	printf("%20s ==> ", s);
+	double x = strtod(s, &end);
+	if(*end) {
+		puts("invalid");
+	} else {
+		show(*(unsigned long *)&x);
+	}
 }
