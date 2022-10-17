@@ -13,7 +13,7 @@ fn main() {
 		("Mars", 1.5),
 	]);
 
-	println!(":{}: {:?}", "Mercury", solar_distance.get("Mercury").unwrap());
+	println!("{}: {:?}", "Mercury", solar_distance.get("Mercury").unwrap());
 	for x in &args[1..] {
 		match solar_distance.get(x.as_str()){
 		Some(d) => println!("{}: {}", x, d),
