@@ -1,0 +1,3 @@
+
+# Show branch structure
+git log --oneline --graph --decorate --all --simplify-by-decoration
