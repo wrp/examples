@@ -17,3 +17,6 @@ git branch -r -d ${remote:?}/${branch:?}
 # Not to be confused with deleting the remote branch on the remote:
 git push --delete ${remote?} ${branch?}
 # Note that 'push --delete' will also delete the local tracking branch
+
+# Show branch structure
+git log --oneline --graph --decorate --all --simplify-by-decoration
