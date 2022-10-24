@@ -1,4 +1,5 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#include <dlfcn.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -16,14 +17,21 @@ static int rand_alloc_fail_odds = 3; // 1 in 3 chance malloc will fail.
 static unsigned total_allocs = 0;
 static unsigned total_mem = 0;
 
-static void *
-xmalloc(size_t size)
+void *
+malloc(size_t size)
 {
+	void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
+
+	if( libc_malloc == NULL ){
+		fprintf(stderr, "Cannot find malloc: %s", dlerror());
+		exit(1);
+	}
+
 	size_t *header;
 	if( rand() % rand_alloc_fail_odds == 0 ){
 		return NULL;
 	}
-	void *mem = header = malloc(sizeof header + size );
+	void *mem = header = libc_malloc(sizeof header + size );
 	if( mem == NULL ){
 		perror("malloc");
 		exit(1);
@@ -34,13 +42,20 @@ xmalloc(size_t size)
 	return (char*)mem + sizeof header;
 }
 
-static void
-xfree(void *ptr)
+void
+free(void *ptr)
 {
+	void (*libc_free)(void*) = dlsym(RTLD_NEXT, "free");
+
+	if( libc_free == NULL ){
+		fprintf(stderr, "Cannot find free: %s", dlerror());
+		exit(1);
+	}
+
 	if( ptr ){
 		size_t *header = (void *)((char *)ptr - sizeof header);
 		total_mem -= *header;
-		free(header);
+		libc_free(header);
 		total_allocs--;
 	}
 }
@@ -97,7 +112,7 @@ hash_str(const void *vitem, const void *seeds)
 
 static void
 free_str(void *item) {
-	xfree(*(char**)item);
+	free(*(char**)item);
 }
 
 /* Test some specific values. */
@@ -375,7 +390,7 @@ test_scan(unsigned N, struct hashmap *map)
 {
 	int *v;
 
-	do v = xmalloc(N * sizeof *v);
+	do v = malloc(N * sizeof *v);
 	while( v == NULL);
 
 	memset(v, 0, N * sizeof *v);
@@ -383,14 +398,14 @@ test_scan(unsigned N, struct hashmap *map)
 	for( unsigned i = 0; i < N; i += 1 ){
 		assert(v[i] == 1);
 	}
-	xfree(v);
+	free(v);
 }
 
 static void
 test_1(unsigned N, unsigned seed)
 {
 	int *vals;
-	do vals = xmalloc(N * sizeof *vals);
+	do vals = malloc(N * sizeof *vals);
 	while( vals == NULL );
 
 	for( unsigned i = 0; i < N; i += 1 ){
@@ -401,8 +416,7 @@ test_1(unsigned N, unsigned seed)
 	struct hashmap *map;
 	struct hash_element el = { sizeof *vals, compare_ints_udata };
 
-	do map = hashmap_new_with_allocator(xmalloc, xfree, &el,
-		hash_int, &seeds, 0);
+	do map = hashmap_new(&el, hash_int, &seeds, 0);
 	while( map == NULL );
 
 	shuffle(vals, N, sizeof(int));
@@ -479,7 +493,7 @@ test_1(unsigned N, unsigned seed)
 
     hashmap_clear(map);
     hashmap_free(map);
-    xfree(vals);
+    free(vals);
 }
 
 
@@ -489,7 +503,7 @@ populate_map(struct hashmap *map, unsigned N)
 	for( unsigned i = 0; i < N; i += 1 ){
 		char *str;
 		void *v;
-		do str = xmalloc(16);
+		do str = malloc(16);
 		while( str == NULL );
 		snprintf(str, 16, "s%i", i);
 		do v = hashmap_set(map, &str);
@@ -514,8 +528,7 @@ main(int argc, char **argv)
 	struct hashmap *map;
 	struct hash_element el = { sizeof(char *), compare_strs, free_str };
 
-	do map = hashmap_new_with_allocator( xmalloc, xfree, &el, hash_str,
-		&seeds, 0);
+	do map = hashmap_new(&el, hash_str, &seeds, 0);
 	while( map == NULL );
 
 	populate_map(map, N);

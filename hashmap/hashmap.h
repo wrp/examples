@@ -26,14 +26,7 @@ struct hash_element {
 	void *udata;  /* Data passed to comparison function */
 };
 
-struct hashmap * hashmap_new(
-	const struct hash_element *,  /* Items stored in the map */
-	hash_function,
-	size_t                        /* Minimum initial capacity */
-);
-struct hashmap *hashmap_new_with_allocator(
-	void *(*malloc)(size_t),
-	void (*free)(void*),
+struct hashmap *hashmap_new(
 	const struct hash_element *,  /* Items stored in the map */
 	hash_function,
 	const void *seed,             /* passed as 2nd arg to hash_function */

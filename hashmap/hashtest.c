@@ -1,5 +1,6 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
+#include <dlfcn.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,23 +79,37 @@ user_hash_murmur(const void *item, const void *seed)
 
 
 static int malloc_allow = 0;
-static void *
-malloc_fail(size_t size)
+void *
+malloc(size_t size)
 {
 	void *v;
+	void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
+
+	fprintf(stderr, "Calling our alloc\n");
+	if( libc_malloc == NULL ){
+		fprintf(stderr, "Cannot find malloc: %s", dlerror());
+		exit(1);
+	}
 	if( ! malloc_allow ){
 		v = NULL;
 	} else {
 		malloc_allow -= 1;
-		v = malloc(size);
+		v = libc_malloc(size);
 	}
 	return v;
 }
 
-static void
-free_fail(void *v)
+void
+free(void *v)
 {
-	free(v);
+	void (*libc_free)(void*) = dlsym(RTLD_NEXT, "free");
+
+	if( libc_free == NULL ){
+		fprintf(stderr, "Cannot find free: %s", dlerror());
+		exit(1);
+	}
+
+	libc_free(v);
 	malloc_allow += (v != NULL);
 }
 
@@ -160,16 +175,13 @@ test_allocator_failures(hash_function h, void *s, size_t cap)
 	struct hash_element el = { sizeof *user, user_compare, 0, 0 };
 	for( int i = 0; i < 2; i += 1 ){
 		malloc_allow = i;
-		map = hashmap_new_with_allocator(
-			malloc_fail, free_fail,
-			&el, h, s, cap
-		);
+		map = hashmap_new(&el, h, s, cap);
 		expect( map == NULL );
 	}
 
 	/* With only two successful allocations, resize should fail */
 	malloc_allow = 2;
-	map = hashmap_new_with_allocator(malloc_fail, free_fail, &el, h, s, cap);
+	map = hashmap_new(&el, h, s, cap);
 	cap = max(cap, 16);
 	load_data(map, cap, NULL);
 	expect( hashmap_oom(map) );
@@ -203,8 +215,7 @@ test_probe(hash_function hf, void *seed, size_t cap)
 		.free = free_user,
 		.udata = NULL
 	};
-	struct hashmap *m = hashmap_new_with_allocator(malloc, free,
-		&el, hf, seed, cap);
+	struct hashmap *m = hashmap_new(&el, hf, seed, cap);
 
 	struct user d = { .name = "Barry", .age = 5 };
 	hashmap_set(m, &d);
@@ -251,7 +262,7 @@ test_collisions(size_t cap)
 	int index[] = { 1, 1 + cap };
 	struct two_ints *tp;
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
-	struct hashmap *m = hashmap_new(&el, identity_hash, cap);
+	struct hashmap *m = hashmap_new(&el, identity_hash, NULL, cap);
 
 	hashmap_set(m, &t);
 	t.x += cap;
@@ -311,7 +322,7 @@ test_resize(size_t cap)
 	struct two_ints t;
 	struct two_ints *tp;
 	struct hash_element el = { .size = sizeof t, .compare = int_compare };
-	struct hashmap *m = hashmap_new(&el, &identity_hash, cap);
+	struct hashmap *m = hashmap_new(&el, &identity_hash, NULL, cap);
 
 	/*
 	 * Add entries to trigger a resize, then delete to trigger
@@ -347,8 +358,7 @@ test_hash(hash_function h, void * seed, size_t cap)
 		.free = free_user,
 		.udata = NULL
 	};
-	struct hashmap *map = hashmap_new_with_allocator(malloc, free,
-		&el, h, seed, cap);
+	struct hashmap *map = hashmap_new(&el, h, seed, cap);
 
 	/*
 	 * Load all the test data and verify
@@ -410,7 +420,7 @@ test_hash(hash_function h, void * seed, size_t cap)
 
 	test_allocator_failures(h, seed, cap);
 
-	map = hashmap_new_with_allocator(malloc, free, &el, h, seed, cap);
+	map = hashmap_new(&el, h, seed, cap);
 	char big_name[256];
 	for( int i = 1; i < 255; i++ ){
 	        big_name[i] = 'k';

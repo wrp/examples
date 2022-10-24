@@ -39,7 +39,6 @@ struct bucket {
 };
 
 struct hashmap {
-	void *(*malloc)(size_t);
 	void (*free)(void *);
 	bool oom;
 	struct hash_element el;
@@ -74,18 +73,13 @@ get_hash(struct hashmap *map, const void *key)
  * Return a new hash map.
  */
 struct hashmap *
-hashmap_new_with_allocator(
-	void *(*_malloc)(size_t),
-	void (*_free)(void*),
+hashmap_new(
 	const struct hash_element *el,
 	hash_function h,
 	const void *seed,
 	size_t cap
 )
 {
-	_malloc = _malloc ? _malloc : malloc;
-	_free = _free ? _free : free;
-
 	/* Ensure number of buckets is a power of 2 at least as big as cap */
 	size_t nbuckets = 16;
 	while( nbuckets < cap ){
@@ -102,12 +96,10 @@ hashmap_new_with_allocator(
 	}
 
 	/* hashmap + spare + edata */
-	struct hashmap *map = _malloc(sizeof *map  + 2 * bucketsz);
+	struct hashmap *map = malloc(sizeof *map  + 2 * bucketsz);
 	if( !map ){
 		return NULL;
 	}
-	map->malloc = _malloc;
-	map->free = _free;
 	map->oom = false;;
 	map->el = *el;
 	map->h = *h;
@@ -117,27 +109,15 @@ hashmap_new_with_allocator(
 	map->count = 0;
 	map->mask = map->nbuckets - 1;
 	map->growat = map->nbuckets * 0.75;
-	map->buckets = _malloc(map->bucketsz * map->nbuckets);
+	map->buckets = malloc(map->bucketsz * map->nbuckets);
 	if( !map->buckets ){
-		_free(map);
+		free(map);
 		return NULL;
 	}
 	memset(map->buckets, 0, map->bucketsz * map->nbuckets);
 	map->spare = ((char*)map) + sizeof *map;
 	map->edata = (char*)map->spare + bucketsz;
 	return map;
-}
-
-
-/* Create a new hash map. */
-struct hashmap *
-hashmap_new(
-	const struct hash_element *el,
-	hash_function h,
-	size_t cap                      /* Minimum initial capacity */
-)
-{
-	return hashmap_new_with_allocator(malloc, free, el, h, NULL, cap);
 }
 
 
@@ -182,9 +162,7 @@ swap(const struct hashmap *m, void *a, void *b)
 static bool
 resize(struct hashmap *map, size_t new_cap)
 {
-	struct hashmap *map2 = hashmap_new_with_allocator(
-		map->malloc,
-		map->free,
+	struct hashmap *map2 = hashmap_new(
 		&map->el,
 		map->h,
 		map->seed,
@@ -222,17 +200,15 @@ resize(struct hashmap *map, size_t new_cap)
 
 	}
 	assert( map2->count == map->count );
-	assert( map2->malloc == map->malloc );
-	assert( map2->free == map->free );
 	assert( map2->bucketsz == map->bucketsz );
 	assert( map2->mask == mask );
 
-	map->free(map->buckets);
+	free(map->buckets);
 	map->buckets = map2->buckets;
 	map->nbuckets = map2->nbuckets;
 	map->mask = mask;
 	map->growat = map2->growat;
-	map->free(map2);
+	free(map2);
 
 	return true;
 }
@@ -411,8 +387,8 @@ hashmap_free(struct hashmap *map)
 {
 	if( map != NULL ){
 		free_elements(map);
-		map->free(map->buckets);
-		map->free(map);
+		free(map->buckets);
+		free(map);
 	}
 }
 
@@ -502,8 +478,6 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 	v2 = ROTL(v2, 32)
 
 	uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
-	fprintf(stderr, "k0 = %0llx  seed0 = %0llx  htonl = %0llx\n",
-		k0, seed0, htonll(seed0));
 	uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
 	uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
 	uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
@@ -771,9 +745,7 @@ main(int argc, char **argv) /* benchmarks */
 	shuffle(vals, N, sizeof *vals);
 
 	struct hash_element el = { sizeof *vals, compare_ints_udata, 0, 0 };
-	map = hashmap_new_with_allocator(
-		malloc, free, &el, hash_int, &seeds, 0
-	);
+	map = hashmap_new(&el, hash_int, &seeds, 0);
 	if( map == NULL ){
 		perror("out of memory");
 		exit(1);
@@ -804,7 +776,7 @@ main(int argc, char **argv) /* benchmarks */
 	show_bench_results();
 	hashmap_free(map);
 
-	map = hashmap_new_with_allocator(malloc, free, &el, hash_int, &seeds, N);
+	map = hashmap_new(&el, hash_int, &seeds, N);
 	if( map == NULL ){
 		perror("out of memory");
 		exit(1);
