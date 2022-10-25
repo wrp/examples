@@ -12,6 +12,8 @@ go.mod:
 	go mod init $(package_name)
 
 install: go.mod
+	# See `go help install` for details.  By default, executbale
+	# will be installed in $$GOBIN or $$GOPATH/bin or $$HOME/go/bin
 	@ go install -v
 
 check:
