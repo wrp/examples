@@ -57,8 +57,10 @@ main(int argc, char **argv)
 	user = get(map, "bob");
 	printf("name: %s, age: %d\n", user->name, user->age);
 	user->age += 1;
+	user = set(map, "bob", 65);
+	printf("name: %s, prior age: %d\n", user->name, user->age);
 	user = get(map, "bob");
-	printf("name: %s, age: %d\n", user->name, user->age);
+	printf("name: %s, current age: %d\n", user->name, user->age);
 
 	get(map, "alice")->age += 1;
 	user = get(map, "alice");
