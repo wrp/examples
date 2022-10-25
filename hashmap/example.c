@@ -41,17 +41,18 @@ main(int argc, char **argv)
 	};
 	struct hashmap *map = hashmap_new(&el, user_hash_sip, 1024);
 
-	struct user d = { "bob", 27 };
-	hashmap_set(map, &d);
-	d.name = "alice";
-	d.age = 15;
-	hashmap_set(map, &d);
+	hashmap_set(map, &(struct user){ "bob", 27 });
+	hashmap_set(map, &(struct user){ "alice", 15 });
+	user = hashmap_get(map, &(struct user){ "bob", 0 });
+	printf("name: %s, age: %d\n", user->name, user->age);
+	user->age += 1;
+	user = hashmap_get(map, &(struct user){ "bob", 0 });
+	printf("name: %s, age: %d\n", user->name, user->age);
 
-	d.name = "bob";
-	user = hashmap_get(map, &d);
-	if( user ) {
-		printf("name: %s, age: %d\n", user->name, user->age);
-	} else {
-		fprintf(stderr, "Not found\n");
-	}
+	((struct user *)hashmap_get(map, &(struct user){ "alice" }))->age += 1;
+	user = hashmap_get(map, &(struct user){ "alice", 0 });
+	printf("name: %s, age: %d\n", user->name, user->age);
+
+
+	hashmap_free(map);
 }
