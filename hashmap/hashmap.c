@@ -502,8 +502,6 @@ hashmap_sip(const void *data, size_t inlen, uint64_t seed0, uint64_t seed1)
 	v2 = ROTL(v2, 32)
 
 	uint64_t k0 = U8TO64_LE((uint8_t*)&seed0);
-	fprintf(stderr, "k0 = %0llx  seed0 = %0llx  htonl = %0llx\n",
-		k0, seed0, htonll(seed0));
 	uint64_t k1 = U8TO64_LE((uint8_t*)&seed1);
 	uint64_t v3 = UINT64_C(0x7465646279746573) ^ k1;
 	uint64_t v2 = UINT64_C(0x6c7967656e657261) ^ k0;
