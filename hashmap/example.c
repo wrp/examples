@@ -29,6 +29,11 @@ user_hash_sip(const void *item, const void *seed)
 	return hashmap_sip(user->name, strlen(user->name), 0, 0);
 }
 
+struct user *
+get(struct hashmap *h, char *name)
+{
+	return hashmap_get(h, &(struct user){ name });
+}
 
 int
 main(int argc, char **argv)
@@ -43,14 +48,14 @@ main(int argc, char **argv)
 
 	hashmap_set(map, &(struct user){ "bob", 27 });
 	hashmap_set(map, &(struct user){ "alice", 15 });
-	user = hashmap_get(map, &(struct user){ "bob", 0 });
+	user = get(map, "bob");
 	printf("name: %s, age: %d\n", user->name, user->age);
 	user->age += 1;
-	user = hashmap_get(map, &(struct user){ "bob", 0 });
+	user = get(map, "bob");
 	printf("name: %s, age: %d\n", user->name, user->age);
 
-	((struct user *)hashmap_get(map, &(struct user){ "alice" }))->age += 1;
-	user = hashmap_get(map, &(struct user){ "alice", 0 });
+	get(map, "alice")->age += 1;
+	user = get(map, "alice");
 	printf("name: %s, age: %d\n", user->name, user->age);
 
 
