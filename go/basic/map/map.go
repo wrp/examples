@@ -29,6 +29,7 @@ func map_incr(x map[int]int) {
 }
 
 func Example() {
+	/* map[K]V  creates a map with keys of type K and values of type V */
 	var m = map[string]vertex{
 		"Bell Labs": vertex{40.68433, -74.39967},
 		"Google":    vertex{37.42202, -122.08408},
