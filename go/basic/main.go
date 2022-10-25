@@ -79,7 +79,7 @@ func main() {
 		if _, ok := f[args[i]]; ok {
 			call(f, args[i])
 		} else {
-			fmt.Fprintln(os.Stderr, args[i], ": unknown")
+			fmt.Fprintf(os.Stderr, "Invalid argument: '%s' unknown\n", args[i])
 		}
 	}
 }
