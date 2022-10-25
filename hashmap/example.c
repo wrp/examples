@@ -35,6 +35,12 @@ get(struct hashmap *h, char *name)
 	return hashmap_get(h, &(struct user){ name });
 }
 
+struct user *
+set(struct hashmap *h, char *name, int age)
+{
+	return hashmap_set(h, &(struct user){ name, age });
+}
+
 int
 main(int argc, char **argv)
 {
@@ -46,8 +52,8 @@ main(int argc, char **argv)
 	};
 	struct hashmap *map = hashmap_new(&el, user_hash_sip, 1024);
 
-	hashmap_set(map, &(struct user){ "bob", 27 });
-	hashmap_set(map, &(struct user){ "alice", 15 });
+	set(map, "bob", 27);
+	set(map, "alice", 15);
 	user = get(map, "bob");
 	printf("name: %s, age: %d\n", user->name, user->age);
 	user->age += 1;
