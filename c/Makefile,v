@@ -24,8 +24,9 @@ text
 @# A stub Makefile used to bootstrap.
 
 BUILDDIR = build/$(shell uname -s)/$(shell uname -m)
+TARGETS = check clean distclean install dist distcheck
 
-.PHONY: all check clean distclean install
+.PHONY: all $(TARGETS)
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 	@@echo Make complete in $(BUILDDIR)
@@ -38,7 +39,7 @@ $(BUILDDIR)/Makefile: configure
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
 	@@echo '$(BUILDDIR) configured'
 
-check clean distclean install: $(BUILDDIR)/Makefile
+$(TARGETS): $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
 
 %: %.c $(BUILDDIR)/Makefile
