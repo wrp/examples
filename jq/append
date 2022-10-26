@@ -1,0 +1,20 @@
+#!/bin/sh
+
+
+echo '
+{
+  "foods": {
+    "menu": [ "item" ]
+  }
+}'  | jq --arg order banana '.foods.menu |= (. + [$order] | unique)'
+
+exit
+# output is:
+{
+  "foods": {
+    "menu": [
+      "banana",
+      "item"
+    ]
+  }
+}
