@@ -28,7 +28,7 @@ BUILDDIR = build/$(shell uname -s)/$(shell uname -m)
 .PHONY: all check clean distclean install
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
-	@echo Make complete in $(BUILDDIR)
+	@@echo Make complete in $(BUILDDIR)
 
 configure:
 	autoreconf -ivf
@@ -43,5 +43,5 @@ check clean distclean install: $(BUILDDIR)/Makefile
 
 %: %.c $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
-	@echo Make complete in $(BUILDDIR)
+	@@echo Make complete in $(BUILDDIR)
 @
