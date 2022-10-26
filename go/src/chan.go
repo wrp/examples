@@ -15,8 +15,8 @@ func main() {
 	go func(x int, c chan int, d chan int) {
 		v := <- c
 		fmt.Printf("chan %d got %d from c\n", x, v)
-		// Send to d to synchronize
-		d <- 1
+		// close d to synchronize
+		close(d)
 	} (1, c, d)
 
 	x, y := <- d, <- d
@@ -24,6 +24,9 @@ func main() {
 
 	// This won't block because above go routine is receiving
 	c <- 5
-	<- d  // Wait for go routine to finish
+	_, ok := <- d  // Wait for go routine to finish
+	if ! ok {
+		fmt.Println("Channel is closed")
+	}
 
 }
