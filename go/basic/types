@@ -27,3 +27,14 @@ complex128  the set of all complex numbers with float64 real and imaginary parts
 
 byte        alias for uint8
 rune        alias for int32 (represents a Unicode code point)
+
+
+type conversion examples:
+
+var i int = 42
+var f float64 = float64(i)
+var u uint = uint(f)
+
+i := 42
+f := float64(i)
+u := uint(f)
