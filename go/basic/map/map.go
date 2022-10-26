@@ -34,8 +34,13 @@ func Example() {
 		"Bell Labs": vertex{40.68433, -74.39967},
 		"Google":    vertex{37.42202, -122.08408},
 	}
+	fmt.Printf("map = %v\n", m)
+
 	b := []string{"Google", "Bell Labs"} // Missing index returns 0
 	delete(m, "Bell Labs")  // Remove entry from a map
+
+	fmt.Println("after deletion, map is", m)
+
 	for _, v := range b {
 		if loc, ok := m[v]; ok {
 			fmt.Println(v, "is at", loc)
@@ -57,5 +62,4 @@ func Example() {
 	p := make(map[string]int, 10)
 	p["foo"] = 5
 	fmt.Printf("p = %v, len = %d\n", p, len(p)) /* cap not defined for maps */
-
 }
