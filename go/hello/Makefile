@@ -3,11 +3,10 @@ package_name = example/user/hello
 
 .PHONY: all install
 all:
-	go run hello.go
+	go run hello.go foo.go
 
 hello:
-	go build hello.go
-
+	go build hello.go foo.go
 
 go.mod:
 	go mod init $(package_name)
