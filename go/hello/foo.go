@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
-func foo() {
-	fmt.Println("this if foo")
+func foo() int {
+	fmt.Println("this is foo")
+	return 1
 }

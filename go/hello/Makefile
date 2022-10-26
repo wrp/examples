@@ -1,12 +1,15 @@
 package_name = example/user/hello
 
 
-.PHONY: all install
+.PHONY: all install test
 all:
 	go run hello.go foo.go
 
 hello:
 	go build hello.go foo.go
+
+test: go.mod
+	go test
 
 go.mod:
 	go mod init $(package_name)
