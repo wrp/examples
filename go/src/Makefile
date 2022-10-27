@@ -5,7 +5,7 @@
 all: map
 
 %: %.go
-	go build $^
+	go build -gcflags=-m $^
 
 check:
 	go test
