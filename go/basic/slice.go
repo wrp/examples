@@ -12,7 +12,11 @@ func slices() {
 	a = append(a, 9)                    /* Append data to a slice */
 	b := []int{1, 2, 3}                 /* An initialized slice */
 	var c []int = []int{6, 7, 8, 9, 10} /* An initialized array */
-	var d [][]int = [][]int{{1, 2, 3}, {4, 5, 6}}
+	var d [][]int = [][]int{{1, 2, 3}, {4, 5, 6}}  /* multi-dimensional slice */
+
+	e := append(b, c ...)
+
+
 
 	/* Iterate over a slice */
 	sum := 0
@@ -27,6 +31,7 @@ func slices() {
 	fmt.Printf("a = %v: len=%d cap=%d\n", a, len(a), cap(a))
 	fmt.Printf("c = %v: len=%d cap=%d\n", c, len(c), cap(c))
 	fmt.Printf("d = %v: len=%d cap=%d\n", d, len(d), cap(d)) /* len == cap == 2 */
+	fmt.Printf("e = %v: len=%d cap=%d\n", e, len(e), cap(e))
 }
 
 type path []byte
