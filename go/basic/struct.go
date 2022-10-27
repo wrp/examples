@@ -24,6 +24,7 @@ func structs() {
 	s := reflect.ValueOf(&t).Elem()
 	typeOfT := s.Type()
 	// Use %+v to print elements of the struct  (this seems identical to %v)
+	// The output with %+v is very different for anonymous structs, though
 	fmt.Printf("%%v vs: %%+v: %v --> %+v\n", t, t)
 
 	// Iterate over the members of a struct, printing their names/values
