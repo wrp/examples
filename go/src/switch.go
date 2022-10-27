@@ -25,4 +25,14 @@ func main() {
 	default:
 		fmt.Println("Try again!")
 	}
+
+	switch false {
+	case 1 < 2: fmt.Println("will NOT print")
+	case 1 < -5: fmt.Println("will print ")
+	}
+
+	switch { // defaults to "switch true"
+	case 1 < 2: fmt.Println("Does print")
+	case 1 < -5: fmt.Println("will print ")
+	}
 }
