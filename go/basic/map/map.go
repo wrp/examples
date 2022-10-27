@@ -62,4 +62,13 @@ func Example() {
 	p := make(map[string]int, 10)
 	p["foo"] = 5
 	fmt.Printf("p = %v, len = %d\n", p, len(p)) /* cap not defined for maps */
+
+	/* Copy a ref to a map */
+	newmap := m
+	newmap["boo"] = vertex{1, 0}  // This modifies m
+	fmt.Printf("map = %v\n", m)
+	fmt.Printf("map = %v\n", newmap)
+
+	// newmap2 := m.clone()  no such method
+	// The idiomatic way to copy seems to be to iterate over the range
 }
