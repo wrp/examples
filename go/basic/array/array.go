@@ -22,6 +22,8 @@ func Example() {
 		switch t := i.(type) {
 		default:
 			fmt.Printf("%v is of type %T\n", i, t)
+		case []int:
+			fmt.Printf("%v is a slice of int\n", i)
 		}
 	}
 	whatAmI(sb) /* is a slice */
