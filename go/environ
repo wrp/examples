@@ -1,0 +1,2 @@
+
+GOMEMLIMIT  sets soft memory consumption limit (https://pkg.go.dev/runtime/debug#FreeOSMemory)
