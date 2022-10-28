@@ -7,8 +7,11 @@ import (
 )
 
 func main() {
-	x := GMin[int](2, 3)
-	fmt.Println("generic min is:", x)
+	fmt.Println("generic min is:", GMin[int](2, 3)) // Make call with explicit type
+	fmt.Println("generic min is:", GMin(2, 3)) // Make call with implicit type
+
+	fmt.Println("generic min is:", GMin[float32](2.0, 3.0)) // Make call with explicit type
+	fmt.Println("generic min is:", GMin(2.0, 3.0)) // Make call with explicit type
 }
 
 
