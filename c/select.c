@@ -5,10 +5,11 @@
 int
 main(void)
 {
-	struct timeval tp = {.tv_sec = 10, .tv_usec = 0 };
+	struct timeval tp = { .tv_sec = 10, .tv_usec = 0 };
 	char b[32];
 	fd_set fds;
 
+	FD_ZERO(&fds);
 	FD_SET(STDIN_FILENO, &fds);
 	switch( select(STDIN_FILENO + 1, &fds, NULL, NULL, &tp) ){
 	case 1:
@@ -24,5 +25,4 @@ main(void)
 	default:
 		fputs("Error\n", stderr);
 	}
-
 }
