@@ -1,13 +1,18 @@
 /* Demonstrate fork, passing data to child through pipe */
 
-#include <unistd.h>
-#include <stdlib.h>
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>  /* For bcopy, for FD_COPY */
+#include <sys/select.h>
+#include <unistd.h>
 
 void xclose(int fd);
 void xdup2(int a, int b);
 void xwrite(int fd, void *v, size_t s);
 void xread(int fd, void *v, size_t s);
+void xpipe(int *p);
 
 
 struct data {
@@ -19,12 +24,23 @@ int
 foo(void *v)
 {
 	struct data *d = v;
-	d->x += 1;
-	d->y += 1;
 	d->z += 1;
 	d->f /= 2;
 	d->g *= 2;
 	return 0;
+}
+
+
+int
+count(fd_set *fd, int max)
+{
+	int c = 0;
+	for( ; max; max -= 1 ){
+		if( FD_ISSET(max, fd) ){
+			c += 1;
+		}
+	}
+	return c;
 }
 
 
@@ -34,54 +50,74 @@ show(const struct data *v)
 	printf("{ %d, %d, %d, %f, %g }\n", v->x, v->y, v->z, v->f, v->g);
 }
 
-
 int
-doit(int (*f)(void *), size_t s, int fdi, int fdo)
+doit(int (*f)(void *), void *in, size_t s, fd_set *fds, int *max)
 {
-	unsigned char d[s];
 	int rv;
+	int p2[2];
+	xpipe(p2);
 
-	xread(fdi, d, s);
-	rv = foo(d);
-	xwrite(fdo, d, s);
-
-	return rv;
+	switch( fork() ){
+	case -1:
+		perror("fork");
+		exit(EXIT_FAILURE);
+	case 0:
+		xclose(p2[0]);
+		rv = f(in);
+		xwrite(p2[1], in, s);
+		xclose(p2[1]);
+		exit(rv);
+	default:
+		xclose(p2[1]);
+	}
+	FD_SET(p2[0], fds);
+	*max = ( p2[0] > *max ) ? p2[0] : *max;
+	return p2[0];
 }
 
 int
 main(int argc, char **argv)
 {
-	int p1[2];
-	int p2[2];
 	struct data val = { 1, 2, 3, 5.0, 1.2 };
 	struct data result;
 	int len;
-	if( pipe(p1) || pipe(p2) ){
-		perror("pipe");
-		return EXIT_FAILURE;
+	int maxfd = 0;
+	fd_set fds[2];
+
+	FD_ZERO(fds);
+
+	for( int i = 0; i < 4; i += 1 ){
+		val.x = i;
+		val.y = 0;
+		doit(foo, &val, sizeof val, fds + 1, &maxfd);
 	}
-	switch( fork() ){
-	case -1:
-		perror("fork");
-		return EXIT_FAILURE;
-	case 0:
-		xclose(p1[1]);
-		xclose(p2[0]);
-		exit(doit(foo, sizeof val, p1[0], p2[1]));
+
+	while( count(fds + 1, maxfd) ){
+	FD_COPY(fds + 1, fds);
+	switch( select(maxfd + 1, fds, NULL, NULL, NULL) ){
 	default:
-		xwrite(p1[1], &val, sizeof val);
-		xclose(p1[1]);
-		xclose(p1[0]);
-		xclose(p2[1]);
-		xread(p2[0], &result, sizeof result);
-		xclose(p2[0]);
-		show(&val);
-		show(&result);
+		for( int fd = 0; fd < maxfd + 1; fd += 1 ){
+			if( FD_ISSET(fd, fds) ){
+				FD_CLR(fd, fds + 1);
+				xread(fd, &val, sizeof val);
+				xclose(fd);
+				printf("count: %d   ", count(fds + 1, maxfd));
+				show(&val);
+				if( val.y < 2 ){
+					val.y += 1;
+					doit(foo, &val, sizeof val, fds + 1, &maxfd);
+				}
+			}
+		}
+		break;
+	case -1:
+		perror("select");
+	case 0:
+		assert(false);
 	}
-	if( fclose(stdout) ){
-		perror("stdout");
-		return EXIT_FAILURE;
 	}
+
+
 	return EXIT_SUCCESS;
 }
 
@@ -118,6 +154,15 @@ xdup2(int a, int b)
 {
 	if( dup2(a,b) == -1 ){
 		perror("dup2");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void
+xpipe(int *p)
+{
+	if( pipe(p) ){
+		perror("pipe");
 		exit(EXIT_FAILURE);
 	}
 }

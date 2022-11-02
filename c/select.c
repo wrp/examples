@@ -22,7 +22,7 @@ main(void)
 	case 0:
 		puts("Timeout");
 		break;
-	default:
+	case -1::
 		fputs("Error\n", stderr);
 	}
 }
