@@ -5,6 +5,10 @@ package main
 import "fmt"
 
 func main() {
+	for i := range [...]int{ 5, 1, 8, 9 } {
+		fmt.Println(i)
+	}
+
 	c := make(chan int, 2)
 	c <- 3
 	go func (c chan int) {
