@@ -12,6 +12,9 @@ perl -anE "say join(',',unpack('$fmt'))"
 
 exit 0
 
+# Read integer input: (on a little endian machine, this will print "18"
+printf '\x11\x00\x00\x00'| perl -anE "say pack('A*', unpack('i*') + 1)"
+
 # Print values from 0 to 0xff
 perl -e 'print pack("c", $_) foreach(0..256)'
 
