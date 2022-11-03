@@ -29,4 +29,10 @@ func main() {
 		fmt.Println("Channel is closed")
 	}
 
+	c = make(chan int, 1);
+	d = make(chan int, 1);
+
+	c <- 2
+	d <- <- c  // Receive from c and write to d
+	fmt.Println("Received: ", <- d)
 }
