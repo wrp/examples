@@ -31,14 +31,15 @@ func (c Counter) Value() (r int64) {
 }
 
 func main() {
-	var c Counter
-	ch := make(chan struct{})
+	var (
+		c Counter
+		wg sync.WaitGroup
+	)
 
 	for i := 0; i < 100; i += 1 {
-		go func() { c.incr(1); ch <- struct {}{} }()
+		wg.Add(1)
+		go func() { c.incr(1); wg.Done() }()
 	}
-	for i := 0; i < 100; i += 1 {
-		<- ch
-	}
+	wg.Wait()
 	fmt.Println( " c = ", c.n)
 }
