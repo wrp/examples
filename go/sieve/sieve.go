@@ -1,6 +1,5 @@
 // Concurrent sieve of Eratosthenes
 
-
 package main
 
 import (
@@ -8,38 +7,33 @@ import (
 	"fmt"
 )
 
+
+
 func main() {
-	var n = flag.Int("n", 100, "max value to check")
+	var n = flag.Int("n", 10, "number of primes to find")
 	flag.Parse()
 
-	w := make(chan chan int, 1);
-	d := make(chan int);
-	w <- d
+	c := make(chan int)
+	go func(c chan<- int) {
+		for i := 2; ; i++ {
+			c <- i
+		}
+	}(c)
 
-	for i := 2; i < *n; i += 1 {
-		c := make(chan int);
+	for i := 0; i < *n; i += 1 {
+		prime := <-c
+		fmt.Println(prime)
+		ch1 := make(chan int)
 
-		go func(m int, in chan int, out chan int ) {
-			for k := range(in) {
-				fmt.Printf("%d -> %d\n", m, k)
-				if k % m != 0 {
-					out <- k
+		go func (in <-chan int, out chan<- int, prime int) {
+			for {
+				i := <-in
+				if i%prime != 0 {
+					out <- i
 				}
 			}
-			close(out)
-		}(i, <- w, c)
+		}(c, ch1, prime)
 
-		w <- c
-	}
-
-	close(w)
-	for i := 0; i < *n; i += 1 {
-		d <- i
-	}
-	close(d)
-
-
-	for p := range( <-w ) {
-		fmt.Println(p)
+		c = ch1
 	}
 }
