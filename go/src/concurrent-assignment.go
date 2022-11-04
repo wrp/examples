@@ -3,19 +3,19 @@ package main
 
 import (
 	"fmt"
-	"time"
-	"runtime"
 )
 
-func foo() int { runtime.Gosched(); time.Sleep(2 * time.Millisecond); fmt.Printf("foo");  return 2}
-func bar() int { fmt.Printf("bar"); return 1}
+func foo(c chan<- struct{}) int { c <- struct{}{}; fmt.Printf("foo");  return 2}
+func bar(c <-chan struct{}) int { fmt.Printf("bar"); <- c ;  return 1}
 func baz(a, b int) int { return a + b }
 
 func main() {
 
-	// c := make(chan int)
-	for i := 0; i < 100; i += 1 {
-		a, b := foo(), bar()  // Allegedly, foo and bar are called concurrently, but this seems to always be sequential
-		fmt.Println(a, b)
-	}
+	c := make(chan struct{})
+
+	// Allegedly, foo and bar are called concurrently, but this seems to always be sequential
+	// Indeed, the language spec guarantees a deadlock here, since foo() must return before
+	// bar() is executed.  The rumor that the calls are concurrent is simply false.
+	a, b := foo(c), bar(c)
+	fmt.Println(a, b)
 }
