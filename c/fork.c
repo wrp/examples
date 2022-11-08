@@ -75,6 +75,26 @@ doit(int (*f)(void *), void *in, size_t s, fd_set *fds, int *max)
 	return p2[0];
 }
 
+
+static void
+handle(int maxfd, fd_set *fds)
+{
+	struct data val;
+	for( int fd = 0; fd < maxfd + 1; fd += 1 ){
+		if( FD_ISSET(fd, fds) ){
+			FD_CLR(fd, fds + 1);
+			xread(fd, &val, sizeof val);
+			xclose(fd);
+			show(&val);
+			if( val.y < 2 ){
+				val.y += 1;
+				doit(foo, &val, sizeof val, fds + 1, &maxfd);
+			}
+		}
+	}
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -93,28 +113,16 @@ main(int argc, char **argv)
 	}
 
 	while( count(fds + 1, maxfd) ){
-	FD_COPY(fds + 1, fds);
-	switch( select(maxfd + 1, fds, NULL, NULL, NULL) ){
-	default:
-		for( int fd = 0; fd < maxfd + 1; fd += 1 ){
-			if( FD_ISSET(fd, fds) ){
-				FD_CLR(fd, fds + 1);
-				xread(fd, &val, sizeof val);
-				xclose(fd);
-				printf("count: %d   ", count(fds + 1, maxfd));
-				show(&val);
-				if( val.y < 2 ){
-					val.y += 1;
-					doit(foo, &val, sizeof val, fds + 1, &maxfd);
-				}
-			}
+		FD_COPY(fds + 1, fds);
+		switch( select(maxfd + 1, fds, NULL, NULL, NULL) ){
+		default:
+			handle(maxfd, fds);
+			break;
+		case -1:
+			perror("select");
+		case 0:
+			assert(false);
 		}
-		break;
-	case -1:
-		perror("select");
-	case 0:
-		assert(false);
-	}
 	}
 
 
