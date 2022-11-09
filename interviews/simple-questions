@@ -1,4 +1,5 @@
 
+infra:
 What is the difference between a vm and a container?
 
 What's the difference between a load balancer and a reverse proxy?
@@ -9,3 +10,6 @@ What's the difference between a load balancer and a reverse proxy?
 		*) TLS acceleration (terminates TLS)
 		*) connection pooling
 		*) compression
+
+What's the difference between a daemon set, a replica set, and a stateful set?
+
