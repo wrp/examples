@@ -1,0 +1,13 @@
+#!/bin/sh
+
+
+# Print only those entries that have a "version" key
+
+printf '%s' '
+[
+	{ "name": "alpha", "version": "3.1" },
+	{ "name": "beta" },
+	{ "name": "charlie", "version": "1" }
+]
+' |
+jq -r '.[] | "\(.name) \(.version // empty)"'
