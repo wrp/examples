@@ -1,0 +1,3 @@
+
+# Which package owns a file:
+pacman -Qo $path
