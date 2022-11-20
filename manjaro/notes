@@ -17,5 +17,18 @@ Notes/thoughts on my new laptop.
 *)	Here's the order in which I installed things:
 	*) created a pgp key and a new rsa key, added to github
 	*) cloned my dotfiles from github (weird that git is installed out of the box, but not gcc nor vim!)
-	*) installed gcc: sudo pacman -S gcc
+	*) gcc: sudo pacman -S gcc   # got 12.1.0-2.1
+	*) tmux: 3.3_a-2
+	*) vim: 9.0.0814-1
+	pacman dependency management is crap.  vim is installed, but I can't open it because
+	"libperl.so: cannot open shared object file".  I suppose this is because of something in my
+	vim startup files, but who releases an OS without perl and vim pre-installed?  Still trying
+	to get the usb-c adapter to work so I can use wired ethernet
 
+	*) perl
+	*) usb_modeswitch
+	*) pkgfile
+	*) pciutils
+	*) usbutils
+
+	for anacondda; libxau libxi libxss libxtst libxcursor libxcomposite libxdamage libxfixes libxrandr libxrender mesa-libgl alsa-lib libglvnd
