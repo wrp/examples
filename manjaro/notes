@@ -1,0 +1,21 @@
+
+Notes/thoughts on my new laptop.
+
+*)	Why did I not just get Debian?  I hate pacman!
+*)	neither gcc nor vi came installed.  I thought vi was mandated by standards?
+*)	The wired connection does not seem to work, and tethering on my phone is painful.
+	Updating packages with pacman is hard on the slow wifi, and it is essential to
+	use --disable-download-timeout.   That should absolutely be the default, and it
+	is clear that whoever designed this was not thinking about people with lousy
+	connections.  Bottom line; first command that needs to be run is:
+
+	sudo pacman -Syy --disable-downloat-timeout
+
+	This updates the pacman db.  Without doing that, attempts to install/upgrade
+	packages will mostly fail.  After that, we can start installing packages.
+
+*)	Here's the order in which I installed things:
+	*) created a pgp key and a new rsa key, added to github
+	*) cloned my dotfiles from github (weird that git is installed out of the box, but not gcc nor vim!)
+	*) installed gcc: sudo pacman -S gcc
+
