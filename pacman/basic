@@ -1,3 +1,6 @@
 
 # Which package owns a file:
 pacman -Qo $path
+
+# Search available packages that match $pattern
+pacman -Ss "$pattern"  # pattern is an re, not a glob
