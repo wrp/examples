@@ -1,6 +1,17 @@
 #!/bin/sh
-BUILDDIR=build/$(uname -s)/$(uname -m)
-out=$( printf 'foo bar baz' | "${BUILDDIR}"/bst )
+
+for dir in . "build/$(uname -s)/$(uname -m)"; do
+	if test -f $dir/bst; then
+		exe=$dir/bst
+		break
+	fi
+done
+if test -z "$exe" || ! test -x "$exe"; then
+	echo 'Cannot find executable' >&2
+	exit 1
+fi
+
+out=$( printf 'foo bar baz' | "$exe" )
 expect='bar: {1:1}
 baz: {1:1}
 foo: {1:1}'
