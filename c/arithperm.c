@@ -220,7 +220,7 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 	exp->operands = v = xmalloc(sizeof *v * argc);
 	exp->count = argc;
 
-	for( ;*argv; argv++, v++ ){
+	for( ; *argv; argv++, v++ ){
 		char *end;
 		*v = strtod(*argv, &end);
 		if( *end != '\0' ){
