@@ -1,7 +1,6 @@
 #!/bin/sh
 
-builddir=build/$(uname -s)/$(uname -m)
-exe=$builddir/read-txt-into-array
+exe=./read-txt-into-array
 
 
 die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2

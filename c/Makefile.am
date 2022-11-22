@@ -25,6 +25,7 @@ check_PROGRAMS = \
 	poly \
 	pyramid \
 	read-indexed \
+	read-txt-into-array \
 	scanf-term \
 	sqlite \
 	tac \
