@@ -333,7 +333,7 @@ validate(const char *fmt, size_t width, int conv, const char *flags, int end)
 	}
 }
 
-#if 0
+/*
 
 From n1256.pdf
 
@@ -557,4 +557,4 @@ Note from linux manpage:
            }
 
        As shown in the above example, it is necessary to call free(3) only if the scanf() call successfully read a string.
-#endif
+*/
