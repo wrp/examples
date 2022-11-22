@@ -66,7 +66,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian \
       $(lsb_release -cs) stable"
 RUN apt-get update
-RUN aptitude install -y docker-ce
+# RUN aptitude install -y docker-ce
 RUN aptitude install -y zlib1g-dev
 
 # Fix locales for tmux
@@ -107,12 +107,12 @@ RUN aptitude install -y tree
 RUN aptitude install -y libyaml-perl
 RUN aptitude install -y bc
 RUN aptitude install -y csvtool
-RUN aptitude install -y valgrind
-RUN aptitude install -y asciidoctor
-RUN aptitude install -y libmodern-perl-perl
-RUN aptitude install -y rcs
-RUN aptitude install -y libev-dev
-RUN aptitude install -y libev4
+# RUN aptitude install -y valgrind
+# RUN aptitude install -y asciidoctor
+# RUN aptitude install -y libmodern-perl-perl
+# RUN aptitude install -y rcs
+# RUN aptitude install -y libev-dev
+# RUN aptitude install -y libev4
 
 
 EXPOSE 8125
