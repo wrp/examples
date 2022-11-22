@@ -25,5 +25,16 @@ AC_SEARCH_LIBS([pow],[m],[ncursesw])
 
 AC_CHECK_FUNCS([getdelim gettimeofday strtol arc4random_uniform])
 
+AC_LANG_PUSH(C)
+AC_RUN_IFELSE(dnl
+	[AC_LANG_PROGRAM(
+		[#include <stdio.h>],
+		[char s[32]; sprintf(s, "%.3'Lg", 2.0);
+			return (s[0] == '%');]
+	)],
+	AC_DEFINE([HAVE_COMMA_FORMAT],[1],[Whether printf format strings honor single quote])
+)
+AC_LANG_POP(C)
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

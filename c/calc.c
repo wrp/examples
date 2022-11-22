@@ -27,7 +27,8 @@ const char *help[] = {
 #include <math.h>
 #include <unistd.h>
 
-#define DEFAULT_FMT "%.3'Lg\n"
+#define COMMA_DEFAULT_FMT "%.3'Lg\n"
+#define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
 #define string_ops "[]FxLRD"
 #define binary_ops "*+/^r"
