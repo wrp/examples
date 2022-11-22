@@ -74,14 +74,14 @@ main(int argc, char **argv)
 	char a[7][1024];
 
 	if( argc > 1 && ! strcmp(argv[0], "formats") ){
-	show(SCNdPTR);
-	show(SCNdMAX);
-	show(SCNd64);
-	show(SCNd32);
-	show(SCNdLEAST32);
-	show(SCNdLEAST64);
-	show(SCNdFAST32);
-	show(SCNdFAST64);
+		show(SCNdPTR);
+		show(SCNdMAX);
+		show(SCNd64);
+		show(SCNd32);
+		show(SCNdLEAST32);
+		show(SCNdLEAST64);
+		show(SCNdFAST32);
+		show(SCNdFAST64);
 	}
 
 	if( argc == 1 ) {
