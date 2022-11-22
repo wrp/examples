@@ -1,3 +1,5 @@
+# Install $pkg
+pacman -S $pkg   # often want to use -y to refresh
 
 # Which package owns a file:
 pacman -Qo $path
