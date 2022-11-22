@@ -230,7 +230,7 @@ parse_cmd_line(int argc, char **argv, struct expression *exp)
 		}
 	}
 	strncpy(exp->operators, "++++++++++++++++++++", exp->count - 1);
-	exp->operators[exp->count] = '\0';
+	exp->operators[exp->count - 1] = '\0';
 	exp->mask = (( 0x1 << ( exp->count - 1 )) - 1);
 	exp->mask = next_mask(exp->mask);
 	exp->operands = exp->operands;
