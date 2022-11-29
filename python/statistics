@@ -13,4 +13,5 @@ for x in sys.stdin.readlines():
 print("v = ", v)
 print("mean = ", statistics.mean(v))
 print("median = ", statistics.median(v))
+print("pop std dev = ", statistics.pstdev(v))
 print("std dev = ", statistics.stdev(v))
