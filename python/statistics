@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+# Compute mean, median, and std deviation of the input
+
+import statistics
+import sys
+
+v = []
+
+for x in sys.stdin.readlines():
+    for y in map(float, x.split()):
+        v.append(y)
+
+print("v = ", v)
+print("mean = ", statistics.mean(v))
+print("median = ", statistics.median(v))
+print("std dev = ", statistics.stdev(v))
