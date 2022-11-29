@@ -4,14 +4,13 @@
 import statistics
 import sys
 
-v = []
 
+print("mean\tmedian\tstddev\tdata")
 for x in sys.stdin.readlines():
+    v = []
+
     for y in map(float, x.split()):
         v.append(y)
 
-print("v = ", v)
-print("mean = ", statistics.mean(v))
-print("median = ", statistics.median(v))
-print("pop std dev = ", statistics.pstdev(v))
-print("std dev = ", statistics.stdev(v))
+    v.sort()
+    print("{}\t{}\t{}\t{}".format(statistics.mean(v), statistics.median(v), statistics.pstdev(v), v))
