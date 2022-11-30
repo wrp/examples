@@ -21,3 +21,15 @@ g = a[greater]
 
 # Select only two columns of the rows in which column A matches > 2
 g = a.loc[greater, ['B', 'C']]
+
+
+i = pd.DataFrame(  # Create dataframe indexed by integers
+        [
+            [1.0, 2.0, 3, 4],
+            ['foo', 'bar', 'baz', 'qux'],
+            pd.Series(1, index=list(range(4)), dtype="float32"),
+            list((9, 2, 3, 5))
+        ]
+    )
+
+print( i.iloc[[0,3],0])  # print column 0 from rows 0 and 3
