@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+import pandas as pd
+
+a = pd.DataFrame(
+        {
+            "A": [1.0, 2.0, 3, 4],
+            "B": ['foo', 'bar', 'baz', 'qux'],
+            "C": pd.Series(1, index=list(range(4)), dtype="float32"),
+            "D": list((1, 2, 3, 5))
+        }
+    )
+
+# print(a)          # Print the entire data frame
+last_row = a[-1:])  # create a new dataframe consisting of one row
+b = a['A']          # create a new dataframe consisting of a single column
