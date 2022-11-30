@@ -12,5 +12,9 @@ a = pd.DataFrame(
     )
 
 # print(a)          # Print the entire data frame
-last_row = a[-1:])  # create a new dataframe consisting of one row
+last_row = a[-1:]   # create a new dataframe consisting of one row
 b = a['A']          # create a new dataframe consisting of a single column
+
+# create a dataframe in which the column matches an expression
+greater = a['A'] > 2  # create a dataframe consisting of two columns: an integer index and true/false
+g = a[greater]
