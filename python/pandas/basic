@@ -45,5 +45,18 @@ h = pd.DataFrame(
     }
 )
 print(h)
+print('uniqe values of foo:')
 for t in h.foo.unique():
     print(t)
+
+
+# get mean of a grouped set
+h = pd.DataFrame(
+    {
+        'v': [1, 2, 3, 4, 5, 6],
+        'k': ['a', 'b', 'a', 'c', 'a', 'e'],
+    }
+)
+print(h)
+print('the mean of all values:')
+print(h.groupby('k').mean())
