@@ -32,4 +32,7 @@ i = pd.DataFrame(  # Create dataframe indexed by integers
         ]
     )
 
-print( i.iloc[[0,3],0])  # print column 0 from rows 0 and 3
+z = i.iloc[[0,3],0]  # column 0 from rows 0 and 3
+last = i.iloc[-1:]    # last row
+first_col = i.iloc[:,0]
+print(first_col)
