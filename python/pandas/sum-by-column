@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+import pandas as pd
+
+
+a = pd.DataFrame(
+    {
+        'k': ['aa', 'ab', 'ac', 'ba', 'bb', 'bc'],
+        'v': [1.0,  1.5,  2,  3,   4,  5],
+    }
+)
+
+# Sum all rows where key starts with 'a'
+rows = a.k.str.startswith('a')
+print(a.loc[rows].sum()['v'])
+
+
+# Sum all rows where key ends with 'c'
+print(a.loc[a.k.str[-1] == 'c'].sum()['v'])
+
+
+
