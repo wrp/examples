@@ -3,13 +3,13 @@
 import pandas as pd
 
 a = pd.DataFrame(
-        {
-            "A": [1.0, 2.0, 3, 4],
-            "B": ['foo', 'bar', 'baz', 'qux'],
-            "C": pd.Series(1, index=list(range(4)), dtype="float32"),
-            "D": list((1, 2, 3, 5))
-        }
-    )
+    {
+        "A": [1.0, 2.0, 3, 4],
+        "B": ['foo', 'bar', 'baz', 'qux'],
+        "C": pd.Series(1, index=list(range(4)), dtype="float32"),
+        "D": list((1, 2, 3, 5))
+    }
+)
 
 # print(a)          # Print the entire data frame
 last_row = a[-1:]   # create a new dataframe consisting of one row
@@ -36,3 +36,14 @@ z = i.iloc[[0,3],0]  # column 0 from rows 0 and 3
 last = i.iloc[-1:]    # last row
 first_col = i.iloc[:,0]
 print(first_col)
+
+# Get unique entries in a column
+h = pd.DataFrame(
+    {
+        'foo': ['one', 'two', 'three', 'one'],
+        'bar': [ 1, 2, 3, 1],
+    }
+)
+print(h)
+for t in h.foo.unique():
+    print(t)
