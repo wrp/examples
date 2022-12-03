@@ -40,15 +40,16 @@ pop(struct heap *h)
 	size_t i = 0;
 	size_t a;  /* index of left child */
 	size_t b;  /* index of right child */
+	size_t e = h->len; /* end */
 
 	/* down heapify */
 	while(
 		a = 2 * i + 1, b = a + 1,
-		a < h->len && d[i] > d[a]
-		|| b < h->len && d[i] > d[b]
+		a < e && d[i] > d[a]
+		|| b < e && d[i] > d[b]
 	){
 		int t = b;
-		if( b >= h->len || d[a] < d[b] ){
+		if( b >= e || d[a] < d[b] ){
 			t = a;
 		}
 		swap(d + i, d + t);
