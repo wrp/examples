@@ -59,12 +59,35 @@ pop(struct heap *h)
 }
 
 
+/* Read an integer from stdin */
+static int
+get_value(int *v)
+{
+	char b[32] = "";
+	char *end;
+	int len;
+	if( scanf("%31s%n", b, &len) == 1 && len < 31 ){
+		*v = strtol(b, &end, 10);
+		if( *end ){
+			goto error;
+		}
+		return 1;
+	}
+	if( feof(stdin) ){
+		return 0;
+	}
+error:
+	fprintf(stderr, "Invalid input%s%s\n", b[0] ? " near: " : "", b);
+	exit(1);
+}
+
+
 int
 main(int argc, char **argv)
 {
 	struct heap h = { 0 };
 	int v;
-	while( scanf("%d", &v) == 1 ){
+	while( get_value(&v) == 1 ){
 		push(&h, v);
 	}
 	while( h.len > 0 ){
