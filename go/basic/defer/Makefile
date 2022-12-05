@@ -1,0 +1,3 @@
+
+intstall:
+	go install -v
