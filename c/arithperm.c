@@ -118,7 +118,7 @@ eval(struct expression *exp)
 			sp -= 2;
 			sp->last = *ops;
 			snprintf(buf, sizeof buf, fmt, sp->descr, *ops, sp[1].descr);
-			strncpy(sp->descr, buf, sizeof sp->descr);
+			strncpy(sp->descr, buf, sizeof sp->descr); /* may not terminate */
 			switch( *ops++ ){
 			case '+': sp->val += sp[1].val; break;
 			case '-': sp->val -= sp[1].val; break;
