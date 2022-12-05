@@ -18,7 +18,7 @@ compare_string( const void *a, const void *b )
 int
 compare_char( const void *a, const void *b )
 {
-	return *(char *)a > *(char *)b;
+	return *(char *)a - *(char *)b;
 }
 
 int
@@ -27,11 +27,12 @@ main( int argc, char **argv )
 	/* Sort each argument */
 	puts("Arguments, individually sorted:");
 	for( int i = 1; i < argc; i++ ) {
-		char copy[1024];
-		strncpy(copy, argv[i], sizeof copy);
+		char *copy;
+		copy = strdup(argv[i]);
 		qsort(copy, strlen(copy), 1, compare_char);
 		putchar('\t');
 		puts(copy);
+		free(copy);
 	}
 
 	/* Sort the arguments */
@@ -39,7 +40,7 @@ main( int argc, char **argv )
 	qsort( argv + 1, argc - 1, sizeof *argv, compare_string );
 	for( int i = 1; i < argc; i++ ) {
 		putchar('\t');
-		puts( argv[i] );
+		puts(argv[i]);
 	}
 
 	return 0;

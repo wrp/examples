@@ -66,16 +66,17 @@ list_dir(char *path, int indent)
 int
 main(int argc, char **argv)
 {
-	char name[PATH_MAX];
+	char *name;
 	char *defaults[] = { ".", NULL };
 	char **path = argc > 1 ? argv + 1 : defaults;
 
 	for( ; *path; path += 1 ){
-		strncpy(name, *path, sizeof name);
+		name = strdup(path);
 		printf("%s:\n", name);
 		if( list_dir(name, 1) ){
 			return 1;
 		}
+		free(name);
 	}
 	return 0;
 }
