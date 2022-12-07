@@ -1,0 +1,2 @@
+
+go tool pprof -h  # get info on profiling
