@@ -1,2 +1,5 @@
 
 go tool pprof -h  # get info on profiling
+go list all  # show all packages found in GOPATH trees
+go list std  # show packages from the standard Go library
+go list cmd  # show commands and internal libraries
