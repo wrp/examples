@@ -1,0 +1,7 @@
+
+Matplotlib is commonly aliased at 'plt'
+Common functions:
+
+plt.title('Add a title to the figure')
+plt.xlabel('Add a label on the x axis')
+plt.safefig('Save-to-this-path.png')
