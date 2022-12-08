@@ -69,3 +69,7 @@ h = pd.DataFrame(
 print(h)
 print('the mean of all values:')
 print(h.groupby('k').mean())
+
+
+h.corr()  # compute a correlation
+h.cov()   # compute covariance
