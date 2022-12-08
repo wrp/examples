@@ -1,0 +1,6 @@
+
+
+import seaborn as sns
+
+d = a pandas dataframe
+sns.paiplot(d)
