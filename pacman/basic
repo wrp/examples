@@ -1,8 +1,4 @@
-# Install $pkg
-pacman -S $pkg   # often want to use -y to refresh
-
-# Which package owns a file:
-pacman -Qo $path
-
-# Search available packages that match $pattern
-pacman -Ss "$pattern"  # pattern is an re, not a glob
+pacman -Q          # List all installled packages
+pacman -S $pkg     # Install $pkg (often want to use -y to refresh)
+pacman -Qo $path   # Which package owns $path
+pacman -Ss "$re"   # Search available packages that match $re (regex, not a glob)
