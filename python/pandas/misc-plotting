@@ -1,0 +1,71 @@
+# With matplotlib, create a barplot of the 'class' column in the titanic data:
+plt.bar(titanic['class'].unique(), titanic['class'].value_counts())
+plt.ylabel('Count')
+plt.xlabel('Class of Tickets on Titanic')
+plt.title('Count by Class on the Titanic')
+
+
+# With seaborn, create a countplot of the 'class' column in the titanic data:
+f = sns.countplot(x='class', data=titanic)
+plt.xlabel('Class of Tickets on Titanic')
+plt.ylabel('Count')
+plt.title('Count by Class on the Titanic')
+plt.show(f)
+
+
+# Create h bar plot using plotly:
+f = px.bar(
+	titanic,
+	x='class',
+	title='Count by Class on the Titanic',
+	color='class',
+	labels={'class': 'Class of Tickets on Titanic'}
+)
+f.show()
+
+
+#  Create a histogram with plotly
+f = px.histogram(
+	titanic,
+	x='fare',
+	title='Histogram of Fares on the Titanic',
+	labels={'fare': 'Fare'},
+	color_discrete_sequence = px.colors.qualitative.Set1
+)
+f.show()
+
+
+# Create histogram split on 'survived'
+f = px.histogram(
+	titanic,
+	x='age',
+	title='Histogram of Ages by Survival',
+#	color_discrete_sequence = px.colors.qualitative.Dark24,
+	labels={'age': 'Age'},
+	color = "survived"
+)
+f.show()
+
+
+
+# Create histogram with some specific attributes with matplotlib
+plt.hist(titanic['fare'], color='lightblue' alpha=0.6, edgecolor = 'black', bins=30 )
+plt.xlabel('Fare')
+plt.ylabel('Count')
+plt.figure(figsize=(12,5))
+plt.savefig('fare.png')
+
+
+
+# Same as previous, demonstrating dpi
+plt.hist(titanic['fare'], color='lightblue' alpha=0.6, edgecolor = 'black', bins=30 )
+plt.xlabel('Fare')
+plt.ylabel('Count')
+plt.figure(figsize=(12,5))
+plt.savefig('fare200.png', dpi=200)
+
+
+# Use plotly to make a histogram
+f = px.histogram(titanic, x='age', title='Histogram of Age', labels={'age': 'Age'})
+f.show()
+f.write_image('plotly_hist.png')
