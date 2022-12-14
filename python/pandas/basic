@@ -5,16 +5,20 @@ import pandas as pd
 
 a = pd.read_csv('./data')
 print("dataframe of ./data'")
-print(a)
 print("mean of height in ./data'")
 print(a['height'].mean())
 print("quantiles")
 print(a['height'].quantile([.25,.5,.9]))
 
+# filter columns, treating them as strings
+a.query('weight.str.contains("1")', engine = 'python')
+print(a)
+sys.exit(0)
+
+
 q ='height < 5 and weight > 8'
 print(q)
 print(a.query(q))
-sys.exit(0)
 
 
 a = pd.DataFrame(
