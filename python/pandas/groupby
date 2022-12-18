@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+import sys
+import pandas as pd
+
+a = pd.DataFrame(
+    [
+        [1.0, 2.0, 3, 4],
+        [1.0, 3.0, 3, 4],
+        [1.0, 2.0, 3, 4],
+        list((1, 2, 3, 5)),
+        (3.1, 3.2, 3.3, 3.4)
+    ],
+    columns=('a', 'b', 'c', 'd'),
+)
+g = a.groupby('b')
+
+
+print(g.groups)   #  {2.0: [0, 2, 3], 3.0: [1], 3.2: [4]}
+
+print(dir(g))
+#    ['__annotations__', '__class__', '__class_getitem__', '__delattr__',
+#    '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__',
+#    '__getattr__', '__getattribute__', '__getitem__', '__gt__', '__hash__',
+#    '__init__', '__init_subclass__', '__iter__', '__le__', '__len__',
+#    '__lt__', '__module__', '__ne__', '__new__', '__orig_bases__',
+#    '__parameters__', '__reduce__', '__reduce_ex__', '__repr__',
+#    '__setattr__', '__sizeof__', '__slots__', '__str__', '__subclasshook__',
+#    '__weakref__', '_accessors', '_agg_examples_doc', '_agg_general',
+#    '_agg_py_fallback', '_aggregate_frame', '_aggregate_item_by_item',
+#    '_aggregate_with_numba', '_apply_allowlist', '_apply_filter',
+#    '_apply_to_column_groupbys', '_ascending_count', '_bool_agg',
+#    '_choose_path', '_concat_objects', '_constructor', '_cumcount_array',
+#    '_cython_agg_general', '_cython_transform', '_define_paths',
+#    '_descending_count', '_dir_additions', '_dir_deletions',
+#    '_fill', '_get_cythonized_result', '_get_data_to_aggregate',
+#    '_get_index', '_get_indices', '_gotitem', '_group_selection',
+#    '_group_selection_context', '_hidden_attrs', '_indexed_output_to_ndframe',
+#    '_insert_inaxis_grouper_inplace', '_internal_names',
+#    '_internal_names_set', '_is_protocol', '_iterate_column_groupbys',
+#    '_iterate_slices', '_make_mask_from_int', '_make_mask_from_list',
+#    '_make_mask_from_positional_indexer', '_make_mask_from_slice',
+#    '_make_mask_from_tuple', '_make_wrapper', '_mask_selected_obj',
+#    '_maybe_warn_numeric_only_depr', '_nth', '_numba_agg_general',
+#    '_numba_prep', '_obj_1d_constructor', '_obj_with_exclusions',
+#    '_positional_selector', '_python_agg_general', '_python_apply_general',
+#    '_reindex_output', '_reset_cache', '_reset_group_selection',
+#    '_resolve_numeric_only', '_selected_obj', '_selection', '_selection_list',
+#    '_set_group_selection', '_set_result_index_ordered', '_transform',
+#    '_transform_general', '_transform_item_by_item', '_transform_with_numba',
+#    '_wrap_agged_manager', '_wrap_aggregated_output', '_wrap_applied_output',
+#    '_wrap_applied_output_series', '_wrap_transform_fast_result',
+#    '_wrap_transformed_output', 'a', 'agg', 'aggregate', 'all', 'any',
+#    'apply', 'b', 'backfill', 'bfill', 'boxplot', 'c', 'corr', 'corrwith',
+#    'count', 'cov', 'cumcount', 'cummax', 'cummin', 'cumprod', 'cumsum',
+#    'd', 'describe', 'diff', 'dtypes', 'ewm', 'expanding', 'ffill',
+#    'fillna', 'filter', 'first', 'get_group', 'groups', 'head', 'hist',
+#    'idxmax', 'idxmin', 'indices', 'last', 'mad', 'max', 'mean', 'median',
+#    'min', 'ndim', 'ngroup', 'ngroups', 'nth', 'nunique', 'ohlc', 'pad',
+#    'pct_change', 'pipe', 'plot', 'prod', 'quantile', 'rank', 'resample',
+#    'rolling', 'sample', 'sem', 'shift', 'size', 'skew', 'std', 'sum',
+#    'tail', 'take', 'transform', 'tshift', 'value_counts', 'var']
+#
+print(g.head())
