@@ -18,7 +18,7 @@ func Example() {
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
 	sb := b[:]
-	whatAmI := func(i interface{}) {
+	whatAmI := func(i any) {
 		switch t := i.(type) {
 		default:
 			fmt.Printf("%v is of type %T\n", i, t)
