@@ -1,4 +1,5 @@
 pacman -Q          # List all installled packages
+pacman -Q $pkg     # Show info (eg version) of $pkg
 pacman -S $pkg     # Install $pkg (often want to use -y to refresh)
 pacman -Qo $path   # Which package owns $path
 pacman -Ss "$re"   # Search available packages that match $re (regex, not a glob)
