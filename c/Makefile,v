@@ -37,7 +37,7 @@ TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
 
 debug:
-	make CFLAGS=--coverage all
+	make CFLAGS='-g -O0 --coverage' all
 
 release:
 	make BUILDDIR=release/$(shell uname -r) CPPFLAGS=-DNDEBUG all
@@ -53,8 +53,9 @@ $(BUILDDIR)/Makefile: configure
 	@@echo Generating configure script in $(BUILDDIR)
 	@@mkdir -p $(BUILDDIR)
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
-		$${CFLAGS:+CFLAGS=$(CFLAGS)} \
-		$${CPPFLAGS:+CPPFLAGS=$(CPPFLAGS)}
+		$${CFLAGS:+CFLAGS="$(CFLAGS)"} \
+		$${CPPFLAGS:+CPPFLAGS="$(CPPFLAGS)"} \
+		;
 	@@echo '$(BUILDDIR) configured'
 
 $(TARGETS): $(BUILDDIR)/Makefile
