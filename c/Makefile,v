@@ -37,13 +37,13 @@ TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
 
 debug:
-	make $(MAKEFLAGS) CFLAGS=--coverage all
+	make CFLAGS=--coverage all
 
 release:
-	make $(MAKEFLAGS) BUILDDIR=release/$(shell uname -r) CPPFLAGS=-DNDEBUG all
+	make BUILDDIR=release/$(shell uname -r) CPPFLAGS=-DNDEBUG all
 
 all: $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && make $(MAKEFLAGS) all
+	cd $(BUILDDIR) && make all
 	@@echo Make complete in $(BUILDDIR)
 
 configure:
@@ -58,9 +58,9 @@ $(BUILDDIR)/Makefile: configure
 	@@echo '$(BUILDDIR) configured'
 
 $(TARGETS): $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
+	cd $(BUILDDIR) && make $@@
 
 %: %.c $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && make $(MAKEFLAGS) $@@
+	cd $(BUILDDIR) && make $@@
 	@@echo Make complete in $(BUILDDIR)
 @
