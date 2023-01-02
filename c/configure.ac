@@ -21,7 +21,7 @@ AC_TYPE_SSIZE_T
 
 AC_FUNC_MMAP
 AC_FUNC_REALLOC
-AC_SEARCH_LIBS([pow],[m],[ncursesw])
+AC_SEARCH_LIBS([pow],[m])
 
 AC_CHECK_FUNCS([getdelim gettimeofday strtol arc4random_uniform])
 
