@@ -17,8 +17,6 @@ an invocation of 'make' in the top-level directory will cause a Makefile
 to be generated from this file (this may be a gnu-make feature) which
 will create a sub-directory in which the project will be built.
 Common targets are provided which will be executed in the builddir.
-The default subdir is debug/, but can be overriden by assigning
-BUILDDIR.
 @
 
 
@@ -30,10 +28,20 @@ text
 @# Use this Makefile to generate build directories below the root dir.
 # This is a convenience to create subdirectories and execute the configure
 # script in them with various common options.
+# The default subdir is debug/, which can be overriden by assigning BUILDDIR.
+# The default CFLAGS used in the builddir are "--coverage"
+# A release target is provided that will assign CFLAGS, CPPFLAGS and BUILDDIR
 
 BUILDDIR = debug/$(shell uname -r)
-TARGETS = check clean distclean install dist distcheck release debug
-.PHONY: all $(TARGETS)
+TARGETS = check clean distclean install dist distcheck
+.PHONY: all release debug $(TARGETS)
+
+debug:
+	make $(MAKEFLAGS) CFLAGS=--coverage all
+
+release:
+	make $(MAKEFLAGS) BUILDDIR=release/$(shell uname -r) CPPFLAGS=-DNDEBUG all
+
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
 	@@echo Make complete in $(BUILDDIR)
@@ -42,8 +50,11 @@ configure:
 	autoreconf -ivf
 
 $(BUILDDIR)/Makefile: configure
+	@@echo Generating configure script in $(BUILDDIR)
 	@@mkdir -p $(BUILDDIR)
-	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure CFLAGS="${CFLAGS} -g -O0"
+	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
+		$${CFLAGS:+CFLAGS=$(CFLAGS)} \
+		$${CPPFLAGS:+CPPFLAGS=$(CPPFLAGS)}
 	@@echo '$(BUILDDIR) configured'
 
 $(TARGETS): $(BUILDDIR)/Makefile
