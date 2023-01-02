@@ -21,11 +21,12 @@ log
 @Initial revision
 @
 text
-@# A stub Makefile used to bootstrap.
+@# Use this Makefile to generate build directories below the root dir.
+# This is a convenience to create subdirectories and execute the configure
+# script in them with various common options.
 
-BUILDDIR = build/$(shell uname -r)
-TARGETS = check clean distclean install dist distcheck
-
+BUILDDIR = debug/$(shell uname -r)
+TARGETS = check clean distclean install dist distcheck release debug
 .PHONY: all $(TARGETS)
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $(MAKEFLAGS) all
