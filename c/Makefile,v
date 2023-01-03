@@ -17,6 +17,8 @@ an invocation of 'make' in the top-level directory will cause a Makefile
 to be generated from this file (this may be a gnu-make feature) which
 will create a sub-directory in which the project will be built.
 Common targets are provided which will be executed in the builddir.
+A subsequent invocation of configure in the top-level directory
+will overwrite this Makefile.
 @
 
 
