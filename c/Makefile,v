@@ -32,7 +32,7 @@ text
 # The default CFLAGS used in the builddir are "--coverage"
 # A release target is provided that will assign CFLAGS, CPPFLAGS and BUILDDIR
 
-BUILDDIR = debug/$(shell uname -r)
+BUILDDIR = debug/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
 TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
 
