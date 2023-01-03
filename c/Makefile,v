@@ -31,7 +31,7 @@ text
 # This is a convenience to create subdirectories and execute the configure
 # script in them with various common options.
 # The default subdir is debug/, which can be overriden by assigning BUILDDIR.
-# The default CFLAGS used in the builddir are "--coverage"
+# The default CFLAGS used in the builddir is "-g -O0 --coverage"
 # A release target is provided that will assign CFLAGS, CPPFLAGS and BUILDDIR
 
 BUILDDIR = debug/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
