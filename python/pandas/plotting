@@ -3,5 +3,5 @@
 import seaborn as sns
 
 d = a pandas dataframe
-sns.paiplot(d)
+sns.pairplot(d)
 sns.heatmap(d)  # heatmap.  like matplotlib.pcolor()
