@@ -1,9 +1,9 @@
-LENGTH += 12
+LEN += 12
 
 .PHONY: password passwd
 passwd: password
 password:
-	@perl -E '@s = (A..Z,a..z,0..9); $$s .= $$s[rand @s] for 1..$(LENGTH); say $$s' \
+	@perl -E 'my $$k = ""; my @s = ("A".."N","P".."Z","a".."k","m".."z",2..9); $$k .= $$s[rand @s] for 1..$(LEN); say $$k' \
 	| while read line; do \
 		printf '%s\n' "$$line" >&2; \
 		if env <&- | grep -q TMUX; then \
