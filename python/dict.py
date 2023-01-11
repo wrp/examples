@@ -9,7 +9,7 @@ class dqdict(dict):
 a = dqdict()
 a['foo'] = 'bar'
 a[3] = 'aux'
-print a
+print(a)
 
 def mutate(a):
     '''Dictionaries are passed by reference.  This mutates in the caller.'''
