@@ -18,3 +18,7 @@ def mutate(a):
 b = {'foo':1}
 mutate( b )       # value increments
 mutate( dict(b) ) # To avoid mutation, pass a copy
+
+# iterate over a dictionary
+for k, v in b.items():
+    print(f'b[{k}] = {v}')
