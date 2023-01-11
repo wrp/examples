@@ -6,7 +6,7 @@ comment	@# @;
 
 
 1.1
-date	2020.10.19.16.14.18;	author wrp;	state Exp;
+date	1994.10.19.16.14.18;	author wrp;	state Exp;
 branches;
 next	;
 
@@ -30,30 +30,36 @@ text
 @# Use this Makefile to generate build directories below the root dir.
 # This is a convenience to create subdirectories and execute the configure
 # script in them with various common options.
-# The default subdir is debug/, which can be overriden by assigning BUILDDIR.
+# The default subdir is build/, which can be overriden by assigning BUILDDIR.
 # The default CFLAGS used in the builddir is "-g -O0 --coverage"
 # A release target is provided that will assign CFLAGS, CPPFLAGS and BUILDDIR
 
-BUILDDIR = debug/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
+BUILDDIR = build/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
 TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
-
-debug:
-	make CFLAGS='-g -O0 --coverage' all
-
-release:
-	make BUILDDIR=release/$(shell uname -r) CPPFLAGS=-DNDEBUG all
 
 all: $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make all
 	@@echo Make complete in $(BUILDDIR)
 
+debug:
+	make BUILDDIR=debug/$(shell uname -r) CFLAGS='-g -O0 --coverage' all
+
+release:
+	make BUILDDIR=release/$(shell uname -r) CFLAGS='-g -O2' CPPFLAGS=-DNDEBUG all
+
 configure:
 	autoreconf -ivf
 
 $(BUILDDIR)/Makefile: configure
+	@@echo '***************************************************************'
 	@@echo Generating configure script in $(BUILDDIR)
+	@@echo 'CFLAGS=$(CFLAGS)'
+	@@echo 'CPPFLAGS=$(CPPFLAGS)'
+	@@echo 'see $(BUILDDIR)/config.log for details'
+	@@echo '***************************************************************'
 	@@mkdir -p $(BUILDDIR)
+	# Explicitly assign CFLAGS, etc. so they are conspicuous in config.log
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
 		$${CFLAGS:+CFLAGS="$(CFLAGS)"} \
 		$${CPPFLAGS:+CPPFLAGS="$(CPPFLAGS)"} \
