@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+import pandas as pd
+
+a = { 'foo': 12, 'bar': 17 }
+b = pd.Series(a)
+print (b.sort_values())
+print (b.sort_index())
+
+
+b = pd.Series(dtype=float)
+b['foo'] = 12
+b['bar'] = 17.3
+b['baz'] = 7.3
+print(b.mean())
+print(b.sort_values(ascending=False).tail(3))
+
