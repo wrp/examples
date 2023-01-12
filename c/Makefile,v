@@ -54,12 +54,15 @@ configure:
 $(BUILDDIR)/Makefile: configure
 	@@echo '***************************************************************'
 	@@echo Generating configure script in $(BUILDDIR)
-	@@echo 'CFLAGS=$(CFLAGS)'
-	@@echo 'CPPFLAGS=$(CPPFLAGS)'
+	@@for e in CC CFLAGS LDFLAGS CPPFLAGS CXXFLAGS LIBS; do \
+		if test -n "$$(eval "printf '%s' \"\$$$$e\"")"; then \
+			eval "echo $$e=\$$$$e"; \
+		fi; \
+	done
 	@@echo 'see $(BUILDDIR)/config.log for details'
 	@@echo '***************************************************************'
 	@@mkdir -p $(BUILDDIR)
-	# Explicitly assign CFLAGS, etc. so they are conspicuous in config.log
+	@@# Explicitly assign CFLAGS, etc. so they are conspicuous in config.log
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
 		$${CFLAGS:+CFLAGS="$(CFLAGS)"} \
 		$${CPPFLAGS:+CPPFLAGS="$(CPPFLAGS)"} \
