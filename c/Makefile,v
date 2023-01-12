@@ -66,6 +66,8 @@ $(BUILDDIR)/Makefile: configure
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
 		$${CFLAGS:+CFLAGS="$(CFLAGS)"} \
 		$${CPPFLAGS:+CPPFLAGS="$(CPPFLAGS)"} \
+		$${CXXFLAGS:+CXXFLAGS="$(CXXFLAGS)"} \
+		$${LDFLAGS:+CXXFLAGS="$(LDFLAGS)"} \
 		;
 	@@echo '$(BUILDDIR) configured'
 
