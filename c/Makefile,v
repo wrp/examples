@@ -27,12 +27,16 @@ log
 @Initial revision
 @
 text
-@# Use this Makefile to generate build directories below the root dir.
+@# Use this Makefile to generate build directories below the source dir.
 # This is a convenience to create subdirectories and execute the configure
-# script in them with various common options.
+# script in them with various common options, and it should not get in the
+# way if you wish to execute the configure script and generate a Makefile
+# directly in the source dir.
+#
 # The default subdir is build/, which can be overriden by assigning BUILDDIR.
-# The default CFLAGS used in the builddir is "-g -O0 --coverage"
-# A release target is provided that will assign CFLAGS, CPPFLAGS and BUILDDIR
+#
+# Targets 'release' and 'debug' are provided that will assign CFLAGS, CPPFLAGS,
+# and BUILDDIR to reasonable values.
 
 BUILDDIR = build/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
 TARGETS = check clean distclean install dist distcheck
