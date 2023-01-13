@@ -60,7 +60,10 @@ new_node(const char *word)
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
-	e->word = strdup(word);
+	if( (e->word = strdup(word)) == NULL ){
+		perror("out of memory");
+		exit(EXIT_FAILURE);
+	}
 	return e;
 }
 
