@@ -116,7 +116,7 @@ xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 		exit(EXIT_FAILURE);
 	}
 	if( endp != NULL ){
-		*endp = buf + offset;
+		*endp = buf + offset * siz;
 	}
 	return buf;
 }
