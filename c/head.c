@@ -1,9 +1,9 @@
-#include "xutil.h"
 #include <err.h>
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "xutil.h"
 
 int
 main(int argc, char **argv)
@@ -13,25 +13,25 @@ main(int argc, char **argv)
 	char *const defaults[] = { "-", NULL };
 	char *const*args = argc > 2 ? argv + 2: defaults;
 
-	if( argv[1] && !strcmp(argv[1], "-h")) {
+	if( argv[1] && !strcmp(argv[1], "-h") ){
 		printf("usage: %s [count] [path ...]\n", basename(argv[0]));
 		exit(EXIT_SUCCESS);
 	}
-	if( *end ) {
+	if( *end ){
 		errx(EXIT_FAILURE, "Invalid char (%c) at position %td in %s",
 			*end, end - argv[1] + 1, argv[1]);
 	}
-	for( ; *args; args++ ) {
+	for( char *arg = *args; arg; arg = *++args ){
 		int c, line = 0;
-		FILE *in = xfopen(*args,"r");
-		if( argc > 3 ) {
-			printf("******** %s ********\n", *args);
+		FILE *in = xfopen(arg, "r");
+		if( argc > 3 ){
+			printf("******** %s ********\n", arg);
 		}
-		while( line < count && ( c = fgetc(in)) != EOF ) {
+		while( line < count && (c = fgetc(in)) != EOF ){
 			line += putchar(c) == '\n';
 		}
-		if(fclose(in)) {
-			err(EXIT_FAILURE, "close %s", *args);
+		if( fclose(in) ){
+			err(EXIT_FAILURE, "close %s", arg);
 		}
 	}
 }
