@@ -15,10 +15,12 @@ main(int argc, char *argv[])
 	struct line *lines = xmalloc(siz * sizeof *lines);
 	struct line *t = lines;
 
-	while( t->b = NULL, (t->s = getline(&t->b, &t->c, in)) != -1) {
+	t->b = NULL;
+	while( (t->s = getline(&t->b, &t->c, in)) != -1) {
 		if( ++t == lines + siz ) {
 			lines = xrealloc(lines, siz *= 2, sizeof *lines, &t);
 		}
+		t->b = NULL;
 	}
 	free(t->b);
 	while( t-- > lines ) {
