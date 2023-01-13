@@ -108,17 +108,18 @@ print_table(const struct entry *t)
 static void *
 xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 {
-	char **endp = endvp;
-	ptrdiff_t offset = endp && *endp ? *endp - (char *)buf : 0;
-	buf = realloc(buf, num * siz);
-	if( buf == NULL ){
+	char **e = endvp, *s = buf;
+	ptrdiff_t offset = s && e && *e ? *e - s : 0;
+	fprintf(stderr, "num = %zd\n", num);
+	s = realloc(s, num * siz);
+	if( s == NULL ){
 		perror("realloc");
 		exit(EXIT_FAILURE);
 	}
-	if( endp != NULL ){
-		*endp = buf + offset * siz;
+	if( e != NULL ){
+		*e = s + offset;
 	}
-	return buf;
+	return s;
 }
 
 int (*is_word)(int) = isalnum;
