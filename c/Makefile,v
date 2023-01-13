@@ -43,6 +43,7 @@ TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
 
 all: $(BUILDDIR)/Makefile
+	@@echo '***************************************************************'
 	cd $(BUILDDIR) && make all
 	@@echo Make complete in $(BUILDDIR)
 
@@ -56,16 +57,14 @@ configure:
 	autoreconf -ivf
 
 $(BUILDDIR)/Makefile: configure
+	@@mkdir -p $(BUILDDIR)
 	@@echo '***************************************************************'
-	@@echo Generating configure script in $(BUILDDIR)
+	@@echo Running configure script in $(BUILDDIR)
 	@@for e in CC CFLAGS LDFLAGS CPPFLAGS CXXFLAGS LIBS; do \
 		if test -n "$$(eval "printf '%s' \"\$$$$e\"")"; then \
 			eval "echo $$e=\$$$$e"; \
 		fi; \
 	done
-	@@echo 'see $(BUILDDIR)/config.log for details'
-	@@echo '***************************************************************'
-	@@mkdir -p $(BUILDDIR)
 	@@# Explicitly assign CFLAGS, etc. so they are conspicuous in config.log
 	@@s=$$(pwd); cd $(BUILDDIR) && $${s}/configure \
 		$${CFLAGS:+CFLAGS="$(CFLAGS)"} \
@@ -73,7 +72,7 @@ $(BUILDDIR)/Makefile: configure
 		$${CXXFLAGS:+CXXFLAGS="$(CXXFLAGS)"} \
 		$${LDFLAGS:+CXXFLAGS="$(LDFLAGS)"} \
 		;
-	@@echo '$(BUILDDIR) configured'
+	@@echo 'see $(BUILDDIR)/config.log for details'
 
 $(TARGETS): $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && make $@@
