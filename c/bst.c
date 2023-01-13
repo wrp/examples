@@ -107,6 +107,17 @@ print_table(const struct entry *t)
 	}
 }
 
+static void
+free_table(struct entry *t)
+{
+	if( t ) {
+		free_table(t->node[0]);
+		free_table(t->node[1]);
+		free(t->word);
+		free(t);
+	}
+}
+
 static void *
 xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 {
@@ -188,6 +199,7 @@ main(int argc, char **argv)
 		word.end = word.start;
 	}
 	print_table(table);
+	free_table(table);
 }
 
 FILE *
