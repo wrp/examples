@@ -64,15 +64,7 @@ new_node(const char *word, ptrdiff_t len)
 	return e;
 }
 
-/* Find an entry in the table, or insert if not present.
- * Note that this tree needs to be rebalanced.  In a real
- * project, we would use existing libraries.  For this toy
- * it is not worth the work needed to properly rebalance the
- * tree.  Should probably use a hash map from C++, but I
- * wanted to do this in C to remind myself of the ...well,
- * maybe I'm just a massochist. :)  We will leave the tree
- * unbalanced and suffer the worst case linear lookup
- */
+/* Find an entry in the table, or insert if not present.  */
 static struct entry *
 lookup(struct entry **table, const char *word, ptrdiff_t len)
 {
