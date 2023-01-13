@@ -113,6 +113,7 @@ free_table(struct entry *t)
 	if( t ) {
 		free_table(t->node[0]);
 		free_table(t->node[1]);
+		free(t->lines.start);
 		free(t->word);
 		free(t);
 	}
