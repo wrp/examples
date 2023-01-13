@@ -201,6 +201,7 @@ main(int argc, char **argv)
 	}
 	print_table(table);
 	free_table(table);
+	free(word.start);
 }
 
 FILE *
