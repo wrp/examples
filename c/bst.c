@@ -53,14 +53,14 @@ index_s(struct string *s, int i)
 }
 
 static struct entry *
-new_node(const char *word, ptrdiff_t len)
+new_node(const char *word)
 {
 	struct entry *e = calloc(1, sizeof *e);
 	if( e == NULL ){
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
-	e->word = strndup(word, len);
+	e->word = strdup(word);
 	return e;
 }
 
@@ -77,7 +77,7 @@ lookup(struct entry **table, const char *word, ptrdiff_t len)
 			return lookup(&t->node[cmp > 0], word, len);
 		}
 	} else {
-		return *table = new_node(word, len);
+		return *table = new_node(word);
 	}
 }
 
