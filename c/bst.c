@@ -110,7 +110,7 @@ xrealloc(void *buf, size_t num, size_t siz, void *endvp)
 {
 	char **e = endvp, *s = buf;
 	ptrdiff_t offset = s && e && *e ? *e - s : 0;
-	fprintf(stderr, "num = %zd\n", num);
+	/* printf(stderr, "num = %zd\n", num); */
 	s = realloc(s, num * siz);
 	if( s == NULL ){
 		perror("realloc");
