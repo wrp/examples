@@ -38,7 +38,7 @@ text
 # Targets 'release' and 'debug' are provided that will assign CFLAGS, CPPFLAGS,
 # and BUILDDIR to reasonable values.
 
-BUILDDIR = build/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
+BUILDDIR ?= build/$(shell uname -r | tr -dc '[:upper:][:lower:][:digit:]._-')
 TARGETS = check clean distclean install dist distcheck
 .PHONY: all release debug $(TARGETS)
 
