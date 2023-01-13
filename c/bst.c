@@ -74,14 +74,13 @@ lookup(struct entry **table, const char *word)
 	struct entry *t = *table;
 	if( t ) {
 		int cmp = strcasecmp(word, t->word);
-		if( cmp == 0 ) {
-			return t;
-		} else {
-			return lookup(&t->node[cmp > 0], word);
+		if( cmp != 0 ) {
+			t = lookup(&t->node[cmp > 0], word);
 		}
 	} else {
-		return *table = new_node(word);
+		t = *table = new_node(word);
 	}
+	return t;
 }
 
 static void
