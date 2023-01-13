@@ -66,15 +66,15 @@ new_node(const char *word)
 
 /* Find an entry in the table, or insert if not present.  */
 static struct entry *
-lookup(struct entry **table, const char *word, ptrdiff_t len)
+lookup(struct entry **table, const char *word)
 {
 	struct entry *t = *table;
 	if( t ) {
-		int cmp = strncasecmp(word, t->word, len);
+		int cmp = strcasecmp(word, t->word);
 		if( cmp == 0 ) {
 			return t;
 		} else {
-			return lookup(&t->node[cmp > 0], word, len);
+			return lookup(&t->node[cmp > 0], word);
 		}
 	} else {
 		return *table = new_node(word);
@@ -84,7 +84,7 @@ lookup(struct entry **table, const char *word, ptrdiff_t len)
 static void
 process_word(struct entry **table, int line, const struct string *w)
 {
-	struct entry *e = lookup(table, w->start, w->end - w->start);
+	struct entry *e = lookup(table, w->start);
 	assert( e != NULL );
 	e->count += 1;
 	push(line, &e->lines);
