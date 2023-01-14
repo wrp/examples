@@ -12,13 +12,18 @@ next	;
 
 
 desc
-@A stub Makefile to bootstrap the project.  If the user has RCS installed,
-an invocation of 'make' in the top-level directory will cause a Makefile
-to be generated from this file (this may be a gnu-make feature) which
-will create a sub-directory in which the project will be built.
-Common targets are provided which will be executed in the builddir.
+@If the user has RCS installed, an invocation of 'make' in the top-level
+directory will cause a Makefile to be generated from this file (see note).
+The generated Makefile contains targets which will create subdirectories
+and invoke the configure script in them with common settins for CFLAGS, etc.
 A subsequent invocation of configure in the top-level directory
 will overwrite this Makefile.
+
+note:
+Checking out the Makefile vi RCS is a gnu-make feature.  If RCS is not
+installed, the Makefile can be generated with:
+a=$(printf '\x40')
+sed -e 1,/^text/d -e /^$a\$/d -e s/$a$a/$a/g -e s/^$a// Makefile,v > Makefile
 @
 
 
