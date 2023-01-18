@@ -32,3 +32,8 @@ x = [a for a in [1, 2, 3]]
 print("{} can be iterated over multiple times".format(type(x)))
 print(f"x has {length(x)} elements")
 print(f"now, x has {length(x)} elements")
+
+
+x = (1,2,3,4,5,6)
+# Find the number of elements in the list that match a condition:
+print(f'There are {sum(a < 4 for a in x)} elements in x less than 4')
