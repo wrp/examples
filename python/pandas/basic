@@ -11,11 +11,7 @@ print("quantiles")
 print(a['height'].quantile([.25,.5,.9]))
 
 # filter columns, treating them as strings
-a.query('weight.str.contains("1")', engine = 'python')
-print(a)
-sys.exit(0)
-
-
+# a.query('weight.str.contains("1")', engine = 'python')
 q ='height < 5 and weight > 8'
 print(q)
 print(a.query(q))
@@ -60,14 +56,18 @@ print(first_col)
 # Get unique entries in a column
 h = pd.DataFrame(
     {
-        'foo': ['one', 'two', 'three', 'one'],
-        'bar': [ 1, 2, 3, 1],
+        'foo': ['foo', 'bar', 'qux', 'foo'],
+        'bar': [ 4, 2, 3, 1],
     }
 )
+print("original data frame:")
 print(h)
 print('uniqe values of foo:')
 for t in h.foo.unique():
     print(t)
+h = h.set_index('bar')
+print("data frame: after set_index")
+print(h)
 
 
 # get mean of a grouped set
