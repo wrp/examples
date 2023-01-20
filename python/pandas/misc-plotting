@@ -69,3 +69,15 @@ plt.savefig('fare200.png', dpi=200)
 f = px.histogram(titanic, x='age', title='Histogram of Age', labels={'age': 'Age'})
 f.show()
 f.write_image('plotly_hist.png')
+
+
+# A 3d plot
+from sklearn.datasets import make_blobs
+X, y = make_blobs(n_samples=200, n_features=3, centers = 4, random_state=42)
+ax = plt.axes(projection = '3d')
+ax.scatter3D(X[:, 0], X[:, 1], X[:, 2], c = y)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+plt.title('Artificial Dataset with 4 Clusters')
+plt.tight_layout();
