@@ -27,8 +27,8 @@ a = pd.DataFrame(
 )
 
 print(a)          # Print the entire data frame
-b = a.drop(columns=['B'])  # Does not mutate a
-print("After dropping B")
+b = a.drop(columns=['B', 'C'])  # Does not mutate a
+print("After dropping B and C")
 print(b)
 last_row = a[-1:]   # create a new dataframe consisting of one row
 b = a['A']          # create a new dataframe consisting of a single column
