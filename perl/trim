@@ -1,3 +1,4 @@
 #!/bin/sh
 
+# trim output to a specified width
 perl -nE "chomp; say substr \$_, 0, ${COLUMNS-80} - 1" "$@"
