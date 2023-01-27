@@ -3,6 +3,13 @@
 import sys
 import pandas as pd
 
+a = pd.DataFrame(
+    data = [ [1, 'foo', 3.3], [5, 'bar', 7.2] ],
+    index = ['A', 'B'],  # Row index
+    columns = ['count', 'name', 'value']  # column names
+)
+print(a)
+
 a = pd.read_csv('./data')
 print("dataframe of ./data'")
 print("mean of height in ./data'")
