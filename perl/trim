@@ -2,3 +2,7 @@
 
 # trim output to a specified width
 perl -nE "chomp; say substr \$_, 0, ${COLUMNS-80} - 1" "$@"
+
+
+# Print enumerated
+# perl -E 'say ((0..9) x 50)'
