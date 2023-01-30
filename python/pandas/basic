@@ -5,10 +5,28 @@ import pandas as pd
 
 a = pd.DataFrame(
     data = [ [1, 'foo', 3.3], [5, 'bar', 7.2] ],
-    index = ['A', 'B'],  # Row index
-    columns = ['count', 'name', 'value']  # column names
+    index = pd.Index(data = ['A', 'B'], name = 'rows'),  # Row index
+    columns = ['banana', 'name', 'value']  # column names
 )
+print("a = ")
 print(a)
+print("a.banana = ")
+print(pd.concat([a.name, a.banana], axis=1))
+sys.exit(0)
+
+a = pd.DataFrame(
+    {
+        'rows': ['A', 'B'],
+        'count': [1, 5],
+        'name': ['foo', 'bar'],
+        'value': [3.3, 7.2]
+    }
+)
+a.set_index('rows')
+print(a)
+
+
+sys.exit(0)
 
 a = pd.read_csv('./data')
 print("dataframe of ./data'")
