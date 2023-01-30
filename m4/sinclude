@@ -1,0 +1,3 @@
+
+sinclude(included)
+def_in_included(foo)

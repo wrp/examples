@@ -1,0 +1,3 @@
+dnl
+define(def_in_included,`def value: $1')dnl
+This text is in the file "included"
