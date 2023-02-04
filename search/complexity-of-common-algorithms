@@ -5,14 +5,14 @@ T -> f = T(g) means that there exists a, b, and n such that a*g(m) <= f(m) <= b*
                                    Time
 		    Best           Avg         Worst       Space
 Selection sort     M(n^2)         T(n^2)       O(n^2)      O(1)
-Bubble sort        M(n)           T(n^2)       O(n^2)      O(1)
-Insertion sort     M(n)           T(n^2)       O(n^2)      O(1)
-Heap sort          M(n log n)   T(n log n)   O(n log n)    O(1)
-Quick sort         M(n log n)   T(n log n)     O(n^2)      O(n)
-Merge sort         M(n log n)   T(n log n)   O(n log n)    O(n)
-Bucket sort        M(n + k)     T(n + k)       O(n^2)      O(n)
+Bubble sort        M(n)           T(n^2)       O(n^2)      O(1)      Stable
+Insertion sort     M(n)           T(n^2)       O(n^2)      O(1)      Stable
+Heap sort          M(n log n)   T(n log n)   O(n log n)    O(1)      Unstable
+Quick sort         M(n log n)   T(n log n)     O(n^2)      O(n)      Unstable
+Merge sort         M(n log n)   T(n log n)   O(n log n)    O(n)      Stable
+Bucket sort        M(n + k)     T(n + k)       O(n^2)      O(n)      ? Stable
 Radix sort         M(nk)          T(nk)        O(nk)     O(n + k)
-Count sort         M(n + k)     T(n + k)     O(n + k)      O(k)
+Count sort         M(n + k)     T(n + k)     O(n + k)      O(k)      Stable
 Shell sort         M(n log n)   T(n log n)     O(n^2)      O(1)
 Tim sort           M(n)         T(n log n)   O(n log n)    O(n)
 Tree sort          M(n log n)   T(n log n)     O(n^2)      O(n)
