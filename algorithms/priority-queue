@@ -1,0 +1,8 @@
+
+O(n) to build the heap initially
+
+operations:
+	is_empty  T(1)
+	insert    T(log n)
+	pop       T(log n)
+	peek      T(1)
