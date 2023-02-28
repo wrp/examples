@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# keep only the first 8 : in each line
+perl -pe 'BEGIN {$/=\1} $m += m/:/; $m = 0 if m/\n/; s/// if $m > 8'
