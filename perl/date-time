@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+
+# from https://stackoverflow.com/questions/4254464/parsing-datetime-in-perl-correct-to-micro-nano-seconds
+use strict;
+use warnings;
+use DateTime::Format::Strptime;
+
+my $strp = DateTime::Format::Strptime->new(
+    pattern => '%Y-%m-%d %H:%M:%S.%6N',
+    on_error => 'croak',
+);
+
+
+my $string = '2010-11-27 10:42:31.808381';
+
+my $dt = $strp->parse_datetime($string);
+
+print $dt->microsecond . "\n";
