@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+import urllib.request
+
+with urllib.request.urlopen('http://localhost:8000') as response:
+    html = response.read()
+    print(html)
