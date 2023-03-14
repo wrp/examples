@@ -25,3 +25,5 @@ in the := line is .... inconsistent.
 
 
 log.Println prints to stderr by default.  This is fucking stupid.
+
+"func" is a mistake.  They should have been verbose and used the keyword "function"
