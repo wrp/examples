@@ -13,6 +13,22 @@ ___
 [This](http:/...) is a link (square brackets followed by url in parentheses).
 
 
-### This is a 3-hash header
-## This is a 2-hash header
-# This is a 1-hash header
+# This is a 1-hash header  (Big)
+## This is a 2-hash header (Less big)
+### This is a 3-hash header (smallish)
+
+** Double asterisk for bold text **
+* Single asterisk for italics *
+
+> This is a
+blockquote
+that spans
+multiple lines
+
+# An ordered list
+1. First item
+2. Second Item
+
+# An un-ordered list
+- First item
+- Second Item
