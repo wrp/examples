@@ -17,13 +17,13 @@ ___
 ## This is a 2-hash header (Less big)
 ### This is a 3-hash header (smallish)
 
-** Double asterisk for bold text **
-* Single asterisk for italics *
+**Double asterisk for bold text** (no space inside **)
+*Single asterisk for italics* (no space inside *)
 
 > This is a
 blockquote
 that spans
-multiple lines
+multiple lines but is rendered according to the available width (perhaps on only one line)
 
 # An ordered list
 1. First item
