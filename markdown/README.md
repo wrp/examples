@@ -14,13 +14,13 @@ ___
 
 
 # This is a 1-hash header
-The single hash header is big, and delimits the text below it
+The single hash header is big.
 
 ## Section
-The 2 hash header is not as big, delimiting the text below it
+The 2 hash header is not as big.
 
 ### text
-The 3 hash header delimits the text below it
+The 3 hash header is smallish.
 
 Use '&amp;lt;' to add a literal left angle bracket: &lt;
 
