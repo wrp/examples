@@ -11,3 +11,8 @@ ___
 
 
 [This](http:/...) is a link (square brackets followed by url in parentheses).
+
+
+### This is a 3-hash header
+## This is a 2-hash header
+# This is a 1-hash header
