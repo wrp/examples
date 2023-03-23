@@ -22,6 +22,8 @@ The 2 hash header is not as big, delimiting the text below it
 ### text
 The 3 hash header delimits the text below it
 
+Use '&amp;lt;' to add a literal left angle bracket: &lt;
+
 
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
