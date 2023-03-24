@@ -1,6 +1,6 @@
 
      %A    is replaced by national representation of the full weekday name.
-     %a    is replaced by national representation of the abbreviated weekday name.
+     %a    is replaced by national representation of the abbreviated weekday name.  (Sun, Mon, Tue, Wed, Thu, Fri, Sat)
      %B    is replaced by national representation of the full month name.
      %b    is replaced by national representation of the abbreviated month name.
      %C    is replaced by (year / 100) as decimal number; single digits are preceded by a zero.
