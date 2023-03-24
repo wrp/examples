@@ -7,8 +7,14 @@ import re
 
 def process(p, f):
     for x in f.readlines():
-        if p.match(x):
+        m = p.match(x)
+        if m:
+            print('-----------')
             print(x, end='')
+            if grp := m.groups():  # list of group matches
+                print('groups:')
+                for g in enumerate(grp):
+                    print(g)
 
 
 if len(sys.argv) < 2:
