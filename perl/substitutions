@@ -6,10 +6,161 @@ use 5.14.0;
 # so the original string is not modified, and the new
 # value is stored in $new
 while(<DATA>) {
-	chop;
-	my $new = s/patt/repl/rg;
-	say "new = $new, old = $_"
+	my $new = s/PATT/repl/r;
+	print "$new";
 }
 
 __DATA__
-the pattern
+From perldoc perlop:
+
+"s/*PATTERN*/*REPLACEMENT*/msixpodualngcer"
+    Searches a string for a pattern, and if found, replaces that
+    pattern with the replacement text and returns the number of
+    substitutions made. Otherwise it returns false (a value that is
+    both an empty string ("") and numeric zero (0) as described in
+    "Relational Operators").
+
+    If the "/r" (non-destructive) option is used then it runs the
+    substitution on a copy of the string and instead of returning
+    the number of substitutions, it returns the copy whether or not
+    a substitution occurred. The original string is never changed
+    when "/r" is used. The copy will always be a plain string, even
+    if the input is an object or a tied variable.
+
+    If no string is specified via the "=~" or "!~" operator, the $_
+    variable is searched and modified. Unless the "/r" option is
+    used, the string specified must be a scalar variable, an array
+    element, a hash element, or an assignment to one of those; that
+    is, some sort of scalar lvalue.
+
+    If the delimiter chosen is a single quote, no variable
+    interpolation is done on either the *PATTERN* or the
+    *REPLACEMENT*. Otherwise, if the *PATTERN* contains a "$" that
+    looks like a variable rather than an end-of-string test, the
+    variable will be interpolated into the pattern at run-time. If
+    you want the pattern compiled only once the first time the
+    variable is interpolated, use the "/o" option. If the pattern
+    evaluates to the empty string, the last successfully executed
+    regular expression is used instead. See perlre for further
+    explanation on these.
+
+    Options are as with "m//" with the addition of the following
+    replacement specific options:
+
+	e   Evaluate the right side as an expression.
+	ee  Evaluate the right side as a string then eval the
+	    result.
+	r   Return substitution and leave the original string
+	    untouched.
+
+    Any non-whitespace delimiter may replace the slashes. Add space
+    after the "s" when using a character allowed in identifiers. If
+    single quotes are used, no interpretation is done on the
+    replacement string (the "/e" modifier overrides this, however).
+    Note that Perl treats backticks as normal delimiters; the
+    replacement text is not evaluated as a command. If the *PATTERN*
+    is delimited by bracketing quotes, the *REPLACEMENT* has its own
+    pair of quotes, which may or may not be bracketing quotes, for
+    example, "s(foo)(bar)" or "s<foo>/bar/". A "/e" will cause the
+    replacement portion to be treated as a full-fledged Perl
+    expression and evaluated right then and there. It is, however,
+    syntax checked at compile-time. A second "e" modifier will cause
+    the replacement portion to be "eval"ed before being run as a
+    Perl expression.
+
+    Examples:
+
+	s/\bgreen\b/mauve/g;              # don't change wintergreen
+
+	$path =~ s|/usr/bin|/usr/local/bin|;
+
+	s/Login: $foo/Login: $bar/; # run-time pattern
+
+	($foo = $bar) =~ s/this/that/;      # copy first, then
+					    # change
+	($foo = "$bar") =~ s/this/that/;    # convert to string,
+					    # copy, then change
+	$foo = $bar =~ s/this/that/r;       # Same as above using /r
+	$foo = $bar =~ s/this/that/r
+		    =~ s/that/the other/r;  # Chained substitutes
+					    # using /r
+	@foo = map { s/this/that/r } @bar   # /r is very useful in
+					    # maps
+
+	$count = ($paragraph =~ s/Mister\b/Mr./g);  # get change-cnt
+
+	$_ = 'abc123xyz';
+	s/\d+/$&*2/e;               # yields 'abc246xyz'
+	s/\d+/sprintf("%5d",$&)/e;  # yields 'abc  246xyz'
+	s/\w/$& x 2/eg;             # yields 'aabbcc  224466xxyyzz'
+
+	s/%(.)/$percent{$1}/g;      # change percent escapes; no /e
+	s/%(.)/$percent{$1} || $&/ge;       # expr now, so /e
+	s/^=(\w+)/pod($1)/ge;       # use function call
+
+	$_ = 'abc123xyz';
+	$x = s/abc/def/r;           # $x is 'def123xyz' and
+				    # $_ remains 'abc123xyz'.
+
+	# expand variables in $_, but dynamics only, using
+	# symbolic dereferencing
+	s/\$(\w+)/${$1}/g;
+
+	# Add one to the value of any numbers in the string
+	s/(\d+)/1 + $1/eg;
+
+	# Titlecase words in the last 30 characters only (presuming
+	# that the substring doesn't start in the middle of a word)
+	substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
+
+	# This will expand any embedded scalar variable
+	# (including lexicals) in $_ : First $1 is interpolated
+	# to the variable name, and then evaluated
+	s/(\$\w+)/$1/eeg;
+
+	# Delete (most) C comments.
+	# that the substring doesn't start in the middle of a word)
+	substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
+
+	# This will expand any embedded scalar variable
+	# (including lexicals) in $_ : First $1 is interpolated
+	# to the variable name, and then evaluated
+	s/(\$\w+)/$1/eeg;
+
+	# Delete (most) C comments.
+	$program =~ s {
+	    /\*     # Match the opening delimiter.
+	    .*?     # Match a minimal number of characters.
+	    \*/     # Match the closing delimiter.
+	} []gsx;
+
+	s/^\s*(.*?)\s*$/$1/;        # trim whitespace in $_,
+				    # expensively
+
+	for ($variable) {           # trim whitespace in $variable,
+				    # cheap
+	    s/^\s+//;
+	    s/\s+$//;
+	}
+
+	s/([^ ]*) *([^ ]*)/$2 $1/;  # reverse 1st two fields
+
+	$foo !~ s/A/a/g;    # Lowercase all A's in $foo; return
+			    # 0 if any were found and changed;
+			    # otherwise return 1
+
+    Note the use of "$" instead of "\" in the last example. Unlike
+    sed, we use the \<*digit*> form only in the left hand side.
+    Anywhere else it's $<*digit*>.
+
+    Occasionally, you can't use just a "/g" to get all the changes
+    to occur that you might want. Here are two common cases:
+
+	# put commas in the right places in an integer
+	1 while s/(\d)(\d\d\d)(?!\d)/$1,$2/g;
+
+	# expand tabs to 8-column spacing
+	1 while s/\t+/' ' x (length($&)*8 - length($`)%8)/e;
+
+    While "s///" accepts the "/c" flag, it has no effect beyond
+    producing a warning if warnings are enabled.
