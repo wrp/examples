@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+
+use 5.14.0;
+
+# The /r is the non-destructive substitution modifier,
+# so the original string is not modified, and the new
+# value is stored in $new
+while(<DATA>) {
+	chop;
+	my $new = s/patt/repl/rg;
+	say "new = $new, old = $_"
+}
+
+__DATA__
+the pattern
