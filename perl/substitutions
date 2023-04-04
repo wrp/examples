@@ -6,8 +6,8 @@ use 5.14.0;
 # so the original string is not modified, and the new
 # value is stored in $new
 while(<DATA>) {
-	my $new = s/PATT/repl/r;
-	print "$new";
+        my $new = s/PATT/repl/r;
+        print "$new";
 }
 
 __DATA__
@@ -16,31 +16,31 @@ From perldoc perlop:
 flags (for q////)        : msixpodualn
 flags (for m/// and s///): msixpodualngc
 flags (for s/// only)    : msixpodualngcer
-	m   Treat string as multiple lines.
-	s   Treat string as single line. (Make . match a newline)
-	i   Do case-insensitive pattern matching.
-	x   Use extended regular expressions; specifying two
-	    x's means \t and the SPACE character are ignored within
-	    square-bracketed character classes
-	p   When matching preserve a copy of the matched string so
-	    that ${^PREMATCH}, ${^MATCH}, ${^POSTMATCH} will be
-	    defined (ignored starting in v5.20) as these are always
-	    defined starting in that release
-	o   Compile pattern only once.
-	d   Use Unicode or native charset, as in 5.12 and earlier.
-	u   Use Unicode rules.
-	a   ASCII-restrict: Use ASCII for \d, \s, \w and [[:posix:]]
-	    character classes; specifying two a's adds the further
-	    restriction that no ASCII character will match a
-	    non-ASCII one under /i.
-	l   Use the current run-time locale's rules.
-	n   Non-capture mode. Don't let () fill in $1, $2, etc...
+        m   Treat string as multiple lines.
+        s   Treat string as single line. (Make . match a newline)
+        i   Do case-insensitive pattern matching.
+        x   Use extended regular expressions; specifying two
+            x's means \t and the SPACE character are ignored within
+            square-bracketed character classes
+        p   When matching preserve a copy of the matched string so
+            that ${^PREMATCH}, ${^MATCH}, ${^POSTMATCH} will be
+            defined (ignored starting in v5.20) as these are always
+            defined starting in that release
+        o   Compile pattern only once.
+        d   Use Unicode or native charset, as in 5.12 and earlier.
+        u   Use Unicode rules.
+        a   ASCII-restrict: Use ASCII for \d, \s, \w and [[:posix:]]
+            character classes; specifying two a's adds the further
+            restriction that no ASCII character will match a
+            non-ASCII one under /i.
+        l   Use the current run-time locale's rules.
+        n   Non-capture mode. Don't let () fill in $1, $2, etc...
         g   global
         c   Do not reset search position
-	e   Evaluate the right side as an expression.
-	ee  Evaluate the right side as a string then eval the
-	    result.
-	r   Return substitution and leave the original string untouched
+        e   Evaluate the right side as an expression.
+        ee  Evaluate the right side as a string then eval the
+            result.
+        r   Return substitution and leave the original string untouched
 
 "qr/*STRING*/msixpodualn"
     This operator quotes (and possibly compiles) its *STRING* as a
@@ -57,38 +57,38 @@ flags (for s/// only)    : msixpodualngcer
 
     For example,
 
-	$rex = qr/my.STRING/is;
-	print $rex;                 # prints (?si-xm:my.STRING)
-	s/$rex/foo/;
+        $rex = qr/my.STRING/is;
+        print $rex;                 # prints (?si-xm:my.STRING)
+        s/$rex/foo/;
 
     is equivalent to
 
-	s/my.STRING/foo/is;
+        s/my.STRING/foo/is;
 
     The result may be used as a subpattern in a match:
 
-	$re = qr/$pattern/;
-	$string =~ /foo${re}bar/;   # can be interpolated in other
-				    # patterns
-	$string =~ $re;             # or used standalone
-	$string =~ /$re/;           # or this way
+        $re = qr/$pattern/;
+        $string =~ /foo${re}bar/;   # can be interpolated in other
+                                    # patterns
+        $string =~ $re;             # or used standalone
+        $string =~ /$re/;           # or this way
 
     Since Perl may compile the pattern at the moment of execution of
     the "qr()" operator, using "qr()" may have speed advantages in
     some situations, notably if the result of "qr()" is used
     standalone:
 
-	sub match {
-	    my $patterns = shift;
-	    my @compiled = map qr/$_/i, @$patterns;
-	    grep {
-		my $success = 0;
-		foreach my $pat (@compiled) {
-		    $success = 1, last if /$pat/;
-		}
-		$success;
-	    } @_;
-	}
+        sub match {
+            my $patterns = shift;
+            my @compiled = map qr/$_/i, @$patterns;
+            grep {
+                my $success = 0;
+                foreach my $pat (@compiled) {
+                    $success = 1, last if /$pat/;
+                }
+                $success;
+            } @_;
+        }
 
     Precompilation of the pattern into an internal representation at
     the moment of "qr()" avoids the need to recompile the pattern
@@ -98,25 +98,25 @@ flags (for s/// only)    : msixpodualngcer
 
     Options (specified by the following modifiers) are:
 
-	m   Treat string as multiple lines.
-	s   Treat string as single line. (Make . match a newline)
-	i   Do case-insensitive pattern matching.
-	x   Use extended regular expressions; specifying two
-	    x's means \t and the SPACE character are ignored within
-	    square-bracketed character classes
-	p   When matching preserve a copy of the matched string so
-	    that ${^PREMATCH}, ${^MATCH}, ${^POSTMATCH} will be
-	    defined (ignored starting in v5.20) as these are always
-	    defined starting in that release
-	o   Compile pattern only once.
-	a   ASCII-restrict: Use ASCII for \d, \s, \w and [[:posix:]]
-	    character classes; specifying two a's adds the further
-	    restriction that no ASCII character will match a
-	    non-ASCII one under /i.
-	l   Use the current run-time locale's rules.
-	u   Use Unicode rules.
-	d   Use Unicode or native charset, as in 5.12 and earlier.
-	n   Non-capture mode. Don't let () fill in $1, $2, etc...
+        m   Treat string as multiple lines.
+        s   Treat string as single line. (Make . match a newline)
+        i   Do case-insensitive pattern matching.
+        x   Use extended regular expressions; specifying two
+            x's means \t and the SPACE character are ignored within
+            square-bracketed character classes
+        p   When matching preserve a copy of the matched string so
+            that ${^PREMATCH}, ${^MATCH}, ${^POSTMATCH} will be
+            defined (ignored starting in v5.20) as these are always
+            defined starting in that release
+        o   Compile pattern only once.
+        a   ASCII-restrict: Use ASCII for \d, \s, \w and [[:posix:]]
+            character classes; specifying two a's adds the further
+            restriction that no ASCII character will match a
+            non-ASCII one under /i.
+        l   Use the current run-time locale's rules.
+        u   Use Unicode rules.
+        d   Use Unicode or native charset, as in 5.12 and earlier.
+        n   Non-capture mode. Don't let () fill in $1, $2, etc...
 
     If a precompiled pattern is embedded in a larger pattern then
     the effect of "msixpluadn" will be propagated appropriately. The
@@ -150,7 +150,7 @@ flags (for s/// only)    : msixpodualngcer
 
      g  Match globally, i.e., find all occurrences.
      c  Do not reset search position on a failed match when /g is
-	in effect.
+        in effect.
 
     If "/" is the delimiter then the initial "m" is optional. With
     the "m" you can use any pair of non-whitespace (ASCII)
@@ -176,26 +176,26 @@ flags (for s/// only)    : msixpodualngcer
     But now, the only reasons to use "/o" are one of:
 
     1   The variables are thousands of characters long and you know
-	that they don't change, and you need to wring out the last
-	little bit of speed by having Perl skip testing for that.
-	(There is a maintenance penalty for doing this, as
-	mentioning "/o" constitutes a promise that you won't change
-	the variables in the pattern. If you do change them, Perl
-	won't even notice.)
+        that they don't change, and you need to wring out the last
+        little bit of speed by having Perl skip testing for that.
+        (There is a maintenance penalty for doing this, as
+        mentioning "/o" constitutes a promise that you won't change
+        the variables in the pattern. If you do change them, Perl
+        won't even notice.)
 
     2   you want the pattern to use the initial values of the
-	variables regardless of whether they change or not. (But
-	there are saner ways of accomplishing this than using "/o".)
+        variables regardless of whether they change or not. (But
+        there are saner ways of accomplishing this than using "/o".)
 
     3   If the pattern contains embedded code, such as
 
-	    use re 'eval';
-	    $code = 'foo(?{ $x })';
-	    /$code/
+            use re 'eval';
+            $code = 'foo(?{ $x })';
+            /$code/
 
-	then perl will recompile each time, even though the pattern
-	string hasn't changed, to ensure that the current value of
-	$x is seen each time. Use "/o" if you want to avoid this.
+        then perl will recompile each time, even though the pattern
+        string hasn't changed, to ensure that the current value of
+        $x is seen each time. Use "/o" if you want to avoid this.
 
     The bottom line is that using "/o" is almost never a good idea.
 
@@ -228,7 +228,7 @@ Matching in list context
     Examples:
 
      open(TTY, "+</dev/tty")
-	|| die "can't access /dev/tty: $!";
+        || die "can't access /dev/tty: $!";
 
      <TTY> =~ /^y/i && foo();       # do foo if desired
 
@@ -239,7 +239,7 @@ Matching in list context
      # poor man's grep
      $arg = shift;
      while (<>) {
-	print if /$arg/o; # compile only once (no longer needed!)
+        print if /$arg/o; # compile only once (no longer needed!)
      }
 
      if (($F1, $F2, $Etc) = ($foo =~ /^(\S+)\s+(\S+)\s*(.*)/))
@@ -281,67 +281,67 @@ Matching in list context
 
     Examples:
 
-	# list context
-	($one,$five,$fifteen) = (`uptime` =~ /(\d+\.\d+)/g);
+        # list context
+        ($one,$five,$fifteen) = (`uptime` =~ /(\d+\.\d+)/g);
 
-	# scalar context
-	local $/ = "";
-	while ($paragraph = <>) {
-	    while ($paragraph =~ /\p{Ll}['")]*[.!?]+['")]*\s/g) {
-		$sentences++;
-	    }
-	}
-	say $sentences;
+        # scalar context
+        local $/ = "";
+        while ($paragraph = <>) {
+            while ($paragraph =~ /\p{Ll}['")]*[.!?]+['")]*\s/g) {
+                $sentences++;
+            }
+        }
+        say $sentences;
 
     Here's another way to check for sentences in a paragraph:
 
      my $sentence_rx = qr{
-	(?: (?<= ^ ) | (?<= \s ) )  # after start-of-string or
-				    # whitespace
-	\p{Lu}                      # capital letter
-	.*?                         # a bunch of anything
-	(?<= \S )                   # that ends in non-
-				    # whitespace
-	(?<! \b [DMS]r  )           # but isn't a common abbr.
-	(?<! \b Mrs )
-	(?<! \b Sra )
-	(?<! \b St  )
-	[.?!]                       # followed by a sentence
-				    # ender
-	(?= $ | \s )                # in front of end-of-string
-				    # or whitespace
+        (?: (?<= ^ ) | (?<= \s ) )  # after start-of-string or
+                                    # whitespace
+        \p{Lu}                      # capital letter
+        .*?                         # a bunch of anything
+        (?<= \S )                   # that ends in non-
+                                    # whitespace
+        (?<! \b [DMS]r  )           # but isn't a common abbr.
+        (?<! \b Mrs )
+        (?<! \b Sra )
+        (?<! \b St  )
+        [.?!]                       # followed by a sentence
+                                    # ender
+        (?= $ | \s )                # in front of end-of-string
+                                    # or whitespace
      }sx;
      local $/ = "";
      while (my $paragraph = <>) {
-	say "NEW PARAGRAPH";
-	my $count = 0;
-	while ($paragraph =~ /($sentence_rx)/g) {
-	    printf "\tgot sentence %d: <%s>\n", ++$count, $1;
-	}
+        say "NEW PARAGRAPH";
+        my $count = 0;
+        while ($paragraph =~ /($sentence_rx)/g) {
+            printf "\tgot sentence %d: <%s>\n", ++$count, $1;
+        }
      }
 
     Here's how to use "m//gc" with "\G":
 
-	$_ = "ppooqppqq";
-	while ($i++ < 2) {
-	    print "1: '";
-	    print $1 while /(o)/gc; print "', pos=", pos, "\n";
-	    print "2: '";
-	    print $1 if /\G(q)/gc;  print "', pos=", pos, "\n";
-	    print "3: '";
-	    print $1 while /(p)/gc; print "', pos=", pos, "\n";
-	}
-	print "Final: '$1', pos=",pos,"\n" if /\G(.)/;
+        $_ = "ppooqppqq";
+        while ($i++ < 2) {
+            print "1: '";
+            print $1 while /(o)/gc; print "', pos=", pos, "\n";
+            print "2: '";
+            print $1 if /\G(q)/gc;  print "', pos=", pos, "\n";
+            print "3: '";
+            print $1 while /(p)/gc; print "', pos=", pos, "\n";
+        }
+        print "Final: '$1', pos=",pos,"\n" if /\G(.)/;
 
     The last example should print:
 
-	1: 'oo', pos=4
-	2: 'q', pos=5
-	3: 'pp', pos=7
-	1: '', pos=7
-	2: 'q', pos=8
-	3: '', pos=8
-	Final: 'q', pos=8
+        1: 'oo', pos=4
+        2: 'q', pos=5
+        3: 'pp', pos=7
+        1: '', pos=7
+        2: 'q', pos=8
+        3: '', pos=8
+        Final: 'q', pos=8
 
     Notice that the final match matched "q" instead of "p", which a
     match without the "\G" anchor would have done. Also note that
@@ -356,23 +356,23 @@ Matching in list context
     leaves off.
 
      $_ = <<'EOL';
-	$url = URI::URL->new( "http://example.com/" );
-	die if $url eq "xXx";
+        $url = URI::URL->new( "http://example.com/" );
+        die if $url eq "xXx";
      EOL
 
      LOOP: {
-	 print(" digits"),       redo LOOP if /\G\d+\b[,.;]?\s*/gc;
-	 print(" lowercase"),    redo LOOP
-					if /\G\p{Ll}+\b[,.;]?\s*/gc;
-	 print(" UPPERCASE"),    redo LOOP
-					if /\G\p{Lu}+\b[,.;]?\s*/gc;
-	 print(" Capitalized"),  redo LOOP
-				  if /\G\p{Lu}\p{Ll}+\b[,.;]?\s*/gc;
-	 print(" MiXeD"),        redo LOOP if /\G\pL+\b[,.;]?\s*/gc;
-	 print(" alphanumeric"), redo LOOP
-				if /\G[\p{Alpha}\pN]+\b[,.;]?\s*/gc;
-	 print(" line-noise"),   redo LOOP if /\G\W+/gc;
-	 print ". That's all!\n";
+         print(" digits"),       redo LOOP if /\G\d+\b[,.;]?\s*/gc;
+         print(" lowercase"),    redo LOOP
+                                        if /\G\p{Ll}+\b[,.;]?\s*/gc;
+         print(" UPPERCASE"),    redo LOOP
+                                        if /\G\p{Lu}+\b[,.;]?\s*/gc;
+         print(" Capitalized"),  redo LOOP
+                                  if /\G\p{Lu}\p{Ll}+\b[,.;]?\s*/gc;
+         print(" MiXeD"),        redo LOOP if /\G\pL+\b[,.;]?\s*/gc;
+         print(" alphanumeric"), redo LOOP
+                                if /\G[\p{Alpha}\pN]+\b[,.;]?\s*/gc;
+         print(" line-noise"),   redo LOOP if /\G\W+/gc;
+         print ". That's all!\n";
      }
 
     Here is the output (split into several lines):
@@ -390,13 +390,13 @@ Matching in list context
     instance. Only "m??" patterns local to the current package are
     reset.
 
-	while (<>) {
-	    if (m?^$?) {
-				# blank line between header and body
-	    }
-	} continue {
-	    reset if eof;       # clear m?? status for next file
-	 print ". That's all!\n";
+        while (<>) {
+            if (m?^$?) {
+                                # blank line between header and body
+            }
+        } continue {
+            reset if eof;       # clear m?? status for next file
+         print ". That's all!\n";
      }
 
     Here is the output (split into several lines):
@@ -414,18 +414,18 @@ Matching in list context
     instance. Only "m??" patterns local to the current package are
     reset.
 
-	while (<>) {
-	    if (m?^$?) {
-				# blank line between header and body
-	    }
-	} continue {
-	    reset if eof;       # clear m?? status for next file
-	}
+        while (<>) {
+            if (m?^$?) {
+                                # blank line between header and body
+            }
+        } continue {
+            reset if eof;       # clear m?? status for next file
+        }
 
     Another example switched the first "latin1" encoding it finds to
     "utf8" in a pod file:
 
-	s//utf8/ if m? ^ =encoding \h+ \K latin1 ?x;
+        s//utf8/ if m? ^ =encoding \h+ \K latin1 ?x;
 
     The match-once behavior is controlled by the match delimiter
     being "?"; with any other delimiter this is the normal "m//"
@@ -472,11 +472,11 @@ Matching in list context
     Options are as with "m//" with the addition of the following
     replacement specific options:
 
-	e   Evaluate the right side as an expression.
-	ee  Evaluate the right side as a string then eval the
-	    result.
-	r   Return substitution and leave the original string
-	    untouched.
+        e   Evaluate the right side as an expression.
+        ee  Evaluate the right side as a string then eval the
+            result.
+        r   Return substitution and leave the original string
+            untouched.
 
     Any non-whitespace delimiter may replace the slashes. Add space
     after the "s" when using a character allowed in identifiers. If
@@ -495,84 +495,84 @@ Matching in list context
 
     Examples:
 
-	s/\bgreen\b/mauve/g;              # don't change wintergreen
+        s/\bgreen\b/mauve/g;              # don't change wintergreen
 
-	$path =~ s|/usr/bin|/usr/local/bin|;
+        $path =~ s|/usr/bin|/usr/local/bin|;
 
-	s/Login: $foo/Login: $bar/; # run-time pattern
+        s/Login: $foo/Login: $bar/; # run-time pattern
 
-	($foo = $bar) =~ s/this/that/;      # copy first, then
-					    # change
-	($foo = "$bar") =~ s/this/that/;    # convert to string,
-					    # copy, then change
-	$foo = $bar =~ s/this/that/r;       # Same as above using /r
-	$foo = $bar =~ s/this/that/r
-		    =~ s/that/the other/r;  # Chained substitutes
-					    # using /r
-	@foo = map { s/this/that/r } @bar   # /r is very useful in
-					    # maps
+        ($foo = $bar) =~ s/this/that/;      # copy first, then
+                                            # change
+        ($foo = "$bar") =~ s/this/that/;    # convert to string,
+                                            # copy, then change
+        $foo = $bar =~ s/this/that/r;       # Same as above using /r
+        $foo = $bar =~ s/this/that/r
+                    =~ s/that/the other/r;  # Chained substitutes
+                                            # using /r
+        @foo = map { s/this/that/r } @bar   # /r is very useful in
+                                            # maps
 
-	$count = ($paragraph =~ s/Mister\b/Mr./g);  # get change-cnt
+        $count = ($paragraph =~ s/Mister\b/Mr./g);  # get change-cnt
 
-	$_ = 'abc123xyz';
-	s/\d+/$&*2/e;               # yields 'abc246xyz'
-	s/\d+/sprintf("%5d",$&)/e;  # yields 'abc  246xyz'
-	s/\w/$& x 2/eg;             # yields 'aabbcc  224466xxyyzz'
+        $_ = 'abc123xyz';
+        s/\d+/$&*2/e;               # yields 'abc246xyz'
+        s/\d+/sprintf("%5d",$&)/e;  # yields 'abc  246xyz'
+        s/\w/$& x 2/eg;             # yields 'aabbcc  224466xxyyzz'
 
-	s/%(.)/$percent{$1}/g;      # change percent escapes; no /e
-	s/%(.)/$percent{$1} || $&/ge;       # expr now, so /e
-	s/^=(\w+)/pod($1)/ge;       # use function call
+        s/%(.)/$percent{$1}/g;      # change percent escapes; no /e
+        s/%(.)/$percent{$1} || $&/ge;       # expr now, so /e
+        s/^=(\w+)/pod($1)/ge;       # use function call
 
-	$_ = 'abc123xyz';
-	$x = s/abc/def/r;           # $x is 'def123xyz' and
-				    # $_ remains 'abc123xyz'.
+        $_ = 'abc123xyz';
+        $x = s/abc/def/r;           # $x is 'def123xyz' and
+                                    # $_ remains 'abc123xyz'.
 
-	# expand variables in $_, but dynamics only, using
-	# symbolic dereferencing
-	s/\$(\w+)/${$1}/g;
+        # expand variables in $_, but dynamics only, using
+        # symbolic dereferencing
+        s/\$(\w+)/${$1}/g;
 
-	# Add one to the value of any numbers in the string
-	s/(\d+)/1 + $1/eg;
+        # Add one to the value of any numbers in the string
+        s/(\d+)/1 + $1/eg;
 
-	# Titlecase words in the last 30 characters only (presuming
-	# that the substring doesn't start in the middle of a word)
-	substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
+        # Titlecase words in the last 30 characters only (presuming
+        # that the substring doesn't start in the middle of a word)
+        substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
 
-	# This will expand any embedded scalar variable
-	# (including lexicals) in $_ : First $1 is interpolated
-	# to the variable name, and then evaluated
-	s/(\$\w+)/$1/eeg;
+        # This will expand any embedded scalar variable
+        # (including lexicals) in $_ : First $1 is interpolated
+        # to the variable name, and then evaluated
+        s/(\$\w+)/$1/eeg;
 
-	# Delete (most) C comments.
-	# that the substring doesn't start in the middle of a word)
-	substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
+        # Delete (most) C comments.
+        # that the substring doesn't start in the middle of a word)
+        substr($str, -30) =~ s/\b(\p{Alpha})(\p{Alpha}*)\b/\u$1\L$2/g;
 
-	# This will expand any embedded scalar variable
-	# (including lexicals) in $_ : First $1 is interpolated
-	# to the variable name, and then evaluated
-	s/(\$\w+)/$1/eeg;
+        # This will expand any embedded scalar variable
+        # (including lexicals) in $_ : First $1 is interpolated
+        # to the variable name, and then evaluated
+        s/(\$\w+)/$1/eeg;
 
-	# Delete (most) C comments.
-	$program =~ s {
-	    /\*     # Match the opening delimiter.
-	    .*?     # Match a minimal number of characters.
-	    \*/     # Match the closing delimiter.
-	} []gsx;
+        # Delete (most) C comments.
+        $program =~ s {
+            /\*     # Match the opening delimiter.
+            .*?     # Match a minimal number of characters.
+            \*/     # Match the closing delimiter.
+        } []gsx;
 
-	s/^\s*(.*?)\s*$/$1/;        # trim whitespace in $_,
-				    # expensively
+        s/^\s*(.*?)\s*$/$1/;        # trim whitespace in $_,
+                                    # expensively
 
-	for ($variable) {           # trim whitespace in $variable,
-				    # cheap
-	    s/^\s+//;
-	    s/\s+$//;
-	}
+        for ($variable) {           # trim whitespace in $variable,
+                                    # cheap
+            s/^\s+//;
+            s/\s+$//;
+        }
 
-	s/([^ ]*) *([^ ]*)/$2 $1/;  # reverse 1st two fields
+        s/([^ ]*) *([^ ]*)/$2 $1/;  # reverse 1st two fields
 
-	$foo !~ s/A/a/g;    # Lowercase all A's in $foo; return
-			    # 0 if any were found and changed;
-			    # otherwise return 1
+        $foo !~ s/A/a/g;    # Lowercase all A's in $foo; return
+                            # 0 if any were found and changed;
+                            # otherwise return 1
 
     Note the use of "$" instead of "\" in the last example. Unlike
     sed, we use the \<*digit*> form only in the left hand side.
@@ -581,11 +581,11 @@ Matching in list context
     Occasionally, you can't use just a "/g" to get all the changes
     to occur that you might want. Here are two common cases:
 
-	# put commas in the right places in an integer
-	1 while s/(\d)(\d\d\d)(?!\d)/$1,$2/g;
+        # put commas in the right places in an integer
+        1 while s/(\d)(\d\d\d)(?!\d)/$1,$2/g;
 
-	# expand tabs to 8-column spacing
-	1 while s/\t+/' ' x (length($&)*8 - length($`)%8)/e;
+        # expand tabs to 8-column spacing
+        1 while s/\t+/' ' x (length($&)*8 - length($`)%8)/e;
 
     While "s///" accepts the "/c" flag, it has no effect beyond
     producing a warning if warnings are enabled.
