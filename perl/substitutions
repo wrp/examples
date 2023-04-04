@@ -13,6 +13,313 @@ while(<DATA>) {
 __DATA__
 From perldoc perlop:
 
+flags (for m/// and s///): msixpodualngc
+flags (for s/// only)    : er
+   r: non-destructive
+
+
+"m/*PATTERN*/msixpodualngc"
+"/*PATTERN*/msixpodualngc"
+    Searches a string for a pattern match, and in scalar context
+    returns true if it succeeds, false if it fails. If no string is
+    specified via the "=~" or "!~" operator, the $_ string is
+    searched. (The string specified with "=~" need not be an
+    lvalue--it may be the result of an expression evaluation, but
+    remember the "=~" binds rather tightly.) See also perlre.
+
+    Options are as described in "qr//" above; in addition, the
+    following match process modifiers are available:
+
+     g  Match globally, i.e., find all occurrences.
+     c  Do not reset search position on a failed match when /g is
+	in effect.
+
+    If "/" is the delimiter then the initial "m" is optional. With
+    the "m" you can use any pair of non-whitespace (ASCII)
+    characters as delimiters. This is particularly useful for
+    matching path names that contain "/", to avoid LTS (leaning
+    toothpick syndrome). If "?" is the delimiter, then a
+    match-only-once rule applies, described in "m?*PATTERN*?" below.
+    If "'" (single quote) is the delimiter, no variable
+    interpolation is performed on the *PATTERN*. When using a
+    delimiter character valid in an identifier, whitespace is
+    required after the "m".
+
+    *PATTERN* may contain variables, which will be interpolated
+    every time the pattern search is evaluated, except for when the
+    delimiter is a single quote. (Note that $(, $), and $| are not
+    interpolated because they look like end-of-string tests.) Perl
+    will not recompile the pattern unless an interpolated variable
+    that it contains changes. You can force Perl to skip the test
+    and never recompile by adding a "/o" (which stands for "once")
+    after the trailing delimiter. Once upon a time, Perl would
+    recompile regular expressions unnecessarily, and this modifier
+    was useful to tell it not to do so, in the interests of speed.
+    But now, the only reasons to use "/o" are one of:
+
+    1   The variables are thousands of characters long and you know
+	that they don't change, and you need to wring out the last
+	little bit of speed by having Perl skip testing for that.
+	(There is a maintenance penalty for doing this, as
+	mentioning "/o" constitutes a promise that you won't change
+	the variables in the pattern. If you do change them, Perl
+	won't even notice.)
+
+    2   you want the pattern to use the initial values of the
+	variables regardless of whether they change or not. (But
+	there are saner ways of accomplishing this than using "/o".)
+
+    3   If the pattern contains embedded code, such as
+
+	    use re 'eval';
+	    $code = 'foo(?{ $x })';
+	    /$code/
+
+	then perl will recompile each time, even though the pattern
+	string hasn't changed, to ensure that the current value of
+	$x is seen each time. Use "/o" if you want to avoid this.
+
+    The bottom line is that using "/o" is almost never a good idea.
+
+The empty pattern "//"
+    If the *PATTERN* evaluates to the empty string, the last
+    *successfully* matched regular expression is used instead. In
+    this case, only the "g" and "c" flags on the empty pattern are
+    honored; the other flags are taken from the original pattern. If
+    no match has previously succeeded, this will (silently) act
+    instead as a genuine empty pattern (which will always match).
+
+    Note that it's possible to confuse Perl into thinking "//" (the
+    empty regex) is really "//" (the defined-or operator). Perl is
+    usually pretty good about this, but some pathological cases
+    might trigger this, such as "$x///" (is that "($x) / (//)" or
+    "$x // /"?) and "print $fh //" ("print $fh(//" or
+    "print($fh //"?). In all of these examples, Perl will assume you
+    meant defined-or. If you meant the empty regex, just use
+    parentheses or spaces to disambiguate, or even prefix the empty
+    regex with an "m" (so "//" becomes "m//").
+
+Matching in list context
+    If the "/g" option is not used, "m//" in list context returns a
+    list consisting of the subexpressions matched by the parentheses
+    in the pattern, that is, ($1, $2, $3...) (Note that here $1 etc.
+    are also set). When there are no parentheses in the pattern, the
+    return value is the list "(1)" for success. With or without
+    parentheses, an empty list is returned upon failure.
+
+    Examples:
+
+     open(TTY, "+</dev/tty")
+	|| die "can't access /dev/tty: $!";
+
+     <TTY> =~ /^y/i && foo();       # do foo if desired
+
+     if (/Version: *([0-9.]*)/) { $version = $1; }
+
+     next if m#^/usr/spool/uucp#;
+
+     # poor man's grep
+     $arg = shift;
+     while (<>) {
+	print if /$arg/o; # compile only once (no longer needed!)
+     }
+
+     if (($F1, $F2, $Etc) = ($foo =~ /^(\S+)\s+(\S+)\s*(.*)/))
+
+    This last example splits $foo into the first two words and the
+    remainder of the line, and assigns those three fields to $F1,
+    $F2, and $Etc. The conditional is true if any variables were
+    assigned; that is, if the pattern matched.
+
+    The "/g" modifier specifies global pattern matching--that is,
+    matching as many times as possible within the string. How it
+    behaves depends on the context. In list context, it returns a
+    list of the substrings matched by any capturing parentheses in
+    the regular expression. If there are no parentheses, it returns
+    a list of all the matched strings, as if there were parentheses
+    around the whole pattern.
+
+    In scalar context, each execution of "m//g" finds the next
+    match, returning true if it matches, and false if there is no
+    further match. The position after the last match can be read or
+    set using the "pos()" function; see "pos" in perlfunc. A failed
+    match normally resets the search position to the beginning of
+    the string, but you can avoid that by adding the "/c" modifier
+    (for example, "m//gc"). Modifying the target string also resets
+    the search position.
+
+"\G *assertion*"
+    You can intermix "m//g" matches with "m/\G.../g", where "\G" is
+    a zero-width assertion that matches the exact position where the
+    previous "m//g", if any, left off. Without the "/g" modifier,
+    the "\G" assertion still anchors at "pos()" as it was at the
+    start of the operation (see "pos" in perlfunc), but the match is
+    of course only attempted once. Using "\G" without "/g" on a
+    target string that has not previously had a "/g" match applied
+    to it is the same as using the "\A" assertion to match the
+    beginning of the string. Note also that, currently, "\G" is only
+    properly supported when anchored at the very beginning of the
+    pattern.
+
+    Examples:
+
+	# list context
+	($one,$five,$fifteen) = (`uptime` =~ /(\d+\.\d+)/g);
+
+	# scalar context
+	local $/ = "";
+	while ($paragraph = <>) {
+	    while ($paragraph =~ /\p{Ll}['")]*[.!?]+['")]*\s/g) {
+		$sentences++;
+	    }
+	}
+	say $sentences;
+
+    Here's another way to check for sentences in a paragraph:
+
+     my $sentence_rx = qr{
+	(?: (?<= ^ ) | (?<= \s ) )  # after start-of-string or
+				    # whitespace
+	\p{Lu}                      # capital letter
+	.*?                         # a bunch of anything
+	(?<= \S )                   # that ends in non-
+				    # whitespace
+	(?<! \b [DMS]r  )           # but isn't a common abbr.
+	(?<! \b Mrs )
+	(?<! \b Sra )
+	(?<! \b St  )
+	[.?!]                       # followed by a sentence
+				    # ender
+	(?= $ | \s )                # in front of end-of-string
+				    # or whitespace
+     }sx;
+     local $/ = "";
+     while (my $paragraph = <>) {
+	say "NEW PARAGRAPH";
+	my $count = 0;
+	while ($paragraph =~ /($sentence_rx)/g) {
+	    printf "\tgot sentence %d: <%s>\n", ++$count, $1;
+	}
+     }
+
+    Here's how to use "m//gc" with "\G":
+
+	$_ = "ppooqppqq";
+	while ($i++ < 2) {
+	    print "1: '";
+	    print $1 while /(o)/gc; print "', pos=", pos, "\n";
+	    print "2: '";
+	    print $1 if /\G(q)/gc;  print "', pos=", pos, "\n";
+	    print "3: '";
+	    print $1 while /(p)/gc; print "', pos=", pos, "\n";
+	}
+	print "Final: '$1', pos=",pos,"\n" if /\G(.)/;
+
+    The last example should print:
+
+	1: 'oo', pos=4
+	2: 'q', pos=5
+	3: 'pp', pos=7
+	1: '', pos=7
+	2: 'q', pos=8
+	3: '', pos=8
+	Final: 'q', pos=8
+
+    Notice that the final match matched "q" instead of "p", which a
+    match without the "\G" anchor would have done. Also note that
+    the final match did not update "pos". "pos" is only updated on a
+    "/g" match. If the final match did indeed match "p", it's a good
+    bet that you're running an ancient (pre-5.6.0) version of Perl.
+
+    A useful idiom for "lex"-like scanners is "/\G.../gc". You can
+    combine several regexps like this to process a string
+    part-by-part, doing different actions depending on which regexp
+    matched. Each regexp tries to match where the previous one
+    leaves off.
+
+     $_ = <<'EOL';
+	$url = URI::URL->new( "http://example.com/" );
+	die if $url eq "xXx";
+     EOL
+
+     LOOP: {
+	 print(" digits"),       redo LOOP if /\G\d+\b[,.;]?\s*/gc;
+	 print(" lowercase"),    redo LOOP
+					if /\G\p{Ll}+\b[,.;]?\s*/gc;
+	 print(" UPPERCASE"),    redo LOOP
+					if /\G\p{Lu}+\b[,.;]?\s*/gc;
+	 print(" Capitalized"),  redo LOOP
+				  if /\G\p{Lu}\p{Ll}+\b[,.;]?\s*/gc;
+	 print(" MiXeD"),        redo LOOP if /\G\pL+\b[,.;]?\s*/gc;
+	 print(" alphanumeric"), redo LOOP
+				if /\G[\p{Alpha}\pN]+\b[,.;]?\s*/gc;
+	 print(" line-noise"),   redo LOOP if /\G\W+/gc;
+	 print ". That's all!\n";
+     }
+
+    Here is the output (split into several lines):
+
+     line-noise lowercase line-noise UPPERCASE line-noise UPPERCASE
+     line-noise lowercase line-noise lowercase line-noise lowercase
+     lowercase line-noise lowercase lowercase line-noise lowercase
+     lowercase line-noise MiXeD line-noise. That's all!
+
+"m?*PATTERN*?msixpodualngc"
+    This is just like the "m/*PATTERN*/" search, except that it
+    matches only once between calls to the "reset()" operator. This
+    is a useful optimization when you want to see only the first
+    occurrence of something in each file of a set of files, for
+    instance. Only "m??" patterns local to the current package are
+    reset.
+
+	while (<>) {
+	    if (m?^$?) {
+				# blank line between header and body
+	    }
+	} continue {
+	    reset if eof;       # clear m?? status for next file
+	 print ". That's all!\n";
+     }
+
+    Here is the output (split into several lines):
+
+     line-noise lowercase line-noise UPPERCASE line-noise UPPERCASE
+     line-noise lowercase line-noise lowercase line-noise lowercase
+     lowercase line-noise lowercase lowercase line-noise lowercase
+     lowercase line-noise MiXeD line-noise. That's all!
+
+"m?*PATTERN*?msixpodualngc"
+    This is just like the "m/*PATTERN*/" search, except that it
+    matches only once between calls to the "reset()" operator. This
+    is a useful optimization when you want to see only the first
+    occurrence of something in each file of a set of files, for
+    instance. Only "m??" patterns local to the current package are
+    reset.
+
+	while (<>) {
+	    if (m?^$?) {
+				# blank line between header and body
+	    }
+	} continue {
+	    reset if eof;       # clear m?? status for next file
+	}
+
+    Another example switched the first "latin1" encoding it finds to
+    "utf8" in a pod file:
+
+	s//utf8/ if m? ^ =encoding \h+ \K latin1 ?x;
+
+    The match-once behavior is controlled by the match delimiter
+    being "?"; with any other delimiter this is the normal "m//"
+    operator.
+
+    In the past, the leading "m" in "m?*PATTERN*?" was optional, but
+    omitting it would produce a deprecation warning. As of v5.22.0,
+    omitting it produces a syntax error. If you encounter this
+    construct in older code, you can just add "m".
+
+
+
 "s/*PATTERN*/*REPLACEMENT*/msixpodualngcer"
     Searches a string for a pattern, and if found, replaces that
     pattern with the replacement text and returns the number of
