@@ -8,5 +8,5 @@ use strict;
 use warnings;
 use Tie::File;
 
-tie my @ar, 'Tie::File', $ARGV[0] or die "$ARGV[0]: $!";
+tie my @ar, 'Tie::File', $ARGV[0] or die "$ARGV[0]: $!\n";
 s/foo/bar/g foreach(@ar);

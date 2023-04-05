@@ -228,7 +228,7 @@ Matching in list context
     Examples:
 
      open(TTY, "+</dev/tty")
-        || die "can't access /dev/tty: $!";
+        || die "can't access /dev/tty: $!\n";
 
      <TTY> =~ /^y/i && foo();       # do foo if desired
 
@@ -357,7 +357,7 @@ Matching in list context
 
      $_ = <<'EOL';
         $url = URI::URL->new( "http://example.com/" );
-        die if $url eq "xXx";
+        die if $url eq "xXx\n";
      EOL
 
      LOOP: {
