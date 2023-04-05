@@ -14,3 +14,7 @@ sub cb {
 	# path: $File::Find::name    (seems to be $File::Find::dir . '/' . $_)
 	say "$File::Find::name"
 }
+
+
+# Find all names with whitespace:
+# perl -MFile::Find -E 'find( sub{ say $File::Find::name if(m/\s+/) }, ("."))'
