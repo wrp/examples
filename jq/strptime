@@ -11,4 +11,18 @@ date +%s \
 echo '"Fri Sep 10 22:24:51 IST 2021"' | jq 'strptime("%a %b %d %H:%M:%S IST %Y") | mktime'
 
 # Convoluted way to get epoch time:
+printf "mktime: "
 date +'"%a, %d %b %Y %T %z"' |  jq 'strptime("%a, %d %b %Y %T %z") | mktime'
+
+
+printf "milliseconds: "
+echo '{ "date" : "2023-03-03T10:10:10.425Z" }' |
+jq 'def toMilliseconds($fmt):
+  def toM:
+    capture("(?<string>.*)[.](?<milliseconds>[0-9]+)Z")
+    | .string += "Z"
+    | .milliseconds |= tonumber;
+  (toM // {string: ., milliseconds: 0})
+  | (.string | strptime($fmt) | mktime) * 1000 + .milliseconds ;
+
+.date | toMilliseconds("%Y-%m-%dT%H:%M:%SZ")'
