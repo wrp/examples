@@ -1,4 +1,7 @@
 /* Store words in input in a hash table */
+/* keywords: hashmap, hash, hashtable */
+#define _GNU_SOURCE
+#include <errno.h>
 #include <limits.h>
 #include <search.h>
 #include <stdio.h>
@@ -26,21 +29,23 @@ push(struct word **root, char *d)
 int
 main(int argc, char **argv)
 {
+	struct hsearch_data table = {};
 	char str[512];
 	struct word *words = NULL;
 	unsigned long max = argc > 1 ? strtoul(argv[1], NULL, 10) : 65536;
 
 	ENTRY item;
 
-	if( ! hcreate(max) ){
+	if( ! hcreate_r(max, &table) ){
 		perror("hcreate");
 		return 1;
 	}
 
 	while( scanf("%511s", str) == 1 ){
 		item.key = str;
-		ENTRY *this = hsearch(item, FIND);
-		if( this ){
+		ENTRY *this;
+
+		if( hsearch_r(item, FIND, &this, &table) ){
 			*(int *)this->data += 1;
 		} else {
 			int *x = malloc(sizeof *x);
@@ -52,7 +57,8 @@ main(int argc, char **argv)
 			push(&words, item.key);
 			item.data = x;
 			*x = 1;
-			if( hsearch(item, ENTER) == NULL ){
+			ENTRY *old;
+			if( hsearch_r(item, ENTER, &old, &table) == 0 ){
 				perror("hsearch");
 				return 1;
 			}
@@ -63,7 +69,7 @@ main(int argc, char **argv)
 	for( ; words; words = words->next ){
 		item.key = words->d;
 		ENTRY *e;
-		if( (e = hsearch(item, FIND)) != NULL ){
+		if( hsearch_r(item, FIND, &e, &table) ){
 			printf("%s: %d\n", words->d, *(int *)e->data);
 		} else {
 			printf("%s was not found\n", words->d);
