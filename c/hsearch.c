@@ -1,6 +1,6 @@
 /* Store words in input in a hash table */
 /* keywords: hashmap, hash, hashtable */
-#define _GNU_SOURCE
+#define _GNU_SOURCE  /* For re-entrant verisions */
 #include <err.h>
 #include <errno.h>
 #include <limits.h>
