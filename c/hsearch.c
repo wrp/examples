@@ -41,7 +41,7 @@ grow(struct hsearch_data *table, unsigned long *size, struct word *words)
 		item.key = words->d;
 
 		if( hsearch_r(item, FIND, &e, table) ){
-			if( hsearch_r(item, ENTER, &e, &new) == 0 ){
+			if( hsearch_r(*e, ENTER, &e, &new) == 0 ){
 				err(1, "unexpected error growing hashmap");
 			}
 		} else {
@@ -60,7 +60,6 @@ insert(ENTRY *item, struct hsearch_data *table, unsigned long *size,
 	struct word *words)
 {
 	ENTRY *old;
-	printf("debug: max: %lu insert %s\n", *size, item->key);
 	while( hsearch_r(*item, ENTER, &old, table) == 0 ){
 		if( errno == ENOMEM ){
 			grow(table, size, words);
