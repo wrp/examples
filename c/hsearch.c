@@ -28,11 +28,15 @@ push(struct word **root, char *d)
 }
 
 
+struct hsearch_data hmap[2] = {{0}, {0}};
+
 static void
-grow(struct hsearch_data *table, unsigned long *size, struct word *words)
+grow(struct hsearch_data **table, unsigned long *size, struct word *words)
 {
-	struct hsearch_data new = {0};
-	if( ! hcreate_r( (*size) *= 2, &new) ){
+	struct hsearch_data *new = (*table == hmap) ? hmap + 1 : hmap;
+
+	memset(new, 0, sizeof *new);
+	if( ! hcreate_r( (*size) *= 2, new) ){
 		err(1, "grow to %d", *size);
 	}
 	for( ; words; words = words->next ){
@@ -40,15 +44,15 @@ grow(struct hsearch_data *table, unsigned long *size, struct word *words)
 		ENTRY *e;
 		item.key = words->d;
 
-		if( hsearch_r(item, FIND, &e, table) ){
-			if( hsearch_r(item, ENTER, &e, &new) == 0 ){
+		if( hsearch_r(item, FIND, &e, *table) ){
+			if( hsearch_r(*e, ENTER, &e, new) == 0 ){
 				err(1, "unexpected error growing hashmap");
 			}
 		} else {
 			err(1, "%s not found", words->d);
 		}
 	}
-	hdestroy_r(table);
+	hdestroy_r(*table);
 	*table = new;
 }
 
@@ -56,12 +60,11 @@ grow(struct hsearch_data *table, unsigned long *size, struct word *words)
 
 /* Insert *item into *table, growing *table if needed. */
 static void
-insert(ENTRY *item, struct hsearch_data *table, unsigned long *size,
+insert(ENTRY *item, struct hsearch_data **table, unsigned long *size,
 	struct word *words)
 {
 	ENTRY *old;
-	printf("debug: max: %lu insert %s\n", *size, item->key);
-	while( hsearch_r(*item, ENTER, &old, table) == 0 ){
+	while( hsearch_r(*item, ENTER, &old, *table) == 0 ){
 		if( errno == ENOMEM ){
 			grow(table, size, words);
 		} else {
@@ -74,14 +77,14 @@ insert(ENTRY *item, struct hsearch_data *table, unsigned long *size,
 int
 main(int argc, char **argv)
 {
-	struct hsearch_data table = {};
 	char str[512];
 	struct word *words = NULL;
 	unsigned long max = argc > 1 ? strtoul(argv[1], NULL, 10) : 65536;
 
 	ENTRY item;
+	struct hsearch_data *table = hmap;
 
-	if( ! hcreate_r(max, &table) ){
+	if( ! hcreate_r(max, table) ){
 		perror("hcreate");
 		return 1;
 	}
@@ -90,7 +93,7 @@ main(int argc, char **argv)
 		item.key = str;
 		ENTRY *this;
 
-		if( hsearch_r(item, FIND, &this, &table) ){
+		if( hsearch_r(item, FIND, &this, table) ){
 			*(int *)this->data += 1;
 		} else {
 			int *x = malloc(sizeof *x);
@@ -110,13 +113,13 @@ main(int argc, char **argv)
 	for( ; words; words = words->next ){
 		item.key = words->d;
 		ENTRY *e;
-		if( hsearch_r(item, FIND, &e, &table) ){
+		if( hsearch_r(item, FIND, &e, table) ){
 			printf("%s: %d\n", words->d, *(int *)e->data);
 		} else {
 			fprintf(stderr, "ERROR: %s not found\n", words->d);
 			return 1;
 		}
 	}
-	hdestroy_r(&table);
+	hdestroy_r(table);
 	return 0;
 }
