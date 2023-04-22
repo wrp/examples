@@ -1,6 +1,7 @@
 /* Store words in input in a hash table */
 /* keywords: hashmap, hash, hashtable */
 #define _GNU_SOURCE
+#include <err.h>
 #include <errno.h>
 #include <limits.h>
 #include <search.h>
@@ -24,6 +25,50 @@ push(struct word **root, char *d)
 	n->d = d;
 	n->next = *root;
 	*root = n;
+}
+
+
+static void
+grow(struct hsearch_data *table, unsigned long *size, struct word *words)
+{
+	struct hsearch_data new = {0};
+	if( ! hcreate_r( (*size) *= 2, &new) ){
+		err(1, "grow to %d", *size);
+	}
+	for( ; words; words = words->next ){
+		ENTRY item;
+		ENTRY *e;
+		item.key = words->d;
+
+		if( hsearch_r(item, FIND, &e, table) ){
+			if( hsearch_r(item, ENTER, &e, &new) == 0 ){
+				err(1, "unexpected error growing hashmap");
+			}
+		} else {
+			err(1, "%s not found", words->d);
+		}
+	}
+	hdestroy_r(table);
+	*table = new;
+}
+
+
+
+/* Insert *item into *table, growing *table if needed. */
+static void
+insert(ENTRY *item, struct hsearch_data *table, unsigned long *size,
+	struct word *words)
+{
+	ENTRY *old;
+	printf("debug: max: %lu insert %s\n", *size, item->key);
+	while( hsearch_r(*item, ENTER, &old, table) == 0 ){
+		if( errno == ENOMEM ){
+			grow(table, size, words);
+		} else {
+			perror("hsearch");
+			exit(1);
+		}
+	}
 }
 
 int
@@ -54,14 +99,10 @@ main(int argc, char **argv)
 				exit(1);
 			}
 			item.key = strdup(str);
-			push(&words, item.key);
 			item.data = x;
 			*x = 1;
-			ENTRY *old;
-			if( hsearch_r(item, ENTER, &old, &table) == 0 ){
-				perror("hsearch");
-				return 1;
-			}
+			insert(&item, &table, &max, words);
+			push(&words, item.key);
 		}
 	}
 
@@ -72,9 +113,10 @@ main(int argc, char **argv)
 		if( hsearch_r(item, FIND, &e, &table) ){
 			printf("%s: %d\n", words->d, *(int *)e->data);
 		} else {
-			printf("%s was not found\n", words->d);
+			fprintf(stderr, "ERROR: %s not found\n", words->d);
+			return 1;
 		}
 	}
-	hdestroy();
+	hdestroy_r(&table);
 	return 0;
 }
