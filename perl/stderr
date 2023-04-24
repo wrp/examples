@@ -1,0 +1,4 @@
+#!/usr/bin/env perl
+
+print STDERR "This message goes to stderr\n";
+printf STDERR "This message goes to %s\n", "stderr";
