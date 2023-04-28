@@ -77,7 +77,13 @@ except Exception: pass
 def func1(a):
     func2(a)
 def func2(a):
-    func3(a)
+    try:
+        func3(a)
+    except Exception as e:
+        v = sys.version_info
+        if v.major > 3 or (v.major == 3 and v.minor >= 11):
+            e.add_note(f"This note is added to the exception")
+        raise e
 def func3(a):
     raise foo('f1->f2->f3')
 
