@@ -80,8 +80,7 @@ def func2(a):
     try:
         func3(a)
     except Exception as e:
-        v = sys.version_info
-        if v.major > 3 or (v.major == 3 and v.minor >= 11):
+        if hasattr(e, 'add_note'):  # Added in 3.11
             e.add_note(f"This note is added to the exception")
         raise e
 def func3(a):
