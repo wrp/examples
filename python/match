@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+
+b = (3, 5)
+
+match b:
+    case (0, 0):
+        print("Origin")
+    case (0, y):
+        print(f'0, Y={y}')
+    case (x, 0):
+        print(f'X={x}, 0')
+    case (x, y):
+        print(f"X={x}, Y={y}")
+    case _:
+        raise ValueError("Not a point")
