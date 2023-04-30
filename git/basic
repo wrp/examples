@@ -1,4 +1,7 @@
 
+# List all available commands
+git help -a
+
 # Determine if work dir is dirty:
 # see https://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
 
