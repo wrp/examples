@@ -13,7 +13,7 @@ TCP/IP over ethernet
 tranport layer PDU is the "tcp segment" or "udb datagram"
 "internet layer" pdu is the "ip packet"
 link layer pdu is "frame"
-pyhsical layer pdu is an "ethernett frame"
+pyhsical layer pdu is an "ethernet frame"
 
 
 
