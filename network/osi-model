@@ -1,0 +1,13 @@
+
+layer   name        pdu (protocol data unit)
+4       transport   segment
+3       network     packet
+2       data link   frame
+1       physical    bit/symbol
+
+
+TCP/IP over ethernet
+tranport layer PDU is the "tcp segment" or "udb datagram"
+"internet layer" pdu is the "ip packet"
+link layer pdu is "frame"
+pyhsical layer pdu is an "ethernett frame"
