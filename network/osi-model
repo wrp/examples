@@ -1,9 +1,12 @@
 
-layer   name        pdu (protocol data unit)
-4       transport   segment
-3       network     packet
-2       data link   frame
-1       physical    bit/symbol
+layer   name           pdu (protocol data unit)
+7       application
+6       presentation
+5       session
+4       transport      segment
+3       network        packet
+2       data link      frame
+1       physical       bit/symbol
 
 
 TCP/IP over ethernet
