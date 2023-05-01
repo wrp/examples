@@ -1,4 +1,5 @@
 
+
 layer   name           pdu (protocol data unit)
 7       application
 6       presentation
@@ -7,6 +8,15 @@ layer   name           pdu (protocol data unit)
 3       network        packet
 2       data link      frame
 1       physical       bit/symbol
+
+
+The TCP/IP model is smaller:
+layers are application, transport, network/internet, data link, physical
+
+Essentially, levels 5-7 of the osi model are L4 (application) in the tcp/ip model
+L4 in osi (transport) is L3 in tcp/ip (transport)
+L3 in osi (network) is L2 in tcp/ip (internet)
+L1,2 in osi is L1 in tcp/ip (physical)
 
 
 TCP/IP over ethernet
