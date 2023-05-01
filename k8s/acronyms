@@ -1,0 +1,7 @@
+
+CRD	custom resource defnition
+CNI	container network interface
+CRI	container runtime interface
+CSI	container storage interface
+IPAM	ip address management
+SMI	service mesh interface
