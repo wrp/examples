@@ -70,4 +70,9 @@ LDADD=libxutil.la
 libringbuf_la_SOURCES = ring-buffer.c
 libstack_la_SOURCES = stack.c
 libxutil_la_SOURCES = xutil.c
-CLEANFILES = *.gcda *.gcno *.gcov
+
+CLEANFILES = *.gcda *.gcno *.gcov @PACKAGE_NAME@.bundle
+EXTRA_DIST = @PACKAGE_NAME@.bundle
+
+@PACKAGE_NAME@.bundle:
+	git -C $(top_srcdir) bundle create "$@" main
