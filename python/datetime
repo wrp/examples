@@ -3,6 +3,7 @@
 
 from datetime import datetime, timedelta
 
+now = datetime.now()
 
 a = datetime.fromisoformat('2021-07-02-21:35:05')
 
