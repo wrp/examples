@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from operator import itemgetter
+
 # Sort tuple by index 2
 student_tuples = [
     ('john', 'A', 15),
@@ -7,7 +9,12 @@ student_tuples = [
     ('dave', 'B', 10),
 ]
 
-a = sorted(student_tuples, key=lambda student: student[2])  # sort by .[2]
-
+# sort by .[2]
+a = sorted(student_tuples, key=lambda student: student[2])
 print('sorted by age:')
+for x in a: print(x)
+
+# sort by .[1], then by .[2]
+a = sorted(student_tuples, key=itemgetter(1,2))
+print('sorted by grade, then age:')
 for x in a: print(x)
