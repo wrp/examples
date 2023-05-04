@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+# Complex numbers are annotated with j
+a = 2 + 3j;
+b = 1 - 2j;
+
+print(a * b)
