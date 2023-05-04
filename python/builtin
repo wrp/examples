@@ -9,7 +9,7 @@ order.
 | Built-in Functions
 ============================
 abs(x)                  absolute value
-aiter(async_iterable)   asynchronous iterator
+aiter(async_iterable)   asynchronous iterator  (new in 3.10)
 all(iterable)           return true if all elements of the iterator are true
 anext(async_iterator)   return next item from async_iterator
 any(iterable)           return true if any element of iterable is true
