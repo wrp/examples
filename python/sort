@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+# Sort tuple by index 2
+student_tuples = [
+    ('john', 'A', 15),
+    ('jane', 'B', 12),
+    ('dave', 'B', 10),
+]
+
+a = sorted(student_tuples, key=lambda student: student[2])  # sort by .[2]
+
+print('sorted by age:')
+for x in a: print(x)
