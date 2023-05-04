@@ -411,9 +411,9 @@ dir(object)
    The resulting list is sorted alphabetically.  For example:
 
    >>> import struct
-   >>> dir()   # show the names in the module namespace  
+   >>> dir()   # show the names in the module namespace
    ['__builtins__', '__name__', 'struct']
-   >>> dir(struct)   # show the names in the struct module 
+   >>> dir(struct)   # show the names in the struct module
    ['Struct', '__all__', '__builtins__', '__cached__', '__doc__', '__file__',
     '__initializing__', '__loader__', '__name__', '__package__',
     '_clearcache', 'calcsize', 'error', 'pack', 'pack_into',
@@ -805,9 +805,9 @@ input(prompt)
    and returns that.  When EOF is read, "EOFError" is raised.
    Example:
 
-      >>> s = input('--> ')  
+      >>> s = input('--> ')
       --> Monty Python's Flying Circus
-      >>> s  
+      >>> s
       "Monty Python's Flying Circus"
 
    If the "readline" module was loaded, then "input()" will use it to
@@ -1820,7 +1820,7 @@ zip(*iterables, strict=False)
      Unlike the default behavior, it raises a "ValueError" if one
      iterable is exhausted before the others:
 
-     >>> for item in zip(range(3), ['fee', 'fi', 'fo', 'fum'], strict=True):  
+     >>> for item in zip(range(3), ['fee', 'fi', 'fo', 'fum'], strict=True):
      ...     print(item)
      ...
      (0, 'fee')
