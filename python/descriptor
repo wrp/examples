@@ -2,10 +2,13 @@
 
 # See: https://docs.python.org/3/howto/descriptor.html
 
+# A descriptor is any object that defines __get__(), __set__(), or __delete__()
+
 import datetime
 
 class Foo:
     def __get__(self, obj, objtype = None):
+        print(f'objtype = {objtype}')
         return datetime.datetime.now()
 
 
@@ -14,4 +17,4 @@ class Bar:
 
 
 a = Bar()
-print(a.n)
+print(a.n)  # objtype = <class '__main__.Bar'>
