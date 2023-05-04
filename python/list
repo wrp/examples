@@ -36,4 +36,15 @@ print(f"now, x has {length(x)} elements")
 
 x = (1,2,3,4,5,6)
 # Find the number of elements in the list that match a condition:
+# (a < 4 for a in x) is the generator object that yields
+# [True, True, True, False, False, False]
 print(f'There are {sum(a < 4 for a in x)} elements in x less than 4')
+
+# slicing gives a shallow copy
+a = [1,2,3]
+b = [1, 2, a, 3]
+b[2][0] = 'foo'  # This modifies a
+c = b[2:]
+print(a)
+c[0][0] = 'bar'  # This also modifies a
+print(a)
