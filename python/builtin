@@ -5,22 +5,82 @@ The Python interpreter has a number of functions and types built into
 it that are always available.  They are listed here in alphabetical
 order.
 
-+---------------------------+-------------------------+-------------------------+---------------------------+
-| Built-in Functions                                                                                        |
-|===========================|=========================|=========================|===========================|
-| **A** "abs()" "aiter()"   | **E** "enumerate()"     | **L** "len()" "list()"  | **R** "range()" "repr()"  |
-| "all()" "any()" "anext()" | "eval()" "exec()"       | "locals()"  **M**       | "reversed()" "round()"    |
-| "ascii()"  **B** "bin()"  | **F** "filter()"        | "map()" "max()"         | **S** "set()" "setattr()" |
-| "bool()" "breakpoint()"   | "float()" "format()"    | "memoryview()" "min()"  | "slice()" "sorted()"      |
-| "bytearray()" "bytes()"   | "frozenset()"  **G**    | **N** "next()"  **O**   | "staticmethod()" "str()"  |
-| **C** "callable()"        | "getattr()" "globals()" | "object()" "oct()"      | "sum()" "super()"  **T**  |
-| "chr()" "classmethod()"   | **H** "hasattr()"       | "open()" "ord()"  **P** | "tuple()" "type()"  **V** |
-| "compile()" "complex()"   | "hash()" "help()"       | "pow()" "print()"       | "vars()"  **Z** "zip()"   |
-| **D** "delattr()"         | "hex()"  **I** "id()"   | "property()"            | **_** "__import__()"      |
-| "dict()" "dir()"          | "input()" "int()"       |                         |                           |
-| "divmod()"                | "isinstance()"          |                         |                           |
-|                           | "issubclass()" "iter()" |                         |                           |
-+---------------------------+-------------------------+-------------------------+---------------------------+
++---------------------------
+| Built-in Functions
+============================
+abs(x)                  absolute value
+aiter(async_iterable)   asynchronous iterator
+all(iterable)           return true if all elements of the iterator are true
+anext(async_iterator)   return next item from async_iterator
+any(iterable)           return true if any element of iterable is true
+ascii(object)           like repr, with non-ascii characters escaped
+bin(int)                convert an integer to a binary string
+bool()                  return a boolean value
+breakpoint()            drop into debugger at the call site
+bytearray()             mutable collection of bytes
+bytes()                 immutable version of bytesarray
+callable(x)             return True if x appears callable
+chr(i)                  return a string representing the character with code point i
+classmethod()           convert a method to a class method
+compile()               compile source to an AST object
+complex()               class representing a complex number
+delattr(object, name)   delete the named attribute from the object
+dict()                  dictionary constructor
+dir()                   return list of names in current local scope or an object
+divmod()                return quotient, remainder
+enumerate()
+eval()
+exec()
+filter()
+float()
+format()
+frozenset()
+getattr()
+globals()
+hasattr()
+hash()
+help()
+hex()
+id()
+input()
+int()
+isinstance()
+issubclass()
+iter()
+len()
+list()
+locals()
+map()
+max()
+memoryview()
+min()
+next()
+object()
+oct()
+open()
+ord()
+pow()
+print()
+property()
+range()
+repr()
+reversed()
+round()
+set()
+setattr()
+slice()
+sorted()
+staticmethod()
+str()
+sum()
+super()
+tuple()
+type()
+vars()
+zip()
+__import__()
+
+
 
 abs(x)
 
