@@ -1,5 +1,7 @@
-/* Store words in input in a hash table */
-/* keywords: hashmap, hash, hashtable */
+/*
+ * Store words in input in a hash table, growing as needed
+ * keywords: hashmap, hash, hashtable
+ */
 #define _GNU_SOURCE  /* For re-entrant verisions */
 #include <err.h>
 #include <errno.h>
@@ -28,6 +30,7 @@ push(struct word **root, char *d)
 }
 
 
+/* Create a new table that is twice the size and rehash */
 static void
 grow(struct hsearch_data *table, unsigned long *size, struct word *words)
 {
