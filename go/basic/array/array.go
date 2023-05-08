@@ -17,6 +17,13 @@ func Example() {
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
+	// Iterate over an array
+	fmt.Printf("values in b: ")
+	for _, v := range b {
+		fmt.Printf("%v ", v)
+	}
+	fmt.Println("")
+
 	sb := b[:]
 	whatAmI := func(i any) {
 		switch t := i.(type) {
