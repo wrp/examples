@@ -19,8 +19,8 @@ The above is fairly high level.  Just do:
 
 $ rustc $file.rs  # Compile and create executable $file
 
-Read local docs with
-$ rustup doc
+Read local docs with:
+$ rustup doc  # open a tab in the currently running browser
 
 
 Notes on the language as I go through initially.
