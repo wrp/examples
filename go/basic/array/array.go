@@ -4,6 +4,18 @@ import (
 	"fmt"
 )
 
+// Passing the array as an argument is *not* idiomatic.  Doing this here
+// to demonstrate (or, rather, comment on) the fact that the array is
+// copied in full to pass it to the function.  Don't do this
+func iterate(b [5]int) {
+	// Iterate over an array
+	fmt.Printf("Iterate values in b: ")
+	for _, v := range b {
+		fmt.Printf("%v ", v)
+	}
+	fmt.Println("")
+}
+
 func Example() {
 	var (
 		a [5]int                          /* An array of 5 integers, initialized to 0 */
@@ -17,12 +29,7 @@ func Example() {
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
-	// Iterate over an array
-	fmt.Printf("values in b: ")
-	for _, v := range b {
-		fmt.Printf("%v ", v)
-	}
-	fmt.Println("")
+	iterate(b)
 
 	sb := b[:]
 	whatAmI := func(i any) {
