@@ -16,6 +16,8 @@ func iterate_over_array(b [5]int) {
 	fmt.Println("")
 }
 
+// Instead, pass the slice.  The slice is just a pointer, len, and capacity,
+// so passing it to a function is reasonable
 func iterate_over_slice(b []int) {
 	fmt.Printf("Iterate values in slice: ")
 	for _, v := range b {
