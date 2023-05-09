@@ -7,9 +7,17 @@ import (
 // Passing the array as an argument is *not* idiomatic.  Doing this here
 // to demonstrate (or, rather, comment on) the fact that the array is
 // copied in full to pass it to the function.  Don't do this
-func iterate(b [5]int) {
+func iterate_over_array(b [5]int) {
 	// Iterate over an array
-	fmt.Printf("Iterate values in b: ")
+	fmt.Printf("Iterate values in array: ")
+	for _, v := range b {
+		fmt.Printf("%v ", v)
+	}
+	fmt.Println("")
+}
+
+func iterate_over_slice(b []int) {
+	fmt.Printf("Iterate values in slice: ")
 	for _, v := range b {
 		fmt.Printf("%v ", v)
 	}
@@ -29,7 +37,8 @@ func Example() {
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
 	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
-	iterate(b)
+	iterate_over_array(b)
+	iterate_over_slice(b[:])
 
 	sb := b[:]
 	whatAmI := func(i any) {
