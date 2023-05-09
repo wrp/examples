@@ -2,7 +2,7 @@
 GOMEMLIMIT  sets soft memory consumption limit (https://pkg.go.dev/runtime/debug#FreeOSMemory)
 
 
-The output of 'go help environemt' for version go1.18.4 darwin/amd64
+The output of 'go help environment' for version go1.18.4 darwin/amd64
 
 The go command and the tools it invokes consult environment variables
 for configuration. If an environment variable is unset, the go command
