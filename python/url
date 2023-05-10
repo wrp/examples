@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+
+# To setup a listener on port 8000, execute:
+# python -m http.server
+
+
 import urllib.request
 
 with urllib.request.urlopen('http://localhost:8000') as response:
