@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# keywords: basename dirname
+
+echo /foo/bar/baz |
+perl -mFile::Basename=basename,dirname -nE 'say dirname $_; print basename $_'
+
+
+# note that the newline is still in the string returned by basename
