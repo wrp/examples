@@ -6,18 +6,14 @@
 #include <unistd.h>
 #include "xutil.h"
 
-sig_atomic_t usr1, usr2, hup;
+sig_atomic_t sig;
 
 void
-handle(int sig, siginfo_t *i, void *v)
+handle(int s, siginfo_t *i, void *v)
 {
 	(void)i;
 	(void)v;
-	switch(sig) {
-	case SIGUSR1: usr1=1; break;
-	case SIGUSR2: usr2=1; break;
-	case SIGHUP: hup=1; break;
-	}
+	sig = s;
 	return;
 }
 
@@ -31,13 +27,28 @@ main(void)
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
 	act.sa_flags = SA_RESTART; /* Not relevant here, just demonstrative */
-	if( sigaction( SIGUSR1, &act, NULL ) ) { perror("sigaction"); exit(1); }
-	if( sigaction( SIGUSR2, &act, NULL ) ) { perror("sigaction"); exit(1); }
-	if( sigaction( SIGHUP, &act, NULL ) ) { perror("sigaction"); exit(1); }
+
+	char *msg = "unknown signal";
+	char *names[] = {
+		[SIGUSR1] = "SIGUSR1",
+		[SIGUSR2] = "SIGUSR2",
+		[SIGHUP] = "SIGHUP",
+		[SIGINT] = "SIGINT",
+	};
+	for( size_t i = 0; i < sizeof names / sizeof *names; i += 1 ){
+		if( names[i] == NULL ){
+			continue;
+		}
+		if( sigaction(i, &act, NULL ) ) {
+			perror(names[i]);
+			exit(1);
+		}
+	}
 	pause();
 
-	printf("usr1=%d\n", usr1);
-	printf("usr2=%d\n", usr2);
-	printf("hup=%d\n", hup);
+	if( sig < sizeof names / sizeof *names && names[sig] ){
+		msg = names[sig];
+	}
+	printf("received %s\n", msg);
 	return 0;
 }
