@@ -19,5 +19,21 @@ a = sorted(student_tuples, key=itemgetter(1,2))
 print('sorted by grade, then age:')
 for x in a: print(x)
 
-
 # For named attributes, use operator.attrgetter
+
+
+class foo:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    # define __lt__ to get sort method for free
+    def __lt__(self, other):
+        return self.a < other.a
+
+    def __repr__(self):
+        return f'{self.a}'
+
+a = [foo(1,2), foo(5,6), foo(2,3)]
+a.sort()
+print(a)
