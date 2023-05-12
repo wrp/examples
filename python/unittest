@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import unittest
+
+class foo:
+    def __init__(self, a):
+        self.a = a
+
+    def __repr__(self):
+        return self.a.upper()
+
+
+class TestFoo(unittest.TestCase):
+    def test_repr(self):
+        f = foo('bar')
+        self.assertEqual(str(f), 'BAR')
+        self.assertNotEqual(str(f), 'bar')
+        self.assertTrue(str(f) == 'BAR')
+
+if __name__ == '__main__':
+    unittest.main()
