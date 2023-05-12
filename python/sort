@@ -2,13 +2,12 @@
 
 from operator import itemgetter
 
-# Sort tuple by index 2
+# Sort tuple by 2nd index
 student_tuples = [
     ('john', 'A', 15),
     ('jane', 'B', 12),
     ('dave', 'B', 10),
 ]
-
 # sort by .[2]
 a = sorted(student_tuples, key=lambda student: student[2])
 print('sorted by age:')
