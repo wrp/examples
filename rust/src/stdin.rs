@@ -12,3 +12,22 @@ fn main() -> io::Result<()> {
 
 	Ok(())
 }
+
+
+// Read newline separated integers
+//
+// use std::{
+//     io::{self, Read},
+//     str::FromStr,
+// };
+//
+// fn main() -> io::Result<()> {
+// 	let mut string = String::new();
+// 	io::stdin().read_to_string(&mut string)?;
+// 	let result = string
+// 		.lines()
+// 		.map(i32::from_str)
+// 		.collect::<Result<Vec<_>, _>>();
+// 	println!("{:?}", result);
+// 	Ok(())
+// }
