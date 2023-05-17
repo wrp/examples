@@ -12,7 +12,8 @@ fn main() {
 	//   $ ./args arg1 arg2
 	println!("I got {:?} arguments: {:?}.", args.len() - 1, &args[1..]);
 
-	// Get integer argument from first arg, defaulting to 5
-	let count = args.get(1).unwrap_or(&5.to_string()).parse::<u32>().unwrap_or(5);
-	println!("count = {}", count);
+	// Get integer argument from first 2 args, defaulting to 5
+	let c1 = args.get(1).unwrap_or(&5.to_string()).parse::<u32>().unwrap_or(5);
+	let c2 = match args.get(2) { Some(d) => d.parse::<i32>().unwrap_or(5), None => 5 };
+	println!("count = {}, {}", c1, c2);
 }
