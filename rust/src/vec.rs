@@ -16,5 +16,13 @@ fn main() -> io::Result<()> {
 		*i += 5;
 		println!("{}", i);
 	}
+
+	println!("Print 5 elements (of 4)");
+	# Get default value from vec when out of range
+	for i in 0..5 {
+		let r = match v.get(i){ Some(d) => *d, None => -1 };
+		println!("{:?}", r);
+	}
+
 	Ok(())
 }
