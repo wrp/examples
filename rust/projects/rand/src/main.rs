@@ -23,6 +23,30 @@ struct Book {
 	buy: Vec<Order>
 }
 
+impl Book {
+	fn sell(&mut self, s: &Order) {
+		println!("selling: {:?}", s);
+		let mut v = s.q;
+		while v > 0.0 {
+			let b = &mut self.buy[0];
+			if b.q > v {
+				b.q -= v;
+				v = 0.0;
+			} else {
+				v -= b.q;
+				// TODO: don't use remove.  Store a slice in the struct
+				self.buy.remove(0);
+			}
+		}
+	}
+	fn print(&self) {
+		println!("sells:");
+		for s in &self.sell { println!("{:?}", s); }
+		println!("buys:");
+		for s in &self.buy { println!("{:?}", s); }
+	}
+}
+
 fn main() -> io::Result<()> {
 	let arg: Vec<String> = env::args().collect();
 	let o_count = match arg.get(1) { Some(d) => d.parse::<i32>().unwrap_or(5), None => 5 };
@@ -38,10 +62,9 @@ fn main() -> io::Result<()> {
 	}
 	b.buy.sort_by(|a, b| a.partial_cmp(b).unwrap());
 	b.sell.sort_by(|b, a| a.partial_cmp(b).unwrap());
-	println!("sells:");
-	for s in b.sell { println!("{:?}", s); }
-	println!("buys:");
-	for s in b.buy { println!("{:?}", s); }
+	b.print();
+	b.sell(&Order{p:2.3, q:1.0});
+	b.print();
 
 
 	Ok(())
