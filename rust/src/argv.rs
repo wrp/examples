@@ -13,6 +13,13 @@ fn main() {
 	//   $ ./args arg1 arg2
 	println!("I got {:?} arguments: {:?}.", args.len() - 1, &args[1..]);
 
+	// Even though we called .collect() on the iterator, we can still
+	// iterate.  TODO: need to understand why we can do that
+	for i in args.iter() {
+		    println!("arg {:?}: {}", count, i);
+		    count += 1;
+	}
+	// Indeed, we can iterate twice, and i here goes 3,4,5 (assuming 2 args)
 	for i in args.iter() {
 		    println!("arg {:?}: {}", count, i);
 		    count += 1;
