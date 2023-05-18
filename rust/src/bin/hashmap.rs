@@ -20,4 +20,10 @@ fn main() {
 		None => println!("{} not in map", x),
 		}
 	}
+
+	// Use tuple as key
+	let tuple_map = HashMap::from([((1,2), 5), ((2,3), 6)]);
+	for (key, value) in &tuple_map {
+		println!("{:?} -> {}", key, value);
+	}
 }
