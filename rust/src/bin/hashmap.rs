@@ -26,4 +26,11 @@ fn main() {
 	for (key, value) in &tuple_map {
 		println!("{:?} -> {}", key, value);
 	}
+
+	let mut m = HashMap::new();
+	m.insert("doug", 7);
+	m.insert("alan", 4);
+	for k in m.keys() {
+		println!("{} -> {}", k, m[k]);
+	}
 }
