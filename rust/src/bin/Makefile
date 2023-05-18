@@ -5,13 +5,13 @@
 SOURCES := $(filter-out misc.rs, $(wildcard *.rs))
 EXE := $(patsubst %.rs,%,$(SOURCES))
 
-all: $(EXE) libmisc.rlib
+all: $(EXE) libwrp_examples.rlib
 
-%: %.rs libmisc.rlib
-	rustc -C debug-assertions=no -C opt-level=3 --extern misc=libmisc.rlib $<
+%: %.rs libwrp_examples.rlib
+	rustc -C debug-assertions=no -C opt-level=3 --extern wrp_examples=libwrp_examples.rlib $<
 
-libmisc.rlib: ../lib.rs
-	rustc --crate-type=lib $<
+libwrp_examples.rlib: ../lib.rs
+	rustc --crate-type=lib $< -o $@
 
 clean:
 	rm -f $(EXE) *.rlib
