@@ -12,10 +12,17 @@ struct point {
 	unsigned path;
 };
 
+unsigned
+dist(int x, int y, size_t S)
+{
+	return abs(x - (int)S/2) + abs(y - (int)S/2);
+}
+
 int
 trace_path(struct point *map, unsigned path, size_t S)
 {
 	int x = S/2, y =S/2;
+	unsigned min = UINT_MAX;
 	int val;
 	int c;
 	int dir;
@@ -40,16 +47,17 @@ trace_path(struct point *map, unsigned path, size_t S)
 			if( y < 0 || y > (int)S-1 || x < 0 || x > (int)S-1 ){
 				errx(1, "out of bounds\n");
 			}
+			int p = map[S * y + x].path;
+			if( p && p != path ){
+				int d = dist(x, y, S);
+				if( d > 0 ){
+					min = d < min ? d : min;
+				}
+			}
 			map[S * y + x].path |= path;
 		}
 	} while( (c = getchar()) == ',' );
-	return c == '\n';
-}
-
-int
-dist(int x, int y, size_t S)
-{
-	return abs(x - (int)S/2) + abs(y - (int)S/2);
+	return min;
 }
 
 int
@@ -60,17 +68,9 @@ main(int argc, char *argv[])
 	unsigned path = 0x1;
 	unsigned min = UINT_MAX;
 
-	while( trace_path(map, path, S) ) {
-		path <<= 1;
-	}
-	for( int y = 0; y < (int)S; y += 1 ) {
-		for( int x = 0; x < (int)S; x += 1 ){
-			if( map[S * y + x].path > 2 ){
-				unsigned d = dist(x, y, S);
-				min = d < min ? d : min;
-			}
-		}
-	}
+	trace_path(map, path, S);
+	path <<= 1;
+	min = trace_path(map, path, S);
 	printf("%d\n", min);
 
 	return 0;
