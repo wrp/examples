@@ -3,25 +3,28 @@
 use std::io;
 
 fn main() -> io::Result<()> {
-	let mut v = vec![7,9,3];
+	let mut v = vec![7, 9, 3];
 
 	v.push(5);
-	for i in &v { println!("{}", i); }
-
+	println!("v = {:?}", v);
+	v.pop();
+	println!("after pop, v = {:?}", v);
 	v.sort();
-	println!("Sort and increment by 5");
-	for i in &mut v { *i += 5; println!("{}", i); }
+	println!("after sort, v = {:?}", v);
+	for i in &mut v { *i += 5; }
+	println!("after increment, v = {:?}", v);
 
-	println!("Print 5 elements (of 4)");
 	// Get default value from vec when out of range
-	for i in 0..5 {
+	println!("Print {} elements (of {})", v.len() + 1, v.len());
+	for i in 0..v.len() + 1 {
 		let r = match v.get(i){ Some(d) => *d, None => -1 };
-		println!("{:?}", r);
+		print!("{r} ");
 	}
+	println!("");
 
 	// Remove element from the vector
 	let s = &v[1..];
-	println!{"{:?}", s};
+	println!{"slice with first item removed: {:?}", s};
 
 	Ok(())
 }
