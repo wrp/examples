@@ -1,28 +1,27 @@
 
-use std::error::Error;
-use std::fs::File;
 use std::{
+	error::Error,
 	env,
 	process,
 	io::{BufReader, BufRead},
-	fs::OpenOptions,
+	fs::{File, OpenOptions},
 };
 
 fn open_file(path: &str) -> std::fs::File {
 	OpenOptions::new()
 	.read(true)
 	.open(path)
-	.unwrap_or_else(|err|
-		{
-		eprintln!("unable to open '{}': {}", path, err);
-		process::exit(1);
+	.unwrap_or_else(
+		|err| {
+			eprintln!("{}: {}", path, err);
+			process::exit(1);
 		}
 	)
 }
 
 
 fn last_char_of_first_line(text: BufReader<File>) -> Option<char> {
-    text.lines().next()?.expect("FOO").chars().last()
+	text.lines().next()?.expect("FOO").chars().last()
 }
 
 
