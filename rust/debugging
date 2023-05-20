@@ -1,0 +1,24 @@
+
+$ rust-gdb -tui $executable
+
+The main program in the executable is *not* the main
+rust function.  If you break in main and run, you will
+see "no debug information", etc.  Do a backtrace.  eg
+
+
+Reading symbols from argv...
+(gdb) b main
+Breakpoint 1 at 0xb0f8
+(gdb) run
+Starting program: /home/william/examples/rust/target/debug/argv
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/libthread_db.so.1".
+
+Breakpoint 1, 0x0000aaaaaaaab0f8 in main ()
+(gdb) bt
+#0  0x0000aaaaaaaab0f8 in main ()
+#1  0x0000fffff7de7b80 in ?? () from /usr/lib/libc.so.6
+#2  0x0000fffff7de7c60 in __libc_start_main () from /usr/lib/libc.so.6
+#3  0x0000aaaaaaaa6e30 in _start () at ../sysdeps/aarch64/start.S:81
+(gdb) b _start
+Breakpoint 2 at 0xaaaaaaaa6e00: file ../sysdeps/aarch64/start.S, line 46.
