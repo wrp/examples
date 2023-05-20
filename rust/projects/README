@@ -1,0 +1,6 @@
+This directory contains projects, allowing a demonstration
+of using Cargo.toml to declare dependencies, etc.
+
+To start a new project, use:
+
+cargo new $project
