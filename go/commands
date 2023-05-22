@@ -4,4 +4,9 @@ go list all  # show all packages found in GOPATH trees
 go list std  # show packages from the standard Go library
 go list cmd  # show commands and internal libraries
 go fmt       # not just a formatter; also support rewrite rules
-go doc       # show documentation
+go doc       # show documentation  eg: go doc -src strings.Replace
+
+go test                          # run tests
+go test -cover                   # include coverage statistics
+go test -coverprofile=${outfile}
+go tool cover -html=${outfile}   # open coverage report in browser
