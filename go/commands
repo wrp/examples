@@ -9,4 +9,6 @@ go doc       # show documentation  eg: go doc -src strings.Replace
 go test                          # run tests
 go test -cover                   # include coverage statistics
 go test -coverprofile=${outfile}
+go test -covermode=count -coverprofile=${outfile}  # include line counts
+go tool cover -func=${outfile}   # display coverage report
 go tool cover -html=${outfile}   # open coverage report in browser

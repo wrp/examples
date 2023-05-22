@@ -7,3 +7,6 @@ mkdir $name && cd $name
 go mod init ${module_path} # $module_path typically ends in $name
 # edit source code.  For an executable, create package main
 # To run the code, 'go run .' or 'go build' to create executable
+
+
+debugging: dlv  (delve)
