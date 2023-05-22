@@ -1,0 +1,13 @@
+
+To encrypt a file with a password derived symmetric key:
+
+$ gpg --no-symkey-cache -c ${file} > ${file}.gpg
+
+To decrypt with symmetric key:
+
+$ gpg -d ${file}.gpg
+
+
+Note that gpg caches the passwords unless --no-symkey-cache is used.  Need
+to understand the implications of that; where is the cache?  This seems
+horribly insecure.
