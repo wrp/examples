@@ -1,0 +1,4 @@
+
+On macos, use lldb (see gdb2lldb)
+For go, use 'dlv' (https://github.com/go-delve/delve/tree/master/Documentation)
+For rust, use 'rust-gdb'
