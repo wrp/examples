@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+
+# miscellaneous things found in sys
+
+import sys
+
+print(sys.version_info)        # sys.version_info(major=x, minor=x, micro=x, releaselevel='final', serial=0)
+print(type(sys.version_info))  # type is sys.version_info
