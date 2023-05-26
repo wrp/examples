@@ -4,7 +4,8 @@ pacman -Q $pkg     # Show info (eg version) of $pkg
 
 pacman -S $pkg     # Install $pkg (often want to use -y to refresh and -u to update all dependencies)
 pacman -Ss $re     # Search available packages that match $re (regex, not a glob)
-pacman -Sw $pkg    # Download only; do not install
+pacman -Sw $pkg    # Download only; do not install Download to $(awk '/CacheDir/{print $3}' /etc/pacman.conf)
+                   # ...by default to /var/cache/pacman/pkg/
 
 
 pacman -Ql $pkg    # List files that belong to $pkg
