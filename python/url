@@ -11,7 +11,8 @@ url='http://localhost:8000'
 # Make a simple request and decode as utf-8
 with urllib.request.urlopen(url) as response:
     html = response.read()
-decoded = html.decode('utf-8')
+character_set = response.headers.get_content_charset()  # eg: utf-8
+decoded = html.decode(character_set)
 print(decoded)
 
 # The metadata is available after the request is closed
