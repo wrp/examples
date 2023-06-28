@@ -34,10 +34,14 @@ func Example() {
 	b := [5]int{1, 2, 3}                  /* An initialized array, unset values go to 0 */
 	e := [...]int{1, 2, 3}                /* An initialized array */
 	var d [2][3]int = [2][3]int{{1, 2, 3}, {4, 5, 6}}
-	_, _, _, _ = a, b, c, d
+	_, _, _, _ = a, b, c, d  // Suppress unused variable warnings
 
 	fmt.Printf("%v: lcn=%d cap=%d\n", b, len(b), cap(b))
-	fmt.Printf("%v: lcn=%d cap=%d\n", e, len(e), cap(e))
+	f := append(b[:], 4, 5, 6)
+	fmt.Println("After append")
+	fmt.Printf("b: %v: lcn=%d cap=%d\n", b, len(b), cap(b))
+	fmt.Printf("f: %v: lcn=%d cap=%d\n", f, len(f), cap(f))
+	fmt.Printf("e: %v: lcn=%d cap=%d\n", e, len(e), cap(e))
 
 	iterate_over_array(b)
 	iterate_over_slice(b[:])
