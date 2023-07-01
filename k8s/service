@@ -1,0 +1,6 @@
+
+service types:
+clusterIP:      service only reachable within cluster
+LoadBalancer:   available to outside via cloud provider's load balancer
+node port:      each node opens a specified port
+external name:  service is mapped to a dns name; no proxying
