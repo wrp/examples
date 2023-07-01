@@ -8,5 +8,11 @@ SMI	service mesh interface
 
 k8s/kubernetes: A platform for managing containerized workloads that facilitates declarative config and automation
 
-pod:    smallest deployable unit.  A collection of containers that share a network namespace.
+pod:    A group of containers with shared storage and network resources and a specification for how to run the containers.
 label:  key-value pair defined by the user associated with a pod
+daemon-set: a collection of pods which are assigned to every node of the cluster
+
+workload:          an application running in k8s
+workload resource: an object that manages a workload
+deployment:        a workload resource in which every pod is replaceable
+statefulSet:
