@@ -5,3 +5,8 @@ CRI	container runtime interface
 CSI	container storage interface
 IPAM	ip address management
 SMI	service mesh interface
+
+k8s/kubernetes: A platform for managing containerized workloads that facilitates declarative config and automation
+
+pod:    smallest deployable unit.  A collection of containers that share a network namespace.
+label:  key-value pair defined by the user associated with a pod

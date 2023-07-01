@@ -1,7 +1,3 @@
 
-CRD	custom resource defnition
-CNI	container network interface
-CRI	container runtime interface
-CSI	container storage interface
-IPAM	ip address management
-SMI	service mesh interface
+Obsolete.  At one point, this file was linked to the same file as glossary.
+git breaks hard links, so it seems silly to keep that link in place
