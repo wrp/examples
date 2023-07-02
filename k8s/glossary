@@ -16,3 +16,9 @@ workload:          an application running in k8s
 workload resource: an object that manages a workload
 deployment:        a workload resource in which every pod is replaceable
 statefulSet:
+
+node: A worker machine in Kubernetes, part of a cluster.
+cluster: A set of Nodes that run containerized applications managed by Kubernetes.
+edge router: A router that enforces the firewall policy for your cluster. This could be a gateway managed by a cloud provider or a physical piece of hardware.
+cluster network: A set of links, logical or physical, that facilitate communication within a cluster according to the Kubernetes networking model.
+service: A Kubernetes Service that identifies a set of Pods using label selectors. Unless mentioned otherwise, Services are assumed to have virtual IPs only routable within the cluster network.
