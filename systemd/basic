@@ -2,3 +2,6 @@ See sample.service for a sample service file
 
 # To see if a service is running:
 $ systemctl is-active ${service?}
+
+# To list all services:
+$ systemctl list-units --type=service
