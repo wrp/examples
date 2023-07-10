@@ -1,29 +1,4 @@
-# Drop this file in /etc/systemd/system with a name $name.service,
-# and that's all there is to it.  Then 'sudo systemctl start $name'
-# will start the service
+See sample.service for a sample service file
 
-# See also:
-#     systemd.service
-#     systemd.directives
-#     systemd.exec
-#     systemd.unit
-#     systemd-system.conf
-
-[Unit]
-Description=systemd demo service
-After=network.target
-
-[Service]
-Type=simple
-Restart=always  # default is no
-RestartSec=1    # Time to sleep before restarting Defaults to 100ms
-User=me
-ExecStart=/path/to/executable with arguments
-
-[Install]
-WantedBy=multi-user.target
-# ----EOF----
-
-
-# To see if the service is running:
+# To see if a service is running:
 $ systemctl is-active ${service?}
