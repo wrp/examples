@@ -8,11 +8,12 @@ I think this is well-intentioned, but misguided.
 Metadata should not be in the commit message subject,
 but belongs in a commit trailer.  eg:
 
-$ git commit -m 'Message' --trailer meta:fix
+
+$ git commit -m 'Message' --trailer ${token-meta}:${value-fix}
 
 Then, to print the log:
 
-$ git log --format=format:'%h [%>(10)%(trailers:key=type,valueonly)%-C()] %an %s %D' -n 1
+$ git log --format=format:"%h [%>(10)%(trailers:key=${token-meta},valueonly)%-C()] %an %s %D" -n 1
 
 which produces:
 
