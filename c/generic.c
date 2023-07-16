@@ -28,6 +28,7 @@ int fooc(char *x) { return printf("char * %s\n", x); }
 	} \
 }while(0)
 
+#define is_compatible(x, T) _Generic((x), T:1, default: 0)
 
 int
 main(void)
@@ -42,6 +43,16 @@ main(void)
 	print_type(z);
 	char *a;
 	print_type(a);
+
+	printf("Z is %scompatible with unsigned\n",
+		is_compatible(z, unsigned) ? "" : "not "
+	);
+	printf("Z is %scompatible with short\n",
+		is_compatible(z, short) ? "" : "not "
+	);
+	printf("Z is %scompatible with int\n",
+		is_compatible(z, int) ? "" : "not "
+	);
 
 	return z == 0;
 }
