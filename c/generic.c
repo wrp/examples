@@ -12,6 +12,23 @@ int fooc(char *x) { return printf("char * %s\n", x); }
 	float: foof          \
 )(X)
 
+
+#define print_type(s) do { \
+	printf(#s " at %p: ", &s); \
+	if( __builtin_types_compatible_p(__typeof__(s), int) ){ \
+		puts("int"); \
+	} else if( __builtin_types_compatible_p(__typeof__(s), long) ){ \
+		puts("long"); \
+	} else if( __builtin_types_compatible_p(__typeof__(s), char *) ){ \
+		puts("char *"); \
+	} else if( __builtin_types_compatible_p(__typeof__(s), float) ){ \
+		puts("float"); \
+	} else { \
+		puts("unknown type"); \
+	} \
+}while(0)
+
+
 int
 main(void)
 {
@@ -21,5 +38,10 @@ main(void)
 	z = foo((float)2.0);
 	z = foo((long double)2.0);
 	z = foo(2);
+
+	print_type(z);
+	char *a;
+	print_type(a);
+
 	return z == 0;
 }
