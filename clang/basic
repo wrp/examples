@@ -1,0 +1,4 @@
+
+
+
+clang-format --style='{AlignAfterOpenBracket: BlockIndent}'
