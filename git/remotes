@@ -24,7 +24,7 @@ git push ${remote?} ${branch?}       # creates remote with same name
 git push --set-upstream ${remote?} ${branch?}   # --set-upstream == -u
 
 # Push local branch to differently named remote branch (possibly creating remote_branch)
-git push ${remote?} ${branch?}:${remote_branch?}
+git push -u ${remote-origin} ${branch-HEAD}:${remote_branch?}
 
 # Delete a tag from a remote
 git push --delete ${remote?} ${tag?}
