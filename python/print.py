@@ -3,6 +3,7 @@
 import sys
 
 print("stderr", file=sys.stderr)
+print("noeol", end='')
 print("stdout")
 
 h = "hello"
