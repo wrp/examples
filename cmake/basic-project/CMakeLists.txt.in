@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 3.26)
-project(hello-world VERSION 1.2.3.4)
+project(hello-world VERSION @PKG_VERSION@)
 add_executable(hello src/hello.c)
 include_directories(inc)
 configure_file(
