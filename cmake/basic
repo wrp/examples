@@ -1,0 +1,6 @@
+
+To change installation location:
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$DESTDIR "$@"
+
+To use ninja for the generator
+cmake "${path?}" -GNinja
