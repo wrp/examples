@@ -24,3 +24,7 @@ __DATA__
 
 # Read entire input into a single array and sort it numerically
 printf '1\n10\n15\n2\n' | perl -0777 -aE 'say foreach sort { $a <=> $b } @F'
+
+# Generate the first few fibonacci numbers
+perl -E 'my @b; push @b, 1; push @b, 1; foreach $n (1..50){ push @b, $b[@b-1] + $b[@b-2]};
+    say join("\n", @b)' | nl -ba
