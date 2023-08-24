@@ -16,5 +16,9 @@ int main(int argc, char **argv)
     s << "bar" << 3.85 << "blah" << 2;
     // std::string ss = s.str();
     foo(&s, 1, 3);
+
+    s.str("");
+    s << "blah";
+    foo(&s, 1, 3);
 	return 0;
 }
