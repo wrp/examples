@@ -7,7 +7,7 @@
 
 
 
-void foo(const auto& s, int k, int j) {
+void foo(const std::stringstream* s, int k, int j) {
     std::cout << s->str() << ": " << k << ": " << j << '\n';
 }
 int main(int argc, char **argv)
