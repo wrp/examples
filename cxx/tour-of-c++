@@ -1,0 +1,6 @@
+Highlights on first read of _A_Tour_of_C++_, 3rd edition (C++20)
+
+New keyword "import"
+Bracket initilializers:  T x = {1} or T x{1}
+range-for-statement:   for( auto& x : v ) { ... }
+modules
