@@ -1,0 +1,4 @@
+
+To see merge conflicts:
+
+git checkout --conflict diff3 $path
