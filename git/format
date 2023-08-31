@@ -11,12 +11,12 @@ Summary of text from Documentation/pretty-formats.txt
 '%Creset':: reset color
 '%C(...)':: color specification
 '%m':: left (`<`), right (`>`) or boundary (`-`) mark
-'%w([<w>[,<i1>[,<i2>]]])':: switch line wrapping, like the -w option of
-'%<( <N> [,trunc|ltrunc|mtrunc])':: specify width of next placeholder
-'%<|( <M> )':: make the next placeholder take at least until Mth display column
-'%>( <N> )', '%>|( <M> )':: similar to '%<( <N> )', '%<|( <M> )' respectively, but padding spaces on the left
-'%>>( <N> )', '%>>|( <M> )':: similar to '%>( <N> )', '%>|( <M> )'
-'%><( <N> )', '%><|( <M> )':: similar to '%<( <N> )', '%<|( <M> )' pad both sides
+'%w([<w>[,<i1>[,<i2>]]])'         :: switch line wrapping, like the -w option of
+'%<( <N> [,trunc|ltrunc|mtrunc])' :: specify width of next placeholder
+'%<|( <M> )'                      :: make the next placeholder take at least until Mth display column
+'%>( <N> )', '%>|( <M> )'         :: similar to '%<( <N> )', '%<|( <M> )' respectively, but padding spaces on the left
+'%>>( <N> )', '%>>|( <M> )'       :: similar to '%>( <N> )', '%>|( <M> )'
+'%><( <N> )', '%><|( <M> )'       :: similar to '%<( <N> )', '%<|( <M> )' pad both sides
 
 - Placeholders that expand to information extracted from the commit:
 '%H':: commit hash
