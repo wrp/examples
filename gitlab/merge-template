@@ -29,4 +29,8 @@ in the first multiline commit message.  Another option is to use
 %{first_commit}, but I like that %{first_multiline_commit} defaults
 to be the same as %{title}, and will be more useful for users
 who are not disciplined about their commit messages but rely
-on the web UI.
+on the web UI.  (note that getting all the trailers may be
+a bad thing.  It does not really make sense to grab signed-off-by
+for the merge commit, since those people did not sign off on the
+merge commit.  See discussion at
+https://gitlab.com/gitlab-org/gitlab/-/issues/385092
