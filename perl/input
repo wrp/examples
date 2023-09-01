@@ -1,0 +1,38 @@
+input record separator (RS) is $/
+
+from perldoc:
+
+    $INPUT_RECORD_SEPARATOR
+    $RS
+    $/      The input record separator, newline by default. This influences Perl's idea of what a "line" is. Works like awk's RS variable, including treating empty lines as a terminator if set to the null string
+            (an empty line cannot contain any spaces or tabs). You may set it to a multi-character string to match a multi-character terminator, or to "undef" to read through the end of file. Setting it to
+            "\n\n" means something slightly different than setting to "", if the file contains consecutive empty lines. Setting to "" will treat two or more consecutive empty lines as a single empty line.
+            Setting to "\n\n" will blindly assume that the next input character belongs to the next paragraph, even if it's a newline.
+
+                local $/;           # enable "slurp" mode
+                local $_ = <FH>;    # whole file now here
+                s/\n[ \t]+/ /g;
+
+            Remember: the value of $/ is a string, not a regex. awk has to be better for something. :-)
+
+            Setting $/ to a reference to an integer, scalar containing an integer, or scalar that's convertible to an integer will attempt to read records instead of lines, with the maximum record size being the
+            referenced integer number of characters. So this:
+
+                local $/ = \32768; # or \"32768", or \$var_containing_32768
+                open my $fh, "<", $myfile or die $!;
+                local $_ = <$fh>;
+
+            will read a record of no more than 32768 characters from $fh. If you're not reading from a record-oriented file (or your OS doesn't have record-oriented files), then you'll likely get a full chunk of
+            data with every read. If a record is larger than the record size you've set, you'll get the record back in pieces. Trying to set the record size to zero or less is deprecated and will cause $/ to
+            have the value of "undef", which will cause reading in the (rest of the) whole file.
+
+            As of 5.19.9 setting $/ to any other form of reference will throw a fatal exception. This is in preparation for supporting new ways to set $/ in the future.
+
+            On VMS only, record reads bypass PerlIO layers and any associated buffering, so you must not mix record and non-record reads on the same filehandle. Record mode mixes with line mode only when the
+            same buffering layer is in use for both modes.
+
+            You cannot call "input_record_separator()" on a handle, only as a static method. See IO::Handle.
+
+            See also "Newlines" in perlport. Also see "$.".
+
+            Mnemonic: / delimits line boundaries when quoting poetry.
