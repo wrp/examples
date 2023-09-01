@@ -5,19 +5,21 @@
 #include <deque>
 
 using namespace std;
-void show_deque(const std::deque<int> & x, const string & msg);
+
+template <typename T>
+void show_container(const T & x, const string & msg);
 
 
 int main()
 {
 	std::deque<int> x { 1, 2, 3 };
-	show_deque(x, "Before removal");
+	show_container(x, "Before removal");
 
 	x.erase(std::remove(x.begin(), x.end(), 2));
 
-	show_deque(x, "After  removal");
+	show_container(x, "After  removal");
 	x.push_front(6); x.push_back(6); x.push_front(8);
-	show_deque(x, "Before remove_if");
+	show_container(x, "Before remove_if");
 
 	x.erase(
 		std::remove_if(
@@ -30,12 +32,13 @@ int main()
 		)
 	);
 
-	show_deque(x, "After remove_if");
+	show_container(x, "After remove_if");
 }
 
 
+template <typename T>
 void
-show_deque(const std::deque<int> & x, const string & msg)
+show_container(const T & x, const string & msg)
 {
 	cout << msg << ": ";
 	for( auto a: x ){
