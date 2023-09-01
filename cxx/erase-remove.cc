@@ -7,13 +7,6 @@
 using namespace std;
 void show_deque(const std::deque<int> & x, const string & msg);
 
-bool remove_and_log_6(int i) {
-	if( i == 6 ){
-		cout << "removing item\n";
-		return false;
-	}
-	return true;
-}
 
 int main()
 {
@@ -26,7 +19,16 @@ int main()
 	x.push_front(6); x.push_back(6); x.push_front(8);
 	show_deque(x, "Before remove_if");
 
-	x.erase(std::remove_if(x.begin(), x.end(), remove_and_log_6));
+	x.erase(
+		std::remove_if(
+			x.begin(),
+			x.end(),
+			[](auto i) {
+				if( i == 6 ){ cout << "removing item\n"; }
+				return i != 6;
+			}
+		)
+	);
 
 	show_deque(x, "After remove_if");
 }
