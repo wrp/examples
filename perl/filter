@@ -10,4 +10,7 @@ if ! test "$n" -gt 0; then
     exit 1
 fi
 
+# $/ is perl's version of RS, the input record separator.
+# See entry in perlvar.  Setting $/ to a reference to the
+# integer n makes <> read n bytes at a time.
 perl -e '$/=\1; while(<>){print if $p >= '$n'; $p += m/\'$c'/}'
