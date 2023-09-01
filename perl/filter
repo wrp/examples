@@ -1,0 +1,13 @@
+#!/bin/sh
+# Delete everything in a stream until the nth occurrence
+# of a character
+
+c=${1-:}
+n=${2-1}
+
+if ! test "$n" -gt 0; then
+    echo '2nd argument must be an integer > 0' >&2
+    exit 1
+fi
+
+perl -e '$/=\1; while(<>){print if $p >= '$n'; $p += m/\'$c'/}'
