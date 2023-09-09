@@ -21,6 +21,7 @@ Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 Don't use logs as metrics.
 Version everything!  Do not hardcode version numbers in a file; derive them from a VCS.
 Rigidly enforce commit message formats from the first commit.
+Use git trailers to embed metadata in commits; do not store them in the first line.
 Never deploy the tip of a branch; deploy a specific commit.
 Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 Don't use the implementation as a basis for the name of a service.
