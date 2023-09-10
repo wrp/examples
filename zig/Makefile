@@ -1,0 +1,3 @@
+
+%: %.zig
+	zig build-exe $<
