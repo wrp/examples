@@ -11,11 +11,15 @@ A simple list of simple best practices.
 	uid or human readable name of the process owner.  Maybe a timestamp.  But no suggestions, and certainly
 	not a usage statement.
 	Examples of line noise:
+    ~~~~
 	$ for i in *.c; do git ls-files --error-unmatch "$i" > /dev/null 2>&1 || echo "$i"; done
+    ~~~~
 	You should not have to discard stderr here, or stdout.  `git ls-files`
 	should output nothing, or just the name.  Instead it writes a slew of messages like:
+    ~~~~
 		error: pathspec 'foo.c' did not match any file(s) known to git
 		Did you forget to 'git add'?
+    ~~~~
 - A usage statement is not an error message.  Usage spew is a real problem; don't contribute.
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
