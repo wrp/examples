@@ -37,7 +37,5 @@ int main()
 	unsigned k = static_cast<unsigned>(f);
 	cout << "Cast " << f << " to unsigned: " << k << endl;
 
-	auto g = outer::foo{5u};
-	cout << g << endl;
 	return 0;
 }
