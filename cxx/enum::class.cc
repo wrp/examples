@@ -5,21 +5,34 @@
 
 using namespace std;
 
-enum class foo {
-    bar,
-    qux,
+class outer {
+public:
+	enum class foo {
+		bar = 5,
+		qux,
+	};
 };
 
-std::ostream& operator << (std::ostream& os, const foo& obj)
-{
-    os << static_cast<std::underlying_type<foo>::type>(obj);
-    os << (obj == foo::bar ? "(bar)" : "(qux)");
-    return os;
-}
+	std::ostream& operator << (std::ostream& os, const outer::foo& obj)
+	{
+		os << static_cast<std::underlying_type<outer::foo>::type>(obj);
+		string v{};
+		switch(obj){
+		case outer::foo::bar: v = "(bar)"; break;
+		case outer::foo::qux: v = "(qux)"; break;
+		default: v = "(??\?)"; break;
+		}
+		os << v;
+		return os;
+	};
 
 int main()
 {
-    auto f = foo::qux;
-    cout << f << '\n';
+	auto f = outer::foo::qux;
+	cout << f << '\n';
+	for( int i = 0; i < 10; i += 1 ) {
+		auto g = static_cast<outer::foo>(i);
+		cout << i << ": " << g << '\n';
+	}
 	return 0;
 }
