@@ -11,13 +11,15 @@ int main(){
 	/* Capture all varaibles by reference */
 	auto f = [&](){ cout << "f: " << i << ", "; };
 
-	/* Capture all variables by value */
-	auto g = [=](){ cout << "g: " << i << ", "; };
+	/* Capture all variables by value, invoke and assign the returned value */
+	auto g = [=](){ return i; }();
 
 	/* Capture no variables */
 	auto h = [](int j) { cout << "h: " << j << '\n'; };
 
 	for( i = 0; i < 5; i += 1 ){
-		f(); g(); h(i);
+		f();
+		cout << "g: " << g << ", ";
+		h(i);
 	}
 }
