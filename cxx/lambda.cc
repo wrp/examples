@@ -1,25 +1,28 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
 int main(){
 
 	int i = 5;
+	auto show = [](int i, string n) { cout << n << ": " << i << "  "; };
 
-	/* Capture all varaibles by reference */
-	auto f = [&](){ cout << "f: " << i << ", "; };
+	/* Capture all variables by reference */
+	auto f = [&](){ show(i++, "f"); };
 
-	/* Capture all variables by value, invoke and assign the returned value */
-	auto g = [=](){ return i; }();
+	/* Capture all variables by value */
+	auto g = [=]() mutable { show(i++, "g"); };
 
 	/* Capture no variables */
-	auto h = [](int j) { cout << "h: " << j << '\n'; };
+	auto h = [show](int i) { show(i++, "h"); };
 
-	for( i = 0; i < 5; i += 1 ){
+	for( ; i < 10; i += 1 ){
 		f();
-		cout << "g: " << g << ", ";
+		g();
 		h(i);
+		cout << '\n';
 	}
 }
