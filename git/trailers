@@ -18,3 +18,11 @@ $ git log --format=format:"%h [%>(10)%(trailers:key=${token-meta},valueonly)%-C(
 which produces:
 
 c7bf28e [       fix] Author Redacted Message
+
+
+
+
+# Show all trailers available in the entire history:
+git rev-list HEAD | while read h ; do
+    git show -s --format=%B "$h" | git interpret-trailers --only-trailers
+done
