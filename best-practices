@@ -12,6 +12,8 @@ A list of simple best practices.
 - Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 - Don't use the implementation as a basis for the name of a service. (2)
 - Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339) (3)
+- Keep your code narrow.  Restricting line widths to a reasonable value (eg, 78) allows more views.
+
 
 git specific best practices:
 - Put meta data for commits in a git trailer.
