@@ -1,0 +1,6 @@
+
+
+Use ! to invert a spec.  Eg, to find string "foo" in all
+files except those with a .txt suffix:
+
+grep foo ':!*.txt'
