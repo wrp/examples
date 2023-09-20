@@ -13,6 +13,7 @@ A list of simple best practices.
 - Don't use the implementation as a basis for the name of a service. (2)
 - Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339) (3)
 - Keep your code narrow.  Restricting line widths to a reasonable value (eg, 78) allows more views.
+- Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
 
 
 git specific best practices:
