@@ -1,3 +1,8 @@
+To see all key-bindings:
+
+list-keys
+
+You can get list-keys -N output (less detail) with <prefix>?
 
 When the shell stops responding, you've probably hit ctrl-S. Recover with ctrl-Q
 
