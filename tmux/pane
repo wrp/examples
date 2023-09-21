@@ -1,3 +1,8 @@
+Move to a pane in the current window:
+	C-q   # print index on each pane
+	C-o   # go to next pane
+	C-C-o # rotate panes (focus changes)
+
 
 https://superuser.com/questions/1105090/move-a-tmux-pane-to-another-session
 
