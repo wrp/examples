@@ -1,13 +1,12 @@
 
-A list of simple best practices.
+# A list of simple best practices.
 
 - Fail loudly (but tersely), succeed quietly. (1)
-- A usage statement is not an error message.  Usage spew is a real problem; don't contribute.
+- Do not write a usage statement in response to an error.  Write only an error message.
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 - Don't use logs as metrics.
 - Version everything, but do not hardcode version numbers in a file; derive them from a VCS.
-- Rigidly enforce commit message formats from the first commit.
 - Never deploy the tip of a branch; deploy a specific commit.
 - Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 - Don't use the implementation as a basis for the name of a service. (2)
@@ -17,12 +16,17 @@ A list of simple best practices.
 - Configuration files are not documentation. (5)
 
 
-git specific best practices:
+## vcs best practices:
+- Rigidly enforce commit message formats from the first commit.
+
+
+## git specific best practices:
 - Put meta data for commits in a git trailer.
 - Put only project specific items in .gitignore.  (4)
 
-Slogans:
+## Slogans:
 - Plan for failure, automate, test extensively.
+
 
 Do not bend your workflow to satsify your tools; fix your tools to fit
 your workflow.  For example, if someone tells you "Even though the syntax
@@ -30,7 +34,7 @@ does not require it, we leave double quotes here because some IDEs flags
 it as a syntax error", tell them to stop using broken IDEs.
 
 
-notes:
+### notes:
 (1)
 	When an error occurs, a process should write a simple, concise, accurate error
 	message to stderr and terminate.  Error messages should *not* offer suggestions.
@@ -74,4 +78,5 @@ notes:
 	documentation.  If you want to document why your site has that item set to a particular
 	value, it is (maybe) appropriate to put a comment in the config file.  A 1000 line config
 	file in which 990 of the lines are commentary is much more difficult to read than a simple
-	10 line config.
+	10 line config, and you certainly don't need all that documentation repeated on every
+	production replica.
