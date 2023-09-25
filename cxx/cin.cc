@@ -24,7 +24,7 @@ int main()
 	cout << "cin.bad " << cin.bad() << endl;
 	cout << "cin.good" << cin.good() << endl;
 	cout << "cin.eof " << cin.eof() << endl;
-	cout << "cin.fail " << cin.eof() << endl;
+	cout << "cin.fail " << cin.fail() << endl;
 	if( cin.rdstate() ){
 		cout << "cin in state: " << cin.rdstate() << endl;
 		cin.clear();
