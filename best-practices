@@ -8,6 +8,7 @@
 - Don't use logs as metrics.
 - Version everything, but do not hardcode version numbers in a file; derive them from a VCS.
 - Never deploy the tip of a branch; deploy a specific commit.
+- Design for the interface, not the implementation
 - Don't use "cool" names for projects. Call your auth service "auth-service", not "jezebel"
 - Don't use the implementation as a basis for the name of a service. (2)
 - Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339) (3)
