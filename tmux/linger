@@ -1,0 +1,5 @@
+
+To make a session survive logging out:
+
+loginctl enable-linger
+systemd-run --scope --user tmux
