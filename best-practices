@@ -1,7 +1,7 @@
 
 # A list of simple best practices.
 
-- Fail loudly (but tersely), succeed quietly. (1)
+- Fail loudly (but tersely), succeed quietly. [^errors]
 - Do not write a usage statement in response to an error.  Write only an error message.
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
@@ -37,7 +37,7 @@ it as a syntax error", tell them to stop using broken IDEs.
 
 
 ### notes:
-(1)
+[^errors]
 	When an error occurs, a process should write a simple, concise, accurate error
 	message to stderr and terminate.  Error messages should *not* offer suggestions.
 	eg: "The connection to the server localhost:8080 was refused - did you specify the right host or port?"
