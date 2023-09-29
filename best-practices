@@ -19,6 +19,7 @@
 
 ## vcs best practices:
 - Rigidly enforce commit message formats from the first commit.
+- History matters.  Churn matters.  Changes must be small and obvious.  This impacts style. (7)
 
 
 ## git specific best practices:
@@ -96,3 +97,38 @@ it as a syntax error", tell them to stop using broken IDEs.
 	to turn my device sideways and go into landscape mode, but 80 has historical precedence.
 	But excessive indendation is a sign of a lack of decomposition, so just keep your line widths
 	below 80 (allowing for 8 space indentation).
+(7)
+	Changes in code need to be contained.  Given the following two diffs, consider how long
+	it takes to understand fully what each does:
+
+	Compare this patch:
+	-        auto foo = this_function_has_a_long_name(a_long_named_arugment,
+	-                                                 another_long_argument,
+	-                                                 a_third_argument_with_a_longish_name,
+	-                                                 yet_another_absurdly_long_name,
+	-                                                 your_dog_is_named_barry,
+	-                                                 most_important_argument);
+	+        auto foo = new_name(a_long_named_arugment,
+	+                            another_long_argument,
+	+                            a_third_argument_with_a_longish_name,
+	+                            yet_another_absurdly_long_name,
+	+                            your_dog_is_named_harry,
+	+                            most_important_argument);
+
+	To this patch
+	-       auto foo = this_function_has_a_long_name(
+	+       auto foo = new_name(
+			a_long_named_arugment,
+			another_long_argument,
+			a_third_argument_with_a_longish_name,
+			yet_another_absurdly_long_name,
+	-               your_dog_is_named_barry,
+	+               your_dog_is_named_harry,
+			most_important_argument
+
+
+	To the casual reader, the first patch obscures the fact that one of the variables being passed to the
+	function has changed.  Either of these patches is a terrible thing to commit, as there are two distinct
+	changes happening here.  One commit should change the name of the function, a second commit should
+	change the variable that is being passed.  In a code review, the first style makes it hard for a
+	human to see that 2 distinct changes are happening.
