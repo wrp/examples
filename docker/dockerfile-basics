@@ -1,0 +1,15 @@
+# An ARG may be set at build time with --build-arg name=value
+FROM debian
+ARG var1
+ARG var2=default-value
+# The scope of an ARG is from the line it is defined until the
+# end of the build stage in which it was defined.
+
+RUN echo $var1 from dockerfile > /tmp/built-file
+RUN echo $var2 from dockerfile>> /tmp/built-file
+ENV var2=$var2
+
+# CMD seems to be in a new build stage, or variables are not
+# expanded by CMD as the '$var1' and '$var2' below
+# are passed literally to the command and not expanded
+CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
