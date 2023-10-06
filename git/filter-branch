@@ -15,3 +15,15 @@ else
 		mv "$tmp" "$x"
 	done
 fi
+
+
+# Straight from the manpage:
+
+git filter-branch --env-filter '
+   if test "$GIT_AUTHOR_EMAIL" = "root@localhost"; then
+	   GIT_AUTHOR_EMAIL=john@example.com
+   fi
+   if test "$GIT_COMMITTER_EMAIL" = "root@localhost"; then
+	   GIT_COMMITTER_EMAIL=john@example.com
+   fi
+' -- --all
