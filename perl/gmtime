@@ -1,0 +1,10 @@
+#!/bin/sh
+
+{
+perl -E 'print gmtime . "\n"'
+perl -E 'say scalar(gmtime)'
+} | sed 's/^/gmtime: /'
+{
+perl -E 'print localtime . "\n"'
+perl -E 'say scalar(localtime)'
+} | sed 's/^/local : /'
