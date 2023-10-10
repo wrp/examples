@@ -35,4 +35,8 @@ run:
 clean:
 	docker system prune -a -f
 
+MOUNTS ?= -v $$(pwd):/pwd
+basic:
+	docker run $(MOUNTS) --user $$(id -u):$$(id -g) -it debian
+
 .PHONY: all build run clean
