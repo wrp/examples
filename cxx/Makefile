@@ -7,3 +7,6 @@ all:
 		-v $$(pwd):/src \
 		--user $$(id -u):$$(id -g) -it gcc
 endif
+
+clean:
+	git clean -xdff
