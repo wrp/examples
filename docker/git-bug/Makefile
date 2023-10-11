@@ -1,0 +1,23 @@
+
+image ?= git-bug
+
+build:
+	docker build --build-arg user=$(USER) \
+		--build-arg uid=$$(id -u) -t $(image) .
+
+run:
+	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
+		echo "Attaching to docker containter $$id"; \
+		docker exec -it -u $(USER) "$$id" bash; \
+	else \
+		echo 'Creating new docker container'; \
+		docker run -it \
+		--user $(USER) \
+		--privileged \
+		-v $(HOME):/$(USER) \
+		--label $(USER)-$(image) \
+		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
+	fi
+	# EXITED the $(image) docker container
+
+.PHONY: all build run clean
