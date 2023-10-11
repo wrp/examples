@@ -13,3 +13,5 @@ ENV var2=$var2
 # expanded by CMD as the '$var1' and '$var2' below
 # are passed literally to the command and not expanded
 CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
+
+# line continuation character is \
