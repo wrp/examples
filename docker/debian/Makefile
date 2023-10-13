@@ -35,6 +35,9 @@ run:
 clean:
 	docker system prune -a -f
 
+wrp:
+	docker build -f Dockerfile-wrp --build-arg user=$(USER) -t debian-wrp .
+
 MOUNTS ?= -v $$(pwd):/pwd
 basic:
 	docker run $(MOUNTS) --user $$(id -u):$$(id -g) -it debian
