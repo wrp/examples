@@ -30,6 +30,7 @@ RUN printf "root ALL=(ALL) ALL\n" > /etc/sudoers
 RUN printf "$user ALL=(ALL) NOPASSWD:ALL\n" >> /etc/sudoers
 copy bashrc ${dest_home}/.bashrc
 copy gitconfig ${dest_home}/.gitconfig
+COPY vimrc ${dest_home}/.vimrc
 
 RUN echo '[user]' > ${dest_home}/.gitconfig-user
 RUN echo "name = ${USER}" >> ${dest_home}/.gitconfig-user
