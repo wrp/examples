@@ -20,4 +20,7 @@ RUN if test -f ${target_dir}/*.bundle; then \
 	else \
 		git clone ${git_url}; \
 	fi
+
+RUN go build -ldflags "-w -s -X 'github.com/opentofu/opentofu/version.dev=no'" -o bin/ ./cmd/tofu
+
 CMD sudo DOCKER=debian -u "$USER" bash
