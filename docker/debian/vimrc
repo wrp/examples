@@ -1,0 +1,18 @@
+
+noremap v V
+noremap V v
+noremap ; :
+noremap , ;
+syntax on
+set nowrapscan
+let loaded_matchparen = 1
+set path+=~
+set t_ti= t_te=  " Disable clear screen on exit
+set novisualbell
+set noerrorbells
+set wildmenu
+set wildmode=longest,list,full
+highlight Comment ctermfg=darkcyan
+highlight String ctermfg=darkcyan
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
