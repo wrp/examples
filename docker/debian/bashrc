@@ -14,7 +14,6 @@ PS1="\[$(tput rev)"'$( r=$(( $? != 0 )); tput setaf $((2 - r));
 	tput setab $(( r * 7 ));
 		)\]\D{%T}'"\[$( tput setaf 2)$(tput sgr0)\]"' $$ \h\$ '
 
-PATH=$HOME/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 c() { clear; }
 g() { git "$@"; }
 vi() { vim "$@"; }

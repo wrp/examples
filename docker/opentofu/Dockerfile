@@ -10,6 +10,7 @@ RUN mkdir ${target_dir}
 COPY Dockerfile opentofu*.bundle ${target_dir}
 RUN rm ${target_dir}/Dockerfile
 RUN chown -R $user ${target_dir}
+RUN echo 'PATH=$PATH:/opentofu/bin' > /etc/profile.d/open-tofu-path.sh
 
 WORKDIR ${target_dir}
 USER ${user}
