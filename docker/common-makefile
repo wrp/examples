@@ -1,6 +1,6 @@
 
 
-build:
+image:
 	docker build --build-arg user=$(USER) \
 		--build-arg uid=$$(id -u) -t $(image) .
 
