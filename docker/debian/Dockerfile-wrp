@@ -19,6 +19,7 @@ RUN aptitude install -y ncurses-doc
 RUN aptitude install -y golang
 RUN aptitude install -y manpages
 RUN aptitude install -y man-db
+RUN aptitude install -y cmake
 
 ARG user=docker_user
 ARG uid=1000
