@@ -35,6 +35,7 @@ RUN sudo aptitude -y install liblld-17
 RUN sudo aptitude -y install liblldb-17
 RUN sudo aptitude -y install liblld-17-dev
 RUN sudo aptitude -y install liblldb-17-dev
-
+RUN cmake ..
+RUN make
 
 CMD sudo DOCKER=debian -u "$USER" bash
