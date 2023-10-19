@@ -1,11 +1,12 @@
 
 base ?= debian
+uid ?= $$(id -u)
 
 image:
 	docker build \
 		--build-arg base=$(base) \
 		--build-arg user=$(USER) \
-		--build-arg uid=$$(id -u) \
+		--build-arg uid=$(uid) \
 		-t $(image) .
 
 run:
