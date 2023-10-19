@@ -1,0 +1,109 @@
+
+[alias]
+	ap = add --patch
+	b = branch -vv
+	caa = !bash -c 'git commit --amend -a \"$@\" -m \"$(git log \
+		--format=format:%B -n 1)\" --cleanup=strip' _
+	caan = caa -n
+	cd = commit -m Documentation
+	cda = cd -a
+	cf = commit -m 'Trivial refactor'
+	cfa = cf -a
+	ci = commit
+	ciam = commit -a -m
+	co = checkout
+	cp = cherry-pick
+	cpx = cp -x
+	cr = commit -m 'Trivial reformat'
+	cra = cr -a
+	cs = commit -m 'Sanity Check'
+	csa = cs -a
+	cw = commit -m 'Whitespace'
+	cwa = cw -a
+	d = diff
+	dc = diff --cached
+	dn = diff --numstat
+	dno = diff --name-only
+	dw = diff --word-diff
+	dwa = diff --word-diff-regex=.
+	exec = "!exec "  # execute a shell command in the top level
+	l = l1
+	# Set t to a comma separated list of trailers to be
+	# displayed in the log output The idea here is that you can
+	# specify trailers with 'git config cored.default-trailers'
+	# or override with t at the command line.  eg, set 'git
+	# config core.default-trailers ticket' to show the ticket
+	# in the log, or use 't=ticket,style g l1' to show both
+	# the ticket adn the style trailer in the log, or 't= g l1'
+	# to show none.
+	l1 = !bash -c 'a=$(printf \"%s\" ${t-$(git config \
+		core.default-trailers)} | sed -E \"s/^|,/&key=/g\" ) && \
+		git log \
+		--date=format:\"\" \
+		--format=format:\"$(echo \"\
+		%Cgreen%h\
+		%Cred%<(12,trunc)%an%Creset\
+		${a:+[%><(${w-11})%(trailers:${a},separator=%x2C,valueonly)]}\
+		%<(60,trunc)%s \
+		%ad \
+		%Cblue%D%Creset\
+		\" | tr -s \" \"  )\" \"$@\"' _
+	l1a = l1 --graph --decorate
+	l1ah = l1 -n 10 --graph
+	l1h = l1 -n 10
+	la = l1 --graph --decorate  # same as l1a
+	ld = l1 --date=format:'%H:%M:%S %d%b%y'
+	ldh = l1 -n 10 --date=format:'%H:%M:%S %d%b%y'
+	ls = l1 --show-signature
+	no = show --name-only --pretty=format:
+	s = status
+	sa = status -uall --ignored
+	sl = stash list
+	sp = stash pop --quiet
+	ss = stash push
+	w = rev-parse --abbrev-ref HEAD
+[apply]
+	whitespace = error
+[core]
+	whitespace = indent-with-non-tab
+	editor = vim
+[push]
+	default = upstream
+	autoSetupRemote = true
+[pager]
+	status = true
+[init]
+	defaultBranch = main
+[versionsort]
+	prereleaseSuffix = .rc
+[color "branch"]
+	meta = red green bold
+[color]
+	branch = true
+[pull]
+	rebase = true
+[advice]
+	detachedHead = false
+[include]
+	path = ~/.gitconfig-user
+[tag]
+	gpgSign = true
+[commit]
+	gpgSign = true
+[merge]
+	tool = vimdiff
+[status]
+	showUntrackedFiles = no
+[diff]
+	base-branch = dev
+	wsErrorHighlight = all
+	# ignoreSubmodules = all        # ignore with --ignore-submodules=none
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[submodule]
+	recurse = true
+[color "diff"]
+	whitespace = red reverse
