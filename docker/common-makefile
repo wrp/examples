@@ -1,8 +1,12 @@
 
+base ?= debian
 
 image:
-	docker build --build-arg user=$(USER) \
-		--build-arg uid=$$(id -u) -t $(image) .
+	docker build \
+		--build-arg base=$(base) \
+		--build-arg user=$(USER) \
+		--build-arg uid=$$(id -u) \
+		-t $(image) .
 
 run:
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
