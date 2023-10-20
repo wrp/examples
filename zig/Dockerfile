@@ -3,15 +3,10 @@ FROM debian-wrp
 
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
-ARG user=docker_user
-
-ENV USER=$user
 
 RUN mkdir /${project}
 copy Makefile ${project}-*.bundle /${project}
 RUN rm /${project}/Makefile
-run chown -R $user /${project}
-USER $user
 WORKDIR /${project}
 RUN git init
 RUN if test -f /${project}/*.bundle; then \
@@ -37,5 +32,7 @@ RUN sudo aptitude -y install liblld-17-dev
 RUN sudo aptitude -y install liblldb-17-dev
 RUN cmake ..
 RUN make
+RUN cp stage3/bin/zig /usr/local/bin
+COPY src /src
 
-CMD sudo DOCKER=debian -u "$USER" bash
+CMD /bin/bash
