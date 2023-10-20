@@ -29,9 +29,9 @@ RUN my-install make
 RUN my-install nmap
 RUN my-install gdb
 RUN my-install git
-# RUN my-install golang
-# RUN my-install manpages
-# RUN my-install man-db
+RUN my-install golang
+RUN my-install manpages
+RUN my-install man-db
 RUN my-install cmake
 RUN mkdir -p /etc/skel
 
