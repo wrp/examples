@@ -1,11 +1,11 @@
 
 # My minimal linux image
 ARG base
-ARG uid=1000
 FROM $base
 RUN printf 'set editing-mode vi\nset keymap vi\n' > /etc/inputrc
 RUN printf 'bind -v\n' > /root/.editrc
 
+ARG user=docker_user
 ARG install_script=/usr/local/bin/my-install
 RUN printf '#!/bin/sh\n\n' > ${install_script}; \
 if apt-get --version; then \
@@ -33,12 +33,14 @@ RUN my-install golang
 RUN my-install manpages
 RUN my-install man-db
 RUN my-install cmake
-RUN mkdir -p /etc/skel
 
+RUN mkdir -p /etc/skel
 COPY bashrc /etc/skel/.bashrc
 COPY gitconfig /etc/skel/.gitconfig
 COPY vimrc /etc/skel/.vimrc
 
-ENV DOCKER=${base}
+RUN useradd ${user} || adduser -D ${user}
+
+ENV DOCKER=${base}-${user}
 
 CMD /bin/bash
