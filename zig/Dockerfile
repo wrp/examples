@@ -19,8 +19,8 @@ RUN if test -f /${project}/*.bundle; then \
 RUN mkdir build
 WORKDIR /${project}/build
 
-RUN printf 'deb http://deb.debian.org/debian sid main\n' | sudo tee -a /etc/apt/sources.list.d/sid.list
-RUN printf 'deb http://deb.debian.org/debian experimental main\n' | sudo tee -a /etc/apt/sources.list.d/exp.list
+RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list.d/sid.list
+RUN printf 'deb http://deb.debian.org/debian experimental main\n' > /etc/apt/sources.list.d/exp.list
 RUN sudo apt-get update
 RUN sudo aptitude -y install llvm-17
 RUN sudo aptitude -y install clang-17
