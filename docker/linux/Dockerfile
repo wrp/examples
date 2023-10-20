@@ -6,7 +6,8 @@ FROM $base
 RUN printf 'set editing-mode vi\nset keymap vi\n' > /etc/inputrc
 RUN printf 'bind -v\n' > /root/.editrc
 
-RUN printf '#!/bin/sh\n\n' > /usr/local/bin/my-install; \
+ARG install_script=/usr/local/bin/my-install
+RUN printf '#!/bin/sh\n\n' > ${install_script}; \
 if apt-get --version; then \
 	apt-get update; \
 	apt-get -y install aptitude; \
@@ -15,8 +16,9 @@ elif yum --version; then \
 	printf 'yum install -y "$@"\n' >&3; \
 elif apk --version; then \
 	printf 'apk add "$@"\n' >&3; \
-fi 3> /usr/local/bin/my-install
-RUN chmod +x /usr/local/bin/my-install
+fi 3> ${install_script}
+RUN printf 'exit 0' >> ${install_script}
+RUN chmod +x ${install_script}
 
 RUN my-install sudo
 RUN my-install less
