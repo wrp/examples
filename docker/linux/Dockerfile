@@ -46,4 +46,4 @@ RUN printf '\nDefaults env_keep += "SSH_CLIENT SSH_USER"\n' >> /etc/sudoers
 
 ENV DOCKER=${base}-${user}
 
-CMD /bin/bash
+CMD /bin/sh
