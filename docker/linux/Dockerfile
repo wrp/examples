@@ -39,6 +39,6 @@ COPY bashrc /etc/skel/.bashrc
 COPY gitconfig /etc/skel/.gitconfig
 COPY vimrc /etc/skel/.vimrc
 
-ENV DOCKER=${base}-${user}
+ENV DOCKER=${base}
 
 CMD /bin/bash
