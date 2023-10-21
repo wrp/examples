@@ -6,7 +6,7 @@ docker exec -it  ${container?} /bin/bash
 docker ps
 
 # Copy file from a container:
-docker cp ${container_id}:/path/within/container /host/path/
+docker cp ${container?}:/path/within/container /host/path/
 
 # Determine the CMD for a container
 docker inspect ${container?} | jq -r '.[].ContainerConfig.Cmd[]'
