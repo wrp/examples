@@ -1,3 +1,3 @@
 
 image ?= opentofu
-include ../common-makefile
+include ../docker/common-makefile
