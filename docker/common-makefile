@@ -13,11 +13,11 @@ image:
 run:
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id"; \
-		docker exec -it -u $(USER) "$$id" bash; \
+		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
 	else \
 		echo 'Creating new docker container'; \
 		docker run -it \
-		--user $(USER) \
+		--user $(uid):$$(id -g) \
 		--privileged \
 		-v $(HOME):$(home_mount) \
 		--label $(USER)-$(image) \
