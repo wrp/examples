@@ -15,7 +15,7 @@ run:
 		echo "Attaching to docker containter $$id"; \
 		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
 	else \
-		echo 'Creating new docker container'; \
+		echo 'Creating new docker container from $(image)'; \
 		docker run -it \
 		--user $(uid):$$(id -g) \
 		--privileged \
