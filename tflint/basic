@@ -1,2 +1,15 @@
 
 docker run --rm -v $(pwd):/data -t ghcr.io/terraform-linters/tflint
+
+
+Configure the local run by adding a .tflint.hcl file. eg:
+
+cat > .tflint.hcl << EOF
+rule "terraform_required_providers" {
+  enabled = false
+
+  # defaults
+  source = true
+  version = true
+}
+EOF
