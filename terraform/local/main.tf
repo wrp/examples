@@ -1,6 +1,9 @@
 
 # Create local file
 
+terraform {
+	required_version = ">1.0"
+}
 
 resource local_file a {
 	content = "Hello, World!\n"
