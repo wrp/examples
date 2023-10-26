@@ -29,4 +29,6 @@ ARG dest_home=/home/$user
 
 WORKDIR ${dest_home}
 ENV DOCKER=debian-${user}
+LABEL description='Debian image with developer tools installed'
+
 CMD /bin/bash
