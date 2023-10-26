@@ -33,3 +33,12 @@ resource local_file c {
 	EOF
 	filename = "${path.module}/nodent"
 }
+
+# Create a local file dynamically
+resource local_file dynamic {
+	content = "hello, world!"
+	filename = "dyn"
+	provisioner "local-exec" {
+		command = "printf ' %s\n' '${self.content}' >> ${self.filename}"
+	}
+}
