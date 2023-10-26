@@ -1,6 +1,8 @@
 
 # Create local file
-resource "local_file" "hello" {
+
+
+resource local_file a {
 	content = "Hello, World!\n"
 	filename = "${path.module}/hello"
 }
@@ -8,7 +10,7 @@ resource "local_file" "hello" {
 # Create a local file using indent removing heredoc
 # leading hard tabs are removed, other whitespace remains
 # There cannot be whitesapce between '<<-' and the label name
-resource "local_file" "heredoc" {
+resource local_file b {
 	content = <<-EOF
 		Hello, Heredoc
 	EOF
@@ -17,7 +19,7 @@ resource "local_file" "heredoc" {
 
 # Create a local file using non indent removing heredoc
 # leading whitespace is retained, label can be indented
-resource "local_file" "heredoc-indent" {
+resource local_file c {
 	content = <<EOF
 		Hello, indented heredoc
 	EOF
