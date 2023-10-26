@@ -47,4 +47,8 @@ resource local_file dynamic {
 		when = destroy
 		command = "printf '${self.filename} destroyed!!\n' > output"
 	}
+	provisioner "local-exec" {
+		when = create
+		command = "printf 'Creating ${self.filename}!!\n' > output-create"
+	}
 }
