@@ -27,6 +27,6 @@ ARG user
 ARG uid
 ARG dest_home=/home/$user
 
-workdir ${dest_home}
+WORKDIR ${dest_home}
 ENV DOCKER=debian-${user}
 CMD /bin/bash
