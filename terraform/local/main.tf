@@ -47,8 +47,9 @@ resource local_file dynamic {
 		when = destroy
 		command = "printf '${self.filename} destroyed!!\n' > output"
 	}
+	# provisionsers execute in the order specified here in the config file
 	provisioner "local-exec" {
 		when = create
-		command = "printf 'Creating ${self.filename}!!\n' > output-create"
+		command = "date >> ${self.filename}"
 	}
 }
