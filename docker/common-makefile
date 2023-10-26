@@ -27,4 +27,4 @@ image:
 clean:
 	docker system prune -a -f
 
-.PHONY: all build run clean
+.PHONY: run clean image
