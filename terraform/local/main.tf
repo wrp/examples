@@ -41,4 +41,10 @@ resource local_file dynamic {
 	provisioner "local-exec" {
 		command = "printf ' %s\n' '${self.content}' >> ${self.filename}"
 	}
+	# destroy provisioner does not execute.  Indeed, this file is not deleted
+	# by tofu destroy.  See https://github.com/hashicorp/terraform/issues/13549
+	provisioner "local-exec" {
+		when = destroy
+		command = "printf '${self.filename} destroyed!!\n' > output"
+	}
 }
