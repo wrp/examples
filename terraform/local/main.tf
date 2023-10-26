@@ -1,7 +1,9 @@
 
 
 terraform {
-	required_version = ">= 1.6"
+	required_version = ">= 1.6, ~> 1.6.0, != 1.2"
+	# ~> is the pessimistic constraint which allows only the rightmost
+	#    number to differ
 }
 
 # Create 2 local files
