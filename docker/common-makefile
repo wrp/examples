@@ -24,5 +24,7 @@ image:
 		--build-arg user=$(USER) \
 		--build-arg uid=$(uid) \
 		-t $(image) .
+clean:
+	docker system prune -a -f
 
 .PHONY: all build run clean
