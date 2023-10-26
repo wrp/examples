@@ -5,7 +5,7 @@ home_mount ?= /$(USER)
 
 run:
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
-		echo "Attaching to docker containter $$id"; \
+		echo "Attaching to docker containter $$id ($(image))"; \
 		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
 	else \
 		echo 'Creating new docker container from $(image)'; \
