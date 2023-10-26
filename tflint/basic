@@ -1,4 +1,6 @@
+See documentation at https://github.com/terraform-linters/tflint
 
+To lint the current working directory:
 docker run --rm -v $(pwd):/data -t ghcr.io/terraform-linters/tflint
 
 
