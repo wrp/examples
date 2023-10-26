@@ -21,6 +21,7 @@ RUN aptitude install -y golang
 RUN aptitude install -y manpages
 RUN aptitude install -y man-db
 RUN aptitude install -y cmake
+RUN aptitude install -y git
 
 ARG user
 ARG uid
