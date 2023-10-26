@@ -4,6 +4,7 @@ uid ?= $$(id -u)
 home_mount ?= /$(USER)
 
 run:
+	@- rename-tmux-window $(image)
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id ($(image))"; \
 		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
