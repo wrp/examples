@@ -3,13 +3,6 @@ base ?= debian
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
 
-image:
-	docker build \
-		--build-arg base=$(base) \
-		--build-arg user=$(USER) \
-		--build-arg uid=$(uid) \
-		-t $(image) .
-
 run:
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id"; \
@@ -24,5 +17,12 @@ run:
 		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
 	fi
 	# EXITED the $(image) docker container
+
+image:
+	docker build \
+		--build-arg base=$(base) \
+		--build-arg user=$(USER) \
+		--build-arg uid=$(uid) \
+		-t $(image) .
 
 .PHONY: all build run clean
