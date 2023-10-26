@@ -1,13 +1,14 @@
 
-# Create local file
 
 terraform {
 	required_version = ">1.0"
 }
 
-resource local_file a {
-	content = "Hello, World!\n"
-	filename = "${path.module}/hello"
+# Create 2 local files
+resource local_file count {
+	count = 2
+	content = "Hello, World from file ${count.index}!\n"
+	filename = "${path.module}/hello.${count.index}"
 }
 
 # Create a local file using indent removing heredoc
