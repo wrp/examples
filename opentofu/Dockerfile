@@ -1,7 +1,8 @@
 
-FROM debian-wrp
+ARG user
+FROM debian-${user}-dev
 
-ARG user=docker_user
+ARG user
 ARG target_dir=/opentofu
 ARG git_url=https://github.com/opentofu/opentofu.git
 ENV target_dir=${target_dir}
@@ -25,5 +26,5 @@ RUN if test -f ${target_dir}/*.bundle; then \
 RUN go build -ldflags "-w -s -X 'github.com/opentofu/opentofu/version.dev=no'" -o bin/ ./cmd/tofu
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opentofu/bin
-
-CMD sudo DOCKER=debian -u "$USER" bash
+ENV DOCKER=debian-${user}-dev
+CMD /bin/bash
