@@ -5,20 +5,22 @@ terraform {
 }
 
 # Create 2 local files
-resource local_file count {
+resource local_file counted {
 	count = 2
 	content = "Hello, World from file ${count.index}!\n"
 	filename = "${path.module}/hello.${count.index}"
 }
 
-# Create a local file using indent removing heredoc
+# Create local files using indent removing heredoc
 # leading hard tabs are removed, other whitespace remains
 # There cannot be whitesapce between '<<-' and the label name
-resource local_file b {
+resource local_file iterated {
+	for_each = toset(["foo", "bar"])
+
 	content = <<-EOF
-		Hello, Heredoc
+		Hello, Heredoc from ${each.key}
 	EOF
-	filename = "${path.module}/heredoc"
+	filename = "${path.module}/heredoc.${each.key}"
 }
 
 # Create a local file using non indent removing heredoc
