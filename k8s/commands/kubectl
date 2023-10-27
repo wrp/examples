@@ -1,3 +1,5 @@
+# docker run -ti d3fk/kubectl version
+
 kubectl controls the Kubernetes cluster manager.
 
 # PODS
