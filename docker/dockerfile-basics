@@ -15,3 +15,9 @@ ENV var2=$var2
 CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
 
 # line continuation character is \
+
+
+# You can access files from the build context without copying them
+# to the image using a bind mount.  eg
+RUN --mount=type=bind,source=examples.bundle,target=examples.bundle \
+	git fetch examples.bundle
