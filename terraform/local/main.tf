@@ -61,3 +61,7 @@ module "module" {
 	source = "./module"
 	names = ["foo", "bar", "baz"]
 }
+
+output "sample_content" {
+	value = local_file.counted[1].content
+}
