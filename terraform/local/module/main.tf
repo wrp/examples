@@ -1,11 +1,12 @@
 
 
-variable "name" {
-	type = string
-	default = "hello"
+variable "names" {
+	type = list(string)
+	default = ["hello"]
 }
 
 resource local_file sub_module_file {
-	content = "Hello, World from file ${path.module}/${var.name}!\n"
-	filename = "${path.module}/${var.name}"
+	for_each = toset(var.names)
+	content = "Hello, World from file ${path.module}/${each.key}!\n"
+	filename = "${path.module}/${each.key}"
 }
