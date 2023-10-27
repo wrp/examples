@@ -56,3 +56,8 @@ resource local_file dynamic {
 
 	}
 }
+
+module "module" {
+	source = "./module"
+	name = "foo"
+}
