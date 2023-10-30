@@ -1,0 +1,7 @@
+
+The circuit breaker wraps the call to a backend.  If the
+backend is unavailable for some threshold, the calls to
+the wrapper do not make the call to the backend.  This
+can help prevent cascade failures on the backend, and
+the logic for resetting the circuit breaker is invisible
+to the caller.
