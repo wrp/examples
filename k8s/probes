@@ -1,0 +1,26 @@
+
+startup: Other probes do not run until this succeeds.
+liveness: If failed, container is restarted.
+readiness: If failed, Ready condition is set to False (no traffic will go to container)
+
+each probe must be one of:
+	httpGet: Specify an http request probe
+		host:
+		scheme:
+		path:
+		httpHeaders:
+		port:
+	exec: Specify a command probe (executed on the container)
+		command:
+	tcpSocket: Specify a tcp probe (success if connection can be made)
+		port:
+	grpc: Specify a gRPC probe
+		port:
+
+available fields: (default in [])
+	initialDelaySeconds[0]: number of seconds to wait before doing any probe
+	periodSeconds[10]: how often to perform the probe.
+	timeoutSeconds[10]: Number of seconds after which probe timesout.
+	successThreshold[1]: Minimum consecutive successes to be considered ok after a failure
+	failureThreshold[3]: Check fails if probe fails this many times consecutively.
+	terminationGracePeriodSeconds[30]:
