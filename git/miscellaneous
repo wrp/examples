@@ -1,0 +1,4 @@
+A hodge-podge of things that don't have a home elsewhere but want to be
+discoverable via "git grep"
+
+--orphan is an option to git-checkout, not git-branch
