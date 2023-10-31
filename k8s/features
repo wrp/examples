@@ -8,6 +8,7 @@ k8s gives you:
 	secrets and config mgmnt
 
 
+from kubernetes.io/docs/concepts/overview:
 k8s is "not a mere orchestration system". "It eliminates the need for orchestration"
 Orchestration being defined as "execution of a defined workflow:  first do
 A, then B, then C." "In contrast, Kubernetes comprises a set of independent,
