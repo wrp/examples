@@ -4,3 +4,17 @@ git worktree add ${path?} ${branch}
 
 # List all the extant worktrees
 git worktree list
+
+# Moving a worktree
+#
+# There is no 'git worktree move' command (as of 2.42.0)
+# If you have worktree at /p/a/t/h/old-work that
+# is a worktree of /path/repo and you move it to
+# /new/path/old-work, then you should modify
+# /path/repo/.git/worktrees/old-work/gitdir
+#
+# If you move the worktree to /p/a/t/new-work
+# then it may be sufficient to mv
+# /path/repo/.git/worktrees/old-work to
+# /path/repo/.git/worktrees/new-work and modify
+# the gitdir, but I haven't tested that.
