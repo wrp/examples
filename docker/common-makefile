@@ -9,10 +9,12 @@ run:
 		echo "Attaching to docker containter $$id ($(image))"; \
 		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
 	else \
+		wd=$$(pwd | sed -e "s@^$$HOME/@@"); \
 		echo 'Creating new docker container from $(image)'; \
 		docker run -it \
 		--user $(uid):$$(id -g) \
 		--privileged \
+		-w /$(USER)/$${wd} \
 		-v $(HOME):$(home_mount) \
 		--label $(USER)-$(image) \
 		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined $(image); \
