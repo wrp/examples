@@ -14,5 +14,5 @@ ifdef(\`$macro',,
 \`errprint(fatal: \`\`$macro'' undefined in \`\`$x''
 )m4exit(1)')
 EOF
-} | m4 > /dev/null || exit
+} | m4 > /dev/null
 done
