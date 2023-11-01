@@ -1,3 +1,4 @@
+---
 # Demonstrate simple array and indentation
 foo-barh:
   # a, b, and c are the same
@@ -9,6 +10,7 @@ foo-barh:
     - bar
     - 2
 
+---
 # Demonstrate a dictionary
 # baz and qux are the same
 baz:
@@ -20,14 +22,19 @@ qux:
       blah
     baz:
 
+---
 # Demonstrate a array of one dictionary
 # qax, quf, and bar are the same
 qax:
-- blah: a
-  foo: b
-bar: [{ "blah": a, foo: b }]
+- ka: a
+  kb: b
+-
+- bc: c
+bar: [{ "ka": a, kb: b }, null, {'bc': c}]
 quf:
-- { blah: a, "foo": b}
+- { ka: a, "kb": b}
+-
+- bc: c
 
 # Select just one
 # make array | jq '.[] | with_entries( select(.key == "bar"))'
