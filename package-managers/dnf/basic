@@ -1,0 +1,15 @@
+
+DNF is "dandified yum"
+
+# list all installed packages
+dnf list installed
+
+# list all packages that provide $path (installed or not)
+# (use rpm -qf $path to see which installed package provides $path)
+dnf provides $path
+
+# Search over all available repostories
+dnf search $string
+
+# List available repositories
+dnf repolist
