@@ -10,4 +10,4 @@ default: $(files:.yaml=)
 	)$$'res=[]\n'$$( :\
 	)$$'for x in list(yaml.load_all(sys.stdin, Loader=yaml.SafeLoader)): res.append(json.dumps(x))\n'$$( :\
 	)$$'print("[" + ",".join(res) + "]")'$$( :\
-	) < $<
+	) < $< | jq .
