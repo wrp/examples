@@ -1,0 +1,2 @@
+
+To set requests/limits on a per namespace basis, use LimitRange
