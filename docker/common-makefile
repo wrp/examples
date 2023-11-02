@@ -1,4 +1,5 @@
 
+image ?= debian-$(USER)-dev
 base ?= debian
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
