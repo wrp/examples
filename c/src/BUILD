@@ -4,3 +4,9 @@ cc_binary(
 	name = "hello",
 	srcs = ["hello.c"],
 )
+
+cc_library(
+	name = "xutil",
+	srcs = ["xutil.c"],
+	hdrs = ["xutil.h"],
+)
