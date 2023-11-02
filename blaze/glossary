@@ -1,0 +1,12 @@
+
+workspace:
+	1. The environment shared by all Bazel commands run
+	in the same main repository.
+	2. (obsolete) The directory tree containing the source files.
+
+
+repository:
+	1. A directory with a WORKSPACE.bazel or WORKSPACE file,
+	containing source files to be used in a Bazel build
+
+	see: https://bazel.build/external/overview
