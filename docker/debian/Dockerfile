@@ -22,6 +22,8 @@ RUN aptitude install -y manpages
 RUN aptitude install -y man-db
 RUN aptitude install -y cmake
 RUN aptitude install -y git
+RUN aptitude install -y bazel-bootstrap
+RUN aptitude install -y bazel-rules-cc
 
 ARG user
 ARG uid
