@@ -7,11 +7,11 @@ cc_binary(
 cc_binary(
 	name = "cat",
 	srcs = ["cat.c"],
-	deps = [ "//:xutil", ],
+	deps = [ "//lib:xutil", ],
 )
 
 cc_binary(
 	name = "calc",
 	srcs = ["calc.c", ],
-	deps = [ "//:stack", "//:ringbuf", ],
+	deps = [ "//lib:stack", "//lib:ringbuf", ],
 )
