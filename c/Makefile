@@ -1,3 +1,7 @@
 
-hello:
-	bazel build --subcommands src/hello
+.PHONY: all
+
+all: src/hello src/cat
+
+%:
+	bazel build $@
