@@ -9,3 +9,9 @@ cc_binary(
 	srcs = ["cat.c"],
 	deps = [ "//lib:xutil", ],
 )
+
+cc_binary(
+	name = "calc",
+	srcs = ["calc.c", ],
+	deps = [ "//lib:stack", "//lib:ringbuf", ],
+)
