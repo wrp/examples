@@ -10,3 +10,8 @@ repository:
 	containing source files to be used in a Bazel build
 
 	see: https://bazel.build/external/overview
+
+package:
+	1. A directory containing a BUILD or BUILD.bazel file.
+	2. A collection of related files and a specification of how
+	they can be used to produce output artifacts.
