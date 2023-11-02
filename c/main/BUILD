@@ -14,4 +14,5 @@ cc_binary(
 	name = "calc",
 	srcs = ["calc.c", ],
 	deps = [ "//lib:stack", "//lib:ringbuf", ],
+	visibility = ["//test:__pkg__"],
 )
