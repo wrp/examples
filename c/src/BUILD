@@ -10,3 +10,9 @@ cc_library(
 	srcs = ["xutil.c"],
 	hdrs = ["xutil.h"],
 )
+
+cc_binary(
+	name = "cat",
+	srcs = ["cat.c"],
+	deps = [ ":xutil", ],
+)
