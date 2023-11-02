@@ -1,5 +1,5 @@
 
-.PHONY: all
+.PHONY: all check
 
 targets = \
 	main/hello \
@@ -7,6 +7,9 @@ targets = \
 	main/cat \
 
 all: $(targets)
+
+check:
+	bazel test test/calc_test
 
 %:
 	bazel build $@

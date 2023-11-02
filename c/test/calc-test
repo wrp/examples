@@ -2,15 +2,16 @@
 
 # test calc.c
 
+exe=main/calc
 
 RV=0
 test_string() {
-	out=$(echo "$1" | ./calc 2>&1)
+	out=$(echo "$1" | $exe 2>&1)
 	if test $# -gt 1 && test "$out" != "$2"; then
 		echo "On input:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
-	out=$(./calc "$1" 2>&1)
+	out=$($exe "$1" 2>&1)
 	if test $# -gt 1 && test "$out" != "$2"; then
 		echo "With args:'$1', expected output '$2', got '$out'" >&2
 		RV=1
@@ -88,10 +89,12 @@ test_string '0XaP2p' 40
 test_string '0Xfp' 15
 test_string '0XfP1p' 30
 test_string '0XfP1p' 30
+if test -z skipping_the_commas; then
 LC_NUMERIC=en_US.UTF-8 test_string '-1k1456798p' '1,456,798'
 LC_NUMERIC=C test_string '-1k2456798p' '2456798'
 LC_ALL=en_US.UTF-8 test_string '-1k3456798p' '3,456,798'
 LC_ALL=C test_string '-1k4456798p' '4456798'
+fi
 
 test_string '4[1 1+]1.2x+p' 'Invalid register: 1.2 is not an integer
 5.2'
