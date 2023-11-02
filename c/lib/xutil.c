@@ -123,7 +123,6 @@ void
 xrename(const char *old, const char *new)
 {
 	if( rename(old, new) ){
-		int errno_sav = errno;
 		fprintf(stderr, "rename: %s -> ", old);
 		perror(new);
 		exit(EXIT_FAILURE);
