@@ -4,5 +4,5 @@ cc_library(
 	srcs = ["xutil.c"],
 	hdrs = ["xutil.h"],
     includes = ["."],
-    visibility = ["//src:__pkg__"],
+    visibility = ["//main:__pkg__"],
 )

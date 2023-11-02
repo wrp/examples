@@ -1,7 +1,7 @@
 
 .PHONY: all
 
-all: src/hello src/cat
+all: main/hello main/cat
 
 %:
 	bazel build $@
