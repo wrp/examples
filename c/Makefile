@@ -1,7 +1,12 @@
 
 .PHONY: all
 
-all: main/hello main/cat
+targets = \
+	main/hello \
+	main/calc \
+	main/cat \
+
+all: $(targets)
 
 %:
 	bazel build $@
