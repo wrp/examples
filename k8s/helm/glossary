@@ -1,0 +1,7 @@
+
+chart: A helm package.  Contains all the resource definitions necessary to run
+	an application.
+
+repository: The place where charts are collected and shared.
+
+release: An instance of a chart running in a cluster.
