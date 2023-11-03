@@ -8,8 +8,8 @@ targets = \
 
 all: $(targets)
 
-check:
-	bazel test test/calc_test
-
-%:
+main/%:
 	bazel build $@
+
+test/%:
+	bazel test $@
