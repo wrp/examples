@@ -31,6 +31,10 @@ kubectl rollout status deployment ${deployment}   # Show status of rollout
 # CONFIGS  k8s configs reside in $HOME/.kube
 kubectl config current-context # Get the current context
 kubectl config view            # See the available contexts
+kubectl config use ${context}  # Use the $context (use == use-context)
+kubectl config view | yq -r '.clusters[].name'  # List names of all clusters
+kubectl config view | yq -r '.contexts[].name'  # List names of all contexts
+
 
 # NAMESPACES
 kubectl get namespaces
