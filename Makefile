@@ -1,4 +1,4 @@
-LEN += 12
+LEN ?= 12
 
 .PHONY: password passwd
 passwd: password
