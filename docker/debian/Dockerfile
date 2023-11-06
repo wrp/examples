@@ -24,6 +24,7 @@ RUN aptitude install -y cmake
 RUN aptitude install -y git
 RUN aptitude install -y bazel-bootstrap
 RUN aptitude install -y bazel-rules-cc
+RUN aptitude install -y yq
 
 ARG user
 ARG uid
