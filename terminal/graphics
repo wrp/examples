@@ -1,0 +1,6 @@
+
+A random collection of symbols.
+
+
+printf '\xf0\x9f\x9b\x91\n' # A stop sign: 🛑
+printf '\xe2\x9c\x8b\n'     # A yellow hand  ✋
