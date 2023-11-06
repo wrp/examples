@@ -10,3 +10,6 @@ docker cp ${container?}:/path/within/container /host/path/
 
 # Determine the CMD for a container
 docker inspect ${container?} | jq -r '.[].ContainerConfig.Cmd[]'
+
+# Use container as a shim around a command:
+cmd() { docker run -i ${container} cmd "$@"; }
