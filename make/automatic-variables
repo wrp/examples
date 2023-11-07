@@ -4,7 +4,8 @@
      archive member, then `$@' is the name of the archive file.  In a
      pattern rule that has multiple targets (*note Introduction to
      Pattern Rules: Pattern Intro.), `$@' is the name of whichever
-     target caused the rule's recipe to be run.
+     target caused the rule's recipe to be run.  (This variable is
+     not defined in the prerequisite list of a rule.)
 
 `$%'
      The target member name, when the target is an archive member.
