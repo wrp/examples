@@ -1,0 +1,13 @@
+
+This is taken from documentation at kubernetes.io.
+After a quick perusalo RFC 1123, I do not see this
+description there and am not sure if the k8s docs
+just have the rfc wrong.  Not worth tracking down
+right now.
+
+
+RFC 1123 rules for a valid dns subdomain name:
+
+No more than 253 characters in length.
+Valid characters are [-a-z.] (lowercase, hyphen, and period)
+Must start and end with alpha.
