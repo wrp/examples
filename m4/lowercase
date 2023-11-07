@@ -1,0 +1,3 @@
+define(`lowercase', `translit($1, `A-Z', `a-z')')dnl
+lowercase(FoO bAr)
+translit(FoO bAr, `A-Z', `a-z')
