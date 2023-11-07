@@ -13,4 +13,15 @@ spec:
       - name: helloworld
         image: alpine:latest
         command: ["/bin/sh"]
-        args: ["-c", "date; sleep 10; date"]
+        args: ["-c", "date; echo \"$GREETING, ${NAME}!\"; sleep 4; date"]
+        env:
+        - name: GREETING
+          valueFrom:
+            configMapKeyRef:
+              name: hello-world-configmap
+              key: properties.greeting
+        - name: NAME
+          valueFrom:
+            configMapKeyRef:
+              name: hello-world-configmap
+              key: properties.name
