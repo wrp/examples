@@ -1,3 +1,10 @@
+define(`env_value',
+        `- name: $1
+          valueFrom:
+            configMapKeyRef:
+              name: hello-world-configmap
+              key: properties.`'translit(`$1', `A-Z', `a-z')'dnl
+)dnl
 apiVersion: apps/v1
 kind: Deployment
 metadata: { name: helloworld }
@@ -15,13 +22,5 @@ spec:
         command: ["/bin/sh"]
         args: ["-c", "date; echo \"$GREETING, ${NAME}!\"; sleep 4; date"]
         env:
-        - name: GREETING
-          valueFrom:
-            configMapKeyRef:
-              name: hello-world-configmap
-              key: properties.greeting
-        - name: NAME
-          valueFrom:
-            configMapKeyRef:
-              name: hello-world-configmap
-              key: properties.name
+        env_value(GREETING)
+        env_value(NAME)
