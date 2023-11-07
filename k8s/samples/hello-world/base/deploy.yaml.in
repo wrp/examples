@@ -1,10 +1,13 @@
-define(`env_value',
-        `- name: $1
-          valueFrom:
-            configMapKeyRef:
-              name: hello-world-configmap
-              key: properties.`'translit(`$1', `A-Z', `a-z')'dnl
-)dnl
+define(`env_value', `{dnl
+        "name": "$1", dnl
+        "valueFrom": dnl
+            { "configMapKeyRef": dnl
+                { "name": hello-world-configmap, dnl
+                  "key": "properties.`'translit(`$1', `A-Z', `a-z')"dnl
+                } dnl
+             } dnl
+         }')dnl
+
 apiVersion: apps/v1
 kind: Deployment
 metadata: { name: helloworld }
@@ -21,6 +24,4 @@ spec:
         image: alpine:latest
         command: ["/bin/sh"]
         args: ["-c", "date; echo \"$GREETING, ${NAME}!\"; sleep 4; date"]
-        env:
-        env_value(GREETING)
-        env_value(NAME)
+        env: [env_value(GREETING), env_value(NAME)]
