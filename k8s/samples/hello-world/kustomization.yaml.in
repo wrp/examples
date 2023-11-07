@@ -1,7 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- deploy.yaml
+- base/deploy.yaml
+patches:
+- target:
+    kind: Deployment
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 3
+
+
 configMapGenerator:
 - name: hello-world-configmap
   literals:
