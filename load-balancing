@@ -1,0 +1,8 @@
+
+basic strategies:
+round robin
+consistent hashing
+fewest backends
+fastest response
+least connections
+least load
