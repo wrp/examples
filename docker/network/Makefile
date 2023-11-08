@@ -2,6 +2,9 @@
 # Build a small lan with 4 containers, attach to 1.
 # Relies on existence of mydebian from ../debian
 #
+# This almost certainly also relies on the private key that
+# was deleted in 4b9323222e97c24e81a5ac2e3fed660f7a9f17db
+#
 RHOME=/home/$(USER)
 all:
 	-docker network create test-network
