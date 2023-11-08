@@ -8,8 +8,10 @@ docker ps
 # Copy file from a container:
 docker cp ${container?}:/path/within/container /host/path/
 
-# Determine the CMD for a container
-docker inspect ${container?} | jq -r '.[].ContainerConfig.Cmd[]'
+# Various inspect examples
+docker inspect --format '{{ .ContainerConfig.Cmd }}' ${container?}
+docker inspect --format '{{ .State.Pid }}' ${container?}
+docker inspect ${container?} | jq -r '.[].State.Pid'
 
 # Use container as a shim around a command:
 cmd() { docker run -i ${container} cmd "$@"; }
