@@ -21,8 +21,7 @@ baz:
 metadata:
   labels: &labels { app: nginx }
 spec:
-  selector:
-    matchLabels: *labels
-  template:
-    metadata:
-      labels: *labels
+  selector: { matchLabels: *labels }
+  template: {
+    metadata: { labels: *labels }
+  }
