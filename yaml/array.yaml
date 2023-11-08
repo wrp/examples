@@ -1,7 +1,7 @@
 ---
 # Demonstrate simple array and indentation
 foo-barh:
-  # a, b, and c are the same
+  # a, b, c and d are the same
   a: [bar,2]
   b:
   - bar
@@ -9,6 +9,10 @@ foo-barh:
   c:
     - bar
     - 2
+  d: [
+    bar,
+    2
+  ]
 
 ---
 # Demonstrate a dictionary
