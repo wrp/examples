@@ -19,3 +19,14 @@ build_release_gcc: &vars
 
 build_coverage_gcc: *vars
 build_clang: *vars
+
+&bar build_release_gcc: 8
+
+test: [
+*vars,
+*bar
+]
+
+foo:
+ - *vars
+ - *bar

@@ -1,4 +1,4 @@
-# This file contains 4 documents (separated by '---')
+# This file contains several documents (separated by '---')
 
 # foo's value is a list containing 1 item
 # which is a dictionary with 2 keys
@@ -42,6 +42,12 @@ bar:
 ---
 #
 bar:
-- a: av
-  b: bv
-- c: test
+  a:
+    b: bv
+    c: test
+
+baz: { a: {
+  b: bv,
+  c: test
+  }
+}
