@@ -4,7 +4,10 @@ base ?= debian
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
 
+.PHONY: run image
 run:
+	@if ! docker image inspect $(image) > /dev/null 2>&1; then \
+	make image; fi
 	@- rename-tmux-window $(image)
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id ($(image))"; \
