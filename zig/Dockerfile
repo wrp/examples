@@ -44,6 +44,5 @@ RUN mv stage3/bin/zig /usr/local/bin
 RUN mv stage3/lib/zig /usr/local/lib
 ARG user
 USER ${user}
-COPY src /src
 
 CMD /bin/bash
