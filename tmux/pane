@@ -7,6 +7,7 @@ Move to a pane in the current window:
 https://superuser.com/questions/1105090/move-a-tmux-pane-to-another-session
 
 resize-pane: <prefix> C-<up|down|left|right>
+resize-pane -U +10    # Make the current pane 10 lines larger
 
 **************************
 How to identify a pane:  (from man-page)
