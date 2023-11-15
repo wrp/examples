@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+import base64
+
+s = bytes('this is a string', 'utf-8')
+b = base64.b64encode(s)
+d = base64.b64decode(b)
+
+print(s)
+print(b)
+print(d)
