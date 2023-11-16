@@ -36,5 +36,36 @@ def delegated_generator():
 	for y in g():  # y takes values 1, 2
 		print(f'{y} yielded from g')
 
+def send_to():
+	"""Demonstrate sending a value to a generator
+
+	Inside the generator, yield returns the value passed
+	to send, and send returns the value of the next yield
+	"""
+
+	print(send_to.__doc__)
+	def f() -> Generator[int, dict, list]:
+		"""f yields an int, can be sent a dict, and returns a list"""
+		x = yield 1
+		x = yield 2 if x is None else 27
+		print(f'After 2nd yield, x = {x}')	# The dict sent
+		x = yield x['foo']	# yields 7, assigns {'a': 12}
+		print(f'After 3rd yield, x = {x}')
+		x = yield x['a']
+		print(f'After 4th yield, x = {x}')
+		return [1, 2]
+	a = f()
+	print("Return from first next:", next(a))  # 1
+	print("Return from next prior to send:", next(a))  # 2
+	print("Return from send:", a.send({'foo':7}))  # 7
+	print("Return from send after send:", a.send({'a':12}))	 # None
+	try:
+		next(a)
+	except StopIteration as e:
+		print("Returned:", e)  # [1,2]
+
+
+
 basic_examples()
 delegated_generator()
+send_to()
