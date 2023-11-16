@@ -2,8 +2,10 @@
 # keyword: generator
 
 import itertools
+from typing import Generator
 
-def incr():
+# type hint is yield, send, return
+def incr() -> Generator[int, None, None]:
 	v = 0
 	while True:
 		yield v
@@ -22,14 +24,14 @@ def delegated_generator():
 	# return in a generator is equivalent to
 	# raise StopIteration(<returned value>)
 	print('An example of a delegated generator:')
-	def f():
+	def f() -> Generator[int, None, str]:
 		yield 1
 		yield 2
-		return 3
+		return "returned value"
 
 	def g():
 		x = yield from f()
-		print(f'{x} returned from yield')  # x takes value 3
+		print(f'"{x}" returned from yield')  # x == "returned value"
 
 	for y in g():  # y takes values 1, 2
 		print(f'{y} yielded from g')
