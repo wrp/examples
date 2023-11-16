@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+import concurrent.futures
+from itertools import repeat
+
+def foo(x, a, b):
+	print(x, a, b)
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+	# Call foo 3 times, with arguments
+	# 2, 5, 1
+	# 7, 5, 'a'
+	# 11, 5, 'foo'
+	executor.map(
+		foo,
+		[2, 7, 11],
+		repeat(5),
+		[1, 'a', 'foo'],
+	)
+	executor.shutdown(wait=True)
