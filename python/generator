@@ -3,17 +3,34 @@
 
 import itertools
 
-def foo():
+def incr():
+	v = 0
 	while True:
-		yield 0
-		yield 0
-		yield 1
-		yield 1
+		yield v
+		v += 1
 
-x = foo()
-m = [next(x) for _ in range(9)]
-k = itertools.islice(foo(), 9)
-print( "m = {}", m)
+x = incr()	# x is a generator, not an int
+m = [next(x) for _ in range(9)] # 0..8
+print("m = {}", m)
 
-# a = k[0:9]
-# print( "a = {}", a)
+# k is a new generator, starting at 0
+k = itertools.islice(incr(), 3)
+print(','.join(map(str,k)))
+
+def delegated_generator():
+	# return in a generator is equivalent to
+	# raise StopIteration(<returned value>)
+	print('An example of a delegated generator:')
+	def f():
+		yield 1
+		yield 2
+		return 3
+
+	def g():
+		x = yield from f()
+		print(f'{x} returned from yield')  # x takes value 3
+
+	for y in g():  # y takes values 1, 2
+		print(f'{y} yielded from g')
+
+delegated_generator()
