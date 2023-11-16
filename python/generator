@@ -9,13 +9,14 @@ def incr():
 		yield v
 		v += 1
 
-x = incr()	# x is a generator, not an int
-m = [next(x) for _ in range(9)] # 0..8
-print("m = {}", m)
+def basic_examples():
+	x = incr()	# x is a generator, not an int
+	m = [next(x) for _ in range(9)] # 0..8
+	print("m = {}", m)
 
-# k is a new generator, starting at 0
-k = itertools.islice(incr(), 3)
-print(','.join(map(str,k)))
+	# k is a new generator, starting at 0
+	k = itertools.islice(incr(), 3)
+	print(','.join(map(str,k)))
 
 def delegated_generator():
 	# return in a generator is equivalent to
@@ -33,4 +34,5 @@ def delegated_generator():
 	for y in g():  # y takes values 1, 2
 		print(f'{y} yielded from g')
 
+basic_examples()
 delegated_generator()
