@@ -11,7 +11,7 @@ def foo():
 		yield 1
 
 x = foo()
-m = [next(x) for _ in xrange(9)]
+m = [next(x) for _ in range(9)]
 k = itertools.islice(foo(), 9)
 print( "m = {}", m)
 
