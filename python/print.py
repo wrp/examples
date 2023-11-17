@@ -3,7 +3,7 @@
 import sys
 
 print("stderr", file=sys.stderr)
-print("noeol", end='')
+print("noeol", end='')  # keyword newline endl eol
 print("stdout")
 
 h = "hello"
