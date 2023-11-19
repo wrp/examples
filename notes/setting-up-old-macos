@@ -1,0 +1,44 @@
+
+A few weeks ago, I turned on a really old macos machine and am trying
+to make it usable.  I should have been documenting what I was doing,
+but did not.  So starting to do so now.  (I haven't looked at it all
+for a few days (weeks!) and have already forgotten the state!).
+
+Brew is almost completely useless, as every invocation spits out
+warnings saying (paraphrased) "your machine is too old, go away".
+
+The biggest takeaway from this experience so far is that testing
+platform instead of features is a huge mistake.
+
+Getting go working was a pain.  Modern go (I cloned
+f215a0be4d1231d897123e28324ab024f3502a52 from Oct 29, 2023,
+which is go1.19beta1-5450-gf215a0be4d) simply refuses to build
+on this machine because my machine does not have nanosecond
+precision on the filesystem (there is some system call that
+I do not have, and at the moment I cannot reproduce the error
+message).  The process was basically: checkout go-1.4 and build,
+then chekcout 1.17.13 and build.  Now I have a working go-1.17
+and will never be able to upgrade to 18.
+
+Have been trying to get zig working, but ran into issues with
+llvm complaining that my clang is too old.  Seems weird, since
+the whole point of building llvm-project is to get clang, so
+this feels like a chicken and egg issue.  Decided instead
+to get a container runtime going.  Docker seems more painful
+that podman, so I am going to try to get podman working.
+
+Downloaded a podman disk image, but double clicking on the
+icon brings up a window that says "verifying disk image" which
+then goes away and the disk does not get mounted.  No visible
+error message anywhere.  I still do not understand why anyone
+likes graphical user interfaces, since they are invariably
+useless.  Glancing through my .bash-history, it looks
+like I cloned podman from github where I see a bunch of failed
+calls to 'make podman-remote', and then a checkout of
+c06460bea followed by a successful call to 'make podman-remote'
+Looks like that commit was the bump of podman to go 1.17.
+So now I have a working podman (version 4.0.0-dev)
+
+
+But 'podman machine init' yields the error:
+Error: exec: "qemu-system-x86_64": executable file not found in $PATH
