@@ -44,25 +44,49 @@ But 'podman machine init' yields the error:
 Error: exec: "qemu-system-x86_64": executable file not found in $PATH
 
 Decided to try macports:
-git clone https://github.com/macports/macports-base.git
-macports has a configure script (why do people include that in the git
-repo?!?  We (as an industry) have got to get away from this idea
-that git is a good mechanism for distributing anything other
-than source code.  It is not an artifact distribution mechanism.
-If we want to use it that way, we should put generated files
-in a different namespace.)
+	git clone https://github.com/macports/macports-base.git
+	macports has a configure script (why do people include that in the git
+	repo?!?  We (as an industry) have got to get away from this idea
+	that git is a good mechanism for distributing anything other
+	than source code.  It is not an artifact distribution mechanism.
+	If we want to use it that way, we should put generated files
+	in a different namespace.)
 
-configure script ran okay (prefix set to path in $HOME), but make fails with:
+	configure script ran okay (prefix set to path in $HOME), but make fails with:
 
-chmod: ${CWD}/vendor/vendor-destroot/${prefix}/libexec/macports/lib/tcllib*: No such file or directory
+	chmod: ${CWD}/vendor/vendor-destroot/${prefix}/libexec/macports/lib/tcllib*: No such file or directory
 
-I notice that git describe --tags on ddc57c5f6ced9ccc0bb4e04e22e218ae851c241d
-shows v2.8.0-beta1-120-gddc57c5f6, but the documentation on https://guide.macports.org/#installing.macports.git
-recommends using v.2.8.1 as most recent stable, so maybe the github repo is
-behind.
+	I notice that git describe --tags on ddc57c5f6ced9ccc0bb4e04e22e218ae851c241d
+	shows v2.8.0-beta1-120-gddc57c5f6, but the documentation on https://guide.macports.org/#installing.macports.git
+	recommends using v.2.8.1 as most recent stable, so maybe the github repo is
+	behind.
 
-There are files in vendor/vendor-destroot/${prefix}/lib/tcllib1.21, so maybe I need
-to specify libexecdir to the configure script.
+	There are files in vendor/vendor-destroot/${prefix}/lib/tcllib1.21, so maybe I need
+	to specify libexecdir to the configure script.
 
-Trying again with ./configure --libexecdir=$HOME/$(uname -m)/$(uname -s)/libexec/macports
-(prefix is set to $HOME/$(uname -m)/$(uname -s) in CONFIG_SITE)
+	Trying again with ./configure --libexecdir=$HOME/$(uname -m)/$(uname -s)/libexec/macports
+	(prefix is set to $HOME/$(uname -m)/$(uname -s) in CONFIG_SITE)
+
+	make gives the same error.  Let's try again with no CONFIG_SITE:
+	./configure --prefix=$HOME/$(uname -m)/$(uname -s)
+
+	With CONFIG_SITE unset, the build "works", which is to say make completes
+	succesfully.  But 'make install' does not give a usable setup.
+
+	Decided to abandon ports.
+
+qemu:
+	Cloned qemu from https://gitlab.com/qemu-project/qemu
+	and checked out v8.2.0-rc0 (9c673a41ee).  configury fails because I do not
+	have ninja installed.
+
+ninja:
+	cloned git@github.com:ninja-build/ninja.git and built using
+	cmake without issue.  Copying resulting binary to $prefix/bin
+
+Back to qemu, configure is failing with
+../meson.build:89:0: ERROR: <PythonExternalProgram 'python3' -> ['$PATH_TO_QEMU/build/pyvenv/bin/python3']> is not a valid python or it is missing distutils
+
+Checking the git log for python, I see that distutils is no longer shipped as of 3.12, so let's downgrade python to 3.11.6 (only
+a few months old, from Oct 2, 2023)
+
