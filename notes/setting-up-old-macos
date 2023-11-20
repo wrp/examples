@@ -90,3 +90,10 @@ Back to qemu, configure is failing with
 Checking the git log for python, I see that distutils is no longer shipped as of 3.12, so let's downgrade python to 3.11.6 (only
 a few months old, from Oct 2, 2023)
 
+After downgrading python, qemu fails with:
+../meson.build:207:4: ERROR: Problem encountered: You either need GCC v7.4 or Clang v10.0 (or XCode Clang v12.0) to compile QEMU
+
+Current clang is Apple LLVM version 9.0.0 (clang-900.0.39.2)
+
+So let's try building  https://github.com/llvm-mirror/clang
+
