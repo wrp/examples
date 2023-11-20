@@ -97,3 +97,16 @@ Current clang is Apple LLVM version 9.0.0 (clang-900.0.39.2)
 
 So let's try building  https://github.com/llvm-mirror/clang
 
+That does not work.  The cmake run in clang fails with:
+  Could not find a package configuration file provided by "LLVM" with any of
+
+
+Try: brew install llm  ... fails with:
+Error: An exception occurred within a child process:
+  CompilerSelectionError: z3 cannot be built with any available compilers.
+  Install GNU's GCC:
+    brew install gcc
+
+
+try: brew install gcc
+
