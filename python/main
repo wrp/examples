@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+"""This is the docstring for the script"""
+
+import inspect
+
+def main():
+    """This is the docstring for main"""
+    n = inspect.getframeinfo(inspect.currentframe()).function
+    print(globals()[n].__doc__)
+    print(main.__doc__)
+
+try:
+    print(globals()['__doc__'])
+    main()
+except KeyboardInterrupt:
+    sys.exit(1)
