@@ -15,3 +15,6 @@ jq .
 
 # Validate the ci pipeline:
 # projects/${id}/ci/lint
+
+# Find the path of the ci/cd config file:
+# $0 projects/$id | jq .ci_config_path
