@@ -66,3 +66,4 @@ strip: |-
          end of the string
 
 
+after: foo
