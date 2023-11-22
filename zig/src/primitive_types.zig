@@ -2,32 +2,19 @@
 
 pub fn main() void {
 	// integers
-	const a: i8 = 1;
-	const b: u8 = 1;
-	const c: i16 = 1;
-	const d: u16 = 1;
-	const e: i32 = 1;
-	const f: u32 = 1;
-	const g: i64 = 1;
-	const h: u64 = 1;
-	const i: i128 = 1;
-	const j: u128 = 1;
-	const k: isize = 1; // pointer sized integer
-	const l: usize = 1; // unsigned pointer sized integer
-	const m: c_char = 1;
+	_ = @as(i8, 1);
+	_ = @as(i8, 1);
+	_ = @as(u8, 1);
+	_ = @as(i16, 1);
+	_ = @as(u16, 1);
+	_ = @as(i32, 1);
+	_ = @as(u32, 1);
+	_ = @as(i64, 1);
+	_ = @as(u64, 1);
+	_ = @as(i128, 1);
+	_ = @as(u128, 1);
+	_ = @as(isize, 1); // pointer sized integer
+	_ = @as(usize, 1); // unsigned pointer sized integer
+	_ = @as(c_char, 1);
 
-
-_ = a;
-_ = b;
-_ = c;
-_ = d;
-_ = e;
-_ = f;
-_ = g;
-_ = h;
-_ = i;
-_ = j;
-_ = k;
-_ = l;
-_ = m;
 }
