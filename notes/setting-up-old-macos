@@ -110,3 +110,36 @@ Error: An exception occurred within a child process:
 
 try: brew install gcc
 
+After 40 hours or so, brew install gcc appears stalled.
+Going to try reverting llvm-project: g co    ea89965b3cfc^
+
+llvm:
+	(That is the commit that bumped CLANG version to >= 1600
+
+	That didn't work: let's try 892e6e2200d9^
+	Got a warning, so going to try:
+	rm -rf build; LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1 cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+	That didn't work; trying:
+	rm -rf build; cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release  -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	That worked!  Now
+	ninja -C build
+
+	Argh.  need to rebuild with a prefix:
+
+	history not stored in .bash-history :( rebuilt with
+	cmake -DCMAKE_INSTALL_PREFIX=$prefix
+	ninja -C build install
+
+zig:
+	now attempting to cmake in zig is giving an encouraging error:
+	CMake Error at cmake/Findllvm.cmake:27 (message):
+	expected LLVM 17.x but found 16.0.0git using
+	$prefix/bin/llvm-config
+	Call Stack (most recent call first):
+	      CMakeLists.txt:135 (find_package)
+
+	So we are using my installed llvm.  Now, we can either
+	try to bootstrap an llvm upgrade, or downgrade zig.  I think
+	I prefer the former.
