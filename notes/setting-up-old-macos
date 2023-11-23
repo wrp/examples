@@ -143,3 +143,51 @@ zig:
 	So we are using my installed llvm.  Now, we can either
 	try to bootstrap an llvm upgrade, or downgrade zig.  I think
 	I prefer the former.
+
+
+clang:
+	need to update clang, so running from top-level llvm-project
+	checked out at d0cf7b2015ebd76ec2957ff808aec2b1201ebc9d:
+	cmake -G Ninja -S clang -B build-clang -DLLVM_EXTERNAL_LIT=$(pwd)/build/utils/lit -DLLVM_ROOT=/Users/wrp/x86_64/Darwin/ -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	Getting error:
+
+	CMake Error at /Users/wrp/x86_64/Darwin/lib/cmake/llvm/LLVMExports.cmake:1152 (set_target_properties):
+	  The link interface of target "LLVMLineEditor" contains:
+
+	    LibEdit::LibEdit
+
+	  but the target was not found.  Possible reasons include:
+
+	    * There is a typo in the target name.
+	    * A find_package call is missing for an IMPORTED target.
+	    * An ALIAS target is missing.
+
+	Call Stack (most recent call first):
+	  /Users/wrp/x86_64/Darwin/lib/cmake/llvm/LLVMConfig.cmake:319 (include)
+	  CMakeLists.txt:73 (find_package)
+
+llvm:
+	let's go back to llvm and try re-installing with different options:
+	cmake -S llvm -B build-llvm -G Ninja -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	That generated an error that recommend adding libcxx to runtimes:s
+	cmake -S llvm -B build-llvm -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	cmake --build build-llvm
+
+	grr:
+/Users/wrp/github/llvm-project/lld/ELF/Config.h:382:3: error: too few template arguments for class template 'SmallVector'
+  SmallVector<std::unique_ptr<MemoryBuffer>> memoryBuffers;
+  ^
+/Users/wrp/github/llvm-project/lld/include/lld/Common/LLVM.h:35:41: note: template is declared here
+template <typename T, unsigned N> class SmallVector;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^
+1 error generated.
+[4781/6318] Building CXX object tools/lld/COFF/CMakeFiles/lldCOFF.dir/Writer.cpp.o
+ninja: build stopped: subcommand failed.
+
+	Let's back up a bit.  Checking out 809855b56f06dd7182685f88fbbc64111df9339a (tag: llvmorg-16-init)
+	and executing:
+	$ cmake -S llvm -B build-llvm-809855b5 -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1k
+	$ cmake --build build-llvm
