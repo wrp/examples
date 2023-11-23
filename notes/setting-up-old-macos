@@ -191,3 +191,38 @@ ninja: build stopped: subcommand failed.
 	and executing:
 	$ cmake -S llvm -B build-llvm-809855b5 -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1k
 	$ cmake --build build-llvm
+	... and after 8.5 hours (I suspect the build was not running while the screen saver was on)
+	same error (but now in line 381)
+
+	Let's try applying this patch:
+
+diff --git a/lld/ELF/Config.h b/lld/ELF/Config.h
+index 39723f092784..c53d39b89307 100644
+--- a/lld/ELF/Config.h
++++ b/lld/ELF/Config.h
+@@ -378,7 +378,7 @@ struct DuplicateSymbol {
+ };
+
+ struct Ctx {
+-  SmallVector<std::unique_ptr<MemoryBuffer>> memoryBuffers;
++  SmallVector<std::unique_ptr<MemoryBuffer>, 0> memoryBuffers;
+   SmallVector<ELFFileBase *, 0> objectFiles;
+   SmallVector<SharedFile *, 0> sharedFiles;
+   SmallVector<BinaryFile *, 0> binaryFiles;
+
+	and see what happens.
+
+
+	Arghhh!!  cmake --build build-llvm was the wrong command.  Let's unapply the
+	patch and run:
+
+	cmake --build build-llvm-809855b5
+
+	While I wait...note that the offending line was added in 9a572164d592e
+	dated 2022-06-29 18:53:38
+
+	Going to checkout llvmorg-15-init, which is the first tag prior to the offending
+	release. (a2601c98873376bbbeff4b6eddf0f4d920535f8b)
+
+	$ cmake -S llvm -B build-llvmorg-15-init -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+	$ cmake --build build-llvmorg-15-init
