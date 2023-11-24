@@ -10,39 +10,48 @@ $ echo text > fileb; git add fileb; git commit -m 'Add fileb' -s --trailer subpr
 $ echo text > filec; git add filec; git commit -m 'Add filec' -s --trailer subproject=comp --trailer ticket=COMP-134 > /dev/null
 $ echo text > filed; git add filed; git commit -m '[mem, MEM-21] Add filed' -s > /dev/null
 $ git l1
- cec2085 bob          [mem, MEM-21] Add filed                                       HEAD -> main
- 8834a83 bob          Add filec
- 8da76ec bob          Add fileb
- 00527dc bob          Add filea
+ 7a0b9d8 bob          [mem, MEM-21] Add filed                                       HEAD -> main
+ a6eb9bb bob          Add filec
+ 8411254 bob          Add fileb
+ 3a95f02 bob          Add filea
 $ t=ticket git l1
- cec2085 bob          [           ] [mem, MEM-21] Add filed                                       HEAD -> main
- 8834a83 bob          [COMP-134   ] Add filec
- 8da76ec bob          [STORE-1234 ] Add fileb
- 00527dc bob          [ABC-1234   ] Add filea
-$ w=18 t=ticket,subproject g l1
- cec2085 bob          [                  ] [mem, MEM-21] Add filed                                       HEAD -> main
- 8834a83 bob          [comp,COMP-134     ] Add filec
- 8da76ec bob          [storage,STORE-1234] Add fileb
- 00527dc bob          [mem,ABC-1234      ] Add filea
+ 7a0b9d8 bob          [           ] [mem, MEM-21] Add filed                                       HEAD -> main
+ a6eb9bb bob          [COMP-134   ] Add filec
+ 8411254 bob          [STORE-1234 ] Add fileb
+ 3a95f02 bob          [ABC-1234   ] Add filea
+$ t=ticket,subproject git l1
+ 7a0b9d8 bob          [           ][           ] [mem, MEM-21] Add filed                                       HEAD -> main
+ a6eb9bb bob          [COMP-134   ][comp       ] Add filec
+ 8411254 bob          [STORE-1234 ][storage    ] Add fileb
+ 3a95f02 bob          [ABC-1234   ][mem        ] Add filea
 $ t=signed-off-by git l1
- cec2085 bob          [bob <bob@dev_null.com>] [mem, MEM-21] Add filed                                       HEAD -> main
- 8834a83 bob          [bob <bob@dev_null.com>] Add filec
- 8da76ec bob          [bob <bob@dev_null.com>] Add fileb
- 00527dc bob          [bob <bob@dev_null.com>] Add filea
+ 7a0b9d8 bob          [bob <bob@dev_null.com>] [mem, MEM-21] Add filed                                       HEAD -> main
+ a6eb9bb bob          [bob <bob@dev_null.com>] Add filec
+ 8411254 bob          [bob <bob@dev_null.com>] Add fileb
+ 3a95f02 bob          [bob <bob@dev_null.com>] Add filea
+$ w=7 t=subproject git l1
+ 7a0b9d8 bob          [       ] [mem, MEM-21] Add filed                                       HEAD -> main
+ a6eb9bb bob          [comp   ] Add filec
+ 8411254 bob          [storage] Add fileb
+ 3a95f02 bob          [mem    ] Add filea
+
 
 (here, l1 is a git alias defined by:
 	l1 = !bash -c 'cd ${GIT_PREFIX:-.} && a=$(printf \"%s\" ${t-$(git config \
-		core.default-trailers)} | sed -E \"s/^|,/&key=/g\" ) && \
+		core.default-trailers)} | \
+		sed -E \"s/([^,]*)(\\$|,)/[%<(${w:-11})%(trailers:key=\\1,separator=%x2C,valueonly)]/g\" \
+		) && \
 		git log \
 		--date=format:\"\" \
 		--format=format:\"$(echo \"\
 		%Cgreen%h\
 		%Cred%<(12,trunc)%an%Creset\
-		${a:+[%<(${w-11})%(trailers:${a},separator=%x2C,valueonly)]}\
+		${a}\
 		%<(60,trunc)%s \
 		%ad \
 		%Cblue%D%Creset\
 		\" | tr -s \" \"  )\" \"$@\"' _
+
 )
 
 metadata can also be added via notes, but I want to focus on trailers here.  Following the
