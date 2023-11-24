@@ -260,3 +260,7 @@ index 39723f092784..c53d39b89307 100644
 	clang: error: linker command failed with exit code 1 (use -v to see invocation)
 	[4583/5944] Building CXX object tools/lldb/source/Host/CMakeFiles/lldbHost.dir/common/TCPSocket.cpp.o
 	ninja: build stopped: subcommand failed.
+
+llvm-12 (7ab7b979d29e1e43701cf690f5cf1903740f50e3)
+	Various other attempts have seen cmake failures.  Now trying:
+	$ cmake -S llvm -B build-llvmorg-12-init -G Ninja -DLLDB_INCLUDE_TESTS=OFF -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
