@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# keyword: format string print
+
 s = [
 	f'{"centered":^15}',
 	f'{"left":<15}',
