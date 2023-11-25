@@ -36,4 +36,7 @@ image:
 clean:
 	docker system prune -a -f
 
+Dockerfile-$(USER): Dockerfile
+	sed -e 's/@user@/$(USER)/g' $< > $@
+
 .PHONY: run clean image

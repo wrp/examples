@@ -1,6 +1,5 @@
 
-ARG user
-FROM debian-${user}-dev
+FROM debian-@user@-dev
 
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
