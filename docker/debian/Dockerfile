@@ -1,7 +1,6 @@
 
 # My minimal debian image
-ARG user
-FROM debian-${user}
+FROM debian-@user@
 RUN apt-get update
 RUN apt-get -y install aptitude
 RUN mv /etc/sudoers /etc/sudoers-orig
