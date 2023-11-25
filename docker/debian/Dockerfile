@@ -12,7 +12,8 @@ RUN aptitude install -y perl
 RUN aptitude install -y gcc
 RUN aptitude install -y make
 RUN aptitude install -y nmap
-RUN apt-get update && aptitude install -y gdb
+RUN apt-get update
+RUN aptitude install -y gdb
 RUN aptitude install -y git
 RUN aptitude install -y libncurses-dev
 RUN aptitude install -y ncurses-doc
