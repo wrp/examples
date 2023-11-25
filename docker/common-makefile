@@ -3,6 +3,7 @@ image ?= debian-$(USER)-dev
 base ?= debian
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
+docker_file ?= Dockerfile
 
 .PHONY: run image
 run:
@@ -31,7 +32,9 @@ image:
 		--build-arg base=$(base) \
 		--build-arg user=$(USER) \
 		--build-arg uid=$(uid) \
-		-t $(image) .
+		-t $(image) \
+		-f $(docker_file) \
+		.
 clean:
 	docker system prune -a -f
 
