@@ -1,7 +1,6 @@
 
 # My minimal linux image
-ARG base
-FROM $base
+FROM @base@
 RUN printf 'set editing-mode vi\nset keymap vi\n' > /etc/inputrc
 RUN printf 'bind -v\n' > /root/.editrc
 
@@ -21,6 +20,6 @@ RUN printf "root ALL=(ALL) ALL\n" > /etc/sudoers
 RUN printf "${user} ALL=(ALL) NOPASSWD:ALL\n" >> /etc/sudoers
 RUN printf '\nDefaults env_keep += "SSH_CLIENT SSH_USER"\n' >> /etc/sudoers
 
-ENV DOCKER=${base}-${user}
+ENV DOCKER=@base@-${user}
 
 CMD /bin/sh
