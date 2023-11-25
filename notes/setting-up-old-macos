@@ -264,3 +264,32 @@ index 39723f092784..c53d39b89307 100644
 llvm-12 (7ab7b979d29e1e43701cf690f5cf1903740f50e3)
 	Various other attempts have seen cmake failures.  Now trying:
 	$ cmake -S llvm -B build-llvmorg-12-init -G Ninja -DLLDB_INCLUDE_TESTS=OFF -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+podman from .dmg
+	I just realized that one of the reasons for going down this route was that double clicking
+	on the podman.dmg wasn't mounting the drive.  So instead I opened up 'disk-utility' and
+	did an explicit 'file/open' to access the disk image.  That worked and I was able to get
+	a podman-desktop out, but attempting to run it gives: "You can't use this version
+	of the application "..." with this version of macOS.  You have MacOS 10.12.6, the application
+	requires 10.15 or later.".  Reinforcing my complaint about testing for system verses testing
+	for features.  It would be nice to know which feature is actually missing.  so I'll try
+	to get an older podman disk image.
+
+
+	Was able to download 1.13.1.15353 from https://download.docker.com/mac/stable/1.13.1.15353/Docker.dmg,
+	but attempts to build fail with:
+
+	DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+		    Install the buildx component to build images with BuildKit:
+		    https://docs.docker.com/go/buildx/
+
+	Sending build context to Docker daemon  12.29kB
+	Error response from daemon: Bad response from Docker engine
+
+	Great error message.  So informative.
+
+
+	Downloaded https://download.docker.com/mac/stable/1.12.6.14937/Docker.dmg
+
+	docker build is happier, but now getting complaints about defining ARG before
+	FROM, so I will need to revamp my Dockerfiles to use the old syntax.
