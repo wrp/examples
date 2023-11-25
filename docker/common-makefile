@@ -1,6 +1,5 @@
 
 image ?= debian-$(USER)-dev
-base ?= debian
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
 docker_file ?= Dockerfile
@@ -29,7 +28,6 @@ run:
 
 image:
 	docker build \
-		--build-arg base=$(base) \
 		--build-arg user=$(USER) \
 		--build-arg uid=$(uid) \
 		-t $(image) \
