@@ -28,7 +28,7 @@ def reraise():
         raise foo("raised foo")
     except Exception as e:
         raise e
-    finally:
+    finally:  # finally clause is executed whether an exception is thrown or not
         print('finally in re-raised foo')
 
 try:
