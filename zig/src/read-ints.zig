@@ -4,13 +4,17 @@ const std = @import("std");
 
 pub fn main() !void {
 	const stdout = std.io.getStdOut().writer();
+	const stderr = std.io.getStdErr().writer();
 
 	var unbuffered_stdin = std.io.getStdIn().reader();
 	var stdin = std.io.bufferedReader(unbuffered_stdin);
 	var r = stdin.reader();
 	var buf: [1000]u8 = undefined;
 	while (try r.readUntilDelimiterOrEof(&buf, ' ')) |line| {
-		const value = try std.fmt.parseInt(i32, line, 10);
+		const value = std.fmt.parseInt(i32, line, 10) catch blk: {
+			try stderr.print("Invalid: {s}\n", .{line});
+			break :blk 0;
+		};
 		try stdout.print("{d}\n", .{value});
 	}
 }
