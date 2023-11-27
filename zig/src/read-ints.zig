@@ -11,10 +11,10 @@ pub fn main() !void {
 	var r = stdin.reader();
 	var buf: [1000]u8 = undefined;
 	while (try r.readUntilDelimiterOrEof(&buf, ' ')) |line| {
-		const value = std.fmt.parseInt(i32, line, 10) catch blk: {
-			try stderr.print("Invalid: {s}\n", .{line});
-			break :blk 0;
-		};
-		try stdout.print("{d}\n", .{value});
+		if (std.fmt.parseInt(i32, line, 10)) |value| {
+			try stdout.print("{d}\n", .{value});
+		} else |err| {
+			try stderr.print("Invalid: {}\n", .{err});
+		}
 	}
 }
