@@ -8,3 +8,6 @@ solve:
 
 c-solve:
 	$(CC) solve.c -o $@
+
+zig-solve: solve.zig
+	zig build-exe --name $@ $<
