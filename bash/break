@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Bash supports break levels:
+
+# break [n]: Exit from within a for, while, until, or select loop.  If n is
+# specified, break n levels.  n must be >= 1.  If n is greater than
+# the number of enclosing loops, all enclosing loops are exited.  The
+# return value is 0 unless the shell is  not  executing  a  loop  when
+# break is executed.
+
+level=0
+for outer in A B C D E F; do
+	echo "********** outer: $outer *****"
+	for i in 0 1 2 3 4; do
+		echo i = $i
+		while : ; do
+			break $((++level))
+			echo never get here
+		done
+		echo after while level = $level
+	done
+	echo after inner for $level: i = $i, outer = $outer
+done
+echo after outer for $level
