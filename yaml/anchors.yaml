@@ -71,3 +71,12 @@ bar:
     id: 'override bar'
 
 baz: [<<: *default]
+
+---
+
+foo: [
+        foo: &ref baz,
+        bar: "7"
+]
+
+bar: [ a: *ref ]
