@@ -5,7 +5,7 @@ curl -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
 	https://${GITLAB_DOMAIN?}/api/v4/${1-projects} |
 jq .
 
-# Some sample queries.
+# Some sample queries. (See 'api' for more details)
 
 # Search for a project by name:
 # "projects?search=${name}&search_namespaces=True"
