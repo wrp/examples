@@ -3,4 +3,7 @@ A brief summary of the rest endpoints I am currently using frequently:
 
 projects/:id/ci/lint     # get the pipeline config
 projects/:id/members/all # get list of members
+
 groups/:id/members/all   # get list of members
+groups/:id/subgroups
+groups/:id/projects
