@@ -559,10 +559,10 @@ Matching in list context
             \*/     # Match the closing delimiter.
         } []gsx;
 
-        s/^\s*(.*?)\s*$/$1/;        # trim whitespace in $_,
+        s/^\s*(.*?)\s*$/$1/;        # trim whitespace in $_, strip
                                     # expensively
 
-        for ($variable) {           # trim whitespace in $variable,
+        for ($variable) {           # trim whitespace in $variable, strip
                                     # cheap
             s/^\s+//;
             s/\s+$//;
