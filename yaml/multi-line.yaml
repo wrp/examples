@@ -1,5 +1,14 @@
 foo:
 - newline: >
+        The > is a "block style indicator".
+        > is the "folded style"
+        | is the "literal style"
+        If there is a second character (eg >- or |-), that
+        character is the "block chomping indicator".
+        Without a block chomping indicator, the default is "clip"
+        which puts a single newline at the end of the string.
+        a '-' is the "strip chomping indicator" which removes all
+        newlines. To keep all newlines, use '+'
         this is a single string
         which compresses newline and following
            indentation that matches the first line to one space
