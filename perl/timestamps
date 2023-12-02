@@ -2,9 +2,7 @@
 
 # Demonstrate some time stamp manipulations
 
-use strict;
-use warnings;
-use 5.12.0;
+use 5.12.0; # enables strict and warnings
 use Time::Piece;
 use Time::Seconds qw(ONE_DAY);
 
