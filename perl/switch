@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+# See perldoc.perl.org/perlsyn#Switch-statements
+# or perldoc perlsyn and search for 'switch'
+
+# 5.10.1 is sufficient for switch
+use 5.12.0; # enables strict and warnings
+
+# smart matching is considered mis-implemented and possibly will
+# be removed completely in 5.28.0.  Do not use it.
+
+for (@ARGV) {
+	when (/^abc/) { say 'abc smart matched' }
+	when (/^def/) { say 'def smart matched' }
+	when (/^xyz/) { say 'xyz smart matched' }
+	default       { say "$_: default" }
+}
+
+# But better to just do:
+for (@ARGV) {
+	if    (/^abc/) { say 'abc if/else matched' }
+	elsif (/^def/) { say 'def if/else matched' }
+	elsif (/^xyz/) { say 'xyz if/else matched' }
+	else           { say "$_: if/else default" }
+}
