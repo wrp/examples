@@ -21,3 +21,13 @@ CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
 # to the image using a bind mount.  eg
 RUN --mount=type=bind,source=examples.bundle,target=examples.bundle \
 	git fetch examples.bundle
+
+# If an ENTRYPOINT is specified, then CMD will be passed as an argument
+# to it.  (entrypoint can be overridden in a container with
+# docker run --entrypoint...)
+
+# If ENTRYPOINT is given, you should use the exec form
+# ENTRYPOINT = ['cmd', 'arg', 'arg']
+# instead of the shell form: ENTRYPOINT = cmd arg arg
+# because in the former, 'cmd' will be pid 1 in the container
+# but with the latter 'cmd' will be a child of an sh instance
