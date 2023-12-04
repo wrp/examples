@@ -1,5 +1,7 @@
 
-image ?= debian-$(USER)-dev
+ifndef image
+$(error image is not defined)
+endif
 uid ?= $$(id -u)
 home_mount ?= /$(USER)
 docker_file ?= Dockerfile
