@@ -1,0 +1,14 @@
+#!/bin/bash
+
+exit_cmd() {
+	# When first entering the trap, $?
+	# is the value that would exit
+	echo in exit_cmd: '$? =' $?
+
+	# But we can change the return value here
+	exit 5
+}
+
+trap exit_cmd 0
+
+exit 3
