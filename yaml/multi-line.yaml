@@ -8,7 +8,7 @@ foo:
         Without a block chomping indicator, the default is "clip"
         which puts a single newline at the end of the string.
         a '-' is the "strip chomping indicator" which removes all
-        newlines. To keep all newlines, use '+'
+        newlines from the end of the string. To keep all newlines, use '+'
         this is a single string
         which compresses newline and following
            indentation that matches the first line to one space
