@@ -15,3 +15,8 @@ for i in itertools.zip_longest(a, b):
 
 for i, (a, b) in enumerate(zip(a, b)):
     print(i, a, b)
+
+a = [1, 2, 3, 4, 5, 6]
+b = [ x for x in a if x % 2]
+# same as using filter, but filter gives a generator
+b = list(filter(lambda x: x%2, a))
