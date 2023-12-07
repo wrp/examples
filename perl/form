@@ -4,12 +4,10 @@
 # keywords: perlform template
 use 5.12.0;
 
-my $name = 'name';
-my $login = 'login';
-my $office = 'office';
-my $uid = 32;
-my $gid = 17;
-my $home = 'home';
+
+my
+	($name, $login, $office, $uid, $gid, $home) =
+	('name', 'login', 'office', 32, 17, 'home');
 
 # <<   left justified
 # >>   right justified
