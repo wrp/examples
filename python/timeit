@@ -12,6 +12,7 @@ Demonstrate basic timeit in idle
 """
 
 
+import time
 import timeit
 from functools import partial, reduce
 import operator
@@ -28,3 +29,13 @@ times = timeit.Timer(partial(to_time, test_items)).repeat(3, 1000)
 time_taken = min(times) / 1000
 
 print(f"avg: {time_taken}")
+
+import sys
+try: limit = int(sys.argv[1])
+except: limit = int(1e7)
+s = time.perf_counter()
+x = 0
+for i in range(limit):
+    x += x % 4
+elapsed = time.perf_counter() - s
+print(f"loop executed in {elapsed:0.2f} seconds.")
