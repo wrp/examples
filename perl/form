@@ -11,9 +11,14 @@ my $uid = 32;
 my $gid = 17;
 my $home = 'home';
 
+# <<   left justified
+# >>   right justified
+# ||   centered
 format =
 @<<<<<<<<<<<<<<<<<< @||||||| @<<<<<<@>>>> @>>>> @<<<<<<<<<<<<<<<<<
 $name,              $login,  $office,$uid,$gid, $home
 .
 
+write;
+$name = 'this is too long to fit in the field, so it will be truncated';
 write;
