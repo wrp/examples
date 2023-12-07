@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 import threading
 import sys
@@ -13,7 +13,6 @@ def foo(name):
 
     try:
         sem.acquire()
-        sys.stderr.write( '%s sem: %d\n' % (name, sem._Semaphore__value))
         raise Foo('%s:oops' % name)  # semaphore is not incremented
         sem.release()
     except Foo:
@@ -23,7 +22,7 @@ def foo(name):
     try:
         with lock:
             for x in range(5):
-                print name, "running:", x
+                print(name, "running:", x)
             raise Foo('%s:oops' % name)  # Lock is released
     except Foo:
         if name == 'c':
@@ -31,11 +30,11 @@ def foo(name):
 
     if name == 'a':
         time.sleep(5)
-        print 'a is done'
+        print('a is done')
 
     if name == 'b':
         time.sleep(1)
-        print 'b is done'
+        print('b is done')
 
 a = threading.Thread(target=foo, args=('a'))
 b = threading.Thread(target=foo, args=('b'))
