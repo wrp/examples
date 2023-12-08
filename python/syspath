@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python -c 'import sys; print("\n".join(sys.path))' # keywords: PYTHONPATH PATH import path module
