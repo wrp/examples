@@ -5,8 +5,14 @@ if test "${GITLAB_HOME?}" = "${GITLAB_HOME#/}"; then
 	exit 1
 fi
 
+# Use this variable to populate data in initial config /etc/gitlab/gitlab.rm
+GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/';"
+GITLAB_OMNIBUS_CONFIG+="gitlab_rails['lfs_enabled'] = true;"
+unset GITLAB_OMNIBUS_CONFIG  # leaving here for demonstration only
+
 docker run --detach \
 	--hostname gitlab.example.com \
+	--env GITLAB_OMNIBUS_CONFIG="$GITLAB_OMNIBUS_CONFIG" \
 	--publish 1043:443 \
 	--publish 1080:80 \
 	--publish 1022:22 \
