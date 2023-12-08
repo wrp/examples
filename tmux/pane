@@ -76,7 +76,7 @@ tmux capture-pane -p -S -${n-1000} -t $PANE # scrape $n lines of history(and cur
 
 
 To move window:
-:movew -a -t {target-window}
+:movew -a [-s source-window] -t {target-window}  # Move source to target
 # target-windows is of the form name-of-session:n  eg :movew -t 0:3
 # without -a, the move will fail if the target window already exists.  With -a
 # it pickes the next available index.
