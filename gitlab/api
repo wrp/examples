@@ -20,4 +20,30 @@ groups/${id}/members/all   # get list of members
 groups/${id}/subgroups
 groups/${id}/projects
 
+# Create a group
+POST groups/${id}?name=${group_name}&path=${group_path}
+
+# Update group:  (make visibility public)
+PUT "./query groups/${id}?visibility=public"
+
+# Add user to a group
+POST "groups/${group_id}/members?user_id=${user_id}&access_level=${access_level}'
+# access levels:
+# No access (0)
+# Minimal access (5) (Introduced in GitLab 13.5.)
+# Guest (10)
+# Reporter (20)
+# Developer (30)
+# Maintainer (40)
+# Owner (50). Valid for projects in GitLab 14.9 and later.
+
+# Create a project
+POST "/projects?name=${name}"
+
+
+
+GET users   # list all users
+
+
+
 namespaces
