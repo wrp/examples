@@ -1,8 +1,10 @@
 #!/bin/sh
 
 : ${protocol=https}  # eg: http
+: ${method=GET}
+
 # Query the gitlab endpoint
-curl -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
+curl -X ${method?} -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
 	${protocol}://${GITLAB_DOMAIN?}/api/v4/${1-projects} |
 jq .
 
