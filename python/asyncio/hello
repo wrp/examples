@@ -19,7 +19,7 @@ async def main():
 	await asyncio.gather(hello(), world())
 
 if __name__ == "__main__":
-	# Older python. (3.9.16)
+	# Older python. (pre 3.9?)
 	# event_loop = asyncio.get_event_loop()
 	# event_loop.run_until_complete(main())
 	# event_loop.run_until_complete(asyncio.gather(say('foo')))
