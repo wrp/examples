@@ -6,7 +6,7 @@
 # Query the gitlab endpoint
 curl -X ${method?} -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
 	${protocol}://${GITLAB_DOMAIN?}/api/v4/${1-projects} |
-jq .
+${QUERY_PAGER-jq .}
 
 # Some sample queries. (See 'api' for more details)
 
