@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Often, you will see recommendations encouraging the use of errexit (set -e)
+# This is bad practice, as using errexit is fragile and inconsistent.
+# One pattern that is common is the temporary suppression of errexit
+# using a short-circuiting ||, and you will often see code that looks
+# like:
+
+(
+sh -c 'echo a command that fails with 2; exit 2' || exit_value=$?
+# Sample of bad practice.  Don't do this.
+if test "$exit_value" = 0; then
+	: block of code handling value 0 >&2
+elif test "$exit_value" = 1; then
+	: block of code handling value 1 >&2
+else
+	echo exiting with a $exit_value >&2
+fi
+exit "$exit_value"
+)
+echo first example exited $?
+
+# The above is an atrocious monstrosity which can be
+# written much more cleanly with a trap on EXIT.  eg
+
+(
+trap 'case $? in
+0) : block of code handling value 0;;
+1) : block of code handling value 1;;
+*)  echo exiting $?;;
+esac >&2' EXIT
+
+sh -c 'echo a command that fails with 3; exit 3'
+exit
+)
+echo second example exited $?
+
+# bash supports trap on RETURN, so you can write a wrapper function like:
+do_cmd() {
+	trap 'case $? in
+	0) : block of code handling value 0;;
+	1) : block of code handling value 1;;
+	*) echo exiting $?;;
+	esac >&2' RETURN
+	"$@"
+}
+
+do_cmd sh -c "echo a command that fails with 4; exit 4"
+echo third example exited $?
+
+# But you don't really need to have support for a trap on RETURN,
+# and in classic sh you can do:
+do_cmd() (
+	trap 'case $? in
+	0) : block of code handling value 0;;
+	1) : block of code handling value 1;;
+	*)  echo exiting $?;;
+	esac >&2' EXIT
+	"$@"
+)
+
+do_cmd sh -c "echo a command that fails with 5; exit 5"
+echo fourth example exited $?
+
+# But all of these are silly.  There is virtually no reason to reason
+# to ever explicitly reference $?  Most uses are simple attempts to
+# append error messages (hence the redirection to fd 2), but there
+# is no need to ever do that.  If the command that fails is not
+# printing its own decent error message, you should stop using that
+# command and use one that is better behaved.  The general rule
+# to remember is this:  Don't ever explicitly reference $?.  If you
+# do, the ONLY place you should ever see "$?" is in the expression
+# "case $?".  Anywhere else is bad practice.  Using it in a case
+# statement is also bad practice, but less bad than using it anywhere
+# else.
