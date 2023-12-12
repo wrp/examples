@@ -15,6 +15,14 @@ projects/${id}/members/all # get list of members
 projects/${id}/templates/${type}
 projects/${id}/templates/${type}/${name}
 
+GET projects/${id}/jobs
+GET projects/${id}/pipelines/${pipeline_id}/jobs
+GET projects/${id}/pipelines/${pipeline_id}/bridges # Trigger jobs
+GET projects/${id}/jobs/${job_id}/trace   # get job's log
+POST projects/${id}/jobs/${job_id}/cancel
+POST projects/${id}/jobs/${job_id}/retry
+POST projects/${id}/jobs/${job_id}/erase # remove artifacts and log
+POST projects/${id}/jobs/${job_id}/play  # trigger a manual job
 
 groups/${id}/members/all   # get list of members
 groups/${id}/subgroups
