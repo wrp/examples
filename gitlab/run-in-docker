@@ -10,6 +10,7 @@ GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/';"
 GITLAB_OMNIBUS_CONFIG+="gitlab_rails['lfs_enabled'] = true;"
 unset GITLAB_OMNIBUS_CONFIG  # leaving here for demonstration only
 
+# Run the main gitlab instance
 docker run --detach \
 	--hostname gitlab.example.com \
 	--env GITLAB_OMNIBUS_CONFIG="$GITLAB_OMNIBUS_CONFIG" \
@@ -23,3 +24,10 @@ docker run --detach \
 	--volume $GITLAB_HOME/data:/var/opt/gitlab \
 	--shm-size 256m \
 	gitlab/gitlab-ee:latest
+
+# Start a runner
+docker run -d --name gitlab-runner --restart always \
+	-v $GITLAB_HOME/gitlab-runner/config:/etc/gitlab-runner \
+	--net host \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	gitlab/gitlab-runner:latest
