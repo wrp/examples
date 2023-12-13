@@ -19,8 +19,8 @@ CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
 
 # You can access files from the build context without copying them
 # to the image using a bind mount.  eg
-RUN --mount=type=bind,source=examples.bundle,target=examples.bundle \
-	git fetch examples.bundle
+# RUN --mount=type=bind,source=examples.bundle,target=examples.bundle \
+#	git fetch examples.bundle
 
 # If an ENTRYPOINT is specified, then CMD will be passed as an argument
 # to it.  (entrypoint can be overridden in a container with
