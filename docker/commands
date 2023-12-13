@@ -15,3 +15,6 @@ docker inspect ${container?} | jq -r '.[].State.Pid'
 
 # Use container as a shim around a command:
 cmd() { docker run -i ${container} cmd "$@"; }
+
+# Add a tag to an image
+docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
