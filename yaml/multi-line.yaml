@@ -15,13 +15,16 @@ foo:
         (eg, there will be one space between "string" and "which" and
         there will be a total of 3 spaces and
         a newline before "and", and a single newline before '(')
-  defintion: >
+  folded: >
         Scalar content can be written in block notation, using a
-        literal style (indicated by "|") where all line breaks are
+            literal style (indicated by "|") where all line breaks are
         significant.  Alternatively, they can be written with the
-        folded style (denoted by ">") where each line break is
-        folded to a space unless it ends an empty or a more-indented
-        line.
+        folded style (denoted by ">") where each line break between
+        lines of equal indenation is folded to a single space, and
+        whitespace of increased indentation is retained. (eg, the
+        "literal" above will be preceded by "\n    ".
+        When indenation decreases, the
+        newline will have no leading whitespace.
   nospace: "this string should\
         have no space between \"should\" and \"have\""
   onespace:
