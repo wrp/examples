@@ -6,3 +6,9 @@ import tempfile
 # when the context manager exits
 with tempfile.TemporaryDirectory() as t:
 	print(f't = {t}')
+
+o = tempfile.TemporaryFile()
+
+o.write(b'foo')
+o.seek(0)
+print(o.read())
