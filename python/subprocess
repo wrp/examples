@@ -36,6 +36,13 @@ if subprocess.run(['ls', 'path/that/almost/certainly/does/not/exist']).returncod
 a = subprocess.run('echo stdout; echo stderr >&2', shell= True, stdout=subprocess.PIPE,
 	stderr=subprocess.DEVNULL)
 
+# Or, use 'check' to raise an exception on failure
+try:
+	subprocess.run(['false'], check=True)
+except subprocess.CalledProcessError as e:
+	print(f'subprocess.run failed: {e}')
+
+
 # Attributes of a are:
 # 'args', 'check_returncode', 'returncode', 'stderr', 'stdout'
 # If using subprocess.PIPE, the data is a bytes object on the relevant member
