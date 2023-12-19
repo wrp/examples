@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import subprocess
+import sys
 
 # Send data to an invocation of cat.  cat's output is inherited
 p = subprocess.Popen('cat', stdin=subprocess.PIPE)
@@ -29,3 +30,5 @@ print('err ="""', err, '"""')
 
 subprocess.run(['printf', '%s', 'hello'])
 subprocess.run('echo , world!', shell=True)
+if subprocess.run(['ls', 'path/that/almost/certainly/does/not/exist']).returncode != 0:
+    print('ls failed', file=sys.stderr)
