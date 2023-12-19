@@ -32,3 +32,16 @@ subprocess.run(['printf', '%s', 'hello'])
 subprocess.run('echo , world!', shell=True)
 if subprocess.run(['ls', 'path/that/almost/certainly/does/not/exist']).returncode != 0:
     print('ls failed', file=sys.stderr)
+
+a = subprocess.run('echo stdout; echo stderr >&2', shell= True, stdout=subprocess.PIPE,
+    stderr=subprocess.DEVNULL)
+
+# Attributes of a are:
+# 'args', 'check_returncode', 'returncode', 'stderr', 'stdout'
+# If using subprocess.PIPE, the data is a bytes object on the relevant member
+print(dir(a))
+print(a.args)
+print(a.check_returncode())
+print(a.returncode)
+print(f'output: {a.stdout}')
+print(f'error stream: {a.stderr}')
