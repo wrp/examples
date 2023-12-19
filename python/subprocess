@@ -25,3 +25,7 @@ out, err = p.communicate()
 print('***************')
 print('out ="""', out, '"""')
 print('err ="""', err, '"""')
+
+
+subprocess.run(['printf', '%s', 'hello'])
+subprocess.run('echo , world!', shell=True)
