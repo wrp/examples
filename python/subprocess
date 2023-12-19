@@ -11,7 +11,7 @@ print(f'p status: {status}')
 print(f'output streams were inherited so these are both none: {out}, {err}')
 
 p = subprocess.Popen(['sh' ,'-c', 'echo stdout; echo stderr >&2'],
-    stdout=subprocess.PIPE, stderr=subprocess.PIPE
+	stdout=subprocess.PIPE, stderr=subprocess.PIPE
 )
 out, err = p.communicate()
 
@@ -19,7 +19,7 @@ print('out =', out)
 print('err =', err)
 
 p = subprocess.Popen(['sh', '-c', 'echo stdout; echo stderr >&2'],
-    stdout=subprocess.PIPE, stderr=subprocess.STDOUT  # Crap ass method of tying stderr to stdout
+	stdout=subprocess.PIPE, stderr=subprocess.STDOUT  # Crap ass method of tying stderr to stdout
 )
 out, err = p.communicate()
 
@@ -31,10 +31,10 @@ print('err ="""', err, '"""')
 subprocess.run(['printf', '%s', 'hello'])
 subprocess.run('echo , world!', shell=True)
 if subprocess.run(['ls', 'path/that/almost/certainly/does/not/exist']).returncode != 0:
-    print('ls failed', file=sys.stderr)
+	print('ls failed', file=sys.stderr)
 
 a = subprocess.run('echo stdout; echo stderr >&2', shell= True, stdout=subprocess.PIPE,
-    stderr=subprocess.DEVNULL)
+	stderr=subprocess.DEVNULL)
 
 # Attributes of a are:
 # 'args', 'check_returncode', 'returncode', 'stderr', 'stdout'
