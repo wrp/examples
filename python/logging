@@ -3,5 +3,22 @@
 import logging
 import sys
 
+
+
+class LogWrapper(logging.Logger):
+    def __init__(self, name, level=logging.NOTSET):
+        return super(LogWrapper, self).__init__(name, level)
+
+    def info(self, msg, *args, **kwargs):
+        print(f"log wrapper called with {msg}: ", end='')
+        return super(LogWrapper, self).info(msg, *args, **kwargs)
+
+
+
+logging.setLoggerClass(LogWrapper)
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+logger = logging.getLogger('log')
+
 logging.info('foo')
+logger.info('bar')
