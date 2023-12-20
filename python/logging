@@ -23,7 +23,10 @@ class LogWrapper(logging.Logger):
 
 
 logging.setLoggerClass(LogWrapper)
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(
+    stream=sys.stdout,
+    level='INFO'  # Can use string or integer.  eg level=logging.INFO
+)
 
 logger = logging.getLogger('log')
 
