@@ -2,8 +2,15 @@
 
 import logging
 import sys
+from functools import wraps
 
 
+def log_decorator(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        print(f"wrapped by decorator {args}: ", end='')
+        return f(*args, **kwargs)
+    return wrapper
 
 class LogWrapper(logging.Logger):
     def __init__(self, name, level=logging.NOTSET):
@@ -21,4 +28,6 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger('log')
 
 logging.info('foo')
+logging.info = log_decorator(logging.info)
+logging.info('baz')
 logger.info('bar')
