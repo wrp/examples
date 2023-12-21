@@ -5,19 +5,25 @@ ARG var2=default-value
 # The scope of an ARG is from the line it is defined until the
 # end of the build stage in which it was defined.
 
-RUN echo $var1 from dockerfile > /tmp/built-file
-RUN echo $var2 from dockerfile>> /tmp/built-file
+RUN mkdir -p path/rel/to/root
+WORKDIR /path/rel/to/root
+RUN echo $var1 from dockerfile > output
+RUN echo $var2 from dockerfile >> output
+
+WORKDIR ../../
+
 RUN echo Another method for do$( \
-        : )ing line continuations >> /tmp/built-file
+        : )ing line continuations >> to/root/output
+
 RUN echo Yet another me$( \
         printf th \
-        )od for line continuations >> /tmp/built-file
+        )od for line continuations >> to/root/output
 ENV var2=$var2
 
 # CMD seems to be in a new build stage, or variables are not
 # expanded by CMD as the '$var1' and '$var2' below
 # are passed literally to the command and not expanded
-CMD echo var1=$var1, var2=$var2 && cat /tmp/built-file
+CMD echo "workdir is $(pwd)" && echo var1=$var1, var2=$var2 && cat /path/rel/to/root/output
 
 # line continuation character is \
 
