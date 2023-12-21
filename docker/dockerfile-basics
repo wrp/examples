@@ -7,6 +7,8 @@ ARG var2=default-value
 
 RUN echo $var1 from dockerfile > /tmp/built-file
 RUN echo $var2 from dockerfile>> /tmp/built-file
+RUN echo Another method for do$( \
+        : )ing line continuations >> /tmp/built-file
 ENV var2=$var2
 
 # CMD seems to be in a new build stage, or variables are not
