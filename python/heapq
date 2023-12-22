@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import heapq
+
+a = [ 5, 6, -7, 9, -19, 23, 1]
+heapq.heapify(a)    # heapify in place, linear time (min-heap)
+heapq.heappush(a, -17) # Push value, maintain heap invariant
+heapq.heappop(a) # return and remove smallest, or raise IndexError
+heapq.heappushpop(a, -8) # push item, pop and return smallest
+heapq.heapreplace(a, -3) # same as above, but item returned may be larger than item inserted
+
+print(a)
+# nlargest 3rd argument extracts a key from each item which is used for comparison
+print(heapq.nlargest(3, a, lambda x: abs(x)))
