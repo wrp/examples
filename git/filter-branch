@@ -3,6 +3,11 @@
 # Note that git-filter-branch is generally considered obsolete.  Instead, look at
 # git://github.com/newren/git-filter-repo
 
+# Edit the commit messages to remove "ticket" trailers
+# args should be ref specs.  eg as passed to rev-list, like # "$oid..HEAD"
+git filter-branch --msg-filter "grep -v '^ticket:'" "$@"
+exit 0
+
 # Replace spaces with tabs in all files throughout history
 this="$PWD/$0"
 if test -z "$REPLACE_TABS"; then
