@@ -1,10 +1,10 @@
 #!/bin/sh
-# Replace spaces with tabs in all files throughout history
 
 # Note that git-filter-branch is generally considered obsolete.  Instead, look at
 # git://github.com/newren/git-filter-repo
-this="$PWD/$0"
 
+# Replace spaces with tabs in all files throughout history
+this="$PWD/$0"
 if test -z "$REPLACE_TABS"; then
 	git filter-branch --tree-filter "git ls-files | REPLACE_TABS=1 xargs $this" HEAD
 else
@@ -15,10 +15,10 @@ else
 		mv "$tmp" "$x"
 	done
 fi
+exit 0
 
-
+# Replace author and committer throughout history
 # Straight from the manpage:
-
 git filter-branch --env-filter '
    if test "$GIT_AUTHOR_EMAIL" = "root@localhost"; then
 	   GIT_AUTHOR_EMAIL=john@example.com
