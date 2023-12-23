@@ -1,0 +1,30 @@
+#!/bin/sh
+# Demonstrate _extended_ terminal graphics characters.
+
+echo "Graphics characters and Logic Analyser display DEMO."
+enable='\033(0'
+disable='\033(B\033[0m'
+alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 abcdefghijklmnopqrstuvwxyz'
+text='
+lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+j
+lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk
+j                               mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+lqqqqqqqqqqqqqqqk               lqqqqqqqqqqqqqqqk
+j               mqqqqqqqqqqqqqqqj               mqqqqqqqqqqqqqqq
+lqqqqqqqk       lqqqqqqqk       lqqqqqqqk       lqqqqqqqk
+j       mqqqqqqqj       mqqqqqqqj       mqqqqqqqj       mqqqqqqq
+lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk
+j   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqq
+lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk
+j mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mq
+x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x
+vqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvq
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+'
+printf '%s\n%b%s\n%s%b' "$alpha" "$enable" "$alpha" "$text" "$disable"
+
+for i in 0 $(perl -E 'say join(" ", (a..z))'); do
+	printf "$i -> %b $i %b\n" $enable $disable
+done
