@@ -13,3 +13,5 @@ What's the difference between a load balancer and a reverse proxy?
 
 What's the difference between a daemon set, a replica set, and a stateful set?
 
+
+Design an LRU cache
