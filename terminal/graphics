@@ -1,7 +1,11 @@
+#!/bin/sh
+# A random collection of symbols.
 
-A random collection of symbols.
-
-
-printf '\U1f6d1 \xf0\x9f\x9b\x91\n' # A stop sign: 🛑
-printf '\xe2\x9c\x8b\n'             # A yellow hand  ✋
-printf '\U1f339 \xf0\x9f\x8c\xb9\n' # A rose 🌹
+for i in \
+	f09f9b91      $(: A stop sign: 🛑    )\
+	e29c8b        $(: A yellow hand  ✋   )\
+	f09f8cb9      $(: A rose 🌹          )\
+; do
+	printf "%8s:" "$i"
+	printf "$i" | perl -nE 'say pack "H*", $_'
+done
