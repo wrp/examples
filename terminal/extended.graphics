@@ -25,6 +25,5 @@ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 '
 printf '%s\n%b%s\n%s%b' "$alpha" "$enable" "$alpha" "$text" "$disable"
 
-for i in 0 $(perl -E 'say join(" ", (a..z))'); do
-	printf "$i -> %b $i %b\n" $enable $disable
-done
+perl -e 'printf "%3d: " . chr($_) . " -> \033(0 " . chr($_) .
+	"\n\033(B\033[0m", $_ foreach 43..48, 96..126'
