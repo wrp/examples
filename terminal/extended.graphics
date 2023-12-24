@@ -1,7 +1,22 @@
 #!/bin/sh
 # Demonstrate _extended_ terminal graphics characters.
 
+# See console_codes(4) and https://www.xfree86.org/current/ctlseqs.html
+
 echo "Graphics characters and Logic Analyser display DEMO."
+# char_set:
+#    0 DEC Special Character and Line Drawing set
+#    A UK
+#    B United States
+#    4 Dutch
+#    5 Finnish  (or C)
+#    R French
+#    Q French Canadian
+#    K German
+#    Y Italian
+#    E Norwegian (or 6)
+#    Z Spanish
+
 enable='\033(0'
 disable='\033(B\033[0m'
 alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 abcdefghijklmnopqrstuvwxyz'
