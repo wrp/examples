@@ -30,8 +30,18 @@ print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
 	[913..991],
 );
 
+my $block = "";
+my $previous_block = "";
+
 foreach my $range (@samples) {
-	print chr($_) . ( ($_ % 16 == %_%$$range[0]) ? "\n" : "  ")
+	my $first = $$range[0];
+	my $info = charinfo($first);
+	# print Dumper($info);
+	$block = $$info{block};
+	say $block if $block ne $previous_block;
+	$previous_block = $block;
+
+	print chr($_) . ( ($_ % 16 == %_%$first) ? "\n" : "  ")
 		foreach (@$range);
 	print "\n";
 }
