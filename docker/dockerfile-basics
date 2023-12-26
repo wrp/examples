@@ -42,3 +42,7 @@ CMD echo "workdir is $(pwd)" && echo var1=$var1, var2=$var2 && cat /path/rel/to/
 # instead of the shell form: ENTRYPOINT = cmd arg arg
 # because in the former, 'cmd' will be pid 1 in the container
 # but with the latter 'cmd' will be a child of an sh instance
+
+# COPY vs ADD
+# COPY only works with local files, while ADD can take URLS, unpacks
+#   tarballs, etc.  Best practive is to prefer COPY for simplicity.
