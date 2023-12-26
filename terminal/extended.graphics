@@ -18,7 +18,7 @@ echo "Graphics characters and Logic Analyser display DEMO."
 #    Z Spanish
 
 enable='\033(0'
-disable='\033(B\033[0m'
+disable='\033(B'
 alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 abcdefghijklmnopqrstuvwxyz'
 text='
 lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -41,4 +41,4 @@ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 printf '%s\n%b%s\n%s%b' "$alpha" "$enable" "$alpha" "$text" "$disable"
 
 perl -e 'printf "%3d: " . chr($_) . " -> \033(0 " . chr($_) .
-	"\n\033(B\033[0m", $_ foreach 43..48, 96..126'
+	"\n\033(B", $_ foreach 43..48, 96..126'
