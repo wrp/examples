@@ -1,17 +1,29 @@
 #!/usr/bin/env perl
 # A random collection of symbols.
 
-my $base = 'f09f9b91'; # A stop sign: 🛑
+use Unicode::UCD "charinfo";
+use Data::Dumper;
+
+
 @samples = (
-	$base,
+	'f09f9b91',  # A stop sign: 🛑  x1f6d1
 	'e29c8b',    # A yellow hand  ✋
 	'f09f8cb9',  # A rose 🌹
 );
-
-for(my $i=15; $i < 40; $i++){
-	my $v = hex($base) + $i;
-	@a = (sprintf("%x", $v));
-	push @samples, @a;
-}
-
 printf "%8s: %s\n", $_, pack "H*", $_ foreach @samples;
+print Dumper(charinfo(0x1f6d1));
+
+# use open ":std", ":encoding(UTF-8)";
+binmode STDOUT, ':encoding(UTF-8)';
+
+print "0x1f6d1: ";
+print chr(0x1f6d1) . "\n";
+
+for (my $i=0x2B00; $i < 0x2B56;) {
+	print chr($i++) . "  ";
+	print "\n" if ($i % 16 == 0);
+}
+print "\n";
+
+
+# perl -MUnicode::UCD=charinfo -MData::Dumper -e 'print Dumper(charinfo(0x1f6d1))'
