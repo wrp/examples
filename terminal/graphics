@@ -1,11 +1,17 @@
-#!/bin/sh
+#!/usr/bin/env perl
 # A random collection of symbols.
 
-for i in \
-	f09f9b91      $(: A stop sign: 🛑    )\
-	e29c8b        $(: A yellow hand  ✋   )\
-	f09f8cb9      $(: A rose 🌹          )\
-; do
-	printf "%8s:" "$i"
-	printf "$i" | perl -nE 'say pack "H*", $_'
-done
+my $base = 'f09f9b91'; # A stop sign: 🛑
+@samples = (
+	$base,
+	'e29c8b',    # A yellow hand  ✋
+	'f09f8cb9',  # A rose 🌹
+);
+
+for(my $i=15; $i < 40; $i++){
+	my $v = hex($base) + $i;
+	@a = (sprintf("%x", $v));
+	push @samples, @a;
+}
+
+printf "%8s: %s\n", $_, pack "H*", $_ foreach @samples;
