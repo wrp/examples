@@ -2,11 +2,12 @@
 # A random collection of symbols.
 # printf '\xf0\x9f\x9b\x91 \U1f6d1'  # Shell printf
 
+use 5.12.0;
 use Unicode::UCD "charinfo";
 use Data::Dumper;
 
 
-@samples = (
+my @samples = (
 	'f09f9b91',  # A stop sign: 🛑  x1f6d1
 	'e29c8b',    # A yellow hand  ✋
 	'f09f8cb9',  # A rose 🌹
@@ -19,13 +20,21 @@ binmode STDOUT, ':encoding(UTF-8)';
 
 print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
 
-print chr($_) . ( ($_ % 16 == 15) ? "\n" : "  ") foreach (0x2B00..0x2B56); print "\n";
-print chr($_) . ( ($_ % 16 == 15) ? "\n" : "  ") foreach (9800..9811); print "\n";
-print chr($_) . ( ($_ % 16 == 15) ? "\n" : "  ") foreach (9812..9831); print "\n";
-print chr($_) . ( ($_ % 16 == 15) ? "\n" : "  ") foreach (9833..9839); print "\n";
-print chr($_) . ( ($_ % 16 == 14) ? "\n" : "  ") foreach (9855..9865); print "\n";
-print chr($_) . ( ($_ % 16 == 14) ? "\n" : "  ") foreach (9889..9899); print "\n";
-print chr($_) . ( ($_ % 16 == 14) ? "\n" : "  ") foreach (913..991); print "\n";
+@samples = (
+	[0x2B00..0x2B56],
+	[9800..9811],
+	[9812..9831],
+	[9833..9839],
+	[9855..9865],
+	[9889..9899],
+	[913..991],
+);
+
+foreach my $range (@samples) {
+	print chr($_) . ( ($_ % 16 == %_%$$range[0]) ? "\n" : "  ")
+		foreach (@$range);
+	print "\n";
+}
 
 
 # perl -MUnicode::UCD=charinfo -MData::Dumper -e 'print Dumper(charinfo(0x1f6d1))'
