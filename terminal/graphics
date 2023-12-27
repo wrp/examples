@@ -41,7 +41,7 @@ foreach my $range (@samples) {
 	say $block if $block ne $previous_block;
 	$previous_block = $block;
 
-	print chr($_) . ( ($_ % 16 == %_%$first) ? "\n" : "  ")
+	print chr($_) . (( ($_ % 16) == (($first - 1) % 16)) ? "\n" : "  ")
 		foreach (@$range);
 	print "\n";
 }
