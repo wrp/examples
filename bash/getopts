@@ -18,8 +18,9 @@ parse_args() {
 		case $opt in
 		c) FLAG_C=1;;
 		d) FLAG_D=$OPTARG;;
-		h) usage; exit 0;;
-		*) die "illegal option -$OPTARG (-h for usage)"
+		h) usage;;
+		:) die "option -$OPTARG requires a value";;
+		?) die "illegal option -$OPTARG (-h for usage)";;
 		esac
 	done
 }
