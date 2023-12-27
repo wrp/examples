@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+# Some standard manipulations
+import sys
+
+def redirect(path, text):
+    orig = sys.stdout
+    with open(path, 'w') as f:
+        print(text, file=f)
+    sys.stdout = orig
+
+redirect('output', 'redirected text')
+print('not redirected')
