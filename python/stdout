@@ -6,7 +6,11 @@ import sys
 def redirect(path, text):
     orig = sys.stdout
     with open(path, 'w') as f:
-        print(text, file=f)
+        sys.stdout = f
+        print(text + ' to file', file=f)
+        sys.stdout.write(text + ' via write()\n')
+        output = sys.stdout.buffer
+        output.write(bytes(text + ' via buffer\n', 'ascii'))
     sys.stdout = orig
 
 redirect('output', 'redirected text')
