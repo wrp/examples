@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"log"
+	"time"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,6 +31,10 @@ func main() {
 	router := gin.Default()
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
+	router.GET("/date",
+		func(c *gin.Context) {
+			c.JSON(http.StatusOK, time.Now())
+		})
 	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8080")
