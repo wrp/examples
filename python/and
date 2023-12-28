@@ -2,23 +2,19 @@
 
 # boolean operator 'and' returns one of its arguments
 
+def parity_init(self, x, f):
+	self.x = x
+	self.parity = True if f(x % 2) else False
+
 class even:
-	def __init__(self, x):
-		self.parity = True if not x % 2 else False
-		self.x = x
-	def __bool__(self):
-		return self.parity
-	def __repr__(self):
-		return f'{self.x} is{"" if self.parity else " not"} even'
+	def __init__(self, x): parity_init(self, x, lambda y: y == 0)
+	def __bool__(self): return self.parity
+	def __repr__(self): return f'{self.x} is{"" if self.parity else " not"} even'
 
 class odd:
-	def __init__(self, x):
-		self.parity = True if x % 2 else False
-		self.x = x
-	def __bool__(self):
-		return  self.parity
-	def __repr__(self):
-		return f'{self.x} is{"" if self.parity else " not"} odd'
+	def __init__(self, x): parity_init(self, x, lambda y: y == 1)
+	def __bool__(self): return  self.parity
+	def __repr__(self): return f'{self.x} is{"" if self.parity else " not"} odd'
 
 print(even(1) and odd(2))  # short circuits and returns even(1) (false)
 print(even(4) and odd(6))  # returns odd(6) (false)
