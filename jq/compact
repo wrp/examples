@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Demonstrate extracting data and printing compactly (one-line)
+
+jq -rc '["foo = " + (.foo | tostring), .bar] | @tsv' << EOF
+{
+	"foo": 5020,
+	"bar": "050",
+	"baz": "abc"
+}
+{
+	"foo": 2280,
+	"bar": "def",
+	"baz": "ghi"
+}
+EOF
