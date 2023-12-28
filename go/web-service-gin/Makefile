@@ -9,8 +9,10 @@ run:
 
 deps:
 	go list -m all  # Show all module dependencies
+
 go.mod:
 	go mod init example/web-service-gin
+	go get .
 
 %: %.go
 	go build $^
