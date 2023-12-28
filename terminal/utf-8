@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+# Print utf-8 characters. Arguments can be single
+# values or ranges.  (eg 'e29c8b f09f8cb9-bb')
+
+use 5.12.0;
+use Unicode::UCD "charinfo";
+binmode STDOUT, ':encoding(UTF-8)';
+use Data::Dumper;
+
+sub show {
+	my $v = $_[0] =~ m/^0/ ? oct($_[0]) : int($_[0]);
+	printf "%8s: %s\n", $_[0], chr($v);
+	print Dumper(charinfo($v));
+}
+
+foreach $_ (@ARGV) {
+	foreach (split ',', $_) {
+		show $_
+	}
+}
