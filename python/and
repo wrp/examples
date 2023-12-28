@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+# boolean operator 'and' returns one of its arguments
+
+class even:
+	def __init__(self, x):
+		self.parity = True if not x % 2 else False
+		self.x = x
+	def __bool__(self):
+		return self.parity
+	def __repr__(self):
+		return f'{self.x} is{"" if self.parity else " not"} even'
+
+class odd:
+	def __init__(self, x):
+		self.parity = True if x % 2 else False
+		self.x = x
+	def __bool__(self):
+		return  self.parity
+	def __repr__(self):
+		return f'{self.x} is{"" if self.parity else " not"} odd'
+
+print(even(1) and odd(2))  # short circuits and returns even(1) (false)
+print(even(4) and odd(6))  # returns odd(6) (false)
+print(even(4) and odd(7))  # returns odd(7) (true)
+print(even(8) or odd(9))   # short circuits and returns even(8) (true)
+print(even(11) or odd(12)) # returns odd(12) (false)
