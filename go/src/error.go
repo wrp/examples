@@ -31,7 +31,7 @@ func main() {
 
 	fmt.Printf("error is of type: %T\n", err)
 
-	if len(os.Args) > 1 {
+	if len(os.Args) > 1 {  # keyword: argv
 		a, err = strconv.ParseFloat(os.Args[1], 64)
 	} else {
 		a = float64(1)
