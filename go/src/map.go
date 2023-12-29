@@ -7,8 +7,16 @@ import (
 
 func main() {
 	/* map[K]V  creates a map with keys of type K and values of type V */
-	m := map[int]int{ 1: 10, 2: 12, 5: 13, }
+	m := map[int]int{ 1: 10, 2: 12, 5: 13, 19: 31 }
 	fmt.Println(m)
+
+	delete(m, 5)
+
+	i, ok := m[17]  // Returns 0, false
+	fmt.Println("get nonextant:", i, e)
+
+	i, ok = m[1]    // Returns, value, true
+	fmt.Println("get existing :", i, e)
 
 	/* Print unsorted */
 	fmt.Println("unsorted map with", len(m), "elements")
