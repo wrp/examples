@@ -33,4 +33,9 @@ func main() {
 	p := make(map[string]int, 10)
 	p["foo"] = 5
 	fmt.Printf("p = %v, len = %d\n", p, len(p)) /* cap not defined for maps */
+
+	/* 2nd argument to make(map, hint) is a hint for the initial capacity, but
+	the map will always automagically grow by the runtime.  Not finding much
+	information about tuning.
+	*/
 }
