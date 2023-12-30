@@ -1,5 +1,5 @@
 
-See also ../gdb/gdb2lldb
+See also ../gdb2lldb
 
 Run with arguments
 (lldb) run <args>
