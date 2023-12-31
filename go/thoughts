@@ -27,3 +27,13 @@ in the := line is .... inconsistent.
 log.Println prints to stderr by default.  This is fucking stupid.
 
 "func" is a mistake.  They should have been verbose and used the keyword "function"
+
+The stated justification for not including a ternary operator is just lame.
+Any language construct can be abused.  If you want to avoid ?: because it
+makes the parser more complex, that's fine.  Use that justification.
+Any other reason is just dumb.
+
+
+Not to sound too negative; overall I like the language, but the culture
+has some issues.  The designers want to treat developers like idiots
+and hold their hand.  Maybe that's justified, but it's a bit insulting.
