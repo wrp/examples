@@ -13,8 +13,10 @@ func main() {
 		d <- i  // Safe to send because channel is buffered
 	}
 	go func(x int, c chan int, d chan int) {
-		v := <- c
-		fmt.Printf("chan %d got %d from c\n", x, v)
+		v, ok := <- c
+		if ok {
+			fmt.Printf("chan %d got %d from c\n", x, v)
+		}
 		// close d to synchronize
 		close(d)
 	} (1, c, d)
@@ -29,10 +31,20 @@ func main() {
 		fmt.Println("Channel is closed")
 	}
 
-	c = make(chan int, 1);
+	c = make(chan int);
 	d = make(chan int, 1);
 
+	// c <- 2 Would block until a receiver is running
+	go func() {
+		d <- <- c  // Receive from c and write to d
+		fmt.Println("Received: ", <- d)
+		// Drain the channel
+		for p := range c {
+			fmt.Println("Received: ", p)
+		}
+	}()
 	c <- 2
-	d <- <- c  // Receive from c and write to d
-	fmt.Println("Received: ", <- d)
+	c <- 4
+	c <- 5
+	close(c)
 }
