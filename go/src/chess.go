@@ -22,7 +22,7 @@ import (
 // TODO add color to pieces and background
 type game struct {
 	board [8][8]square
-	history []string
+	history []move
 }
 
 type location struct {
@@ -140,7 +140,7 @@ func(g *game) reset() {
 		square{white, piece{white, rook}, "h1"},
 		},
 	}
-	g.history = make([]string, 0)
+	g.history = make([]move, 0)
 }
 
 func enable_reverse_video() {
@@ -180,7 +180,7 @@ func (g game) draw() {
 		} else {
 			fmt.Printf("%d: ", i / 2 + 1)
 		}
-		fmt.Printf("%s", t)
+		fmt.Printf("%s", t.text)
 		fmt.Printf(c)
 	}
 	fmt.Printf("\n\n")
@@ -220,7 +220,7 @@ func (g *game) update(m move) (e error) {
 	g.board[m.to.col][m.to.row].p = src
 	g.board[m.from.col][m.from.row].p = piece{}
 
-	g.history = append(g.history, m.text)
+	g.history = append(g.history, m)
 	return
 }
 
