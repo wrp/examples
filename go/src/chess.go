@@ -183,7 +183,7 @@ func (g game) draw() {
 		fmt.Printf("%s", t)
 		fmt.Printf(c)
 	}
-	fmt.Printf("\n")
+	fmt.Printf("\n\n")
 }
 type move struct {
 	text string
