@@ -187,7 +187,8 @@ func (g game) draw() {
 }
 type move struct {
 	text string
-	to, from location;
+	to, from location
+	captured piece
 }
 func (m *move) parse (s string) (e error) {
 	m.from.row = (int(s[0]) - 'a')
@@ -217,7 +218,11 @@ func (g *game) update(m move) (e error) {
 	if (src.r == 0) {
 		return errors.New("No piece at source")
 	}
-	g.board[m.to.col][m.to.row].p = src
+
+	to := &g.board[m.to.col][m.to.row]
+	m.captured = to.p
+
+	to.p = src
 	g.board[m.from.col][m.from.row].p = piece{}
 
 	g.history = append(g.history, m)
