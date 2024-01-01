@@ -21,6 +21,7 @@ binmode STDOUT, ':encoding(UTF-8)';
 print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
 
 @samples = (
+	[0x2589..0x25A0],
 	[0x2B00..0x2B56],
 	[9800..9811],
 	[9812..9831],
