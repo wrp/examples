@@ -4,7 +4,7 @@ import "fmt"
 
 type ByteSize float64
 
-const (
+const (  // enum
     _           = iota // ignore first value by assigning to blank identifier
     KiB ByteSize = 1 << (10 * iota)
     MiB
