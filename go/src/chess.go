@@ -213,7 +213,20 @@ func (m *move) parse (s string) (e error) {
 	return
 }
 
-func (g *game) update(m move) (e error) {
+// undo the last move
+func (g *game) undo() (e error) {
+	if (len(g.history) == 0) {
+		return errors.New("No previous entry")
+	}
+	m := g.history[len(g.history)-1]
+	moved_piece := g.board[m.to.col][m.to.row].p
+	g.board[m.to.col][m.to.row].p = m.captured
+	g.board[m.from.col][m.from.row].p = moved_piece
+
+	return
+}
+
+func (g *game) apply(m move) (e error) {
 	src := g.board[m.from.col][m.from.row].p
 	if (src.r == 0) {
 		return errors.New("No piece at source")
@@ -221,16 +234,19 @@ func (g *game) update(m move) (e error) {
 
 	to := &g.board[m.to.col][m.to.row]
 	m.captured = to.p
-
 	to.p = src
 	g.board[m.from.col][m.from.row].p = piece{}
-
-	g.history = append(g.history, m)
 	return
 }
 
 func read_move(g *game, p string) (e error){
 	// Read move and update board
+	if (p == string('p')) {
+		if e = g.undo(); e == nil {
+			g.history = g.history[0:len(g.history)-1]
+		}
+		return
+	}
 	if (len(p) < 4) {
 		e = errors.New("invalid entry(too short)")
 		return
@@ -246,7 +262,10 @@ func read_move(g *game, p string) (e error){
 	e = m.parse(p)
 
 	if e == nil {
-		e = g.update(m)
+		e = g.apply(m)
+	}
+	if e == nil {
+		g.history = append(g.history, m)
 	}
 	return e
 }
