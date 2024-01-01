@@ -143,10 +143,18 @@ func(g *game) reset() {
 	g.history = make([]string, 0)
 }
 
+func enable_reverse_video() {
+	fmt.Printf("\x1b\x5b\x37\x6d")
+}
+func disable_reverse_video() {
+	fmt.Printf("\x1b\x5b\x6d\x0f")
+}
+
 func (s square) print() {
-	r := string('\u258c')
-	if (s.c == black) {
-		r = string(' ')
+	r := string(' ')
+
+	if (s.c == white) {
+		enable_reverse_video()
 	}
 	if (s.p.r != 0) {
 		r = string(s.p.r)
@@ -155,6 +163,7 @@ func (s square) print() {
 		r = strings.ToUpper(r)
 	}
 	fmt.Printf("%s", r)
+	disable_reverse_video()
 }
 
 func (g game) draw() {
