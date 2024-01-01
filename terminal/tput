@@ -46,7 +46,7 @@ tput rmul 				exit underline mode
 tput rev 				Turn on reverse mode
 tput smso 				Enter standout mode (bold on rxvt)
 tput rmso 				Exit standout mode
-tput sgr0 				Turn off all attributes (doesn't work quite as expected)
+tput sgr0 				Turn off all attributes (doesn't work quite as expected, but does disable reverse)
 tput cup Y X 				Move cursor to screen location X,Y (top left is 0,0)
 tput sc 				Save the cursor position
 tput rc 				Restore the cursor position
