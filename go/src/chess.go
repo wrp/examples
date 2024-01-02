@@ -41,7 +41,7 @@ const (
 )
 
 type piece struct {
-	c color
+	color color
 	r rank
 }
 
@@ -142,7 +142,7 @@ func (s square) print() {
 		b, w = w, b
 		enable_reverse_video()
 	}
-	switch s.p.c {
+	switch s.p.color {
 	case white: r = w
 	case black: r = b
 	}
@@ -262,7 +262,7 @@ func read_move(g *game, p string) (e error){
 	if g.board[m.from].p.r == 0 {
 		return errors.New("No piece at " + m.from)
 	}
-	if g.board[m.from].p.c != m.player {
+	if g.board[m.from].p.color != m.player {
 		player_color := "white"
 		if m.player == black {
 			player_color = "black"
