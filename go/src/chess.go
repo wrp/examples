@@ -47,7 +47,7 @@ type piece struct {
 
 type square struct {
 	color color
-	p piece
+	piece piece
 	d string
 }
 
@@ -131,10 +131,10 @@ func disable_reverse_video() {
 
 func (s square) print() {
 	r := ' '
-	if s.p.rank != 0 {
-		r = rune(s.p.rank)
+	if s.piece.rank != 0 {
+		r = rune(s.piece.rank)
 	}
-	b := rune(s.p.rank)
+	b := rune(s.piece.rank)
 	w := b + 6
 
 	defer disable_reverse_video()
@@ -142,7 +142,7 @@ func (s square) print() {
 		b, w = w, b;
 		enable_reverse_video()
 	}
-	switch s.p.color {
+	switch s.piece.color {
 	case white: r = w
 	case black: r = b
 	}
@@ -208,31 +208,31 @@ func (g *game) undo() (e error) {
 		return errors.New("No previous entry")
 	}
 	m := g.history[len(g.history)-1]
-	moved_piece := g.board[m.to].p
+	moved_piece := g.board[m.to].piece
 	to := g.board[m.to]
-	to.p = m.captured
+	to.piece = m.captured
 	g.board[m.to] = to
 
 	from := g.board[m.from]
-	from.p = moved_piece
+	from.piece = moved_piece
 	g.board[m.from] = from
 
 	return
 }
 
 func (g *game) apply(m move) (e error) {
-	src := g.board[m.from].p
+	src := g.board[m.from].piece
 	if (src.rank == 0) {
 		return errors.New("No piece at source")
 	}
 
 	to := g.board[m.to]
-	m.captured = to.p
-	to.p = src
+	m.captured = to.piece
+	to.piece = src
 	g.board[m.to] = to
 
 	from := g.board[m.from]
-	from.p = piece{}
+	from.piece = piece{}
 	g.board[m.from] = from
 	return
 }
@@ -259,10 +259,10 @@ func read_move(g *game, p string) (e error){
 	if e != nil {
 		return
 	}
-	if g.board[m.from].p.rank == 0 {
+	if g.board[m.from].piece.rank == 0 {
 		return errors.New("No piece at " + m.from)
 	}
-	if g.board[m.from].p.color != m.player {
+	if g.board[m.from].piece.color != m.player {
 		player_color := "white"
 		if m.player == black {
 			player_color = "black"
