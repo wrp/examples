@@ -15,7 +15,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"strings"
 	"os"
 )
 
@@ -33,12 +32,12 @@ const (
 
 type rank rune
 const (
-	pawn = 'p'
-	rook = 'r'
-	knight = 'n'
-	bishop = 'b'
-	king = 'k'
-	queen = 'q'
+	pawn = '\u2659'
+	rook = '\u2656'
+	knight = '\u2658'
+	bishop = '\u2657'
+	king = '\u2654'
+	queen = '\u2655'
 )
 
 type piece struct {
@@ -131,19 +130,19 @@ func disable_reverse_video() {
 }
 
 func (s square) print() {
-	r := string(' ')
+	r := ' '
+	if s.p.r != 0 {
+		r = rune(s.p.r)
+	}
 
 	defer disable_reverse_video()
-	if (s.c == white) {
+	if (s.c == white && s.p.r == 0) {
 		enable_reverse_video()
 	}
-	if (s.p.r != 0) {
-		r = string(s.p.r)
+	if (s.p.c == black) {
+		r += 6
 	}
-	if (s.p.c == white) {
-		r = strings.ToUpper(r)
-	}
-	fmt.Printf("%s", r)
+	fmt.Printf("%c ", r)
 }
 
 func (g game) draw() {
