@@ -189,6 +189,7 @@ type move struct {
 	text string
 	to, from location
 	captured piece
+	player color
 }
 
 func (m *move) validate() (e error){
@@ -261,7 +262,10 @@ func read_move(g *game, p string) (e error){
 		g.reset()
 		return
 	}
-	var m move
+	m := move{player: white}
+	if (len(g.history) % 2 == 1) {
+		m.player = black
+	}
 	e = m.parse(p)
 
 	if e == nil {
