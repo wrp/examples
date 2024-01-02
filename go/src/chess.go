@@ -169,7 +169,7 @@ func (g game) draw() {
 type move struct {
 	text string
 	to, from string  // eg "a2"
-	captured piece
+	captured, moved piece
 	player color
 }
 
@@ -254,6 +254,18 @@ func read_move(g *game, p string) (e error){
 		m.player = black
 	}
 	e = m.parse(p)
+	if g.board[m.from].p.r == 0 {
+		return errors.New("No piece at " + m.from)
+	}
+	if g.board[m.from].p.c != m.player {
+		player_color := "white"
+		if m.player == black {
+			player_color = "black"
+
+		}
+		return errors.New("piece at " + m.from +
+			" does not belong to " + player_color)
+	}
 
 	if e == nil {
 		e = g.apply(m)
