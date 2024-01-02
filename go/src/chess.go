@@ -42,7 +42,7 @@ const (
 
 type piece struct {
 	color color
-	r rank
+	rank rank
 }
 
 type square struct {
@@ -131,10 +131,10 @@ func disable_reverse_video() {
 
 func (s square) print() {
 	r := ' '
-	if s.p.r != 0 {
-		r = rune(s.p.r)
+	if s.p.rank != 0 {
+		r = rune(s.p.rank)
 	}
-	b := rune(s.p.r)
+	b := rune(s.p.rank)
 	w := b + 6
 
 	defer disable_reverse_video()
@@ -222,7 +222,7 @@ func (g *game) undo() (e error) {
 
 func (g *game) apply(m move) (e error) {
 	src := g.board[m.from].p
-	if (src.r == 0) {
+	if (src.rank == 0) {
 		return errors.New("No piece at source")
 	}
 
@@ -259,7 +259,7 @@ func read_move(g *game, p string) (e error){
 	if e != nil {
 		return
 	}
-	if g.board[m.from].p.r == 0 {
+	if g.board[m.from].p.rank == 0 {
 		return errors.New("No piece at " + m.from)
 	}
 	if g.board[m.from].p.color != m.player {
