@@ -133,6 +133,7 @@ func disable_reverse_video() {
 func (s square) print() {
 	r := string(' ')
 
+	defer disable_reverse_video()
 	if (s.c == white) {
 		enable_reverse_video()
 	}
@@ -143,7 +144,6 @@ func (s square) print() {
 		r = strings.ToUpper(r)
 	}
 	fmt.Printf("%s", r)
-	disable_reverse_video()
 }
 
 func (g game) draw() {
