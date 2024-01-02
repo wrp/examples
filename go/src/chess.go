@@ -21,12 +21,8 @@ import (
 
 // TODO add color to pieces and background
 type game struct {
-	board [8][8]square
+	board map[string]square
 	history []move
-}
-
-type location struct {
-	row, col int
 }
 
 type color int
@@ -58,87 +54,71 @@ type square struct {
 
 
 func(g *game) reset() {
-	g.board = [8][8]square {
-		{
-		square{white, piece{black, rook}, "a8"},
-		square{black, piece{black, knight}, "b8"},
-		square{white, piece{black, bishop}, "c8"},
-		square{black, piece{black, queen}, "d8"},
-		square{white, piece{black, king}, "e8"},
-		square{black, piece{black, bishop}, "f8"},
-		square{white, piece{black, knight}, "g8"},
-		square{black, piece{black, rook}, "h8"},
-		},
-		{
-		square{black, piece{black, pawn}, "a7"},
-		square{white, piece{black, pawn}, "b7"},
-		square{black, piece{black, pawn}, "c7"},
-		square{white, piece{black, pawn}, "d7"},
-		square{black, piece{black, pawn}, "e7"},
-		square{white, piece{black, pawn}, "f7"},
-		square{black, piece{black, pawn}, "g7"},
-		square{white, piece{black, pawn}, "h7"},
-		},
-		{
-		square{white, piece{}, "a6"},
-		square{black, piece{}, "b6"},
-		square{white, piece{}, "c6"},
-		square{black, piece{}, "d6"},
-		square{white, piece{}, "e6"},
-		square{black, piece{}, "f6"},
-		square{white, piece{}, "g6"},
-		square{black, piece{}, "h6"},
-		},
-		{
-		square{black, piece{}, "a5"},
-		square{white, piece{}, "b5"},
-		square{black, piece{}, "c5"},
-		square{white, piece{}, "d5"},
-		square{black, piece{}, "e5"},
-		square{white, piece{}, "f5"},
-		square{black, piece{}, "g5"},
-		square{white, piece{}, "h5"},
-		},
-		{
-		square{white, piece{}, "a4"},
-		square{black, piece{}, "b4"},
-		square{white, piece{}, "c4"},
-		square{black, piece{}, "d4"},
-		square{white, piece{}, "e4"},
-		square{black, piece{}, "f4"},
-		square{white, piece{}, "g4"},
-		square{black, piece{}, "h4"},
-		},
-		{
-		square{black, piece{}, "a3"},
-		square{white, piece{}, "b3"},
-		square{black, piece{}, "c3"},
-		square{white, piece{}, "d3"},
-		square{black, piece{}, "e3"},
-		square{white, piece{}, "f3"},
-		square{black, piece{}, "g3"},
-		square{white, piece{}, "h3"},
-		},
-		{
-		square{white, piece{white, pawn}, "h2"},
-		square{black, piece{white, pawn}, "g2"},
-		square{white, piece{white, pawn}, "f2"},
-		square{black, piece{white, pawn}, "d2"},
-		square{white, piece{white, pawn}, "e2"},
-		square{black, piece{white, pawn}, "f2"},
-		square{white, piece{white, pawn}, "g2"},
-		square{black, piece{white, pawn}, "h2"},
-		},
-		{
-		square{black, piece{white, rook}, "a1"},
-		square{white, piece{white, knight}, "b1"},
-		square{black, piece{white, bishop}, "c1"},
-		square{white, piece{white, queen}, "d1"},
-		square{black, piece{white, king}, "e1"},
-		square{white, piece{white, bishop}, "f1"},
-		square{black, piece{white, knight}, "g1"},
-		square{white, piece{white, rook}, "h1"},
-		},
+	g.board = map[string]square {
+		"a8": square{white, piece{black, rook}, "a8"},
+		"b8": square{black, piece{black, knight}, "b8"},
+		"c8": square{white, piece{black, bishop}, "c8"},
+		"d8": square{black, piece{black, queen}, "d8"},
+		"e8": square{white, piece{black, king}, "e8"},
+		"f8": square{black, piece{black, bishop}, "f8"},
+		"g8": square{white, piece{black, knight}, "g8"},
+		"h8": square{black, piece{black, rook}, "h8"},
+		"a7": square{black, piece{black, pawn}, "a7"},
+		"b7": square{white, piece{black, pawn}, "b7"},
+		"c7": square{black, piece{black, pawn}, "c7"},
+		"d7": square{white, piece{black, pawn}, "d7"},
+		"e7": square{black, piece{black, pawn}, "e7"},
+		"f7": square{white, piece{black, pawn}, "f7"},
+		"g7": square{black, piece{black, pawn}, "g7"},
+		"h7": square{white, piece{black, pawn}, "h7"},
+		"a6": square{white, piece{}, "a6"},
+		"b6": square{black, piece{}, "b6"},
+		"c6": square{white, piece{}, "c6"},
+		"d6": square{black, piece{}, "d6"},
+		"e6": square{white, piece{}, "e6"},
+		"f6": square{black, piece{}, "f6"},
+		"g6": square{white, piece{}, "g6"},
+		"h6": square{black, piece{}, "h6"},
+		"a5": square{black, piece{}, "a5"},
+		"b5": square{white, piece{}, "b5"},
+		"c5": square{black, piece{}, "c5"},
+		"d5": square{white, piece{}, "d5"},
+		"e5": square{black, piece{}, "e5"},
+		"f5": square{white, piece{}, "f5"},
+		"g5": square{black, piece{}, "g5"},
+		"h5": square{white, piece{}, "h5"},
+		"a4": square{white, piece{}, "a4"},
+		"b4": square{black, piece{}, "b4"},
+		"c4": square{white, piece{}, "c4"},
+		"d4": square{black, piece{}, "d4"},
+		"e4": square{white, piece{}, "e4"},
+		"f4": square{black, piece{}, "f4"},
+		"g4": square{white, piece{}, "g4"},
+		"h4": square{black, piece{}, "h4"},
+		"a3": square{black, piece{}, "a3"},
+		"b3": square{white, piece{}, "b3"},
+		"c3": square{black, piece{}, "c3"},
+		"d3": square{white, piece{}, "d3"},
+		"e3": square{black, piece{}, "e3"},
+		"f3": square{white, piece{}, "f3"},
+		"g3": square{black, piece{}, "g3"},
+		"h3": square{white, piece{}, "h3"},
+		"a2": square{white, piece{white, pawn}, "a2"},
+		"b2": square{black, piece{white, pawn}, "b2"},
+		"c2": square{white, piece{white, pawn}, "c2"},
+		"d2": square{black, piece{white, pawn}, "d2"},
+		"e2": square{white, piece{white, pawn}, "e2"},
+		"f2": square{black, piece{white, pawn}, "f2"},
+		"g2": square{white, piece{white, pawn}, "g2"},
+		"h2": square{black, piece{white, pawn}, "h2"},
+		"a1": square{black, piece{white, rook}, "a1"},
+		"b1": square{white, piece{white, knight}, "b1"},
+		"c1": square{black, piece{white, bishop}, "c1"},
+		"d1": square{white, piece{white, queen}, "d1"},
+		"e1": square{black, piece{white, king}, "e1"},
+		"f1": square{white, piece{white, bishop}, "f1"},
+		"g1": square{black, piece{white, knight}, "g1"},
+		"h1": square{white, piece{white, rook}, "h1"},
 	}
 	g.history = make([]move, 0)
 }
@@ -167,9 +147,10 @@ func (s square) print() {
 }
 
 func (g game) draw() {
-	for row := 0; row < 8; row += 1 {
-		for col := 0; col < 8; col += 1 {
-			g.board[row][col].print()
+	for rank := '8'; rank >= '1'; rank -= 1 {
+		for col := 'a'; col <= 'h' ; col += 1 {
+			idx := string(col) + string(rank)
+			g.board[idx].print()
 		}
 		fmt.Println()
 	}
@@ -187,30 +168,27 @@ func (g game) draw() {
 }
 type move struct {
 	text string
-	to, from location
+	to, from string  // eg "a2"
 	captured piece
 	player color
 }
 
 func (m *move) validate() (e error){
 	switch {
-	case m.from.row < 0 || m.from.row > 7:
+	case m.from[0] < 'a' || m.from[0] > 'h':
 		return errors.New("bad source row")
-	case m.from.col < 0 || m.from.col > 7:
+	case m.from[1] < '1' || m.from[1] > '8':
 		return errors.New("bad source col")
-	case m.to.row < 0 || m.to.row > 7:
+	case m.to[0] < 'a' || m.to[0] > 'h':
 		return errors.New("bad destination row")
-	case m.to.col < 0 || m.to.col > 7:
+	case m.to[1] < '1' || m.to[1] > '8':
 		return errors.New("bad destination col")
 	}
 	return
 }
 func (m *move) parse (s string) (e error) {
-	m.from.row = (int(s[0]) - 'a')
-	m.from.col = 7 - (int(s[1]) - '0' - 1)
-	m.to.row = (int(s[2]) - 'a')
-	m.to.col = 7 - (int(s[3]) - '0' - 1)
-
+	m.from = s[0:2]
+	m.to = s[2:4]
 	m.text = s
 	e = m.validate()
 
@@ -223,23 +201,32 @@ func (g *game) undo() (e error) {
 		return errors.New("No previous entry")
 	}
 	m := g.history[len(g.history)-1]
-	moved_piece := g.board[m.to.col][m.to.row].p
-	g.board[m.to.col][m.to.row].p = m.captured
-	g.board[m.from.col][m.from.row].p = moved_piece
+	moved_piece := g.board[m.to].p
+	to := g.board[m.to]
+	to.p = m.captured
+	g.board[m.to] = to
+
+	from := g.board[m.from]
+	from.p = moved_piece
+	g.board[m.from] = from
 
 	return
 }
 
 func (g *game) apply(m move) (e error) {
-	src := g.board[m.from.col][m.from.row].p
+	src := g.board[m.from].p
 	if (src.r == 0) {
 		return errors.New("No piece at source")
 	}
 
-	to := &g.board[m.to.col][m.to.row]
+	to := g.board[m.to]
 	m.captured = to.p
 	to.p = src
-	g.board[m.from.col][m.from.row].p = piece{}
+	g.board[m.to] = to
+
+	from := g.board[m.from]
+	from.p = piece{}
+	g.board[m.from] = from
 	return
 }
 
