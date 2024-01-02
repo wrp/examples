@@ -235,16 +235,15 @@ func (g *game) apply(m move) (e error) {
 
 func read_move(g *game, p string) (e error){
 	// Read move and update board
-	if (p == string('p')) {
+	switch p {
+	case "u":
 		if e = g.undo(); e == nil {
 			g.history = g.history[0:len(g.history)-1]
 		}
 		return
-	}
-	if (p == "quit") {
+	case "q":
 		os.Exit(0)
-	}
-	if (p == "reset") {
+	case "reset":
 		g.reset()
 		return
 	}
