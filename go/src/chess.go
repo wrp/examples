@@ -153,7 +153,7 @@ func (g game) draw() {
 		}
 		fmt.Println(" ", string(rank))
 	}
-	fmt.Printf("abcdefgh\n")
+	fmt.Printf("a b c d e f g h\n")
 	for i, t := range(g.history) {
 		c := "\t";
 		if (i % 2 == 1) {
