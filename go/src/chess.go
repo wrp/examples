@@ -152,8 +152,9 @@ func (g game) draw() {
 			idx := string(col) + string(rank)
 			g.board[idx].print()
 		}
-		fmt.Println()
+		fmt.Println(" ", string(rank))
 	}
+	fmt.Printf("abcdefgh\n")
 	for i, t := range(g.history) {
 		c := "\t";
 		if (i % 2 == 1) {
