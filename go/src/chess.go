@@ -46,7 +46,7 @@ type piece struct {
 }
 
 type square struct {
-	c color
+	color color
 	p piece
 	d string
 }
@@ -138,8 +138,8 @@ func (s square) print() {
 	w := b + 6
 
 	defer disable_reverse_video()
-	if (s.c == white) {
-		b, w = w, b
+	if (s.color == white) {
+		b, w = w, b;
 		enable_reverse_video()
 	}
 	switch s.p.color {
