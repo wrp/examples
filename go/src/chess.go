@@ -135,7 +135,7 @@ func (s square) print() {
 		r = rune(s.p.r)
 	}
 	b := rune(s.p.r)
-	w := rune(s.p.r) + 6
+	w := b + 6
 
 	defer disable_reverse_video()
 	if (s.c == white) {
