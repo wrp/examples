@@ -26,7 +26,7 @@ type game struct {
 
 type color int
 const (
-	white = iota
+	white = iota + 1
 	black
 )
 
@@ -134,13 +134,17 @@ func (s square) print() {
 	if s.p.r != 0 {
 		r = rune(s.p.r)
 	}
+	b := rune(s.p.r)
+	w := rune(s.p.r) + 6
 
 	defer disable_reverse_video()
-	if (s.c == white && s.p.r == 0) {
+	if (s.c == white) {
+		b, w = w, b
 		enable_reverse_video()
 	}
-	if (s.p.c == black) {
-		r += 6
+	switch s.p.c {
+	case white: r = w
+	case black: r = b
 	}
 	fmt.Printf("%c ", r)
 }
