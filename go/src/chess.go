@@ -190,6 +190,20 @@ type move struct {
 	to, from location
 	captured piece
 }
+
+func (m *move) validate() (e error){
+	switch {
+	case m.from.row < 0 || m.from.row > 7:
+		return errors.New("bad source row")
+	case m.from.col < 0 || m.from.col > 7:
+		return errors.New("bad source col")
+	case m.to.row < 0 || m.to.row > 7:
+		return errors.New("bad destination row")
+	case m.to.col < 0 || m.to.col > 7:
+		return errors.New("bad destination col")
+	}
+	return
+}
 func (m *move) parse (s string) (e error) {
 	m.from.row = (int(s[0]) - 'a')
 	m.from.col = 7 - (int(s[1]) - '0' - 1)
@@ -197,19 +211,8 @@ func (m *move) parse (s string) (e error) {
 	m.to.col = 7 - (int(s[3]) - '0' - 1)
 
 	m.text = s
+	e = m.validate()
 
-	if m.from.row < 0 || m.from.row > 7 {
-		e = errors.New("bad source row")
-	}
-	if m.from.col < 0 || m.from.col > 7 {
-		e = errors.New("bad source col")
-	}
-	if m.to.row < 0 || m.to.row > 7 {
-		e = errors.New("bad destination row")
-	}
-	if m.to.col < 0 || m.to.col > 7 {
-		e = errors.New("bad destination col")
-	}
 	return
 }
 
