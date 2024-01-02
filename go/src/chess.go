@@ -187,6 +187,9 @@ func (m *move) validate() (e error){
 	return
 }
 func (m *move) parse (s string) (e error) {
+	if (len(s) < 4) {
+		return errors.New("invalid entry(too short)")
+	}
 	m.from = s[0:2]
 	m.to = s[2:4]
 	m.text = s
@@ -236,10 +239,6 @@ func read_move(g *game, p string) (e error){
 		if e = g.undo(); e == nil {
 			g.history = g.history[0:len(g.history)-1]
 		}
-		return
-	}
-	if (len(p) < 4) {
-		e = errors.New("invalid entry(too short)")
 		return
 	}
 	if (p == "quit") {
