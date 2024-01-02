@@ -253,6 +253,9 @@ func read_move(g *game, p string) (e error){
 		m.player = black
 	}
 	e = m.parse(p)
+	if e != nil {
+		return
+	}
 	if g.board[m.from].p.r == 0 {
 		return errors.New("No piece at " + m.from)
 	}
