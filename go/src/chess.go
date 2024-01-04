@@ -41,13 +41,13 @@ const (
 )
 
 type piece struct {
-	color color
-	rank rank
+	color
+	rank
 }
 
 type square struct {
-	color color
-	piece piece
+	color
+	piece
 }
 
 
