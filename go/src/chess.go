@@ -18,9 +18,11 @@ import (
 	"os"
 )
 
+type board map[string]square
+
 // TODO add color to pieces and background
 type game struct {
-	board map[string]square
+	board
 	history []move
 }
 
