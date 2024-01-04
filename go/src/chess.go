@@ -63,38 +63,6 @@ func(g *game) reset() {
 		"f8": square{black, piece{black, bishop}},
 		"g8": square{white, piece{black, knight}},
 		"h8": square{black, piece{black, rook}},
-		"a6": square{white, piece{}},
-		"b6": square{black, piece{}},
-		"c6": square{white, piece{}},
-		"d6": square{black, piece{}},
-		"e6": square{white, piece{}},
-		"f6": square{black, piece{}},
-		"g6": square{white, piece{}},
-		"h6": square{black, piece{}},
-		"a5": square{black, piece{}},
-		"b5": square{white, piece{}},
-		"c5": square{black, piece{}},
-		"d5": square{white, piece{}},
-		"e5": square{black, piece{}},
-		"f5": square{white, piece{}},
-		"g5": square{black, piece{}},
-		"h5": square{white, piece{}},
-		"a4": square{white, piece{}},
-		"b4": square{black, piece{}},
-		"c4": square{white, piece{}},
-		"d4": square{black, piece{}},
-		"e4": square{white, piece{}},
-		"f4": square{black, piece{}},
-		"g4": square{white, piece{}},
-		"h4": square{black, piece{}},
-		"a3": square{black, piece{}},
-		"b3": square{white, piece{}},
-		"c3": square{black, piece{}},
-		"d3": square{white, piece{}},
-		"e3": square{black, piece{}},
-		"f3": square{white, piece{}},
-		"g3": square{black, piece{}},
-		"h3": square{white, piece{}},
 		"a1": square{black, piece{white, rook}},
 		"b1": square{white, piece{white, knight}},
 		"c1": square{black, piece{white, bishop}},
@@ -109,6 +77,14 @@ func(g *game) reset() {
 		g.board[string(row) + "7"] = square{black, piece{black, pawn}}
 		g.board[string(row + 1) + "2"] = square{black, piece{white, pawn}}
 		g.board[string(row + 1) + "7"] = square{white, piece{black, pawn}}
+	}
+	for i := 3; i < 7; i += 2 {
+		for _, row := range("aceg") {
+			g.board[fmt.Sprintf("%c%d", row, i)] = square{black, piece{}}
+			g.board[fmt.Sprintf("%c%d", row + 1, i)] = square{white, piece{}}
+			g.board[fmt.Sprintf("%c%d", row, i + 1)] = square{white, piece{}}
+			g.board[fmt.Sprintf("%c%d", row + 1, i + 1)] = square{black, piece{}}
+		}
 	}
 	g.history = make([]move, 0)
 }
