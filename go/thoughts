@@ -1,6 +1,18 @@
 
 Some random thoughts.
 
+Basic components of the language pseud-ordered by my own vague
+opinion of importance.  ie, key concepts that you should understand:
+	go routines
+	channels
+	interfaces
+	errors
+	select
+	panic/recover
+	interface{}
+	struct{}
+
+
 The language designers misspelled "while".  Instead of using 'for' as the
 looping keyword, they should have dumped it and kept 'while'.
 
