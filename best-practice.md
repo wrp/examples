@@ -15,6 +15,7 @@
 - Keep your code narrow. [^6]
 - Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
 - Configuration files are not documentation. [^5]
+- Test functionality, not platform. [^8]
 
 
 ## vcs best practices:
@@ -159,3 +160,13 @@ it as a syntax error", tell them to stop using broken IDEs.
 	the variable that is being passed.  In a code review, the first
 	style makes it hard for a human to see that 2 distinct changes
 	are happening.
+
+[^8]:
+    Never test for the platform or program that you are running to
+    decide if you have access to certain functionality.  eg, instead
+    of trying to determine that the current shell is zsh and therefore
+    you can use some zsh specific syntax, just test if the syntax is
+    valid.  Similiarly, instead of checking to see if you are running
+    on Darwin and can therefore assume the presence of some particular
+    libary function, test for the existence of the function.  The tests
+    are harder to write, but far more robust.
