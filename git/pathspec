@@ -1,6 +1,10 @@
 
+See gitglossary(7)
 
 Use ! to invert a spec.  Eg, to find string "foo" in all
 files except those with a .txt suffix:
 
 grep foo ':!*.txt'
+
+A name matches if it matches at least one non-exclude pathspec
+and does not match any exclude pathspec.
