@@ -10,8 +10,9 @@ git clone --origin ${remote_name?} ${url?}
 # Delete a branch on remote
 git push ${remote?} --delete ${remote_branch?}
 
-# Create local branch to track extant remote
-git fetch ${remote?}
+# Create local branch to track extant remote (fetch ${remote?} first)
+git branch -t ${branch?} ${remote?}/${remote_branch-$branch}
+# -- or
 git branch ${branch?}
 git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
 # -- or (also checkout new branch) --
