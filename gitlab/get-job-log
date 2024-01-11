@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# logs are called "traces"
+# The rest api returns terminal control characters, so
+# we use printf to convert \n, \t, etc. and use 'tr'
+# to convert carriage returns to newlines.
+
+
+: ${project_id=$1}
+: ${job_id=$2}
+
+log=$(curl -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
+	https://${GITLAB_DOMAIN?}/api/v4/projects/${project_id?}/jobs/${job_id?}/trace
+)
+
+printf "$log" | tr '\015' '\n' | less -R
+
