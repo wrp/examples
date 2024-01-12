@@ -1,8 +1,7 @@
-
 # A list of simple best practices.
 
 - Fail loudly (but tersely), succeed quietly. [^errors]
-- Do not write a usage statement in response to an error.  Write only an error message.
+- Avoid usage spew. [^errors]
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 - Don't use logs as metrics.
@@ -46,23 +45,10 @@ it as a syntax error", tell them to stop using broken IDEs.
 	right host or port?"  A better error message would be simply:
 	"localhost:8080: connection refused" The rest is line noise.
 	Perhaps include the name of the executable.  Maybe include the uid
-	or human readable name of the process owner.  Maybe a timestamp.
-	But no suggestions, and certainly not a usage statement.
-
-	An example of line noise:
-	```
-	for i in *.c; do
-		git ls-files --error-unmatch "$i" > /dev/null 2>&1 || echo "$i"
-	done
-	```
-	You should not have to discard stderr here, or stdout.  `git ls-files`
-	should output nothing, or just the name.  Instead it writes a slew of messages like:
-	```
-		error: pathspec 'foo.c' did not match any file(s) known to git
-		Did you forget to 'git add'?
-	```
-	Because of the loop, this "useful suggestion" is just a major irritant that
-	may obscure actual, useful error messages.
+	or human readable name of the process owner.  Do not include
+	a timestamp by default (let the caller wrap the command if timestamps
+	are desired, maybe add a flag to enable timestamps).
+	Do not provide "helpful" suggestions, and certainly not a usage statement.
 [^2]:
 	Humans should not care about the underlying implementation.
 	If you name your message queue "kafka", then it will be extremely
