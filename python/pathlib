@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+import pathlib
+
+# pathlib should generally be preferred over os.path
+
+# check if a file exists
+f = pathlib.Path('/', 'tmp', 'foo')
+full_name = f.absolute()
+print(full_name, end=' ')
+print('exists' if f.exists() else 'does not exist')
