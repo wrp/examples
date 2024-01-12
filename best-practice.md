@@ -1,7 +1,7 @@
 # A list of simple best practices.
 
 - Fail loudly (but tersely), succeed quietly. [^errors]
-- Avoid usage spew. [^errors]
+- Avoid usage spew. [^usage]
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 - Don't use logs as metrics.
@@ -49,6 +49,16 @@ it as a syntax error", tell them to stop using broken IDEs.
 	a timestamp by default (let the caller wrap the command if timestamps
 	are desired, maybe add a flag to enable timestamps).
 	Do not provide "helpful" suggestions, and certainly not a usage statement.
+[^usage]:
+	Usage spew is the act of printing a "wall of text" in response
+	to a simple error, and the wall of text generally obscures the
+	error message.	For example, if a command is invoked with one
+	argument misspelled, it is not helpful to the user to see a
+	list of all the possible arguments that may be available; they
+	just need to be informed of the one argument that is not
+	recognized.  If the usage statement scrolls off of the screen,
+	the actual error message if often no longer visible.  The full
+	usage statement is rarely useful, and can be requested if desired.
 [^2]:
 	Humans should not care about the underlying implementation.
 	If you name your message queue "kafka", then it will be extremely
