@@ -1,0 +1,10 @@
+
+Using docker image r-base, execute:
+
+install.packages("tsibble")
+library(dplyr)
+library(tsibble)
+
+
+(install.pacakges("tsibble") takes awhile; probably want to make a docker image
+after doing that)
