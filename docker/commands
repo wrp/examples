@@ -18,3 +18,6 @@ cmd() { docker run -i ${container} cmd "$@"; }
 
 # Add a tag to an image
 docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
+# Create an image from a running container
+docker commit ${container_id}
