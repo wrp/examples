@@ -15,6 +15,7 @@
 - Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
 - Configuration files are not documentation. [^5]
 - Test functionality, not platform. [^8]
+- Use roles extensively. [^roles]
 
 
 ## vcs best practices:
@@ -166,3 +167,12 @@ it as a syntax error", tell them to stop using broken IDEs.
 	on Darwin and can therefore assume the presence of some particular
 	libary function, test for the existence of the function.  The tests
 	are harder to write, but far more robust.
+[^roles]:
+	Always identify a role as an owner of a resource rather than an
+	individual.  Instead of putting a user id in a metadata file showing that
+	person as an owner of a repository, indicate a team or a role.
+	Always.  Individuals will be identified by their authorship of
+	commits in the VCS, and that is really the *only* place a person
+	should be identified.  Using roles also helps keep post-mortems
+	blameless.  Infrastructure must exist to enable identifying a person
+	from a given role, and it is worth the effort to build that infra early.
