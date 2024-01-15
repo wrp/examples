@@ -14,6 +14,9 @@ to build a project:
 	# see https://ziglang.org/learn/build-system/
 	zig build --summary all # requires build.zig
 
+to bootstrap (create boilerplate build.zig):
+	zig init
+
 to run:
 	zig run ${name}.zig -- arguments
 
