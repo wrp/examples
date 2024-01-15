@@ -1,6 +1,6 @@
 
 make image  # create the zig-playground
-make        # start a shell in the container
+make run    # start a shell in the container
 
 In the container, this directory should be mounted
 at /$USER (check the common-makefile in ../docker)
