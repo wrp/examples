@@ -7,6 +7,7 @@ pacman -Ss $re     # Search available packages that match $re (regex, not a glob
 pacman -Sw $pkg    # Download only; do not install Download to $(awk '/CacheDir/{print $3}' /etc/pacman.conf)
                    # ...by default to /var/cache/pacman/pkg/
 
+pacman -Syu        # upgrade everything
 
 pacman -Ql $pkg    # List files that belong to $pkg
 pacman -Qo $path   # Which package owns $path
