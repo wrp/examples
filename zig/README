@@ -7,8 +7,12 @@ at /$USER (check the common-makefile in ../docker)
 
 
 zig basics:
-to build a program:
+to build a single executable:
 	zig build-exe ${name}.zig
+
+to build a project:
+	# see https://ziglang.org/learn/build-system/
+	zig build --summary all # requires build.zig
 
 to run:
 	zig run ${name}.zig -- arguments
