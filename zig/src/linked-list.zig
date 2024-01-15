@@ -9,8 +9,13 @@ pub fn main() !void {
 		.next = null,
 		.data = 1234,
 	};
+	var node2 = LinkedList(i32).Node {
+		.prev = null,
+		.next = null,
+		.data = 5678,
+	};
 
-	const list = LinkedList(i32) {
+	var list = LinkedList(i32) {
 		.first = &node,
 		.last = &node,
 		.len = 1,
@@ -21,7 +26,11 @@ pub fn main() !void {
 	try stdout.print("{?}\n", .{list.last});
 	try stdout.print("{?}\n", .{usize});
 	try stdout.print("{?}\n", .{list});
+
 	try stdout.print("Value is: {d}\n", .{list.first.?.data});
+
+	list.push(&node2);
+	try stdout.print("new head is: {d}\n", .{list.first.?.data});
 }
 
 fn LinkedList(comptime T: type) type {
@@ -35,5 +44,12 @@ fn LinkedList(comptime T: type) type {
 		first: ?*Node,
 		last:  ?*Node,
 		len:   usize,
+
+		pub fn push(self: *LinkedList(T), node: *Node) void {
+			self.len += 1;
+			node.next = self.first;
+			self.first.?.prev = node;
+			self.first = node;
+		}
 	};
 }
