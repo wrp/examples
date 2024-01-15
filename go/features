@@ -1,0 +1,39 @@
+A list from https://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html
+
+a list of significant simplifications in Go over C and C++:
+
+regular syntax (don't need a symbol table to parse)
+garbage collection (only)
+no header files
+explicit dependencies
+no circular dependencies
+constants are just numbers
+int and int32 are distinct types
+letter case sets visibility
+methods for any type (no classes)
+no subtype inheritance (no subclasses)
+package-level initialization and well-defined order of initialization
+files compiled together in a package
+package-level globals presented in any order
+no arithmetic conversions (constants help)
+interfaces are implicit (no "implements" declaration)
+embedding (no promotion to superclass)
+methods are declared as functions (no special location)
+methods are just functions
+interfaces are just methods (no data)
+methods match by name only (not by type)
+no constructors or destructors
+postincrement and postdecrement are statements, not expressions
+no preincrement or predecrement
+assignment is not an expression
+evaluation order defined in assignment, function call (no "sequence point")
+no pointer arithmetic
+memory is always zeroed
+legal to take address of local variable
+no "this" in methods
+segmented stacks
+no const or other type annotations
+no templates
+no exceptions
+builtin string, slice, map
+array bounds checking
