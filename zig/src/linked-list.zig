@@ -21,9 +21,7 @@ pub fn main() !void {
 	try stdout.print("{?}\n", .{list.last});
 	try stdout.print("{?}\n", .{usize});
 	try stdout.print("{?}\n", .{list});
-	if (list.first) |v| {
-		try stdout.print("Value is: {d}\n", .{v.data});
-	}
+	try stdout.print("Value is: {d}\n", .{list.first.?.data});
 }
 
 fn LinkedList(comptime T: type) type {
