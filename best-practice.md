@@ -114,7 +114,10 @@ it as a syntax error", tell them to stop using broken IDEs.
 	for 60 so I don't need to turn my device sideways and go into
 	landscape mode, but 80 has historical precedence.  But excessive
 	indendation is a sign of a lack of decomposition, so just keep
-	your line widths below 80 (allowing for 8 space indentation).
+	your line widths below 80 (allowing for 8 space indentation).  As
+	I write this, I have 3 terminals currently open on a width of 30;
+	don't just assume your reader has a lot of real estate to waste
+	on excessive indentation of Java-esque naming schemes.
 [^7]:
 	Changes in code need to be contained.  Given the following two diffs, consider how long
 	it takes to understand fully what each does:
