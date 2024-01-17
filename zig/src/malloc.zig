@@ -8,7 +8,7 @@ pub fn main() !void {
     const args = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, args);
 
-    var x = try std.fmt.parseInt(i32, args[1], 10);
-    var y = x * x;
+    const x = try std.fmt.parseInt(i32, args[1], 10);
+    const y = x * x;
     std.debug.print("{d}\n", .{y});
 }
