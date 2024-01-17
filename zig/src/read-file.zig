@@ -25,12 +25,12 @@ pub fn main() !void {
 			try stdout.print("{s}:\n", .{filename});
 		}
 		while (true) {
-			const number_of_read_bytes = try buffered_file.read(&buffer);
+			const n = try buffered_file.read(&buffer);
 
-			if (number_of_read_bytes == 0) {
+			if (n == 0) {
 				break;
 			}
-			try stdout.print("{s}", .{buffer[0..number_of_read_bytes]});
+			try stdout.print("{s}", .{buffer[0..n]});
 		}
 	}
 }
