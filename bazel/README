@@ -1,0 +1,6 @@
+
+Public docker image for running bazel is:
+
+gcr.io/bazel-public/bazel:latest
+
+see https://bazel.build/install/docker-container
