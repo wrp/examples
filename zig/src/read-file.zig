@@ -30,7 +30,7 @@ pub fn main() !void {
 			if (number_of_read_bytes == 0) {
 				break;
 			}
-			try stdout.print("{s}", .{buffer});
+			try stdout.print("{s}", .{buffer[0..number_of_read_bytes]});
 		}
 	}
 }
