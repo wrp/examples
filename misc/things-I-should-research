@@ -9,3 +9,7 @@ in /etc/apt/source.list.d, repostiories can be added using
 add-apt-repository.  I don't know if this is recommended,
 or if this a useful tool, or if it is already obsolete, so
 I need to do some research.  But I don't have time right now.
+
+tools to look into:
+
+zarf - package management for air-gapped environments
