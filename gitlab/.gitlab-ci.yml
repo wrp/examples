@@ -1,0 +1,39 @@
+# This is the default base file for the ci/cd pipeline
+
+variables:
+	foo: foo-value
+
+# The before script is executed as part of all scripts, in the same shell
+before_script:
+- var="value"
+- echo "Before script section executing in shell $$ with var=$var, foo=$foo"
+- sh -c 'echo "var is \"$var\" in the environ, foo is \"$foo\""'
+- foo='reassigned in before script'
+
+after_script:
+- echo "After script section in shell $$ with var=$var"  # Runs in distinct shell (var is unset)
+- |-
+	if true; then
+		echo 'multiline script has embedded newlines'
+		echo 'so there is no need for continuation chars'
+	fi
+	# In test2, foo will be changed to the value assigned in the variables section,
+	# but in build1, foo retains the value from the global variables section ('foo-value')
+- sh -c 'echo "In after script, var is \"$var\" in the environ, foo is \"$foo\""'
+
+build1:
+	stage: build
+	tags: [autoscale]
+	script:
+	- echo "build1 executing in shell $$ with var=$var, foo=$foo" # Same shell as before_script commands
+	- var="set in build1"
+	- foo='foo set in build1' # This does not persists into the after_script
+
+test2:
+	variables:
+		foo: foo set in test2 # This value is used in both the after_script and the before_script.
+	stage: test
+	tags: [autoscale]
+	script:
+	- echo "2nd test command runs in $$ with var=$var, foo=$foo"
+	- var="set in test2"
