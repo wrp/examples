@@ -27,18 +27,25 @@ qux:
     baz:
 
 ---
-# Demonstrate a array of one dictionary
-# qax, quf, and bar are the same
+# Demonstrate an array of one dictionary
+# foo, bar, qax, and quf are the same
+bar: [{ "ka": a, kb: b }, null, {'bc': c}]
 qax:
 - ka: a
   kb: b
 -
 - bc: c
-bar: [{ "ka": a, kb: b }, null, {'bc': c}]
 quf:
 - { ka: a, "kb": b}
 -
 - bc: c
+foo:
+-
+        ka: a
+        kb: b
+-
+-
+        bc: c
 
 # Select just one
 # make array | jq '.[] | with_entries( select(.key == "bar"))'
