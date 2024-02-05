@@ -1,6 +1,7 @@
 # Drop this file in /etc/systemd/system with a name $name.service,
 # and that's all there is to it.  Then 'sudo systemctl start $name'
-# will start the service
+# will start the service and 'sudo systemctl enable $name' will
+# set it to start on rebooot
 
 # See also:
 #     systemd.service

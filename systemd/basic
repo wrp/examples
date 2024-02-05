@@ -5,3 +5,6 @@ $ systemctl is-active ${service?}
 
 # To list all services:
 $ systemctl list-units --type=service
+
+# To ensure a service starts on boot:
+$ systemctl enable ${service?}
