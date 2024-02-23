@@ -1,0 +1,13 @@
+
+basic workflow:
+Make changes and do not commit in git.
+
+$ arc diff   # create a new commit in phabricator
+
+pull/rebase/make changes, whatever
+
+# Show extant diffs (a "diff" is a commit in differential,
+# phabricator's web UI (or whatever))
+$ arc list
+
+$ arc amend --revision ${rev}  # rev is provided by 'arc list'
