@@ -11,3 +11,6 @@ pull/rebase/make changes, whatever
 $ arc list
 
 $ arc amend --revision ${rev}  # rev is provided by 'arc list'
+
+# Create and checkout a branch on an existing diff
+$ arc feature ${rev}  # rev is of the form D[0-9]+  eg rev=D12345
