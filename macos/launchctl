@@ -1,0 +1,3 @@
+
+
+$ launchctl bootout user/$(id -u $USER) # shutdown a login session
