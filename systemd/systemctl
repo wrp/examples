@@ -1,5 +1,5 @@
-systemctl poweroff  # power down the machine
-systemctl reboot    # power down the machine/restart
+systemctl poweroff  # power down the machine shutdown/halt/
+systemctl reboot    # power down the machine/restart/shutdown
 systemctl halt      # halt machine, but hardware still drains battery
 
 
