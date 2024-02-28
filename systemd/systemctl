@@ -1,3 +1,8 @@
+systemctl poweroff  # power down the machine
+systemctl reboot    # power down the machine/restart
+systemctl halt      # halt machine, but hardware still drains battery
+
+
 # Get the pid of a service
 systemctl show -p MainPID ${service_name?}.service | cut -d = -f 2
 
