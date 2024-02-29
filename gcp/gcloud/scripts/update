@@ -77,10 +77,13 @@ all_hosts() {
 
 	tput vi #  make cursor invisible
 	el=$(tput el)
-	awk 'NR>1 {print $1}' $1/list | while read host; do
+	while read host _; do
+		if test -z "$host" || test "$host" = NAME; then
+			continue
+		fi
 		printf "\r(%d/%d) update $host$el" "$((++i))" "$count"
 		$0 $1/$host || return 1
-	done
+	done < $1/list
 	echo
 }
 
