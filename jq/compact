@@ -2,10 +2,15 @@
 
 # Demonstrate extracting data and printing compactly (one-line)
 
-jq -rc '["foo = " + (.foo | tostring), .bar] | @tsv' << EOF
+for fmt in \
+	'["foo = " + (.foo | tostring), .bar] | @tsv' \
+	'[.foo, .bar] | @csv' \
+; do
+echo fmt="$fmt"
+jq -rc "$fmt" << EOF
 {
 	"foo": 5020,
-	"bar": "050",
+	"bar": 50,
 	"baz": "abc"
 }
 {
@@ -14,3 +19,4 @@ jq -rc '["foo = " + (.foo | tostring), .bar] | @tsv' << EOF
 	"baz": "ghi"
 }
 EOF
+done
