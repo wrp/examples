@@ -71,7 +71,6 @@ all_hosts() {
 	export FORCE
 	test -s $1/list || { echo "No entries in $1/list" >&2; return 1; }
 
-	$(dirname $0)/purge $1 || return 1
 	count=$(( $(wc -l < $1/list) - 1 ))
 
 	trap 'tput ve' RETURN
