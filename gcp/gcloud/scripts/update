@@ -178,11 +178,9 @@ main() {
 		if ! test -s "$x"; then rm "$x"; else (
 			cd "$base_dir"
 			git add $x
-			interactive_commit "$(printf \
-				"Update $PROJECT:$orig_type/$host$(
-					test "$PROJECT" != gcloud && echo " in $PROJECT"
-					)\n\n%s" \
-					"${FORCE}"
+			interactive_commit "$(printf '%s\n\n%s\n' \
+				"Update $PROJECT:$orig_type/$host" \
+				"${FORCE}"
 				)"
 			)
 		fi
