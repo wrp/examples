@@ -18,7 +18,7 @@
 # `-- sshKeys
 
 
-. $(dirname $0)/funcs.sh
+. $(dirname $(readlink $0))/funcs.sh
 : ${base_dir=$(pwd)}
 
 : ${FORCE="update gcp data on $(date)"}
