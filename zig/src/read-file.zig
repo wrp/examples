@@ -4,6 +4,20 @@ const std = @import("std");
 const stdout = std.io.getStdOut().writer();
 const stderr = std.io.getStdErr().writer();
 
+pub fn show_file(file: std.fs.File) !void {
+	var buffered_file = std.io.bufferedReader(file.reader());
+	var buffer: [1024]u8 = undefined;
+	while (buffered_file.read(&buffer)) |n| {
+		if (n == 0) {
+			break;
+		}
+		try stdout.print("{s}", .{buffer[0..n]});
+	} else |err| {
+		try stderr.print("ERROR: {}\n", .{err});
+	}
+}
+
+
 pub fn main() !void {
 	var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
 	defer arena.deinit();
@@ -20,19 +34,10 @@ pub fn main() !void {
 		const file = try std.fs.openFileAbsolute(path, .{});
 		defer file.close();
 
-		var buffered_file = std.io.bufferedReader(file.reader());
-		var buffer: [1024]u8 = undefined;
 		if (args.len > 2){
 			try stdout.print("{s}:\n", .{filename});
 		}
-		while (buffered_file.read(&buffer)) |n| {
+		try show_file(file);
 
-			if (n == 0) {
-				break;
-			}
-			try stdout.print("{s}", .{buffer[0..n]});
-		} else |err| {
-			try stderr.print("ERROR: {}\n", .{err});
-		}
 	}
 }
