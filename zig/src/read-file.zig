@@ -1,17 +1,35 @@
 //! Basic sample showing reading from a file.
 
+// See OneByteReadReader struct in the OneByte test in std/io/buffered_tee.zig
+
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
 const stderr = std.io.getStdErr().writer();
 
+pub fn getchar(file: anytype) !?u8 {
+	// Read one char at a time.  This is extremely slow, but
+	// is only making one system call (currently, std hard-codes
+	// a buffer size of 4096).  I hypothesize that the slowness
+	// is just from the function call overhead, but it is really,
+	// really slow.  Should look into.
+
+	var buffer: [1]u8 = undefined;
+	const n = try file.*.read(&buffer);
+	if (n == 0) {
+		return null;
+	} else {
+		return buffer[0];
+	}
+}
+
+
 pub fn show_file(file: std.fs.File) !void {
 	var buffered_file = std.io.bufferedReader(file.reader());
-	var buffer: [1024]u8 = undefined;
-	while (buffered_file.read(&buffer)) |n| {
-		if (n == 0) {
-			break;
+	while (getchar(&buffered_file)) |n| {
+		if (n == null) {
+			return;
 		}
-		try stdout.print("{s}", .{buffer[0..n]});
+		try stdout.print("{c}", .{n.?});
 	} else |err| {
 		try stderr.print("ERROR: {}\n", .{err});
 	}
@@ -38,6 +56,5 @@ pub fn main() !void {
 			try stdout.print("{s}:\n", .{filename});
 		}
 		try show_file(file);
-
 	}
 }
