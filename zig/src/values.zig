@@ -33,8 +33,8 @@ pub fn main() void {
 	optional_value = "hi";
 	assert(optional_value != null);
 
-	print("\noptional 2\ntype: {}\nvalue: {?s}\n", .{
-		@TypeOf(optional_value), optional_value,
+	print("\noptional 2\ntype: {}\nvalue: {?s}  s:{s}\n", .{
+		@TypeOf(optional_value), optional_value, optional_value.?
 	});
 
 	// error union
