@@ -7,11 +7,7 @@ const stdout = std.io.getStdOut().writer();
 const stderr = std.io.getStdErr().writer();
 
 pub fn getchar(file: anytype) !?u8 {
-	// Read one char at a time.  This is extremely slow, but
-	// is only making one system call (currently, std hard-codes
-	// a buffer size of 4096).  I hypothesize that the slowness
-	// is just from the function call overhead, but it is really,
-	// really slow.  Should look into.
+	// Read one char at a time, emulating libc's getchar
 
 	var buffer: [1]u8 = undefined;
 	const n = try file.*.read(&buffer);
@@ -25,11 +21,15 @@ pub fn getchar(file: anytype) !?u8 {
 
 pub fn show_file(file: std.fs.File) !void {
 	var buffered_file = std.io.bufferedReader(file.reader());
+	var buf_stdout = std.io.bufferedWriter(stdout);
+	var buf_out = buf_stdout.writer();
+
 	while (getchar(&buffered_file)) |n| {
 		if (n == null) {
+			try buf_stdout.flush();
 			return;
 		}
-		try stdout.print("{c}", .{n.?});
+		try buf_out.print("{c}", .{n.?});
 	} else |err| {
 		try stderr.print("ERROR: {}\n", .{err});
 	}
