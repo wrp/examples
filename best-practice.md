@@ -64,7 +64,13 @@ it as a syntax error", tell them to stop using broken IDEs.
 	Humans should not care about the underlying implementation.
 	If you name your message queue "kafka", then it will be extremely
 	difficult to migrate to KubeMQ.  This is the same rationale for
-	avoiding `.sh` suffixes on your shell scripts.
+	avoiding `.sh` suffixes on your shell scripts and `.py` suffixes
+	on your python scripts.  If you have a process that frobs by calling
+	frob.py, but you later realize that frobbing is better implemented in
+	some other language, you suddenly have a problem.  If you re-implement
+	`frob.py`, you cannot easily change the name without breaking all
+	existing tooling.  The problem is completely avoided if you had
+	originally named the program `frob` instead of `frob.py`.
 [^ts]:
 	Never display or write "07:18".  Always write "07:18:00-06:00"
 	or "13:18:00Z" or "07:18T-6".  It is less important how you choose
