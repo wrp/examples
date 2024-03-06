@@ -10,7 +10,7 @@ pub fn read_stream(r: anytype) !i32 {
 
 	while (try r.readUntilDelimiterOrEof(&buf, '\n')) |line| {
 		if (std.fmt.parseInt(i32, line, 10)) |value| {
-			var k: i32 = @divTrunc(value, 3) - 2;
+			const k: i32 = @divTrunc(value, 3) - 2;
 			sum += k;
 		} else |err| {
 			try stderr.print("Invalid: {}\n", .{err});
@@ -20,10 +20,9 @@ pub fn read_stream(r: anytype) !i32 {
 }
 
 pub fn main() !void {
-
-	var unbuffered_stdin = std.io.getStdIn().reader();
+	const unbuffered_stdin = std.io.getStdIn().reader();
 	var stdin = std.io.bufferedReader(unbuffered_stdin);
-	var r = stdin.reader();
+	const r = stdin.reader();
 
 	if(read_stream(r)) |sum| {
 		try stdout.print("{}\n", .{sum});
