@@ -6,7 +6,7 @@
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
 - Don't use logs as metrics.
 - Version everything, but do not hardcode version numbers in a file; derive them from a VCS.
-- Never deploy a mutable ref (eg "latest"); always use a fixed version
+- Never deploy a mutable ref (eg "latest"); always use a fixed version.
 - Design for the interface, not the implementation.
 - Use descriptive names for projects. Call your auth service "auth-service", not "jezebel".
 - Don't use the implementation as a basis for the name of a service. [^2]
