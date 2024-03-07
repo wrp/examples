@@ -5,7 +5,11 @@
 # *   /usr/src/linux/drivers/char/vt.c
 # *   /usr/src/include/linux/console-struct.h
 
-printf "\e[?%d;%d${2:+;}%d${3:+;}c" ${1?} $2 $3
+fmt=$(printf "[?%d;%d${2:+;}%d${3:+;}c" ${1?} $2 $3)
+printf '\e%s' "$fmt"
+infocmp -A /usr/share/terminfo linux \
+	| sed -e 's/cnorm=[^,]*/cnorm=\\E[?25h\\E'"${fmt}/" > /tmp/linux
+tic /tmp/linux   # Writes to ~/.terminfo/l/linux
 exit
 
 p1: size
