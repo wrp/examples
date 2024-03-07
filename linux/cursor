@@ -5,16 +5,17 @@
 # *   /usr/src/linux/drivers/char/vt.c
 # *   /usr/src/include/linux/console-struct.h
 
-fmt=$(printf "[?%d;%d${2:+;}%d${3:+;}c" ${1?} $2 $3)
+# Defaults that I like on the pinebook: 11 0 64
+size=${1:-11}
+toggle=${2:-0}
+color=${3:-64}
+
+fmt=$(printf "[?%d;%d${toggle:+;}%d${color:+;}c" "${size:?}" "$toggle" "$color")
 printf '\e%s' "$fmt"
 infocmp -A /usr/share/terminfo linux \
 	| sed -e 's/cnorm=[^,]*/cnorm=\\E[?25h\\E'"${fmt}/" > /tmp/linux
 tic /tmp/linux   # Writes to ~/.terminfo/l/linux
 exit
-
-p1: size
-p2: toggle the color bits
-p3: set the color bits
 
 p1 is cursor size:
 	0: default  (2, in console-struct.h)
