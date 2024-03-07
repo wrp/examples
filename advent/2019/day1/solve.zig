@@ -9,8 +9,7 @@ pub fn read_stream(r: anytype) !i32 {
 
 	while (try r.readUntilDelimiterOrEof(&buf, '\n')) |line| {
 		if (std.fmt.parseInt(i32, line, 10)) |value| {
-			const k: i32 = @divTrunc(value, 3) - 2;
-			sum += k;
+			sum += @as(i32, @divTrunc(value, 3)) - 2;
 		} else |err| {
 			try stderr.print("Invalid: {}\n", .{err});
 		}
