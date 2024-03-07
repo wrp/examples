@@ -1,8 +1,9 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import os
+import subprocess
 
-print os.environ['HOME']
+print(os.environ['HOME'])
 
 if 'FOO' in os.environ:
-    print 'FOO="%s"' % os.environ['FOO']
+    print('FOO="%s"' % os.environ['FOO'])
