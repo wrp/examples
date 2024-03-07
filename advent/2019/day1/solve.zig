@@ -18,14 +18,10 @@ pub fn read_stream(r: anytype) !i32 {
 	return sum;
 }
 
-pub fn flush_ignore_err(f: anytype) void {
-	_ = f.*.flush() catch 0;
-}
-
 pub fn main() !void {
 	var buffered_stdout = std.io.bufferedWriter(std.io.getStdOut().writer());
 	const stdout = buffered_stdout.writer();
-	defer flush_ignore_err(&buffered_stdout);
+	defer buffered_stdout.flush() catch unreachable;
 
 	const unbuffered_stdin = std.io.getStdIn().reader();
 	var stdin = std.io.bufferedReader(unbuffered_stdin);
