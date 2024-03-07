@@ -2,14 +2,14 @@
 const std = @import("std");
 const stderr = std.io.getStdErr().writer();
 
-pub fn read_stream(r: anytype) !i32 {
+pub fn read_stream(r: anytype) !u32 {
 	var buf: [1024]u8 = undefined;
 
-	var sum: i32 = 0;
+	var sum: u32 = 0;
 
 	while (try r.readUntilDelimiterOrEof(&buf, '\n')) |line| {
-		if (std.fmt.parseInt(i32, line, 10)) |value| {
-			sum += @as(i32, @divTrunc(value, 3)) - 2;
+		if (std.fmt.parseInt(u32, line, 10)) |value| {
+			sum += value / 3 - 2;
 		} else |err| {
 			try stderr.print("Invalid: {}\n", .{err});
 		}
