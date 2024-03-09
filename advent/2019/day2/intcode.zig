@@ -45,8 +45,11 @@ pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
 	}
 }
 
-pub fn process(data: *std.ArrayList(u32)) !void {
-
+pub fn
+process(
+	data: *std.ArrayList(u32),
+) !void
+{
 	var i:u32 = 0;
 	var p = data.*.items[0..];
 	p[1] = 12;
