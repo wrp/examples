@@ -3,7 +3,15 @@ const std = @import("std");
 
 pub fn main() !void {
 
+	// TODO: figure out how to cast away const so I can write:
+	// const stdin_reader = std.io.bufferedReader(
+	//         std.io.getStdIn().reader()
+	// ).reader();
+	// Currently (zig 0.11.0), the object returned by std.io.bufferedReader
+	// is const, so the attempt to invoke reader() in the one-liner fails.
 	var stdin = std.io.bufferedReader(std.io.getStdIn().reader());
+	const stdin_reader = stdin.reader();
+
 	var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 	defer _ = gpa.deinit();
 
@@ -12,7 +20,7 @@ pub fn main() !void {
 	var stack = std.ArrayList(u32).init(alloc);
 	defer stack.deinit();
 
-	if (read_stream(stdin.reader(), &stack)) {
+	if (read_stream(stdin_reader, &stack)) {
 		try process(&stack);
 	} else |err| {
 		std.debug.print("error: {}\n", .{err});
