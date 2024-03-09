@@ -48,16 +48,17 @@ pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
 pub fn process(data: *std.ArrayList(u32)) !void {
 
 	var i:u32 = 0;
-	data.*.items[1] = 12;
-	data.*.items[2] = 2;
-	while (data.*.items[i] != 99) {
-		const a = data.*.items[data.*.items[i + 1]];
-		const b = data.*.items[data.*.items[i + 2]];
-		const idx = data.*.items[i+3];
+	var p = data.*.items[0..];
+	p[1] = 12;
+	p[2] = 2;
+	while (p[i] != 99) {
+		const a = p[p[i + 1]];
+		const b = p[p[i + 2]];
+		const idx = p[i+3];
 
-		switch (data.*.items[i]) {
-		1 => data.*.items[idx] = a + b,
-		2 => data.*.items[idx] = a * b,
+		switch (p[i]) {
+		1 => p[idx] = a + b,
+		2 => p[idx] = a * b,
 		else => return error.FatalError,
 		}
 		i += 4;
