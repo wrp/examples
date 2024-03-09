@@ -9,6 +9,8 @@ pub fn main() !void {
 	// ).reader();
 	// Currently (zig 0.11.0), the object returned by std.io.bufferedReader
 	// is const, so the attempt to invoke reader() in the one-liner fails.
+	// I am a bit surprised any of this is necssary.  Surely there is
+	// a buffered object in std that we can just use.
 	var stdin = std.io.bufferedReader(std.io.getStdIn().reader());
 	const stdin_reader = stdin.reader();
 
@@ -26,6 +28,7 @@ pub fn main() !void {
 		std.debug.print("error: {}\n", .{err});
 	}
 
+	// Similarly here: there must be a buffered writer in std
 	var buffered_stdout = std.io.bufferedWriter(std.io.getStdOut().writer());
 	const stdout = buffered_stdout.writer();
 	defer buffered_stdout.flush() catch unreachable;
