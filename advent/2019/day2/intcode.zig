@@ -1,7 +1,7 @@
 
 const std = @import("std");
 
-pub fn read_stream(stream: anytype, data: anytype) !void {
+pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
 	var buf: [1024]u8 = undefined;
 
 	// TODO: explore options for extant functions with multiple delims
