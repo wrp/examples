@@ -2,7 +2,10 @@
 
 const std = @import("std");
 
-pub fn string_map(stdout: anytype, allocator: anytype) !void {
+pub fn
+string_map(stdout: anytype, allocator: anytype)
+!void
+{
 	const map = std.StringHashMap(usize);
 
 	var m = map.init(allocator);
@@ -19,6 +22,25 @@ pub fn string_map(stdout: anytype, allocator: anytype) !void {
 	}
 }
 
+pub fn
+int_map(stdout: anytype, allocator: anytype)
+!void
+{
+	const map = std.AutoHashMap(usize, usize);
+
+	var m = map.init(allocator);
+	defer m.deinit();
+
+	for(0..4) |i| {
+		_ = try m.fetchPut(i, i * i);
+	}
+
+	var it = m.iterator();
+	while (it.next()) |kv| {
+		try stdout.print("{d}: {d}\n", .{kv.key_ptr.*, kv.value_ptr.*});
+	}
+}
+
 
 pub fn main() !void
 {
@@ -26,4 +48,5 @@ pub fn main() !void
 	var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 	defer _ = gpa.deinit();
 	try string_map(stdout, gpa.allocator());
+	try int_map(stdout, gpa.allocator());
 }
