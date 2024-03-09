@@ -26,12 +26,13 @@ pub fn
 int_map(stdout: anytype, allocator: anytype)
 !void
 {
-	const map = std.AutoHashMap(usize, usize);
+	const map = std.AutoHashMap(u8, u8);
 
 	var m = map.init(allocator);
 	defer m.deinit();
 
-	for(0..4) |i| {
+	for(0..4) |iu| {
+		const i = @as(u8, @truncate(iu));
 		_ = try m.fetchPut(i, i * i);
 	}
 
