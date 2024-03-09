@@ -1,6 +1,24 @@
 
 const std = @import("std");
 
+pub fn main() !void {
+
+	var stdin = std.io.bufferedReader(std.io.getStdIn().reader());
+	var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+	defer _ = gpa.deinit();
+
+	const alloc = gpa.allocator();
+
+	var stack = std.ArrayList(u32).init(alloc);
+	defer stack.deinit();
+
+	if (read_stream(stdin.reader(), &stack)) {
+		try process(&stack);
+	} else |err| {
+		std.debug.print("error: {}\n", .{err});
+	}
+}
+
 pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
 	var buf: [1024]u8 = undefined;
 
@@ -35,23 +53,4 @@ pub fn process(data: *std.ArrayList(u32)) !void {
 		i += 4;
 	}
 	try stdout.print("{d}\n", .{data.*.items[0]});
-}
-
-pub fn main() !void {
-
-	var stdin = std.io.bufferedReader(std.io.getStdIn().reader());
-
-	var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-	defer _ = gpa.deinit();
-
-	const alloc = gpa.allocator();
-
-	var stack = std.ArrayList(u32).init(alloc);
-	defer stack.deinit();
-
-	if (read_stream(stdin.reader(), &stack)) {
-		try process(&stack);
-	} else |err| {
-		std.debug.print("error: {}\n", .{err});
-	}
 }
