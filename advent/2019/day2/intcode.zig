@@ -25,6 +25,11 @@ pub fn main() !void {
 	} else |err| {
 		std.debug.print("error: {}\n", .{err});
 	}
+
+	var buffered_stdout = std.io.bufferedWriter(std.io.getStdOut().writer());
+	const stdout = buffered_stdout.writer();
+	defer buffered_stdout.flush() catch unreachable;
+	try stdout.print("{d}\n", .{stack.items[0]});
 }
 
 pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
@@ -41,9 +46,6 @@ pub fn read_stream(stream: anytype, data: *std.ArrayList(u32)) !void {
 }
 
 pub fn process(data: *std.ArrayList(u32)) !void {
-	var buffered_stdout = std.io.bufferedWriter(std.io.getStdOut().writer());
-	const stdout = buffered_stdout.writer();
-	defer buffered_stdout.flush() catch unreachable;
 
 	var i:u32 = 0;
 	data.*.items[1] = 12;
@@ -60,5 +62,4 @@ pub fn process(data: *std.ArrayList(u32)) !void {
 		}
 		i += 4;
 	}
-	try stdout.print("{d}\n", .{data.*.items[0]});
 }
