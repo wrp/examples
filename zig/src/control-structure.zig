@@ -4,6 +4,12 @@ const std = @import("std");
 
 fn for_loops(stdout: std.fs.File.Writer) !void {
 	const names = [_][]const u8{"Alice", "Bob"};  // Initialize array of strings
+	const text = "banana";
+
+	for (text) |c| {
+		try stdout.print("{c}", .{c});
+	}
+	try stdout.print("\n", .{});
 
 	// Basic usage
 	for(0..3) |i| {
