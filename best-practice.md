@@ -11,6 +11,7 @@
 - Use descriptive names for projects. Call your auth service "auth-service", not "jezebel".
 - Don't use the implementation as a basis for the name of a service. [^2]
 - Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339) [^ts]
+- Never use relative timestamps (eg, "6 hours ago") [^no-relative-time]
 - Keep your code narrow. [^6]
 - Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
 - Configuration files are not documentation. [^5]
@@ -185,3 +186,7 @@ it as a syntax error", tell them to stop using broken IDEs.
 	should be identified.  Using roles also helps keep post-mortems
 	blameless.  Infrastructure must exist to enable identifying a person
 	from a given role, and it is worth the effort to build that infra early.
+[^no-relative-time]:
+	Strings like "6 hours ago" have no meaning when they've been cut-n-pasted
+	or are viewed in a screen shot from 5 days ago, or many other unforseen
+	contexts.  Unambiguous rfc3339 conforming strings are unambiguous.
