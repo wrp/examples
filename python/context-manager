@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+class cm():
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        print(f'__enter__ called for {self.name}')
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f'__exit__ called for {self.name} with args: ', end=None)
+        if exc_type:
+            print('***********************')
+            print(f'exception type = {exc_type}')
+            print(f'exception value = {exc_val}')
+            print(f'exception traceback = {exc_tb}')
+            print('***********************')
+
+with cm('foo') as k:
+    print(f'k name is {k.name}')
+
+print('')
+
+with cm('BAD') as k:
+    # Raise an exception
+    a = k.no_such_attribute
