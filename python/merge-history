@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+
+# naive script to merge two sorted shell history files
+
+import sys
+import re
+
+def merge_files(a, b):
+    n, m = a.next(), b.next()
+    while n or m:
+        if not m or (n and n.ts < m.ts):
+            to_print = n.lines
+            n = a.next()
+        else:
+            to_print = m.lines
+            m = b.next()
+        print(''.join(to_print), end='')
+
+
+class cmd():
+    def __init__(self, ts, lines):
+        self.ts = ts
+        self.lines = lines
+
+class NotSorted(Exception): pass
+
+class hist_file():
+    def __init__(self, path=None):
+        self.path = path if path else 'stdin'
+        self.f = open(path, 'r') if path else sys.stdin
+        self.next_line = "#0"
+        self.line_number = 0
+        self.bof = re.compile('^#[0-9]{10}')
+        self.prev = None
+        self.next()
+
+
+    def next(self):
+        """Return the next command in the file"""
+        if not self.next_line:
+            return None
+
+        ts = int(self.next_line[1:11])
+
+        if self.prev and ts < self.prev.ts:
+            raise(NotSorted(f'{self.path} is out of order at line {self.line_number}'))
+
+        lines = [self.next_line]
+        self.next_line = self.f.readline()
+        self.line_number += 1
+        while self.next_line and not self.bof.match(self.next_line):
+            lines.append(self.next_line)
+            self.next_line = self.f.readline()
+            self.line_number += 1
+
+        self.prev = cmd(ts, lines)
+        return self.prev
+
+
+    def readlines(self):
+        return self.f.readlines()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.f.close()
+
+def main():
+    path1 = sys.argv[1]
+    path2 = sys.argv[2] if len(sys.argv) > 2 else None
+    with hist_file(path1) as a, hist_file(path2) as b:
+        try:
+            merge_files(a, b)
+        except NotSorted as e:
+            raise SystemExit(e)
+
+main()
