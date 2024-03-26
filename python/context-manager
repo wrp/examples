@@ -8,13 +8,13 @@ class cm():
         print(f'__enter__ called for {self.name}')
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, *args):
         print(f'__exit__ called for {self.name} with args: ', end=None)
-        if exc_type:
+        if len(args) > 0:
             print('***********************')
-            print(f'exception type = {exc_type}')
-            print(f'exception value = {exc_val}')
-            print(f'exception traceback = {exc_tb}')
+            print(f'exception type = {args[0]}')
+            print(f'exception value = {args[1]}')
+            print(f'exception traceback = {args[2]}')
             print('***********************')
 
 with cm('foo') as k:
