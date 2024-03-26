@@ -3,6 +3,7 @@
 # Demonstrate extracting data and printing compactly (one-line)
 
 for fmt in \
+	. \
 	'["foo = " + (.foo | tostring), .bar] | @tsv' \
 	'[.foo, .bar] | @csv' \
 ; do
