@@ -10,7 +10,7 @@ def merge_files(paths):
 
     while any(files):
         s = min(files)
-        print(''.join(s.prev.lines), end='')
+        print(''.join(s.cmd.lines), end='')
         s.next()
 
 
@@ -28,32 +28,32 @@ class hist_file():
         self.next_line = self.f.readline()
         self.line_number = 0
         self.bof = re.compile('^#[0-9]{10}')
-        self.prev = None
+        self.cmd = None
         self.next()
 
     def __repr__(self):
-        return f'{self.path}: {self.line_number}: {self.prev.ts if self.prev else "NONE"}'
+        return f'{self.path}: {self.line_number}: {self.cmd.ts if self.cmd else "NONE"}'
 
     def __lt__(self, other):
-        if other.prev and self.prev:
-            return self.prev.ts < other.prev.ts
-        if other.prev:
+        if other.cmd and self.cmd:
+            return self.cmd.ts < other.cmd.ts
+        if other.cmd:
             return False
         return True
 
 
     def __bool__(self):
-        return bool(self.prev)
+        return bool(self.cmd)
 
     def next(self):
-        """Return the next command in the file"""
+        """Put the next command from the file into self.cmd"""
         if not self.next_line:
-            self.prev = None
+            self.cmd = None
             return None
 
         ts = int(self.next_line[1:11])
 
-        if self.prev and ts < self.prev.ts:
+        if self.cmd and ts < self.cmd.ts:
             raise(NotSorted(f'{self.path} is out of order at line {self.line_number}'))
 
         lines = [self.next_line]
@@ -64,9 +64,7 @@ class hist_file():
             self.next_line = self.f.readline()
             self.line_number += 1
 
-        self.prev = cmd(ts, lines)
-        return self.prev
-
+        self.cmd = cmd(ts, lines)
 
     def readlines(self):
         return self.f.readlines()
