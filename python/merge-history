@@ -66,7 +66,12 @@ class hist_file():
         ts = int(self.next_line[1:11])
 
         if self.cmd and ts < self.cmd.ts:
-            raise(NotSorted(f'{self.path} is out of order at line {self.line_number}'))
+            # OOOOK == out of order okay
+            msg = f'{self.path} is out of order at line {self.line_number}'
+            if os.environ.get('OOOOK', False):
+                print(msg, file=sys.stderr)
+            else:
+                raise(NotSorted(msg))
 
         lines = [self.next_line]
         self.next_line = self.f.readline()
