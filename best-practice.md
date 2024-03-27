@@ -190,5 +190,5 @@ it as a syntax error", tell them to stop using broken IDEs.
 	Strings like "6 hours ago" have no meaning when they've been cut-n-pasted
 	or are viewed in a screen shot from 5 days ago, or many other unforseen
 	contexts.  Unambiguous ISO-8601/rfc3339 conforming strings are better.
-	(https://www.iso.org/iso-8601-date-and-time-format.html)
+	(https://en.wikipedia.org/wiki/ISO_8601)
 	(https://www.rfc-editor.org/rfc/rfc3339)
