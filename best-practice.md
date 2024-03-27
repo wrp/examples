@@ -10,7 +10,7 @@
 - Design for the interface, not the implementation.
 - Use descriptive names for projects. Call your auth service "auth-service", not "jezebel".
 - Don't use the implementation as a basis for the name of a service. [^2]
-- Always include timezone in a timestamp representation.  (https://www.rfc-editor.org/rfc/rfc3339) [^ts]
+- Always include timezone in a timestamp representation.  ISO-8601/rfc3339 [^ts]
 - Never use relative timestamps (eg, "6 hours ago") [^no-relative-time]
 - Keep your code narrow. [^6]
 - Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
@@ -189,4 +189,6 @@ it as a syntax error", tell them to stop using broken IDEs.
 [^no-relative-time]:
 	Strings like "6 hours ago" have no meaning when they've been cut-n-pasted
 	or are viewed in a screen shot from 5 days ago, or many other unforseen
-	contexts.  Unambiguous rfc3339 conforming strings are unambiguous.
+	contexts.  Unambiguous ISO-8601/rfc3339 conforming strings are better.
+	(https://www.iso.org/iso-8601-date-and-time-format.html)
+	(https://www.rfc-editor.org/rfc/rfc3339)
