@@ -2,6 +2,7 @@
 
 # naive script to merge sorted shell histories
 
+import os
 import sys
 import re
 
@@ -26,8 +27,9 @@ def ignore_command(lines):
     if len(lines) < 1:
         return False
 
-    if lines[0] == 'g show\n':
-        return True
+    for pattern in commands_to_ignore_re:
+        if pattern.match(lines[0]):
+            return True
 
     return False
 
@@ -89,7 +91,19 @@ class hist_file():
     def __exit__(self, *args):
         self.f.close()
 
+# Commands that are probably not interesting to keep in history
+# TODO: add flags to allow user to specify categories to omit,
+#       or patterns to ignore, or categories to keep, or ...?
+#       For now, just honor HISTIGNORE as a pattern to ignore.
+commands_to_ignore_re = [
+    re.compile('^(g|git)\s+(ap|dc|diff|l1h||s|show)(\s+[^|]*)$'),
+    re.compile('^(cat|grep|ls|pwd|s)(\s+[^|]*)$'),
+]
+
+
 def main():
+    if pattern := os.environ.get('HISTIGNORE', None):
+        commands_to_ignore_re.append(re.compile(pattern))
     try:
         merge_files(sys.argv[1:])
     except NotSorted as e:
