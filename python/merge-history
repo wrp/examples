@@ -74,6 +74,11 @@ class hist_file():
     def __bool__(self):
         return bool(self.cmd)
 
+    def readline(self):
+        self.next_line = self.f.readline()
+        self.line_number += 1
+        return self.next_line and not self.bof.match(self.next_line)
+
     def next(self):
         """Put the next command from the file into self.cmd"""
         if not self.next_line:
@@ -91,12 +96,8 @@ class hist_file():
                 raise(NotSorted(msg))
 
         lines = [self.next_line]
-        self.next_line = self.f.readline()
-        self.line_number += 1
-        while self.next_line and not self.bof.match(self.next_line):
+        while self.readline():
             lines.append(self.next_line)
-            self.next_line = self.f.readline()
-            self.line_number += 1
 
         if ignore_command(lines[1:]):
             self.next()
