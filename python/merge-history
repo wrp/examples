@@ -11,7 +11,7 @@ def merge_files(paths):
 
     while any(files):
         s = min(files)
-        print(''.join(s.cmd.lines), end='')
+        print(s.cmd, end='')
         s.next()
 
 
@@ -19,6 +19,9 @@ class cmd():
     def __init__(self, ts, lines):
         self.ts = ts
         self.lines = lines
+
+    def __str__(self):
+        return ''.join(self.lines)
 
 class NotSorted(Exception): pass
 
