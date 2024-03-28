@@ -125,10 +125,8 @@ def sort_file(path):
     h = hist_file(path, True)
     if h.cmd:
         cmds = [h.cmd]
-    while h:
-        h.next()
-        if h.cmd:
-            cmds.append(h.cmd)
+    while h.next():
+        cmds.append(h.cmd)
 
     cmds.sort()
 
