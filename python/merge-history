@@ -38,8 +38,8 @@ def ignore_command(lines):
 
 class hist_file():
     def __init__(self, path=None):
-        self.path = path if path else 'stdin'
-        self.f = open(path, 'r') if path else sys.stdin
+        self.path = path if path != '-' else 'stdin'
+        self.f = open(path, 'r') if path != '-' else sys.stdin
         self.next_line = self.f.readline()
         self.line_number = 1
         self.bof = re.compile('^#[0-9]{10}')
