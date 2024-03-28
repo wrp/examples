@@ -79,14 +79,7 @@ class hist_file():
         self.line_number += 1
         return self.next_line and not self.bof.match(self.next_line)
 
-    def next(self):
-        """Put the next command from the file into self.cmd"""
-        if not self.next_line:
-            self.cmd = None
-            return None
-
-        ts = int(self.next_line[1:11])
-
+    def check_order(self, ts):
         if not self.allow_unsorted and self.cmd and ts < self.cmd.ts:
             # OOOOK == out of order okay
             msg = f'{self.path} is out of order at line {self.line_number}'
@@ -94,6 +87,15 @@ class hist_file():
                 print(msg, file=sys.stderr)
             else:
                 raise(NotSorted(msg))
+
+    def next(self):
+        """Put the next command from the file into self.cmd"""
+        if not self.next_line:
+            self.cmd = None
+            return None
+
+        ts = int(self.next_line[1:11])
+        self.check_order(ts)
 
         lines = [self.next_line]
         while self.readline():
