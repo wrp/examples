@@ -112,9 +112,12 @@ commands_to_ignore_re = [
 def main():
     if pattern := os.environ.get('HISTIGNORE', None):
         commands_to_ignore_re.append(re.compile(pattern))
+
     try:
         merge_files(sys.argv[1:])
     except NotSorted as e:
         raise SystemExit(e)
+    except IOError as e:
+        raise SystemExit(f'{e.filename}: {e.strerror}')
 
 main()
