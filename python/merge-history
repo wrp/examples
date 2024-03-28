@@ -23,6 +23,9 @@ class cmd():
     def __str__(self):
         return ''.join(self.lines)
 
+    def __lt__(self, other):
+        return self.ts < other.ts
+
 class NotSorted(Exception): pass
 
 
@@ -50,17 +53,18 @@ class hist_file():
         return f'{self.path}: {self.line_number}: {self.cmd.ts if self.cmd else "NONE"}'
 
     def __lt__(self, other):
-        if other.cmd and self.cmd:
-            return self.cmd.ts < other.cmd.ts
+        if self.cmd and other.cmd:
+            return self.cmd < other.cmd
         if other.cmd:
             return False
         return True
 
 
+
     def __bool__(self):
         return bool(self.cmd)
 
-    def next(self):
+    def next(self, ignore_order=False):
         """Put the next command from the file into self.cmd"""
         if not self.next_line:
             self.cmd = None
@@ -68,7 +72,7 @@ class hist_file():
 
         ts = int(self.next_line[1:11])
 
-        if self.cmd and ts < self.cmd.ts:
+        if not ignore_order and self.cmd and ts < self.cmd.ts:
             # OOOOK == out of order okay
             msg = f'{self.path} is out of order at line {self.line_number}'
             if os.environ.get('OOOOK', False):
@@ -85,7 +89,7 @@ class hist_file():
             self.line_number += 1
 
         if ignore_command(lines[1:]):
-            self.next()
+            self.next(ignore_order)
             return
 
         self.cmd = cmd(ts, lines)
@@ -109,15 +113,37 @@ commands_to_ignore_re = [
 ]
 
 
+def sort_file(path):
+    new_path = path + '.sorted'
+    if os.path.exists(new_path):
+        raise SystemExit(f'{new_path} already exists!  Aborting')
+
+    h = hist_file(path)
+    if h.cmd:
+        cmds = [h.cmd]
+    while h:
+        h.next(True)
+        if h.cmd:
+            cmds.append(h.cmd)
+
+    cmds.sort()
+
+    with open(new_path, 'w') as output:
+        for x in cmds:
+            print(x, end='', file=output)
+
 def main():
     if pattern := os.environ.get('HISTIGNORE', None):
         commands_to_ignore_re.append(re.compile(pattern))
 
     try:
-        merge_files(sys.argv[1:])
-    except NotSorted as e:
-        raise SystemExit(e)
+        if os.path.basename(sys.argv[0]).startswith('sort'):
+            for x in sys.argv[1:]: sort_file(x)
+        else:
+            merge_files(sys.argv[1:])
     except IOError as e:
         raise SystemExit(f'{e.filename}: {e.strerror}')
+#    except Exception as e:
+#        raise SystemExit(e)
 
 main()
