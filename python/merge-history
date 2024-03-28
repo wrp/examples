@@ -6,6 +6,17 @@ import os
 import sys
 import re
 
+
+# Commands that are probably not interesting to keep in history
+# TODO: add flags to allow user to specify categories to omit,
+#       or patterns to ignore, or categories to keep, or ...?
+#       For now, just honor HISTIGNORE as a pattern to ignore.
+commands_to_ignore_re = [
+    re.compile('^(g|git)\s+(ap|dc|diff|l1h||s|show|--version)(\s+[^|]*)$'),
+    re.compile('^(cat|grep|ls|pwd|s|type|vi|which)(\s+[^|]*)$'),
+]
+
+
 def merge_files(paths):
     files = [hist_file(path) for path in paths]
 
@@ -102,15 +113,6 @@ class hist_file():
 
     def __exit__(self, *args):
         self.f.close()
-
-# Commands that are probably not interesting to keep in history
-# TODO: add flags to allow user to specify categories to omit,
-#       or patterns to ignore, or categories to keep, or ...?
-#       For now, just honor HISTIGNORE as a pattern to ignore.
-commands_to_ignore_re = [
-    re.compile('^(g|git)\s+(ap|dc|diff|l1h||s|show)(\s+[^|]*)$'),
-    re.compile('^(cat|grep|ls|pwd|s)(\s+[^|]*)$'),
-]
 
 
 def sort_file(path):
