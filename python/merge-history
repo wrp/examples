@@ -6,6 +6,7 @@ import os
 import platform
 import sys
 import re
+from datetime import datetime, timezone
 
 
 # Commands that are probably not interesting to keep in history
@@ -126,7 +127,9 @@ class hist_file():
         """If next_line is only a timestamp, append filename to comment"""
         extra = ''
         if self.bof.match(self.next_line) and len(self.next_line) == 12:
-            extra = f' ({self.basename})'
+            ts = int(self.next_line[1:11])
+            when = datetime.fromtimestamp(ts, timezone.utc)
+            extra = f' ({when.isoformat()} {self.basename})'
         return self.next_line.rstrip() + extra + '\n'
 
     def next(self):
