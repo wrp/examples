@@ -139,8 +139,10 @@ class hist_file():
 
 def sort_file(path):
     new_path = path + '.sorted'
-    if os.path.exists(new_path):
-        raise SystemExit(f'{new_path} already exists!  Aborting')
+    backup_path = path + '.bak'
+    for p in [new_path, backup_path]:
+        if os.path.exists(p):
+            raise SystemExit(f'{p} already exists!  Aborting')
 
     h = hist_file(path, True)
     if h.cmd:
@@ -153,6 +155,9 @@ def sort_file(path):
     with open(new_path, 'w') as output:
         for x in cmds:
             print(x, end='', file=output)
+
+    os.rename(path, backup_path)
+    os.rename(new_path, path)
 
 def main():
     if pattern := os.environ.get('HISTIGNORE', None):
