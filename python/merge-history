@@ -19,10 +19,12 @@ commands_to_ignore_re = [
 
 def merge_files(paths):
     files = [hist_file(path, False) for path in paths]
-
+    prev = None
     while any(files):
         s = min(files)
-        print(s.cmd, end='')
+        if s.cmd != prev and s.cmd.is_printable():
+            prev = s.cmd
+            print(s.cmd, end='')
         s.next()
 
 
@@ -31,11 +33,28 @@ class cmd():
         self.ts = ts
         self.lines = lines
 
+    def __eq__(self, other):
+        if not other: return False
+        if self.ts != other.ts: return False
+        if len(self.lines) != len(other.lines): return False
+        for i in range(1,len(self.lines)):
+            if self.lines[i] != other.lines[i]:
+                return False
+        return True
+
     def __str__(self):
         return ''.join(self.lines)
 
     def __lt__(self, other):
         return self.ts < other.ts
+
+    def is_printable(self):
+        """Return True if the command should be printed in the output"""
+        if ignore_command(self.lines[1:]):
+            return False
+        if len(self.lines) == 1 and not " begins " in self.lines[0]:
+            return False
+        return True
 
 class NotSorted(Exception): pass
 
@@ -55,11 +74,11 @@ class hist_file():
         self.allow_unsorted = allow_unsorted
         self.path = path if path != '-' else 'stdin'
         self.f = open(path, 'r') if path != '-' else sys.stdin
-        self.next_line = self.f.readline()
-        self.line_number = 1
         self.bof = re.compile('^#[0-9]{10}')
+        self.readline()
         self.cmd = None
-        self.next()
+        while not self.cmd and self.next_line:
+            self.next()
 
     def __repr__(self):
         return f'{self.path}: {self.line_number}: {self.cmd.ts if self.cmd else "NONE"}'
@@ -76,7 +95,10 @@ class hist_file():
 
     def readline(self):
         self.next_line = self.f.readline()
-        self.line_number += 1
+        try:
+            self.line_number += 1
+        except AttributeError:
+            self.line_number = 0
         return self.next_line and not self.bof.match(self.next_line)
 
     def check_order(self, ts):
@@ -90,6 +112,7 @@ class hist_file():
 
     def next(self):
         """Put the next command from the file into self.cmd"""
+
         if not self.next_line:
             self.cmd = None
             return None
@@ -101,10 +124,7 @@ class hist_file():
         while self.readline():
             lines.append(self.next_line)
 
-        if ignore_command(lines[1:]):
-            self.next()
-        else:
-            self.cmd = cmd(ts, lines)
+        self.cmd = cmd(ts, lines)
         return self.cmd
 
     def readlines(self):
@@ -145,7 +165,5 @@ def main():
             merge_files(sys.argv[1:])
     except IOError as e:
         raise SystemExit(f'{e.filename}: {e.strerror}')
-#    except Exception as e:
-#        raise SystemExit(e)
 
 main()
