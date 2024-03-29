@@ -1,20 +1,31 @@
 #!/usr/bin/env python
 
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 now = datetime.now()
 
-a = datetime.fromisoformat('2021-07-02-21:35:05')
+a = datetime.fromisoformat('2021-07-02-21:35:05+01:00')
 
 a += timedelta(hours=2)
 a += timedelta(days=1)
 print(a)
+print(f'{a} in isoformat: {a.isoformat()}')
 
 b = datetime.strptime('sat dec 24 01:03:49 Am MDT 2023', '%a %b %d %H:%M:%S %p %Z %Y')
+# b is not timezone aware, despite the presence of %Z in the format string.
+# Perhaps use dateutil instead
 
 for fmt in ('%c', '%C', '%G', '%I %p', '%X', '%+'):
     print(f"{fmt} format: ", b.strftime(fmt))  # 'Sun Dec 24 11:03:49 2023'
+
+
+d = 3601
+c = datetime.utcfromtimestamp(d)  # NOT timezone aware
+print(f'{d} in isoformat: {c.isoformat()}')   # C is *NOT* timezone aware.  WTF??!!
+
+c = datetime.fromtimestamp(d, timezone.utc)
+print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
 
 
 '''
