@@ -46,6 +46,11 @@ class cmd():
         return ''.join(self.lines)
 
     def __lt__(self, other):
+        """If timestamps are the same, the timestamp with the longest
+        comment is considered 'less' so that the entry with the longest
+        comment makes it through the dedup"""
+        if self.ts == other.ts:
+            return len(self.lines[0]) > len(other.lines[0])
         return self.ts < other.ts
 
     def is_printable(self):
