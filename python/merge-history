@@ -82,10 +82,9 @@ class hist_file():
             self.basename = os.path.basename(path)
             self.f = open(path, 'r')
         self.line_number = 0
-        self.readline()
         self.cmd = None
-        while not self.cmd and self.next_line:
-            self.next()
+        self.readline()
+        self.next()
 
     def __repr__(self):
         return f'{self.path}: {self.line_number}: {self.cmd.ts if self.cmd else "NONE"}'
@@ -130,16 +129,15 @@ class hist_file():
 
         if not self.next_line:
             self.cmd = None
-            return None
+        else:
+            ts = int(self.next_line[1:11])
+            self.check_order(ts)
 
-        ts = int(self.next_line[1:11])
-        self.check_order(ts)
+            lines = [self.append_name_to_next_line()]
+            while self.readline():
+                lines.append(self.next_line)
 
-        lines = [self.append_name_to_next_line()]
-        while self.readline():
-            lines.append(self.next_line)
-
-        self.cmd = cmd(ts, lines)
+            self.cmd = cmd(ts, lines)
         return self.cmd
 
     def readlines(self):
