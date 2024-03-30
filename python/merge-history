@@ -70,6 +70,7 @@ class NotSorted(Exception): pass
 
 
 class hist_file():
+    bof = re.compile('^#[0-9]{10}')
     def __init__(self, path, allow_unsorted=False):
         self.allow_unsorted = allow_unsorted
         if path == '-':
@@ -80,7 +81,6 @@ class hist_file():
             self.path = path
             self.basename = os.path.basename(path)
             self.f = open(path, 'r')
-        self.bof = re.compile('^#[0-9]{10}')
         self.line_number = 0
         self.readline()
         self.cmd = None
