@@ -26,7 +26,7 @@ def merge_files(paths):
         s = min(files)
         if s.cmd != prev and s.cmd.is_printable():
             prev = s.cmd
-            print(s.cmd, end='')
+            print(s.cmd)
         s.next()
 
 
@@ -45,7 +45,7 @@ class cmd():
         return True
 
     def __str__(self):
-        return ''.join(self.lines)
+        return '\n'.join(self.lines)
 
     def __lt__(self, other):
         """If timestamps are the same, the timestamp with the longest
@@ -110,6 +110,8 @@ class hist_file():
     def readline(self):
         self.next_line = self.f.readline()
         self.line_number += 1
+        if self.next_line:
+            self.next_line = self.next_line.rstrip()
         return self.next_line and not self.bof.match(self.next_line)
 
     def check_order(self, ts):
@@ -128,7 +130,7 @@ class hist_file():
             ts = int(self.next_line[1:11])
             when = datetime.fromtimestamp(ts, timezone.utc)
             extra = f' ({when.isoformat()} {self.basename})'
-        return self.next_line.rstrip() + extra + '\n'
+        return self.next_line + extra
 
     def next(self):
         """Put the next command from the file into self.cmd"""
@@ -174,7 +176,7 @@ def sort_file(path):
 
     with open(new_path, 'w') as output:
         for x in cmds:
-            print(x, end='', file=output)
+            print(x, file=output)
 
     os.rename(path, backup_path)
     os.rename(new_path, path)
