@@ -20,7 +20,7 @@ commands_to_ignore_re = [
 
 
 def merge_files(paths):
-    files = [hist_file(path, False) for path in paths]
+    files = [hist_file(path) for path in paths]
     prev = None
     while any(files):
         s = min(files)
@@ -70,7 +70,7 @@ class NotSorted(Exception): pass
 
 
 class hist_file():
-    def __init__(self, path, allow_unsorted):
+    def __init__(self, path, allow_unsorted=False):
         self.allow_unsorted = allow_unsorted
         if path == '-':
             self.path = 'stdin'
@@ -159,7 +159,7 @@ def sort_file(path):
         if os.path.exists(p):
             raise SystemExit(f'{p} already exists!  Aborting')
 
-    h = hist_file(path, True)
+    h = hist_file(path, allow_unsorted=True)
     if h.cmd:
         cmds = [h.cmd]
     while h.next():
