@@ -192,5 +192,7 @@ def main():
             merge_files(sys.argv[1:])
     except IOError as e:
         raise SystemExit(f'{e.filename}: {e.strerror}')
+    except NotSorted as e:
+        raise SystemExit(e)
 
 main()
