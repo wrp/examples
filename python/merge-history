@@ -88,6 +88,7 @@ class hist_file():
             self.basename = os.path.basename(path)
             self.f = open(path, 'r')
         self.bof = re.compile('^#[0-9]{10}')
+        self.line_number = 0
         self.readline()
         self.cmd = None
         while not self.cmd and self.next_line:
@@ -108,10 +109,7 @@ class hist_file():
 
     def readline(self):
         self.next_line = self.f.readline()
-        try:
-            self.line_number += 1
-        except AttributeError:
-            self.line_number = 0
+        self.line_number += 1
         return self.next_line and not self.bof.match(self.next_line)
 
     def check_order(self, ts):
