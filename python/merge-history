@@ -8,6 +8,7 @@ import sys
 import re
 from datetime import datetime, timezone
 
+timestamp_len = 10
 
 # Commands that are probably not interesting to keep in history
 # TODO: add flags to allow user to specify categories to omit,
@@ -70,7 +71,7 @@ class NotSorted(Exception): pass
 
 
 class hist_file():
-    bof = re.compile('^#[0-9]{10}')
+    bof = re.compile(f'^#[0-9]{{{timestamp_len}}}')
     def __init__(self, path, allow_unsorted=False):
         self.allow_unsorted = allow_unsorted
         if path == '-':
@@ -118,8 +119,8 @@ class hist_file():
     def append_name_to_next_line(self):
         """If next_line is only a timestamp, append filename to comment"""
         extra = ''
-        if self.bof.match(self.next_line) and len(self.next_line) == 12:
-            ts = int(self.next_line[1:11])
+        if self.bof.match(self.next_line) and len(self.next_line) == timestamp_len + 1:
+            ts = int(self.next_line[1:])
             when = datetime.fromtimestamp(ts, timezone.utc)
             extra = f' ({when.isoformat()} {self.basename})'
         return self.next_line + extra
@@ -130,7 +131,7 @@ class hist_file():
         if not self.next_line:
             self.cmd = None
         else:
-            ts = int(self.next_line[1:11])
+            ts = int(self.next_line[1:timestamp_len + 1])
             self.check_order(ts)
 
             lines = [self.append_name_to_next_line()]
