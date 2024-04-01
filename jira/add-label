@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Add the label $2 to the issue in $1
+
+curl -Ssf --location --request PUT \
+	"${JIRA_URL?}/rest/api/latest/issue/${1:?}" \
+	--header 'Content-Type: application/json' \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	--data-raw '{ "update": { "labels": [ { "add" : "${2?}" } ] } }'
