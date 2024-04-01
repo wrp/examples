@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test $# = 0 && set oncalls teams addons schedules
+test $# = 0 && set oncalls teams addons schedules incidents
 
 query() {
 	curl -sS \
@@ -12,8 +12,14 @@ query() {
 }
 
 for endpoint; do
-	echo "*** $1 ***"
-	query $endpoint | jq .
+	query "$endpoint" | jq .
 done
 
-# See https://v2.developer.pagerduty.com/v2/page/api-reference
+exit 0
+
+See https://v2.developer.pagerduty.com/v2/page/api-reference
+
+common quries (quoted for easy cut-n-paste):
+
+"incidents?team_ids[]=${PD_TEAM_ID}"
+"incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC"
