@@ -21,5 +21,7 @@ See https://v2.developer.pagerduty.com/v2/page/api-reference
 
 common quries (quoted for easy cut-n-paste):
 
+escalation_policies
 "incidents?team_ids[]=${PD_TEAM_ID}"
 "incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC"
+"incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
