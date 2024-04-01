@@ -103,9 +103,9 @@ class hist_file():
     def readline(self):
         self.next_line = self.f.readline()
         self.line_number += 1
-        if self.next_line:
-            self.next_line = self.next_line.rstrip()
-        return self.next_line and not self.bof.match(self.next_line)
+        eof = len(self.next_line) == 0
+        self.next_line = self.next_line.rstrip()
+        return not eof and not self.bof.match(self.next_line)
 
     def check_order(self, ts):
         if not self.allow_unsorted and self.cmd and ts < self.cmd.ts:
