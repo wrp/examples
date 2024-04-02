@@ -1,0 +1,5 @@
+
+To set the cache expiration for gpgconf, add lines to ~/.gnupg/gpg-agent.conf:
+
+default-cache-ttl ${timeout_in_seconds}
+max-cache-ttl ${timeout_in_seconds}
