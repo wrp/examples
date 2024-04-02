@@ -8,6 +8,9 @@ if test -z "$1"; then
 	incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
 
 	users/$id
+
+	teams/$id
+	teams/$id/members
 	EOF
 	exit 0
 fi
