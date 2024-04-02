@@ -1,5 +1,16 @@
 #!/bin/sh
 
+if test -z "$1"; then
+	cat <<- \EOF
+	Query the pager duty endpoint.  Common queries:
+
+	incidents/$n
+	incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
+
+	users/$id
+	EOF
+	exit 0
+fi
 
 curl -sS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \

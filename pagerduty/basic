@@ -25,3 +25,4 @@ escalation_policies
 "incidents?team_ids[]=${PD_TEAM_ID}"
 "incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC"
 "incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
+"incidents?sort_by=incident_number:DESC&offset=$((100 * i++))"
