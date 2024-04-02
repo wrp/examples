@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Pretty print pages and their ids
+
+curl -Ssf -X GET \
+	-H "Authorization:OAuth $STATUSPAGE_KEY" \
+	'https://api.statuspage.io/v1/pages' \
+| jq -rc '.[] | [.id, .name] | @csv' pages
