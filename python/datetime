@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 
-from datetime import datetime, timedelta, timezone
+import sys
+from datetime import datetime, timedelta, timezone, tzinfo
 
 now = datetime.now()
 
@@ -20,12 +21,28 @@ for fmt in ('%c', '%C', '%G', '%I %p', '%X', '%+'):
     print(f"{fmt} format: ", b.strftime(fmt))  # 'Sun Dec 24 11:03:49 2023'
 
 
-d = 3601
+try:
+    d = int(sys.argv[1])
+except:
+    d = 3601
+
 c = datetime.utcfromtimestamp(d)  # NOT timezone aware
 print(f'{d} in isoformat: {c.isoformat()}')   # C is *NOT* timezone aware.  WTF??!!
 
 c = datetime.fromtimestamp(d, timezone.utc)
 print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
+print(f'raw: {c}')
+
+class pacific(tzinfo):
+    def utcoffset(self, x):
+        return timedelta(hours=-7)
+    def dst(self, x):
+        return timedelta(hours=-7)
+
+
+c = datetime.fromtimestamp(d, pacific())
+print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
+print(f'raw: {c}')
 
 
 '''
