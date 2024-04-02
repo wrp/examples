@@ -18,7 +18,7 @@ fi
 curl -sS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \
 	-H "Authorization: Token token=${PD_TOKEN:?}" \
-	--data-urlencode 'limit=100' \
+	--data-urlencode limit=100 \
 	-X GET \
-	https://api.pagerduty.com/$1 \
+	https://api.pagerduty.com/"$1" \
 | jq .
