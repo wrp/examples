@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+curl -Ssf -X GET \
+	-H "Authorization:OAuth $STATUSPAGE_KEY" \
+	"https://api.statuspage.io/v1/pages/$STATUSPAGE_PAGE/incidents"
