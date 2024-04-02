@@ -1,6 +1,9 @@
 #!/bin/sh
 
+# API:
+#   /pages      get list of pages
+#   /incidents  get list of incidents
 
 curl -Ssf -X GET \
 	-H "Authorization:OAuth $STATUSPAGE_KEY" \
-	"https://api.statuspage.io/v1/pages/$STATUSPAGE_PAGE/incidents"
+	"https://api.statuspage.io/v1/${1-pages/$STATUSPAGE_PAGE/incidents}"
