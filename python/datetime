@@ -3,6 +3,7 @@
 
 import sys
 from datetime import datetime, timedelta, timezone, tzinfo
+import pytz
 
 now = datetime.now()
 
@@ -33,14 +34,8 @@ c = datetime.fromtimestamp(d, timezone.utc)
 print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
 print(f'raw: {c}')
 
-class pacific(tzinfo):
-    def utcoffset(self, x):
-        return timedelta(hours=-7)
-    def dst(self, x):
-        return timedelta(hours=-7)
 
-
-c = datetime.fromtimestamp(d, pacific())
+c = datetime.fromtimestamp(d, pytz.timezone('US/pacific'))
 print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
 print(f'raw: {c}')
 
