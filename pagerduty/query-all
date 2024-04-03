@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Repeat query with incrementing offset until no more
+
+case $1 in
+*offset*) echo 'Do not specify offset in query' >&2; exit 1;;
+*[?]*) delim='&';;
+*) delim='?';;
+esac
+
+items_per_page=25
+
+for(( offset = 0; ; offset += items_per_page )); do
+	curl -fsS \
+		-H 'Accept: application/vnd.pagerduty+json;version=2' \
+		-H "Authorization: Token token=${PD_TOKEN:?}" \
+		--data-urlencode limit=25 \
+		-X GET \
+		https://api.pagerduty.com/"$1${delim}offset=$offset" \
+	| jq '., .more' \
+	| awk '$0 == "true" {exit 0} $0 == "false" {exit 1} 1' \
+	|| break
+done
