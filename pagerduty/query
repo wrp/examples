@@ -16,10 +16,9 @@ if test -z "$1"; then
 	exit 0
 fi
 
-curl -sS \
+curl -fsS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \
 	-H "Authorization: Token token=${PD_TOKEN:?}" \
 	--data-urlencode limit=100 \
 	-X GET \
-	https://api.pagerduty.com/"$1" \
-| jq .
+	https://api.pagerduty.com/"$1"
