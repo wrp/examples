@@ -1,23 +1,22 @@
 
 const std = @import("std");
-
+const Repl = struct { div: usize, word: []const u8, };
 pub fn convert(buffer: []u8, n: u32) []const u8 {
-	var base: usize = 0;
-	if (n % 3 == 0) {
-		@memcpy(buffer[base..base + 5], "Pling");
-		base += 5;
+	var rv: []u8 = buffer[0..0];
+	const replace = [_]Repl{
+		.{ .div = 3, .word = "Pling" },
+		.{ .div = 5, .word = "Plang" },
+		.{ .div = 7, .word = "Plong" },
+	};
+	for (replace) |w| {
+		if (n % w.div == 0) {
+			var s = rv.len;
+			rv.len += w.word.len;
+			@memcpy(rv[s..], w.word);
+		}
 	}
-	if (n % 5 == 0) {
-		@memcpy(buffer[base..base + 5], "Plang");
-		base += 5;
+	if (rv.len == 0) {
+		rv = std.fmt.bufPrint(buffer, "{d}", .{n}) catch unreachable;
 	}
-	if (n % 7 == 0) {
-		@memcpy(buffer[base..base + 5], "Plong");
-		base += 5;
-	}
-	if (base == 0) {
-	    const s = std.fmt.bufPrint(buffer, "{d}", .{n}) catch "1";
-	    base = s.len;
-	}
-	return buffer[0..base];
+	return rv;
 }
