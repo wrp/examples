@@ -2,5 +2,5 @@
 # Make --rebase default
 git config --global pull.rebase true
 
-# To do per-branch configs, search for "onbranch" in git-config[1]
+# For per-branch configs, see "onbranch" in git-config[1] import/include
 # Paths in the config clause are relative to GIT_DIR
