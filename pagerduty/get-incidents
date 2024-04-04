@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Get recent incidents. If $1 is specified, limit search to that service,
+# otherwise get all incidents (1st 100).
+
+curl -fsS \
+	-H 'Accept: application/vnd.pagerduty+json;version=2' \
+	-H "Authorization: Token token=${PD_TOKEN:?}" \
+	--data-urlencode limit=100 \
+	-X GET \
+	"https://api.pagerduty.com/incidents?sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
+| jq -rc '.incidents[] | [.created_at, .incident_number, .title] | @tsv' \
+| ${PAGER-more}
