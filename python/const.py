@@ -1,10 +1,10 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 class Foo(object):
-    FOO =3
+    FOO = 3
 
     def run(self):
-        print self.FOO
+        print(self.FOO)
 
 a=Foo()
 a.run()
