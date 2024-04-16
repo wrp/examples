@@ -20,6 +20,7 @@ curl -fsS \
 	-X GET \
 	"https://api.pagerduty.com/incidents"$( :
 	)"?since=$start_date"$( :
+	)"&urgencies[]=high"$( :
 	)"&sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
 | jq -rc '.incidents[] | [.created_at, .incident_number, .title] | @tsv' \
 | ${PAGER-more}
