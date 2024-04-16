@@ -47,3 +47,14 @@ if even(16) < even(17) + 1 < even(19):
 	print('16 < 17 + 1 < 19 evaluated 17 + 1 once')
 if even(16) < even(17) + 1 and even(17) + 1 < even(19):
 	print('16 < 17 + 1 and 17 + 1 < 19 evaluated 2x')
+
+
+# Demonstration of craptastic style that should be disallowed
+# by the language
+def foo(*args, a):
+    print(*args)
+foo(
+    f'surprise, a is set to 7, not 5!!',
+    a = 5
+    if False else 7,
+)
