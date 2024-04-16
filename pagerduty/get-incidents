@@ -1,13 +1,25 @@
 #!/bin/sh
 
 # Get recent incidents. If $1 is specified, limit search to that service,
-# otherwise get all incidents (1st 100).
+# otherwise get all incidents (up to 1st 100).
+
+# If $2 is given, it should be an ISO 8601 formatted time: only incidents
+# after that time are included.  Default is one week ago.
+
+# Full list of services can be found by GETting services/ from PD.
+# eg:
+# ./query services | jq -rc .servi'ces[] | [ .id, .name ] | @tsv'
+# (Use ./list-all-services to account for pagination)
+
+start_date=${2-$(date -v -1w -Iseconds)}
 
 curl -fsS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \
 	-H "Authorization: Token token=${PD_TOKEN:?}" \
 	--data-urlencode limit=100 \
 	-X GET \
-	"https://api.pagerduty.com/incidents?sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
+	"https://api.pagerduty.com/incidents"$( :
+	)"?since=$start_date"$( :
+	)"&sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
 | jq -rc '.incidents[] | [.created_at, .incident_number, .title] | @tsv' \
 | ${PAGER-more}
