@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# generate a new private key
+
+ssh-keygen
