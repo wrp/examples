@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Get recent incidents. If $1 is specified, limit search to that service,
+# Get recent unresolved incidents. If $1 is specified, limit search to that service,
 # otherwise get all incidents (up to 1st 100).
 
 # If $2 is given, it should be an ISO 8601 formatted time: only incidents
@@ -11,6 +11,8 @@
 # ./query services | jq -rc .servi'ces[] | [ .id, .name ] | @tsv'
 # (Use ./list-all-services to account for pagination)
 
+# If RESOLVED is set in the environment, also return resolved incidents
+
 start_date=${2-$(date -v -1w -Iseconds)}
 
 curl -fsS \
@@ -20,6 +22,9 @@ curl -fsS \
 	-X GET \
 	"https://api.pagerduty.com/incidents"$( :
 	)"?since=$start_date"$( :
+	)"&statuses[]=triggered"$( :
+	)"&statuses[]=acknowledged"$( :
+	)${RESOLVED:+"&statuses[]=resolved"}$( :
 	)"&urgencies[]=high"$( :
 	)"&sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
 | jq -rc '.incidents[] | [.created_at, .incident_number, .title] | @tsv' \
