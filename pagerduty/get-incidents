@@ -27,5 +27,5 @@ curl -fsS \
 	)${RESOLVED:+"&statuses[]=resolved"}$( :
 	)"&urgencies[]=high"$( :
 	)"&sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
-| jq -rc '.incidents[] | [.created_at, .incident_number, .title] | @tsv' \
+| jq -rc '.incidents[] | [.created_at, .incident_number, .status, .title] | @tsv' \
 | ${PAGER-more}
