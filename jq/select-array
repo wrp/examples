@@ -1,5 +1,17 @@
 #!/bin/sh
 
+
+# Select items in which a string is present in an array
+echo '[
+	{ "a": [ "n", "z" ], "b" : "bar" },
+	{ "a": [ "q", "s" ], "b" : "baz" },
+	{ "a": [ "a", "c" ], "b" : "bla" }
+]' |
+jq -rc '.[] | select( .a | index("z")) | .b'
+# output: bar
+
+
+
 echo '[
 	{ "a": "foo", "b": "bar" },
 	{ "a": "qux", "b": "baz" },
