@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Get recent unresolved incidents. If $1 is specified, limit search to that service,
-# otherwise get all incidents (up to 1st 100).
+# otherwise get incidents for $PD_SERVICE, or (if empty) all incidents (up to 1st 100).
 
 # If $2 is given, it should be an ISO 8601 formatted time: only incidents
 # after that time are included.  Default is one week ago.
@@ -13,6 +13,7 @@
 
 # If RESOLVED is set in the environment, also return resolved incidents
 
+service=${1-$PD_SERVICE}
 start_date=${2-$(date -v -1w -Iseconds)}
 
 curl -fsS \
@@ -26,6 +27,7 @@ curl -fsS \
 	)"&statuses[]=acknowledged"$( :
 	)${RESOLVED:+"&statuses[]=resolved"}$( :
 	)"&urgencies[]=high"$( :
-	)"&sort_by=incident_number:DESC${1:+&service_ids[]=${1}}" \
+	)"&sort_by=incident_number:DESC"$( :
+	)"${service:+&service_ids[]=${service}}" \
 | jq -rc '.incidents[] | [.created_at, .incident_number, .status, .title] | @tsv' \
 | ${PAGER-more}
