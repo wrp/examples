@@ -16,6 +16,13 @@
 service=${1-$PD_SERVICE}
 start_date=${2-$(date -v -1w -Iseconds)}
 
+# If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
+# to use it as an argument to date to generate a timestamp
+case $start_date in
+[12][09][0-9][0-9]-[01][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9][+-][0-9][0-9]:[0-9][0-9]) : ;;
+*) start_date=$(date -v -${start_date} -Iseconds);;
+esac
+
 curl -fsS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \
 	-H "Authorization: Token token=${PD_TOKEN:?}" \
