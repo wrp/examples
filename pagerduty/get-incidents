@@ -13,9 +13,9 @@
 
 # If RESOLVED is set in the environment, also return resolved incidents
 
-service=${1-$PD_SERVICE}
 
 main() {
+	parse_services "${1-$PD_SERVICE}"   # Can be a colon separated list
 	parse_start_date "${2-$(date -v -1w -Iseconds)}"
 
 	curl -fsS \
@@ -30,9 +30,18 @@ main() {
 		)${RESOLVED:+"&statuses[]=resolved"}$( :
 		)"&urgencies[]=high"$( :
 		)"&sort_by=incident_number:DESC"$( :
-		)"${service:+&service_ids[]=${service}}" \
-	| jq -rc '.incidents[] | [.created_at, .incident_number, .status, .title] | @tsv' \
+		)"${services}" \
+	| jq -rc '.incidents[] | [.service.id, .created_at, .incident_number, .status, .title] | @tsv' \
 	| ${PAGER-more}
+}
+
+parse_services() {
+	unset services
+	while read service; do
+		services="${services}&service_ids[]=${service}"
+	done <<- EOF
+	$(echo $1 | tr : \\n)
+	EOF
 }
 
 # If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
