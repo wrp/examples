@@ -31,7 +31,13 @@ main() {
 		)"&urgencies[]=high"$( :
 		)"&sort_by=incident_number:DESC"$( :
 		)"${services}" \
-	| jq -rc '.incidents[] | [.service.id, .created_at, .incident_number, .status, .title] | @tsv' \
+	| jq -rc '.incidents[] | [
+		.service.id,
+		.created_at,
+		.incident_number,
+		.status,
+		.title
+	] | @tsv' \
 	| ${PAGER-more}
 }
 
