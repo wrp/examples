@@ -1,0 +1,10 @@
+#!/bin/sh
+
+page_id=${1?}
+component_id=${2?}
+new_name=${3?}
+
+curl -Ssf -X PATCH \
+	-H "Authorization:OAuth $STATUSPAGE_KEY" \
+	-d "component[name]=$new_name" \
+	"https://api.statuspage.io/v1/pages/${page_id}/components/${component_id}"
