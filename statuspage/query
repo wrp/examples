@@ -1,8 +1,9 @@
 #!/bin/sh
 
 # API:
-#   /pages      get list of pages
-#   /incidents  get list of incidents
+#   /pages                       list all pages
+#   /pages/$id/components        list components for a page
+#   /incidents                   list all incidents
 
 curl -Ssf -X GET \
 	-H "Authorization:OAuth $STATUSPAGE_KEY" \
