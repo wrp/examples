@@ -7,6 +7,6 @@
 #           /subscribers         list subscribers for a page
 #   /incidents                   list all incidents
 
-curl -Ssf -X GET \
+curl -Ssf -X "${method-GET}" \
 	-H "Authorization:OAuth $STATUSPAGE_KEY" \
 	"https://api.statuspage.io/v1/${1-pages/$STATUSPAGE_PAGE/incidents}"
