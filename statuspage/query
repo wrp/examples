@@ -2,7 +2,9 @@
 
 # API at https://developer.statuspage.io
 #   /pages                       list all pages
-#   /pages/$id/components        list components for a page
+#       /pages/$id/
+#           /components          list components for a page
+#           /subscribers         list subscribers for a page
 #   /incidents                   list all incidents
 
 curl -Ssf -X GET \
