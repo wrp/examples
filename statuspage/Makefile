@@ -22,4 +22,4 @@ $(SP_PAGE)-components:
 		$(GET)/components > $@
 
 $(SP_PAGE)-subscribers:
-		$(GET)/subscribers > $@
+		./list-subscribers > $@
