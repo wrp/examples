@@ -1,4 +1,9 @@
+
+This page has only been validated by looking at this file on github,
+so should certainly not be considered anything but github specific.
+
 [documentation](https://developer.statuspage.io)
+Use text in square brackets followed by url in parentheses to make a link.
 
 ~~~~
 $ echo Use '~~~~' for a code block
@@ -6,13 +11,9 @@ $ echo Use '~~~~' for a code block
 
 ----
 Create a horizontal line by placing 3 or more hyphens, asterisks,
-or underscores on a line by themself
 ***
+or underscores on a line by themselves. All three of these look the same.
 ___
-
-
-[This](http:/...) is a link (square brackets followed by url in parentheses).
-
 
 # This is a 1-hash header
 The single hash header is big.
@@ -24,7 +25,6 @@ The 2 hash header is not as big.
 The 3 hash header is smallish.
 
 Use '&amp;lt;' to add a literal left angle bracket: &lt;
-
 
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
@@ -44,8 +44,6 @@ multiple lines but is rendered according to the available width (perhaps on only
 # An un-ordered list
 - First item
 - Second Item
-
-
 
 To create a table, use `|` to separate columns.
 The header is defined by the presence of 3 or more
