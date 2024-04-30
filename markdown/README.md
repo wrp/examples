@@ -49,10 +49,10 @@ multiple lines but is rendered according to the available width (perhaps on only
 
 To create a table, use `|` to separate columns.
 The header is defined by the presence of 3 or more
-hyphens in a cell.
+hyphens in the second row.  You can control the justification
+of text in the column with a colon:
 
 | left-justified | centered | right justified |
-| column | | |
 | :---        |    :----:   |          ---: |
 | Apple      | Banana       | Cherry |
 | Dog | Elephant        | Frog |
