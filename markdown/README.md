@@ -18,15 +18,11 @@ ___
 # This is a 1-hash header
 The single hash header is big.
 
-## Section
+## This is 2-hash header
 The 2 hash header is not as big.
 
-### text
-The 3 hash header is smallish.
-
-Use '&amp;lt;' to add a literal left angle bracket: &lt;
-(This is just embedding html, so not really markdown.)
-
+### This is 3-hash header
+The 3 hash header is smallish, and looks a lot like **bold text**
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
 
