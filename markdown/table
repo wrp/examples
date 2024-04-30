@@ -1,0 +1,12 @@
+
+[see](https://developer.statuspage.io)
+
+To create a table, use `|` to separate columns.
+The header is defined by the presence of 3 or more
+`-` in a cell.
+
+| left-justified | centered | right justified |
+| column | | |
+| :---        |    :----:   |          ---: |
+| Apple      | Banana       | Cherry |
+| Dog | Elephant        | Frog |
