@@ -8,7 +8,13 @@ $(error SP_TOKEN is not set)
 endif
 
 
+
+GET = curl -Ssf -X GET \
+	-H "Authorization:OAuth $(SP_TOKEN)" \
+	"https://api.statuspage.io/v1/pages/$(SP_PAGE)"
+
 $(SP_PAGE)-components:
-	curl -Ssf -X GET \
-		-H "Authorization:OAuth $(SP_TOKEN)" \
-		"https://api.statuspage.io/v1/pages/$(SP_PAGE)/components" > $@
+		$(GET)/components > $@
+
+$(SP_PAGE)-subscribers:
+		$(GET)/subscribers > $@
