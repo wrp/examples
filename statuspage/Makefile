@@ -7,7 +7,12 @@ ifndef SP_TOKEN
 $(error SP_TOKEN is not set)
 endif
 
+targets = \
+	$(SP_PAGE)-components \
+	$(SP_PAGE)-subscribers \
 
+
+all: $(targets)
 
 GET = curl -Ssf -X GET \
 	-H "Authorization:OAuth $(SP_TOKEN)" \
