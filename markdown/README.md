@@ -49,6 +49,7 @@ multiple lines in the markdown but is rendered according to the available width.
 - First item
 - Second Item
 
+## Tables
 To create a table, use `|` to separate columns.
 The header is defined by the presence of 3 or more
 hyphens in the second row.  You can control the justification
