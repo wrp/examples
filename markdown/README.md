@@ -1,3 +1,4 @@
+[documentation](https://developer.statuspage.io)
 
 ~~~~
 $ echo Use '~~~~' for a code block
@@ -35,7 +36,10 @@ multiple lines but is rendered according to the available width (perhaps on only
 
 # An ordered list
 1. First item
+    - Some variants of markdown seem to require blank lines.  I don't fully understand
+    that: maybe it is just our current linter.
 2. Second Item
+    1. Subitems should be indented with 4 spaces
 
 # An un-ordered list
 - First item
