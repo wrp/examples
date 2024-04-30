@@ -34,14 +34,19 @@ blockquote
 that spans
 multiple lines but is rendered according to the available width (perhaps on only one line)
 
-# An ordered list
+## A checklist
+- [ ] this is the first item
+- [x] this is the selected tem
+- [ ] this is the 3rd item
+
+## An ordered list
 1. First item
     - Some variants of markdown seem to require blank lines.  I don't fully understand
     that: maybe it is just our current linter.
-2. Second Item
+1. Second Item
     1. Subitems should be indented with 4 spaces
 
-# An un-ordered list
+## An un-ordered list
 - First item
 - Second Item
 
