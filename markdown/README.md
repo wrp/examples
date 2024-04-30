@@ -25,14 +25,17 @@ The 2 hash header is not as big.
 The 3 hash header is smallish.
 
 Use '&amp;lt;' to add a literal left angle bracket: &lt;
+(This is just embedding html, so not really markdown.)
 
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
 
-> This is a
+## A blockquote
+> Create a
 blockquote
-that spans
-multiple lines but is rendered according to the available width (perhaps on only one line)
+by using > in the first column.  The quote
+may span
+multiple lines in the markdown but is rendered according to the available width.
 
 ## A checklist
 - [ ] this is the first item
