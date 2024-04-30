@@ -44,3 +44,15 @@ multiple lines but is rendered according to the available width (perhaps on only
 # An un-ordered list
 - First item
 - Second Item
+
+
+
+To create a table, use `|` to separate columns.
+The header is defined by the presence of 3 or more
+hyphens in a cell.
+
+| left-justified | centered | right justified |
+| column | | |
+| :---        |    :----:   |          ---: |
+| Apple      | Banana       | Cherry |
+| Dog | Elephant        | Frog |
