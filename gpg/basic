@@ -11,3 +11,6 @@ $ gpg -d ${file}.gpg
 Note that gpg caches the passwords unless --no-symkey-cache is used.  Need
 to understand the implications of that; where is the cache?  This seems
 horribly insecure.
+
+
+gpg --generate-key #  create a key for use with git
