@@ -16,10 +16,10 @@ foo-barh:
 
 ---
 # Demonstrate a dictionary
-# baz and qux are the same
+# foo, baz, and qux are the same
+foo: { a: { 'bar': "blah", baz}}
 baz:
   a: { "bar": "blah", baz}
-
 qux:
   a:
     bar:
