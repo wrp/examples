@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+import sys
+
+print(f'version = {sys.version}')
+
+class foo():
+    def __init__(s, x):
+        s.x = x
+    def __str__(s):
+        return f'id(s): x = {s.x}'
+
+# Create an object and bind it to the name a
+a = foo(5)
+
+# bind the object currently bound to a to b
+b = a
+# (a and b now refer to the same object)
+
+print(f'a = {a}, b = {b}')
+b.x = 8
+print(f'a = {a}, b = {b}')
