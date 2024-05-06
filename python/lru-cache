@@ -1,0 +1,172 @@
+#!/usr/bin/env python
+
+import sys
+
+class node:
+    def __init__(self, key, value):
+        self.value = value
+        self.key = key
+        self.next = None
+        self.prev = None
+
+    def __str__(self):
+        return f'id = {id(self)}, .value = {self.value}, .next = {id(self.next)}, .prev = {id(self.prev)}'
+
+class usage_queue():
+    def __init__(self, m):
+        self.head = None
+        self.tail = None
+        self.map = m
+
+    def extract(self, x):
+        assert(isinstance(x, node))
+
+        if x.next is not None:
+            x.next.prev = x.prev
+        elif id(self.tail) == id(x):
+            self.tail = x.prev
+
+        if x.prev is not None:
+            x.prev.next = x.next
+        elif id(self.head) == id(x):
+            self.head = x.next
+
+    def push(self, x):
+        self.extract(x)
+        if self.head is None:
+            assert(self.tail is None)
+            self.head = x
+            self.tail = x
+        else:
+            x.next = self.head
+            self.head.prev = x
+        x.prev = None
+        self.head = x
+
+    def pop(self):
+        if self.tail is None:
+            return None
+
+        assert(self.head is not None)
+        t = self.tail
+        assert(t.next is None)
+        if t.prev is not None:
+            assert(t.prev.next == t)
+            t.prev.next = None
+        else:
+            assert(id(self.head) == id(t))
+            self.head = None
+        self.tail = t.prev
+        return t.key
+
+    def __str__(self):
+        rv = ""
+        x = self.head
+        while x is not None:
+            rv += f"{x.value},"
+            x = x.next
+        rv += f'\ntail = {self.tail}'
+        rv += f'\nhead = {self.head}'
+        return rv
+
+
+class LRUCache:
+    def __init__(self, cap):
+        self.cap = cap
+        self.map = {}
+        self.lru = usage_queue(self.map)
+
+    def __getitem__(self, x):
+        return self.get(x)
+
+    def get(self, key):
+        if key in self.map:
+            self.lru.push(v := self.map[key])
+            return v.value
+        else:
+            raise KeyError
+
+    def push(self, key, value):
+        if key in self.map:
+            n = self.map[key]
+            old_value = n.value
+            n.value = value
+            self.lru.push(n)
+            return old_value
+
+        if len(self.map) >= self.cap:
+            k = self.lru.pop();
+            del self.map[k]
+
+        v = node(key, value)
+        self.map[key] = v
+        self.lru.push(v)
+        return None
+
+    def __str__(self):
+        return str(self.lru)
+
+
+def run_test(f, expect=None, *args, **kwargs):
+    global tests_passed, tests_failed
+    if f(*args, **kwargs) == expect:
+        tests_passed += 1
+    else:
+        tests_failed += 1
+
+def test_pop():
+    a = LRUCache(10)
+    for x in range(2 * 10):
+        a.push(x, x + 2)
+
+    for x in range(10):
+        try: a[x]
+        except KeyError: pass
+        else: assert(False)
+
+
+def test_access():
+    """Test that an access to a value updates its recent usage"""
+    a = LRUCache(10)
+    for x in range(10):
+        a.push(x, x + 2)
+
+    assert(a[5] == 7)
+    for x in range(10):
+        # Access 5 to refresh it...
+        assert(a[5] == 7)
+        a.push(10 + x, 2*x)
+
+    for x in range(10):
+        if x == 5:
+            # ... so it is still in the cache
+            assert(a.get(5) == 7)
+            continue
+
+        try: a.get(x)
+        except KeyError: pass
+        else: assert(False)
+
+
+def test_insert():
+    a = LRUCache(3)
+    a.push("foo", 3)
+    a.push("bar", 4)
+    a.push("baz", 5)
+    assert(a['foo'] == 3)
+    assert(a.get('bar') == 4)
+    assert(a.get('baz') == 5)
+    try: a.get(5)
+    except KeyError: pass
+    else: assert(False)
+
+def main():
+    global tests_passed
+    tests_passed = 0
+    run_test(test_insert)
+    run_test(test_pop)
+    run_test(test_access)
+
+    print(f'{tests_passed} test{"s" if tests_passed > 1 else ""} passed')
+
+main()
