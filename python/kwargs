@@ -2,17 +2,22 @@
 
 
 def foo(f, *args, **kwargs):
-    print("in f, kwargs = {}".format(kwargs))
-    print("in f, args = {}".format(args))
+    print(f"in f, args = {args}")     # in f, args = (7, 8)
+    print(f"in f, kwargs = {kwargs}") # in f, kwargs = {'c': 9, 'd': 10}
     f(5, *args, **kwargs)
 
 
 def bar(a, b=3, *args, **kwargs):
-    print("in bar, a = {}, b = {}, args = {}, kwargs = {}".format(a, b, args, kwargs))
+    print(f"in bar, a = {a} of type {type(a)}, b = {b}, args = {args}, kwargs = {kwargs}")
 
-
-def baz(a, b=2, *args, **kwargs):
-    print("in baz, a = {}, b = {}, args = {}, kwargs = {}".format(a, b, args, kwargs))
+def baz(a, b, c, d, **kwargs):
+    print(f"in bar, a = {a}, b = {b}, c = {c}, d = {d}")
 
 
 foo(bar, 7, 8, c=9, d=10)
+
+d = {'banana': 4, 'e': "e value", 'd': 4}
+t = (2, 3)
+baz(1, *t, **d)  # * expands a tuple, ** expands a dict into keyword
+
+bar(*d)  # passes the keys of the dict as arguments
