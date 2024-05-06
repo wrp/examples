@@ -86,6 +86,9 @@ class LRUCache:
         else:
             raise KeyError
 
+    def __setitem__(self, k, v):
+        self.push(k, v)
+
     def push(self, key, value):
         if key in self.map:
             n = self.map[key]
@@ -117,7 +120,7 @@ def run_test(f, expect=None, *args, **kwargs):
 def test_pop():
     a = LRUCache(10)
     for x in range(2 * 10):
-        a.push(x, x + 2)
+        a[x] = x + 2
 
     for x in range(10):
         try: a[x]
@@ -150,9 +153,9 @@ def test_access():
 
 def test_insert():
     a = LRUCache(3)
-    a.push("foo", 3)
-    a.push("bar", 4)
-    a.push("baz", 5)
+    a["foo"] = 3
+    a["bar"] = 4
+    a["baz"] = 5
     assert(a['foo'] == 3)
     assert(a.get('bar') == 4)
     assert(a.get('baz') == 5)
