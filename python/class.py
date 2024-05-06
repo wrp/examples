@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
+import types
 
-class Foo:
-    bar = 5
+class Foo: pass
+Foo.bar = 5
 
-    def __init__(self, x):
-        self.x = x
-        self.bar += x
-
-    def __str__(self):
+def n(self):
         rv = f"x = {self.x}, bar = {self.bar}"
         if hasattr(self, "baz"):
             rv += f", baz = {self.baz}"
-
         return rv
+Foo.__str__ = n
+
+def n(self, x):
+        self.x = x
+        self.bar += x
+        self.map = {}
+Foo.__init__ = n
+
 
 
 a = Foo(7)
@@ -25,5 +29,3 @@ a.bar = 9
 a.baz = 11
 print(a)
 
-print(a.bar)
-print([x for x in a.get('kk', None)])
