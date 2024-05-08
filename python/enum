@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+from enum import Enum
+
+class Shape(Enum):
+    SQUARE = 1
+    CIRCLE = 2
+
+# Also functional notation
+Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
+
+print(f'red = {Color.RED}')
+
+b = Color.RED
+print(f'b = {b}: {b.name} = {b.value}')
+
+print(f'shape = {Shape}')
