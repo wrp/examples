@@ -8,3 +8,5 @@ groff -man -Tascii file.1
 man -M $MANPATH  # MANPATH is colon separated list
 
 
+# Common options:
+-w      Display the location of the manual page instead of the contents of the manual page.
