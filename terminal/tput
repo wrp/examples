@@ -8,8 +8,8 @@ From http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x361.html
 - Move the cursor backward N columns:     \033[<N>D       # tput cub $N
 - Clear the screen, move to (0,0):        \033[2J
 - Erase to end of line:                   \033[K          # tput el
-- Save cursor position:                   \033[s          # tput sc
-- Restore cursor position:                \033[u          # tput rc
+- Save cursor position (and attributes):  \033[s          # tput sc
+- Restore cursor position/attributes:     \033[u          # tput rc
 
 
 tput setaf $N  # Set foreground color
@@ -48,8 +48,8 @@ tput smso                               Enter standout mode (bold on rxvt)
 tput rmso                               Exit standout mode
 tput sgr0                               Turn off all attributes (doesn't work quite as expected, but does disable reverse)
 tput cup Y X                            Move cursor to screen location X,Y (top left is 0,0)
-tput sc                                 Save the cursor position
-tput rc                                 Restore the cursor position
+tput sc                                 Save the cursor position/attributes
+tput rc                                 Restore the cursor position/attributes
 tput lines                              Output the number of lines of the terminal
 tput cols                               Output the number of columns of the terminal
 tput cub N                              Move N characters left
