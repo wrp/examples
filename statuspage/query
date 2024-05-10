@@ -8,5 +8,5 @@
 #   /incidents                   list all incidents
 
 curl -Ssf -X "${method-GET}" \
-	-H "Authorization:OAuth $STATUSPAGE_KEY" \
+	-H "Authorization:OAuth $SP_TOKEN" \
 	"https://api.statuspage.io/v1/${1-pages/$STATUSPAGE_PAGE/incidents}"
