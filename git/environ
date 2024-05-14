@@ -1,8 +1,4 @@
 
 GIT_CEILING_DIRECTORIES: colon separated list of directories that will not be checked when looking up tree for gitdir
 I generally add $HOME to GIT_CEILING_DIRECTORIES so I can put things like .bash-local in git.  If you want files
-is a subdir of $HOME to be tracked, it is convenient to do:
-
-echo 'gitdir: $HOME/.git' > $HOME/subdir/.git
-
-to explicitly find the gitdir from the subidr
+is a subdir of $HOME to be tracked, you just need to use $HOME as your workdir.
