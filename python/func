@@ -38,3 +38,12 @@ a = {'a': 5, 'foo': 'foovalue', 'bar': 'bazvahlue'}
 kwdict(baz='unp', **a)
 a['baz'] = 'baz added'
 kwdict(**a)
+
+# If function definition does not contain / to indicate
+# end of postional args, all args are keyword
+def bar(a, b = 'def b'):
+    print(f'bar: a = {a}, b = {b}')
+
+bar(b = 5, a = 2)
+bar(**{"b": 5, "a": 2})
+bar(*[1,2])
