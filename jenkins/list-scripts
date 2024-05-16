@@ -7,12 +7,15 @@ get() {
 }
 
 
+i=0
 get "${JENKINS_URL?}"/api/json |
 jq -rc '.jobs[] | .url' |
 while read url; do
-	printf '%-60s:\t' "${url##$JENKINS_URL/job/}"
+	let i=$(( (i + 1) % 10  ))
+	printf '%-60s:' "${url##$JENKINS_URL/job/}" |
+	if test $i = 0; then tr ' ' .;  else cat; fi
 	get "$url"/config.xml |
 	xmlstarlet sel -t \
 		--value-of org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject/factory/scriptPath \
-		2> /dev/null | grep . || echo
+		2> /dev/null | sed -E 's/^(.)/  \1/' | grep . || echo
 done
