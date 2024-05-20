@@ -12,13 +12,13 @@ file=${1?}
 tag=${2-%id%}
 filter_name=${3-$(echo "$tag" | tr -dc '[:alnum:]\n')}
 
-git_dir=$(git rev-parse --git-dir) || exit 1
+hook_dir=$(git config core.hooksPath 2> /dev/null || $(git rev-parse --git-dir)/hooks) || exit 1
 
 printf "%s filter=${filter_name}\n" "${file?}" >> $(git rev-parse --show-toplevel)/.gitattributes
 git config filter.${filter_name}.clean "git show HEAD:${file?}"
 git config filter.${filter_name}.smudge "sed -e \"s/$tag/\$(git rev-parse --short HEAD)/g\""
-if ! test -s "git_dir"/hooks/post-commit; then
-	echo '#!/bin/sh' > "$git_dir"/hooks/post-commit
+if ! test -s "$hook_dir"/post-commit; then
+	echo '#!/bin/sh' > "$hook_dir"/post-commit
 fi
-echo "rm ${file?}; git checkout HEAD ${file?}" >> "$git_dir"/hooks/post-commit
-chmod +x "$git_dir"/hooks/post-commit
+echo "rm ${file?}; git checkout HEAD ${file?}" >> "$hook_dir"/post-commit
+chmod +x "$hook_dir"/post-commit
