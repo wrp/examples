@@ -16,22 +16,30 @@
 
 
 main() {
+	items_per_page=25
 	parse_services "${1-$PD_SERVICE}"   # Can be a colon separated list
 	parse_start_date "${2-$(date -v -1w -Iseconds)}"
+	offset=0
 
-	curl -fsS \
+	while curl -fsS \
 		-H 'Accept: application/vnd.pagerduty+json;version=2' \
 		-H "Authorization: Token token=${PD_TOKEN:?}" \
-		--data-urlencode limit=100 \
+		--data-urlencode limit=$items_per_page \
 		-X GET \
 		"https://api.pagerduty.com/incidents"$( :
 		)"?since=$start_date"$( :
+		)"&offset=$offset"$( :
 		)"&statuses[]=triggered"$( :
 		)"&statuses[]=acknowledged"$( :
 		)${RESOLVED:+"&statuses[]=resolved"}$( :
 		)"&urgencies[]=high"$( :
 		)"&sort_by=incident_number:DESC"$( :
 		)"${services}" \
+	| jq '., .more' \
+	| awk '$0 == "true" {exit 0} $0 == "false" {exit 1} 1' \
+	; do
+		: $(( offset += $items_per_page ))
+	done \
 	| jq -rc '.incidents[] | [
 		.service.id,
 		.assignments[].assignee.summary,
