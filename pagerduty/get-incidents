@@ -26,15 +26,16 @@ main() {
 		-H "Authorization: Token token=${PD_TOKEN:?}" \
 		--data-urlencode limit=$items_per_page \
 		-X GET \
-		"https://api.pagerduty.com/incidents"$( :
-		)"?since=$start_date"$( :
-		)"&offset=$offset"$( :
-		)"&statuses[]=triggered"$( :
-		)"&statuses[]=acknowledged"$( :
-		)${RESOLVED:+"&statuses[]=resolved"}$( :
-		)"&urgencies[]=high"$( :
-		)"&sort_by=incident_number:DESC"$( :
-		)"${services}" \
+		-G \
+		-d "since=$start_date" \
+		-d "offset=$offset" \
+		-d "statuses[]=triggered" \
+		-d "statuses[]=acknowledged" \
+		${RESOLVED:+-d "statuses[]=resolved"} \
+		-d "urgencies[]=high" \
+		-d "sort_by=incident_number:DESC" \
+		${services} \
+		https://api.pagerduty.com/incidents \
 	| jq '., .more' \
 	| awk '$0 == "true" {exit 0} $0 == "false" {exit 1} 1' \
 	; do
@@ -54,7 +55,7 @@ main() {
 parse_services() {
 	unset services
 	while read service; do
-		services="${services}&service_ids[]=${service}"
+		services="${services} -d service_ids[]=${service}"
 	done <<- EOF
 	$(echo $1 | tr : \\n)
 	EOF
