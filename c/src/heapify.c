@@ -45,8 +45,7 @@ pop(struct heap *h)
 	/* down heapify */
 	while(
 		a = 2 * i + 1, b = a + 1,
-		a < e && d[i] > d[a]
-		|| b < e && d[i] > d[b]
+		(a < e && d[i] > d[a]) || ( b < e && d[i] > d[b])
 	){
 		int t = b;
 		if( b >= e || d[a] < d[b] ){
