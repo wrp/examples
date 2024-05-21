@@ -12,6 +12,7 @@ struct heap {
 void *xrealloc(void *buf, size_t num, size_t siz);
 static void swap(int *a, int *b) { int t = *a; *a = *b; *b = t; }
 
+
 /* Push a value onto the heap */
 static void
 push(struct heap *h, int v)
@@ -30,7 +31,7 @@ push(struct heap *h, int v)
 }
 
 
-/* Remove a value from the heap */
+/* Remove a value from the heap.  Behavior undefined if heap is empty. */
 static int
 pop(struct heap *h)
 {
@@ -97,10 +98,35 @@ interactive(void)
 	return 0;
 }
 
+
+int
+basic_test(void)
+{
+	struct heap h = { 0 };
+	for( int i = 10; i > -3; i -= 2 ){
+		push(&h, i);
+	}
+	for( int i = -2; i < 11; i += 2 ){
+		int g = pop(&h);
+		if( i != g ){
+			fprintf(stderr, "Expected %d, got %d\n", i, g);
+			return 1;
+		}
+	}
+	if( h.len != 0 ){
+		fprintf(stderr, "Expected empty heap\n");
+		return 1;
+	}
+	return 0;
+}
+
+
 int
 test(void)
 {
-	return 0;
+	int rv = 0;
+	rv |= basic_test();
+	return rv;
 }
 
 
