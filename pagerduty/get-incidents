@@ -55,12 +55,14 @@ main() {
 }
 
 parse_services() {
+	if test -n "$1"; then
 	unset services
 	while read service; do
 		services="${services} -d service_ids[]=${service}"
 	done <<- EOF
 	$(echo $1 | tr : \\n)
 	EOF
+	fi
 }
 
 # If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
