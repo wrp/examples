@@ -34,6 +34,7 @@ main() {
 		)"${services}" \
 	| jq -rc '.incidents[] | [
 		.service.id,
+		.assignments[].assignee.summary,
 		.created_at,
 		.incident_number,
 		.status,
