@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct heap {
 	int *data;
@@ -82,7 +83,7 @@ error:
 
 
 int
-main(int argc, char **argv)
+interactive(void)
 {
 	struct heap h = { 0 };
 	int v;
@@ -94,6 +95,23 @@ main(int argc, char **argv)
 	}
 	putchar('\n');
 	return 0;
+}
+
+int
+test(void)
+{
+	return 0;
+}
+
+
+int
+main(int argc, char **argv)
+{
+	if( argc > 1 && ! strcmp(argv[1], "run") ){
+		return interactive();
+	} else {
+		return test();
+	}
 }
 
 void *
