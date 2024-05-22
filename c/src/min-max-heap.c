@@ -207,7 +207,7 @@ push_down_min(struct min_max_heap *h, size_t i)
 	) {
 		size_t new_index = 0;
 		if (llc >= e) {
-			if( rc >= e || d[lc] > d[rc]) {
+			if( rc >= e || d[lc] < d[rc]) {
 				new_index = lc;
 			} else {
 				new_index = rc;
@@ -448,6 +448,19 @@ test_push_down_max_1(void)
 }
 
 
+static void
+test_push_down_min_swap_rc(void)
+{
+	/* Get coverage of the swap with rc in push_down_min */
+	struct min_max_heap h = {0};
+	min_max_push(&h, 0);
+	min_max_push(&h, 6);
+	min_max_push(&h, 4);
+	min_max_push(&h, 5);
+	validate(0 == min_pop(&h));
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -458,6 +471,7 @@ main(int argc, char **argv)
 	test_push_up_max();
 	test_push_down_max_nollc();
 	test_push_down_max_1();
+	test_push_down_min_swap_rc();
 
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
