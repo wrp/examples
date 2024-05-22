@@ -143,7 +143,7 @@ push_down_max(struct min_max_heap *h, size_t i)
 	) {
 		size_t new_index = 0;
 		if (llc >= e) {
-			if( rc >= e || d[lc] < d[rc]) {
+			if( rc >= e || d[lc] > d[rc]) {
 				new_index = lc;
 			} else {
 				new_index = rc;
@@ -374,17 +374,20 @@ test_push_down_max_nollc(void)
 	/* Test push down max when the item being pushed has
 	no grand children */
 	struct min_max_heap h = {0};
-	int expect[] = { 0, 7, 6, 1, 2, 2, 5, 3 };
+	int expect[] = { 0, 7, 6, 1, 3, 2, 5, 4 };
 
 	/* First build a heap with 8 items */
 	for (int i = 0; i < 8; i += 1) {
-		min_max_push(&h, i == 4 ? 2 : i);
+		min_max_push(&h, i);
 	}
 	for (int i = 0; i < 8; i += 1) {
 		validate(h.data[i] == expect[i]);
 	}
-	/* Pop the max (7) so the 3 pushes down */
 	validate(7 == max_pop(&h));
+
+	/* Percolate the 3 down after pop to cover push_down_max */
+	min_max_push(&h, 3);
+	validate(6 == max_pop(&h));
 }
 
 
