@@ -461,6 +461,23 @@ test_push_down_min_swap_rc(void)
 }
 
 
+static void
+test_push_down_min_swap_rrc(void)
+{
+	/* Get coverage of the swap with rrc in push_down_min */
+	struct min_max_heap h = {0};
+	min_max_push(&h, 0);
+	min_max_push(&h, 6);
+	min_max_push(&h, 4);
+	min_max_push(&h, 5);
+	min_max_push(&h, 3);
+	min_max_push(&h, 2);
+	min_max_push(&h, 1);
+	min_max_push(&h, 7);
+	validate(0 == min_pop(&h));
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -472,6 +489,7 @@ main(int argc, char **argv)
 	test_push_down_max_nollc();
 	test_push_down_max_1();
 	test_push_down_min_swap_rc();
+	test_push_down_min_swap_rrc();
 
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
