@@ -419,6 +419,35 @@ test_push_down_max_nollc(void)
 }
 
 
+static void
+test_push_down_max_1(void)
+{
+	/* Get coverage of the linear max check of grand children */
+	struct min_max_heap h = {0};
+	min_max_push(&h, 0);
+	min_max_push(&h, 4);
+	min_max_push(&h, 6);
+	min_max_push(&h, 1);
+	min_max_push(&h, 3);
+	min_max_push(&h, 2);
+	min_max_push(&h, 5);
+	/*
+	*        0
+	*   4         6
+	* 1   3     2   5
+	*/
+	min_max_push(&h, 20);
+	validate(h.data[1] == 20);
+	validate(h.data[7] == 4);
+	min_max_push(&h, 5);
+	validate(h.data[8] == 5);
+	min_max_push(&h, 6);
+	min_max_push(&h, 7);
+	min_max_push(&h, 1);  /* the 1 will be pushed down to the 7 */
+	validate(20 == max_pop(&h));
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -428,6 +457,7 @@ main(int argc, char **argv)
 	test_push_up_min();
 	test_push_up_max();
 	test_push_down_max_nollc();
+	test_push_down_max_1();
 
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
