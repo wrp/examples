@@ -21,6 +21,15 @@ struct min_max_heap {
 };
 
 
+static void
+init(struct min_max_heap *h)
+{
+	free(h->data);
+	h->data = NULL;
+	h->cap = h->len = 0;
+}
+
+
 static int
 level(size_t i)
 {
@@ -388,6 +397,25 @@ test_push_down_max_nollc(void)
 	/* Percolate the 3 down after pop to cover push_down_max */
 	min_max_push(&h, 3);
 	validate(6 == max_pop(&h));
+
+	init(&h);
+	min_max_push(&h, 0);
+	min_max_push(&h, 4);
+	min_max_push(&h, 6);
+	min_max_push(&h, 1);
+	min_max_push(&h, 3);
+	min_max_push(&h, 5);
+	min_max_push(&h, 2);
+	min_max_push(&h, 3);
+	validate(6 == max_pop(&h));
+	validate(5 == max_pop(&h));
+	validate(4 == max_pop(&h));
+	validate(3 == max_pop(&h));
+	validate(3 == max_pop(&h));
+	validate(2 == max_pop(&h));
+	validate(1 == max_pop(&h));
+	validate(0 == max_pop(&h));
+	validate(h.len == 0);
 }
 
 
