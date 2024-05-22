@@ -300,6 +300,22 @@ test_2(void)
 	validate(2 == max_pop(&h));
 	validate(-1 == min_pop(&h));
 	validate(2 == h.len);
+
+	for( int i = 0; i < 6; i += 1 ){
+		min_max_push(&h, i);
+	}
+	/* Push a small value onto a max level */
+	min_max_push(&h, -4);
+	validate(-4 == min_pop(&h));
+	for( int i = 6; i < 14; i += 1 ){
+		min_max_push(&h, i);
+	}
+	min_max_push(&h, -5);
+	validate(-5 == min_pop(&h));
+
+	/* Pop max to cover push_down_max */
+	validate(13 == max_pop(&h));
+
 	free(h.data);
 }
 
@@ -352,6 +368,26 @@ test_push_up_max(void)
 }
 
 
+static void
+test_push_down_max_nollc(void)
+{
+	/* Test push down max when the item being pushed has
+	no grand children */
+	struct min_max_heap h = {0};
+	int expect[] = { 0, 7, 6, 1, 2, 2, 5, 3 };
+
+	/* First build a heap with 8 items */
+	for (int i = 0; i < 8; i += 1) {
+		min_max_push(&h, i == 4 ? 2 : i);
+	}
+	for (int i = 0; i < 8; i += 1) {
+		validate(h.data[i] == expect[i]);
+	}
+	/* Pop the max (7) so the 3 pushes down */
+	validate(7 == max_pop(&h));
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -360,6 +396,7 @@ main(int argc, char **argv)
 	test_level();
 	test_push_up_min();
 	test_push_up_max();
+	test_push_down_max_nollc();
 
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
