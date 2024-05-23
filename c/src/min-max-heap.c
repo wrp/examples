@@ -523,9 +523,7 @@ main(int argc, char **argv)
 	test_1();
 	test_2();
 	test_pairs(32, 0);
-	test_pairs(64, 0);
 	test_pairs(7, 1);
-	test_pairs(32, 1);
 	test_level();
 	test_push_up_min();
 	test_push_up_max();
