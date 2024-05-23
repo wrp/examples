@@ -136,17 +136,6 @@ push_down_cmp(struct min_max_heap *h, size_t i, int min)
 }
 
 
-static void
-push_down(struct min_max_heap *h, size_t i)
-{
-	if (is_min_level(i)) {
-		push_down_cmp(h, i, 1);
-	} else {
-		push_down_cmp(h, i, 0);
-	}
-}
-
-
 static T
 min_pop(struct min_max_heap *h)
 {
@@ -154,7 +143,7 @@ min_pop(struct min_max_heap *h)
 	T *d = h->data;
 	T rv = d[0];
 	d[0] = d[--h->len];
-	push_down(h, 0);
+	push_down_cmp(h, 0, 1);
 	return rv;
 }
 
@@ -171,7 +160,7 @@ max_pop(struct min_max_heap *h)
 
 	T rv = d[i];
 	d[i] = d[--h->len];
-	push_down(h, i);
+	push_down_cmp(h, i, 0);
 	return rv;
 }
 
