@@ -71,17 +71,19 @@ push_up(struct min_max_heap *h, size_t i)
 		return;
 	}
 
+	size_t p = parent(i);
+
 	if (is_min_level(i)) {
-		if (d[i] > d[parent(i)]) {
-			swap(d + i, d + parent(i));
-			push_up_max(h, parent(i));
+		if (d[i] > d[p]) {
+			swap(d + i, d + p);
+			push_up_max(h, p);
 		} else {
 			push_up_min(h, i);
 		}
 	} else {
-		if (d[i] < d[parent(i)]) {
-			swap(d + i, d + parent(i));
-			push_up_min(h, parent(i));
+		if (d[i] < d[p]) {
+			swap(d + i, d + p);
+			push_up_min(h, p);
 		} else {
 			push_up_max(h, i);
 		}
@@ -92,16 +94,11 @@ push_up(struct min_max_heap *h, size_t i)
 static void
 min_max_push(struct min_max_heap *h, T v)
 {
-	size_t i = h->len;
-	while( h->len >= h->cap ){
+	while (h->len >= h->cap) {
 		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
 	}
-	T *d = h->data;
-	d[h->len] = v;
-	push_up(h, h->len);
-	h->len += 1;
-
-	return;
+	h->data[h->len] = v;
+	push_up(h, h->len++);
 }
 
 static void push_down(struct min_max_heap *h, size_t i);
