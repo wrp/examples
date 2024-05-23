@@ -480,14 +480,23 @@ test_pairs(size_t siz, int which)
 	validate(0 == h.len);
 }
 
+static void
+do_test_pairs(void)
+{
+	size_t sizes[] = {7, 32, 33, 63, 64, 65, 66, 1023, 1024};
+	for (size_t *s = sizes; s < sizes + sizeof sizes / sizeof *sizes; s++) {
+		for (int which = 0; which < 2; which += 1) {
+			test_pairs(*s, which);
+		}
+	}
+}
 
 int
 main(int argc, char **argv)
 {
 	test_1();
 	test_2();
-	test_pairs(32, 0);
-	test_pairs(7, 1);
+	do_test_pairs();
 	test_level();
 	test_push_up_min();
 	test_push_up_max();
