@@ -126,85 +126,6 @@ min_max_push(struct min_max_heap *h, T v)
 static void push_down(struct min_max_heap *h, size_t i);
 
 static void
-push_down_max(struct min_max_heap *h, size_t i)
-{
-	assert(is_max_level(i));
-	T *d = h->data;
-	size_t lc;          /* index of left child */
-	size_t llc;         /* index of left-left grandchild */
-	size_t lrc;         /* index of left-right grandchild */
-	size_t rc;          /* index of right child */
-	size_t rlc;         /* index of right-left grandchild */
-	size_t rrc;         /* index of right-right grandchild */
-	size_t e = h->len;  /* end */
-
-	while(
-		lc = 2 * i + 1,
-		rc = lc + 1,
-		llc = 2 * lc + 1,
-		lrc = llc + 1,
-		rlc = 2 * rc + 1,
-		rrc = rlc + 1,
-		(rrc < e && d[i] < d[rrc]) ||
-		(rlc < e && d[i] < d[rlc]) ||
-		(lrc < e && d[i] < d[lrc]) ||
-		(llc < e && d[i] < d[llc]) ||
-		(llc >= e && lc < e && d[i] < d[lc]) ||
-		(rlc >= e && rc < e && d[i] < d[rc])
-	) {
-
-		/* i is on a max-level, but the heap invariants are not
-		** necessarily satisfied by this cell.  However, the heap
-		** invariants should be satisfied everywhere else, so we
-		** can assert the following:
-		*/
-		assert(llc >= e || d[llc] >= d[lc]);
-		assert(lrc >= e || d[lrc] >= d[lc]);
-		assert(rlc >= e || d[rlc] >= d[rc]);
-		assert(rrc >= e || d[rrc] >= d[rc]);
-
-		/* TODO: fix this.  The algorithm requirest swapping with the
-		** grandchild and then comparing with the grandchild's parent,
-		** and this code completely skips that part.  But, since we
-		** are currently duplicating all of this logic in push_down_min,
-		** I don't want to bother fixing this until I have a clean
-		** way to combine the code.  Also, that condition in the
-		** while loop is really ugly.  Not sure if I should get
-		** correctness with duplication or do cleanliness first.
-		** This is just a silly academic exercise, so not really
-		** interested in thinking too much about it.  Will add
-		** failing tests in the commit with this comment and
-		** maybe come back to this in a few years.
-		*/
-		size_t new_index = 0;
-		if (llc >= e) {
-			if( rc >= e || d[lc] > d[rc]) {
-				new_index = lc;
-			} else {
-				new_index = rc;
-			}
-		} else {
-			T max = d[new_index = llc];
-			if (lrc < e && d[lrc] > max) {
-				max = d[new_index = lrc];
-			}
-			if (rlc < e && d[rlc] > max) {
-				max = d[new_index = rlc];
-			}
-			if (rrc < e && d[rrc] > max) {
-				max = d[new_index = rrc];
-			}
-		}
-		assert(new_index > 0);
-		assert(new_index < e);
-		assert(d[new_index] > d[i]);
-		swap(d + new_index, d + i);
-		i = new_index;
-	}
-}
-
-
-static void
 push_down_min(struct min_max_heap *h, size_t i)
 {
 	assert(is_min_level(i));
@@ -241,6 +162,49 @@ push_down_min(struct min_max_heap *h, size_t i)
 	}
 
 	if (d[m] > d[parent(m)]) {
+		swap(d + m, d + parent(m));
+	}
+	push_down(h, m);
+}
+
+
+static void
+push_down_max(struct min_max_heap *h, size_t i)
+{
+	assert(is_max_level(i));
+	T *d = h->data;
+
+	size_t lc  = 2 * i + 1;    /* index of left child */
+	size_t rc  = lc + 1;       /* index of left-left grandchild */
+	size_t llc = 2 * lc + 1;   /* index of left-right grandchild */
+	size_t lrc = llc + 1;      /* index of right child */
+	size_t rlc = 2 * rc + 1;   /* index of right-left grandchild */
+	size_t rrc = rlc + 1;      /* index of right-right grandchild */
+	size_t e = h->len;         /* end */
+
+	if (lc >= e) {
+		/* i has no children */
+		return;
+	}
+
+	size_t m; /* index of the largest child or grandchild */
+	T max = d[m = lc];
+	assert(lc < e);
+	if (rc < e && d[rc] > max) max = d[m = rc];
+	if (llc < e && d[llc] > max) max = d[m = llc];
+	if (lrc < e && d[lrc] > max) max = d[m = lrc];
+	if (rlc < e && d[rlc] > max) max = d[m = rlc];
+	if (rrc < e && d[rrc] > max) max = d[m = rrc];
+
+	if (d[m] > d[i]) {
+		swap(d + m, d + i);
+	}
+
+	if (m == lc || m == rc) {
+		return;
+	}
+
+	if (d[m] < d[parent(m)]) {
 		swap(d + m, d + parent(m));
 	}
 	push_down(h, m);
