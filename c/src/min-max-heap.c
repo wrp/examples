@@ -129,13 +129,23 @@ push_down_max(struct min_max_heap *h, size_t i)
 {
 	assert(is_max_level(i));
 	T *d = h->data;
-	size_t lc;  /* index of left child */
-	size_t llc; /* index of left-left grandchild */
-	size_t lrc; /* index of left-right grandchild */
-	size_t rc;  /* index of right child */
-	size_t rlc;  /* index of right-left grandchild */
-	size_t rrc;  /* index of right-right grandchild */
-	size_t e = h->len; /* end */
+	size_t lc = 2*i + 1;    /* index of left child */
+	size_t llc = 2*lc + 1;  /* index of left-left grandchild */
+	size_t lrc = llc + 1;   /* index of left-right grandchild */
+	size_t rc = lc + 1;     /* index of right child */
+	size_t rlc = 2*rc + 1;  /* index of right-left grandchild */
+	size_t rrc = rlc + 1;   /* index of right-right grandchild */
+	size_t e = h->len;      /* end */
+
+	/* i is on a max-level, but the heap invariants are not
+	** necessarily satisfied by this cell.  However, the heap
+	** invariants should be satisfied everywhere else, so we
+	** can assert the following:
+	*/
+	assert(llc >= e || d[llc] >= d[lc]);
+	assert(lrc >= e || d[lrc] >= d[lc]);
+	assert(rlc >= e || d[rlc] >= d[rc]);
+	assert(rrc >= e || d[rrc] >= d[rc]);
 
 	while(
 		lc = 2 * i + 1,
