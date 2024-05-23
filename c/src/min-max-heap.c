@@ -42,9 +42,8 @@ compare_to_grand_parent(T *d, size_t i, int min)
 }
 
 static void
-push_up_2(struct min_max_heap *h, size_t i, int min)
+push_up_2(T *d, size_t i, int min)
 {
-	T *d = h->data;
 	while (compare_to_grand_parent(d, i, min)) {
 		size_t k = (i+1)/4 - 1;
 		swap(d + i, d + k);
@@ -58,7 +57,7 @@ push_up(struct min_max_heap *h, size_t i)
 {
 	T *d = h->data;
 
-	if( i < 1 ){
+	if (i < 1) {
 		return;
 	}
 
@@ -67,9 +66,9 @@ push_up(struct min_max_heap *h, size_t i)
 
 	if ((min && (d[i] > d[p])) || (!min && d[i] < d[p])) {
 		swap(d + i, d + p);
-		push_up_2(h, p, !min);
+		push_up_2(d, p, !min);
 	} else {
-		push_up_2(h, i, min);
+		push_up_2(d, i, min);
 	}
 }
 
@@ -304,12 +303,12 @@ test_push_up_min(void)
 {
 	T data[10] = { 5, 4, 1, 2, 3, 6, -7, 8 };
 	struct min_max_heap h = {.data = data, .cap = 10, .len = 8};
-	push_up_2(&h, 3, 1);
+	push_up_2(h.data, 3, 1);
 	validate(data[0] == 2);
 	validate(data[1] == 4);
 	validate(data[2] == 1);
 	validate(data[3] == 5);
-	push_up_2(&h, 6, 1);
+	push_up_2(h.data, 6, 1);
 	validate(data[0] == -7);
 	validate(data[6] == 2);
 }
@@ -320,7 +319,7 @@ test_push_up_max(void)
 {
 	T data[10] = { 5,   4, 1,   2, 3, 6, -7,   8 };
 	struct min_max_heap h = {.data = data, .cap = 10, .len = 8};
-	push_up_2(&h, 7, 0);
+	push_up_2(h.data, 7, 0);
 	validate(data[0] == 5);
 	validate(data[1] == 8);
 	validate(data[2] == 1);
