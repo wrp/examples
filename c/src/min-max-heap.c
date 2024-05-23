@@ -37,6 +37,10 @@ static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
 static int
 compare_to_grand_parent(T *d, size_t i, int min)
 {
+	/* Compare the value at i to its grandparent.
+	** If min is true, return true if node i is less than gp.
+	** If min is false, return true if node i is greater than gp.
+	*/
 	size_t k = (i+1)/4 - 1;
 	return min ? (i > 2 && d[i] < d[k]) : (i > 6 && d[i] > d[k]);
 }
