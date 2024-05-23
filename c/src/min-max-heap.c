@@ -67,7 +67,7 @@ push_up(struct min_max_heap *h, size_t i)
 {
 	T *d = h->data;
 
-	if( i < 2 ){
+	if( i < 1 ){
 		return;
 	}
 
@@ -249,6 +249,14 @@ test_1(void)
 
 	min_max_push(&h, 1);
 	min_max_push(&h, 2);
+	validate(2 == h.len);
+	validate(1 == min_pop(&h));
+	validate(2 == min_pop(&h));
+	validate(0 == h.len);
+
+	h.len = 0;
+	min_max_push(&h, 2);
+	min_max_push(&h, 1);
 	validate(2 == h.len);
 	validate(1 == min_pop(&h));
 	validate(2 == min_pop(&h));
