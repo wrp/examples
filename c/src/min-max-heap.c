@@ -64,8 +64,7 @@ push_up_min(struct min_max_heap *h, size_t i)
 {
 	/* Take the item at index i and percolate up min levels*/
 	assert(is_min_level(i));
-	if( level(i) < 2 ){
-		assert(level(i) == 0);
+	if( i < 3 ){
 		return;
 	}
 	T *d = h->data;
@@ -490,6 +489,7 @@ do_test_pairs(void)
 		}
 	}
 }
+
 
 int
 main(int argc, char **argv)
