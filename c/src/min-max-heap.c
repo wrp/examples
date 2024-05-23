@@ -480,20 +480,25 @@ test_push_down_min_swap_rrc(void)
 
 
 static void
-test_pairs(size_t siz)
+test_pairs(size_t siz, int which)
 {
-	struct min_max_heap h = {0};
+	assert(which == 0 || which == 1);
 
-	/* Make a big (ish) heap and validate */
+	struct min_max_heap h = {0};
+	T (*poppers[])(struct min_max_heap *) = { min_pop, max_pop };
+
+	/* Make a heap and validate by alternately popping max and min */
 	for (int i = 0; i < siz; i++) {
 		min_max_push(&h, i);
 	}
 	for (int i = 0; i < siz / 2; i++) {
-		validate(i == min_pop(&h));
-		validate(siz - 1 - i == max_pop(&h));
+		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
+		which = ! which;
+		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
 	}
 	if (siz % 2) {
-		validate((siz/2) + 1 == min_pop(&h));
+		int i = siz / 2;
+		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
 	}
 	validate(0 == h.len);
 }
@@ -504,7 +509,8 @@ main(int argc, char **argv)
 {
 	test_1();
 	test_2();
-	test_pairs(32);
+	test_pairs(32, 0);
+	test_pairs(7, 1);
 	test_level();
 	test_push_up_min();
 	test_push_up_max();
