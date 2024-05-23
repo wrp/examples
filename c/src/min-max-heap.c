@@ -48,7 +48,7 @@ static void
 push_up_max(struct min_max_heap *h, size_t i)
 {
 	assert(is_max_level(i));
-	if( level(i) < 2 ){
+	if( i < 7 ){
 		return;
 	}
 	T *d = h->data;
