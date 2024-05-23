@@ -6,11 +6,6 @@
 /* A naive implementation of the algo at
 https://en.wikipedia.org/wiki/Min-max_heap */
 
-int fail_count = 0;
-int pass_count = 0;
-#define validate(b) if( !(b) ) { fprintf(stderr, "FALSE: %s at line %d\n", \
-	#b, __LINE__); fail_count += 1; } else { pass_count += 1; }
-
 static void * xrealloc(void *b, size_t num, size_t siz);
 
 typedef int T;
@@ -250,6 +245,11 @@ max_pop(struct min_max_heap *h)
 	return rv;
 }
 
+
+int fail_count = 0;
+int pass_count = 0;
+#define validate(b) if( !(b) ) { fprintf(stderr, "FALSE: %s at line %d\n", \
+	#b, __LINE__); fail_count += 1; } else { pass_count += 1; }
 
 static void
 test_1(void)
