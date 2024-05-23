@@ -48,13 +48,11 @@ static void
 push_up_max(struct min_max_heap *h, size_t i)
 {
 	assert(is_max_level(i));
-	if( i < 7 ){
-		return;
-	}
 	T *d = h->data;
-	if (d[i] > d[grand_parent(i)]) {
-		swap(d + i, d + grand_parent(i));
-		push_up_max(h, grand_parent(i));
+	size_t k;
+	while (i > 6 && d[i] > d[k = grand_parent(i)]) {
+		swap(d + i, d + k);
+		i = k;
 	}
 }
 
