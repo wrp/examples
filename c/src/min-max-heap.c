@@ -63,21 +63,13 @@ push_up(struct min_max_heap *h, size_t i)
 	}
 
 	size_t p = parent(i);
+	int min = is_min_level(i);
 
-	if (is_min_level(i)) {
-		if (d[i] > d[p]) {
-			swap(d + i, d + p);
-			push_up_2(h, p, 0);
-		} else {
-			push_up_2(h, i, 1);
-		}
+	if ((min && (d[i] > d[p])) || (!min && d[i] < d[p])) {
+		swap(d + i, d + p);
+		push_up_2(h, p, !min);
 	} else {
-		if (d[i] < d[p]) {
-			swap(d + i, d + p);
-			push_up_2(h, p, 1);
-		} else {
-			push_up_2(h, i, 0);
-		}
+		push_up_2(h, i, min);
 	}
 }
 
