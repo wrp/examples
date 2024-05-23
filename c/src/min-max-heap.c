@@ -64,13 +64,11 @@ push_up_min(struct min_max_heap *h, size_t i)
 {
 	/* Take the item at index i and percolate up min levels*/
 	assert(is_min_level(i));
-	if( i < 3 ){
-		return;
-	}
 	T *d = h->data;
-	if (d[i] < d[grand_parent(i)]) {
-		swap(d + i, d + grand_parent(i));
-		push_up_min(h, grand_parent(i));
+	size_t k;
+	while (i > 2 && d[i] < d[k = grand_parent(i)]) {
+		swap(d + i, d + k);
+		i = k;
 	}
 }
 
