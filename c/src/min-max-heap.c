@@ -53,10 +53,8 @@ push_up_2(T *d, size_t i, int min)
 
 
 static void
-push_up(struct min_max_heap *h, size_t i)
+push_up(T *d, size_t i)
 {
-	T *d = h->data;
-
 	if (i < 1) {
 		return;
 	}
@@ -80,7 +78,7 @@ min_max_push(struct min_max_heap *h, T v)
 		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
 	}
 	h->data[h->len] = v;
-	push_up(h, h->len++);
+	push_up(h->data, h->len++);
 }
 
 static void
