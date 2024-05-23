@@ -16,15 +16,6 @@ struct min_max_heap {
 };
 
 
-static void
-init(struct min_max_heap *h)
-{
-	free(h->data);
-	h->data = NULL;
-	h->cap = h->len = 0;
-}
-
-
 static int
 level(size_t i)
 {
@@ -371,7 +362,7 @@ test_push_down_max_nollc(void)
 	min_max_push(&h, 3);
 	validate(6 == max_pop(&h));
 
-	init(&h);
+	h.len = 0;
 	min_max_push(&h, 0);
 	min_max_push(&h, 4);
 	min_max_push(&h, 6);
