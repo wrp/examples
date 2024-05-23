@@ -89,12 +89,16 @@ min_max_push(struct min_max_heap *h, T v)
 	push_up(h->data, h->len++);
 }
 
-static void
-push_down_min(struct min_max_heap *h, size_t i)
+static int
+cmp(T a, T b, int min)
 {
-	assert(is_min_level(i));
-	T *d = h->data;
+	return min ? a < b : b < a;
+}
 
+static void
+push_down_cmp(struct min_max_heap *h, size_t i, int min)
+{
+	T *d = h->data;
 	size_t lc  = 2 * i + 1;    /* index of left child */
 	size_t rc  = lc + 1;       /* index of right child */
 	size_t llc = 2 * lc + 1;   /* index of left-left grandchild */
@@ -108,16 +112,16 @@ push_down_min(struct min_max_heap *h, size_t i)
 		return;
 	}
 
-	size_t m; /* index of the smallest child or grandchild */
-	T min = d[m = lc];
+	size_t m; /* index of the extrema (child or grandchild) */
+	T extrema = d[m = lc];
 	assert(lc < e);
-	if (rc < e && d[rc] < min) min = d[m = rc];
-	if (llc < e && d[llc] < min) min = d[m = llc];
-	if (lrc < e && d[lrc] < min) min = d[m = lrc];
-	if (rlc < e && d[rlc] < min) min = d[m = rlc];
-	if (rrc < e && d[rrc] < min) min = d[m = rrc];
+	if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
+	if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
+	if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
+	if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+	if (rrc < e && cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
 
-	if (d[m] < d[i]) {
+	if (cmp(d[m], d[i], min)) {
 		swap(d + m, d + i);
 	}
 
@@ -125,55 +129,10 @@ push_down_min(struct min_max_heap *h, size_t i)
 		return;
 	}
 
-	if (d[m] > d[parent(m)]) {
+	if (cmp(d[parent(m)], d[m], min)) {
 		swap(d + m, d + parent(m));
 	}
-	assert(is_min_level(m));
-	push_down_min(h, m);
-}
-
-
-static void
-push_down_max(struct min_max_heap *h, size_t i)
-{
-	assert(is_max_level(i));
-	T *d = h->data;
-
-	size_t lc  = 2 * i + 1;    /* index of left child */
-	size_t rc  = lc + 1;       /* index of left-left grandchild */
-	size_t llc = 2 * lc + 1;   /* index of left-right grandchild */
-	size_t lrc = llc + 1;      /* index of right child */
-	size_t rlc = 2 * rc + 1;   /* index of right-left grandchild */
-	size_t rrc = rlc + 1;      /* index of right-right grandchild */
-	size_t e = h->len;         /* end */
-
-	if (lc >= e) {
-		/* i has no children */
-		return;
-	}
-
-	size_t m; /* index of the largest child or grandchild */
-	T max = d[m = lc];
-	assert(lc < e);
-	if (rc < e && d[rc] > max) max = d[m = rc];
-	if (llc < e && d[llc] > max) max = d[m = llc];
-	if (lrc < e && d[lrc] > max) max = d[m = lrc];
-	if (rlc < e && d[rlc] > max) max = d[m = rlc];
-	if (rrc < e && d[rrc] > max) max = d[m = rrc];
-
-	if (d[m] > d[i]) {
-		swap(d + m, d + i);
-	}
-
-	if (m == lc || m == rc) {
-		return;
-	}
-
-	if (d[m] < d[parent(m)]) {
-		swap(d + m, d + parent(m));
-	}
-	assert(is_max_level(m));
-	push_down_max(h, m);
+	push_down_cmp(h, m, min);
 }
 
 
@@ -181,9 +140,9 @@ static void
 push_down(struct min_max_heap *h, size_t i)
 {
 	if (is_min_level(i)) {
-		push_down_min(h, i);
+		push_down_cmp(h, i, 1);
 	} else {
-		push_down_max(h, i);
+		push_down_cmp(h, i, 0);
 	}
 }
 
@@ -279,7 +238,7 @@ test_2(void)
 	min_max_push(&h, -5);
 	validate(-5 == min_pop(&h));
 
-	/* Pop max to cover push_down_max */
+	/* Pop max to cover push_down_cmp */
 	validate(13 == max_pop(&h));
 
 	free(h.data);
