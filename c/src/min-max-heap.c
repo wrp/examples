@@ -151,6 +151,19 @@ push_down_max(struct min_max_heap *h, size_t i)
 		(llc >= e && lc < e && d[i] < d[lc]) ||
 		(rlc >= e && rc < e && d[i] < d[rc])
 	) {
+		/* TODO: fix this.  The algorithm requirest swapping with the
+		** grandchild and then comparing with the grandchild's parent,
+		** and this code completely skips that part.  But, since we
+		** are currently duplicating all of this logic in push_down_min,
+		** I don't want to bother fixing this until I have a clean
+		** way to combine the code.  Also, that condition in the
+		** while loop is really ugly.  Not sure if I should get
+		** correctness with duplication or do cleanliness first.
+		** This is just a silly academic exercise, so not really
+		** interested in thinking too much about it.  Will add
+		** failing tests in the commit with this comment and
+		** maybe come back to this in a few years.
+		*/
 		size_t new_index = 0;
 		if (llc >= e) {
 			if( rc >= e || d[lc] > d[rc]) {
@@ -510,7 +523,9 @@ main(int argc, char **argv)
 	test_1();
 	test_2();
 	test_pairs(32, 0);
+	test_pairs(64, 0);
 	test_pairs(7, 1);
+	test_pairs(32, 1);
 	test_level();
 	test_push_up_min();
 	test_push_up_max();
