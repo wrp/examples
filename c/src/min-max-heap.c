@@ -110,9 +110,9 @@ push_down_min(struct min_max_heap *h, size_t i)
 	T *d = h->data;
 
 	size_t lc  = 2 * i + 1;    /* index of left child */
-	size_t rc  = lc + 1;       /* index of left-left grandchild */
-	size_t llc = 2 * lc + 1;   /* index of left-right grandchild */
-	size_t lrc = llc + 1;      /* index of right child */
+	size_t rc  = lc + 1;       /* index of right child */
+	size_t llc = 2 * lc + 1;   /* index of left-left grandchild */
+	size_t lrc = llc + 1;      /* index of left-right grandchild */
 	size_t rlc = 2 * rc + 1;   /* index of right-left grandchild */
 	size_t rrc = rlc + 1;      /* index of right-right grandchild */
 	size_t e = h->len;         /* end */
