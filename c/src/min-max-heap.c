@@ -45,6 +45,8 @@ compare_to_grand_parent(T *d, size_t i, int min)
 	return min ? (i > 2 && d[i] < d[k]) : (i > 6 && d[i] > d[k]);
 }
 
+
+/* Swap node i up the tree, skipping levels */
 static void
 push_up_2(T *d, size_t i, int min)
 {
@@ -66,12 +68,14 @@ push_up(T *d, size_t i)
 	size_t p = parent(i);
 	int min = is_min_level(i);
 
+	/* If needed, swap current with parent */
 	if ((min && (d[i] > d[p])) || (!min && d[i] < d[p])) {
 		swap(d + i, d + p);
-		push_up_2(d, p, !min);
-	} else {
-		push_up_2(d, i, min);
+		i = p;
+		min = !min;
 	}
+	/* Now push up the tree within the current level category. */
+	push_up_2(d, i, min);
 }
 
 
