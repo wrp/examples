@@ -34,24 +34,21 @@ static int is_min_level(size_t i) { return ! (level(i) % 2); }
 static int is_max_level(size_t i) { return (level(i) % 2); }
 static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
 
+static int
+compare_to_grand_parent(T *d, size_t i, int min)
+{
+	size_t k = (i+1)/4 - 1;
+	return min ? (i > 2 && d[i] < d[k]) : (i > 6 && d[i] > d[k]);
+}
 
 static void
 push_up_2(struct min_max_heap *h, size_t i, int min)
 {
 	T *d = h->data;
-	size_t k;
-	if (min) {
-		assert(is_min_level(i));
-		while (i > 2 && d[i] < d[k = grand_parent(i)]) {
-			swap(d + i, d + k);
-			i = k;
-		}
-	} else {
-		assert(is_max_level(i));
-		while (i > 6 && d[i] > d[k = grand_parent(i)]) {
-			swap(d + i, d + k);
-			i = k;
-		}
+	while (compare_to_grand_parent(d, i, min)) {
+		size_t k = (i+1)/4 - 1;
+		swap(d + i, d + k);
+		i = k;
 	}
 }
 
