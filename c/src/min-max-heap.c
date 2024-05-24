@@ -413,6 +413,28 @@ do_test_pairs(void)
 }
 
 
+static void
+test_constants(size_t limit)
+{
+	struct min_max_heap h = {0};
+	for (size_t i=0; i < limit; i += 1) {
+		min_max_push(&h, 3);
+	}
+	for (size_t i=0; i < limit; i += 1) {
+		min_max_push(&h, 2);
+		min_max_push(&h, 4);
+	}
+	for (size_t i=0; i < limit; i += 1) {
+		validate(min_pop(&h) == 2);
+		validate(max_pop(&h) == 4);
+	}
+	for (size_t i=0; i < limit/2; i += 1) {
+		validate(max_pop(&h) == 3);
+		validate(min_pop(&h) == 3);
+	}
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -425,6 +447,7 @@ main(int argc, char **argv)
 	test_push_down_max_1();
 	test_push_down_min_swap_rc();
 	test_push_down_min_swap_rrc();
+	test_constants(500);
 
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
