@@ -91,40 +91,46 @@ static void
 push_down_cmp(struct min_max_heap *h, size_t i, int min)
 {
 	T *d = h->data;
-	size_t lc  = 2 * i + 1;    /* index of left child */
-	size_t rc  = lc + 1;       /* index of right child */
-	size_t llc = 2 * lc + 1;   /* index of left-left grandchild */
-	size_t lrc = llc + 1;      /* index of left-right grandchild */
-	size_t rlc = 2 * rc + 1;   /* index of right-left grandchild */
-	size_t rrc = rlc + 1;      /* index of right-right grandchild */
-	size_t e = h->len;         /* end */
+	size_t e = h->len;  /* end */
 
-	if (lc >= e) {
-		/* i has no children */
-		return;
+	size_t m;   /* index of the extrema (child or grandchild) */
+	size_t lc;  /* index of left child */
+	size_t rc;  /* index of right child */
+	size_t llc; /* index of left-left grandchild */
+	size_t lrc; /* index of left-right grandchild */
+	size_t rlc; /* index of right-left grandchild */
+	size_t rrc; /* index of right-right grandchild */
+
+	while(
+		lc  = 2 * i + 1,
+		rc  = lc + 1,
+		llc = 2 * lc + 1,
+		lrc = llc + 1,
+		rlc = 2 * rc + 1,
+		rrc = rlc + 1,
+		lc < e
+	) {
+		T extrema = d[m = lc];
+		assert(lc < e);
+		if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
+		if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
+		if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
+		if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+		if (rrc < e && cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
+
+		if (cmp(d[m], d[i], min)) {
+			swap(d + m, d + i);
+		}
+
+		if (m == lc || m == rc) {
+			return;
+		}
+
+		if (cmp(d[parent(m)], d[m], min)) {
+			swap(d + m, d + parent(m));
+		}
+		i = m;
 	}
-
-	size_t m; /* index of the extrema (child or grandchild) */
-	T extrema = d[m = lc];
-	assert(lc < e);
-	if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
-	if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
-	if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
-	if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
-	if (rrc < e && cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
-
-	if (cmp(d[m], d[i], min)) {
-		swap(d + m, d + i);
-	}
-
-	if (m == lc || m == rc) {
-		return;
-	}
-
-	if (cmp(d[parent(m)], d[m], min)) {
-		swap(d + m, d + parent(m));
-	}
-	push_down_cmp(h, m, min);
 }
 
 
