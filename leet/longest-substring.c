@@ -26,7 +26,6 @@ Constraints:
 s consists of English letters, digits, symbols and spaces.
 */
 
-#define NDEBUG 1
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,31 +36,30 @@ int
 lengthOfLongestSubstring(char *s)
 {
 	int max = 0;
-	int count = 0;
 	char *start_of_substring = s;
 	unsigned lut[256] = {0};
+	size_t len;
 
 	for (; *s; s += 1) {
 		if (lut[*s] == 0) {
-			count += 1;
 			lut[*s] += 1;
 		} else {
-			if (count > max) {
-				max = count;
+			len = s - start_of_substring;
+			if (len > max) {
+				max = len;
 			}
 			do {
 				assert(lut[*start_of_substring] == 1);
 				lut[*start_of_substring++] = 0;
-				count -= 1;
 			} while(start_of_substring[-1] != *s);
 			assert(start_of_substring[-1] == *s);
 			assert(start_of_substring <= s);
-			count += 1;
 			assert(lut[start_of_substring[-1]] == 0);
 			lut[start_of_substring[-1]] = 1;
 		}
 	}
-	return count > max ? count : max;
+	len = s - start_of_substring;
+	return len > max ? len : max;
 }
 
 int
@@ -70,7 +68,11 @@ main(int argc, char **argv)
 	assert(lengthOfLongestSubstring("b") == 1);
 	assert(lengthOfLongestSubstring("abcabcbb") == 3);
 	assert(lengthOfLongestSubstring("bbbbbbbb") == 1);
+	assert(lengthOfLongestSubstring("bbbbabcd") == 4);
 	assert(lengthOfLongestSubstring("pwwkew") == 3);
 	assert(lengthOfLongestSubstring("abcdefghijklmabcdk") == 13);
+	while (*++argv ){
+		printf("%5d: %s\n", lengthOfLongestSubstring(*argv), *argv);
+	}
 	return 0;
 }
