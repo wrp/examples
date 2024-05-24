@@ -128,6 +128,7 @@ push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 			if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
 			if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
 			if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+			assert (rrc >= e);
 		}
 
 		if (cmp(d[m], d[i], min)) {
