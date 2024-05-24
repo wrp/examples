@@ -115,13 +115,20 @@ push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 		assert(rlc >= e || !cmp(d[rlc], d[rc], !min));
 		assert(rrc >= e || !cmp(d[rrc], d[rc], !min));
 
-		T extrema = d[m = lc];
-		assert(lc < e);
-		if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
-		if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
-		if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
-		if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
-		if (rrc < e && cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
+		T extrema;
+		if (rrc < e) {
+			extrema = d[m = llc];
+			if (cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
+			if (cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+			if (cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
+		} else {
+			extrema = d[m = lc];
+			assert(lc < e);
+			if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
+			if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
+			if (lrc < e && cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
+			if (rlc < e && cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+		}
 
 		if (cmp(d[m], d[i], min)) {
 			swap(d + m, d + i);
