@@ -13,6 +13,7 @@ struct min_max_heap {
 	T *data;
 	size_t cap;
 	size_t len;
+	size_t level;  /* level in the tree of d[len] */
 };
 
 
@@ -85,7 +86,16 @@ min_max_push(struct min_max_heap *h, T v)
 		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
 	}
 	h->data[h->len] = v;
-	push_up(h->data, h->len++);
+	push_up(h->data, h->len);
+
+	assert(level(h->len) == h->level);
+
+	// When incrementing the length, we are moving to a new level iff
+	// the new length is 2^n - 1 for some n.
+	h->len += 1;
+	if ((h->len & (h->len + 1)) == 0) {
+		h->level += 1;
+	}
 }
 
 static int
@@ -135,13 +145,25 @@ push_down_cmp(struct min_max_heap *h, size_t i, int min)
 }
 
 
+static void
+decrement_len(struct min_max_heap *h)
+{
+	assert(h->len > 0);
+	// if h->len is 2^n - 1, then we are decreasing level
+	if ((h->len & (h->len + 1)) == 0) {
+		h->level -= 1;
+	}
+	h->len -= 1;
+}
+
 static T
 min_pop(struct min_max_heap *h)
 {
 	assert(h->len > 0);
 	T *d = h->data;
 	T rv = d[0];
-	d[0] = d[--h->len];
+	decrement_len(h);
+	d[0] = d[h->len];
 	push_down_cmp(h, 0, 1);
 	return rv;
 }
@@ -153,12 +175,14 @@ max_pop(struct min_max_heap *h)
 	assert(h->len > 0);
 	T *d = h->data;
 	if(h->len < 3) {
-		return d[--h->len];
+		decrement_len(h);
+		return d[h->len];
 	}
 	size_t i = (d[1] > d[2]) ? 1 : 2;
 
 	T rv = d[i];
-	d[i] = d[--h->len];
+	decrement_len(h);
+	d[i] = d[h->len];
 	push_down_cmp(h, i, 0);
 	return rv;
 }
@@ -187,6 +211,7 @@ test_1(void)
 	validate(0 == h.len);
 
 	h.len = 0;
+	h.level = 0;
 	min_max_push(&h, 2);
 	min_max_push(&h, 1);
 	validate(2 == h.len);
@@ -303,6 +328,7 @@ test_push_down_max_nollc(void)
 	validate(6 == max_pop(&h));
 
 	h.len = 0;
+	h.level = 0;
 	min_max_push(&h, 0);
 	min_max_push(&h, 4);
 	min_max_push(&h, 6);
