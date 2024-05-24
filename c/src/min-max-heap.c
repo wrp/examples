@@ -17,8 +17,6 @@ struct min_max_heap {
 	size_t level;  /* level in the tree of d[len] */
 };
 
-static size_t parent(size_t i) { assert(i > 0); return (i-1)/2; }
-static size_t grand_parent(size_t i) { assert(i > 2); return ((i+1)/4) - 1; }
 static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
 
 static int
@@ -52,7 +50,7 @@ push_up(T *d, size_t i, int min)
 		return;
 	}
 
-	size_t p = parent(i);
+	size_t p = (i-1)/2;  // parent;
 
 	/* If needed, swap current with parent */
 	if ((min && (d[i] > d[p])) || (!min && d[i] < d[p])) {
@@ -127,8 +125,8 @@ push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 			return;
 		}
 
-		if (cmp(d[parent(m)], d[m], min)) {
-			swap(d + m, d + parent(m));
+		if (cmp(d[(m-1)/2], d[m], min)) {
+			swap(d + m, d + (m-1)/2);
 		}
 		i = m;
 	}
