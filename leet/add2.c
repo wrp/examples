@@ -42,23 +42,12 @@ struct ListNode {
 
 
 struct ListNode *
-new(int val, struct ListNode *next)
-{
-	struct ListNode *k = malloc(sizeof *k);
-	k->val = val;
-	k->next = next;
-	return k;
-}
-
-
-struct ListNode *
 addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
 {
 	int carry = 0;
-	struct ListNode *k = new(0, NULL);
+	static struct ListNode k[128];
 	struct ListNode *l = k;
 	while (l1 || l2) {
-
 		assert(l1 == NULL || (l1->val > -1 && l1->val < 10));
 		assert(l2 == NULL || (l2->val > -1 && l2->val < 10));
 		unsigned v = (l1 ? l1->val : 0) + (l2 ? l2->val : 0) + carry;
@@ -69,17 +58,21 @@ addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
 		} else {
 			carry = 0;
 		}
-		l->next = new(v, NULL);
-		l = l->next;
+		l->val = v;
+		l->next = l + 1;
+		l += 1;
 		if (l1) l1 = l1->next;
 		if( l2) l2 = l2->next;
 	}
 	if (carry) {
-		l->next = new(1, NULL);
+		l->val = 1;
+		l->next = NULL;
+	} else if (l > k) {
+		l[-1].next = NULL;
+	} else {
+		return NULL;
 	}
-	l = k->next;
-	free(k);
-	return l;
+	return k;
 }
 
 
