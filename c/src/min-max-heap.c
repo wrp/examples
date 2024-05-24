@@ -16,7 +16,6 @@ struct min_max_heap {
 	size_t level;  /* level in the tree of d[len] */
 };
 
-
 static size_t parent(size_t i) { assert(i > 0); return (i-1)/2; }
 static size_t grand_parent(size_t i) { assert(i > 2); return ((i+1)/4) - 1; }
 static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
@@ -158,14 +157,12 @@ max_pop(struct min_max_heap *h)
 {
 	assert(h->len > 0);
 	T *d = h->data;
-	if(h->len < 3) {
-		decrement_len(h);
+	decrement_len(h);
+	if (h->len < 2) {
 		return d[h->len];
 	}
 	size_t i = (d[1] > d[2]) ? 1 : 2;
-
 	T rv = d[i];
-	decrement_len(h);
 	d[i] = d[h->len];
 	push_down_cmp(h, i, 0);
 	return rv;
