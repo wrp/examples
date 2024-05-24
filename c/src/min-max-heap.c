@@ -115,12 +115,14 @@ push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 		assert(rlc >= e || !cmp(d[rlc], d[rc], !min));
 		assert(rrc >= e || !cmp(d[rrc], d[rc], !min));
 
+		T extrema;
 		if (rrc < e) {
-			size_t a = cmp(d[lrc], d[llc], min) ? lrc : llc;
-			size_t b = cmp(d[rlc], d[rrc], min) ? rlc : rrc;
-			m = cmp(d[a], d[b], min) ? a : b;
+			extrema = d[m = llc];
+			if (cmp(d[lrc], extrema, min)) extrema = d[m = lrc];
+			if (cmp(d[rlc], extrema, min)) extrema = d[m = rlc];
+			if (cmp(d[rrc], extrema, min)) extrema = d[m = rrc];
 		} else {
-			T extrema = d[m = lc];
+			extrema = d[m = lc];
 			assert(lc < e);
 			if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
 			if (llc < e && cmp(d[llc], extrema, min)) extrema = d[m = llc];
