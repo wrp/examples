@@ -315,6 +315,7 @@ test_push_down_max_nollc(void)
 	validate(1 == max_pop(&h));
 	validate(0 == max_pop(&h));
 	validate(h.len == 0);
+	free(h.data);
 }
 
 
@@ -344,6 +345,7 @@ test_push_down_max_1(void)
 	min_max_push(&h, 7);
 	min_max_push(&h, 1);  /* the 1 will be pushed down to the 7 */
 	validate(20 == max_pop(&h));
+	free(h.data);
 }
 
 
@@ -357,6 +359,7 @@ test_push_down_min_swap_rc(void)
 	min_max_push(&h, 4);
 	min_max_push(&h, 5);
 	validate(0 == min_pop(&h));
+	free(h.data);
 }
 
 
@@ -374,6 +377,7 @@ test_push_down_min_swap_rrc(void)
 	min_max_push(&h, 1);
 	min_max_push(&h, 7);
 	validate(0 == min_pop(&h));
+	free(h.data);
 }
 
 
@@ -399,6 +403,7 @@ test_pairs(size_t siz, int which)
 		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
 	}
 	validate(0 == h.len);
+	free(h.data);
 }
 
 static void
@@ -432,6 +437,7 @@ test_constants(size_t limit)
 		validate(max_pop(&h) == 3);
 		validate(min_pop(&h) == 3);
 	}
+	free(h.data);
 }
 
 
