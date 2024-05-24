@@ -17,21 +17,8 @@ struct min_max_heap {
 };
 
 
-static int
-level(size_t i)
-{
-	/* Find level in the tree.  eg, highest set bit */
-	int rv = 0;
-	i += 1;
-	while(i >>= 1) {
-		rv += 1;
-	}
-	return rv;
-}
-
 static size_t parent(size_t i) { assert(i > 0); return (i-1)/2; }
 static size_t grand_parent(size_t i) { assert(i > 2); return ((i+1)/4) - 1; }
-static int is_min_level(size_t i) { return ! (level(i) % 2); }
 static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
 
 static int
@@ -59,14 +46,13 @@ push_up_2(T *d, size_t i, int min)
 
 
 static void
-push_up(T *d, size_t i)
+push_up(T *d, size_t i, int min)
 {
 	if (i < 1) {
 		return;
 	}
 
 	size_t p = parent(i);
-	int min = is_min_level(i);
 
 	/* If needed, swap current with parent */
 	if ((min && (d[i] > d[p])) || (!min && d[i] < d[p])) {
@@ -86,9 +72,7 @@ min_max_push(struct min_max_heap *h, T v)
 		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
 	}
 	h->data[h->len] = v;
-	push_up(h->data, h->len);
-
-	assert(level(h->len) == h->level);
+	push_up(h->data, h->len, !(h->level % 2));
 
 	// When incrementing the length, we are moving to a new level iff
 	// the new length is 2^n - 1 for some n.
@@ -255,24 +239,6 @@ test_2(void)
 	validate(13 == max_pop(&h));
 
 	free(h.data);
-}
-
-
-static void
-test_level(void)
-{
-	validate(0 == level(0U));
-	validate(1 == level(1U));
-	validate(1 == level(2U));
-	for (size_t i = 3; i < 7; i += 1) {
-		validate(2 == level(i));
-	}
-	for (size_t e = 0; e < 10; e += 1) {
-		size_t n = (1U << e);
-		for (size_t i = n - 1; i < 2*n - 1; i += 1) {
-			validate(e == level(i));
-		}
-	}
 }
 
 
@@ -450,7 +416,6 @@ main(int argc, char **argv)
 	test_1();
 	test_2();
 	do_test_pairs();
-	test_level();
 	test_push_up_min();
 	test_push_up_max();
 	test_push_down_max_nollc();
