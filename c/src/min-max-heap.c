@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 /* A naive implementation of the algo at
 https://en.wikipedia.org/wiki/Min-max_heap */
@@ -441,9 +442,42 @@ test_constants(size_t limit)
 }
 
 
+static void
+start_timer(struct timeval *s)
+{
+	if (gettimeofday(s, NULL)) {
+		perror("gettimeofday");
+		exit(1);
+	}
+}
+
+
+static void
+report_time(const struct timeval *s)
+{
+	struct timeval end, diff;
+	if( gettimeofday(&end, NULL)) {
+		perror("gettimeofday");
+		return;
+	}
+
+	timersub(&end, s, &diff);
+	printf(
+		"Elapsed time: %ld.%06lds\n",
+		(long)diff.tv_sec,
+		(long)diff.tv_usec
+	);
+	return;
+}
+
+
 int
 main(int argc, char **argv)
 {
+	int count = argc > 1 ? strtol(argv[1], NULL, 10) : 1;
+	struct timeval start;
+	start_timer(&start);
+	while (count--) {
 	test_1();
 	test_2();
 	do_test_pairs();
@@ -454,7 +488,8 @@ main(int argc, char **argv)
 	test_push_down_min_swap_rc();
 	test_push_down_min_swap_rrc();
 	test_constants(500);
-
+	}
+	report_time(&start);
 	printf("%d tests passed, %d tests failed\n", pass_count, fail_count);
 	return fail_count == 0 ? 0 : 1;
 }
