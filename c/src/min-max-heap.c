@@ -109,6 +109,12 @@ push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 		rrc = rlc + 1,
 		lc < e
 	) {
+		/* Verify the heap invariants on the grand children */
+		assert(llc >= e || !cmp(d[llc], d[lc], !min));
+		assert(lrc >= e || !cmp(d[lrc], d[lc], !min));
+		assert(rlc >= e || !cmp(d[rlc], d[rc], !min));
+		assert(rrc >= e || !cmp(d[rrc], d[rc], !min));
+
 		T extrema = d[m = lc];
 		assert(lc < e);
 		if (rc < e && cmp(d[rc], extrema, min)) extrema = d[m = rc];
