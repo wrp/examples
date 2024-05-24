@@ -31,7 +31,6 @@ level(size_t i)
 static size_t parent(size_t i) { assert(i > 0); return (i-1)/2; }
 static size_t grand_parent(size_t i) { assert(i > 2); return ((i+1)/4) - 1; }
 static int is_min_level(size_t i) { return ! (level(i) % 2); }
-static int is_max_level(size_t i) { return (level(i) % 2); }
 static void swap(T *a, T *b) { T t = *a; *a = *b; *b = t; }
 
 static int
