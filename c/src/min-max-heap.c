@@ -82,13 +82,13 @@ min_max_push(struct min_max_heap *h, T v)
 }
 
 static int
-cmp(T a, T b, int min)
+cmp(T a, T b, const int min)
 {
 	return min ? a < b : b < a;
 }
 
 static void
-push_down_cmp(struct min_max_heap *h, size_t i, int min)
+push_down_cmp(struct min_max_heap *h, size_t i, const int min)
 {
 	T *d = h->data;
 	size_t e = h->len;  /* end */
