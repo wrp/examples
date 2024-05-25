@@ -41,16 +41,18 @@ findMedianSortedArrays(int *na, int n, int *ma, int m)
 	int merged[2048];
 	int *mp = merged;
 	int *ne = na + n, *me = ma + m;
-	while (na < ne || ma < me) {
-		if (na == ne) {
-			*mp++ = *ma++;
-		} else if (ma == me) {
-			*mp++ = *na++;
-		} else if (*na < *ma) {
+	while (na < ne && ma < me) {
+		if (*na < *ma) {
 			*mp++ = *na++;
 		} else {
 			*mp++ = *ma++;
 		}
+	}
+	while (ma < me) {
+		*mp++ = *ma++;
+	}
+	while (na < ne) {
+		*mp++ = *na++;
 	}
 	size_t len = mp - merged;
 	if (len == 0) {
