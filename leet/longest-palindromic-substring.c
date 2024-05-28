@@ -69,13 +69,12 @@ struct string
 manacher(const struct string s)
 {
 	struct string rv = {0};
-	unsigned *radii;
+	char radii[4096] = {0};
 	unsigned center = 0;
 	unsigned radius = 0;
 	unsigned max_radius = 0;
 	unsigned max_center;
 
-	radii = calloc(s.len * 2 + 1, sizeof *radii);
 	while (center < s.len * 2 + 1) {
 		radius = radii[center] = find_longest_centered_at(s, center);
 		if (radius > max_radius) {
