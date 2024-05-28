@@ -233,6 +233,8 @@ main(int argc, char **argv)
 	test_case(" a ", " a ");
 	test_case("foo", "oo");
 	test_case("fff", "fff");
+	test_case("abba", "abba");
+	test_case("abbc", "bb");
 	test_case("banana", "anana");
 	test_case("bananz", "ana");
 	test_repl("abcdefghijklmlkjihgfedcba", 26);
