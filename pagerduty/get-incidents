@@ -18,6 +18,10 @@
 
 main() {
 	items_per_page=25
+	if test "$1" = -a; then
+		shift
+		RESOLVED=1
+	fi
 	parse_services "${1-$PD_SERVICE}"   # Can be a colon separated list
 	parse_start_date "${2-$(date -v -1w -Iseconds)}"
 	offset=0
