@@ -14,7 +14,7 @@
 
 # If RESOLVED is set in the environment, also return resolved incidents
 
-: ${output=full-output}
+: ${output=incidents-$(date +%s)}
 
 main() {
 	items_per_page=25
