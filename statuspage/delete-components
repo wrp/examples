@@ -1,0 +1,19 @@
+#!/bin/sh
+
+trap 'rm -f $TMPFILE' 0
+TMPFILE=$(mktemp)
+
+./query pages/$STATUSPAGE_PAGE/components > $TMPFILE
+
+
+for group_id; do
+	printf 'Deleting componenents from: '
+	jq -rc ".[] | select( .id == \"$group_id\" ) | .name" $TMPFILE
+
+
+	< $TMPFILE jq -rc ".[] | select( .group_id == \"$group_id\" )| [.id, .name] | @tsv" |
+		while read id name; do
+			printf '%s\n' "$name"
+			method=DELETE ./query pages/${STATUSPAGE_PAGE?}/components/$id
+		done;
+done
