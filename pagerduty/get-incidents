@@ -5,7 +5,7 @@
 # otherwise get incidents for $PD_SERVICE, or (if empty) all incidents (up to 1st 100).
 
 # If $2 is given, it should be an ISO 8601 formatted time or a string that
-# can be passed to the -v option of gnu date (eg "-2w"): only incidents
+# can be passed to the -v option of gnu date (eg "2w" or "-2w"): only incidents
 # after that time are included.  Default is one week ago.
 
 # Full list of services can be found by GETting services/ from PD.
@@ -78,7 +78,7 @@ parse_start_date() {
 
 	case $start_date in
 	$d$d$d$d-[01]$d-[0-3]${d}T[0-2]$d:[0-6]$d:[0-6]$d[+-]$d$d:$d$d) : ;;
-	*) start_date=$(date -v -${start_date} -Iseconds);;
+	*) start_date=$(date -v -${start_date#-} -Iseconds);;
 	esac
 }
 
