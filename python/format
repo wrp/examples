@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+# specify width of integer:
+
+a = 5
+print(f'{a:03}')  # Width of 3, zero padded
+print(f'{a:3}')   # Width of 3, space padded
