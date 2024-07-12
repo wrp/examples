@@ -63,10 +63,17 @@ init_test(struct test_case *t, int expect, size_t size, ...)
 int
 main(int argc, char **argv)
 {
-	struct test_case tests[2];
+	struct test_case tests[7];
 	struct test_case *end = tests + sizeof tests / sizeof *tests;
+
 	init_test(tests + 0, 49, 9, 1, 8, 6, 2, 5, 4, 8, 3, 7);
 	init_test(tests + 1, 1, 2, 1, 1);
+	init_test(tests + 2, 4, 3, 2, 100, 3);
+	init_test(tests + 3, 50, 4, 2, 100, 50, 3);
+	init_test(tests + 4, 50, 6, 2, 2, 2, 100, 50, 3);
+	init_test(tests + 5, 52, 6, 2, 2, 26, 100, 50, 3);
+	init_test(tests + 6, 78, 6, 2, 26, 26, 100, 50, 3);
+
 	for (struct test_case *t = tests; t < end; t += 1) {
 		int d = maxArea(t->heights, (int)t->siz);
 		if (d != t->expected_value) {
