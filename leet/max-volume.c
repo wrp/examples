@@ -14,7 +14,6 @@ Notice that you may not slant the container.
 
 #include <stdarg.h>
 
-
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -22,130 +21,33 @@ Notice that you may not slant the container.
 
 
 #define MIN(a, b) (((a) > (b)) ? (b) : (a))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
-void *
-xrealloc(void *b, size_t num, size_t siz)
-{
-	b = realloc(b, num * siz);
-	if( b == NULL ){
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	}
-	return b;
-}
-
-struct point { int x; int h; };
-struct queue {
-	struct point *data;
-	size_t cap;
-	size_t len;
-};
-
-
-static void swap(struct point *a, struct point *b) { struct point t = *a; *a = *b; *b = t; }
-
-/* Remove a value from the queue.  Behavior undefined if queue is empty. */
-static struct point
-pop(struct queue *q)
-{
-	struct point *d = q->data;
-	struct point rv = d[0];
-	d[0] = d[--q->len];
-
-	size_t i = 0;
-	size_t a;  /* index of left child */
-	size_t b;  /* index of right child */
-	size_t e = q->len; /* end */
-
-	/* down heapify */
-	while(
-		a = 2 * i + 1, b = a + 1,
-		(a < e && d[i].h < d[a].h) || ( b < e && d[i].h < d[b].h)
-	){
-		int t = b;
-		if( b >= e || d[a].h > d[b].h ){
-			t = a;
-		}
-		swap(d + i, d + t);
-		i = t;
-	}
-	return rv;
-}
-
-
-struct queue *
-build_queue(int *height, int siz)
-{
-	struct queue *q = xrealloc(NULL, 1, sizeof *q);
-	q->data = xrealloc(NULL, siz, sizeof *q->data);
-	q->len = 0;
-	q->cap = siz;
-
-	for (int j = 0; j < siz; j += 1) {
-		size_t i = q->len;
-		q->data[q->len].x = i;
-		q->data[q->len++].h = height[i];
-		/* up heapify */
-		while (i > 0 && q->data[i].h > q->data[(i - 1)/2].h) {
-			swap(q->data + i, q->data + (i - 1)/2);
-			i = (i - 1)/2;
-		}
-	}
-	return q;
-}
-
-
-static int
-volume(struct point a, struct point b)
-{
-	return abs(a.x - b.x) * MIN(a.h, b.h);
-}
-
 
 int
 maxArea(int *height, int heightSize)
 {
+	assert(heightSize > 1);
+	int *left = height;
+	int *right = height + heightSize - 1;
 	int max = 0;
-	int *a;
 
-	if (heightSize < 2) {
-		return 0;
-	}
-	struct queue *q = build_queue(height, heightSize);
-
-	struct point pa = pop(q);  /* left boundary */
-	struct point pb = pop(q);  /* right boundary */
-
-	assert(pa.x != pb.x);
-	if (pa.x > pb.x) {
-		swap(&pa, &pb);
-	}
-
-	max = volume(pa, pb);
-
-	while (q->len) {
-		struct point pc = pop(q);
-		assert(pa.x < pb.x);
-
-		if (pc.x < pa.x) {
-			int m = volume(pc, pb);
-			if (m > max) {
-				max = m;
-			}
-			pa = pc;
-		} else if (pc.x > pb.x) {
-			int m = volume(pc, pa);
-			if (m > max) {
-				max = m;
-			}
-			pb = pc;
+	do {
+		int h = MIN(*left, *right);
+		int v = h * (right - left);
+		if (v > max) {
+			max = v;
 		}
-	}
-
+		if (*left < *right) {
+			do {
+				left += 1;
+			} while (*left <= h && left < right);
+		} else {
+			do {
+				right -= 1;
+			} while (*right <= h && left < right);
+		}
+	} while (right > left);
 	return max;
 }
-
 
 /*****************************/
 struct test_case {
@@ -159,7 +61,11 @@ init_test(struct test_case *t, int expect, size_t size, ...)
 {
 	t->expected_value = expect;
 	t->siz = size;
-	t->heights = xrealloc(NULL, size, sizeof *t->heights);
+	t->heights = malloc(size * sizeof *t->heights);
+	if( t->heights == NULL) {
+		fputs("Out of memory\n", stderr);
+		exit(1);
+	}
 	va_list ap;
 	int *h = t->heights;
 	va_start(ap, size);
