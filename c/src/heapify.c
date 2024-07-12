@@ -1,5 +1,6 @@
 /* Trivial example using a binary heap to sort inputs */
 
+/* keywords: priority queue, heap, min-heap */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
