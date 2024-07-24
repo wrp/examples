@@ -4,10 +4,12 @@ start=0
 incr=30
 
 while
-	curl -Ssf \
+	curl -Ssf -G \
+		-d startAt=${start} \
+		-d maxResults=${incr} \
 		-H 'Content-Type: application/json' \
 		-u "${EMAIL?}:${JIRA_TOKEN?}" \
-		"${JIRA_URL?}/rest/api/2/component?startAt=${start}&maxResults=${incr}" \
+		"${JIRA_URL?}/rest/api/2/component" \
 	| jq '.values[], .isLast' \
 	| awk '$0 == "false" {exit 0} $0 == "true" {exit 1} 1'
 do
