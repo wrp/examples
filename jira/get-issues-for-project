@@ -1,0 +1,12 @@
+#!/bin/bash
+
+project=${1?}
+start=${2}
+
+curl -Ssf -G \
+	-H 'Content-Type: application/json' \
+	-d "jql=project=$project" \
+	${start:+-d startAt=$start} \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	"${JIRA_URL?}/rest/api/2/search" \
+| jq .
