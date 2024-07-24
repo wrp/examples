@@ -1,0 +1,16 @@
+#!/bin/bash
+
+start=0
+incr=30
+
+while
+	curl -Ssf \
+		-H 'Content-Type: application/json' \
+		-u "${EMAIL?}:${JIRA_TOKEN?}" \
+		"${JIRA_URL?}/rest/api/2/component?startAt=${start}&maxResults=${incr}" \
+	| jq '.values[], .isLast' \
+	| awk '$0 == "false" {exit 0} $0 == "true" {exit 1} 1'
+do
+	: $(( start += $incr ))
+done \
+| jq -rc '[ .id, .name, .description ] | @tsv'
