@@ -4,4 +4,4 @@ curl -Ssf \
 	-u "${EMAIL?}:${JIRA_TOKEN?}" \
 	-H 'Content-Type: application/json' \
 	"${JIRA_URL?}/rest/api/2/search?jql=assignee=currentuser()" \
-| jq -rc '.issues[] | [.key, .created, .fields.summary] | @tsv'
+| jq -rc '.issues[] | [.key, .created, .fields.status.statusCategory.name, .fields.summary] | @tsv'
