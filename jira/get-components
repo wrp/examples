@@ -15,4 +15,5 @@ while
 do
 	: $(( start += $incr ))
 done \
+| { echo '{"id": "id", "name": "name", "description": "description"}'; cat ; } \
 | jq -rc '[ .id, .name, .description ] | @tsv'
