@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Terminate jq early when a condition is matched
-jq '.foo , if .bar == null then null | halt_error else empty end' << EOF
+jq '.foo , if .bar == null then null | halt_error(1) else empty end' << EOF
 {
   "foo": 5,
   "bar": 2
