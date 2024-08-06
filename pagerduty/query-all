@@ -2,6 +2,8 @@
 
 # Repeat query with incrementing offset until no more
 
+# TODO: get rid of the awk.  Instead, terminate jq as in ../jira/get-dashboards
+
 case $1 in
 *offset*) echo 'Do not specify offset in query' >&2; exit 1;;
 *[?]*) delim='&';;

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: get rid of the awk.  Instead, terminate jq as in ../jira/get-dashboards
+
 start=0
 incr=30
 
