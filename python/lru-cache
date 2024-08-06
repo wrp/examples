@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import itertools
 import sys
 
 class node:
@@ -138,19 +139,18 @@ def test_access():
 
     assert(a[5] == 7)
     for x in range(10):
-        # Access 5 to refresh it...
+        # Access 5 to refresh it so it remains in the cache
         assert(a[5] == 7)
-        a.push(10 + x, 2*x)
+        a.push(10 + x, 2 * x)
 
-    for x in range(10):
-        if x == 5:
-            # ... so it is still in the cache
-            assert(a.get(5) == 7)
-            continue
-
+    for x in itertools.chain(range(0, 5), range(6, 11)):
         try: a.get(x)
         except KeyError: pass
         else: assert(False)
+
+    assert(a.get(5) == 7)
+    for x in range(12, 20):
+        assert(a.get(x) == 2 * (x - 10))
 
 
 def test_insert():
