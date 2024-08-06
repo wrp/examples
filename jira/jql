@@ -1,0 +1,8 @@
+#!/bin/sh
+
+jql=$(echo "$*" | tr -s ' ' | sed 's/ /%20/g')
+
+curl -Ssf \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	-H 'Content-Type: application/json' \
+	"${JIRA_URL?}/rest/api/2/search?jql=$jql"
