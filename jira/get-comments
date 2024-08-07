@@ -1,0 +1,11 @@
+#!/bin/bash
+
+issue=${1:?}
+
+# By default, the query seems to return 5000 results, which
+# is a bit overwhelming already, so we don't bother paginating.
+curl -Ssf -G \
+	-H 'Content-Type: application/json' \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	"${JIRA_URL?}/rest/api/2/issue/$issue/comment" \
+| jq '.comments[].body'
