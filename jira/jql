@@ -1,9 +1,16 @@
 #!/bin/sh
 
+if ! test "${s=0}" -ge 0; then
+	echo '$s (used for start position) is not a positive integer' >&2
+	exit 1
+fi
 jql=$(echo "$*" | tr -s ' ' | sed 's/ /%20/g')
 
+
 curl -Ssf \
+	-G \
 	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	-d startAt=${s} \
 	-H 'Content-Type: application/json' \
 	"${JIRA_URL?}/rest/api/2/search?jql=$jql" \
 | jq .
