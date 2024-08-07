@@ -1,7 +1,7 @@
 
 ${JIRA_URL?}/rest/api/2/
 	field                 # Access custom fields (and noncustom)
-	field/${id}
+	field/${id}           # $id can be id OR key
 	field/${id}/contexts
 	field/${id}/restore
 	field/${id}/trash
