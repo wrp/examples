@@ -2,8 +2,6 @@
 
 # Repeat query with incrementing offset until no more
 
-# TODO: get rid of the awk.  Instead, terminate jq as in ../jira/get-dashboards
-
 case $1 in
 *offset*) echo 'Do not specify offset in query' >&2; exit 1;;
 *[?]*) delim='&';;
@@ -19,7 +17,6 @@ for(( offset = 0; ; offset += items_per_page )); do
 		--data-urlencode limit=25 \
 		-X GET \
 		https://api.pagerduty.com/"$1${delim}offset=$offset" \
-	| jq '., .more' \
-	| awk '$0 == "true" {exit 0} $0 == "false" {exit 1} 1' \
+	| jq '., if .more then empty else null | halt_error end' \
 	|| break
 done
