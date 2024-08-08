@@ -16,6 +16,9 @@ if test -z "$1"; then
 	exit 0
 fi
 
+# TODO: add a -a option or something to do pagination
+echo >&2 'WARNING: not checking pagination.  See query-all'
+
 curl -fsS \
 	-H 'Accept: application/vnd.pagerduty+json;version=2' \
 	-H "Authorization: Token token=${PD_TOKEN:?}" \
