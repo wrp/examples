@@ -10,6 +10,8 @@ short option) to set it.   Here's a snippet from less(1):
               ing the new setting.  If a ^P (CONTROL-P) is entered immediately after the dash, the setting of the option is changed but no message is printed.
               If  the  option letter has a numeric value (such as -b or -h), or a string value (such as -P or -t), a new value may be entered after the option
               letter.  If no new value is entered, a message describing the current setting is printed and nothing is changed.
+       -S     Toggle line wrap
+
 
        --     Like the - command, but takes a long option name (see OPTIONS below) rather than a single option letter.  You must press ENTER or  RETURN  after
               typing  the  option  name.  A ^P immediately after the second dash suppresses printing of a message describing the new setting, as in the - com-
