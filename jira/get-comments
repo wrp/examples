@@ -8,5 +8,5 @@ curl -Ssf -G \
 	-H 'Content-Type: application/json' \
 	-u "${EMAIL?}:${JIRA_TOKEN?}" \
 	"${JIRA_URL?}/rest/api/2/issue/$issue/" \
-| jq -rc '.fields.summary, ( .fields.comment.comments[] | [.updated, .body] | @tsv )' \
+| jq -rc '([.key, .fields.summary] | @tsv), ( .fields.comment.comments[] | [.updated, .body] | @tsv )' \
 | ${PAGER-more}
