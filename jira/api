@@ -1,11 +1,15 @@
 
 ${JIRA_URL?}/rest/api/2/
-	field                 # Access custom fields (and noncustom)
-	field/${id}           # $id can be id OR key
-	field/${id}/contexts
-	field/${id}/restore
-	field/${id}/trash
-	field/search
-	field/search/trashed
+	field/                  # Access custom fields (and noncustom)
+		${id}           # $id can be id OR key
+		${id}/contexts
+		${id}/restore
+		${id}/trash
+		search
+		search/trashed
 	issue/${id}/comment   # List comments for an issue
-	project               # list projects
+	project/              # list projects
+
+	dashboard/            # list all dashboards
+		${id}         # details for a dashboard
+		${id}/gadget  # show items in a dashboard
