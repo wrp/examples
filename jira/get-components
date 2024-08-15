@@ -14,5 +14,9 @@ while
 do
 	: $(( start += $incr ))
 done \
-| { echo '{"id": "id", "name": "name", "description": "description"}'; cat ; } \
-| jq -rc '[ .id, .name, .description ] | @tsv'
+| if test -n "$brief"; then
+	{ echo '{"id": "id", "name": "name", "description": "description"}'; cat ; } \
+	| jq -rc '[ .id, .name, .description ] | @tsv'
+else
+	cat
+fi

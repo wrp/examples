@@ -10,9 +10,14 @@ ${JIRA_URL?}/rest/api/2/
 	issue/${id}/comment   # List comments for an issue
 	project/              # list projects
 
+	component/            # list components
+
 	dashboard/            # list all dashboards
 		${id}         # details for a dashboard
 		${id}/gadget  # show items in a dashboard
+
+	workflow/             # list workflows (deprecated)
+		search        # list paginated workflows
 
 
 
