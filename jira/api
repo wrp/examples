@@ -13,3 +13,9 @@ ${JIRA_URL?}/rest/api/2/
 	dashboard/            # list all dashboards
 		${id}         # details for a dashboard
 		${id}/gadget  # show items in a dashboard
+
+
+
+
+
+${JIRA_URL}/rest/gadgets/1.0/g/com.atlassian.jira.gadgets:....  # Get url from rest/api/2/dashboard/${id}/gadget
