@@ -10,3 +10,18 @@ git rev-parse --abbrev-ref HEAD
 # Show sha of current branch
 git rev-parse HEAD
 git rev-parse --short HEAD  # Non-ambiguous abbreviate hash
+
+
+
+       <rev>^, e.g. HEAD^, v1.5.1^0
+           A suffix ^ to a revision parameter means the first parent of that commit object.  ^<n> means the <n>th parent (i.e.  <rev>^ is equivalent to <rev>^1). As a special rule, <rev>^0 means the commit itself and
+           is used when <rev> is the object name of a tag object that refers to a commit object.
+
+       <rev>~<n>, e.g. master~3
+           A suffix ~<n> to a revision parameter means the commit object that is the <n>th generation ancestor of the named commit object, following only the first parents. I.e.  <rev>~3 is equivalent to <rev>^^^
+           which is equivalent to <rev>^1^1^1. See below for an illustration of the usage of this form.
+
+       <rev>^{<type>}, e.g. v0.99.8^{commit}
+           A suffix ^ followed by an object type name enclosed in brace pair means dereference the object at <rev> recursively until an object of type <type> is found or the object cannot be dereferenced anymore (in
+           which case, barf). For example, if <rev> is a commit-ish, <rev>^{commit} describes the corresponding commit object. Similarly, if <rev> is a tree-ish, <rev>^{tree} describes the corresponding tree object.
+           <rev>^0 is a short-hand for <rev>^{commit}.
