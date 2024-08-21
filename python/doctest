@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+# When run, this validates the examples in the docstrings and produces
+# no output.  Run as `python doctest -v` to see verbose output or
+# change a test so it will fail to see what is happening.
+
+def foo(x, y):
+	"""Add x and y
+	>>> foo(3, 5)
+	8
+	>>> foo('bar', 'baz')
+	'barbaz'
+	"""
+	return x + y
+
+if __name__ == '__main__':
+	import doctest
+	doctest.testmod()
