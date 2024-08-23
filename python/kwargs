@@ -11,13 +11,15 @@ def bar(a, b=3, *args, **kwargs):
     print(f"in bar, a = {a} of type {type(a)}, b = {b}, args = {args}, kwargs = {kwargs}")
 
 def baz(a, b, c, d, **kwargs):
-    print(f"in bar, a = {a}, b = {b}, c = {c}, d = {d}")
+    print(f"in baz, a = {a}, b = {b}, c = {c}, d = {d}, kwargs = {kwargs}")
 
 
-foo(bar, 7, 8, c=9, d=10)
+foo(bar, 7, 8, c=9, d=10) # args = (7, 8), kwargs = {'c': 9, 'd': 10}
 
-d = {'banana': 4, 'e': "e value", 'd': 4}
+vals = {'banana': 4, 'e': "e value", 'd': 4}
 t = (2, 3)
-baz(1, *t, **d)  # * expands a tuple, ** expands a dict into keyword
 
-bar(*d)  # passes the keys of the dict as arguments
+print('Calling baz with *t and **vals')
+baz(1, *t, **vals)  # * expands a tuple, ** expands a dict into keyword
+
+bar(*vals)  # passes the keys of the dict as arguments
