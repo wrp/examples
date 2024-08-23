@@ -23,3 +23,12 @@ print('Calling baz with *t and **vals')
 baz(1, *t, **vals)  # * expands a tuple, ** expands a dict into keyword
 
 bar(*vals)  # passes the keys of the dict as arguments
+
+def use_locals():
+    print(f'calling bar from use_locals')
+    a = 1
+    c=4
+    bar(**locals())
+    # in bar, a = 1 of type <class 'int'>, b = 3, args = (), kwargs = {'c': 4}
+
+use_locals()
