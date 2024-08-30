@@ -1,0 +1,3 @@
+
+
+Reflog is stored in $(git rev-parse --git-dir)/logs/refs/heads/$name
