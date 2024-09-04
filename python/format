@@ -5,3 +5,8 @@
 a = 5
 print(f'{a:03}')  # Width of 3, zero padded
 print(f'{a:3}')   # Width of 3, space padded
+
+
+template = 'this is a template: {:03}'
+for x in range(3):
+    print(f'{x}: ' + template.format((x)))
