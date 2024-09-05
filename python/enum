@@ -15,3 +15,13 @@ b = Color.RED
 print(f'b = {b}: {b.name} = {b.value}') # b = Color.RED: RED = 1
 
 print(f'shape = {Shape}') #  shape = <enum 'Shape'>
+
+c = Shape.SQUARE
+
+# c = Shape.SQUARE = Shape.SQUARE = 1
+print(f'c = {c} = {Shape.SQUARE} = {Shape.SQUARE.value}')
+
+try:
+    d = Shape.OVAL
+except AttributeError as e:
+    print(f'AttributeError: {e}') # AttributeError: OVAL
