@@ -9,9 +9,9 @@ class Shape(Enum):
 # Also functional notation
 Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
 
-print(f'red = {Color.RED}')
+print(f'red = {Color.RED}')  # red = Color.RED
 
 b = Color.RED
-print(f'b = {b}: {b.name} = {b.value}')
+print(f'b = {b}: {b.name} = {b.value}') # b = Color.RED: RED = 1
 
-print(f'shape = {Shape}')
+print(f'shape = {Shape}') #  shape = <enum 'Shape'>
