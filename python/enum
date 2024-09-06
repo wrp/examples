@@ -21,6 +21,8 @@ c = Shape.SQUARE
 # c = Shape.SQUARE = Shape.SQUARE = 1
 print(f'c = {c} = {Shape.SQUARE} = {Shape.SQUARE.value}')
 
+print(Shape.__members__) # {'SQUARE': <Shape.SQUARE: 1>, 'CIRCLE': <Shape.CIRCLE: 2>}
+
 try:
     d = Shape.OVAL
 except AttributeError as e:
