@@ -2,15 +2,14 @@
 
 
 check_jq_version() {
-	jqv=$(jq --version) || exit 1
-	echo "$jqv" | sed -e 's/^/jq-/' | {
-		IFS=. read maj min patch
-		if ! test "$min" -ge 7; then
-			printf '%s' "jq is version $jqv: "
-			echo 'must be at least 1.7' >&2
-			exit 1
-		fi
-	}
+	if ! echo '{"a": 1}' |
+		jq 'if .a then null else null | halt_error end' > /dev/null 2>&1
+	then
+		printf >&2 'Invalid version of jq (%s).  %s\n' \
+			"$(jq --version)" \
+			'halt_error not recognized. Try 1.7.1'
+		exit 1
+	fi
 }
 
 check_jq_version || exit
