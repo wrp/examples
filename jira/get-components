@@ -1,5 +1,20 @@
 #!/bin/bash
 
+
+check_jq_version() {
+	jqv=$(jq --version) || exit 1
+	echo "$jqv" | sed -e 's/^/jq-/' | {
+		IFS=. read maj min patch
+		if ! test "$min" -ge 7; then
+			printf '%s' "jq is version $jqv: "
+			echo 'must be at least 1.7' >&2
+			exit 1
+		fi
+	}
+}
+
+check_jq_version || exit
+
 start=0
 incr=30
 
