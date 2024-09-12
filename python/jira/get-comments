@@ -8,9 +8,10 @@ import sys
 
 jira_url = os.environ['JIRA_URL']
 jira_token = os.environ['JIRA_TOKEN']
+email = os.environ['EMAIL']
 
 def main():
-	jira = JIRA(jira_url, token_auth=jira_token)
+	jira = JIRA(jira_url, basic_auth=(email, jira_token))
 	for ident in sys.argv[1:]:
 		issue = jira.issue(ident)
 		print(f"{issue}: {issue.raw['fields']['summary']}")
