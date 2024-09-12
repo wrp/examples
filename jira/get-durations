@@ -1,0 +1,71 @@
+#!/bin/sh
+# Given a ticket (key or id), show the times in various states
+# TODO: reimplement this all in python: this script was glommed together
+# from a shell script and a python script, but should be in one language.
+
+die() { printf "%s${1:+\n}" "$@"; exit 1; } >&2
+
+check_jq_version() {
+	if ! echo '{"a": 1}' |
+	       jq 'if .a then null else null | halt_error end' > /dev/null 2>&1
+	then
+	       printf >&2 'Invalid version of jq (%s).  %s\n' \
+		       "$(jq --version)" \
+		       'halt_error not recognized. Try 1.7.1'
+	       exit 1
+	fi
+}
+
+get() {
+	curl -Ssf -G \
+		-d startAt=${start} \
+		-d maxResults=${incr} \
+		-H 'Content-Type: application/json' \
+		-u "${EMAIL?}:${JIRA_TOKEN?}" \
+		"${JIRA_URL?}/rest/api/3/issue/${1?}/changelog"
+}
+
+main() {
+	check_jq_version
+
+	start=0
+	incr=1
+	issue=$1
+
+	{
+	get $issue |
+	jq -r '[.values[0] | .created, "null", "To Do" ] | @tsv'
+
+	start=1
+	incr=50
+	while { get $issue || echo '{"isLast": true}'; } |
+		jq '., if .isLast then null | halt_error else empty end'
+	do
+		: $(( start += $incr ))
+	done |
+	jq -r '.values[] | select( any(.items[]; .field == "status")) |
+		[ .created, (.items[] | select(.field == "status") |
+		(.fromString, .toString))] | @tsv'
+	} |
+	python -c '
+import sys
+from datetime import datetime
+states = []
+for line in sys.stdin:
+	time, b, c = line.strip().split("\t")
+	a = datetime.fromisoformat(time)
+	if len(states) == 0:
+		if b != "null":
+			raise SystemExit("invalid initial state")
+	else:
+		prev = states[-1]
+		if b != prev[2]:
+			raise SystemExit(f"invalid state: {b}")
+
+		duration = str(a - prev[0])
+		print(f"{duration:>30}\t{prev[2]:>30} -> {c}")
+	states.append((a, b, c))
+	'
+}
+
+main "$@"
