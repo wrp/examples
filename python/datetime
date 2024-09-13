@@ -18,7 +18,7 @@ b = datetime.strptime('sat dec 24 01:03:49 Am MDT 2023', '%a %b %d %H:%M:%S %p %
 # b is not timezone aware, despite the presence of %Z in the format string.
 # Perhaps use dateutil instead
 
-for fmt in ('%c', '%C', '%G', '%I %p', '%X', '%+'):
+for fmt in ('%s', '%c', '%C', '%G', '%I %p', '%X', '%+'):
     print(f"{fmt} format: ", b.strftime(fmt))  # 'Sun Dec 24 11:03:49 2023'
 
 
@@ -38,6 +38,9 @@ print(f'raw: {c}')
 c = datetime.fromtimestamp(d, pytz.timezone('US/pacific'))
 print(f'{d} in isoformat: {c.isoformat()}')   # C *is* timezone aware.
 print(f'raw: {c}')
+
+# print epoch time
+print(f"epoch time of {b}", b.strftime('%s'))
 
 
 '''
