@@ -1,6 +1,7 @@
 
 FROM debian-@user@-dev
 
+ARG commit=4793e52
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
 ARG llvm_version=18
@@ -30,8 +31,8 @@ RUN rm /${project}/Makefile
 
 RUN git init
 
-RUN if test -f /${project}/*.bundle; then \
-		git fetch *.bundle; \
+RUN if test -f /${project}/${project}-${commit}.bundle; then \
+		git fetch ${project}-${commit}.bundle; \
 	else \
 		git fetch ${url}; \
 	fi; \
