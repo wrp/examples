@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+# Simple example using a translation table to delete characters from a string
+
+a = 'The quick brown fox jumps over the lazy dog'
+
+# Remove all q, j, a, and z
+b = a.translate(''.maketrans('', '', 'qjaz'))
+
+print(f'a = {a}')
+print(f'b = {b}')
