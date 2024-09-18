@@ -1,0 +1,8 @@
+
+This is some text.
+
+To remove "is some" from above, you can do:
+:%s/^This\zs.*\zetext.$/ /
+
+\zs sets the start of the match, while \ze sets the end
+:help /\zs
