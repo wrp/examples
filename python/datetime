@@ -13,6 +13,8 @@ a += timedelta(hours=2)
 a += timedelta(days=1)
 print(a)
 print(f'{a} in isoformat: {a.isoformat()}')
+print(f'{a} in default format: {a}')
+print(f'{a} in epoch time format: {a.strftime("%s")}')
 
 b = datetime.strptime('sat dec 24 01:03:49 Am MDT 2023', '%a %b %d %H:%M:%S %p %Z %Y')
 # b is not timezone aware, despite the presence of %Z in the format string.
