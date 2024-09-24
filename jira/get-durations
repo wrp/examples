@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# module there will not recognize the format of the timestamp.
 # vim: sw=8 ts=8 sts=8 noet
 
 # Given a ticket (key or id), show the times in various states
