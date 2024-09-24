@@ -30,7 +30,7 @@ def main():
 			this = get_time(h.created)
 			duration = this - prev
 			prev = this
-			print(f'{str(duration):>30}  {item.fromString:>30}  {item.toString}')
+			print(f'{duration.total_seconds():>30}{str(duration):>30}  {item.fromString:>30}  {item.toString}')
 
 
 try:
