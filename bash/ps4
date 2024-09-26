@@ -4,6 +4,9 @@
 # for subshells
 up=$(tput cuu1)
 
+# New prompt string in bash 4.4: PS0.  Expanded and displayed by interactive
+# shells after reading a complete command but before executing it.
+
 PS4="${1:-$up} "
 set -x
 
