@@ -9,6 +9,7 @@ struct Rectangle {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct Point ( i32, i32, i32 );  // A tuple-struct
 
 // Use "Field Init Shorthand

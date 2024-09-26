@@ -1,4 +1,5 @@
 
+#[allow(dead_code)]
 #[derive(Debug)]
 enum Foo {
 	X(i32),
