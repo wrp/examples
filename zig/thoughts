@@ -10,7 +10,7 @@ passing a pointer, but this seems like discarding clarity for potential
 performance.  I like the idea of immutable arguments, but am less certain
 I like the uncertainty of letting the compiler make a choice.
 
-camelCase is stupid.  Every language recently says "emphasize readability
+camelCase is stupid.  Every recent language says "emphasize readability
 over writeability".  camelCase is not readable, and exists only to assist
-in wrtieability and shaving a few characters off for width purposes. It
+in writeability and shaving a few characters off for width purposes. It
 has no place in a modern language.
