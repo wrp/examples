@@ -13,7 +13,10 @@ struct Rectangle {
 struct Point ( i32, i32, i32 );  // A tuple-struct
 
 // Use "Field Init Shorthand
-fn demo_field_init( height: u32, width: u32, name: String) -> Rectangle { Rectangle { height, width, name } }
+fn demo_field_init( height: u32, name: String) -> Rectangle {
+	let width = height + 2;
+	Rectangle { height, width, name }
+}
 
 impl Drop for Rectangle {
 	fn drop(&mut self) {
@@ -24,7 +27,7 @@ impl Drop for Rectangle {
 
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50, name: "rect1".to_string() };
-    let mut rect2 = demo_field_init(5, 10, String::from("rect2"));
+    let mut rect2 = demo_field_init(5, String::from("rect2"));
 
     let a = Point(2, 4, 5);
     println!("point is {:?}.  Middle is {}", a, a.1);
