@@ -37,3 +37,6 @@ Notes on the language as I go through initially.
   camel crap for variable names.  (Never forget the model sim experience where
   all variable names are lower cased by the tooling.)  Tooling should not
   dictate style.
+
+* Implicit return of the last object in a function is a terrible idea.  This
+  should have been obvious from decades of experience.
