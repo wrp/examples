@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+import re
+
+def check(pat, target, flags=0):
+    r = re.compile(pat, flags=flags)
+    m = r.match(target)
+    print(f'Matching "{target}" with "{pat}": {m}')
+
+check('object *id:?', 'Object id foo', flags=re.IGNORECASE)
+check('foo[b]+ar', 'foobar')
+check('foo[b]+ar', 'foobbbar')
+check('foo[b]+ar', 'fooar')
