@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from enum import Enum
+from enum import Enum, IntEnum, auto
 
 class Shape(Enum):
     SQUARE = 1
@@ -27,3 +27,11 @@ try:
     d = Shape.OVAL
 except AttributeError as e:
     print(f'AttributeError: {e}') # AttributeError: OVAL
+
+
+class Numbers(IntEnum):
+    ONE = auto()
+    TWO = auto()
+
+c = Numbers.TWO
+print(c.value)
