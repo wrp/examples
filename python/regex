@@ -12,3 +12,7 @@ check('object *id:?', 'Object id foo', flags=re.IGNORECASE)
 check('foo[b]+ar', 'foobar')
 check('foo[b]+ar', 'foobbbar')
 check('foo[b]+ar', 'fooar')
+
+check('([def]+)([abc]+)', 'deaa')
+# Non capturing group
+check('(?:[def]+)([abc]+)', 'deaa')
