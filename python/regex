@@ -4,7 +4,8 @@ import re
 
 def check(pat, target, flags=0):
     r = re.compile(pat, flags=flags)
-    m = r.match(target)
+    m = re.findall(r, target)
+    # m = r.match(target)
     print(f'Matching "{target}" with "{pat}": {m}')
 
 check('object *id:?', 'Object id foo', flags=re.IGNORECASE)
