@@ -11,6 +11,14 @@ template = 'this is a template: {:03}'
 for x in range(3):
     print(f'{x}: ' + template.format((x)))
 
+template = 'the value of foo is "{foo}"'
+try:
+    print(template.format(**locals()))
+except KeyError:
+    foo = 'value'
+    print(template.format(**locals()))
+
+
 
 b = "foo"
 print(f':{b:30}:')  # Width of 30, space padded, left justified
