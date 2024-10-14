@@ -5,7 +5,10 @@
 # python -m http.server
 
 
+import sys
+import urllib
 import urllib.request
+
 url='http://localhost:8000'
 
 # Make a simple request and decode as utf-8
@@ -42,3 +45,16 @@ request = urllib.request.Request(url, headers={
 # 'peek', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline',
 # 'readlines', 'reason', 'seek', 'seekable', 'status', 'tell', 'truncate',
 # 'url', 'version', 'will_close', 'writable', 'write', 'writelines']
+
+
+# Construct a url
+
+url = 'https://example.com/somepage/?'
+params = {'var1': 'some data', 'var2': 1337}
+
+if sys.version_info.major == 2:
+    print(url + urllib.urlencode(params))
+elif sys.version_info.major == 3:
+    print(url + urllib.parse.urlencode(params))
+else:
+    raise RuntimeError
