@@ -11,7 +11,11 @@ template = 'this is a template: {:03}'
 for x in range(3):
     print(f'{x}: ' + template.format((x)))
 
-template = 'the value of foo is "{foo}" {banana}'
+toggle_idx = 0
+template = 'the value of foo is "{foo}"'
+for var in ['banana', 'bar', 'baz', 'qux', 'qaf']:
+    template += f':{var}={{{var}}}'
+
 
 # Cannot modify locals(), so make a copy
 vars = locals()
@@ -20,8 +24,13 @@ while True:
         print(template.format(**vars))
         break
     except KeyError as e:
-        print(f'KeyError raised for {e.args[0]}')
-        vars[e.args[0]] = f'{e.args[0]}_value'
+        key = e.args[0]
+        print(f'KeyError raised for {key}')
+        if toggle_idx % 2 == 0:
+            vars[key] = f'{key}_value'
+        else:
+            template = template.replace(f'{{{key}}}', f'${{{{{key}}}}}')
+        toggle_idx += 1
 
 
 b = "foo"
