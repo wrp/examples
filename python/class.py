@@ -2,8 +2,13 @@
 
 import types
 
-class Foo: pass
-Foo.bar = 5
+
+def initialize(x):
+    print(f'initializing{x}')
+    return x
+
+class Foo:
+    bar = initialize(5)  # This is only called once
 
 def n(self):
         rv = f"x = {self.x}, bar = {self.bar}"
@@ -14,18 +19,25 @@ Foo.__str__ = n
 
 def n(self, x):
         self.x = x
+        print(f'In init befor assign: {Foo.bar}  {self.bar}')
         self.bar += x
+        print(f'In init after assign: {Foo.bar}  {self.bar}')
         self.map = {}
 Foo.__init__ = n
 
 
 
-a = Foo(7)
-print(a)
+print(f'Before creating A, Foo.bar = {Foo.bar}')
+a = Foo(7)  # __init__  incrmements the instance variable bar
+
+# After creating a, Foo.bar is NOT changed
+print(f'After creating A, Foo.bar = {Foo.bar}')
+
+
+print(a)  # Calling print invokes __str__ which  does not change anything
 
 b = Foo(9)
 print(b)
 a.bar = 9
 a.baz = 11
 print(a)
-
