@@ -15,6 +15,10 @@ for x in range(3):
 
 toggle_idx = 0
 template = 'the value of foo is "{foo}"'
+foo = os.environ.get('foo', 'XXXXXXXX')
+print("Expanding from local:", end='')
+print(template.format(**locals()))
+
 for var in ['banana', 'bar', 'baz', 'qux', 'qaf']:
     template += f':{var}={{{var}}}'
 
