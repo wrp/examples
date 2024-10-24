@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 # specify width of integer:
 
 a = 5
@@ -26,10 +28,12 @@ while True:
     except KeyError as e:
         key = e.args[0]
         print(f'KeyError raised for {key}')
-        if toggle_idx % 2 == 0:
-            vars[key] = f'{key}_value'
-        else:
-            template = template.replace(f'{{{key}}}', f'${{{{{key}}}}}')
+        vars[key] = os.environ.get(key)
+        if vars[key] is None:
+            if toggle_idx % 2 == 0:
+                vars[key] = f'{key}_value'
+            else:
+                template = template.replace(f'{{{key}}}', f'${{{{{key}}}}}')
         toggle_idx += 1
 
 
