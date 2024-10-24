@@ -24,7 +24,7 @@ for var in ['banana', 'bar', 'baz', 'qux', 'qaf']:
 
 
 # Cannot modify locals(), so make a copy
-vars = locals()
+vars = locals().copy()
 while True:
     try:
         print(template.format(**vars))
