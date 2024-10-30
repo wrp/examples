@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+# Some hacks for writing to stderr
+
+from sys import stderr
+
+print('error', file=stderr)
+
+# Make stderr the default for print
+# Don't do this
+import sys
+save_stdout = sys.stdout
+sys.stdout = stderr
+print('error')
+sys.stdout = save_stdout
+print('output')
