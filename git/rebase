@@ -1,0 +1,12 @@
+
+To auto rebase, you can do something like:
+
+GIT_SEQUENCE_EDITOR='sh -c "cat << EOF > $1
+p d694644
+p 4efcb5a
+p 1826839
+p 73137a3
+EOF
+"' git rebase -i HEAD~4
+
+which will make the new history: d694644 -> 4efcb5a' -> 1826839' -> 73137a3'
