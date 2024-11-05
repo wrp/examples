@@ -2,7 +2,7 @@
 
 # emulate sed -i 's/foo/bar/g', but do not break links
 
-# perl -mTie::File -e 'tie @ar, "Tie::File","$ARGV[0]" or die $!; for (@ar) { s/foo/bar/g}' input
+# perl -mTie::File -e 'tie @ar, "Tie::File","$ARGV[0]" or die $!; for (@ar) {s/foo/bar/g}' input
 
 use strict;
 use warnings;
