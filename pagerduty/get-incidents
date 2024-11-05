@@ -58,7 +58,8 @@ main() {
 		.status,
 		.title
 	] | @tsv' \
-	| ${PAGER-more}
+	| ${PAGER-more} \
+	| grep . || exit 1
 }
 
 parse_services() {
