@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+import textwrap
+
+# Demonstrate indentation of long strings
+
+a = textwrap.dedent("""
+            This long string will be unindented
+        so that it appears in the first column,
+        but can be indented in the code.
+""")
+
+print(a, end='')
