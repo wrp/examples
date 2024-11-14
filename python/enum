@@ -42,3 +42,7 @@ class Numbers(IntEnum):
 
 c = Numbers.TWO
 print(c.value)
+
+print('iterating over the enum:')
+for x in Shape:
+    print(f'x = {x}')
