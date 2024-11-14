@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
-a = []  # An empty list
+a = [0]  # An empty list
+b = (1,2,3)
+a.extend(b)
+assert( a == [0,1,2,3])
+a.append(b)
+assert( a == [0,1,2,3,(1,2,3)])
 
 # lists are passed by reference
 def mutate(b, x=5):
@@ -16,6 +21,7 @@ a = [1, 2, 3]
 print([x for x in a if x % 2])
 
 
+# You cannot apply builtin len() to a generator
 def length(x):
     c = 0
     for i in x:
