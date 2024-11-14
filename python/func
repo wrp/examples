@@ -4,19 +4,20 @@
 # * indicates end of args that can be keyword or positional
 # (eg, a cannot be passed by keyword, c *must* be passed by keyword)
 
-def foo(a='default a', /, b='default b', *, c=['default c']):
-    print("a is a positional arg:", a, end=': ')
-    print("b can be a keyword or positional arg:", b, end=': ')
-    print("c is a keyword arg:", c)
+def foo(a='default a', /, b='default b', *, c=['default c'], **kwargs):
+    if 'verbose' in kwargs:
+        print("a:", a, end=': ')
+        print("b:", b, end=': ')
+        print("c:", c)
     c.append(a)  # Modifies/mutates the default value for subsequent calls
 
-foo(1)
-foo(2, 5)
-foo(3, b=6)
+foo(1, verbose=1)
+foo(2, 5, verbose=1)
+foo(3, b=6, verbose=1)
 a = ['foo']
-print("a = ", a)
-foo(4, c=a) # appends 4 to a
-print("a = ", a)
+print(f"Before call: a = {a}", end=', ')
+foo(4, c=a, quiet=True) # appends 4 to a
+print(f"After, a = {a}")
 foo(5)
 
 try:
