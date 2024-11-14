@@ -2,25 +2,33 @@
 
 # / indicates end of postional args
 # * indicates end of args that can be keyword or positional
+# (eg, a cannot be passed by keyword, c *must* be passed by keyword)
 
-def foo(a = 'default a', /, b = 'default b', *, c = ['default c']):
-    print("a is a positional arg:", a)
-    print("b can be a keyword or positional arg:", b)
+def foo(a='default a', /, b='default b', *, c=['default c']):
+    print("a is a positional arg:", a, end=': ')
+    print("b can be a keyword or positional arg:", b, end=': ')
     print("c is a keyword arg:", c)
-    c.append(a)  # Modifies the default value for subsequent calls
+    c.append(a)  # Modifies/mutates the default value for subsequent calls
 
 foo(1)
 foo(2, 5)
-foo(3, b = 6)
+foo(3, b=6)
 a = ['foo']
 print("a = ", a)
-foo(4, c = a) # appends 4 to a
+foo(4, c=a) # appends 4 to a
 print("a = ", a)
 foo(5)
+
 try:
-    foo(a = 5, b = 6, c = 7)
+    foo(a=5, b=6, c=7)  # Error: a cannot be passed by keyword
 except Exception as e:
-    print('caught', e)
+    print(f'caught calling foo with 3 kwargs: {e}')
+
+foo(5, 6, c=[9])     # okay
+foo(5, b=6, c=[9])  # okay
+try: foo(5, 6, [9]) # Error: cannot pass c by position
+except Exception as e:
+    print(f'caught calling foo with 3 positional args {e}')
 
 
 def kwdict(a, foo=1, bar=2, **kwargs):
