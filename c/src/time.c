@@ -4,19 +4,24 @@
 #include <stdio.h>
 #include <sys/time.h>
 
-
-int
-main(void)
+void
+print_time(void)
 {
-	struct timeval start;
-	int s = gettimeofday(&start, NULL);
 
 	time_t t;
 	time(&t);
 	char *d = ctime(&t);
 	printf("%s", d);  /* value returned has newline */
 	assert(d[24] == '\n');
+}
 
+int
+main(void)
+{
+	struct timeval start;
+	print_time();
+
+	int s = gettimeofday(&start, NULL);
 	if (s == 0) {
 		struct timeval end, diff;
 
