@@ -1,20 +1,18 @@
 #!/bin/sh
 
+base_url=https://api.logz.io
+: ${v=v2}
+endpoint=${1-whoami}
 
-# curl -L -X GET 'https://api.logz.io/v1/authentication/groups' \
-# 	-H 'Accept: application/json' \
-# 	-H "X-API-TOKEN: ${LOGZ_TOKEN?}"
-# echo; exit
+curl -Ssl -X GET \
+	-H 'Content-Type: application/json' \
+	-H 'Accept: application/json' \
+	-H "X-API-TOKEN: $LOGZ_TOKEN" \
+	"$base_url${v:+/}${v}/${endpoint}"
+echo
+exit 0
 
-# curl -L -X GET \
-# 	-H 'Content-Type: application/json' \
-# 	-H 'Accept: application/json' \
-# 	-H "X-API-TOKEN: $LOGZ_TOKEN" \
-# 	https://api.logz.io/v2/whoami
-
-# exit
-
-curl -L -X POST 'https://api.logz.io/v1/search' \
+curl -SsL -X POST 'https://api.logz.io/v1/search' \
 	-H 'Content-Type: application/json' \
 	-H 'Accept: application/json' \
 	-H "X-API-TOKEN: $LOGZ_TOKEN" \
