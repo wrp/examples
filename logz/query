@@ -1,0 +1,60 @@
+#!/bin/sh
+
+
+# curl -L -X GET 'https://api.logz.io/v1/authentication/groups' \
+# 	-H 'Accept: application/json' \
+# 	-H "X-API-TOKEN: ${LOGZ_TOKEN?}"
+# echo; exit
+
+# curl -L -X GET \
+# 	-H 'Content-Type: application/json' \
+# 	-H 'Accept: application/json' \
+# 	-H "X-API-TOKEN: $LOGZ_TOKEN" \
+# 	https://api.logz.io/v2/whoami
+
+# exit
+
+curl -L -X POST 'https://api.logz.io/v1/search' \
+	-H 'Content-Type: application/json' \
+	-H 'Accept: application/json' \
+	-H "X-API-TOKEN: $LOGZ_TOKEN" \
+	--data-raw '{
+		"query": {
+			"bool": {
+				"must": [ {
+						"range": {
+							"@timestamp": {
+								"gte": "now-5m",
+								"lte": "now"
+							}
+						}
+					} ]
+				}
+			},
+		"from": 0,
+		"size": 10,
+		"sort": [
+			{}
+		],
+		"_source": false,
+		"post_filter": null,
+		"docvalue_fields": [
+			"@timestamp"
+		],
+		"version": true,
+		"stored_fields": [
+			"*"
+		],
+		"highlight": {},
+		"aggregations": {
+			"byType": {
+				"terms": {
+					"field": "type",
+					"size": 5
+					}
+				}
+			}
+		}'
+
+
+echo
