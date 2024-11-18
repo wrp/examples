@@ -1,0 +1,11 @@
+#!/bin/sh
+
+s=${1-foo}
+
+case $s in
+foo|\
+bar)
+	echo 'case 1: foo|bar'
+;;
+*)	echo default
+esac
