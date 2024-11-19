@@ -33,7 +33,7 @@ curl -SsL -X POST 'https://api.logz.io/v1/search' \
 		"sort": [
 			{}
 		],
-		"_source": false,
+		"_source": ["msg"],
 		"post_filter": null,
 		"docvalue_fields": [
 			"@timestamp"
