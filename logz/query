@@ -4,14 +4,13 @@ base_url=https://api.logz.io
 : ${v=v2}
 endpoint=${1-whoami}
 
+if ! test "$endpoint" = msg; then
 curl -Ssl -X GET \
 	-H 'Content-Type: application/json' \
 	-H 'Accept: application/json' \
 	-H "X-API-TOKEN: $LOGZ_TOKEN" \
 	"$base_url${v:+/}${v}/${endpoint}"
-echo
-exit 0
-
+else
 curl -SsL -X POST 'https://api.logz.io/v1/search' \
 	-H 'Content-Type: application/json' \
 	-H 'Accept: application/json' \
@@ -53,6 +52,5 @@ curl -SsL -X POST 'https://api.logz.io/v1/search' \
 				}
 			}
 		}'
-
-
+fi
 echo
