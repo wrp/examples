@@ -7,6 +7,10 @@ import pytz
 
 now = datetime.now()
 
+then = now - timedelta(minutes=5)
+
+print(f'now = {now}')
+print(f'then = {then}')
 a = datetime.fromisoformat('2021-07-02-21:35:05+01:00')
 
 a += timedelta(hours=2)
