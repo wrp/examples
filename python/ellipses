@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+# Ellipsis is a builtin singleton that is used by __getitem__.
+# It is used primarily for numpy,  but you can abuse it like this:
+
+class C:
+    def __init__(self, stop=None):
+        self.stop = stop
+    def __getitem__(self, k):
+        if isinstance(k, slice):
+            if k.stop == Ellipsis:
+                step = k.step if k.step else 1
+                v = k.start
+                while not self.stop or v < self.stop:
+                    yield v
+                    v += step
+
+for i in C(30)[5:...:2]:
+    print(i)
