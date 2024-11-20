@@ -3,18 +3,21 @@
 import subprocess
 import sys
 
-# Send data to an invocation of cat.  cat's output is inherited
+# Send data to an invocation of cat.  cat's output fd is inherited
 p = subprocess.Popen('cat', stdin=subprocess.PIPE)
 out, err = p.communicate(input=bytes('this text is sent to the subprocess\n', 'utf-8'))
 status = p.wait()
 print(f'p status: {status}')
 print(f'output streams were inherited so these are both none: {out}, {err}')
 
+# Both I/O streams are captured
 p = subprocess.Popen(['sh' ,'-c', 'echo stdout; echo stderr >&2'],
 	stdout=subprocess.PIPE, stderr=subprocess.PIPE
 )
 out, err = p.communicate()
 
+print('***************')
+print('both streams captured by python:')
 print('out =', out)
 print('err =', err)
 
@@ -24,6 +27,7 @@ p = subprocess.Popen(['sh', '-c', 'echo stdout; echo stderr >&2'],
 out, err = p.communicate()
 
 print('***************')
+print('stdout captured by python, stderr tied to it:')
 print('out ="""', out, '"""')
 print('err ="""', err, '"""')
 
@@ -52,3 +56,17 @@ print(a.check_returncode())
 print(a.returncode)
 print(f'output: {a.stdout}')
 print(f'error stream: {a.stderr}')
+
+
+print('Run a process and fail to show the exception:')
+try:
+    p = subprocess.run(['sh', '-c', 'echo stdout; echo stderr >&2; exit 1'],
+        capture_output=True,  # Captures both stdout and stderr
+        check=True  # Raise an exception if the subprocess fails
+    )
+    status = p.wait()
+except Exception as e:
+    print(f'exception: {e}')
+    print(f'stdout: {e.stdout}')
+    print(f'stderr: {e.stderr}')
+    print(f'output: {e.output}')  # same ? as stdout
