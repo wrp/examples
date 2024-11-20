@@ -11,6 +11,9 @@ then = now - timedelta(minutes=5)
 
 print(f'now = {now}')
 print(f'then = {then}')
+
+three_minutes = timedelta(minutes=3)
+print(f'There are {three_minutes.total_seconds()} seconds in {three_minutes}')
 a = datetime.fromisoformat('2021-07-02-21:35:05+01:00')
 
 a += timedelta(hours=2)
