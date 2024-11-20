@@ -3,4 +3,5 @@
 # names.  To get a list of names only, do:
 git show --pretty=format: --name-only $commitish
 
+# See gitrevisions(7) for $commitish
 # Or use -s/--no-patch to supress output of the diff
