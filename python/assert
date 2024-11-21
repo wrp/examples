@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 
 import traceback
+import sys
 
 # Build module with -O to disable (eg, python -O $file)
-print("debug =", __debug__)
+print(f"debug = {__debug__}, modified with -O")
+
+# Assert will either "raise AssertionError" or
+# raise "AssertionError(expression2)"
+
 try:
-    assert False
+    if len(sys.argv) > 1:
+        assert False, sys.argv[1]
+    else:
+        assert False
 except AssertionError as e:
     print("caught:", e.__repr__())
     print("caught:", e.__traceback__)
     print(dir(e.__traceback__))
-
     print(traceback.extract_tb(e.__traceback__))
