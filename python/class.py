@@ -8,6 +8,10 @@ def initialize(x):
     return x
 
 class Foo:
+    def __new__(cls, *args, **kwargs):
+        print(f'Foo.__new__ called with {args} {kwargs}')
+        return super().__new__(cls)
+
     bar = initialize(5)  # This is only called once
 
 def n(self):
@@ -17,7 +21,7 @@ def n(self):
         return rv
 Foo.__str__ = n
 
-def n(self, x):
+def n(self, x, **kwargs):
         self.x = x
         print(f'In init befor assign: {Foo.bar}  {self.bar}')
         self.bar += x
@@ -36,7 +40,7 @@ print(f'After creating A, Foo.bar = {Foo.bar}')
 
 print(a)  # Calling print invokes __str__ which  does not change anything
 
-b = Foo(9)
+b = Foo(9, name='b')
 print(b)
 a.bar = 9
 a.baz = 11
