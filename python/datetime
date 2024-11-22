@@ -7,7 +7,7 @@ import pytz
 
 now = datetime.now()
 
-then = now - timedelta(minutes=5)
+then = now - timedelta(days=5)
 
 print(f'now = {now}')
 print(f'then = {then}')
@@ -38,15 +38,14 @@ except:
     d = 3601
 
 c = datetime.utcfromtimestamp(d)  # NOT timezone aware
-print(f'{d} in isoformat: {c.isoformat()}')   # c is *NOT* timezone aware.  WTF??!!
+print(f'{d} in isoformat: {c.isoformat()} *Not* timezone aware')   # WTF??!!
 
 c = datetime.fromtimestamp(d, timezone.utc)
-print(f'{d} in isoformat: {c.isoformat()}')   # c *is* timezone aware.
+print(f'{d} in isoformat: {c.isoformat()} timezone aware')
 print(f'raw: {c}')
 
-
 c = datetime.fromtimestamp(d, pytz.timezone('US/pacific'))
-print(f'{d} in isoformat: {c.isoformat()}')   # c *is* timezone aware.
+print(f'{d} in isoformat: {c.isoformat()} US/pacific')
 print(f'raw: {c}')
 
 # print epoch time
