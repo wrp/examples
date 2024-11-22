@@ -9,6 +9,10 @@ now = datetime.now()
 
 then = now - timedelta(days=5)
 
+print(then < now)
+print(then <= now)
+print(then > now)
+
 print(f'now = {now}')
 print(f'then = {then}')
 
