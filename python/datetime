@@ -5,7 +5,7 @@ import sys
 from datetime import datetime, timedelta, timezone, tzinfo
 import pytz
 
-now = datetime.now()
+now = datetime.now(timezone.utc)
 
 then = now - timedelta(days=5)
 
@@ -43,9 +43,11 @@ except:
 
 c = datetime.utcfromtimestamp(d)  # NOT timezone aware
 print(f'{d} in isoformat: {c.isoformat()} *Not* timezone aware')   # WTF??!!
+print(f'c {"is" if c.tzinfo else "IS NOT"} timezone aware')
 
 c = datetime.fromtimestamp(d, timezone.utc)
 print(f'{d} in isoformat: {c.isoformat()} timezone aware')
+print(f'c {"is" if c.tzinfo else "IS NOT"} timezone aware')
 print(f'raw: {c}')
 
 c = datetime.fromtimestamp(d, pytz.timezone('US/pacific'))
