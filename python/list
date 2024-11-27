@@ -2,7 +2,7 @@
 
 a = [0]  # An empty list
 b = (1,2,3)
-a.extend(b)
+a.extend(b)  # roughly equivalent to 'for v in b: a.append(v)'
 assert( a == [0,1,2,3])
 a.append(b)
 assert( a == [0,1,2,3,(1,2,3)])
