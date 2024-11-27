@@ -1,5 +1,8 @@
 #!/bin/sh
 
+
+# Patterns are matched as via Pathname Expansion.
+# (eg, they are globs, not regex)
 s=${1-foo}
 
 case $s in
