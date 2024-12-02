@@ -5,13 +5,16 @@ import sys
 from datetime import datetime, timedelta, timezone, tzinfo
 import pytz
 
-now = datetime.now(timezone.utc)
+now = datetime.now()  # A naive timestamp
+now = datetime.now(timezone.utc)  # Timezone aware
+m = timezone(timedelta(hours=-8), name='PST')
+now = datetime.now(m)
 
 then = now - timedelta(days=5)
 
-print(then < now)
-print(then <= now)
-print(then > now)
+# print(then < now)
+# print(then <= now)
+# print(then > now)
 
 print(f'now = {now}')
 print(f'then = {then}')
