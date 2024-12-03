@@ -1,4 +1,5 @@
-Current pane is available in $TMUX_PANE
+Pane in which a process is executing is available in $TMUX_PANE
+#{pane_id} (tmux variable) is the currently active pane
 
 identify pane as: ${name_of_session}:${index_of_window}.${index_of_pane}
 
