@@ -1,3 +1,5 @@
+Current pane is available in $TMUX_PANE
+
 identify pane as: ${name_of_session}:${index_of_window}.${index_of_pane}
 
 Move to a pane in the current window:
