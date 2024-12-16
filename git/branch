@@ -24,3 +24,5 @@ git log --oneline --graph --decorate --all --simplify-by-decoration
 # Archive a branch (prevent gc, but don't show it in git-branch)
 git update-ref refs/archive/${branch} ${branch}
 git branch -D ${branch}
+
+git show-ref --heads  # List all branches (plumbing)
