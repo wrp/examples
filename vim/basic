@@ -7,3 +7,7 @@ relativenumber  (rnu)
 
 Motion commands
 z.    # Move current line to center/middle of screen
+
+
+To open a file with a search: +/pattern
+vim '+/text\|other' filename
