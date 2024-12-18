@@ -32,3 +32,6 @@ def use_locals():
     # in bar, a = 1 of type <class 'int'>, b = 3, args = (), kwargs = {'c': 4}
 
 use_locals()
+
+f = lambda *args, **kwargs: kwargs.get('foo', args)
+print(f(foo='bar'), f(2))
