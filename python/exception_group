@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import sys
+
+if sys.version_info < (3, 11):
+    raise RuntimeError("Need python >= 3.11")
+
+try:
+	raise ExceptionGroup(
+		"group message",
+		[
+			ValueError("value"),
+			TypeError("type"),
+			RuntimeError("runtime"),
+		]
+	)
+
+except* ValueError as v:
+	print(f'caught ValueError: {v}: {v.args}')
+except* TypeError as t:
+	print(f'caught TypeError: {t}: {t.args}')
+except* Exception as e:
+	print(f'caught Exception: {e}: {e.args}')
