@@ -16,5 +16,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 		[2, 7, 11],
 		repeat(5),
 		[1, 'a', 'foo'],
+		timeout=None,  # timeout in seconds
+		chunksize=1,
 	)
 	executor.shutdown(wait=True)
