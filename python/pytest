@@ -1,0 +1,4 @@
+
+to run one test, use -k:
+
+pytest file-to-test -k test-to-run
