@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 class cm():
-    def __init__(self, name):
+    def __init__(self, name, propagate=False):
         self.name = name
+        self.propagate = propagate
 
     def __enter__(self):
         print(f'__enter__ called for {self.name}')
@@ -16,12 +17,16 @@ class cm():
             print(f'exception value = {args[1]}')
             print(f'exception traceback = {args[2]}')
             print('***********************')
+        # If __exit__ returns a truthy value, exceptions are not propagated
+        return self.propagate
+
 
 with cm('foo') as k:
     print(f'k name is {k.name}')
 
 print('')
 
-with cm('BAD') as k:
+with cm('BAD', True) as k:
     # Raise an exception
     a = k.no_such_attribute
+    print('Never called')
