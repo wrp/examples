@@ -11,7 +11,7 @@ class cm:
 
     def __exit__(self, exception_type, exception_value, traceback):
         print(f'__exit__ called for {self.name} with args: ', end=None)
-        if exception_type:
+        if exception_type is AttributeError:
             print('***********************')
             print(f'exception type = {exception_type}')
             print(f'exception value = {exception_value}')
