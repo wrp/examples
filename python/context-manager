@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-class cm():
+class cm:
     def __init__(self, name, propagate=False):
         self.name = name
         self.propagate = propagate
