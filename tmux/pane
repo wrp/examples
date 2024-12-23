@@ -16,6 +16,16 @@ resize-pane -U +10    # Make the current pane 10 lines larger
 
 **************************
 How to identify a pane:  (from man-page)
+     The following special tokens are available to indicate particular
+     windows.  Each has a single-character alternative form.
+
+     Token              Meaning
+     {start}       ^    The lowest-numbered window
+     {end}         $    The highest-numbered window
+     {last}        !    The last (previously current) window
+     {next}        +    The next window by number
+     {previous}    -    The previous window by number
+
      target-pane (or src-pane or dst-pane) may be a pane ID or takes a similar
      form to target-window but with the optional addition of a period followed
      by a pane index or pane ID, for example: `mysession:mywindow.1'.  If the
