@@ -52,15 +52,14 @@ it as a syntax error", tell them to stop using broken IDEs.
 	are desired, maybe add a flag to enable timestamps).
 	Do not provide "helpful" suggestions, and certainly not a usage statement.
 [^usage]:
-	Usage spew is the act of printing a "wall of text" in response
-	to a simple error, and the wall of text generally obscures the
-	error message.	For example, if a command is invoked with one
-	argument misspelled, it is not helpful to the user to see a
-	list of all the possible arguments that may be available; they
-	just need to be informed of the one argument that is not
-	recognized.  If the usage statement scrolls off of the screen,
-	the actual error message if often no longer visible.  The full
-	usage statement is rarely useful, and can be requested if desired.
+	Usage spew is the act of printing a "wall of text" in
+	response to a simple error.  The wall of text generally
+	obscures the error message.  A concrete example of this is
+	the current behavior of 'git diff' when executed in a
+	directory that is not a git repo.  The user does not need
+	to see 129 lines of text!  The user only needs to see the
+	first line ("warning: Not a git repository"), and the other
+	128 lines are just an irritating distraction.
 [^2]:
 	Humans should not care about the underlying implementation.
 	If you name your message queue "kafka", then it will be extremely
