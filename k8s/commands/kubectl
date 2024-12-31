@@ -25,6 +25,11 @@ kubectl get event --namespace ${namespace?} $( : # Get events for one specific o
 kubectl get event --namespace ${namespace?} $( : # Get events for one specific pod
 	) --field-selector involvedObject.name=${pod#pod/},involvedObject.kind=Pod
 
+# include timestamp:
+kubectl get events -o custom-columns=FirstSeen:.firstTimestamp,LastSeen:.lastTimestamp,$( :
+	)Count:.count,From:.source.component,Type:.type,Reason:.reason,Message:.message \
+	--field-selector involvedObject.kind=Pod
+
 # DEPLOYMENTS
 kubectl scale deployment ${deployment?} --replicas=${n-3} # Set the number of pods
 kubectl rollout restart deployment ${deployment}  # Rolling restart
