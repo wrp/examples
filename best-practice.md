@@ -17,6 +17,7 @@
 - Configuration files are not documentation. [^5]
 - Test functionality, not platform. [^8]
 - Use roles extensively. [^roles]
+- Don't over comment [^comments]
 
 
 ## vcs best practices:
@@ -200,3 +201,15 @@ it as a syntax error", tell them to stop using broken IDEs.
 	contexts.  Unambiguous ISO-8601/rfc3339 conforming strings are better.
 	(https://en.wikipedia.org/wiki/ISO_8601)
 	(https://www.rfc-editor.org/rfc/rfc3339)
+[^comments]:
+	Names describe "what", code describes "how", comments describe "why".
+	Comments can also be used to call out gotchas.  There is a trend
+	towards over-commenting that is disturbing.  Often driven by policies
+	such as "every function must have a descriptive comment" and "every
+	function parameter must have a comment" which at first glance seem
+	reasonable, these policies are detrimental to code health.  Accurate
+	(but unnecessary) comments are at best distracting; too often code
+	changes and the comments become both distracting and wrong.  There should
+	be one source of truth, and comments must not become a conflicting
+	source.  If the code needs comments to be understood, then the code
+	should be refactored with better names.
