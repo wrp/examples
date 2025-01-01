@@ -5,7 +5,7 @@ List of dunder methods from https://docs.python.org/3/genindex-_.html
       __aenter__() (object method)
       __aexit__() (object method)
       __aiter__() (object method)
-      __all__
+      __all__ (package variable)
       __and__() (enum.Flag method)
       __anext__() (agen method)
       __annotations__ (class attribute)
@@ -35,7 +35,7 @@ List of dunder methods from https://docs.python.org/3/genindex-_.html
       __contravariant__ (typing.TypeVar attribute)
       __copy__() (copy protocol)
       __covariant__ (typing.TypeVar attribute)
-      __debug__
+      __debug__ (built-in variable)
       __deepcopy__() (copy protocol)
       __default__ (typing.ParamSpec attribute)
       __defaults__ (function attribute), [1]
@@ -58,7 +58,7 @@ List of dunder methods from https://docs.python.org/3/genindex-_.html
       __float__() (object method)
       __floor__() (fractions.Fraction method)
       __floordiv__() (in module operator)
-      __format__
+      __format__ (object method)
       __format__() (datetime.date method)
       __fspath__() (os.PathLike method)
       __func__ (method attribute), [1]
@@ -68,7 +68,7 @@ List of dunder methods from https://docs.python.org/3/genindex-_.html
       __getattr__ (module attribute)
       __getattr__() (object method)
       __getattribute__() (object method)
-      __getitem__() (email.headerregistry.HeaderRegistry method)
+      __getitem__() (object method)
       __getnewargs__() (object method)
       __getnewargs_ex__() (object method)
       __getstate__() (copy protocol)
