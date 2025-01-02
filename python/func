@@ -4,7 +4,7 @@
 # * indicates end of args that can be keyword or positional
 # (eg, a cannot be passed by keyword, c *must* be passed by keyword)
 
-def foo(a='default a', /, b='default b', *, c=['default c'], **kwargs):
+def foo(a: str = 'default a', /, b: str = 'default b', *, c=['default c'], **kwargs):
     if 'verbose' in kwargs:
         print("a:", a, end=': ')
         print("b:", b, end=': ')
@@ -56,3 +56,5 @@ def bar(a, b = 'def b'):
 bar(b = 5, a = 2)
 bar(**{"b": 5, "a": 2})
 bar(*[1,2])
+
+print(f'foo.__annotations__: {foo.__annotations__}')
