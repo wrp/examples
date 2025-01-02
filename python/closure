@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+# vim: noet
+
+def outer(a, b, c):
+	def inner(a, d):
+		print(f'inner: a = {a}, b = {b}, c = {c}')
+
+	print(f'Calling inner at start: {a}, {b}, {c}')
+	inner(a, b)
+
+	# There are only two elements in __closure__, since
+	# the name a is not bound to outer's variable
+	print(f'inner.__closure__ = {inner.__closure__}')
+	for cell in inner.__closure__:
+		print(cell)
+		print(cell.cell_contents)
+		cell.cell_contents += 4
+
+	print(f'Calling inner at end: {a}, {b}, {c}')
+	inner(a, b)
+
+
+outer(1,2,3)
