@@ -51,3 +51,16 @@ print(a)
 
 z = b.meth.__self__
 assert z is b
+
+
+def frob(x, y=None):
+    print(f'frobbing with x = "{x}" and y = "{y}"')
+b.unbound = frob
+# Quoting the docs:
+# It is important to note that user-defined functions which are
+# attributes of a class instance are not converted to bound methods;
+# this only happens when the function is an attribute of the class.
+b.unbound(3)  # No self argument is passed
+
+Foo.meth2 = frob
+b.meth2(3)  # self argument is pass, so y == 3
