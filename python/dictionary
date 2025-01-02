@@ -15,11 +15,15 @@ def mutate(a):
     '''Dictionaries are passed by reference.  This mutates in the caller.'''
     a['foo'] += 5
 
-b = {'foo':1}
+b = {'foo':-4}
 mutate( b )       # value increments
 mutate( dict(b) ) # To avoid mutation, pass a copy
-
-# iterate over a dictionary
+b['bar'] = 1
+b['baz'] = 2
+b['bar'] = 2  # Does not change insertion order
+del b['bar']  # But deleting and re-assigning does change order
+b['bar'] = 3
+print('Iterate over a dictionary.  Keys are returned in insertion order.')
 for k, v in b.items():
     print(f'b[{k}] = {v}')
 
