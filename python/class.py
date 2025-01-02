@@ -12,7 +12,10 @@ class Foo:
         print(f'Foo.__new__ called with {args} {kwargs}')
         return super().__new__(cls)
 
-    bar = initialize(5)  # This is only called once
+    def meth(self):
+        print(f'A do nothing method on {self}')
+
+    bar = initialize(5)  # Initialization of class attribute happens only once
 
 def n(self):
         rv = f"x = {self.x}, bar = {self.bar}"
@@ -45,3 +48,6 @@ print(b)
 a.bar = 9
 a.baz = 11
 print(a)
+
+z = b.meth.__self__
+assert z is b
