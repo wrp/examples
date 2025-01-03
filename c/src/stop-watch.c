@@ -20,35 +20,10 @@
 #include <unistd.h>
 
 sig_atomic_t stop;
+static void get_time(struct timeval *tp);
+static void handle(int sig, siginfo_t *i, void *v);
+static void set_cursor_visibility(int on);
 
-static void
-get_time(struct timeval *tp)
-{
-	if( gettimeofday(tp, NULL ) == -1 ) {
-		perror("gettimeofday");
-		exit(1);
-	}
-}
-
-void
-handle(int sig, siginfo_t *i, void *v)
-{
-	(void)i;
-	(void)v;
-	switch(sig) {
-	case SIGINT: stop = 1; break;
-	}
-}
-
-void
-set_cursor_visibility(int on)
-{
-	if(on) {
-		fputs("\x1b\x5b\x33\x34\x68\x1b\x5b\x3f\x32\x35\x68", stdout);
-	} else {
-		fputs("\x1b\x5b\x3f\x32\x35\x6c", stdout);
-	}
-}
 
 int
 main(void)
@@ -84,4 +59,36 @@ main(void)
 	set_cursor_visibility(1);
 
 	return 0;
+}
+
+
+static void
+get_time(struct timeval *tp)
+{
+	if( gettimeofday(tp, NULL ) == -1 ) {
+		perror("gettimeofday");
+		exit(1);
+	}
+}
+
+
+static void
+handle(int sig, siginfo_t *i, void *v)
+{
+	(void)i;
+	(void)v;
+	switch(sig) {
+	case SIGINT: stop = 1; break;
+	}
+}
+
+
+static void
+set_cursor_visibility(int on)
+{
+	if(on) {
+		fputs("\x1b\x5b\x33\x34\x68\x1b\x5b\x3f\x32\x35\x68", stdout);
+	} else {
+		fputs("\x1b\x5b\x3f\x32\x35\x6c", stdout);
+	}
 }
