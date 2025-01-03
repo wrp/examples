@@ -45,7 +45,10 @@ main(void)
 		unsigned minutes = delta.tv_sec / 60;
 		unsigned seconds = delta.tv_sec % 60;
 
-		printf("%um%u.%us\033[K\r", minutes, seconds, delta.tv_usec);
+		char usec[4];
+		snprintf(usec, sizeof usec, "%u", delta.tv_usec);
+
+		printf("%0um%02u.%ss\033[K\r", minutes, seconds, usec);
 		pause();
 	}
 	putchar('\n');
