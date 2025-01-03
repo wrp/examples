@@ -26,3 +26,6 @@ git update-ref refs/archive/${branch} ${branch}
 git branch -D ${branch}
 
 git show-ref --heads  # List all branches (plumbing)
+
+# Delete an arbitrary ref
+git update-ref -d refs/${name}/${base}
