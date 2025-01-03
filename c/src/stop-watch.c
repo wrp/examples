@@ -1,5 +1,16 @@
 /* Print a running stopwatch until SIGINT is received */
 
+/* TODO
+   currently, this ignores keypresses so the user can
+   insert a newline by hitting 'return', which is
+   nice behavior.  It would be nice to instead grab
+   the keystroke and print intervals.
+
+   Also, need to get the raw ansi escape sequences
+   out and actually query to terminfo data base.  Maybe
+   using SIGINT to print laptimes and abort on SIGQUIT
+*/
+
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
