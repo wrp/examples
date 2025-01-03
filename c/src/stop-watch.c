@@ -23,27 +23,20 @@ sig_atomic_t stop;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
 static void set_cursor_visibility(int on);
+static void establish_handlers(void);
 
 
 int
 main(void)
 {
-	int to_catch[] = { SIGALRM, SIGINT, SIGQUIT };
-	struct sigaction act;
 	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
 	struct itimerval t = {.it_interval = tp, .it_value = tp };
 	struct timeval start, delta, now;
 
 	set_cursor_visibility(0);
 	get_time(&start);
-	memset(&act, 0, sizeof act);
-	act.sa_sigaction = handle;
-	for (int i = 0; i < sizeof to_catch / sizeof *to_catch; i += 1) {
-		if( sigaction( to_catch[i], &act, NULL ) ) {
-			perror("sigaction");
-			exit(1);
-		}
-	}
+	establish_handlers();
+
 
 	setitimer(ITIMER_REAL, &t, NULL);
 	while(!stop) {
@@ -90,5 +83,22 @@ set_cursor_visibility(int on)
 		fputs("\x1b\x5b\x33\x34\x68\x1b\x5b\x3f\x32\x35\x68", stdout);
 	} else {
 		fputs("\x1b\x5b\x3f\x32\x35\x6c", stdout);
+	}
+}
+
+
+static void
+establish_handlers(void)
+{
+	int to_catch[] = { SIGALRM, SIGINT, SIGQUIT };
+	struct sigaction act;
+
+	memset(&act, 0, sizeof act);
+	act.sa_sigaction = handle;
+	for (int i = 0; i < sizeof to_catch / sizeof *to_catch; i += 1) {
+		if (sigaction(to_catch[i], &act, NULL)) {
+			perror("sigaction");
+			exit(1);
+		}
 	}
 }
