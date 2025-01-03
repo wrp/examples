@@ -45,6 +45,7 @@ main(void)
 {
 	struct timeval start, now, prev;
 
+	system("tput vi");
 	get_time(&start);
 	prev = start;
 	establish_handlers();
@@ -59,6 +60,7 @@ main(void)
 		pause();
 	}
 	putchar('\n');
+	system("tput ve");
 
 	return 0;
 }
