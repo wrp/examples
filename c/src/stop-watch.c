@@ -32,11 +32,11 @@ main(void)
 	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
 	struct itimerval t = {.it_interval = tp, .it_value = tp };
 	struct timeval start, delta, now;
+	char *spaces = "                                 ";
 
 	set_cursor_visibility(0);
 	get_time(&start);
 	establish_handlers();
-
 
 	setitimer(ITIMER_REAL, &t, NULL);
 	while(!stop) {
@@ -48,7 +48,7 @@ main(void)
 		char usec[4];
 		snprintf(usec, sizeof usec, "%u", delta.tv_usec);
 
-		printf("%0um%02u.%ss\033[K\r", minutes, seconds, usec);
+		printf("%0um%02u.%ss%s\r", minutes, seconds, usec, spaces);
 		pause();
 	}
 	putchar('\n');
