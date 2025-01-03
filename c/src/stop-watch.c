@@ -22,7 +22,6 @@
 sig_atomic_t stop;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
-static void set_cursor_visibility(int on);
 static void establish_handlers(void);
 
 
@@ -34,7 +33,6 @@ main(void)
 	struct timeval start, delta, now;
 	char *spaces = "                                 ";
 
-	set_cursor_visibility(0);
 	get_time(&start);
 	establish_handlers();
 
@@ -48,11 +46,11 @@ main(void)
 		char usec[4];
 		snprintf(usec, sizeof usec, "%u", delta.tv_usec);
 
-		printf("%0um%02u.%ss%s\r", minutes, seconds, usec, spaces);
+		printf("\r%0um%02u.%ss%s", minutes, seconds, usec, spaces);
+		fflush(stdout);
 		pause();
 	}
 	putchar('\n');
-	set_cursor_visibility(1);
 
 	return 0;
 }
@@ -75,17 +73,6 @@ handle(int sig, siginfo_t *i, void *v)
 	(void)v;
 	switch(sig) {
 	case SIGINT: stop = 1; break;
-	}
-}
-
-
-static void
-set_cursor_visibility(int on)
-{
-	if(on) {
-		fputs("\x1b\x5b\x33\x34\x68\x1b\x5b\x3f\x32\x35\x68", stdout);
-	} else {
-		fputs("\x1b\x5b\x3f\x32\x35\x6c", stdout);
 	}
 }
 
