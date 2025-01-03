@@ -53,6 +53,7 @@ set_cursor_visibility(int on)
 int
 main(void)
 {
+	int to_catch[] = { SIGALRM, SIGINT, SIGQUIT };
 	struct sigaction act;
 	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
 	struct itimerval t = {.it_interval = tp, .it_value = tp };
@@ -62,9 +63,12 @@ main(void)
 	get_time(&start);
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
-	if( sigaction( SIGALRM, &act, NULL ) ) { perror("sigaction"); exit(1); }
-	if( sigaction( SIGINT, &act, NULL ) ) { perror("sigaction"); exit(1); }
-	if( sigaction( SIGQUIT, &act, NULL ) ) { perror("sigaction"); exit(1); }
+	for (int i = 0; i < sizeof to_catch / sizeof *to_catch; i += 1) {
+		if( sigaction( to_catch[i], &act, NULL ) ) {
+			perror("sigaction");
+			exit(1);
+		}
+	}
 
 	setitimer(ITIMER_REAL, &t, NULL);
 	while(!stop) {
