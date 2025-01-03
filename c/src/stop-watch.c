@@ -25,28 +25,32 @@ static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
 
 
+static void
+print_delta(struct timeval begin, struct timeval end)
+{
+	const char *spaces = "                                 ";
+	struct timeval delta;
+	timersub(&end, &begin, &delta);
+	unsigned minutes = delta.tv_sec / 60;
+	unsigned seconds = delta.tv_sec % 60;
+	char usec[4];
+	snprintf(usec, sizeof usec, "%u", delta.tv_usec);
+	printf("%0um%02u.%ss%s", minutes, seconds, usec, spaces);
+}
+
+
 int
 main(void)
 {
-	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
-	struct itimerval t = {.it_interval = tp, .it_value = tp };
-	struct timeval start, delta, now;
-	char *spaces = "                                 ";
+	struct timeval start, now;
 
 	get_time(&start);
 	establish_handlers();
 
-	setitimer(ITIMER_REAL, &t, NULL);
 	while(!stop) {
 		get_time(&now);
-		timersub(&now, &start, &delta);
-		unsigned minutes = delta.tv_sec / 60;
-		unsigned seconds = delta.tv_sec % 60;
-
-		char usec[4];
-		snprintf(usec, sizeof usec, "%u", delta.tv_usec);
-
-		printf("\r%0um%02u.%ss%s", minutes, seconds, usec, spaces);
+		putchar('\r');
+		print_delta(start, now);
 		fflush(stdout);
 		pause();
 	}
@@ -82,6 +86,8 @@ establish_handlers(void)
 {
 	int to_catch[] = { SIGALRM, SIGINT, SIGQUIT };
 	struct sigaction act;
+	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
+	struct itimerval t = {.it_interval = tp, .it_value = tp };
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
@@ -91,4 +97,5 @@ establish_handlers(void)
 			exit(1);
 		}
 	}
+	setitimer(ITIMER_REAL, &t, NULL);
 }
