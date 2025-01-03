@@ -23,20 +23,7 @@ sig_atomic_t stop;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
-
-
-static void
-print_delta(struct timeval begin, struct timeval end)
-{
-	const char *spaces = "                                 ";
-	struct timeval delta;
-	timersub(&end, &begin, &delta);
-	unsigned minutes = delta.tv_sec / 60;
-	unsigned seconds = delta.tv_sec % 60;
-	char usec[4];
-	snprintf(usec, sizeof usec, "%u", delta.tv_usec);
-	printf("%0um%02u.%ss%s", minutes, seconds, usec, spaces);
-}
+static void print_delta(struct timeval begin, struct timeval end);
 
 
 int
@@ -98,4 +85,18 @@ establish_handlers(void)
 		}
 	}
 	setitimer(ITIMER_REAL, &t, NULL);
+}
+
+
+static void
+print_delta(struct timeval begin, struct timeval end)
+{
+	const char *spaces = "                                 ";
+	struct timeval delta;
+	timersub(&end, &begin, &delta);
+	unsigned minutes = delta.tv_sec / 60;
+	unsigned seconds = delta.tv_sec % 60;
+	char usec[4];
+	snprintf(usec, sizeof usec, "%u", delta.tv_usec);
+	printf("%0um%02u.%ss%s", minutes, seconds, usec, spaces);
 }
