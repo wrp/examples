@@ -21,13 +21,10 @@ show_lap(struct timeval now, struct timeval *prev)
 	if (lap) {
 		fputs("   ", stdout);
 		print_delta(*prev, now);
-		puts("         ");
+		putchar('\n');
 		*prev = now;
 		lap = 0;
-	} else {
-		fputs("                                 ", stdout);
 	}
-
 }
 
 
