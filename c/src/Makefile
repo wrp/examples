@@ -18,4 +18,4 @@ check: udp-client udp-server
 	done
 
 clean:
-	rm -f $(EXE)
+	rm -f $(EXE) *.gcno *.gcda
