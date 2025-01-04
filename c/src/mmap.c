@@ -1,5 +1,4 @@
 /* Simple example using mmap to cat a regular file */
-#include "config.h"
 #include "xutil.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,7 +1,6 @@
 
 /* motivated by https://stackoverflow.com/questions/61206360/random-word-in-file-without-same-word-twice-c-programming */
 
-#include "config.h"
 #include <stdio.h>
 #include <ctype.h>
 #include "xutil.h"

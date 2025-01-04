@@ -1,5 +1,4 @@
 /* Print the nth line of a file, using a prepared index */
-#include "config.h"
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
