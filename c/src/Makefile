@@ -16,3 +16,6 @@ check: udp-client udp-server
 		make $${file%-test} > /dev/null; \
 		$$path || exit 1; \
 	done
+
+clean:
+	rm -f $(EXE)
