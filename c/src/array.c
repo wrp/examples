@@ -9,19 +9,20 @@ int
 main(int argc, char *argv[])
 {
 	unsigned idx = argc > 1 ? strtoul(argv[1], NULL, 0) : 0;
+#pragma GCC diagnostic push  /* Save the current diagnostics */
+#pragma GCC diagnostic ignored "-Woverride-init"
 	int a[25] = {
 		[0 ... 24] = -1,
-		[3]       = 3,  /* Valid, but throws warning (1)*/
+		[3]       = 3,  /* Valid, warning suppressed (1)*/
 	};
-#pragma GCC diagnostic ignored "-Woverride-init"
 	int b[25] = {
 		[0 ... 24] = -1,
 		[3]       = 3,  /* Warning suppressed by pragma */
 		[4]       = 4,
 		[4 + 1]   = 5,
 		[24] = 24,
+#pragma GCC diagnostic pop  /* Restore previous diagnostics */
 	};
-#pragma GCC diagnostic pop
 	if( idx > 24 ) {
 		fprintf(stderr, "Out of bounds\n");
 	} else {
