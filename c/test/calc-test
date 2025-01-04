@@ -2,7 +2,7 @@
 
 # test calc.c
 
-exe=main/calc
+exe=./calc
 
 RV=0
 test_string() {

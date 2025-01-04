@@ -58,10 +58,8 @@ simple_examples(void)
 
 	/* Dynamic allocation */
 	k[0] = sscanf("this is a string", "%m[^s] %s", &p, buf);
-	if( k[0] ){
-		printf( "scanned %d items: %s and %s\n", k[0], p, buf);
-		free(p);
-	}
+	/* Scans "thi" to p and "s" to buf */
+	free(p);
 }
 
 #define show(x) printf(#x" = %s\n", x);

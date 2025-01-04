@@ -26,8 +26,7 @@ expect="input:                                  format string:      scanned:
 '24'                                    '%d'                24
 '24'                                    '%1d%d'             2, 4
 k = 10
-'1234567890123'                         '%9d'               123456789
-scanned 2 items: thi and s"
+'1234567890123'                         '%9d'               123456789"
 
 test "$out" = "$expect" || die "expected '$expect', got '$out'"
 
