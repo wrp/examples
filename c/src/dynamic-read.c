@@ -1,7 +1,7 @@
 /*
- * Reverse each lines of input.
- * Demonstrates using read and growing the buffer.
- */
+** Reverse each line of input.
+** Demonstrates using read and growing the buffer.
+**/
 
 #include <assert.h>
 #include <fcntl.h>
@@ -27,13 +27,13 @@ main(int argc, char **argv)
 	char *end = s;               /* one past last char read from input */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 
-	while(( rc = read( fd, s, BUFSIZ )) > 0 ) {
+	while(( rc = read(fd, s, BUFSIZ)) > 0 ){
 		char *eol; /* A newline, or one past valid data */
 		end = s + rc;
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end > buf + siz ) {
+			if( end > buf + siz ){
 				ptrdiff_t p_off = prev - buf;
 				siz += BUFSIZ;
 				buf = xrealloc(buf, BUFSIZ + siz, sizeof *buf, &end);
