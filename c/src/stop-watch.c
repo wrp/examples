@@ -33,8 +33,8 @@ main(void)
 {
 	struct timeval start, now, prev;
 
-	system("tput vi");
 	get_time(&start);
+	system("tput vi");
 	prev = start;
 	establish_handlers();
 
