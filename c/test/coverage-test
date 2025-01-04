@@ -4,7 +4,7 @@
 # this will likely just get skipped.  (eg, configure with
 # CFLAGS='--coverage -g -O0' to run this test)
 
-progs='
+: ${progs:=
 	calc
 	dynamic
 	dynamic-read
@@ -17,7 +17,7 @@ progs='
 	tcp-server
 	udp-client
 	udp-server
-'
+}
 
 if ! test -f calc-calc.gcda; then
 	echo 'gcda files do not seem to exist.  Run other tests first' >&2
