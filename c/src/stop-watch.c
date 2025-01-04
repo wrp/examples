@@ -2,6 +2,7 @@
 
 
 #include <errno.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,8 @@ static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
 static void print_delta(struct timeval begin, struct timeval end);
+static void make_stdin_non_blocking(void);
+static void check_user_activity(void);
 
 static void
 show_lap(struct timeval now, struct timeval *prev)
@@ -34,6 +37,7 @@ main(void)
 	struct timeval start, now, prev;
 
 	get_time(&start);
+	make_stdin_non_blocking();
 	system("tput vi");
 	prev = start;
 	establish_handlers();
@@ -46,6 +50,7 @@ main(void)
 		fflush(stdout);
 		setlinebuf(stdout);
 		pause();
+		check_user_activity();
 	}
 	putchar('\n');
 	system("tput ve");
@@ -106,4 +111,28 @@ print_delta(struct timeval begin, struct timeval end)
 	char usec[4];
 	snprintf(usec, sizeof usec, "%u", delta.tv_usec);
 	printf("%0um%02u.%ss", minutes, seconds, usec);
+}
+
+
+static void
+make_stdin_non_blocking(void)
+{
+	if (-1 == fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK)) {
+		perror("fcntl");
+		exit(1);
+	}
+}
+
+
+static void
+check_user_activity(void)
+{
+	char b;
+	if (-1 != read(STDIN_FILENO, &b, 1)) {
+		lap = 1;
+		while (b != '\n' && (-1 != read(STDIN_FILENO, &b, 1))) {
+			;
+		}
+		system("tput cuu 1");
+	}
 }
