@@ -63,9 +63,12 @@ display(const struct node *list, char delim)
 	for(const struct node *t = list->next; t != list; t = t->next) {
 		used += printf("%i%c", t->val,
 			t->next == list ? '\n'
-			: avail - used < 20 ? used = 0, '\n'
+			: avail - used < 20 ? '\n'
 			: delim
 		);
+		if( avail - used < 20 ){
+			used = 0;
+		}
 	}
 }
 
