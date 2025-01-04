@@ -18,6 +18,9 @@ static void print_delta(struct timeval begin, struct timeval end);
 static void make_stdin_non_blocking(void);
 static void check_user_activity(void);
 static void show_lap(struct timeval now, struct timeval *prev);
+static void hide_cursor() { system("tput vi"); }
+static void show_cursor() { system("tput ve"); }
+static void move_cursor_up_one_line() { system("tput cuu 1"); }
 
 
 int
@@ -27,7 +30,7 @@ main(void)
 
 	get_time(&start);
 	make_stdin_non_blocking();
-	system("tput vi");
+	hide_cursor();
 	prev = start;
 	establish_handlers();
 
@@ -42,7 +45,7 @@ main(void)
 		check_user_activity();
 	}
 	putchar('\n');
-	system("tput ve");
+	show_cursor();
 
 	return 0;
 }
@@ -122,7 +125,7 @@ check_user_activity(void)
 		while (b != '\n' && (-1 != read(STDIN_FILENO, &b, 1))) {
 			;
 		}
-		system("tput cuu 1");
+		move_cursor_up_one_line();
 	}
 }
 
