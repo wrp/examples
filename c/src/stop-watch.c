@@ -1,14 +1,5 @@
 /* Print a running stopwatch until SIGQUIT is received */
 
-/*
-** Instead of making the cursor invisible using fragile
-** escape sequences, we try to keep the cursor out of the
-** way by printing spaces.  This mostly works.  But if the
-** user hits return and injects a newline into the terminal,
-** things are wonky (ie, the cursor starts to be visible
-** and jumps all over the line) until the next SIGINT is
-** received to print an interval.  TODO: figure this out.
-**/
 
 #include <errno.h>
 #include <signal.h>
