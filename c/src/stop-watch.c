@@ -28,6 +28,7 @@ main(void)
 	struct timeval start, now, prev;
 
 	get_time(&start);
+	puts("^C or <return> for interval, ^\\ to quit");
 	hide_cursor();
 	prev = start;
 	establish_handlers();
