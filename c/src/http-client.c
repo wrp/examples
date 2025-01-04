@@ -1,7 +1,6 @@
 
 #include <arpa/inet.h>
 #include <err.h>
-#include <fcntl.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
