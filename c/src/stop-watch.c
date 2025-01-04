@@ -40,7 +40,6 @@ main(void)
 		print_delta(start, now);
 		show_lap(now, &prev);
 		fflush(stdout);
-		setlinebuf(stdout);
 		pause();
 		check_user_activity();
 	}
