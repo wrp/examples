@@ -19,6 +19,7 @@ static void show_lap(struct timeval now, struct timeval *prev);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void move_cursor_up_one_line() { system("tput cuu 1"); }
+static void start_timer(void);
 
 
 int
@@ -30,6 +31,7 @@ main(void)
 	hide_cursor();
 	prev = start;
 	establish_handlers();
+	start_timer();
 
 	while(!stop) {
 		get_time(&now);
@@ -69,12 +71,19 @@ handle(int sig, siginfo_t *i, void *v)
 
 
 static void
+start_timer(void)
+{
+	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
+	struct itimerval t = {.it_interval = tp, .it_value = tp };
+	setitimer(ITIMER_REAL, &t, NULL);
+}
+
+
+static void
 establish_handlers(void)
 {
 	int to_catch[] = { SIGALRM, SIGINT, SIGQUIT };
 	struct sigaction act;
-	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
-	struct itimerval t = {.it_interval = tp, .it_value = tp };
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
@@ -84,7 +93,6 @@ establish_handlers(void)
 			exit(1);
 		}
 	}
-	setitimer(ITIMER_REAL, &t, NULL);
 }
 
 
