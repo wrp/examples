@@ -1,0 +1,6 @@
+
+This directory contains programs that for one reason or another
+do not build cleanly.  Some fail to build because they are
+designed to fail (eg, k_and_r.c uses ancient syntax that no
+one in their right mind would use), other's just happen to
+not work today and I don't feel like fixing them.
