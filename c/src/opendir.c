@@ -71,7 +71,7 @@ main(int argc, char **argv)
 	char **path = argc > 1 ? argv + 1 : defaults;
 
 	for( ; *path; path += 1 ){
-		name = strdup(path);
+		name = strdup(*path);
 		printf("%s:\n", name);
 		if( list_dir(name, 1) ){
 			return 1;
