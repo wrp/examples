@@ -17,18 +17,7 @@ static void establish_handlers(void);
 static void print_delta(struct timeval begin, struct timeval end);
 static void make_stdin_non_blocking(void);
 static void check_user_activity(void);
-
-static void
-show_lap(struct timeval now, struct timeval *prev)
-{
-	if (lap) {
-		fputs("   ", stdout);
-		print_delta(*prev, now);
-		putchar('\n');
-		*prev = now;
-		lap = 0;
-	}
-}
+static void show_lap(struct timeval now, struct timeval *prev);
 
 
 int
@@ -134,5 +123,18 @@ check_user_activity(void)
 			;
 		}
 		system("tput cuu 1");
+	}
+}
+
+
+static void
+show_lap(struct timeval now, struct timeval *prev)
+{
+	if (lap) {
+		fputs("   ", stdout);
+		print_delta(*prev, now);
+		putchar('\n');
+		*prev = now;
+		lap = 0;
 	}
 }
