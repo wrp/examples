@@ -34,7 +34,6 @@ static void
 simple_examples(void)
 {
 	char buf[128];
-	char *p;
 	int k[10];
 	printf("%-40s%-20s%s\n", "input:", "format string:", "scanned:");
 	scan("input string", "%3s", buf); /* Writes 4 chars: 'inp\0' */
@@ -57,6 +56,7 @@ simple_examples(void)
 	scan("1234567890123", buf, k);
 
 	/* Dynamic allocation */
+	char *p = NULL;
 	k[0] = sscanf("this is a string", "%m[^s] %s", &p, buf);
 	/* Scans "thi" to p and "s" to buf */
 	free(p);
