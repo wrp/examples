@@ -42,9 +42,7 @@ main(void)
 		show_lap(now, &prev);
 		fflush(stdout);
 	}
-	putchar('\n');
 	show_cursor();
-
 	return 0;
 }
 
