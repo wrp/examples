@@ -3,11 +3,11 @@ CPPFLAGS = -I ../include
 CFLAGS=--coverage -g -O0
 LDFLAGS = -L../lib
 LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3
+
 SOURCES := $(wildcard *.c)
 EXE := $(subst .c,,$(SOURCES))
 
 all: $(EXE)
-
 
 check: udp-client udp-server
 	@for path in ../test/*-test; do \
