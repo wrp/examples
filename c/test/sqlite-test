@@ -1,8 +1,18 @@
 #!/bin/sh
 
+if test -f foo; then
+	echo "foo exists. Aborting" >&2
+	exit 1
+fi
+
+trap 'rm -f foo' 0
 
 ./sqlite foo "create table foo('bar' int primary key, 'baz' int);"
 ./sqlite foo "insert into foo ('bar', 'baz') values(1,2)"
-./sqlite foo "select * from foo"
+output=$(./sqlite foo "select * from foo")
 
-
+if test "$output" != 'bar = 1
+baz = 2'; then
+	echo "unexpected output '$output'"
+	exit 1
+fi
