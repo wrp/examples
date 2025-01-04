@@ -35,12 +35,12 @@ main(void)
 	start_timer();
 
 	while(!stop) {
+		check_user_activity();
 		get_time(&now);
 		putchar('\r');
 		print_delta(start, now);
 		show_lap(now, &prev);
 		fflush(stdout);
-		check_user_activity();
 	}
 	putchar('\n');
 	show_cursor();
@@ -127,7 +127,7 @@ check_user_activity(void)
 static void
 show_lap(struct timeval now, struct timeval *prev)
 {
-	if (lap) {
+	if (lap || stop) {
 		fputs("   ", stdout);
 		print_delta(*prev, now);
 		putchar('\n');
