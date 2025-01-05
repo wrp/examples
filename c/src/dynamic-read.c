@@ -63,6 +63,21 @@ get_lines(int fd, struct read_buf *b)
 }
 
 
+static void
+reverse_lines(struct read_buf *b)
+{
+	do {
+		assert( *b->eol == '\n' );
+		assert( b->eol < b->end );
+		reverse( b->s, b->eol - 1 );
+		b->s = b->eol + 1;
+		assert( b->s <= b->end );
+	} while( (b->eol = findchr(b->s, b->end, '\n')) < b->end );
+	assert( b->eol == b->end );
+	assert( b->eol[-1] != '\n' || b->s == b->end );
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -73,16 +88,7 @@ main(int argc, char **argv)
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 
 	while(( rc = get_lines(fd, &b)) > 0 ){
-		do {
-			assert( *b.eol == '\n' );
-			assert( b.eol < b.end );
-			reverse( b.s, b.eol - 1 );
-			b.s = b.eol + 1;
-			assert( b.s <= b.end );
-		} while( (b.eol = findchr(b.s, b.end, '\n')) < b.end );
-		assert( b.eol == b.end );
-		assert( b.eol[-1] != '\n' || b.s == b.end );
-
+		reverse_lines(&b);
 		fwrite(b.prev, 1, b.s - b.prev, stdout);
 		b.prev = b.data + BUFSIZ - (b.end - b.s);
 		memcpy(b.prev, b.s, b.end - b.s);
