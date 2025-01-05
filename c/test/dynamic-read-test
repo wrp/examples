@@ -26,11 +26,19 @@ expect "$long\n" "$long$nl"
 
 count=0
 start_time="$(date +%s)"
+
+if stat -c %Y . > /dev/null 2>&1; then
+	stat="stat -c %Y"
+else
+	stat="stat -f %a"
+fi
+
+
 for i in *; do
 	test -f "$i" || continue
 	: $(( count += 1 ))
 	if ! $exe "$i" | $exe | cmp - "$i"; then
-		if ! test "$(stat -c '%Y' "$i")" -lt "$start" 2> /dev/null; then
+		if ! test "$($stat "$i")" -lt "$start" 2> /dev/null; then
 			# File recently modified.  Ignore test.
 			: $(( count -= 1 ))
 		else
