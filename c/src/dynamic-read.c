@@ -1,7 +1,6 @@
 /*
 ** Reverse each line of input.
-** Demonstrates using read and growing the buffer.
-** Also a demonstration of atrocious code.  Did I really write this?
+** Demonstrate using read and growing the buffer.
 **/
 
 #include <assert.h>
@@ -16,14 +15,30 @@
 void reverse(char *, char *);
 char * findchr(char *, char *, char);
 
+struct read_buf {
+	char *data;
+	size_t size;
+	char *s;
+};
+
+
+static void
+init_read_buf(struct read_buf *b)
+{
+	b->size = BUFSIZ;
+	b->data = xrealloc(NULL, b->size + BUFSIZ, sizeof b->data, NULL);
+}
+
 int
 main(int argc, char **argv)
 {
 	ssize_t rc;
 
-	size_t siz = BUFSIZ;         /* size available to read into */
-	char *buf = xrealloc(NULL, BUFSIZ + siz, sizeof *buf, NULL); /* Pad the front */
-	char *s = buf + BUFSIZ;      /* first char of a line */
+	struct read_buf b;
+
+	init_read_buf(&b);
+
+	char *s = b.data + BUFSIZ;      /* first char of a line */
 	char *prev = s;              /* start of data from previous read */
 	char *end = s;               /* one past last char read from input */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
@@ -34,15 +49,15 @@ main(int argc, char **argv)
 
 		if( (eol = findchr(s, end, '\n')) == end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end > buf + siz ){
-				ptrdiff_t p_off = prev - buf;
-				siz += BUFSIZ;
-				buf = xrealloc(buf, BUFSIZ + siz, sizeof *buf, &end);
+			if( end > b.data + b.size ){
+				ptrdiff_t p_off = prev - b.data;
+				b.size += BUFSIZ;
+				b.data = xrealloc(b.data, BUFSIZ + b.size, sizeof *b.data, &end);
 				eol = end;
-				prev = buf + p_off;
+				prev = b.data + p_off;
 			}
 			s = end;
-			assert( s <= buf + siz );
+			assert( s <= b.data + b.size );
 			continue;
 		}
 		s = prev;
@@ -57,9 +72,9 @@ main(int argc, char **argv)
 		assert( eol[-1] != '\n' || s == end );
 
 		fwrite(prev, 1, s - prev, stdout);
-		prev = buf + BUFSIZ - (end - s);
+		prev = b.data + BUFSIZ - (end - s);
 		memcpy(prev, s, end - s);
-		s = buf + BUFSIZ;
+		s = b.data + BUFSIZ;
 	}
 	if( rc == -1 ){
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
