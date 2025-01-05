@@ -37,7 +37,7 @@ fi
 for i in *; do
 	test -f "$i" || continue
 	: $(( count += 1 ))
-	if ! $exe "$i" | $exe | cmp - "$i"; then
+	if ! $exe "$i" | $exe | cmp - "$i" > /dev/null; then
 		if ! test "$($stat "$i")" -lt "$start" 2> /dev/null; then
 			# File recently modified.  Ignore test.
 			: $(( count -= 1 ))
