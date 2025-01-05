@@ -43,7 +43,9 @@ init_read_buf(struct read_buf *b)
 static int
 get_lines(int fd, struct read_buf *b)
 {
-	ssize_t rc = read(fd, b->s, BUFSIZ);
+	ssize_t rc;
+read_data:
+	rc = read(fd, b->s, BUFSIZ);
 	if( rc < 1 ){
 		return (int)rc;
 	}
@@ -60,7 +62,7 @@ get_lines(int fd, struct read_buf *b)
 		}
 		b->s = b->end;
 		assert( b->s <= b->data + b->size );
-		return get_lines(fd, b);  /* Is tail recursion any better than a goto? */
+		goto read_data;
 	}
 	b->s = b->prev;
 	return 1;
