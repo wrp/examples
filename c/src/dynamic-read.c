@@ -36,6 +36,10 @@ init_read_buf(struct read_buf *b)
 }
 
 
+/*
+** Read data into b until there is at least
+** one newline
+*/
 static int
 get_lines(int fd, struct read_buf *b)
 {
