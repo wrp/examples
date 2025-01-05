@@ -1,6 +1,7 @@
 /*
 ** Reverse each line of input.
 ** Demonstrates using read and growing the buffer.
+** Also a demonstration of atrocious code.  Did I really write this?
 **/
 
 #include <assert.h>
@@ -46,26 +47,26 @@ main(int argc, char **argv)
 		}
 		s = prev;
 		do {
-			assert(*eol == '\n');
-			assert(eol < end);
-			reverse(s, eol-1);
+			assert( *eol == '\n' );
+			assert( eol < end );
+			reverse( s, eol - 1 );
 			s = eol + 1;
-			assert(s <= end);
+			assert( s <= end );
 		} while( (eol = findchr(s, end, '\n')) < end );
-		assert(eol == end);
-		assert(eol[-1] != '\n' || s == end);
+		assert( eol == end );
+		assert( eol[-1] != '\n' || s == end );
 
 		fwrite(prev, 1, s - prev, stdout);
 		prev = buf + BUFSIZ - (end - s);
 		memcpy(prev, s, end - s);
 		s = buf + BUFSIZ;
 	}
-	if(rc == -1) {
+	if( rc == -1 ){
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
 		return EXIT_FAILURE;                  /* uncovered */
 	}
-	if(prev < s) {
-		reverse(prev, s-1);
+	if( prev < s ){
+		reverse(prev, s - 1);
 		fwrite(prev, 1, s - prev, stdout);
 	}
 
@@ -78,17 +79,19 @@ main(int argc, char **argv)
  * returns pointer to end if not found.)
  */
 char *
-findchr(char *str, char *end, char v) {
-	assert(str <= end);
-	while( str < end && *str != v )
+findchr(char *str, char *end, char v)
+{
+	assert( str <= end );
+	while( str < end && *str != v ){
 		str += 1;
+	}
 	return str;
 }
 
 void
 reverse(char *start, char *end)
 {
-	for( ; start < end; start++, end-- ) {
+	for( ; start < end; start++, end-- ){
 		char tmp = *end;
 		*end = *start;
 		*start = tmp;
