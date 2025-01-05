@@ -19,6 +19,8 @@ struct read_buf {
 	char *data;
 	size_t size;
 	char *s;
+	char *prev;  /* start of data from previous read */
+	char *end;  /* one past last char read from input */
 };
 
 
@@ -27,6 +29,9 @@ init_read_buf(struct read_buf *b)
 {
 	b->size = BUFSIZ;
 	b->data = xrealloc(NULL, b->size + BUFSIZ, sizeof b->data, NULL);
+	b->prev = b->end = b->s = b->data + BUFSIZ;
+	/* We read into s, and leave space before s in order to copy
+	** the unused values of the previous read. */
 }
 
 int
@@ -38,51 +43,48 @@ main(int argc, char **argv)
 
 	init_read_buf(&b);
 
-	char *s = b.data + BUFSIZ;      /* first char of a line */
-	char *prev = s;              /* start of data from previous read */
-	char *end = s;               /* one past last char read from input */
 	int fd = argc > 1 ? xopen(argv[1], O_RDONLY) : STDIN_FILENO;
 
-	while(( rc = read(fd, s, BUFSIZ)) > 0 ){
+	while(( rc = read(fd, b.s, BUFSIZ)) > 0 ){
 		char *eol; /* A newline, or one past valid data */
-		end = s + rc;
+		b.end = b.s + rc;
 
-		if( (eol = findchr(s, end, '\n')) == end ) {
+		if( (eol = findchr(b.s, b.end, '\n')) == b.end ) {
 			/* No newlines found in the last read.  Read more. */
-			if( end > b.data + b.size ){
-				ptrdiff_t p_off = prev - b.data;
+			if( b.end > b.data + b.size ){
+				ptrdiff_t p_off = b.prev - b.data;
 				b.size += BUFSIZ;
-				b.data = xrealloc(b.data, BUFSIZ + b.size, sizeof *b.data, &end);
-				eol = end;
-				prev = b.data + p_off;
+				b.data = xrealloc(b.data, BUFSIZ + b.size, sizeof *b.data, &b.end);
+				eol = b.end;
+				b.prev = b.data + p_off;
 			}
-			s = end;
-			assert( s <= b.data + b.size );
+			b.s = b.end;
+			assert( b.s <= b.data + b.size );
 			continue;
 		}
-		s = prev;
+		b.s = b.prev;
 		do {
 			assert( *eol == '\n' );
-			assert( eol < end );
-			reverse( s, eol - 1 );
-			s = eol + 1;
-			assert( s <= end );
-		} while( (eol = findchr(s, end, '\n')) < end );
-		assert( eol == end );
-		assert( eol[-1] != '\n' || s == end );
+			assert( eol < b.end );
+			reverse( b.s, eol - 1 );
+			b.s = eol + 1;
+			assert( b.s <= b.end );
+		} while( (eol = findchr(b.s, b.end, '\n')) < b.end );
+		assert( eol == b.end );
+		assert( eol[-1] != '\n' || b.s == b.end );
 
-		fwrite(prev, 1, s - prev, stdout);
-		prev = b.data + BUFSIZ - (end - s);
-		memcpy(prev, s, end - s);
-		s = b.data + BUFSIZ;
+		fwrite(b.prev, 1, b.s - b.prev, stdout);
+		b.prev = b.data + BUFSIZ - (b.end - b.s);
+		memcpy(b.prev, b.s, b.end - b.s);
+		b.s = b.data + BUFSIZ;
 	}
 	if( rc == -1 ){
 		perror(argc > 1 ? argv[1] : "stdin"); /* uncovered */
 		return EXIT_FAILURE;                  /* uncovered */
 	}
-	if( prev < s ){
-		reverse(prev, s - 1);
-		fwrite(prev, 1, s - prev, stdout);
+	if( b.prev < b.s ){
+		reverse(b.prev, b.s - 1);
+		fwrite(b.prev, 1, b.s - b.prev, stdout);
 	}
 
 	return EXIT_SUCCESS;
