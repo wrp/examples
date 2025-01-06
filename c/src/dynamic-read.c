@@ -45,13 +45,13 @@ get_lines(int fd, struct read_buf *b)
 {
 	ssize_t rc;
 read_data:
-	rc = read(fd, b->s, BUFSIZ);
+	rc = read(fd, b->end, BUFSIZ);
 	if( rc < 1 ){
 		return (int)rc;
 	}
-	b->end = b->s + rc;
+	b->end += rc;
 
-	if( (b->eol = findchr(b->s, b->end, '\n')) == b->end ) {
+	if( (b->eol = findchr(b->prev, b->end, '\n')) == b->end ) {
 		/* No newlines found in the last read.  Read more. */
 		if( b->end > b->data + b->size ){
 			ptrdiff_t p_off = b->prev - b->data;
@@ -60,8 +60,8 @@ read_data:
 			b->eol = b->end;
 			b->prev = b->data + p_off;
 		}
+		assert( b->end <= b->data + b->size );
 		b->s = b->end;
-		assert( b->s <= b->data + b->size );
 		goto read_data;
 	}
 	b->s = b->prev;
