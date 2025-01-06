@@ -17,6 +17,18 @@ FILE * xtmpfile(char *tempname, size_t siz, const char *mode);
 int die(const char *fmt, ...);
 void xrename(const char *old, const char *new);
 
+static void
+usage(const char *argv0)
+{
+	const char *base = strrchr(argv0, '/');
+	const char *name = base ? base + 1 : argv0;
+	printf("usage: %s [file ... ]\n", name);
+	puts("");
+	printf("%s version: %s\n", name, PACKAGE_VERSION);
+	puts("Remove all bytes preceding backspace and all between");
+	puts("\\e(0x1b) and the next 'm'.  Useful for naive clean up");
+	puts("of manpages.  Also trim dos newlines.");
+}
 
 int
 main(int argc, char **argv)
@@ -25,14 +37,7 @@ main(int argc, char **argv)
 	char *defaults[] = { "-", NULL };
 
 	if( argc > 1 && strcmp(argv[1], "-h") == 0 ){
-		char *base = strrchr(argv[0], '/');
-		char *name = base ? base + 1 : argv[0];
-		printf("usage: %s [file ... ]\n", name);
-		puts("");
-		printf("%s version: %s\n", name, PACKAGE_VERSION);
-		puts("Remove all bytes preceding backspace and all between");
-		puts("\\e(0x1b) and the next 'm'.  Useful for naive clean up");
-		puts("of manpages.  Also trim dos newlines.");
+		usage(argv[0]);
 		return 0;
 	}
 
