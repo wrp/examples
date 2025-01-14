@@ -9,13 +9,13 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-sig_atomic_t stop, lap;
+sig_atomic_t stop, lap, reset;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
 static void print_delta(struct timeval begin, struct timeval end);
 static void check_user_activity(void);
-static void show_lap(struct timeval now, struct timeval *prev);
+static void show_lap(struct timeval, struct timeval *, struct timeval *);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void move_cursor_up_one_line() { system("tput cuu 1"); }
@@ -28,7 +28,7 @@ main(void)
 	struct timeval start, now, prev;
 
 	get_time(&start);
-	puts("^C or <return> for interval, ^\\ to quit");
+	puts("<return> for interval, ^c to reset, ^\\ to quit");
 	hide_cursor();
 	prev = start;
 	establish_handlers();
@@ -39,7 +39,7 @@ main(void)
 		get_time(&now);
 		putchar('\r');
 		print_delta(start, now);
-		show_lap(now, &prev);
+		show_lap(now, &prev, &start);
 		fflush(stdout);
 	}
 	show_cursor();
@@ -63,7 +63,7 @@ handle(int sig, siginfo_t *i, void *v)
 	(void)i;
 	(void)v;
 	switch(sig) {
-	case SIGINT: lap = 1; break;
+	case SIGINT: reset = 1; break;
 	case SIGQUIT: stop = 1; break;
 	}
 }
@@ -123,13 +123,17 @@ check_user_activity(void)
 
 
 static void
-show_lap(struct timeval now, struct timeval *prev)
+show_lap(struct timeval now, struct timeval *prev, struct timeval *start)
 {
-	if (lap || stop) {
+	if (lap || stop || reset) {
 		fputs("   ", stdout);
 		print_delta(*prev, now);
 		putchar('\n');
 		*prev = now;
-		lap = 0;
+		if (reset) {
+			puts("*****");
+			*start = now;
+		}
+		lap = reset = 0;
 	}
 }
