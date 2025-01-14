@@ -111,10 +111,10 @@ print_delta(struct timeval begin, struct timeval end)
 static void
 check_user_activity(void)
 {
-	char b;
-	if (-1 != read(STDIN_FILENO, &b, 1)) {
+	char b[128];
+	if (-1 != read(STDIN_FILENO, b, 128)) {
 		lap = 1;
-		while (b != '\n' && (-1 != read(STDIN_FILENO, &b, 1))) {
+		while (-1 != read(STDIN_FILENO, &b, 1)) {
 			;
 		}
 		move_cursor_up_one_line();
