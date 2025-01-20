@@ -1,10 +1,10 @@
 // Demonstrate reading n bytes from a reader
 
 #![allow(non_camel_case_types)]
-
+#[allow(unused_imports)]
 
 use std::{
-	io::{prelude::*, BufReader},
+	io::{self, prelude::*, BufReader},
 	str,
 };
 
@@ -14,15 +14,17 @@ where
 {
 	let mut buf = vec![];
 	let mut chunk = reader.take(bytes_to_read);
-	let n = chunk.read_to_end(&mut buf).expect("Unexpected EOF");
-	assert_eq!(bytes_to_read as usize, n);
+	// let _n = chunk.read_to_end(&mut buf).expect("Unexpected EOF");
+	let _n = chunk.read_to_end(&mut buf);
+	// assert_eq!(bytes_to_read as usize, n);
 	buf
 }
 
 
 fn main() {
-	let input_data = b"hello world";
-	let mut reader = BufReader::new(&input_data[..]);
+	// let input_data = b"hello world";
+	// let mut reader = BufReader::new(&input_data[..]);
+	let mut reader = io::stdin();
 
 	let first = getchar(&mut reader, 5);
 	let _ = getchar(&mut reader, 1);
