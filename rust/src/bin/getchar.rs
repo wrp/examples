@@ -14,9 +14,7 @@ where
 {
 	let mut buf = vec![];
 	let mut chunk = reader.take(bytes_to_read);
-	// let _n = chunk.read_to_end(&mut buf).expect("Unexpected EOF");
-	let _n = chunk.read_to_end(&mut buf);
-	// assert_eq!(bytes_to_read as usize, n);
+	chunk.read_to_end(&mut buf).expect("Read Error");
 	buf
 }
 
