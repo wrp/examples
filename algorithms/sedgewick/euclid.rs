@@ -23,7 +23,7 @@ fn main() -> io::Result<()> {
 			.split_whitespace()
 			.map(|s| s.parse::<u32>().unwrap())
 			.collect::<Vec<u32>>()[0..2] else { todo!() };
-		println!("<{:?}, {:?}> -> {:?}", u, v, gcd(u, v));
+		println!("<{}, {}> -> {}", u, v, gcd(u, v));
 	}
 	Ok(())
 }
