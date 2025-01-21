@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void) {
+int
+main(void)
+{
 	struct timeval tp;
 	char *date;
 	if (gettimeofday(&tp, NULL) == -1) {
