@@ -1,9 +1,5 @@
 
 // Simple reverse polish (postfix) calculator
-// Extremely fragile, but works
-// (eg, input stream "334 2 +p" gives 336",
-// but "334 2 + p" yields 0, since the space
-// after the '+' pushes a 0 to the stack.)
 
 use std::{
 	io,
@@ -23,18 +19,28 @@ fn ord(c: char) -> u32 {
 fn main() {
 	let mut lines = io::stdin().lines();
 	let mut stack = Vec::<f32>::new();
-	let mut accum: f32 = 0.0;
+	let mut accum: Option<f32> = None;
 
 	while let Some(line) = lines.next() {
 		for c in line.unwrap().chars() {
+			if c.is_digit(10) {
+				let val = (ord(c) - ord('0')) as f32;
+				accum = match accum {
+				None => Some(val),
+				Some(x) => Some(10.0 * x + (ord(c) - ord('0')) as f32),
+				}
+			} else if accum.is_some(){
+				stack.push(accum.unwrap());
+				accum = None;
+			}
+
 			match c {
 			'+' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a + b) },
-			'-' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a - b) },
+			'-' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(b - a) },
 			'*' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a * b) },
-			'/' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a / b) },
-			'0'..='9' => accum = 10.0 * accum + (ord(c) - ord('0')) as f32,
-			' ' => { stack.push(accum); accum = 0.0; },
-			'p' => print!("{}", stack.pop().unwrap()),
+			'/' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(b / a) },
+			'p' => println!("{}", stack.pop().unwrap()),
+			' ' | '0'..='9' => {},
 			 _ => todo!(),
 			}
 		}
