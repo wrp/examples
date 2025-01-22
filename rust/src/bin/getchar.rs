@@ -25,7 +25,7 @@ fn main() {
 	let mut reader = io::stdin();
 
 	let first = getchar(&mut reader, 5);
-	let _ = getchar(&mut reader, 1);
+	let _ = getchar2(&mut reader);
 	let second = getchar(&mut reader, 5);
 
 	println!(
@@ -33,4 +33,13 @@ fn main() {
 		str::from_utf8(&first).unwrap(),
 		str::from_utf8(&second).unwrap()
 	);
+}
+
+fn getchar2<R>(mut reader: R) -> u8
+where
+	R: Read,
+{
+	let mut b = vec![0_u8];
+	_ = reader.read_exact(&mut b).expect("Read Error");
+	b[0]
 }
