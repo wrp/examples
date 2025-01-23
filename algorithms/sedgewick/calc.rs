@@ -33,12 +33,15 @@ fn main() {
 				stack.push(accum.unwrap());
 				accum = None;
 			}
-
+			let (a, b) = match c {
+				'+'|'-'|'*'|'/' => (stack.pop().unwrap(), stack.pop().unwrap()),
+				_ => (0.0, 0.0)
+			};
 			match c {
-			'+' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a + b) },
-			'-' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(b - a) },
-			'*' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(a * b) },
-			'/' => { let a = stack.pop().unwrap(); let b = stack.pop().unwrap(); stack.push(b / a) },
+			'+' => stack.push(a + b),
+			'-' => stack.push(b - a),
+			'*' => stack.push(a * b),
+			'/' => stack.push(b / a),
 			'p' => println!("{}", stack.pop().unwrap()),
 			' ' | '0'..='9' => {},
 			 _ => todo!(),
