@@ -19,8 +19,8 @@ fn swap(data: &mut[i32], a: usize, b: usize) {
 
 fn insertion_sort(data: &mut[i32]) {
 	for d in 0..data.len() - 1 {
-		let i = find_index_of_min(&data[d..]) + d;
-		swap(data, i, d);
+		let i = find_index_of_min(&data[d..]);
+		swap(data, i + d, d);
 	}
 }
 
