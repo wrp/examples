@@ -5,7 +5,9 @@ groff -man -Tascii file.1
 
 
 # To specify a manpath:
-man -M $MANPATH  # MANPATH is colon separated list
+man -M $MANPATH file # MANPATH is colon separated list
+# eg: to view the file /p/a/t/h/share/man/man1/foo.1, do
+# man -M /p/a/t/h/share/man foo
 
 
 # Common options:
