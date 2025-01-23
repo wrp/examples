@@ -43,6 +43,7 @@ fn main() {
 			'*' => stack.push(a * b),
 			'/' => stack.push(b / a),
 			'p' => println!("{}", stack.pop().unwrap()),
+			'q' => return,
 			' ' | '0'..='9' => {},
 			 _ => todo!(),
 			}
