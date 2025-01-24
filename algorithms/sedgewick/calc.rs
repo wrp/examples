@@ -49,5 +49,4 @@ fn main() {
 			}
 		}
 	}
-	println!("");
 }
