@@ -1,9 +1,9 @@
-## Slogans:
+## slogans:
 - Explicit is better than implicit.
 - Fail loudly (but tersely), succeed quietly. [^errors]
 
 
-# A list of simple best practices.
+# general best practices:
 - Plan for failure, automate, test extensively.
 - Avoid usage spew. [^usage]
 - A stack trace is not an error message; it is an embarrassment.
