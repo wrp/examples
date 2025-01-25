@@ -1,6 +1,10 @@
-# A list of simple best practices.
-
+## Slogans:
+- Explicit is better than implicit.
 - Fail loudly (but tersely), succeed quietly. [^errors]
+
+
+# A list of simple best practices.
+- Plan for failure, automate, test extensively.
 - Avoid usage spew. [^usage]
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
@@ -15,9 +19,9 @@
 - Keep your code narrow. [^6]
 - Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
 - Configuration files are not documentation. [^5]
+- Comments are not documentation. [^comments]
 - Test functionality, not platform. [^8]
 - Use roles extensively. [^roles]
-- Don't over comment [^comments]
 
 
 ## vcs best practices:
@@ -29,10 +33,8 @@
 - Put meta data for commits in a git trailer.
 - Put only project specific items in .gitignore.  [^4]
 
-## Slogans:
-- Plan for failure, automate, test extensively.
 
-
+## General thoughts:
 Do not bend your workflow to satsify your tools; fix your tools to fit
 your workflow.  For example, if someone tells you "Even though the syntax
 does not require it, we leave double quotes here because some IDEs flags
