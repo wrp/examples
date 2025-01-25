@@ -1,14 +1,9 @@
-## slogans:
-- Explicit is better than implicit.
-- Fail loudly (but tersely), succeed quietly. [^errors]
-
-
 # general best practices:
-- Plan for failure, automate, test extensively.
+- Have a single source of truth.
 - Avoid usage spew. [^usage]
 - A stack trace is not an error message; it is an embarrassment.
 - Write errors to stderr.  Write output to stdout.  Write logs somewhere else.
-- Don't use logs as metrics.
+- Instrument extensively, but don't use logs as metrics.
 - Version everything, but do not hardcode version numbers in a file; derive them from a VCS.
 - Never deploy a mutable ref (eg "latest"); always use a fixed version.
 - Design for the interface, not the implementation.
@@ -17,11 +12,17 @@
 - Always include timezone in a timestamp representation.  ISO-8601/rfc3339 [^ts]
 - Never use relative timestamps (eg, "6 hours ago") [^no-relative-time]
 - Keep your code narrow. [^6]
-- Make everything local.  Confluence is fine, but useless on an airplane.  Put your docs in git.
+- Make everything local.  Web-based docs are useless on an airplane.  Put your docs in git.
 - Configuration files are not documentation. [^5]
 - Comments are not documentation. [^comments]
 - Test functionality, not platform. [^8]
 - Use roles extensively. [^roles]
+- Plan for failure, automate, test extensively.
+
+
+## pithy slogans:
+- Explicit is better than implicit.
+- Fail loudly (but tersely), succeed quietly. [^errors]
 
 
 ## vcs best practices:
