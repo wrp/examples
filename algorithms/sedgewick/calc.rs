@@ -27,7 +27,7 @@ fn main() {
 				let val = (ord(c) - ord('0')) as f32;
 				accum = match accum {
 				None => Some(val),
-				Some(x) => Some(10.0 * x + (ord(c) - ord('0')) as f32),
+				Some(x) => Some(10.0 * x + val),
 				}
 			} else if accum.is_some(){
 				stack.push(accum.unwrap());
