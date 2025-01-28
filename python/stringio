@@ -8,3 +8,7 @@ a = StringIO()
 a.write('hello, world')
 a.seek(0)
 print(a.read())
+
+s = "Hello, world!"
+b = StringIO(s)
+print(b.read())
