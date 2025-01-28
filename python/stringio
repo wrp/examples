@@ -12,3 +12,14 @@ print(a.read())
 s = "Hello, world!"
 b = StringIO(s)
 print(b.read())
+
+
+def exhaust(a, b):
+    with open(a, 'rb') if a else b as f:
+        print(f.read())
+
+
+with StringIO("foo") as b:
+    exhaust(None, b)
+    # b.seek(0)  # Would fail, since exhaust() closes file
+    # print(b.read())  # Also would fail
