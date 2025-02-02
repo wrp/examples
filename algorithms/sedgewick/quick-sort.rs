@@ -9,10 +9,15 @@ fn qsort(d: &mut [i32]) {
 	let len = d.len();
 	let mut l: usize = 0;
 	let mut r: usize = len - 2;
-	let v = d[len - 1];
+	let v = {
+		if d[len - 1] < d[0] {
+			(d[0], d[len - 1]) = (d[len - 1], d[0]);
+		}
+		d[len - 1]
+	};
 	while l < r {
 		while d[l] < v { l += 1; }
-		while d[r] > v && r > l { r -= 1; }
+		while d[r] > v { r -= 1; }
 		if l < r {
 			(d[l], d[r]) = (d[r], d[l]);
 		}
