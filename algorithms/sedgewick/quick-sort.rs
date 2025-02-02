@@ -18,9 +18,7 @@ fn qsort(d: &mut [i32]) {
 		}
 	}
 	if d[l] > v {
-		let t = d[l];
-		d[l] = v;
-		d[len - 1] = t;
+		(d[l], d[len - 1]) = (v, d[l]);
 	}
 	qsort(&mut d[0..l]);
 	qsort(&mut d[r + 1..len]);
