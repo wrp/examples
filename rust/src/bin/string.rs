@@ -1,9 +1,10 @@
 
 
 fn main() {
-    let s = "  ";
-    let s = s.len();
-    let d = "   ".len();
+	let s = "Hello, world!";
+	let d = "   ".len();
 
-    println!("s = {:?} d = {:?}", s,d);
+	println!("s = {:?} d = {:?}", s, d);
+	println!("s = {s:?} d = {d:?}");
+	println!("s = {} d = {}", s, d);
 }
