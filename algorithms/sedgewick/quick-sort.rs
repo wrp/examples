@@ -38,6 +38,7 @@ fn run_tests() {
 		vec![4, 1],
 		vec![1, 9, 2, 8, 3, 7, 4, 6, 5, 0],
 	];
+	let count = test_cases.len();
 	for mut tc in test_cases {
 		qsort(&mut tc);
 		let mut s = tc[0];
@@ -48,6 +49,7 @@ fn run_tests() {
 			s = *v;
 		}
 	};
+	println!("Succesfully ran {} tests", count);
 }
 
 
@@ -61,7 +63,6 @@ fn main() {
 		data.push(a.unwrap());
 	}
 	run_tests();
-	println!("unsorted data = {:?}", data);
 	qsort(&mut data);
-	println!("  sorted data = {:?}", data);
+	println!("{:?}", data);
 }
