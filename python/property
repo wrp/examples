@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+import math
+
+class circle: pass
+
+def assign(self, **kwargs):
+    for k, v in kwargs.items():
+        self.__dict__[k] = v
+
+@property
+def area(self):
+    return self.radius * self.radius * math.pi
+
+circle.area = area
+circle.__init__ = assign
+
+a = circle(radius = 3)
+print(a.area)
