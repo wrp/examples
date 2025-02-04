@@ -2,6 +2,8 @@
 
 extern crate text_io;
 use text_io::try_read;
+use std::io;
+use std::io::IsTerminal;
 
 fn qsort(d: &mut [i32]) {
 	if d.len() < 2 { return; }
@@ -56,13 +58,16 @@ fn run_tests() {
 fn main() {
 	let mut a: Result<i32, _>;
 	let mut data = vec![];
-	while {
-		a = try_read!();
-		a.is_ok()
-	} {
-		data.push(a.unwrap());
+	if io::stdin().is_terminal() {
+		run_tests();
+	} else {
+		while {
+			a = try_read!();
+			a.is_ok()
+		} {
+			data.push(a.unwrap());
+		}
+		qsort(&mut data);
+		println!("{:?}", data);
 	}
-	run_tests();
-	qsort(&mut data);
-	println!("{:?}", data);
 }
