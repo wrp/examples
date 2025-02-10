@@ -24,13 +24,13 @@ def n(self):
         return rv
 Foo.__str__ = n
 
-def n(self, x, **kwargs):
-        self.x = x
-        print(f'In init befor assign: {Foo.bar}  {self.bar}')
-        self.bar += x
-        print(f'In init after assign: {Foo.bar}  {self.bar}')
-        self.map = {}
-Foo.__init__ = n
+Foo.__init__ = lambda self, x, **kwargs: (
+    self.x = x,
+    print(f'In init before assign: {Foo.bar}  {self.bar}'),
+    self.bar += x,
+    print(f'In init after assign: {Foo.bar}  {self.bar}'),
+    self.map = {}
+)
 
 
 

@@ -9,6 +9,9 @@ class S_info:
     side: int
     area: float
 
+    def meth(self):
+        return f'[{self.side}, {self.area}]'
+
 class Shape(Enum):
     SQUARE = S_info(5, 25)
     CIRCLE = S_info(1, 3.141)
@@ -46,3 +49,6 @@ print(c.value)
 print('iterating over the enum:')
 for x in Shape:
     print(f'x = {x}')
+    print(f'meth -> {x.value.meth()}')
+
+
