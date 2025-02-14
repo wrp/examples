@@ -1,31 +1,9 @@
 #!/usr/bin/env python3
 
+from Foo import Foo
+
 import types
 
-
-def initialize(x):
-    print(f'initializing{x}')
-    return x
-
-class Foo:
-    bar = initialize(5)  # Initialization of class attribute happens only once
-
-def foo_meth(self: Foo):
-    print(f'A do nothing method on {self}')
-
-def foo_new(cls: Foo, *args, **kwargs):
-        print(f'Foo.__new__ called with {args} {kwargs}')
-        return super(Foo, cls).__new__(cls)
-
-def foo_str(self: Foo) -> str:
-        rv = f"x = {self.x}, bar = {self.bar}"
-        if hasattr(self, "baz"):
-            rv += f", baz = {self.baz}"
-        return rv
-
-Foo.__new__ = foo_new
-Foo.__str__ = foo_str
-Foo.meth = foo_meth
 
 def n(self, x, **kwargs):
         self.x = x
