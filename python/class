@@ -5,22 +5,11 @@ from Foo import Foo
 import types
 
 
-def n(self, x, **kwargs):
-        self.x = x
-        print(f'In init befor assign: {Foo.bar}  {self.bar}')
-        self.bar += x
-        print(f'In init after assign: {Foo.bar}  {self.bar}')
-        self.map = {}
-Foo.__init__ = n
-
-
-
-print(f'Before creating A, Foo.bar = {Foo.bar}')
+assert Foo.bar == 0
 a = Foo(7)  # __init__  incrmements the instance variable bar
-
-# After creating a, Foo.bar is NOT changed
-print(f'After creating A, Foo.bar = {Foo.bar}')
-
+# After creating a, Foo.bar is NOT changed, but a.bar is
+assert Foo.bar == 0
+assert a.bar == 7
 
 print(a)  # Calling print invokes __str__ which  does not change anything
 
