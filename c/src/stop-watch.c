@@ -112,11 +112,10 @@ static void
 check_user_activity(void)
 {
 	char b[128];
-	if (-1 != read(STDIN_FILENO, b, 128)) {
+	while (-1 != read(STDIN_FILENO, b, 128)) {
 		lap = 1;
-		while (-1 != read(STDIN_FILENO, &b, 1)) {
-			;
-		}
+	}
+	if (lap) {
 		move_cursor_up_one_line();
 	}
 }
