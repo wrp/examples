@@ -103,7 +103,7 @@ print_delta(struct timeval begin, struct timeval end)
 	unsigned minutes = delta.tv_sec / 60;
 	unsigned seconds = delta.tv_sec % 60;
 	char usec[4];
-	snprintf(usec, sizeof usec, "%u", delta.tv_usec);
+	snprintf(usec, sizeof usec, "%ld", (long)delta.tv_usec);
 	printf("%0um%02u.%ss", minutes, seconds, usec);
 }
 
