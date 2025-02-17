@@ -29,3 +29,18 @@ git show-ref --heads  # List all branches (plumbing)
 
 # Delete an arbitrary ref
 git update-ref -d refs/${name}/${base}
+
+get_branch() {
+	# Get original branch name during a rebase
+	branch=$(git branch --show-current)
+	if test -z "$branch"; then
+		# Maybe we are rebasing; try to get the original branch name
+		for i in rebase-merge rebase-apply; do
+			p=$(git rev-parse --git-path $i)
+			if test -d "$p"; then
+				branch=$(sed -e 's@refs/heads/@@' "$p"/head-name)
+				break;
+			fi
+		done
+	fi
+}
