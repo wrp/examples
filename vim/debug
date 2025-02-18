@@ -1,0 +1,7 @@
+
+Get full logging with:
+
+vim -V20$logpath $path
+
+To open vim with $path loaded in the buffer and excessive debugging output
+written to $logpath
