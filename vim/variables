@@ -1,0 +1,4 @@
+
+To see the value of a variable:
+
+:echo $variable
