@@ -180,9 +180,10 @@ basic_test(void)
 int
 test_invariant(void)
 {
-	int x[] = { 0, 1, 1, 2, 2, 2, 2, 3 };
-	struct heap h = { x, 8, 8 };
-	for( int i = 1; i < 8; i += 1 ){
+	int x[] = { 0, 1, 1, 2, 2, 2, 2, 3, 3, 3 };
+	size_t siz = sizeof x / sizeof *x;
+	struct heap h = { x, siz, siz };
+	for( int i = 1; i < siz; i += 1 ){
 		int orig = x[i];
 		Assert( satisfies_invariant(&h) );
 		x[i] -= 2;
