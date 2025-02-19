@@ -183,11 +183,15 @@ test_invariant(void)
 	int x[] = { 0, 1, 1, 2, 2, 2, 2, 3, 3, 3 };
 	size_t siz = sizeof x / sizeof *x;
 	struct heap h = { x, siz, siz };
+	x[0] = 2;
+	Assert( ! satisfies_invariant(&h) );;
+	x[0] = 0;
+
 	for( int i = 1; i < siz; i += 1 ){
 		int orig = x[i];
 		Assert( satisfies_invariant(&h) );
 		x[i] -= 2;
-		Assert( ! satisfies_invariant(&h) );;
+		Assert( ! satisfies_invariant(&h) );
 		x[i] = orig;
 	}
 	Assert( satisfies_invariant(&h) );
