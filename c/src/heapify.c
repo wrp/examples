@@ -59,20 +59,15 @@ push(struct heap *h, int v)
 }
 
 
-/* Remove a value from the heap.  Behavior undefined if heap is empty. */
-static int
-pop(struct heap *h)
+static void
+down_heapify(struct heap *h)
 {
 	int *d = h->data;
-	int rv = d[0];
-	d[0] = d[--h->len];
-
 	size_t i = 0;
 	size_t a;  /* index of left child */
 	size_t b;  /* index of right child */
 	size_t e = h->len; /* end */
 
-	/* down heapify */
 	while(
 		a = 2 * i + 1, b = a + 1,
 		(a < e && d[i] > d[a]) || ( b < e && d[i] > d[b])
@@ -85,6 +80,16 @@ pop(struct heap *h)
 		i = t;
 	}
 	assert(satisfies_invariant(h));
+}
+
+
+/* Remove a value from the heap.  Behavior undefined if heap is empty. */
+static int
+pop(struct heap *h)
+{
+	int rv = h->data[0];
+	h->data[0] = h->data[--h->len];
+	down_heapify(h);
 	return rv;
 }
 
