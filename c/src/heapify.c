@@ -1,6 +1,7 @@
 /* Trivial example using a binary heap to sort inputs */
 
 /* keywords: priority queue, heap, min-heap */
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,6 +14,24 @@ struct heap {
 void *xrealloc(void *buf, size_t num, size_t siz);
 static void swap(int *a, int *b) { int t = *a; *a = *b; *b = t; }
 
+
+/* Return 1 if the heap satsifies the invariant, 0 otherwise */
+int
+satisfies_invariant(struct heap *h)
+{
+	int *d = h->data;
+	for( size_t i = 0; i < h->len; i += 1 ){
+		size_t left = 2 * i + 1;
+		size_t right = 2 * i + 2;
+		if( left < h-> len && d[i] > d[left] ){
+			return 0;
+		}
+		if( right < h-> len && d[i] > d[right] ){
+			return 0;
+		}
+	}
+	return 1;
+}
 
 /* Push a value onto the heap */
 static void
@@ -29,6 +48,7 @@ push(struct heap *h, int v)
 		swap(h->data + i, h->data + (i - 1)/2);
 		i = (i - 1)/2;
 	}
+	assert(satisfies_invariant(h));
 }
 
 
@@ -57,6 +77,7 @@ pop(struct heap *h)
 		swap(d + i, d + t);
 		i = t;
 	}
+	assert(satisfies_invariant(h));
 	return rv;
 }
 
