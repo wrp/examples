@@ -33,22 +33,29 @@ satisfies_invariant(struct heap *h)
 	return 1;
 }
 
-/* Push a value onto the heap */
-static void
-push(struct heap *h, int v)
-{
-	size_t i = h->len;
-	if( h->len >= h->cap ){
-		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
-	}
-	h->data[h->len++] = v;
 
-	/* up heapify */
+static void
+up_heapify(struct heap *h)
+{
+	size_t i = h->len - 1;
 	while( i > 0 && h->data[i] < h->data[(i - 1)/2] ){
 		swap(h->data + i, h->data + (i - 1)/2);
 		i = (i - 1)/2;
 	}
 	assert(satisfies_invariant(h));
+}
+
+
+/* Push a value onto the heap */
+static void
+push(struct heap *h, int v)
+{
+	if( h->len >= h->cap ){
+		h->data = xrealloc(h->data, h->cap += 512, sizeof *h->data);
+	}
+	h->data[h->len++] = v;
+
+	up_heapify(h);
 }
 
 
