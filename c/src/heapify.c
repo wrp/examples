@@ -20,13 +20,13 @@ int
 satisfies_invariant(struct heap *h)
 {
 	int *d = h->data;
-	for( size_t i = 0; i < h->len; i += 1 ){
+	for( size_t i = 0; i < h->len / 2; i += 1 ){
 		size_t left = 2 * i + 1;
 		size_t right = 2 * i + 2;
-		if( left < h-> len && d[i] > d[left] ){
+		if( left < h->len && d[i] > d[left] ){
 			return 0;
 		}
-		if( right < h-> len && d[i] > d[right] ){
+		if( right < h->len && d[i] > d[right] ){
 			return 0;
 		}
 	}
