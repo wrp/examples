@@ -127,17 +127,7 @@ basic_test(void)
 	for( int i = 10; i > -3; i -= 2 ){
 		push(&h, i);
 	}
-	for( int i = -2; i < 11; i += 2 ){
-		int g = pop(&h);
-		if( i != g ){
-			fprintf(stderr, "Expected %d, got %d\n", i, g);
-			return 1;
-		}
-	}
-	if( h.len != 0 ){
-		fprintf(stderr, "Expected empty heap\n");
-		return 1;
-	}
+	validate_and_empty_heap(&h);
 	for( int t = 0; t < sizeof test_cases / sizeof *test_cases; t += 1 ){
 		int *tc = test_cases[t];
 		for( ; tc < (int *)(test_cases + t + 1); tc += 1 ){
