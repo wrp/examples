@@ -173,10 +173,35 @@ basic_test(void)
 
 
 int
+test_invariant(void)
+{
+	int x[] = { 0, 1, 1, 2, 2, 2, 2, 3 };
+	struct heap h = { x, 8, 8 };
+	for( int i = 1; i < 3; i += 1 ){
+		assert( satisfies_invariant(&h) );
+		x[i] = -1;
+		assert( ! satisfies_invariant(&h) );;
+		x[i] = 1;
+	}
+	for( int i = 3; i < 7; i += 1 ){
+		assert( satisfies_invariant(&h) );
+		x[i] = 0;
+		assert( ! satisfies_invariant(&h) );
+		x[i] = 2;
+	}
+	x[7] = 1;
+	assert( ! satisfies_invariant(&h) );
+	return 0;
+
+}
+
+
+int
 test(void)
 {
 	int rv = 0;
 	rv |= basic_test();
+	rv |= test_invariant();
 	return rv;
 }
 
