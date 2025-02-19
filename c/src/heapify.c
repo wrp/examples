@@ -100,9 +100,29 @@ interactive(void)
 }
 
 
+void
+validate_and_empty_heap(struct heap *h)
+{
+	int p = pop(h);
+	while( h->len ){
+		int g = pop(h);
+		if( g < p ){
+			fprintf(stderr, "Out of order %d < %d\n", g, p);
+			exit(1);
+		}
+		p = g;
+	}
+}
+
+
 int
 basic_test(void)
 {
+	int test_cases[][10] = {
+		{ 5, 4, 3, 2, 1 },
+		{-3, 7, -6, 8, -1, 10},
+		{ 1, 2, 5, 4, 3, 7, 6 },
+	};
 	struct heap h = { 0 };
 	for( int i = 10; i > -3; i -= 2 ){
 		push(&h, i);
@@ -117,6 +137,13 @@ basic_test(void)
 	if( h.len != 0 ){
 		fprintf(stderr, "Expected empty heap\n");
 		return 1;
+	}
+	for( int t = 0; t < sizeof test_cases / sizeof *test_cases; t += 1 ){
+		int *tc = test_cases[t];
+		for( ; tc < (int *)(test_cases + t + 1); tc += 1 ){
+			push(&h, *tc);
+		}
+		validate_and_empty_heap(&h);
 	}
 	return 0;
 }
