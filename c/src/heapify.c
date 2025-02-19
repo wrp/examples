@@ -14,6 +14,14 @@ struct heap {
 void *xrealloc(void *buf, size_t num, size_t siz);
 static void swap(int *a, int *b) { int t = *a; *a = *b; *b = t; }
 
+unsigned test_count;
+
+#ifdef NDEBUG
+#define Assert(x)
+#else
+#define Assert(x) do { assert(x); test_count += 1; } while(0)
+#endif
+
 
 /* Return 1 if the heap satsifies the invariant, 0 otherwise */
 int
@@ -139,10 +147,7 @@ validate_and_empty_heap(struct heap *h)
 	int p = pop(h);
 	while( h->len ){
 		int g = pop(h);
-		if( g < p ){
-			fprintf(stderr, "Out of order %d < %d\n", g, p);
-			exit(1);
-		}
+		Assert( g >= p );
 		p = g;
 	}
 }
@@ -177,32 +182,24 @@ test_invariant(void)
 {
 	int x[] = { 0, 1, 1, 2, 2, 2, 2, 3 };
 	struct heap h = { x, 8, 8 };
-	for( int i = 1; i < 3; i += 1 ){
-		assert( satisfies_invariant(&h) );
-		x[i] = -1;
-		assert( ! satisfies_invariant(&h) );;
-		x[i] = 1;
+	for( int i = 1; i < 8; i += 1 ){
+		int orig = x[i];
+		Assert( satisfies_invariant(&h) );
+		x[i] -= 2;
+		Assert( ! satisfies_invariant(&h) );;
+		x[i] = orig;
 	}
-	for( int i = 3; i < 7; i += 1 ){
-		assert( satisfies_invariant(&h) );
-		x[i] = 0;
-		assert( ! satisfies_invariant(&h) );
-		x[i] = 2;
-	}
-	x[7] = 1;
-	assert( ! satisfies_invariant(&h) );
+	Assert( satisfies_invariant(&h) );
 	return 0;
 
 }
 
 
-int
+void
 test(void)
 {
-	int rv = 0;
-	rv |= basic_test();
-	rv |= test_invariant();
-	return rv;
+	basic_test();
+	test_invariant();
 }
 
 
@@ -212,7 +209,9 @@ main(int argc, char **argv)
 	if( argc > 1 && ! strcmp(argv[1], "run") ){
 		return interactive();
 	} else {
-		return test();
+		test();
+		printf("%u tests passed\n", test_count);
+		return 0;
 	}
 }
 
