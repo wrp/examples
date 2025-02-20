@@ -50,7 +50,7 @@ main() {
 	test_string '2 4r/p' '2'
 	test_string '4,1-8Y' "  0: 4${nl}  1: 1${nl}  2: -8"
 	test_string '4,1- 8Y' "  0: 3${nl}  1: 8"
-	if test "@HAVE_COMMA_FORMAT@" = 1; then
+	if $have_comma_format; then
 		test_string "[%.3'Lf]0F1024,1+p" '1,025.000'
 	fi
 
@@ -116,4 +116,29 @@ main() {
 	exit $RV
 }
 
+check_comma_format() {
+	# See  fa469334^:c/configure.ac, in which we used a configure
+	# script to evaluate the platform.  For now, just do the
+	# check at runtime.
+	source_file=$(mktemp).c
+	executable=$(mktemp)
+	cat > "$source_file" <<- EOF
+		#include <stdio.h>
+		#include <string.h>
+		int main(void) {
+			char s[32];
+			sprintf(s, "%.3'Lf", (long double)1025);
+			return strcmp(s, "1,025");
+		}
+		EOF
+	${CC-cc} "$source_file" -o "$executable" 2> /dev/null
+	have_comma_format=false
+	if "$executable"; then
+		have_comma_format=true
+	fi
+	rm "$source_file" "$executable"
+}
+
+
+check_comma_format
 main
