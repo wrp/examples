@@ -30,7 +30,7 @@ test_string '10 3 1--5-p' '7'  # 2 - (-5)
 test_string '10,3,1-,-5,-+p' '17'
 test_string '10,3,1--5,-+p' '17'
 test_string '10,3,1--5,-,+,p' '17'
-test_string '4.5 1 1+l' "  0: 4.5${nl}  1: 2"
+test_string '4.5 1 1+Y' "  0: 4.5${nl}  1: 2"
 test_string '5 6*p' '30'
 test_string '5,6*p' '30'
 test_string '7 -3+p' '4'
@@ -44,8 +44,8 @@ test_string '10k10 3/p' '3.3333333333'
 test_string '1y+p' '2'
 test_string '1 2 3np' "3${nl}2"
 test_string '2 4r/p' '2'
-test_string '4,1-8l' "  0: 4${nl}  1: 1${nl}  2: -8"
-test_string '4,1- 8l' "  0: 3${nl}  1: 8"
+test_string '4,1-8Y' "  0: 4${nl}  1: 1${nl}  2: -8"
+test_string '4,1- 8Y' "  0: 3${nl}  1: 8"
 if test "@HAVE_COMMA_FORMAT@" = 1; then
 	test_string "[%.3'Lf]0F1024,1+p" '1,025.000'
 fi
@@ -54,12 +54,12 @@ fi
 test_string '[2 2+p][1 1+p]1x0x' "2${nl}4"
 test_string '5[2 2+n]1[1 1+n]x0xp' "2${nl}4${nl}5"
 test_string '[garbage][2 2+n]5[1 1+n]2x1xn' "2${nl}4${nl}5"
-test_string '[f_oo][bar]L' "(0): f_oo${nl}(1): bar"
-test_string '[foo][bar]RL' "(0): bar${nl}(1): foo"
-test_string 'D[foo][bar][baz]DL' "(0): foo${nl}(1): bar"
-test_string '[foo]LRL' "(0): foo${nl}(0): foo"
+test_string '[f_oo][bar]Z' "(0): f_oo${nl}(1): bar"
+test_string '[foo][bar]RZ' "(0): bar${nl}(1): foo"
+test_string 'D[foo][bar][baz]DZ' "(0): foo${nl}(1): bar"
+test_string '[foo]ZRZ' "(0): foo${nl}(0): foo"
 long='this string needs to be at least 32 characters long'
-test_string "[$long][bar]L" "(0): ${long}${nl}(1): bar"
+test_string "[$long][bar]Z" "(0): ${long}${nl}(1): bar"
 test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 test_string '[]9x' 'Register 9 empty'

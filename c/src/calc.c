@@ -30,9 +30,9 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
-#define string_ops "[]FxLRD"
+#define string_ops "[]DFRxZ"
 #define binary_ops "*+/^r"
-#define unary_ops "lknpy"
+#define unary_ops "knpyY"
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
@@ -59,8 +59,6 @@ print_help(struct state *S)
 		"[s]  push s onto the register stack\n"
 		"h    print this help message\n"
 		"k    set precision of format string\n"
-		"l    list elements of the stack\n"
-		"L    list elements of register stack\n"
 		"n    print and pop top value of stack\n"
 		"p    print top value of stack\n"
 		"q    quit\n"
@@ -68,6 +66,8 @@ print_help(struct state *S)
 		"R    swap top two elements of the register stack\n"
 		"x    execute a string in register\n"
 		"y    duplicate top value of stack\n"
+		"Y    list (examine) elements of the stack\n"
+		"Z    list elements of register stack\n"
 	);
 	fprintf(stderr, "Output format currently: %s", S->fmt);
 }
@@ -311,7 +311,7 @@ apply_string_op(struct state *S, unsigned char c)
 			stack_push(S->registers, b);
 		}
 		break;
-	case 'L':
+	case 'Z':
 		for( unsigned i = 0; i < stack_size(S->registers); i++ ){
 			int j = 0, c;
 			struct ring_buf *s = stack_get(S->registers, i);
@@ -369,7 +369,7 @@ apply_unary(struct state *S, unsigned char c)
 			S->type = rational;
 		}
 		break;
-	case 'l':
+	case 'Y':
 		stack_push(S->values, &val);
 		print_stack(S);
 		break;
