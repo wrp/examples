@@ -279,6 +279,9 @@ execute_function(struct state *S, const char *cmd)
 
 	stack_pop(S->values, &res);
 
+	/* TODO: do a lookup via polynomial rolling hash instead
+	* of this absurd linear search via strcmp.
+	*/
 	for ( ; func->name; func += 1 ){
 		if (strcmp(cmd, func->name) == 0) {
 			res = func->f.f(res);
