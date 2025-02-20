@@ -54,6 +54,22 @@ struct state {
 	enum { rational, integer } type;
 };
 
+struct func {
+	const char *name;
+	long double (*f)(long double);
+} functions[] = {
+	{ "sin", sinl },
+	{ "cos", cosl },
+	{ "tan", tanl },
+	{ "log", logl },
+	{ "log2", log2l },
+	{ "log10", log10l },
+	{ "log1p", log1pl },
+	{ NULL, 0 },
+};
+
+static void show_functions(void);
+
 void
 print_help(struct state *S)
 {
@@ -78,6 +94,11 @@ print_help(struct state *S)
 		"Y    list (examine) elements of the stack\n"
 		"Z    list elements of register stack\n"
 	);
+	putchar('\n');
+	puts("The ~ command understands the following functions:");
+	putchar('\t');
+	show_functions();
+	putchar('\n');
 	fprintf(stderr, "Output format currently: %s", S->fmt);
 }
 
@@ -217,27 +238,44 @@ push_value(struct state *S, unsigned char c)
 }
 
 
-void
-execute_function(struct state *S, const char *cmd)
+static void
+show_functions(void)
 {
-	/* Execute a function.  For now, this is just a stub which
-	* only executes sin.  TODO: perhaps embed a lua interpreter!
-	* There are lots of options here, and this function currently
-	* exists merely to demonstrate the possibilities.
-	*/
-	double val[2];
-	double res;
-	if (strcmp(cmd, "sin") == 0) {
-		stack_pop(S->values, val);
-		res = sin(val[0]);
-		stack_push(S->values, &res);
-	} else {
-		fprintf(stderr, "Unknown function: %s\n", cmd);
+	struct func *func = functions;
+	while( func->name ){
+		printf("%s", func->name);
+		func += 1;
+		if( func->name ) {
+			fputs(", ", stdout);
+		}
 	}
 }
 
 
-void
+static void
+execute_function(struct state *S, const char *cmd)
+{
+	long double arg;
+	long double res;
+	struct func *func = functions;
+
+	stack_pop(S->values, &res);
+
+	for ( ; func->name; func += 1 ){
+		if (strcmp(cmd, func->name) == 0) {
+			res = func->f(res);
+			break;
+		}
+	}
+
+	if (func->name == NULL) {
+		fprintf(stderr, "Unknown function: %s\n", cmd);
+	}
+	stack_push(S->values, &res);
+}
+
+
+static void
 apply_function(struct state *S)
 {
 	struct ring_buf *rb = select_register(S);
