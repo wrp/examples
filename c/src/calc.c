@@ -11,6 +11,14 @@ const char *help[] = {
 "",
 "',' is used to separate entries.  So '1,2+' computes the sum of 1 and 2",
 "'_' is an ignored place holder, so 65536 can be written 65_536",
+"",
+"All computation is done using double precision floats, but you can",
+"control the output format with k or F.  Although values are parsed",
+"using strtod, you must use X and P verses x and p.",
+"eg, 0X34P3 will be parsed as the hex value 34 shifted left 3 bits,",
+"but 0x34p3 will place 0 on the stack, try to execute the ",
+"string in register 0, push decimal 34 on the stack, print it,",
+"and then push 3 onto the stack.",
 0
 };
 
