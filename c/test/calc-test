@@ -5,6 +5,7 @@
 exe=./calc
 
 RV=0
+count=0
 test_string() {
 	out=$(echo "$1" | $exe 2>&1)
 	if test $# -gt 1 && test "$out" != "$2"; then
@@ -16,6 +17,7 @@ test_string() {
 		echo "With args:'$1', expected output '$2', got '$out'" >&2
 		RV=1
 	fi
+	: $((count += 1))
 }
 
 nl='
@@ -108,4 +110,5 @@ test_string "$s"
 e='Stack empty (need 2 values)'
 test_string '**' "$e$nl$e"
 
+echo "$count tests passed"
 exit $RV
