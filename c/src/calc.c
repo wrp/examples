@@ -58,6 +58,7 @@ struct func {
 	const char *name;
 	long double (*f)(long double);
 } functions[] = {
+	{ "acos", acosl },
 	{ "sin", sinl },
 	{ "cos", cosl },
 	{ "tan", tanl },
