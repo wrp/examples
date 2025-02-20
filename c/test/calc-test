@@ -125,10 +125,12 @@ check_comma_format() {
 	cat > "$source_file" <<- EOF
 		#include <stdio.h>
 		#include <string.h>
+		#include <locale.h>
 		int main(void) {
 			char s[32];
+			setlocale(LC_NUMERIC, "");
 			sprintf(s, "%.3'Lf", (long double)1025);
-			return strcmp(s, "1,025");
+			return strcmp(s, "1,025.000");
 		}
 		EOF
 	${CC-cc} "$source_file" -o "$executable" 2> /dev/null
