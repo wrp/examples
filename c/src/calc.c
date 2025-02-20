@@ -38,7 +38,7 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
-#define string_ops "[]DFRxZ"
+#define string_ops "[]D~FRxZ"
 #define binary_ops "*+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_"
@@ -62,6 +62,7 @@ print_help(struct state *S)
 	}
 	putchar('\n');
 	puts(
+		"~    use function from specified register\n"
 		"D    Delete the first register\n"
 		"F    use value from the specified register as format string\n"
 		"[s]  push s onto the register stack\n"
@@ -215,6 +216,46 @@ push_value(struct state *S, unsigned char c)
 	return *cp == '-';
 }
 
+
+void
+execute_function(struct state *S, const char *cmd)
+{
+	/* Execute a function.  For now, this is just a stub which
+	* only executes sin.  TODO: perhaps embed a lua interpreter!
+	* There are lots of options here, and this function currently
+	* exists merely to demonstrate the possibilities.
+	*/
+	double val[2];
+	double res;
+	if (strcmp(cmd, "sin") == 0) {
+		stack_pop(S->values, val);
+		res = sin(val[0]);
+		stack_push(S->values, &res);
+	} else {
+		fprintf(stderr, "Unknown function: %s\n", cmd);
+	}
+}
+
+
+void
+apply_function(struct state *S)
+{
+	struct ring_buf *rb = select_register(S);
+	if( ! rb ){
+		return;
+	}
+	char cmd[128];
+	int c;
+	char *b = cmd;
+	char *e = cmd + sizeof cmd - 1;
+	while( b < e && (c = rb_peek(rb, b - cmd)) != EOF ){
+		*b++ = c;
+	}
+	*b = '\0';
+	execute_function(S, cmd);
+}
+
+
 void
 extract_format(struct state *S)
 {
@@ -301,6 +342,9 @@ apply_string_op(struct state *S, unsigned char c)
 		S->enquote = 0;
 		stack_xpush(S->registers, S->accum);
 		S->accum = rb_create(32);
+		break;
+	case '~':
+		apply_function(S);
 		break;
 	case 'D':
 		if( stack_size(S->registers) > 0 ){
