@@ -59,13 +59,18 @@ struct func {
 	long double (*f)(long double);
 } functions[] = {
 	{ "acos", acosl },
-	{ "sin", sinl },
+	{ "asin", asinl },
+	{ "atan", atanl },
 	{ "cos", cosl },
-	{ "tan", tanl },
+	{ "cosh", coshl },
 	{ "log", logl },
-	{ "log2", log2l },
 	{ "log10", log10l },
 	{ "log1p", log1pl },
+	{ "log2", log2l },
+	{ "sin", sinl },
+	{ "sinh", sinhl },
+	{ "tan", tanl },
+	{ "tanh", tanhl },
 	{ NULL, 0 },
 };
 
