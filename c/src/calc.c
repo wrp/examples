@@ -69,6 +69,7 @@ struct func {
 	{ "log2", log2l },
 	{ "sin", sinl },
 	{ "sinh", sinhl },
+	{ "sqrt", sqrtl },
 	{ "tan", tanl },
 	{ "tanh", tanhl },
 	{ NULL, 0 },
