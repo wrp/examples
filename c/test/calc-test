@@ -122,6 +122,7 @@ main() {
 	test_string '1000 [log10]0~p' '3'
 	test_string '1 2e-5 + [log1p] 0~ p' 0.693
 	test_string '100 [sqrt] 0~ p' 10
+	test_string '10 2 [pow] 0~ p' 100
 
 	echo "$count tests passed"
 	exit $RV

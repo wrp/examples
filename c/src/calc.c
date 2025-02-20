@@ -56,8 +56,11 @@ struct state {
 
 struct func {
 	const char *name;
-	long double (*f)(long double);
-} functions[] = {
+	union {
+		long double (*f)(long double);
+		long double (*g)(long double, long double);
+	} f;
+} unary_functions[] = {
 	{ "acos", acosl },
 	{ "asin", asinl },
 	{ "atan", atanl },
@@ -72,6 +75,11 @@ struct func {
 	{ "sqrt", sqrtl },
 	{ "tan", tanl },
 	{ "tanh", tanhl },
+	{ NULL, 0 },
+};
+
+struct func binary_functions[] = {
+	{ "pow", .f.g = powl},
 	{ NULL, 0 },
 };
 
@@ -248,12 +256,15 @@ push_value(struct state *S, unsigned char c)
 static void
 show_functions(void)
 {
-	struct func *func = functions;
-	while( func->name ){
-		printf("%s", func->name);
-		func += 1;
-		if( func->name ) {
-			fputs(", ", stdout);
+	struct func *funcs[2] = { unary_functions, binary_functions };;
+	for( int i = 0; i < 2; i += 1 ){
+		struct func *func = funcs[i];
+		while( func->name ){
+			printf("%s", func->name);
+			func += 1;
+			if( i < 1 || func->name ) {
+				fputs(", ", stdout);
+			}
 		}
 	}
 }
@@ -264,20 +275,30 @@ execute_function(struct state *S, const char *cmd)
 {
 	long double arg;
 	long double res;
-	struct func *func = functions;
+	struct func *func = unary_functions;
 
 	stack_pop(S->values, &res);
 
 	for ( ; func->name; func += 1 ){
 		if (strcmp(cmd, func->name) == 0) {
-			res = func->f(res);
+			res = func->f.f(res);
+			goto done;
+		}
+	}
+
+	for ( func = binary_functions; func->name; func += 1 ){
+		if (strcmp(cmd, func->name) == 0) {
+			stack_pop(S->values, &arg);
+			res = func->f.g(arg, res);
 			break;
 		}
 	}
 
+done:
 	if (func->name == NULL) {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
+
 	stack_push(S->values, &res);
 }
 
