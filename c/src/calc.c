@@ -85,8 +85,11 @@ struct func {
 	} f;
 } functions[] = {
 	{ "acos", 1, acosl },
+	{ "acosh", 1, acoshl },
 	{ "asin", 1, asinl },
+	{ "asinh", 1, asinhl },
 	{ "atan", 1, atanl },
+	{ "atanh", 1, atanhl },
 	{ "cbrt", 1, cbrtl },
 	{ "cos", 1, cosl },
 	{ "cosh", 1, coshl },
@@ -94,6 +97,7 @@ struct func {
 	{ "exp2", 1, exp2l },
 	{ "fabs", 1, fabsl },
 	{ "hypot", 2, .f.g = hypotl },
+	{ "lgamma", 1, lgammal },
 	{ "log", 1, logl },
 	{ "log10", 1, log10l },
 	{ "log1p", 1, log1pl },
@@ -104,6 +108,7 @@ struct func {
 	{ "sinh", 1, sinhl },
 	{ "sqrt", 1, sqrtl },
 	{ "tan", 1, tanl },
+	{ "tgamma", 1, tgammal },
 	{ "tanh", 1, tanhl },
 	{ NULL, 0 },
 };
