@@ -131,8 +131,6 @@ compute_hash(const char *s)
 	int p_pow = 1;
 	int p = 31;
 	int m = 256;
-#define debug(x)
-	debug(fprintf(stderr, "Computing hash for %s: ", s));
 	for( ; *s; s += 1 ){
 		int base = 'a';
 		if (isdigit(*s)) {
@@ -142,7 +140,6 @@ compute_hash(const char *s)
 		rv = (rv + (*s - base + 1) * p_pow) % m;
 		p_pow = (p_pow * p) % m;
 	}
-	debug(fprintf(stderr, "%ld\n", rv %m));
 	return (size_t)(rv % m);
 }
 

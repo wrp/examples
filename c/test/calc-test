@@ -130,6 +130,9 @@ main() {
 	test_string '100 [sqrt] 0~ p' 10
 	test_string '10 2 [pow] 0~ p' 100
 
+	test_string '[banana] 0~' 'Unknown function: banana'
+
+
 	printf '%s' "$count tests passed"
 	case $fail_count in
 	0) printf '\n';;
