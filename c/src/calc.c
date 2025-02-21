@@ -124,13 +124,9 @@ void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
 
-int
-main(int argc, char **argv)
+static void
+init_state(struct state *S)
 {
-	int c;
-	struct state S[1];
-
-	setlocale(LC_NUMERIC, "");
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
@@ -138,6 +134,16 @@ main(int argc, char **argv)
 	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
+}
+
+int
+main(int argc, char **argv)
+{
+	int c;
+	struct state S[1];
+
+	setlocale(LC_NUMERIC, "");
+	init_state(S);
 
 	if( argc > 1 ){
 		for( ; *++argv; push_it(S, ' ') ){
