@@ -99,12 +99,12 @@ struct func {
 	{ "log1p", 1, log1pl },
 	{ "log2", 1, log2l },
 	{ "nextafter", 2, .f.g = nextafterl },
+	{ "pow", 2, .f.g = powl},
 	{ "sin", 1, sinl },
 	{ "sinh", 1, sinhl },
 	{ "sqrt", 1, sqrtl },
 	{ "tan", 1, tanl },
 	{ "tanh", 1, tanhl },
-	{ "pow", 2, .f.g = powl},
 	{ NULL, 0 },
 };
 
