@@ -29,9 +29,10 @@ test_string() {
 
 nl='
 '
+err='Stack empty'
 
 main() {
-	test_string 'p' 'Stack empty (need 1 value)'
+	test_string 'p' "$err"
 	test_string "1 $(yes 24 | sed -e 300q | tr -d \\n)
 		3+p" "Overflow: Term truncated${nl}4"
 	test_string 'hq'
@@ -67,14 +68,14 @@ main() {
 	test_string '[garbage][2 2+n]5[1 1+n]2x1xn' "2${nl}4${nl}5"
 	test_string '[f_oo][bar]Z' "(0): f_oo${nl}(1): bar"
 	test_string '[foo][bar]RZ' "(0): bar${nl}(1): foo"
-	test_string 'D[foo][bar][baz]DZ' "(0): foo${nl}(1): bar"
+	test_string 'D[foo][bar][baz]DZ' "$err${nl}(0): foo${nl}(1): bar"
 	test_string '[foo]ZRZ' "(0): foo${nl}(0): foo"
 	long='this string needs to be at least 32 characters long'
 	test_string "[$long][bar]Z" "(0): ${long}${nl}(1): bar"
 	test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
 	test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 	test_string '[]9x' 'Register 9 empty'
-	test_string 'x' 'Register stack empty'
+	test_string 'x' "$err"
 	test_string '1024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 	test_string '1_024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
 	fmt_warning="Warning: output fmt should print a long value (eg '%Lf')"
@@ -84,7 +85,7 @@ main() {
 	test_string "[$long_string]0x[%.0Lf]1Fp" '1050'
 	test_string "[${long_string} 1+]0x[%.0Lf]1Fp" '1051'
 	test_string '1 4eXe2 3-p' "Garbled (discarded): 4eXe2${nl}-2"
-	test_string "4-" 'Stack empty (need 2 values)'
+	test_string "4-" 'Stack empty'
 	test_string "4-2" ''
 	test_string "4-2+p" '2'
 	test_string "4 3.5-p" '0.5'
@@ -116,7 +117,7 @@ main() {
 	# Grow the stack
 	s=$(yes 1 | sed -e 128q | tr \\n ' ')
 	test_string "$s"
-	e='Stack empty (need 2 values)'
+	e='Stack empty'
 	test_string '**' "$e$nl$e"
 
 	test_string '3.14159 6 /[sin]0~p' '0.5'

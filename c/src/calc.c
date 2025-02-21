@@ -340,6 +340,17 @@ show_functions(void)
 }
 
 
+static int
+pop_value(struct stack *s, void *value)
+{
+	int rv = stack_pop(s, value);
+	if( !rv ){
+		fputs("Stack empty\n", stderr);
+	}
+	return rv;
+}
+
+
 static void
 execute_function(struct state *S, const char *cmd)
 {
@@ -348,27 +359,25 @@ execute_function(struct state *S, const char *cmd)
 	struct func *func;
 	size_t idx;
 
-	stack_pop(S->values, &res);
-
 	idx = compute_hash(cmd);
 	assert(idx < sizeof S->function_lut / sizeof *S->function_lut);
 	func = S->function_lut[idx];
 
 	if (func && strcmp(cmd, func->name) == 0) {
+		pop_value(S->values, &res);
 		switch(func->arg_count){
 		default: assert(0);
 		case 2:
-			stack_pop(S->values, &arg);
+			pop_value(S->values, &arg);
 			res = func->f.g(arg, res);
 			break;
 		case 1:
 			res = func->f.f(res);
 		}
+		stack_push(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
-
-	stack_push(S->values, &res);
 }
 
 
@@ -444,7 +453,7 @@ select_register(struct state *S)
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_pop(S->values, &val) ){
+	if( stack_size(S->values) && pop_value(S->values, &val) ){
 		offset = val;
 	}
 	if( rint(val) != val ){
@@ -453,7 +462,7 @@ select_register(struct state *S)
 		stack_push(S->values, &val);
 	} else if( (ret = stack_get(S->registers, offset)) == NULL ){
 		if( offset == -1 ){
-			fprintf(stderr, "Register stack empty\n");
+			fprintf(stderr, "Stack empty\n");
 		} else {
 			fprintf(stderr, "Register %d empty\n", offset);
 		}
@@ -487,9 +496,7 @@ apply_string_op(struct state *S, unsigned char c)
 		apply_function(S, rb);
 		break;
 	case 'D':
-		if( stack_size(S->registers) > 0 ){
-			stack_pop(S->registers, &e);
-		}
+		pop_value(S->registers, &e);
 		break;
 	case 'F':
 		extract_format(S);
@@ -497,8 +504,8 @@ apply_string_op(struct state *S, unsigned char c)
 	case 'R':
 		if( stack_size(S->registers) > 1 ){
 			struct ring_buf *a, *b;
-			stack_pop(S->registers, &a);
-			stack_pop(S->registers, &b);
+			pop_value(S->registers, &a);
+			pop_value(S->registers, &b);
 			stack_push(S->registers, a);
 			stack_push(S->registers, b);
 		}
@@ -543,8 +550,7 @@ apply_unary(struct state *S, unsigned char c)
 {
 	long double val;
 	assert( strchr(unary_ops, c) );
-	if( !stack_pop(S->values, &val) ){
-		fputs("Stack empty (need 1 value)\n", stderr);
+	if( !pop_value(S->values, &val) ){
 		return;
 	}
 	switch( c ){
@@ -583,12 +589,9 @@ apply_binary(struct state *S, unsigned char c)
 	long double val[2];
 	long double res;
 	assert( strchr(binary_ops, c) || c == '-' );
-	if( stack_size(S->values) < 2 ){
-		fputs("Stack empty (need 2 values)\n", stderr);
+	if( !pop_value(S->values, val) || !pop_value(S->values, val + 1) ){
 		return;
 	}
-	stack_pop(S->values, val);
-	stack_pop(S->values, val + 1);
 	switch(c) {
 	case 'r':
 		stack_push(S->values, val);
