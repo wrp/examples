@@ -90,6 +90,8 @@ struct func {
 	{ "cbrt", 1, cbrtl },
 	{ "cos", 1, cosl },
 	{ "cosh", 1, coshl },
+	{ "exp", 1, expl },
+	{ "exp2", 1, exp2l },
 	{ "fabs", 1, fabsl },
 	{ "hypot", 2, .f.g = hypotl },
 	{ "log", 1, logl },

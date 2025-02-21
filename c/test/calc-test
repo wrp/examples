@@ -138,6 +138,9 @@ main() {
 	test_string '3 4 [hypot] !p' 5
 	test_string '5 6 [nextafter] ! 4 ! p' 5
 
+	test_string '5 [exp2] !p' 32
+	test_string '2 [exp] !p' 7.39
+
 	test_string '[banana] 0~' 'Unknown function: banana'
 
 
