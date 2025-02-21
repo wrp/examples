@@ -21,6 +21,7 @@ const char *help[] = {
 "and then push 3 onto the stack.",
 "",
 "~    use function from specified register",
+"!    use function from top register",
 "D    delete the first register",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
@@ -55,7 +56,7 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
-#define string_ops "[]D~FRxZ"
+#define string_ops "[]D~!FRxZ"
 #define binary_ops "*+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_"
@@ -109,7 +110,7 @@ print_help(struct state *S)
 	for( const char **s = help; *s; s++ ){
 		puts(*s);
 	}
-	puts("\nThe ~ command understands the following functions:");
+	puts("\nThe ~ and ! commands understand the following functions:");
 	show_functions();
 	putchar('\n');
 }
@@ -355,9 +356,11 @@ execute_function(struct state *S, const char *cmd)
 
 
 static void
-apply_function(struct state *S)
+apply_function(struct state *S, struct ring_buf *rb)
 {
-	struct ring_buf *rb = select_register(S);
+	if( !rb ) {
+		rb = select_register(S);
+	}
 	if( ! rb ){
 		return;
 	}
@@ -445,7 +448,7 @@ select_register(struct state *S)
 void
 apply_string_op(struct state *S, unsigned char c)
 {
-	struct ring_buf *rb;
+	struct ring_buf *rb = NULL;
 	void *e;
 	assert( !S->enquote || c == ']' );
 	if( c != ']' ){
@@ -460,8 +463,11 @@ apply_string_op(struct state *S, unsigned char c)
 		stack_xpush(S->registers, S->accum);
 		S->accum = rb_create(32);
 		break;
+	case '!':
+		rb = stack_get(S->registers, -1);
+		/* Fall Thru */
 	case '~':
-		apply_function(S);
+		apply_function(S, rb);
 		break;
 	case 'D':
 		if( stack_size(S->registers) > 0 ){

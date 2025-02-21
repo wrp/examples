@@ -120,7 +120,9 @@ main() {
 	test_string '**' "$e$nl$e"
 
 	test_string '3.14159 6 /[sin]0~p' '0.5'
+	test_string '3.14159 6 /[sin]!p' '0.5'
 	test_string '3.14159 3 /[cos]0~p' '0.5'
+	test_string '3.14159 3 /[cos]!p' '0.5'
 	test_string '1 [acos]0~p' '0'
 	test_string '0 [tan]0~p' '0'
 	test_string '2.718281828459 [log]0~p' '1'
