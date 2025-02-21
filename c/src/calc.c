@@ -44,6 +44,7 @@ const char *help[] = {
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
+struct func;
 struct state {
 	struct stack *values;
 	struct stack *registers;
@@ -52,34 +53,32 @@ struct state {
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 	enum { rational, integer } type;
+	struct func *function_lut[256];
 };
 
 struct func {
 	const char *name;
+	int arg_count;
 	union {
 		long double (*f)(long double);
 		long double (*g)(long double, long double);
 	} f;
-} unary_functions[] = {
-	{ "acos", acosl },
-	{ "asin", asinl },
-	{ "atan", atanl },
-	{ "cos", cosl },
-	{ "cosh", coshl },
-	{ "log", logl },
-	{ "log10", log10l },
-	{ "log1p", log1pl },
-	{ "log2", log2l },
-	{ "sin", sinl },
-	{ "sinh", sinhl },
-	{ "sqrt", sqrtl },
-	{ "tan", tanl },
-	{ "tanh", tanhl },
-	{ NULL, 0 },
-};
-
-struct func binary_functions[] = {
-	{ "pow", .f.g = powl},
+} functions[] = {
+	{ "acos", 1, acosl },
+	{ "asin", 1, asinl },
+	{ "atan", 1, atanl },
+	{ "cos", 1, cosl },
+	{ "cosh", 1, coshl },
+	{ "log", 1, logl },
+	{ "log10", 1, log10l },
+	{ "log1p", 1, log1pl },
+	{ "log2", 1, log2l },
+	{ "sin", 1, sinl },
+	{ "sinh", 1, sinhl },
+	{ "sqrt", 1, sqrtl },
+	{ "tan", 1, tanl },
+	{ "tanh", 1, tanhl },
+	{ "pow", 2, .f.g = powl},
 	{ NULL, 0 },
 };
 
@@ -124,6 +123,58 @@ void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
 
+
+static size_t
+compute_hash(const char *s)
+{
+	unsigned long rv = 0;
+	int p_pow = 1;
+	int p = 31;
+	int m = 256;
+#define debug(x)
+	debug(fprintf(stderr, "Computing hash for %s: ", s));
+	for( ; *s; s += 1 ){
+		int base = 'a';
+		if (isdigit(*s)) {
+			base = '0';
+		}
+
+		rv = (rv + (*s - base + 1) * p_pow) % m;
+		p_pow = (p_pow * p) % m;
+	}
+	debug(fprintf(stderr, "%ld\n", rv %m));
+	return (size_t)(rv % m);
+}
+
+
+static void
+insert_into_lut(struct func *f, struct state *S)
+{
+	size_t idx = compute_hash(f->name);
+	if( S->function_lut[idx] ){
+		/* We should construct the hash table to avoid
+		* collisions.  If this ever happens (this is a
+		* compile-time issue), either implement probing
+		* or change the hash function.
+		*/
+		fprintf(stderr, "Hash collision.  Aborting\n");
+		exit(1);
+	}
+	S->function_lut[idx] = f;
+}
+
+static void
+hash_functions(struct state *S)
+{
+	memset(S->function_lut, 0, sizeof S->function_lut);
+	struct func *func = functions;
+	while(func->name) {
+		insert_into_lut(func, S);
+		func += 1;
+	}
+}
+
+
 static void
 init_state(struct state *S)
 {
@@ -134,6 +185,7 @@ init_state(struct state *S)
 	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
+	hash_functions(S);
 }
 
 int
@@ -259,19 +311,16 @@ push_value(struct state *S, unsigned char c)
 static void
 show_functions(void)
 {
-	struct func *funcs[2] = { unary_functions, binary_functions };;
-	for( int i = 0; i < 2; i += 1 ){
-		struct func *func = funcs[i];
-		putchar('\t');
-		while( func->name ){
-			printf("%s", func->name);
-			func += 1;
-			if( func->name ){
-				fputs(", ", stdout);
-			}
+	struct func *func = functions;
+	putchar('\t');
+	while( func->name ){
+		printf("%s", func->name);
+		func += 1;
+		if( func->name ){
+			fputs(", ", stdout);
 		}
-		putchar('\n');
 	}
+	putchar('\n');
 }
 
 
@@ -280,30 +329,26 @@ execute_function(struct state *S, const char *cmd)
 {
 	long double arg;
 	long double res;
-	struct func *func = unary_functions;
+	struct func *func;
+	size_t idx;
 
 	stack_pop(S->values, &res);
 
-	/* TODO: do a lookup via polynomial rolling hash instead
-	* of this absurd linear search via strcmp.
-	*/
-	for ( ; func->name; func += 1 ){
-		if (strcmp(cmd, func->name) == 0) {
-			res = func->f.f(res);
-			goto done;
-		}
-	}
+	idx = compute_hash(cmd);
+	assert(idx < sizeof S->function_lut / sizeof *S->function_lut);
+	func = S->function_lut[idx];
 
-	for ( func = binary_functions; func->name; func += 1 ){
-		if (strcmp(cmd, func->name) == 0) {
+	if (func && strcmp(cmd, func->name) == 0) {
+		switch(func->arg_count){
+		default: assert(0);
+		case 2:
 			stack_pop(S->values, &arg);
 			res = func->f.g(arg, res);
 			break;
+		case 1:
+			res = func->f.f(res);
 		}
-	}
-
-done:
-	if (func->name == NULL) {
+	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
 
