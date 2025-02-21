@@ -44,6 +44,8 @@ const char *help[] = {
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
+#define HASH_TABLE_SIZE 256
+
 struct func;
 struct state {
 	struct stack *values;
@@ -53,7 +55,7 @@ struct state {
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 	enum { rational, integer } type;
-	struct func *function_lut[256];
+	struct func *function_lut[HASH_TABLE_SIZE];
 };
 
 struct func {
@@ -130,7 +132,7 @@ compute_hash(const char *s)
 	unsigned long rv = 0;
 	int p_pow = 1;
 	int p = 31;
-	int m = 256;
+	int m = HASH_TABLE_SIZE;
 	for( ; *s; s += 1 ){
 		int base = 'a';
 		if (isdigit(*s)) {
