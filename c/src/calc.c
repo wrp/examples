@@ -19,6 +19,23 @@ const char *help[] = {
 "but 0x34p3 will place 0 on the stack, try to execute the ",
 "string in register 0, push decimal 34 on the stack, print it,",
 "and then push 3 onto the stack.",
+"",
+"~    use function from specified register",
+"D    delete the first register",
+"F    use value from the specified register as format string",
+"[s]  push s onto the register stack",
+"h    print this help message",
+"k    set precision of format string",
+"n    print and pop top value of stack",
+"p    print top value of stack",
+"q    quit",
+"r    swap top two elements of the stack",
+"R    swap top two elements of the register stack",
+"x    execute a string in register",
+"y    duplicate top value of stack",
+"Y    list (examine) elements of the stack",
+"Z    list elements of register stack",
+"?    show the current setting of the output format string",
 0
 };
 
@@ -92,27 +109,9 @@ print_help(struct state *S)
 	for( const char **s = help; *s; s++ ){
 		puts(*s);
 	}
-	putchar('\n');
-	puts(
-		"~    use function from specified register\n"
-		"D    Delete the first register\n"
-		"F    use value from the specified register as format string\n"
-		"[s]  push s onto the register stack\n"
-		"h    print this help message\n"
-		"k    set precision of format string\n"
-		"n    print and pop top value of stack\n"
-		"p    print top value of stack\n"
-		"q    quit\n"
-		"r    swap top two elements of the stack\n"
-		"R    swap top two elements of the register stack\n"
-		"x    execute a string in register\n"
-		"y    duplicate top value of stack\n"
-		"Y    list (examine) elements of the stack\n"
-		"Z    list elements of register stack\n"
-	);
 	puts("\nThe ~ command understands the following functions:");
 	show_functions();
-	fprintf(stderr, "Output format currently: %s", S->fmt);
+	putchar('\n');
 }
 
 void process_entry(struct state *S, unsigned char c);
@@ -252,8 +251,8 @@ process_entry(struct state *S, unsigned char c)
 		default: fprintf( stderr, "Unexpected: %c\n", c );
 		case '_': break; /* noop */
 		case 'q': exit(0);
-		case 'h':
-		case '?': print_help(S);
+		case 'h': print_help(S); /* Fall Thru */
+		case '?': printf("Output format currently: %s", S->fmt);
 	}
 }
 
