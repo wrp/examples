@@ -133,6 +133,10 @@ main() {
 	test_string '100 [sqrt] 0~ p' 10
 	test_string '10 2 [pow] 0~ p' 100
 
+	test_string '-3.4 [fabs] !p' 3.4
+	test_string '27 [cbrt] !p' 3
+	test_string '3 4 [hypot] !p' 5
+
 	test_string '[banana] 0~' 'Unknown function: banana'
 
 
