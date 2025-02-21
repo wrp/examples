@@ -311,12 +311,18 @@ static void
 show_functions(void)
 {
 	struct func *func = functions;
+	int columns = 0;
 	putchar('\t');
 	while( func->name ){
-		printf("%s", func->name);
+		columns += printf("%s", func->name);
 		func += 1;
 		if( func->name ){
-			fputs(", ", stdout);
+			putchar(',');
+			putchar(columns > 40 ? '\n' : ' ');
+			if( columns > 40 ){
+				putchar('\t');
+				columns = 0;
+			}
 		}
 	}
 	putchar('\n');
