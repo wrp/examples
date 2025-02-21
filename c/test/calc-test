@@ -69,7 +69,7 @@ main() {
 	test_string '[f_oo][bar]Z' "(0): f_oo${nl}(1): bar"
 	test_string '[foo][bar]RZ' "(0): bar${nl}(1): foo"
 	test_string 'D[foo][bar][baz]DZ' "$err${nl}(0): foo${nl}(1): bar"
-	test_string '[foo]ZRZ' "(0): foo${nl}(0): foo"
+	test_string '[foo]ZRZ' "$err${nl}(0): foo"
 	long='this string needs to be at least 32 characters long'
 	test_string "[$long][bar]Z" "(0): ${long}${nl}(1): bar"
 	test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"

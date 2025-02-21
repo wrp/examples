@@ -474,7 +474,7 @@ select_register(struct state *S)
 void
 apply_string_op(struct state *S, unsigned char c)
 {
-	struct ring_buf *rb = NULL;
+	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
 	assert( !S->enquote || c == ']' );
 	if( c != ']' ){
@@ -502,21 +502,19 @@ apply_string_op(struct state *S, unsigned char c)
 		extract_format(S);
 		break;
 	case 'R':
-		if( stack_size(S->registers) > 1 ){
-			struct ring_buf *a, *b;
-			pop_value(S->registers, &a);
-			pop_value(S->registers, &b);
+		if( pop_value(S->registers, &a) &&
+			pop_value(S->registers, &rb) ){
 			stack_push(S->registers, a);
-			stack_push(S->registers, b);
+			stack_push(S->registers, rb);
 		}
 		break;
 	case 'Z':
 		for( unsigned i = 0; i < stack_size(S->registers); i++ ){
 			int j = 0, c;
-			struct ring_buf *s = stack_get(S->registers, i);
+			rb = stack_get(S->registers, i);
 
 			printf("(%d): ", i);
-			while( (c = rb_peek(s, j++)) != EOF ){
+			while( (c = rb_peek(rb, j++)) != EOF ){
 				putchar(c);
 			}
 			putchar('\n');
