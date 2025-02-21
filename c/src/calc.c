@@ -109,11 +109,8 @@ print_help(struct state *S)
 		"Y    list (examine) elements of the stack\n"
 		"Z    list elements of register stack\n"
 	);
-	putchar('\n');
-	puts("The ~ command understands the following functions:");
-	putchar('\t');
+	puts("\nThe ~ command understands the following functions:");
 	show_functions();
-	putchar('\n');
 	fprintf(stderr, "Output format currently: %s", S->fmt);
 }
 
@@ -259,13 +256,15 @@ show_functions(void)
 	struct func *funcs[2] = { unary_functions, binary_functions };;
 	for( int i = 0; i < 2; i += 1 ){
 		struct func *func = funcs[i];
+		putchar('\t');
 		while( func->name ){
 			printf("%s", func->name);
 			func += 1;
-			if( i < 1 || func->name ) {
+			if( func->name ){
 				fputs(", ", stdout);
 			}
 		}
+		putchar('\n');
 	}
 }
 
