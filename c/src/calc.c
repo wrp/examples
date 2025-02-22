@@ -1,7 +1,7 @@
 const char *help[] = {
 "A simple reverse polish calculator",
 "",
-"'-' is treated specially.  When possible, it is treated as a numeric symbol,",
+"When possible, '-' and '+' are treated as numeric symbols,",
 "so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier",
 "to enter negative numbers and values like '1e-2'.  Any time a token can be",
 "interpreted as a numeric value, it is.  This sometimes gets confusing.  For",
@@ -55,7 +55,7 @@ const char *help[] = {
 
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
-#define numeric_tok "-0123456789XPEabcdef."
+#define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "[]D~!FRxZ"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
@@ -269,7 +269,7 @@ process_entry(struct state *S, unsigned char c)
 }
 
 /*
- * Parse a number.  If we encounter an unexpected '-',
+ * Parse a number.  If we encounter an unexpected '-' or '+',
  * treat it as a binary operator and push the rest of
  * the buffer back on the stack to be processed, and
  * return non-zero to indicate that has happened.
@@ -296,14 +296,14 @@ push_value(struct state *S, unsigned char c)
 			return 0;
 		}
 		val = strtold(start, &cp);
-		while( *cp == '-' && cp != start ){
+		while( *cp && strchr("+-", *cp) && cp != start ){
 			stack_push(S->values, &val);
 			start = cp;
 			val = strtold(start, &cp);
 		}
-		if( *cp == '-' ){
+		if( *cp && strchr("+-", *cp) ){
 			assert( cp == start );
-			apply_binary(S, '-');
+			apply_binary(S, *cp);
 			for( char *t = cp + 1; *t; t++ ){
 				push_it(S, *t);
 			}
@@ -314,7 +314,7 @@ push_value(struct state *S, unsigned char c)
 			stack_push(S->values, &val);
 		}
 	}
-	return *cp == '-';
+	return *cp && strchr("+-", *cp) != NULL;
 }
 
 
