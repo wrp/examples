@@ -1,5 +1,6 @@
 /* Demonstrate fork, passing data to child through pipe */
 
+#define _ISOC99_SOURCE
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
