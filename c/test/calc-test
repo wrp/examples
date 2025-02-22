@@ -8,23 +8,20 @@ RV=0
 count=0
 fail_count=0
 
+fail() {
+	printf '%3d: %s\n' "$((++fail_count))" "$1" >&2
+}
+
 test_string() {
 	out=$(echo "$1" | $exe 2>&1)
-	RV=0
 	if test $# -gt 1 && test "$out" != "$2"; then
-		echo "On input:'$1', expected output '$2', got '$out'" >&2
-		RV=1
+		fail " On input: '$1', expected output '$2', got '$out'"
 	fi
 	out=$($exe "$1" 2>&1)
 	if test $# -gt 1 && test "$out" != "$2"; then
-		echo "With args:'$1', expected output '$2', got '$out'" >&2
-		RV=1
+		fail "With args: '$1', expected output '$2', got '$out'"
 	fi
-	if test $RV = 1; then
-		: $((fail_count += 1))
-	else
-		: $((count += 1))
-	fi
+	: $((count += 1))
 }
 
 nl='
@@ -145,7 +142,7 @@ main() {
 	test_string '[banana] 0~' 'Unknown function: banana'
 
 
-	printf '%s' "$count tests passed"
+	printf '%s' "$count tests executed"
 	case $fail_count in
 	0) printf '\n';;
 	1) echo ', 1 test failed';;
