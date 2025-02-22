@@ -2,7 +2,7 @@
 CPPFLAGS = -I ../include
 CFLAGS=--coverage -g -O0
 LDFLAGS = -L../lib
-LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3
+LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3 -lm
 
 SOURCES := $(wildcard *.c)
 EXE := $(subst .c,,$(SOURCES))
