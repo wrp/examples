@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>  /* For bcopy, for FD_COPY */
-#include <sys/select.h>
+#include <strings.h>  /* For bcopy */
+#include <sys/select.h>  /* FD_COPY */
+#include <sys/types.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 void xclose(int fd);
