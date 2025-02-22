@@ -1,6 +1,6 @@
 
 /*
-https://stackoverflow.com/questions/60515959/multiply-numbers-using-fork-and-a-pipe
+https://stackoverflow.com/questions/60515959
 
 For this assignment, we are required to multiply two numbers on
 multiple processes. The first number gets multiplied by each digit
@@ -14,6 +14,7 @@ processes.
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 
