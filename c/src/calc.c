@@ -145,11 +145,7 @@ compute_hash(const char *s)
 	int p = 31;
 	int m = HASH_TABLE_SIZE;
 	for( ; *s; s += 1 ){
-		int base = 'a';
-		if (isdigit(*s)) {
-			base = '0';
-		}
-
+		int base = isdigit(*s) ? '0' : islower(*s) ? 'a' : 0;
 		rv = (rv + (*s - base + 1) * p_pow) % m;
 		p_pow = (p_pow * p) % m;
 	}
