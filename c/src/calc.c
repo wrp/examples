@@ -82,7 +82,7 @@ struct func {
 	union {
 		long double (*f)(long double);
 		long double (*g)(long double, long double);
-	} f;
+	};
 } functions[] = {
 	{ "acos", 1, acosl },
 	{ "acosh", 1, acoshl },
@@ -96,14 +96,14 @@ struct func {
 	{ "exp", 1, expl },
 	{ "exp2", 1, exp2l },
 	{ "fabs", 1, fabsl },
-	{ "hypot", 2, .f.g = hypotl },
+	{ "hypot", 2, .g = hypotl },
 	{ "lgamma", 1, lgammal },
 	{ "log", 1, logl },
 	{ "log10", 1, log10l },
 	{ "log1p", 1, log1pl },
 	{ "log2", 1, log2l },
-	{ "nextafter", 2, .f.g = nextafterl },
-	{ "pow", 2, .f.g = powl},
+	{ "nextafter", 2, .g = nextafterl },
+	{ "pow", 2, .g = powl},
 	{ "sin", 1, sinl },
 	{ "sinh", 1, sinhl },
 	{ "sqrt", 1, sqrtl },
@@ -369,10 +369,10 @@ execute_function(struct state *S, const char *cmd)
 		default: assert(0);
 		case 2:
 			pop_value(S->values, &arg);
-			res = func->f.g(arg, res);
+			res = func->g(arg, res);
 			break;
 		case 1:
-			res = func->f.f(res);
+			res = func->f(res);
 		}
 		stack_push(S->values, &res);
 	} else {
