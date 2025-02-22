@@ -38,12 +38,14 @@ main() {
 	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
 	test_string '3 1--5-p' '7'   # 3 - 1 - (-5)
 	test_string '3e+2p' '300'
-	test_string '10,3,1-,-5,-+p' '17'
-	test_string '10,3,1--5,-+p' '17'
+	test_string '10,3,1-,-5,-+p' '17' # 3 - 1 - (-1) + 10
+	test_string '10,3,1--5,-+p' '17'  # 3 - 1 - (-5) + 10
 	test_string '10,3,1--5,-,+,p' '17'
 	test_string '4.5 1 1+Y' "  0: 4.5${nl}  1: 2"
 	test_string '5 6*p' '30'
 	test_string '5,6*p' '30'
+	test_string '5,+6*p' 30
+	test_string '5,-6*p' -30
 	test_string '7 -3+p' '4'
 	test_string '5e-1 30*p' 15
 	test_string '7    2/p' '3.5'
