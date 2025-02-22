@@ -36,7 +36,7 @@ main() {
 	test_string '1 1+p' '2'
 	test_string '3 +1 +1 +p' 2   # 1 + 1
 	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
-	test_string '10 3 1--5-p' '7'  # 2 - (-5)
+	test_string '3 1--5-p' '7'   # 3 - 1 - (-5)
 	test_string '3e+2p' '300'
 	test_string '10,3,1-,-5,-+p' '17'
 	test_string '10,3,1--5,-+p' '17'
