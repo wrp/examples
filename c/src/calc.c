@@ -73,6 +73,14 @@ fix as needed when/if we change the set of known functions.
 #define HASH_OFFSET 3
 
 struct func;
+struct entry {
+	enum { entry_double, entry_long, entry_ulong } type;
+	union {
+		long double f;
+		long d;
+		unsigned long u;
+	};
+};
 struct state {
 	struct stack *values;
 	struct stack *registers;
@@ -190,7 +198,7 @@ init_state(struct state *S)
 	S->accum = rb_create(32);
 	S->enquote = 0;
 	S->type = rational;
-	S->values = stack_xcreate(sizeof(long double));
+	S->values = stack_xcreate(sizeof(struct entry));
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
 	hash_functions(S);
@@ -282,7 +290,7 @@ push_value(struct state *S, unsigned char c)
 
 	cp = start = s;
 	if( ! rb_isempty(b) ){
-		long double val;
+		struct entry val;
 
 		while( (i = rb_pop(b)) != EOF ){
 			if( cp < end ){
@@ -293,11 +301,11 @@ push_value(struct state *S, unsigned char c)
 			fprintf(stderr, "Overflow: Term truncated\n");
 			return 0;
 		}
-		val = strtold(start, &cp);
+		val.f = strtold(start, &cp);
 		while( *cp && strchr("+-", *cp) && cp != start ){
 			stack_push(S->values, &val);
 			start = cp;
-			val = strtold(start, &cp);
+			val.f = strtold(start, &cp);
 		}
 		if( *cp && strchr("+-", *cp) ){
 			assert( cp == start );
@@ -352,8 +360,8 @@ pop_value(struct stack *s, void *value)
 static void
 execute_function(struct state *S, const char *cmd)
 {
-	long double arg;
-	long double res;
+	struct entry arg;
+	struct entry res;
 	struct func *func;
 	size_t idx;
 
@@ -367,10 +375,10 @@ execute_function(struct state *S, const char *cmd)
 		default: assert(0);
 		case 2:
 			pop_value(S->values, &arg);
-			res = func->g(arg, res);
+			res.f = func->g(arg.f, res.f);
 			break;
 		case 1:
-			res = func->f(res);
+			res.f = func->f(res.f);
 		}
 		stack_push(S->values, &res);
 	} else {
@@ -447,15 +455,15 @@ extract_format(struct state *S)
 struct ring_buf *
 select_register(struct state *S)
 {
-	long double val = -1.0;
+	struct entry val = { entry_double, .f = -1.0 };
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
 	if( stack_size(S->values) && pop_value(S->values, &val) ){
-		offset = val;
+		offset = val.f;
 	}
-	if( rint(val) != val ){
-		fprintf(stderr, "Invalid register: %Lg", val);
+	if( rint(val.f) != val.f ){
+		fprintf(stderr, "Invalid register: %Lg", val.f);
 		fprintf(stderr, " is not an integer\n");
 		stack_push(S->values, &val);
 	} else if( (ret = stack_get(S->registers, offset)) == NULL ){
@@ -533,10 +541,10 @@ void
 print_stack(struct state *S)
 {
 	unsigned i = 0;
-	long double *s;
+	struct entry *s;
 	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++ ){
 		printf("%3u: ", i);
-		printf(S->fmt, *s);
+		printf(S->fmt, s->f);
 	}
 }
 
@@ -544,7 +552,7 @@ print_stack(struct state *S)
 void
 apply_unary(struct state *S, unsigned char c)
 {
-	long double val;
+	struct entry val;
 	assert( strchr(unary_ops, c) );
 	if( !pop_value(S->values, &val) ){
 		return;
@@ -555,11 +563,12 @@ apply_unary(struct state *S, unsigned char c)
 		stack_push(S->values, &val);
 		break;
 	case 'k':
-		if( val < 1 ){
+		if( val.f < 1 ){
 			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
-			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n", (int)val);
+			int v = (int)val.f;
+			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n", v);
 			S->type = rational;
 		}
 		break;
@@ -570,9 +579,9 @@ apply_unary(struct state *S, unsigned char c)
 	case 'p': stack_push(S->values, &val); /* Fall thru */
 	case 'n':
 		if( S->type == rational ){
-			printf(S->fmt, val);
+			printf(S->fmt, val.f);
 		} else {
-			long lval = (long)val;
+			long lval = (long)val.f;
 			printf(S->fmt, lval);
 		}
 		break;
@@ -582,8 +591,8 @@ apply_unary(struct state *S, unsigned char c)
 void
 apply_binary(struct state *S, unsigned char c)
 {
-	long double val[2];
-	long double res;
+	struct entry val[2];
+	struct entry res;
 	assert( strchr(binary_ops, c));
 	if( !pop_value(S->values, val) || !pop_value(S->values, val + 1) ){
 		return;
@@ -593,11 +602,11 @@ apply_binary(struct state *S, unsigned char c)
 		stack_push(S->values, val);
 		res = val[1];
 		break;
-	case '*': res = val[1] * val[0]; break;
-	case '-': res = val[1] - val[0]; break;
-	case '+': res = val[1] + val[0]; break;
-	case '/': res = val[1] / val[0]; break;
-	case '^': res = pow(val[1], val[0]); break;
+	case '*': res.f = val[1].f * val[0].f; break;
+	case '-': res.f = val[1].f - val[0].f; break;
+	case '+': res.f = val[1].f + val[0].f; break;
+	case '/': res.f = val[1].f / val[0].f; break;
+	case '^': res.f = pow(val[1].f, val[0].f); break;
 	}
 	stack_push(S->values, &res);
 }
