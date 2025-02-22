@@ -62,7 +62,15 @@ const char *help[] = {
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
 
+/* We construct the hash table to avoid collisions.  If
+a collision happens (this is a compile-time issue), either implement
+probing or change the hash function.  For now, we just set the
+offset of 3 because 0, 1, and 2 collide.  We could iterate at run
+time to find an offset that works, but a better approach is to just
+fix as needed when/if we change the set of known functions.
+*/
 #define HASH_TABLE_SIZE 256
+#define HASH_OFFSET 3
 
 struct func;
 struct state {
@@ -145,7 +153,7 @@ compute_hash(const char *s)
 	int p = 31;
 	int m = HASH_TABLE_SIZE;
 	for( ; *s; s += 1 ){
-		rv = (rv + (3 + *s) * p_pow) % m;
+		rv = (rv + (HASH_OFFSET + *s) * p_pow) % m;
 		p_pow = (p_pow * p) % m;
 	}
 	return (size_t)(rv % m);
@@ -157,11 +165,6 @@ insert_into_lut(struct func *f, struct state *S)
 {
 	size_t idx = compute_hash(f->name);
 	if( S->function_lut[idx] ){
-		/* We should construct the hash table to avoid
-		* collisions.  If this ever happens (this is a
-		* compile-time issue), either implement probing
-		* or change the hash function.
-		*/
 		fprintf(stderr, "Hash collision.  Aborting\n");
 		exit(1);
 	}
