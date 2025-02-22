@@ -145,14 +145,19 @@ main() {
 	test_string '2 [exp] !p' 7.39
 
 	test_string '[banana] 0~' 'Unknown function: banana'
+	summarize_results
+}
 
 
-	printf '%s' "$count tests executed"
+set_color() { if test -t 1; then tput setaf $1; fi; }
+
+summarize_results() {
+	printf '%s' "$count tests executed, "
 	case $fail_count in
-	0) printf '\n';;
-	1) echo ', 1 test failed';;
-	*) echo ", $fail_count tests failed";;
+	0) set_color 2; echo all passed!!;;
+	*) set_color 1; echo "$fail_count failed";;
 	esac
+	set_color 9
 	test "$fail_count" = 0
 }
 
