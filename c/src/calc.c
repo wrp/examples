@@ -57,7 +57,7 @@ const char *help[] = {
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "-0123456789XPEabcdef."
 #define string_ops "[]D~!FRxZ"
-#define binary_ops "*+/^r"
+#define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_"
 #define token_div " \t\n,"
@@ -586,7 +586,7 @@ apply_binary(struct state *S, unsigned char c)
 {
 	long double val[2];
 	long double res;
-	assert( strchr(binary_ops, c) || c == '-' );
+	assert( strchr(binary_ops, c));
 	if( !pop_value(S->values, val) || !pop_value(S->values, val + 1) ){
 		return;
 	}
