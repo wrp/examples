@@ -7,7 +7,12 @@ LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3 -lm
 SOURCES := $(wildcard *.c)
 EXE := $(subst .c,,$(SOURCES))
 
-all: $(EXE)
+.PHONY: libs clean all
+
+all: libs $(EXE)
+
+libs:
+	cd ../lib; make
 
 check: udp-client udp-server
 	@for path in ../test/*-test; do \
@@ -18,4 +23,5 @@ check: udp-client udp-server
 	done
 
 clean:
-	rm -f $(EXE) *.gcno *.gcda
+	rm -f $(EXE) *.gcno *.gcda *.o
+	cd ../lib; make clean
