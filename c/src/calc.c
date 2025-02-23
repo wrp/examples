@@ -74,11 +74,11 @@ fix as needed when/if we change the set of known functions.
 
 struct func;
 struct entry {
-	enum { entry_double, entry_long, entry_ulong } type;
+	enum type { t_any, t_double, t_long, t_ulong } type;
 	union {
 		long double f;
-		long d;
-		unsigned long u;
+		long long d;
+		unsigned long long u;
 	};
 };
 struct state {
@@ -274,6 +274,30 @@ process_entry(struct state *S, unsigned char c)
 	}
 }
 
+
+struct entry
+get_numeric(const char *s, char **end)
+{
+	struct entry val;
+
+	if( *s != '-' ){
+		val.type = t_ulong;
+		val.u = strtoul(s, end, 0);
+		if( strchr("+-", **end) ){
+			return val;
+		}
+	}
+	val.type = t_long;
+	val.d = strtol(s, end, 0);
+	if( strchr("+-", **end) ){
+		return val;
+	}
+	val.type = t_double;
+	val.f = strtold(s, end);
+	return val;
+}
+
+
 /*
  * Parse a number.  If we encounter an unexpected '-' or '+',
  * treat it as a binary operator and push the rest of
@@ -301,11 +325,11 @@ push_value(struct state *S, unsigned char c)
 			fprintf(stderr, "Overflow: Term truncated\n");
 			return 0;
 		}
-		val.f = strtold(start, &cp);
+		val = get_numeric(start, &cp);
 		while( *cp && strchr("+-", *cp) && cp != start ){
 			stack_push(S->values, &val);
 			start = cp;
-			val.f = strtold(start, &cp);
+			val = get_numeric(start, &cp);
 		}
 		if( *cp && strchr("+-", *cp) ){
 			assert( cp == start );
@@ -317,6 +341,7 @@ push_value(struct state *S, unsigned char c)
 		} else if( *cp ){
 			fprintf(stderr, "Garbled (discarded): %s\n", s);
 		} else {
+			assert(val.type != t_any);
 			stack_push(S->values, &val);
 		}
 	}
@@ -347,12 +372,55 @@ show_functions(void)
 
 
 static int
-pop_value(struct stack *s, void *value)
+pop_value(struct stack *s, void *v, enum type type)
 {
+	struct entry *value = v;
 	int rv = stack_pop(s, value);
 	if( !rv ){
 		fputs("Stack empty\n", stderr);
+	} else if( type != t_any && type != value->type ){
+		switch(value->type) {
+		case t_any: assert(0);
+		case t_double:
+		case t_ulong:
+			switch(type) {
+			case t_any: assert(0);
+			case t_ulong: assert(0);
+			case t_long:
+				value->d = (long long)value->u;
+				break;
+			case t_double:
+				value->f = (long double)value->u;
+			}
+			break;
+		case t_long:
+			switch(type) {
+			case t_any: assert(0);
+			case t_long: assert(0);
+			case t_ulong:
+				value->d = (unsigned long long)value->d;
+				break;
+			case t_double:
+				value->f = (long double)value->d;
+			}
+			break;
+		}
+		value->type = type;
+		/*
+		fputs("Invalid type on stack\n", stderr);
+		stack_push(s, value);
+		rv = 0;
+		*/
 	}
+#if 0
+	printf("popped:");
+	switch(value->type){
+	case t_any: assert(0);
+	case t_ulong: printf(" ulong: %llu\n", value->u); break;
+	case t_long: printf("  long: %lld\n", value->d); break;
+	case t_double: printf("  double: %Lf\n", value->f); break;
+	}
+#endif
 	return rv;
 }
 
@@ -361,7 +429,7 @@ static void
 execute_function(struct state *S, const char *cmd)
 {
 	struct entry arg;
-	struct entry res;
+	struct entry res = {.type = t_double};
 	struct func *func;
 	size_t idx;
 
@@ -370,17 +438,18 @@ execute_function(struct state *S, const char *cmd)
 	func = S->function_lut[idx];
 
 	if (func && strcmp(cmd, func->name) == 0) {
-		pop_value(S->values, &res);
-		switch(func->arg_count){
-		default: assert(0);
-		case 2:
-			pop_value(S->values, &arg);
-			res.f = func->g(arg.f, res.f);
-			break;
-		case 1:
-			res.f = func->f(res.f);
+		if( pop_value(S->values, &res, t_double) ) {
+			switch(func->arg_count){
+			default: assert(0);
+			case 2:
+				pop_value(S->values, &arg, t_double);
+				res.f = func->g(arg.f, res.f);
+				break;
+			case 1:
+				res.f = func->f(res.f);
+			}
+			stack_push(S->values, &res);
 		}
-		stack_push(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
@@ -455,11 +524,11 @@ extract_format(struct state *S)
 struct ring_buf *
 select_register(struct state *S)
 {
-	struct entry val = { entry_double, .f = -1.0 };
+	struct entry val = { t_double, .f = -1.0 };
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_size(S->values) && pop_value(S->values, &val) ){
+	if (stack_size(S->values) && pop_value(S->values, &val, t_double)){
 		offset = val.f;
 	}
 	if( rint(val.f) != val.f ){
@@ -481,7 +550,6 @@ void
 apply_string_op(struct state *S, unsigned char c)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
-	void *e;
 	assert( !S->enquote || c == ']' );
 	if( c != ']' ){
 		push_value(S, c);
@@ -502,14 +570,14 @@ apply_string_op(struct state *S, unsigned char c)
 		apply_function(S, rb);
 		break;
 	case 'D':
-		pop_value(S->registers, &e);
+		pop_value(S->registers, &a, t_any);
 		break;
 	case 'F':
 		extract_format(S);
 		break;
 	case 'R':
-		if( pop_value(S->registers, &a) &&
-			pop_value(S->registers, &rb) ){
+		if( pop_value(S->registers, &a, t_any) &&
+			pop_value(S->registers, &rb, t_any) ){
 			stack_push(S->registers, a);
 			stack_push(S->registers, rb);
 		}
@@ -544,7 +612,18 @@ print_stack(struct state *S)
 	struct entry *s;
 	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++ ){
 		printf("%3u: ", i);
-		printf(S->fmt, s->f);
+		switch(s->type){
+		case t_any: assert(0);
+		case t_double:
+			printf(S->fmt, s->f);
+			break;
+		case t_ulong:
+			printf("%llu\n", s->u);
+			break;
+		case t_long:
+			printf("%lld\n", s->d);
+			break;
+		}
 	}
 }
 
@@ -554,7 +633,7 @@ apply_unary(struct state *S, unsigned char c)
 {
 	struct entry val;
 	assert( strchr(unary_ops, c) );
-	if( !pop_value(S->values, &val) ){
+	if( !pop_value(S->values, &val, t_double) ){
 		return;
 	}
 	switch( c ){
@@ -592,9 +671,12 @@ void
 apply_binary(struct state *S, unsigned char c)
 {
 	struct entry val[2];
-	struct entry res;
+	struct entry res = { .type = t_double };
+
+	res.type = t_double;
 	assert( strchr(binary_ops, c));
-	if( !pop_value(S->values, val) || !pop_value(S->values, val + 1) ){
+	if( !pop_value(S->values, val, t_double) ||
+			!pop_value(S->values, val + 1, t_double) ){
 		return;
 	}
 	switch(c) {
