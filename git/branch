@@ -21,6 +21,9 @@ git push --delete ${remote?} ${branch?}
 # Show branch structure
 git log --oneline --graph --decorate --all --simplify-by-decoration
 
+# Rename branch
+git branch -m $old_branch "$new_branch"
+
 # Archive a branch (prevent gc, but don't show it in git-branch)
 git update-ref refs/archive/${branch} ${branch}
 git branch -D ${branch}
