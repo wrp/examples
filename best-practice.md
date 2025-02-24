@@ -44,17 +44,18 @@ it as a syntax error", tell them to stop using broken IDEs.
 
 ### notes:
 [^errors]:
-	When an error occurs, a process should write a simple, concise,
-	accurate error message to stderr and terminate.  Error messages
-	should *not* offer suggestions.  eg: "The connection to
-	the server localhost:8080 was refused - did you specify the
-	right host or port?"  A better error message would be simply:
-	"localhost:8080: connection refused" The rest is line noise.
-	Perhaps include the name of the executable.  Maybe include the uid
-	or human readable name of the process owner.  Do not include
-	a timestamp by default (let the caller wrap the command if timestamps
-	are desired, maybe add a flag to enable timestamps).
-	Do not provide "helpful" suggestions, and certainly not a usage statement.
+	When an error occurs, a process should write a simple,
+	concise, accurate error message to stderr and terminate.
+	Error messages should *not* offer suggestions and certainly
+	not a usage statement.  For example, instead of: "The
+	connection to the server localhost:8080 was refused - did
+	you specify the right host or port?" a better error message
+	would be simply: "localhost:8080: connection refused" The
+	rest is line noise.  Perhaps include the name of the
+	executable.  Maybe include the uid or human readable name
+	of the process owner.  Do not include a timestamp by default
+	(let the caller wrap the command if timestamps are desired,
+	maybe add a flag to enable timestamps).
 [^usage]:
 	Usage spew is the act of printing a "wall of text" in
 	response to a simple error.  The wall of text generally
