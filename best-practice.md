@@ -139,8 +139,9 @@ it as a syntax error", tell them to stop using broken IDEs.
 	don't just assume your reader has a lot of real estate to waste
 	on excessive indentation of Java-esque naming schemes.
 [^7]:
-	Changes in code need to be contained.  Given the following two diffs, consider how long
-	it takes to understand fully what each does:
+	Changes in code need to be contained.  Given the following
+	two diffs, consider how long it takes to understand fully
+	what each does:
 
 	Compare this patch:
 	```
