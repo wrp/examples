@@ -12,3 +12,6 @@ z<cr> # Move current line to top of screen
 
 To open a file with a search: +/pattern
 vim '+/text\|other' filename
+
+Uppercase a word: gUaw
+Uppercase 3 words: gU3aw
