@@ -1,7 +1,7 @@
 
 To see the value of a variable:
 
-:echo $variable
+:echo variable
 
 
 To see the value of an option:
@@ -9,3 +9,15 @@ To see the value of an option:
 
 To toggle a boolean option:
 :set option!  (eg:set list!)
+
+
+
+The namespace for options is separate from the namespace of
+variables, so you can have variables with the same name as
+options.  eg:
+:set textwidth=50  (set an option)
+:let textwidth="Hello, world!" (set a variable)
+
+Use a & to refer to the option:
+:echo &textwidth   <--- prints 50
+:echo textwidth    <--- prints Hello, world!
