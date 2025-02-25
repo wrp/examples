@@ -2,3 +2,10 @@
 To see the value of a variable:
 
 :echo $variable
+
+
+To see the value of an option:
+:set option?  (eg:set ts?)
+
+To toggle a boolean option:
+:set option!  (eg:set list!)
