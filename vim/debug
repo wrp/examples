@@ -5,3 +5,8 @@ vim -V20$logpath $path
 
 To open vim with $path loaded in the buffer and excessive debugging output
 written to $logpath
+
+
+:echo "message"   # Display message
+:echom "message"  # Display message and write it to the message list
+:messages         # List all messages
