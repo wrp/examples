@@ -21,3 +21,9 @@ options.  eg:
 Use a & to refer to the option:
 :echo &textwidth   <--- prints 50
 :echo textwidth    <--- prints Hello, world!
+
+You can also use let to set an option, but must precede with &.
+:let &textwidth=&textwidth + 5
+
+Local (to window)
+:let &l:textwidth=&textwidth + 5
