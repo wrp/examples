@@ -1,0 +1,5 @@
+See also variables
+
+Set an option local to the buffer
+:let &l:list=1    # Turn on list for this buffer only
+:let &l:ts=8      # Set tabstop for this buffer only
