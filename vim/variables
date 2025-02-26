@@ -25,5 +25,8 @@ Use a & to refer to the option:
 You can also use let to set an option, but must precede with &.
 :let &textwidth=&textwidth + 5
 
-Local (to window)
+Local option (to window)
 :let &l:textwidth=&textwidth + 5
+
+Variable local to the buffer (:help internal-variables)
+:let b:foo="bar"
