@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # keyword: generator
 
+# A generator is a function that returns an iterator.  Any function
+# that uses "yield" is a generator.
+
 import itertools
 from typing import Generator
 
