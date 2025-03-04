@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+from collections import Counter
+
+a = Counter(a=4, b=6)
+
+def show_counter(c):
+    v = [f'{x}->{c[x]}' for x in c]
+    print(', '.join(v))
+
+show_counter(a)
+a['a'] += 3
+a['c'] += 8
+show_counter(a)
+
+s = 'initialize from string counts each char'
+b = Counter(s)
+print(s)
+show_counter(b)
+
+show_counter(a + b)
