@@ -1,11 +1,13 @@
 # Class Foo used in script 'class'
 
+from __future__ import annotations
+
 
 class Foo:
     bar = 0  # Initialization of class attribute happens only once
 
 
-    def __init__(self: 'Foo', x: int, **kwargs: dict):
+    def __init__(self: Foo, x: int, **kwargs: dict):
             self.x = x
             self.bar += x  # Does not modify class instance
             self.map = {}
