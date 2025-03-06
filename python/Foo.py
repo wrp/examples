@@ -5,11 +5,11 @@ class Foo:
     bar = 0  # Initialization of class attribute happens only once
 
 
-def __init(self, x, **kwargs):
-        self.x = x
-        self.bar += x  # Does not modify class instance
-        self.map = {}
-        assert Foo.bar == 0
+    def __init__(self, x: int, **kwargs: dict):
+            self.x = x
+            self.bar += x  # Does not modify class instance
+            self.map = {}
+            assert Foo.bar == 0
 
 def __meth(self: Foo):
     print(f'A do nothing method on {self}')
@@ -27,6 +27,5 @@ def __str(self: Foo) -> str:
     return rv
 
 Foo.__new__ = __new
-Foo.__init__ =__init
 Foo.__str__ = __str
 Foo.meth = __meth
