@@ -16,12 +16,17 @@ sys.stdout.flush()
 # Note that "down two rows" will not scroll the display, so
 # if already at the bottom of the screen it is a no-op.
 
-time.sleep(1)
+time.sleep(.25)
 
 print(ansiEscapes.cursorBackward(20) +
     'Bye, World!' +
     ansiEscapes.eraseEndLine
 )
+
+# Now do the same thing simpler:
+print('Hello, World', end='\r')
+time.sleep(.25)
+print('Bye, World! ')
 
 '''
     cursorBackward(count=1)
