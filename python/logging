@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import os
 import sys
 from functools import wraps
 
@@ -12,6 +13,7 @@ def log_decorator(f):
         return f(*args, **kwargs)
     return wrapper
 
+
 class LogWrapper(logging.Logger):
     def __init__(self, name, level=logging.NOTSET):
         return super(LogWrapper, self).__init__(name, level)
@@ -20,17 +22,33 @@ class LogWrapper(logging.Logger):
         print(f"log wrapper called with {msg}: ", end='')
         return super(LogWrapper, self).info(msg, *args, **kwargs)
 
+logging.basicConfig(
+    stream=sys.stdout,
+    # level can be string or integer.  eg level=logging.INFO
+    level=os.getenv('LOGLEVEL', 'INFO')
+)
+
+logger = logging.getLogger('default')
+class Foo(Exception): pass
+
+try:
+    raise Foo('oops')
+except:
+    logger.debug('test debug')
+    logger.info('test info')
+    logging.info('test logging.info to logging')
+    logger.warning('test warning')
+    logger.error('test error')
+    logger.fatal('test fatal', exc_info=1)  # Show the Foo
+    logger.critical('test critical')
 
 
 logging.setLoggerClass(LogWrapper)
-logging.basicConfig(
-    stream=sys.stdout,
-    level='INFO'  # Can use string or integer.  eg level=logging.INFO
-)
+
+logging.info('foo')  # Calls root logger, not wrapper
+logging.info = log_decorator(logging.info)
+logging.info('bar')  # Root logger with decorated info
 
 logger = logging.getLogger('log')
-
-logging.info('foo')
-logging.info = log_decorator(logging.info)
-logging.info('baz')
-logger.info('bar')
+logger.info('baz')  # Calls LogWrapper.info
+logger.warning('qux')  # Calls unwrapped warning
