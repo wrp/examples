@@ -5,19 +5,23 @@
 # See: https://peps.python.org/pep-0484 and
 # https://peps.python.org/pep-0649
 
+# Verify the hints with 'mypy $path'
+
 from __future__ import annotations  # Allow incomplete types
-# explicit import of types is not necessary when using __future__.annotations
-# from typing import Tuple, Optional
+
+# explicit import of types seems unnecessary when using
+# __future__.annotations, but mypy requires it
+from typing import Iterable, Tuple, Optional
 
 
-def f(x: int, y: Optional[Tuple[int, str]] = None) -> Optional[int]:
+def f(x: int, y: Optional[Iterable[Tuple[int, str]]] = None) -> Optional[int]:
     if x > 0:
         return x
     else:
         return None
 
 class Bar():
-    def __init__(self: Bar, x: int) -> None:
+    def __init__(self: Bar, x: Optional[int] = None) -> None:
         self.x = x
 
 a = Bar(f(1))
