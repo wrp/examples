@@ -26,8 +26,9 @@ def show_counter(c):
 show_counter(a)
 a['a'] += 3
 a['c'] += 8
-a[hashabledict({'test':'dict', 'as':'key'})] += 1
-a[hashabledict({'test':'dict', 'as':'key'})] += 1
+key = {'test':'dict', 'as':'key'}
+a[hashabledict(key)] += 1
+a[hashabledict(key)] += 1
 show_counter(a)
 
 s = 'initialize from string counts each char'
