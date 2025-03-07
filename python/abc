@@ -11,9 +11,11 @@ class D:                                 # No inheritance
     def count(self, value): ...          # Mixin method
     def index(self, value): ...          # Mixin method
 
+print(f'before registering: ', end='')
+print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
 Sequence.register(D)                     # Register instead of inherit
-
-print(f'D is a sequence: {issubclass(D, Sequence)}')
+print(f'after registering : ', end='')
+print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
 print(f'D() is an instance: {isinstance(D(), Sequence)}')
 
 # For simple interfaces, you do not have to explicitly register
