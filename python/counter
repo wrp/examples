@@ -18,9 +18,13 @@ a = Counter(a=4, b=6)
 def show_counter(c):
     for k in c.keys():
         if isinstance(k, dict):
-            for k, v in k.items():
+            print(f'Type of k ({k}) is {type(k)}')
+            d = dict(k)
+            print(f'Type of d ({d}) is {type(d)}')
+            for k, v in d.items():
                 print(f'key: {k}: val: {v}')
-    v = [f'{x}->{c[x]}' for x in c]
+    # v = [f'{x}->{c[x]}' for x in c]
+    v = [f'{k}->{v}' for k, v in c.items()]
     print(', '.join(v))
 
 show_counter(a)
