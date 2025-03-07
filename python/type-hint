@@ -6,7 +6,8 @@
 # https://peps.python.org/pep-0649
 
 from __future__ import annotations  # Allow incomplete types
-from typing import Tuple, Optional
+# explicit import of types is not necessary when using __future__.annotations
+# from typing import Tuple, Optional
 
 
 def f(x: int, y: Optional[Tuple[int, str]] = None) -> Optional[int]:
