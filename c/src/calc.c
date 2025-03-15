@@ -455,10 +455,10 @@ select_register(struct state *S)
 		offset = val;
 	}
 	if( rint(val) != val ){
-		fprintf(stderr, "Invalid register: %Lg", val);
-		fprintf(stderr, " is not an integer\n");
+		offset = -1;
 		stack_push(S->values, &val);
-	} else if( (ret = stack_get(S->registers, offset)) == NULL ){
+	}
+	if( (ret = stack_get(S->registers, offset)) == NULL ){
 		if( offset == -1 ){
 			fprintf(stderr, "Stack empty\n");
 		} else {

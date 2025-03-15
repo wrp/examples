@@ -112,9 +112,7 @@ main() {
 	LC_ALL=en_US.UTF-8 test_string '-1k3456798p' '3,456,798' 3456798
 	LC_ALL=C test_string '-1k4456798p' '4456798'
 
-	test_string '4[1 1+]1.2x+p' \
-		"Invalid register: 1.2 is not an integer${nl}5.2"
-
+	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1,1+,1.2+
 	test_string '[%04Ld]F23p' '0023'
 
 	# Grow the stack
