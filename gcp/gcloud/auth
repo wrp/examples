@@ -3,3 +3,7 @@ gcloud auth list
 
 
 gcloud auth activate-service-account # Run as a service account
+
+
+# Show the currently active account (less verbose than gcloud auth list)
+gcloud config list account --format "value(core.account)"
