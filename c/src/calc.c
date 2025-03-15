@@ -439,7 +439,7 @@ extract_format(struct state *S)
 		*b = '\0';
 		if( count < 2 ){
 			fputs("Warning: output fmt should print a long value "
-				"(eg '\%Lf')\n", stderr);
+				"(eg '\%.2Lf' or '\%3Lu')\n", stderr);
 		}
 	}
 }
