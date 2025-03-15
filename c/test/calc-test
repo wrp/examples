@@ -121,29 +121,29 @@ main() {
 	e='Stack empty'
 	test_string '**' "$e$nl$e"
 
-	test_string '3.14159 6 /[sin]0~p' '0.5'
+	test_string '3.14159 6 /[sin]0!p' '0.5'
 	test_string '3.14159 6 /[sin]!p' '0.5'
-	test_string '3.14159 3 /[cos]0~p' '0.5'
+	test_string '3.14159 3 /[cos]0!p' '0.5'
 	test_string '3.14159 3 /[cos]!p' '0.5'
-	test_string '[log2][foo] 3.14159 3 /[cos]!0~p' '-1'
-	test_string '1 [acos]0~p' '0'
-	test_string '0 [tan]0~p' '0'
-	test_string '2.718281828459 [log]0~p' '1'
-	test_string '1024 [log2]0~p' '10'
-	test_string '1000 [log10]0~p' '3'
-	test_string '1 2e-5 + [log1p] 0~ p' 0.693
-	test_string '100 [sqrt] 0~ p' 10
-	test_string '10 2 [pow] 0~ p' 100
+	test_string '[log2][foo] 3.14159 3 /[cos]!0!p' '-1'
+	test_string '1 [acos]0!p' '0'
+	test_string '0 [tan]0!p' '0'
+	test_string '2.718281828459 [log]0!p' '1'
+	test_string '1024 [log2]0!p' '10'
+	test_string '1000 [log10]0!p' '3'
+	test_string '1 2e-5 + [log1p] 0! p' 0.693
+	test_string '100 [sqrt] 0! p' 10
+	test_string '10 2 [pow] 0! p' 100
 
 	test_string '-3.4 [fabs] !p' 3.4
-	test_string '27 [cbrt] !p' 3
-	test_string '3 4 [hypot] !p' 5
-	test_string '5 6 [nextafter] ! 4 ! p' 5
+	test_string '27 [cbrt]0!p' 3
+	test_string '3 4 [hypot]0!p' 5
+	test_string '5 6 [nextafter] 0! 4 0! p' 5
 
-	test_string '5 [exp2] !p' 32
-	test_string '2 [exp] !p' 7.39
+	test_string '5 [exp2] 0!p' 32
+	test_string '2 [exp] 0!p' 7.39
 
-	test_string '[banana] 0~' 'Unknown function: banana'
+	test_string '[banana] 0!' 'Unknown function: banana'
 	summarize_results
 }
 

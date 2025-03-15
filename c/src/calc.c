@@ -20,8 +20,7 @@ const char *help[] = {
 "string in register 0, push decimal 34 on the stack, print it,",
 "and then push 3 onto the stack.",
 "",
-"~    use function from specified register",
-"!    use function from top register",
+"!    use function from specified register",
 "D    delete the first register",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
@@ -56,7 +55,7 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
-#define string_ops "[]D~!FRxZ"
+#define string_ops "[]D!FRxZ"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_"
@@ -129,7 +128,7 @@ print_help(struct state *S)
 	for( const char **s = help; *s; s++ ){
 		puts(*s);
 	}
-	puts("\nThe ~ and ! commands understand the following functions:");
+	puts("\nThe ! command understands the following functions:");
 	show_functions();
 	putchar('\n');
 }
@@ -465,7 +464,6 @@ select_register(struct state *S)
 			fprintf(stderr, "Register %d empty\n", offset);
 		}
 	}
-
 	return ret;
 }
 
@@ -488,10 +486,9 @@ apply_string_op(struct state *S, unsigned char c)
 		S->accum = rb_create(32);
 		break;
 	case '!':
-		rb = stack_get(S->registers, -1);
-		/* Fall Thru */
-	case '~':
-		apply_function(S, rb);
+		if( (rb = select_register(S)) != NULL ){
+			apply_function(S, rb);
+		}
 		break;
 	case 'D':
 		pop_value(S->registers, &e);
