@@ -2,7 +2,11 @@
 
 import sys
 
+print(f'len(sys.argv) = {len(sys.argv)}')
+
 if __name__ == '__main__':
-	print sys.argv[0]  # Path used to invoke the program
-	for i in sys.argv[1:]:  # remainder of args
-		print i
+    print(f'argv[0] == {sys.argv[0]}')  # Path used to invoke the program
+    print('  i:\tsys.argv[i]')
+    print('-----------------')
+    for i in range(len(sys.argv)):
+        print(f'{i:3}:\t{sys.argv[i]}')
