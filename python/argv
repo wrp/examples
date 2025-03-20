@@ -5,6 +5,9 @@ import os
 
 print(f'len(sys.argv) = {len(sys.argv)}')
 
+if len(sys.argv) == 1:
+    sys.argv.append('foo')
+
 if __name__ == '__main__':
     name = sys.argv[0]  # Path used to invoke the program
     print(f'argv[0] == {os.path.basename(name)}')
