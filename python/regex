@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import re
+import sys
 
 def check(pat, target, flags=0):
     r = re.compile(pat, flags=flags)
@@ -8,11 +9,24 @@ def check(pat, target, flags=0):
     # m = r.match(target)
     print(f'Matching "{target}" with "{pat}": {m}')
 
-check('object *id:?', 'Object id foo', flags=re.IGNORECASE)
-check('foo[b]+ar', 'foobar')
-check('foo[b]+ar', 'foobbbar')
-check('foo[b]+ar', 'fooar')
 
-check('([def]+)([abc]+)', 'deaa')
-# Non capturing group
-check('(?:[def]+)([abc]+)', 'deaa')
+if len(sys.argv) == 1:
+    check('object *id:?', 'Object id foo', flags=re.IGNORECASE)
+    check('foo[b]+ar', 'foobar')
+    check('foo[b]+ar', 'foobbbar')
+    check('foo[b]+ar', 'fooar')
+
+    check('([def]+)([abc]+)', 'deaa')
+    # Non capturing group
+    check('(?:[def]+)([abc]+)', 'deaa')
+else:
+    from itertools import tee
+
+    def pairwise(iterable):
+        "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+        a, b = tee(iterable)
+        next(b, None)
+        return zip(a, b)
+
+    for pat, s in pairwise(sys.argv[1:]):
+        check(pat, s)

@@ -31,3 +31,11 @@ def __str(self: Foo) -> str:
 Foo.__new__ = __new
 Foo.__str__ = __str
 Foo.meth = __meth
+
+
+class bar(Foo):
+    def __init__(self: bar, x: int):
+        super().__init__(x)
+
+b = bar(3)
+assert(isinstance(b, Foo))
