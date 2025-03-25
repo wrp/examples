@@ -3,6 +3,10 @@
 import subprocess
 import sys
 
+a = subprocess.run('echo hello world', shell=True,
+    stdout=subprocess.PIPE).stdout
+assert(a == b'hello world\n')
+
 # Send data to an invocation of cat.  cat's output fd is inherited
 p = subprocess.Popen('cat', stdin=subprocess.PIPE)
 out, err = p.communicate(input=bytes('this text is sent to the subprocess\n', 'utf-8'))
