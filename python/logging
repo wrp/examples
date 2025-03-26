@@ -39,8 +39,9 @@ except:
     logging.info('test logging.info to logging')
     logger.warning('test warning')
     logger.error('test error')
-    logger.fatal('test fatal', exc_info=1)  # Show the Foo
+    logger.fatal('test fatal', exc_info=1)  # Show the stacktrace
     logger.critical('test critical')
+    logger.exception('exception')  # Show the stacktrace
 
 
 logging.setLoggerClass(LogWrapper)
