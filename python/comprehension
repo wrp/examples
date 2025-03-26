@@ -14,3 +14,8 @@ for i in g:
 g = [(a, b) for a, b in zip(range(0, 6), range(2, 8)) if a != 3]
 for i in g:
     print(i)
+
+
+# dictionary comprehension  { key: value for item in iterable if cond }
+a = { x : ord(x) for x in "abc" if ord(x) % 2 }
+print(a)
