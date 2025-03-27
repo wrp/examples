@@ -2,13 +2,16 @@
 
 tabs 20,+16,+40
 
-printf 'key\tstatus\tcreated at\tsummary\n'
+header=$(printf 'key\tstatus\tcreated at\tsummary')
 curl -Ssf \
 	-u "${EMAIL?}:${JIRA_TOKEN?}" \
 	-H 'Content-Type: application/json' \
 	"${JIRA_URL?}/rest/api/2/search?jql=$(:
 		)assignee=currentuser()%20AND%20statusCategory!=Done" \
 | jq -rc ".issues[] | [.key, .fields.status.statusCategory.name, $(:
-	).fields.created, .fields.summary] | @tsv"
+	).fields.created, .fields.summary] | @tsv" \
+| sed -e '1i\
+'"$header
+"
 
 tabs -8
