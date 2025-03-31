@@ -16,7 +16,7 @@ def show_status():
 
     while True:
         time.sleep(.25)
-        m = datetime.now().strftime(f'%c.%f {spinner[idx]}')
+        m = datetime.now().strftime(f'%T {spinner[idx]}')
         end = f'\033[K\r'
         idx = (idx+1) % 4
         if message:
