@@ -17,6 +17,7 @@ then = now - timedelta(days=5)
 # print(then > now)
 
 print(f'now = {now}')
+print(f'now = {now.strftime("%c.%f")}')  # %f gives microseconds
 print(f'then = {then}')
 
 three_minutes = timedelta(minutes=3)
@@ -35,8 +36,8 @@ b = datetime.strptime('sat dec 24 01:03:49 Am MDT 2023', '%a %b %d %H:%M:%S %p %
 # b is not timezone aware, despite the presence of %Z in the format string.
 # Perhaps use dateutil instead
 
-for fmt in ('%s', '%c', '%C', '%G', '%I %p', '%X', '%+'):
-    print(f"{fmt} format: ", b.strftime(fmt))  # 'Sun Dec 24 11:03:49 2023'
+for fmt in ('%s', '%c.%f', '%C', '%G', '%I %p', '%X', '%+'):
+    print(f"{fmt} format: ", b.strftime(fmt))
 
 
 try:
