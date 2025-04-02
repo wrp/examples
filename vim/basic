@@ -14,4 +14,7 @@ To open a file with a search: +/pattern
 vim '+/text\|other' filename
 
 Uppercase a word: gUaw
+Uppercase a line: gUgU
 Uppercase 3 words: gU3aw
+
+Put quotes around the word the cursor is on:  ciw""<esc>P
