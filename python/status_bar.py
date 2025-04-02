@@ -3,10 +3,17 @@
 import time
 from datetime import datetime
 import threading
-
+import os
 
 
 class status_bar:
+    def __init__(self):
+        if os.isatty(1):
+            self.end = f'\033[K\r'
+        else:
+            self.end = '\n'
+
+
     def run(self, message='', interval=.3):
         self.message = message
         self.interval = interval
@@ -18,16 +25,15 @@ class status_bar:
         a.start()
         return self
 
-    def display(self, message):
+    def status(self, message):
         self.message = message
 
     def _show_message(self):
             c = self.spinner[self.idx] + self.spinner[-self.idx]
             m = datetime.now().strftime(f'%T {c}')
-            end = f'\033[K\r'
             self.idx = (self.idx+1) % 4
             print(f'{m}: ', end='')
-            print(self.message, end=end, flush=True)
+            print(self.message, end=self.end, flush=True)
 
     def _main_loop(self):
         while True:
