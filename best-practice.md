@@ -23,6 +23,7 @@
 ## pithy slogans:
 - Explicit is better than implicit.
 - Fail loudly (but tersely), succeed quietly. [^errors]
+- Simple, elegant, robust.  Choose 3.
 
 
 ## vcs best practices:
