@@ -1,0 +1,110 @@
+
+
+$ launchctl bootout user/$(id -u $USER) # shutdown a login session
+
+$ launchctl reboot halt   # shutdown
+
+
+
+From launchtcl(1):
+SYNOPSIS launchctl subcommand [arguments ...]
+
+DESCRIPTION
+     launchctl interfaces with launchd to manage and inspect daemons, agents and XPC services.
+
+SUBCOMMANDS
+     system/[service-name]
+     user/<uid>/[service-name]
+     login/<asid>/[service-name]
+     gui/<uid>/[service-name]
+     pid/<pid>/[service-name]
+
+SUBCOMMANDS
+     bootstrap | bootout domain-target [service-path service-path2 ...] |
+     enable | disable service-target
+     kickstart [-kp] service-target
+     attach [-ksx] service-target
+     debug service-target [--program <program path>] [--guard-malloc]
+     kill signal-name | signal-number service-target
+     blame service-target
+     print domain-target | service-target
+     print-cache
+     print-disabled domain-target
+     plist [segment,section] Mach-O
+     procinfo pid
+     hostinfo
+     resolveport owner-pid port-name
+     examine [tool arg0 arg1 @PID ...]
+     config system | user parameter value
+     reboot [system|userspace|halt|logout|apps]
+     error [posix|mach|bootstrap] code
+     variant  Prints the launchd variant currently active on the system.
+     version  Prints the launchd version string.
+
+LEGACY SUBCOMMANDS
+     load | unload [-wF] [-S sessiontype] [-D searchpath] paths ...
+
+              NOTE: Due to bugs in the previous implementation and long-
+              standing client expectations around those bugs, the load and
+              unload subcommands will only return a non-zero exit code due to
+              improper usage.  Otherwise, zero is always returned.
+
+     submit -l label [-p executable] [-o stdout-path] [-e stderr-path] --
+     remove label
+     start label
+     stop label
+     list [-x] [label] Recommended alternative subcommand: print
+     setenv key value
+     unsetenv key
+     getenv key
+     export   Export all of the environment variables of launchd for use in a shell eval statement.
+     getrusage self | children
+     limit [cpu | filesize | data | stack | core | rss | memlock | maxproc |
+     shutdown
+              Tell launchd to prepare for shutdown by removing all jobs. This
+              subcommand is not implemented.
+     umask [newmask]
+     bslist [PID | ..] [-j]
+              This subcommand is not implemented and has been superseded by
+              the print subcommand, which provides much richer information.
+     bsexec PID command [args]
+     asuser UID command [args]
+     bstree   This subcommand is not implemented and has been superseded by
+              the print subcommand, which provides much richer information.
+
+     managerpid
+     manageruid
+     managername
+     help     Print out a quick usage statement.
+
+CAVEATS
+     The output produced by the "legacy" subcommands (chiefly list) should
+     match their output on previous OS X releases. However, the output of
+     newer subcommands does not conform to any particular format and is not
+     guaranteed to remain stable across releases. These commands are intended
+     for use by human developers and system administrators, not for automation
+     by programs or scripts. Their output does not constitute an API and no
+     promises of forward compatibility are offered to programs that attempt to
+     parse it.
+
+DEPRECATED AND REMOVED FUNCTIONALITY
+     launchctl no longer has an interactive mode, nor does it accept commands
+     from stdin. The /etc/launchd.conf file is no longer consulted for
+     subcommands to run during early boot time; this functionality was removed
+     for security considerations. While it was documented that
+     $HOME/.launchd.conf would be consulted prior to setting up a user's
+     session, this functionality was never implemented.
+
+     launchd no longer uses Unix domain sockets for communication, so the
+     LAUNCHD_SOCKET environment variable is no longer relevant and is not set.
+
+     launchd no longer loads configuration files from the network
+
+FILES
+     ~/Library/LaunchAgents         Per-user agents provided by the user.
+     /Library/LaunchAgents          Per-user agents provided by the
+                                    administrator.
+     /Library/LaunchDaemons         System wide daemons provided by the
+                                    administrator.
+     /System/Library/LaunchAgents   OS X Per-user agents.
+     /System/Library/LaunchDaemons  OS X System wide daemons.

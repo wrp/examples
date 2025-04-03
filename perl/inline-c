@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
 #
 # Prepend "Hello, " to each line of input and write it.
-use v5.14;
-use warnings;
+use v5.14; # enables warnings
 use Inline 'C';
 
 while(<>) {

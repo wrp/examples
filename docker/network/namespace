@@ -1,0 +1,3 @@
+
+# Run a command in the network namespace of a container:
+sudo nsenter -t $(docker inspect --format '{{.State.Pid}}' ${container_id}) -n ${cmd?}

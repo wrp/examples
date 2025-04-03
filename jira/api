@@ -1,0 +1,26 @@
+
+${JIRA_URL?}/rest/api/2/
+	field/                  # Access custom fields (and noncustom)
+		${id}           # $id can be id OR key
+		${id}/contexts
+		${id}/restore
+		${id}/trash
+		search
+		search/trashed
+	issue/${id}/comment   # List comments for an issue
+	project/              # list projects
+
+	component/            # list components
+
+	dashboard/            # list all dashboards
+		${id}         # details for a dashboard
+		${id}/gadget  # show items in a dashboard
+
+	workflow/             # list workflows (deprecated)
+		search        # list paginated workflows
+
+
+
+
+
+${JIRA_URL}/rest/gadgets/1.0/g/com.atlassian.jira.gadgets:....  # Get url from rest/api/2/dashboard/${id}/gadget

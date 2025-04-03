@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+# A random collection of symbols.
+# printf '\xf0\x9f\x9b\x91 \U1f6d1'  # Shell printf
+
+use 5.12.0;
+use Unicode::UCD "charinfo";
+use Data::Dumper;
+
+
+my @samples = (
+	'f09f9b91',  # A stop sign: 🛑  x1f6d1
+	'e29c8b',    # A yellow hand  ✋
+	'f09f8cb9',  # A rose 🌹
+);
+printf "%s", pack "H*", $_ foreach @samples; print "\n";
+# print Dumper(charinfo(0x1f6d1));
+
+# use open ":std", ":encoding(UTF-8)";
+binmode STDOUT, ':encoding(UTF-8)';
+
+print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
+
+@samples = (
+	[0x2589..0x25A0],
+	[0x2B00..0x2B56],
+	[9800..9811],
+	[9812..9831],  # chess/card symbols
+	[9833..9839],
+	[9855..9865],
+	[9889..9899],
+	[913..991],
+);
+
+my $block = "";
+my $previous_block = "";
+
+foreach my $range (@samples) {
+	my $first = $$range[0];
+	my $info = charinfo($first);
+	# print Dumper($info);
+	$block = $$info{block};
+	say $block if $block ne $previous_block;
+	$previous_block = $block;
+
+	print chr($_) . (( ($_ % 16) == (($first - 1) % 16)) ? "\n" : "  ")
+		foreach (@$range);
+	print "\n";
+}
+
+
+# perl -MUnicode::UCD=charinfo -MData::Dumper -e 'print Dumper(charinfo(0x1f6d1))'

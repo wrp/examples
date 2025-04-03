@@ -1,0 +1,9 @@
+
+clang-format --style='{AlignAfterOpenBracket: BlockIndent}'
+clang-format -style=file:./path/to/file
+
+
+sed -i \
+    -e '/BreakBeforeBraces/s/:.*/: Linux/' \
+    -e '/BreakConstructorInitializersBeforeComma/s/:.*/: true/' \
+    .clang-format

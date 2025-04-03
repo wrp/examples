@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Check coverage of various programs.  If configured without --coverage in CFLAGS,
+# this will likely just get skipped.  (eg, configure with
+# CFLAGS='--coverage -g -O0' to run this test)
+
+: ${progs:=
+	calc
+	dynamic
+	dynamic-read
+	grow
+	list
+	ring-buffer
+	stack
+	tac
+	tcp-client
+	tcp-server
+	udp-client
+	udp-server
+}
+
+if ! test -f calc-calc.gcda; then
+	echo 'gcda files do not seem to exist.  Run other tests first' >&2
+	exit 77
+fi
+RV=0
+
+for file in $progs; do
+	gcov $file $file-$file.gcno
+	if < "$file".c.gcov sed \
+			-e '\@{ /\* uncovered block \*/@,'"$( :
+				)"'\@} /\* end uncovered \*/@d' \
+			-e '/#####/!d' \
+			-e '\@/\* uncovered \*/@d' | grep .; then
+		echo FAIL: The above lines of $file were not executed during testing
+		RV=1
+	fi >&2
+done
+exit $RV

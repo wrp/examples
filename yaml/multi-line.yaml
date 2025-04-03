@@ -1,25 +1,37 @@
-foo:
-- newline: >
-        this is a single string
-        which compresses newline and following
-           indentation that matches the first line to one space
+newline: >
+        The > is a "block style indicator".
+        > is the "folded style"
+        | is the "literal style"
+        If there is a second character (eg >- or |-), that
+        character is the "block chomping indicator".
+        Without a block chomping indicator, the default is "clip"
+        which puts a single newline at the end of the string.
+        a '-' is the "strip chomping indicator" which removes all
+        newlines from the end of the string. To keep all newlines,
+        use '+'.
+        With '>', you get a single string
+        which compresses newlines and gives
+                indentation that matches the first line to one space
         (eg, there will be one space between "string" and "which" and
-        there will be a total of 3 spaces and
-        a newline before "and", and a single newline before '(')
-  defintion: >
+        there will be a newline followed by 8 spaces
+        before "indenation", and a single newline before '(eg,')
+folded: >
         Scalar content can be written in block notation, using a
-        literal style (indicated by "|") where all line breaks are
+                literal style (indicated by "|") where all line breaks are
         significant.  Alternatively, they can be written with the
-        folded style (denoted by ">") where each line break is
-        folded to a space unless it ends an empty or a more-indented
-        line.
-  nospace: "this string should\
+        folded style (denoted by ">") where each line break between
+        lines of equal indenation is folded to a single space, and
+        whitespace of increased indentation is retained. (eg, the
+        "literal" above will be preceded by "\n    ".
+        When indenation decreases, the
+        newline will have no leading whitespace.
+nospace: "this string should\
         have no space between \"should\" and \"have\""
-  onespace:
+onespace:
         "this string should \
         have one space between \"should\" and \"have\""
 
-  bar: barvalue
+bar: barvalue
 
 nospace2: >
         "this has\
@@ -30,21 +42,22 @@ nospace3:
         no space between 'has' and 'no'"
 
 nospace4: "\
-        same as\
-                nospace 3\
+        no space\
+                between 'space' and 'between'\
         "
 nospace5: >-
         "this has\
         a backslash and a space between 'has' and 'a', and no trailing newline"
 
-
 "quoted":
-        "wtf\
-        will this do?"
+        "you can quote the name with no effect"
+
+unquoted with space:
+        but you don't need to
 
 noquotes:
-        big\
-        query
+        A single string\
+        with a backslash and a space 
 
 literal: |
          It keeps our line breaks but reduces
@@ -66,3 +79,4 @@ strip: |-
          end of the string
 
 
+after: foo

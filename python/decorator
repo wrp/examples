@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 def baz(i):
     return 'baz', i
@@ -6,36 +6,38 @@ def baz(i):
 class foo(object):
     def __init__(self, arg):
         self.arg=arg
-        print 'creating a foo with', arg
+        print(f'creating a foo with arg {arg}')
 
     def __call__(self, o):
-        print 'my arg is', self.arg
-        print 'my o is', o
+        print(f'my arg is {self.arg}')
+        print(f'my o is {o}')
         return baz
 
-# Decorating bar with an argument causes a foo object to be instantiaed
+# Decorating bar with an argument causes a foo object to be instantiated
 # (with 3 as argument to __init__) and called (with bar as an argument)
+# The function returned by foo.__call__ is bound to bar
 @foo(3)
 def bar(arg):
     return 'Unseen string'
 
-print 'calling bar'
+print('calling bar')
 k = bar(9)
-print 'bar returned:', k
+print(f'bar returned: {k}')
+print(f'bar is {bar}')
 
 
 def wr2(func):
     def rv(arg):
-        print "in wr2s rv, arg = ", arg
+        print(f'in wr2s rv, arg = {arg}')
         return func(arg + 1)
-    print 'in wr2, func = ', func, ' rv = ', rv
+    print(f'in wr2, func = {func}, rv = {rv}')
     return rv
 
 def wr1(func):
     def rv(arg):
-        print "in wr1s rv, arg = ", arg
+        print(f'in wr1s rv, arg {arg}')
         return func(arg + 2)
-    print 'in wr1, func = ', func, ' rv = ', rv
+    print(f'in wr1, func = {func},  rv = {rv}')
     return rv
 
 # Decorating sum causes wr1 to be called with sum as an argument.
@@ -44,7 +46,7 @@ def wr1(func):
 @wr2
 @wr1
 def sum(arg):
-    print 'in original sum, arg = ', arg
+    print('in original sum, arg = {arg}')
     return arg + 3
 
-print sum(1)
+print(sum(1))

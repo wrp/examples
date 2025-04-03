@@ -3,8 +3,8 @@
 use 5.12.0;
 
 my $path = shift;
-opendir my $dir, $path or die "can't opendir $path: $!";
+opendir my $dir, $path or die "can't opendir $path: $!\n";
 
 for my $name ( grep { /^example_/ && -f "$path/$_" } readdir($dir) ){
-        rename("$path/$name", "$path/" . substr $name, 8) or die "$!: $name";
+        rename("$path/$name", "$path/" . substr $name, 8) or die "$!: $name\n";
 }

@@ -1,0 +1,3 @@
+
+# Really, the only thing you need to know about gnome:
+gnome-session-quit --force

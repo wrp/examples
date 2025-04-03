@@ -1,0 +1,12 @@
+# Get list of files from a package
+dpkg-query -L ${package?}
+
+# Find the package that owns a file
+dpkg -S ${full_path}
+
+# List files in a .deb
+dpkc -c ${path}.deb
+
+
+# apt related commands (these don't really belong here)
+apt-file list $pkg_name   # list files in a package without installing it

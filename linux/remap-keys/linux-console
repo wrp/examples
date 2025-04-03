@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Use 'showkey' to determine keycodes.  eg, type 'showkey' and then
+# hit caps lock, and you should see output telling you that caps lock
+# is 58
+
+# To get the name "Escape", use 'dumpkeys -l | grep -i esc'
+
+: ${CAPS_LOCK=58}
+: ${ESC=Escape}
+
+
+{ dumpkeys | grep -i keymaps; echo keycode $CAPS_LOCK = $ESC; } | sudo loadkeys -

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Demonstrate some basic queries to Artifactory's REST api
+
+# Query the endpoint
+curl -kSs -H "Authorization: Bearer ${JFROG_TOKEN?}" \
+	https://${JFROG_DOMAIN?}/access/api/v1/$1 \
+| jq .

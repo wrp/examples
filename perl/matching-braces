@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use 5.10.0;
+use 5.10.0; # 5.12.0 enables strict and warnings
 use strict;
 use warnings;
 

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+from Foo import Foo
+
+import types
+
+
+class Bar: pass
+
+assert Foo.bar == 0
+a = Foo(7)  # __init__  incrmements the instance variable bar
+# After creating a, Foo.bar is NOT changed, but a.bar is
+assert Foo.bar == 0
+assert a.bar == 7
+
+print(a)  # Calling print invokes __str__ which  does not change anything
+
+b = Foo(9, name='b')
+print(b)
+a.bar = 9
+a.baz = 11
+print(a)
+
+z = b.meth.__self__
+assert z is b
+
+
+def frob(x, y=None):
+    print(f'frobbing with class {x.__class__} and y = "{y}"')
+b.unbound = frob
+# Quoting the docs:
+# It is important to note that user-defined functions which are
+# attributes of a class instance are not converted to bound methods;
+# this only happens when the function is an attribute of the class.
+b.unbound(3)  # No self argument is passed
+
+Foo.meth2 = frob
+b.meth2(3)  # self argument is pass, so y == 3
+
+Bar.meth = frob
+b = Bar()
+b.a = 5
+b.meth(2)
+print(f'b.a = {b.a}')

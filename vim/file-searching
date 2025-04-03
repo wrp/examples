@@ -13,3 +13,5 @@ set includeexpr=substitute(v:fname,'$FOO/','','g')
 
 To match 'foobar' or 'foobaz':
 /fooba\(r\|z\)
+or
+/foobar\|foobaz

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+length=${1-16}
+
+if ! test "$length" -gt 0 2> /dev/null; then
+	echo 'First arg must be a positive integer' >&2
+	exit 1
+fi
+
+# Use od to convert /dev/urandom to hex
+# This is arguably better than xxd since -An can be used to remove
+# the file offsets.
+
+< /dev/urandom perl -we 'read STDIN, my $s, '"$length"/2'; print $s' |
+od -An -tx | tr -d ' \n'

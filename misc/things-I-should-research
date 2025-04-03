@@ -1,0 +1,15 @@
+
+The file should probably just be called TODO.  I expect
+it to be a hodge-podge of "stuff I learned about but haven't
+yet had a chance to explore" and realistically I expect to
+never remove anything from here even after I have learned
+it.  Mostly creating this file because I just discovered
+that instead of modifying /etc/apt/sources.list or files
+in /etc/apt/source.list.d, repostiories can be added using
+add-apt-repository.  I don't know if this is recommended,
+or if this a useful tool, or if it is already obsolete, so
+I need to do some research.  But I don't have time right now.
+
+tools to look into:
+
+zarf - package management for air-gapped environments

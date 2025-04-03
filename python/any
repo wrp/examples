@@ -14,3 +14,10 @@ if all(a > 7 for a in x):
     print("All greater than 7")
 else:
     print("Some less than or equal to 7")
+
+lod = []
+lod.append({'a': 5})
+lod.append({'b': 7})
+lod.append({'a': 9})
+if any(x.get('a', 0) == 7 for x in lod):
+    print('one of the dicts has value 7')

@@ -1,0 +1,58 @@
+
+Adding metadata to commits is a popular idea (eg https://www.conventionalcommits.org),
+but it should be done with care.  Consider:
+
+$ rm -rf git-example; mkdir git-example; cd git-example; git init > /dev/null
+$ git config user.email 'bob@dev_null.com'; git config user.name bob
+$ git config commit.gpgSign false
+$ echo text > filea; git add filea; git commit -m 'Add filea' -s --trailer subproject=mem --trailer ticket=MEM-4 > /dev/null
+$ echo text > fileb; git add fileb; git commit -m 'Add fileb' -s --trailer subproject=storage --trailer ticket=STORE-1234 > /dev/null
+$ echo text > filec; git add filec; git commit -m 'Add filec' -s --trailer subproject=comp --trailer ticket=COMP-134 > /dev/null
+$ echo text > filed; git add filed; git commit -m '[mem, MEM-21] Add filed' -s > /dev/null
+$ git l1
+140ad0c bob    [mem, MEM-21] Add filed
+c2c6aa4 bob    Add filec
+626de6d bob    Add fileb
+abacf7f bob    Add filea
+$ t=ticket git l1
+140ad0c bob  [           ]  [mem, MEM-21] Add filed
+c2c6aa4 bob  [COMP-134   ]  Add filec
+626de6d bob  [STORE-1234 ]  Add fileb
+abacf7f bob  [MEM-4      ]  Add filea
+$ w=10 t=ticket,subproject git l1
+140ad0c bob  [          ][          ]  [mem, MEM-21] Add filed
+c2c6aa4 bob  [COMP-134  ][comp      ]  Add filec
+626de6d bob  [STORE-1234][storage   ]  Add fileb
+abacf7f bob  [MEM-4     ][mem       ]  Add filea
+$ t=signed-off-by git l1
+140ad0c bob  [bob <bob@dev_null.com>]  [mem, MEM-21] Add filed
+c2c6aa4 bob  [bob <bob@dev_null.com>]  Add filec
+626de6d bob  [bob <bob@dev_null.com>]  Add fileb
+abacf7f bob  [bob <bob@dev_null.com>]  Add filea
+$ w=7 t=subproject git l1
+140ad0c bob  [       ]  [mem, MEM-21] Add filed
+c2c6aa4 bob  [comp   ]  Add filec
+626de6d bob  [storage]  Add fileb
+abacf7f bob  [mem    ]  Add filea
+
+
+(here, l1 is a git alias defined by:
+	l1 = !bash -c 'cd ${GIT_PREFIX:-.} && a=$(printf \"%s\" ${t-$(git config \
+		core.default-trailers)} | \
+		sed -E \"s/([^,]*)(\\$|,)/[%<(${w:-11})%(trailers:key=\\1,separator=%x2C,valueonly)]/g\" \
+		) && \
+		git log \
+		--format=format:\"%h %an\
+		${a}\
+		%<(60,trunc)%s\
+		\" \"$@\"' _
+)
+
+metadata can also be added via notes, but I want to focus on trailers here.  Following the
+recommendations of conventional commits (as in commit 140ad0c above), you get a static
+set of metadata that is difficult to manipulate and inflexible.  By using trailers, it
+is trivial to filter out the metadata you actually care about, and the git
+history is much cleaner.  You can display only the meta data you actually care about.
+
+In short, I am arguing that you should not embed meta-data about a commit in the commit subject
+("commit subject" meaning the first line of the commit message).  Instead, use trailers.

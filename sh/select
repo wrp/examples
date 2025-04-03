@@ -1,7 +1,13 @@
 #!/bin/sh
 
-select word in foo bar baz qux; do
-	break
+list='foo bar baz qux'
+select word in $list; do
+	# The item from $list is the value of $word,
+	# the line read from stdin in the value of $REPLY
+
+	echo "word is '$word', reply is $REPLY"
+	if test -n "$word"; then
+		break
+	fi
 done
 
-echo "word is '$word', reply is $REPLY"

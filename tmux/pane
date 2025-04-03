@@ -1,9 +1,31 @@
+Pane in which a process is executing is available in $TMUX_PANE
+#{pane_id} (tmux variable) is the currently active pane
+
+identify pane as: ${name_of_session}:${index_of_window}.${index_of_pane}
+
+Move to a pane in the current window:
+	C-q   # print index on each pane
+	C-o   # go to next pane
+	C-C-o # rotate panes (focus changes)
+
 
 https://superuser.com/questions/1105090/move-a-tmux-pane-to-another-session
 
+resize-pane: <prefix> C-<up|down|left|right>
+resize-pane -U +10    # Make the current pane 10 lines larger
 
 **************************
 How to identify a pane:  (from man-page)
+     The following special tokens are available to indicate particular
+     windows.  Each has a single-character alternative form.
+
+     Token              Meaning
+     {start}       ^    The lowest-numbered window
+     {end}         $    The highest-numbered window
+     {last}        !    The last (previously current) window
+     {next}        +    The next window by number
+     {previous}    -    The previous window by number
+
      target-pane (or src-pane or dst-pane) may be a pane ID or takes a similar
      form to target-window but with the optional addition of a period followed
      by a pane index or pane ID, for example: `mysession:mywindow.1'.  If the
@@ -58,16 +80,16 @@ Copy a pane:
 	    pane.  The default is to capture only the visible
 	    contents of the pane.
 
-tmux capture-pane -p -t $TMUX_PANE                # scrape currenly visible pane
-tmux capture-pane -p -S - -t $TMUX_PANE           # scrape all history of current pane
-tmux capture-pane -p -S -10000 -t $TARGET_PANE    # scrape 10000 lines of history(and currently visible)
+tmux capture-pane -p -t $PANE               # scrape PANE
+tmux capture-pane -p -S - -t $PANE          # scrape all history of PANE
+tmux capture-pane -p -S -${n-1000} -t $PANE # scrape $n lines of history(and currently visible)
 
 # misc. cmds
 :setw synchronize-panes    # Send keystrokes to multiple panes
 
 
 To move window:
-:movew -a -t {target-window}
+:movew -a [-s source-window] -t {target-window}  # Move source to target
 # target-windows is of the form name-of-session:n  eg :movew -t 0:3
 # without -a, the move will fail if the target window already exists.  With -a
 # it pickes the next available index.
@@ -79,7 +101,7 @@ tmux join-pane -s ${src_pane}  # Note: raw "2" means current window, pane 2.  Us
 # eg:
 tmux join-pane -s :2     # Split current window and insert pane from window 2.  Focus moves to added pane.
 tmux join-pane -s 2.1    # Split current window and insert pane witn index 1 from window 2
-tmux join-pane -s name-of-session:2.1  # Split current window and insert pane witn index 1 from window 2 of session 4
+tmux join-pane -s name-of-session:2.1  # Split current window and insert pane witn index 1 from window 2 of session name-of-session
 
 
 

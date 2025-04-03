@@ -1,7 +1,6 @@
-
-Very ignorant README.  Trust nothing.  This is based on me digging
-through my .bash-history from many months ago while sitting on a couch
-with no internet access and no Rust documentation.
+This top level directory contains a single project that builds
+all of the sample crates in src/bin and the library in src/lib.rs
+To build, use 'cargo build', which creates executables in target/
 
 To start a new project:
 cargo new $project
@@ -19,8 +18,8 @@ The above is fairly high level.  Just do:
 
 $ rustc $file.rs  # Compile and create executable $file
 
-Read local docs with
-$ rustup doc
+Read local docs with:
+$ rustup doc  # open a tab in the currently running browser
 
 
 Notes on the language as I go through initially.
@@ -32,4 +31,12 @@ Notes on the language as I go through initially.
 * Labelled break/continue! Awesome.  Single quote in the label notation: ick
 
 * #[warn(non_camel_case_types)] on by default is utterly stupid.  The language
-  should not dictate such style choices.  Especially horrible ones.
+  should not dictate such style choices.  Especially horrible ones.  If _
+  is to be the name of a token that is treated specially and the standard
+  library includes names like "sort_by", then it seems inconsistent to push
+  camel crap for variable names.  (Never forget the model sim experience where
+  all variable names are lower cased by the tooling.)  Tooling should not
+  dictate style.
+
+* Implicit return of the last object in a function is a terrible idea.  This
+  should have been obvious from decades of experience.

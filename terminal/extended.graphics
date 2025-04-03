@@ -1,0 +1,44 @@
+#!/bin/sh
+# Demonstrate _extended_ terminal graphics characters.
+
+# See console_codes(4) and https://www.xfree86.org/current/ctlseqs.html
+
+echo "Graphics characters and Logic Analyser display DEMO."
+# char_set:
+#    0 DEC Special Character and Line Drawing set
+#    A UK
+#    B United States
+#    4 Dutch
+#    5 Finnish  (or C)
+#    R French
+#    Q French Canadian
+#    K German
+#    Y Italian
+#    E Norwegian (or 6)
+#    Z Spanish
+
+enable='\033(0'
+disable='\033(B'
+alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 abcdefghijklmnopqrstuvwxyz'
+text='
+lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+j
+lqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk
+j                               mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+lqqqqqqqqqqqqqqqk               lqqqqqqqqqqqqqqqk
+j               mqqqqqqqqqqqqqqqj               mqqqqqqqqqqqqqqq
+lqqqqqqqk       lqqqqqqqk       lqqqqqqqk       lqqqqqqqk
+j       mqqqqqqqj       mqqqqqqqj       mqqqqqqqj       mqqqqqqq
+lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk   lqqqk
+j   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqqj   mqqq
+lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk lqk
+j mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mqj mq
+x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x
+vqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvqvq
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+'
+printf '%s\n%b%s\n%s%b' "$alpha" "$enable" "$alpha" "$text" "$disable"
+
+perl -e 'printf "%3d: " . chr($_) . " -> \033(0 " . chr($_) .
+	"\n\033(B", $_ foreach 43..48, 96..126'

@@ -1,0 +1,24 @@
+
+make image  # create the zig-playground
+make run    # start a shell in the container
+
+In the container, this directory should be mounted
+at /$USER (check the common-makefile in ../docker)
+
+
+zig basics:
+to build a single executable:
+	zig build-exe ${name}.zig
+
+to build a project:
+	# see https://ziglang.org/learn/build-system/
+	zig build --summary all # requires build.zig
+
+to bootstrap (create boilerplate build.zig):
+	zig init
+
+to run:
+	zig run ${name}.zig -- arguments
+
+to test:
+	zig test ${name}.zig

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# See https://www.gnu.org/software/bash/manual/bash.html#Command-Substitution:
+# When using the $(command) form, all characters between the parentheses
+# make up the command; none are treated specially.
+
+# Inside single quotes: this is not a command substitution
+echo '$(echo 'whitespace         discarded')'
+
+# The double quote inside the subst does not terminate the string
+echo "$(echo "whitespace          retained")"
+
+# Variable expansion does not occur (the '$' is not "treated specially")
+foo=abc
+echo $(foo=def; echo foo=$foo) prints def

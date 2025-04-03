@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if test $# = 0; then
+	perl -MFile::Basename -nE 'say dirname $_'
+else
+	for x; do
+		perl -MFile::Basename -E "say dirname '${x}'"
+	done
+fi

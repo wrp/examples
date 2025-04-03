@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# keywords: PWD, CWD, current working directory
+
 import os
 
 print(os.getcwd())

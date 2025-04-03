@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# /issue/ID
+case ${jira_version=3} in
+2|3) : ;;
+*)
+	echo jira_version must be 2 or 3 >&2
+	exit 1
+esac
+
+test $# = 0 && set -- project
+
+if test -n "$USE_BEARER_TOKEN"; then
+	auth=(-H "Authorization: Bearer $JIRA_TOKEN")
+else
+	auth=(-u "${EMAIL?}:${JIRA_TOKEN?}")
+fi
+
+set -x
+curl -Ssf \
+	-H 'Content-Type: application/json' \
+	"${auth[@]}" \
+	${JIRA_URL?}/rest/api/$jira_version/"$1" \
+| jq .

@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+# An implementation of grep, to demonstrate usage of re
+
+import sys
+import re
+
+def process(p, f):
+    for x in f.readlines():
+        m = p.match(x)
+        if m:
+            print('-----------')
+            print(x, end='')
+            if grp := m.groups():  # list of group matches
+                print('groups:')
+                for g in enumerate(grp):
+                    print(g)
+
+
+if len(sys.argv) < 2:
+    print('usage: %s pattern [path [...]]'.format(sys.argv[0]))
+    sys.exit(0)
+
+pattern = re.compile(sys.argv[1], flags=re.IGNORECASE)
+names = sys.argv[2:]
+
+if len(names) == 0:
+    process(pattern, sys.stdin)
+else:
+    for n in names:
+        with open(n) as f:
+            process(pattern, f)

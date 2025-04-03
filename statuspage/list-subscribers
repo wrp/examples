@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Get all subscribers (handle pagination)
+
+page=0
+
+while curl -Ssf -X GET \
+	-H "Authorization:OAuth $SP_TOKEN" \
+	"https://api.statuspage.io/v1/pages/${1-$SP_PAGE}/subscribers"$( :
+	)"?page=$page" \
+| jq -r '.[]' | grep .
+do
+	: $(( page += 1 ))
+	sleep 1  # status page only allow 1 query per second
+done

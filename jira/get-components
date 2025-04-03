@@ -1,0 +1,36 @@
+#!/bin/bash
+
+
+check_jq_version() {
+	if ! echo '{"a": 1}' |
+		jq 'if .a then null else null | halt_error end' > /dev/null 2>&1
+	then
+		printf >&2 'Invalid version of jq (%s).  %s\n' \
+			"$(jq --version)" \
+			'halt_error not recognized. Try 1.7.1'
+		exit 1
+	fi
+}
+
+check_jq_version || exit
+
+start=0
+incr=30
+
+while
+	curl -Ssf -G \
+		-d startAt=${start} \
+		-d maxResults=${incr} \
+		-H 'Content-Type: application/json' \
+		-u "${EMAIL?}:${JIRA_TOKEN?}" \
+		"${JIRA_URL?}/rest/api/2/component" \
+	| jq '.values[], if .isLast then null | halt_error else empty end'
+do
+	: $(( start += $incr ))
+done \
+| if test -n "$brief"; then
+	{ echo '{"id": "id", "name": "name", "description": "description"}'; cat ; } \
+	| jq -rc '[ .id, .name, .description ] | @tsv'
+else
+	cat
+fi

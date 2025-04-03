@@ -1,0 +1,4 @@
+
+rpm -qa            # list all packages
+rpm -ql ${pkg}     # list files in a package
+rpm -qf ${path}    # list which package owns $path

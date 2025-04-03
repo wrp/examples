@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+# boolean operator 'and' returns one of its arguments
+
+def parity_init(self, x, f):
+	self.x = x
+	self.parity = True if f(x % 2) else False
+
+class even:
+	def __init__(self, x): parity_init(self, x, lambda y: y == 0)
+	def __bool__(self):
+		print(f'evaluating truthiness of {self.x}')
+		return self.parity
+	def __repr__(self): return f'{self.x} is{"" if self.parity else " not"} even'
+	def __lt__(self, a):
+		print(f'comparing {self.x} with {a.x}')
+		return self.x < a.x
+	def __int__(self): return self.x
+	def __add__(self, other):
+		print(f'evaluating {self.x} + {int(other)}')
+		return even(self.x + int(other))
+
+class odd:
+	def __init__(self, x): parity_init(self, x, lambda y: y == 1)
+	def __bool__(self): return self.parity
+	def __repr__(self): return f'{self.x} is{"" if self.parity else " not"} odd'
+	def __lt__(self, a):
+		return self.x < a.x
+
+print(even(1) and odd(2))  # short circuits and returns even(1) (false)
+print(even(4) and odd(6))  # returns odd(6) (false)
+print(even(4) and odd(7))  # returns odd(7) (true)
+print(even(8) or odd(9))   # short circuits and returns even(8) (true)
+print(even(11) or odd(12)) # returns odd(12) (false)
+
+# truthiness of each is only checked once
+if even(12) and even(14):
+	print('12 and 14 are both even')
+
+# truthiness of 17 is *not* checked until the "if" below
+a = even(16) and even(17)
+print(f'a = {a}')  # This prints before we ever see print from __bool__
+if not a:
+	print('16 and 17 are not both even')
+
+if even(16) < even(17) + 1 < even(19):
+	print('16 < 17 + 1 < 19 evaluated 17 + 1 once')
+if even(16) < even(17) + 1 and even(17) + 1 < even(19):
+	print('16 < 17 + 1 and 17 + 1 < 19 evaluated 2x')
+
+
+# Demonstration of craptastic style that should be disallowed
+# by the language
+def foo(*args, a):
+    print(*args)
+foo(
+    f'surprise, a is set to 7, not 5!!',
+    a = 5
+    if False else 7,
+)

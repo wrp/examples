@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+# posix mandates that "source non-extant-file" shall cause a
+# non-interactive script to terminate
+
+# bash in non-posix mode does not terminate, however.  So:
+
+rm -rf non-extant-file
+unset POSIXLY_CORRECT
+bash -c '
+	. non-extant-file ||
+	echo sourc-ing non-extant file in non-posix mode failed
+'
+
+POSIXLY_CORRECT=1 bash -c '
+	. non-extant-file
+	echo This will not print, because in posix mode the script terminates
+'
+
+bash --posix -c '
+	. non-extant-file
+	echo This will not print, because in posix mode the script terminates
+'

@@ -1,0 +1,255 @@
+To set console fonts, execute: 'setfont $font'
+where font is the basename of one of the console fonts.  eg, one of the
+files in /usr/lib/kbd/consolefonts/, which usually has suffix .psf or
+.psfu (or .psf.gz or .psfu.gz)
+
+A description of that file from: https://wiki.osdev.org/PC_Screen_Font
+
+On every Linux distributions, you can find a lot of console fonts with the
+extension .psf or .psfu. You can find where they are located by entering
+"whereis consolefonts" into the Terminal. This article describes how
+to display those on graphical screen, which has the advantage that
+you don't have to mess with your fonts, you can directly use the ones
+shipped with your Linux. The other advantage is that PSF fonts can store
+the whole UNICODE character set, although consolefonts have maximum 512
+glyphs usually.
+
+There are two versions of PSF, PSF 1 and PSF 2. Each of these versions
+can be detected using their magic number.  This page assumes a PSF 2
+font is being used.
+
+Structure of file:
+
+The PSF file itself consist of a header, bitmaps for the glyphs and
+optionally a unicode character translation table.
+
+File Header:
+It's a fixed chunk at the beginning of the file. You will need to be
+able to detect the version before you begin parsing.
+
+#define PSF1_FONT_MAGIC 0x0436
+typedef struct {
+	uint16_t magic; // Magic bytes for identification.
+	uint8_t fontMode; // PSF font mode.
+	uint8_t characterSize;  // PSF character size.
+} PSF1_Header;
+
+#define PSF_FONT_MAGIC 0x864ab572
+typedef struct {
+	uint32_t magic;         /* magic bytes to identify PSF */
+	uint32_t version;       /* zero */
+	uint32_t headersize;    /* offset of bitmaps in file, 32 */
+	uint32_t flags;         /* 0 if there's no unicode table */
+	uint32_t numglyph;      /* number of glyphs */
+	uint32_t bytesperglyph; /* size of each glyph */
+	uint32_t height;        /* height in pixels */
+	uint32_t width;         /* width in pixels */
+} PSF_font;
+
+
+Glyphs
+Each glyph is a bitmap, encoded the same way as VGA Fonts. For a 8x16
+font, each glyph is 16 bytes long, and every byte encodes exactly one
+row of the glyph.
+
+
+00000000b  byte  0
+00000000b  byte  1
+00000000b  byte  2
+00010000b  byte  3
+00111000b  byte  4
+01101100b  byte  5
+11000110b  byte  6
+11000110b  byte  7
+11111110b  byte  8
+11000110b  byte  9
+11000110b  byte 10
+11000110b  byte 11
+11000110b  byte 12
+00000000b  byte 13
+00000000b  byte 14
+00000000b  byte 15
+
+Unicode Table
+-------------
+If the flags in the PSF header is 1, it indicates that the font has a
+unicode table for glyph mapping. Without such a table, unicode characters
+and glyphs are mapped identically, so first glyph is for unicode character
+0, second glyph for unicode character 1 and so forth.
+The table is as follows: each glyph has a variable length record. Those
+are very similar to lines in a text file, only here lines are ended in
+0xFF character not '\n' (0x0A). The nth line describes the nth glyph's
+mappings. Every line contains at least one, but possibly more UTF-8
+character sequences.
+
+
+Dealing with PSF
+----------------
+Although there are lot of PSF editors out there, I've found all of them
+broken or hard to use. So I'd recommend two neat perl scripts instead:
+readpsf, writepsf. They can convert PSF into easily editable ascii text
+file or a bitmap image that can be opened with Gimp or Photoshop and
+vice versa.
+
+
+Loading the font
+----------------
+As described in VGA Fonts, you have several options. For simplicity,
+we'll embed it. Here's how to convert PSF into an ELF so that you can
+link with your kernel:
+
+objcopy -O elf64-x86-64 -B i386 -I binary font.psf font.o
+readelf -s font.o
+
+Symbol table '.symtab' contains 5 entries:
+.  Num:    Value          Size Type    Bind   Vis      Ndx Name
+.    0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+.    1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1
+.    2: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT    1 _binary_font_psf_start
+.    3: 0000000000008020     0 NOTYPE  GLOBAL DEFAULT    1 _binary_font_psf_end
+.    4: 0000000000008020     0 NOTYPE  GLOBAL DEFAULT  ABS _binary_font_psf_size
+
+
+As you can see the resulting object exports three symbols that can be
+referenced as any other variables.  Before we can use our font, first
+we have to decode the unicode table. That's a bit tricky to do, and
+you'll have to have calloc(), but the good news is it's optional. You
+can skip this if you're happy with the first glyph is for character 0,
+second glyph is for character 1, etc. scheme.
+
+/* import our font that's in the object file we've created above */
+extern char _binary_font_psf_start;
+extern char _binary_font_psf_end;
+uint16_t *unicode;   /* translation table */
+void psf_init()
+{
+	uint16_t glyph = 0;
+	PSF_font *font = (PSF_font*)&_binary_font_psf_start;
+	if (font->flags) {
+		unicode = NULL;
+		return;
+	}
+
+	/* get the offset of the table */
+	char *s = (char *)(
+		(unsigned char*)&_binary_font_psf_start +
+			font->headersize +
+			font->numglyph * font->bytesperglyph
+	);
+	unicode = calloc(USHRT_MAX, 2);
+	while(s>_binary_font_psf_end) {
+		uint16_t uc = (uint16_t)((unsigned char *)s[0]);
+		if(uc == 0xFF) {
+			glyph++;
+			s++;
+			continue;
+		} else if(uc & 128) {
+			/* UTF-8 to unicode */
+			if((uc & 32) == 0 ) {
+				uc = ((s[0] & 0x1F)<<6)+(s[1] & 0x3F);
+				s++;
+			} else if((uc & 16) == 0 ) {
+				uc = ((((s[0] & 0xF)<<6)+(s[1] & 0x3F))<<6)+(s[2] & 0x3F);
+				s+=2;
+			} else if((uc & 8) == 0 ) {
+				uc = ((((((s[0] & 0x7)<<6)+(s[1] & 0x3F))<<6)+(s[2] & 0x3F))<<6)+(s[3] & 0x3F);
+				s+=3;
+			} else {
+				uc = 0;
+			}
+		}
+		/* save translation */
+		unicode[uc] = glyph;
+		s++;
+	}
+}
+
+
+Displaying a character
+----------------------
+I'll assume that you've set up linear frame buffer properly and you can
+plot a pixel from your kernel. This example uses 32 bit RGBA format,
+but can be adapted to other formats easily.
+
+extern char *fb;     /* the linear framebuffer */
+extern int scanline; /* number of bytes in each line, it's possible it's not screen width * bytesperpixel! */
+extern char _binary_font_start[];  /* import our font that's in the object file we've created above */
+
+#define PIXEL uint32_t   /* pixel pointer */
+
+void putchar(
+	unsigned short int c,    /* note that this is int, not char as it's a unicode character */
+	int cx, int cy,          /* cursor position on screen, in characters not in pixels */
+	uint32_t fg, uint32_t bg /* foreground and background colors, say 0xFFFFFF and 0x000000 */
+) {
+	PSF_font *font = (PSF_font*)&_binary_font_psf_start;
+
+	/* we need to know how many bytes encode one row */
+	int bytesperline=(font->width+7)/8;
+	/* unicode translation */
+	if (unicode != NULL) {
+		c = unicode[c];
+	}
+
+	/* get the glyph for the character. If there's no
+	** glyph for a given character, we'll display the first glyph.
+	*/
+	unsigned char *glyph = (unsigned char*)&_binary_font_psf_start +
+		font->headersize +
+		(c > 0 && c < font->numglyph ? c : 0) * font->bytesperglyph
+	;
+	/* calculate the upper left corner on screen where we want to display.
+	** we only do this once, and adjust the offset later. This is faster.
+	*/
+	int offs =
+		(cy * font->height * scanline) +
+		(cx * (font->width + 1) * sizeof(PIXEL))
+	;
+	/* finally display pixels according to the bitmap */
+	int x, y, line, mask;
+	for (y = 0; y < font->height; y += 1) {
+		/* save the starting position of the line */
+		line = offs;
+		mask = 1 << (font->width - 1);
+		/* display a row */
+		for( x = 0; x < font->width; x += 1) {
+			*((PIXEL*)(fb + line)) = *((unsigned int*)glyph) & mask ? fg : bg;
+			/* adjust to the next pixel */
+			mask >>= 1;
+			line += sizeof(PIXEL);
+		}
+		/* adjust to the next line */
+		glyph += bytesperline;
+		offs += scanline;
+	}
+}
+
+
+With this you can display strings on a linear frame buffer just like
+Linux does on its ttys. Please note that this code is not optimal, it's
+for demonstration purposes, but it's a good start.  Calculating the offs
+with width + 1 is necessary to keep one pixel distance between glyphs
+on screen. Without some fonts became unreadable. This is also what the
+original VGA hardware did, it used 8x16 fonts, but actually displayed
+them as 9x16. Casting glyph before anding with the mask is necessary to
+support font widths up to 32 pixels.  Using 8 pixel width would require
+an unsigned char, but 9 pixels an unsigned short. This way you can have
+single code even though you don't know the required size at compilation
+time (as it depends on the font loaded).  You might be tempted to replace
+PIXEL and line with an array, but that won't work on all hardware, as
+scanline is given in bytes, and nobody actually said that it must be a
+multiple of PIXEL (very unlikely, but possible).
+
+See Also
+--------
+	VGA Fonts
+	Scalable Screen Font - comes with a small, free ANSI C rendering library
+	Loading Icons
+
+
+External Links
+--------------
+http://www.win.tue.nl/~aeb/linux/kbd/font-formats-1.html PC Screen Font format description
+https://en.wikipedia.org/wiki/PC_Screen_Font Wikipedia on PC Screen Font
+https://github.com/talamus/solarize-12x29-psf/blob/master/readpsf Perl script to convert PSF into txt or bmp.
+https://github.com/talamus/solarize-12x29-psf/blob/master/writepsf Perl script to convert txt or bmp into PSF.

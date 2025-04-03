@@ -16,18 +16,18 @@ endif
 ND ?= $(notdir /this/is/a/path)
 
 all:
-	echo not dir =  $(ND)
-	echo Running rules in Makefile
+	@echo not dir =  $(ND)
+	@echo Running rules in Makefile
 	#
 	# Whitespace is preserved in both expansions here:
-	echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
-	echo foo = $(foo)
-	echo bar = $(bar)
-	echo baz = $(baz)
-	echo qux = $(qux)
-	echo qan = $(qan)
-	echo qaz = $(qaz)
-	echo  target name: $@
+	@echo test :+ $${TMP:+TMP is $(TMP) and ${TMP}}
+	@echo foo = $(foo)
+	@echo bar = $(bar)
+	@echo baz = $(baz)
+	@echo qux = $(qux)
+	@echo qan = $(qan)
+	@echo qaz = $(qaz)
+	@echo  target name: $@
 
 quotes:
 	# Demonstrate how to embed newlines into an argument

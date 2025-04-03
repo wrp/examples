@@ -1,0 +1,19 @@
+#!/bin/sh
+
+die() { printf "%s${1:+\n}" "$@"; exit 1; } >&2
+
+test "${s=0}" -ge 0 || die '$s (used for start position) is not a positive integer'
+test "${m=50}" -gt 0 || die '$m (used for result count) is not a strictly positive integer'
+
+
+jql=$(echo "$*" | tr -s ' ' | sed 's/ /%20/g')
+
+
+curl -Ssf \
+	-G \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	-d startAt=${s} \
+	-d maxResults=${m} \
+	-H 'Content-Type: application/json' \
+	"${JIRA_URL?}/rest/api/2/search?jql=$jql" \
+| jq .

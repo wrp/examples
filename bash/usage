@@ -1,11 +1,13 @@
 #!/bin/sh
-# usage: @NAME@ [-h] required_operand [operand ...]
+
+# usage: @NAME@ [-h] required_argument [optional_argument ...]
 #
 # options:
 #   -h         print usage statement
+##############################################################
 
 case "$1" in
 -h)
-	sed -E -e 1d -e "s|@NAME@|$(basename $0)|" -e '/^#/!q' -e 's/# ?//' $0
+	sed -nE "/^##/q; s|@NAME@|$(basename $0)|; 1!s/# ?//p;" "$0"
 	exit
 esac

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Demonstrate extracting data and printing compactly (one-line)
+
+for fmt in \
+	. \
+	'["foo = " + (.foo | tostring), .bar] | @tsv' \
+	'[.foo, .bar] | @csv' \
+; do
+echo fmt="$fmt"
+jq -rc "$fmt" << EOF
+{
+	"foo": 5020,
+	"bar": 50,
+	"baz": "abc"
+}
+{
+	"foo": 2280,
+	"bar": "def",
+	"baz": "ghi"
+}
+EOF
+done

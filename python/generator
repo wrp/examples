@@ -1,18 +1,85 @@
 #!/usr/bin/env python
+# keyword: generator
+
+# A "generator function" is a function that returns a generator.
+# Any function that uses "yield" is a generator function.
 
 import itertools
+from typing import Generator
 
-def foo():
+# type hint is yield, send, return
+def incr() -> Generator[int, None, None]:
+	print('This is not called until the first next()')
+	v = 0
 	while True:
-		yield 0
-		yield 0
-		yield 1
-		yield 1
+		yield v
+		v += 1
 
-x = foo()
-m = [next(x) for _ in xrange(9)]
-k = itertools.islice(foo(), 9)
-print( "m = {}", m)
+def basic_examples():
+	x = incr()	# x is a generator
+	print(f'x is of type {type(x)}')
+	m = [next(x) for _ in range(9)] # 0..8
+	print("m = {}", m)
 
-# a = k[0:9]
-# print( "a = {}", a)
+	# k is a new generator, starting at 0
+	k = itertools.islice(incr(), 3)
+	print(','.join(map(str,k)))
+
+def delegated_generator():
+	# return in a generator is equivalent to
+	# raise StopIteration(<returned value>)
+	print('An example of a delegated generator:')
+	def f() -> Generator[int, None, str]:
+		yield 1
+		yield 2
+		return "returned value"
+
+	def g():
+		x = yield from f()
+		print(f'"{x}" returned from yield')  # x == "returned value"
+
+	for y in g():  # y takes values 1, 2
+		print(f'{y} yielded from g')
+
+def send_to():
+	"""Demonstrate sending a value to a generator
+
+	Inside the generator, yield returns the value passed
+	to send (None on next), and send returns the
+	value of the next yield
+	"""
+
+	print(send_to.__doc__)
+	def f() -> Generator[int, dict, list]:
+		"""f yields an int, can be sent a dict, and returns a list"""
+		y = 1
+		incr = 1
+		while True:
+			x = yield y
+			y = y + incr
+			if x is None:
+				continue
+			if 'quit' in x:
+				return x['quit']
+			if 'reset' in x:
+				y = x['reset']
+			if 'incr' in x:
+				incr = x['incr']
+
+	a = f()
+	try:
+		print("Return from first next:", next(a))  # 1
+		print("Return from next prior to send:", next(a))  # 2
+		print("Return from send incr 7:", a.send({'incr':7}))  # 3
+		print("Return from next after incr:", next(a))  # 10
+		print("Return from send reset 7:", a.send({'reset':-1})) # -1
+		print("Return from send after send:", a.send({}))	 # 6
+		print("Return from 2nd send after send:", a.send({'quit':[1,2]}))
+	except StopIteration as e:
+		print("Returned:", e)  # [1,2]
+
+
+
+basic_examples()
+delegated_generator()
+send_to()

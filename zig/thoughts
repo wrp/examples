@@ -1,0 +1,16 @@
+
+First impressions while I explore the language.
+
+errdefer seems like a great idea.
+
+making function parameters immutable and allowing the compiler to decide
+whether or not to pass by reference or value is an interesting choice.  I
+believe the author of the code can force pass by reference by explicitly
+passing a pointer, but this seems like discarding clarity for potential
+performance.  I like the idea of immutable arguments, but am less certain
+I like the uncertainty of letting the compiler make a choice.
+
+camelCase is stupid.  Every recent language says "emphasize readability
+over writeability".  camelCase is not readable, and exists only to assist
+in writeability and shaving a few characters off for width purposes. It
+has no place in a modern language.

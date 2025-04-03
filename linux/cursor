@@ -1,0 +1,43 @@
+#!/bin/sh
+# From https://linuxgazette.net/137/anonymous.html
+# See:
+# *   /usr/src/linux/Documentation/VGA-softcursor.txt
+# *   /usr/src/linux/drivers/char/vt.c
+# *   /usr/src/include/linux/console-struct.h
+
+# Defaults that I like on the pinebook: 11 0 64
+size=${1:-11}
+toggle=${2:-0}
+color=${3:-64}
+
+fmt=$(printf "[?%d;%d${toggle:+;}%d${color:+;}c" "${size:?}" "$toggle" "$color")
+printf '\e%s' "$fmt"
+infocmp -A /usr/share/terminfo linux \
+	| sed -e 's/cnorm=[^,]*/cnorm=\\E[?25h\\E'"${fmt}/" > /tmp/linux
+tic /tmp/linux   # Writes to ~/.terminfo/l/linux
+exit
+
+p1 is cursor size:
+	0: default  (2, in console-struct.h)
+	1: invisible
+	2: underscore
+	3: lower third
+	4: lower half
+	5: two thirds
+	6: full block
+
+7-15 is the same as 0-6, but using 0-6 cause p2 and p3 to default to 0
+Using 16 gives a soft cursor (a non-blinking full block in some color).
+
+The values of parm1 are reduced mod 32, but:
+48-63: softcursor using foreground color, char at cursor invisible
+112-127: softcurs using foreground color, char at cursor visible
+
+Note that many applications will reset the cursor.  Get the setting
+you want by doing:
+
+$ infocmp -A /usr/share/terminfo linux > /tmp/linux
+# edit file, change cnorm, eg
+$ infocmp -A /usr/share/terminfo linux \
+	| sed -e 's/cnorm=[^,]*/cnorm=\\E[?25h\\E[?16;0;64c/' > /tmp/linux
+$ tic /tmp/linux

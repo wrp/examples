@@ -1,8 +1,0 @@
-#!/bin/sh
-
-
-./sqlite foo "create table foo('bar' int primary key, 'baz' int);"
-./sqlite foo "insert into foo ('bar', 'baz') values(1,2)"
-./sqlite foo "select * from foo"
-
-

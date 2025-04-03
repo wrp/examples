@@ -1,0 +1,22 @@
+
+unalias -a
+shopt -s histappend
+trap 'history -a' DEBUG
+HISTTIMEFORMAT='%H:%M:%S '
+HISTFILESIZE=9999999999
+unset PROMPT_COMMAND
+export LESS=FeRXSQ
+export SYSTEMD_LESS="${LESS//S/}"
+export LC_TIME=C
+set -o vi
+set -o physical   # make pwd do the right thing w.r.t. symbolic links
+PS1="\[$(tput rev)"'$( r=$(( $? != 0 )); tput setaf $((2 - r));
+	tput setab $(( r * 7 ));
+		)\]\D{%T}'"\[$( tput setaf 2)$(tput sgr0)\]"' $$ \h\$ '
+
+c() { clear; }
+g() { git "$@"; }
+vi() { vim "$@"; }
+in_path() { case ":$PATH:" in *:$1:*) return 0;; *) return 1;; esac }
+append_path() { for x; do in_path "$x" || PATH="$PATH${PATH:+:}$x"; done }
+append_path $HOME/go/bin /usr/local/bin /usr/bin /sbin /bin

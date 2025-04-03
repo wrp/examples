@@ -1,0 +1,13 @@
+#!/bin/sh
+
+die() { printf "%s${1:+\n}" "$@"; exit 1; } >&2
+
+pct=${1-100}
+test "$pct" -ge 0 && test "$pct" -le 100 ||
+	die "First arg must be integer in [0, 100]"
+
+max=$(cat /sys/class/backlight/edp-backlight/max_brightness) || die
+test "$max" -ge 100 2> /dev/null ||
+	die "Unexpected max_brightness found.  Aborting"
+
+echo "$max * $pct / 100" | bc | sudo tee /sys/class/backlight/edp-backlight/brightness

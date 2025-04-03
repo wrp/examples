@@ -1,0 +1,6 @@
+c-states allow you to turn off components of the cpu
+
+Hold /dev/cpu_dma_latency open to lock power transitions.  See:
+https://patchwork.kernel.org/project/linux-arm-kernel/patch/1503472998-9009-1-git-send-email-leo.yan@linaro.org/
+
+https://android.googlesource.com/kernel/msm/+/android-msm-marlin-3.18-nougat-dr1/Documentation/power/pm_qos_interface.txt

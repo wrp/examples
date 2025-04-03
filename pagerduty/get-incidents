@@ -1,0 +1,88 @@
+#!/bin/sh
+
+# TODO: get rid of the awk.  Instead, terminate jq as in ../jira/get-dashboards
+
+# Get recent unresolved incidents.  Set RESOLVED to see all.
+# If $1 is specified, limit search to that service,
+# otherwise get incidents for $PD_SERVICE, or (if empty) all incidents (up to 1st 100).
+
+# If $2 is given, it should be an ISO 8601 formatted time or a string that
+# can be passed to the -v option of gnu date (eg "2w" or "-2w"): only incidents
+# after that time are included.  Default is one week ago.
+
+# Full list of services can be found by GETting services/ from PD.
+# eg:
+# ./query services | jq -rc .servi'ces[] | [ .id, .name ] | @tsv'
+# (Use ./list-all-services to account for pagination)
+
+# If RESOLVED is set in the environment, also return resolved incidents
+
+: ${output=incidents-$(date +%s)}
+
+main() {
+	items_per_page=25
+	if test "$1" = -a; then
+		shift
+		RESOLVED=1
+	fi
+	parse_services "${1-$PD_SERVICE}"   # Can be a colon separated list
+	parse_start_date "${2-$(date -v -1w -Iseconds)}"
+	offset=0
+
+	while curl -fsS \
+		-H 'Accept: application/vnd.pagerduty+json;version=2' \
+		-H "Authorization: Token token=${PD_TOKEN:?}" \
+		--data-urlencode limit=$items_per_page \
+		-X GET \
+		-G \
+		-d "since=$start_date" \
+		-d "offset=$offset" \
+		-d "statuses[]=triggered" \
+		-d "statuses[]=acknowledged" \
+		${RESOLVED:+-d "statuses[]=resolved"} \
+		-d "urgencies[]=high" \
+		-d "sort_by=incident_number:DESC" \
+		${services} \
+		https://api.pagerduty.com/incidents \
+	| jq '., .more' \
+	| awk '$0 == "true" {exit 0} $0 == "false" {exit 1} 1' \
+	; do
+		: $(( offset += $items_per_page ))
+	done \
+	| tee -a "$output" \
+	| jq -rc '.incidents[] | [
+		.service.id,
+		.assignments[].assignee.summary,
+		.created_at,
+		.incident_number,
+		.status,
+		.title
+	] | @tsv' \
+	| ${PAGER-more} \
+	| grep . || exit 1
+}
+
+parse_services() {
+	if test -n "$1"; then
+	unset services
+	while read service; do
+		services="${services} -d service_ids[]=${service}"
+	done <<- EOF
+	$(echo $1 | tr : \\n)
+	EOF
+	fi
+}
+
+# If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
+# to use it as an argument to date to generate a timestamp
+parse_start_date() {
+	start_date=${1}
+	local d='[0-9]'
+
+	case $start_date in
+	$d$d$d$d-[01]$d-[0-3]${d}T[0-2]$d:[0-6]$d:[0-6]$d[+-]$d$d:$d$d) : ;;
+	*) start_date=$(date -v -${start_date#-} -Iseconds);;
+	esac
+}
+
+main "$@"

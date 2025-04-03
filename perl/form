@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+# For details: perldoc perlform
+# keywords: perlform template
+use 5.12.0;
+
+
+my
+	($name, $login, $office, $uid, $gid, $home) =
+	('name', 'login', 'office', 32, 17, 'home');
+
+# <<   left justified
+# >>   right justified
+# ||   centered
+format =
+@<<<<<<<<<<<<<<<<<< @||||||| @<<<<<<@>>>> @>>>> @<<<<<<<<<<<<<<<<<
+$name,              $login,  $office,$uid,$gid, $home
+.
+
+write;
+$name = 'this is too long to fit in the field, so it will be truncated';
+write;

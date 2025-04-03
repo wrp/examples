@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+page=1
+len=100
+
+while test "$len" = 100; do
+	res=$(curl -Ssf -X GET \
+		-H "Authorization:OAuth $SP_TOKEN" \
+		"https://api.statuspage.io/v1/pages/$STATUSPAGE_PAGE/incidents?page=${page}")
+
+	printf '%s' "$res"
+	len=$(printf '%s' "$res" | jq '. | length')
+	let page=page+1
+done

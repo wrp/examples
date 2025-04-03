@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+# Available with python 3.7
+# See Pep 555.
+# and https://docs.python.org/3.11/library/contextvars.html
+
+from contextvars import ContextVar
+
+c = ContextVar('sample', default='default')
+
+print(f'The default is {c.get()}')
+t = c.set(3)
+print(f'After first set, c =  {c.get()}')
+q = c.set('banana')
+print(f'After 2nd set, c =  {c.get()}')
+
+c.reset(t)
+print(f'After reset, c =  {c.get()}')

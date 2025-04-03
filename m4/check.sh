@@ -10,9 +10,9 @@ for x; do
 {
 cat "$x"
 cat << EOF
- ifdef(\`$macro',,\`errprint(fatal: \`\`$macro'' undefined in $x
-)m4exit(1)\')
+ifdef(\`$macro',,
+\`errprint(fatal: \`\`$macro'' undefined in \`\`$x''
+)m4exit(1)')
 EOF
-} | m4 > /dev/null || exit
+} | m4 > /dev/null
 done
-

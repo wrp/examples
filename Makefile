@@ -1,4 +1,4 @@
-LEN += 12
+LEN ?= 12
 
 .PHONY: password passwd
 passwd: password
@@ -10,5 +10,5 @@ password:
 			printf '%s' "$$line" | tmux load-buffer - && \
 			echo "^^ copied to tmux paste buffer" >&2; \
 		fi; \
-		if echo "$$line" | pbcopy 2> /dev/null; then echo "^^ copied to clipboard" >&2; fi; \
+		if echo "$$line" | xclip -selection clipboard 2> /dev/null; then echo "^^ copied to clipboard" >&2; fi; \
 	done

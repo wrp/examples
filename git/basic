@@ -1,13 +1,21 @@
 
+# List all available commands
+git help -a
+
 # Determine if work dir is dirty:
 # see https://stackoverflow.com/questions/2657935/checking-for-a-dirty-index-or-untracked-files-with-git
-
 git diff-index --quiet HEAD --
 
 
 # Handy function to create a generic log message:
-create_msg() {
-        git diff --cached --stat | tac | awk 'NR==2{print ""}1'
-}
-
+create_msg() { git diff --cached --stat | tac | awk 'NR==2{print ""}1'; }
 # Can be used with 'create_msg | git commit -F -'
+
+
+# Determine if you are in a work dir or the git repo
+if git rev-parse; then
+	printf 'Current git dir is: '
+	git rev-parse --path-format=absolute --git-dir
+else
+	echo you are not in a work dir or git dir >&2
+fi

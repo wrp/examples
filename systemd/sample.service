@@ -1,0 +1,25 @@
+# Drop this file in /etc/systemd/system with a name $name.service,
+# and that's all there is to it.  Then 'sudo systemctl start $name'
+# will start the service and 'sudo systemctl enable $name' will
+# set it to start on rebooot
+
+# See also:
+#     systemd.service
+#     systemd.directives
+#     systemd.exec
+#     systemd.unit
+#     systemd-system.conf
+
+[Unit]
+Description=systemd demo service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always  # default is no
+RestartSec=1    # Time to sleep before restarting Defaults to 100ms
+User=me
+ExecStart=/path/to/executable with arguments
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[x for x in (1,2,3)]  # Is a list comprehension (PEP 202)
+(x for x in (1,2,3))  # Is a generator expression (PEP 289)
+
+# See Section 5.2.6 of https://docs.python.org/2/reference/expressions.html
+
+
+a = {x: len(x) for x in ['foo','apple']}
+print(f'a = {a}')

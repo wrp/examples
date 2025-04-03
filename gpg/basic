@@ -1,0 +1,12 @@
+
+Note that gpg caches the passwords unless --no-symkey-cache is used.  Need
+to understand the implications of that; where is the cache?  This seems
+horribly insecure.
+
+To clear the cache:
+gpg-connect-agent reloadagent /bye
+
+
+gpg --no-symkey-cache -c ${file} > ${file}.gpg  # encrypt w/symmetric key
+gpg -d ${file}.gpg                              # decrypt w/symmetric key
+gpg --generate-key                              # create a signing key

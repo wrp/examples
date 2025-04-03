@@ -9,5 +9,11 @@ def restore_signals():
         signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
+# At one time, subprocess would set the dispostion of the childe
+# to ignore SIGPIPE, # but that seems to not be the case in 3.10.9.
+# (It seems that the restore_signals keyword passed to the initializer
+# now defaults to true) so this explicit restoration of the disposition
+# is no longer necessary.  Be wary when using older Python.
+
 p = Popen(["bash", "-c", "yes | head"], preexec_fn=restore_signals)
 p.wait()

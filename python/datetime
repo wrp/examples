@@ -1,11 +1,107 @@
 #!/usr/bin/env python
 
 
-from datetime import datetime, timedelta
+import sys
+from datetime import datetime, timedelta, timezone, tzinfo
+import pytz
 
+now = datetime.now()  # A naive timestamp
+now = datetime.now(timezone.utc)  # Timezone aware
+m = timezone(timedelta(hours=-8), name='PST')
+now = datetime.now(m)
 
-a = datetime.fromisoformat('2021-07-02-21:35:05')
+then = now - timedelta(days=5)
+
+# print(then < now)
+# print(then <= now)
+# print(then > now)
+
+print(f'now = {now}')
+print(f'now = {now.strftime("%c.%f")}')  # %f gives microseconds
+print(f'then = {then}')
+
+three_minutes = timedelta(minutes=3)
+print(f'There are {three_minutes.total_seconds()} seconds in {three_minutes}')
+a = datetime.fromisoformat('2021-07-02-21:35:05+01:00')
 
 a += timedelta(hours=2)
 a += timedelta(days=1)
+
 print(a)
+print(f'{a} in isoformat: {a.isoformat()}')
+print(f'{a} in default format: {a}')
+print(f'{a} in epoch time format: {a.strftime("%s")}')
+
+b = datetime.strptime('sat dec 24 01:03:49 Am MDT 2023', '%a %b %d %H:%M:%S %p %Z %Y')
+# b is not timezone aware, despite the presence of %Z in the format string.
+# Perhaps use dateutil instead
+
+for fmt in ('%s', '%c.%f', '%C', '%G', '%I %p', '%X', '%+'):
+    print(f"{fmt} format: ", b.strftime(fmt))
+
+
+try:
+    d = int(sys.argv[1])
+except:
+    d = 3601
+
+c = datetime.utcfromtimestamp(d)  # NOT timezone aware
+print(f'{d} in isoformat: {c.isoformat()} *Not* timezone aware')   # WTF??!!
+print(f'c {"is" if c.tzinfo else "IS NOT"} timezone aware')
+
+c = datetime.fromtimestamp(d, timezone.utc)
+print(f'{d} in isoformat: {c.isoformat()} timezone aware')
+print(f'c {"is" if c.tzinfo else "IS NOT"} timezone aware')
+print(f'raw: {c}')
+
+c = datetime.fromtimestamp(d, pytz.timezone('US/pacific'))
+print(f'{d} in isoformat: {c.isoformat()} US/pacific')
+print(f'raw: {c}')
+
+# print epoch time
+print(f"epoch time of {b}", b.strftime('%s'), " == ",  b.timestamp())
+
+
+'''
+# Common format modifiers
+%A    full weekday name. (Sunday, Monday, Tuesday, Wednesday, etc.) (not case sensitive)
+%a    abbreviated weekday name.  (Sun, Mon, Tue, Wed, Thu, Fri, Sat) (not case sensitive)
+%B    full month name. (January, etc.)
+%b    abbreviated month name. (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec) (not case sensitive)
+%C    century(year / 100) as decimal number; single digits are preceded by a zero.
+%c    time and date (eg  Sun Dec 24 11:03:49 2023)
+%D    equivalent to “%m/%d/%y”.
+%d    day of month as a decimal number (01-31).
+%e    day of the month as a decimal number (1-31); single digits are preceded by a blank.
+%F    equivalent to “%Y-%m-%d”.
+%G    year as a decimal number with century.  This year is the one that contains the greater part of the week (Monday as the first day of the week).
+%g    the same year as in “%G”, but as a decimal number without century (00-99).
+%H    hour (24-hour clock) as a decimal number (00-23).
+%h    the same as %b. (abbreviated month name)
+%I    the hour (12-hour clock) as a decimal number (01-12); single digits are preceded by a '0'.
+%j    day of the year as a decimal number (001-366).
+%k    hour (24-hour clock) as a decimal number (0-23); single digits are preceded by a blank.
+%l    hour (12-hour clock) as a decimal number (1-12); single digits are preceded by a blank.
+%M    minute as a decimal number (00-59).
+%m    month as a decimal number (01-12).
+%n    newline.
+%p    am/pm (case insensitive)
+%R    equivalent to “%H:%M”.
+%r    equivalent to “%I:%M:%S %p”.
+%S    second as a decimal number (00-60).
+%s    number of seconds since the Epoch, UTC
+%T    equivalent to “%H:%M:%S”.
+%t    a literal tab.
+%U    week number of the year (Sunday as the first day of the week) as a decimal number (00-53).
+%u    weekday (Monday as the first day of the week) as a decimal number (1-7).
+%V    week number of the year (Monday as the first day of the week) as a decimal number (01-53).  If the week containing January 1 has four or more days in the new year, then it is week 1; otherwise it is the last week of the previous year, and the next week is week 1.
+%v    equivalent to “%e-%b-%Y”.
+%W    the week number of the year (Monday as the first day of the week) as a decimal number (00-53).
+%w    the weekday (Sunday as the first day of the week) as a decimal number (0-6).
+%X    national representation of the time.
+%x    replaced by national representation of the date.
+%Y    year with century as a decimal number.
+%y    year without century as a decimal number (00-99).
+%Z    time zone name.
+%z    time zone offset from UTC; a leading plus sign stands for east of UTC, a minus sign for west of UTC, hours and minutes follow with two digits each and no delimiter between them (common form for RFC 822 date headers).
+ '''

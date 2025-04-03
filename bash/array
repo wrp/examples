@@ -1,0 +1,14 @@
+#!/bin/bash
+
+declare -a array
+
+array[0]=zero
+
+append() { for x;  do array+=($x); done; }
+append one two
+
+echo Number of elements in array is ${#array[@]}
+
+for x in ${array[@]}; do
+	echo "array[$((i++))] = $x"
+done

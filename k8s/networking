@@ -1,0 +1,8 @@
+
+General rules:
+	* every pod gets its own IP address and network namespace
+	* No NAT: pods on a node can communicate with all pods on all nodes without NAT
+	* agents on a node can communicate with all pods on the node
+	* containers within a pod share the same network namespace, so can communicate over loopback
+
+Every node gets a dedicated cidr range to give to pods

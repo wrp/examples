@@ -1,0 +1,15 @@
+
+common flags
+CMAKE_BUILD_TYPE=Debug
+CMAKE_INSTALL_PREFIX:PATH=$DESTDIR
+CMAKE_C_FLAGS_DEBUG="-g -O0"
+CMAKE_CXX_FLAGS_DEBUG="-g -O0"
+
+To disable optimization:
+cmake -DCMAKE_BUILD_TYPE=Debug
+
+To change installation location:
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$DESTDIR "$@"
+
+To use ninja for the generator
+cmake "${path?}" -GNinja

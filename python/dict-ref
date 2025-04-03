@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+class dict_wrapper():
+	def __init__(self, m):
+		self.m = m
+
+	def assign(self, k, v):
+		self.m[k] = v
+
+a = {}
+
+# The dictionary is (effectviely) passed by reference...
+b = dict_wrapper(a)
+
+# ... and this assigns in a
+b.assign("foo", "5")
+
+print(a['foo'])

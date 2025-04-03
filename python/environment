@@ -1,8 +1,28 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import os
+import subprocess
+from contextlib import contextmanager
 
-print os.environ['HOME']
+print("HOME = ", end='')
+print(os.environ['HOME'])
 
 if 'FOO' in os.environ:
-    print 'FOO="%s"' % os.environ['FOO']
+    print('FOO="%s"' % os.environ['FOO'])
+
+@contextmanager
+def set_env(**kwargs):
+    orig_env = dict(os.environ)
+    os.environ.update(kwargs)
+    try:
+        yield
+    finally:
+        os.environ.clear()
+        os.environ.update(orig_env)
+
+# Use the context manager
+with set_env(TEMP_VAR='temporary value'):
+    print('Inside ctxt: TEMP_VAR="%s"' % os.environ['TEMP_VAR'])
+
+# Outside the context manager, the variable is gone
+print('Outside ctxt: TEMP_VAR is', os.environ.get('TEMP_VAR', 'unset'))

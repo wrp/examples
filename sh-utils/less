@@ -1,0 +1,28 @@
+
+To change case sensitivity of search, type "-I" or "-i" interactively,
+or pass those flags at invocation.  Key takeaway: to change any
+setting interactively, you can simply type '-X' (where X is the
+short option) to set it.   Here's a snippet from less(1):
+
+
+
+       -      Followed by one of the command line option letters (see OPTIONS below), this will change the setting of that option and print a message describ-
+              ing the new setting.  If a ^P (CONTROL-P) is entered immediately after the dash, the setting of the option is changed but no message is printed.
+              If  the  option letter has a numeric value (such as -b or -h), or a string value (such as -P or -t), a new value may be entered after the option
+              letter.  If no new value is entered, a message describing the current setting is printed and nothing is changed.
+       -S     Toggle line wrap
+
+
+       --     Like the - command, but takes a long option name (see OPTIONS below) rather than a single option letter.  You must press ENTER or  RETURN  after
+              typing  the  option  name.  A ^P immediately after the second dash suppresses printing of a message describing the new setting, as in the - com-
+              mand.
+
+       -+     Followed by one of the command line option letters this will reset the option to its default setting and print a message describing the new set-
+              ting.  (The "-+X" command does the same thing as "-+X" on the command line.)  This does not work for string-valued options.
+
+       --+    Like the -+ command, but takes a long option name rather than a single option letter.
+
+       -!     Followed  by  one  of  the  command line option letters, this will reset the option to the "opposite" of its default setting and print a message
+              describing the new setting.  This does not work for numeric or string-valued options.
+
+       --!    Like the -! command, but takes a long option name rather than a single option letter.

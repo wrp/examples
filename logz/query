@@ -1,0 +1,56 @@
+#!/bin/sh
+
+base_url=https://api.logz.io
+: ${v=v2}
+endpoint=${1-whoami}
+
+if ! test "$endpoint" = msg; then
+curl -Ssl -X GET \
+	-H 'Content-Type: application/json' \
+	-H 'Accept: application/json' \
+	-H "X-API-TOKEN: $LOGZ_TOKEN" \
+	"$base_url${v:+/}${v}/${endpoint}"
+else
+curl -SsL -X POST 'https://api.logz.io/v1/search' \
+	-H 'Content-Type: application/json' \
+	-H 'Accept: application/json' \
+	-H "X-API-TOKEN: $LOGZ_TOKEN" \
+	--data-raw '{
+		"query": {
+			"bool": {
+				"must": [ {
+						"range": {
+							"@timestamp": {
+								"gte": "now-5m",
+								"lte": "now"
+							}
+						}
+					} ]
+				}
+			},
+		"from": 0,
+		"size": 10,
+		"sort": [
+			{}
+		],
+		"_source": ["msg"],
+		"post_filter": null,
+		"docvalue_fields": [
+			"@timestamp"
+		],
+		"version": true,
+		"stored_fields": [
+			"*"
+		],
+		"highlight": {},
+		"aggregations": {
+			"byType": {
+				"terms": {
+					"field": "type",
+					"size": 5
+					}
+				}
+			}
+		}'
+fi
+echo

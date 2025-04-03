@@ -1,0 +1,57 @@
+noremap v V
+noremap V v
+noremap ; :
+noremap , ;
+noremap ' `
+noremap ` '
+
+set foldopen-=search
+set iskeyword=@,48-57,_,192-255,-
+set modelines=10
+set modeline
+set hlsearch
+set listchars=extends:%,precedes:%,eol:$,tab:>-,trail:$
+set laststatus=2   " Always show status line
+set matchpairs+=<:>
+set nowrap
+set nowrapscan
+set scrolloff=0
+set tildeop
+set t_ti= t_te=  " Disable clear screen on exit
+set novisualbell
+set noerrorbells
+syntax on
+highlight Comment ctermfg=darkcyan
+highlight DiffChange ctermbg=25
+highlight DiffAdd    term=bold ctermbg=5
+highlight DiffDelete term=bold ctermfg=12 ctermbg=159
+highlight DiffText   term=reverse cterm=bold ctermbg=7
+set formatoptions=cq
+set comments=
+
+set swapfile
+set directory^=~/.vim/swap//
+set writebackup
+set backupcopy=auto
+if has("patch-8.1.0251")
+	set backupdir^=~/.vim/backup//
+end
+set undofile
+set undodir^=~/.vim/undo//
+
+function! ClearWhite()
+	" A bit hacky: if you :let g:keep_white=1 before you
+	" do any writes, you can keep trailing whitespace
+	if !exists("g:keep_white") || g:keep_white != 1
+		let l:save_pos = getcurpos()
+		execute '%s/\s\+$//e'
+		call cursor(l:save_pos[1:])
+		call histdel("search", -1)
+	endif
+endfunction
+autocmd BufWritePre * call ClearWhite()
+
+" Grrr.  I occasionally get ft set to things that change my formatoptions
+" eg, if vim sets ft=conf, it add 'r' and 'o'.  Get rid of them!
+autocmd BufEnter * set formatoptions-=ro
+autocmd BufEnter * set indentexpr=

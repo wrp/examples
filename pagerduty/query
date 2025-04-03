@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if test -z "$1"; then
+	cat <<- \EOF
+	Query the pager duty endpoint.  Common queries:
+
+	incidents/$n
+	incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
+	incidents?serivce_ids[]=${SVC_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
+
+	users/$id
+
+	teams/$id
+	teams/$id/members
+	EOF
+	exit 0
+fi
+
+# TODO: add a -a option or something to do pagination
+echo >&2 'WARNING: not checking pagination.  See query-all'
+
+curl -fsS \
+	-H 'Accept: application/vnd.pagerduty+json;version=2' \
+	-H "Authorization: Token token=${PD_TOKEN:?}" \
+	--data-urlencode limit=100 \
+	-X GET \
+	https://api.pagerduty.com/"$1"

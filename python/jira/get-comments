@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+# Show comments for each ticket
+
+from jira import JIRA, JIRAError
+import os
+import sys
+
+jira_url = os.environ['JIRA_URL']
+jira_token = os.environ['JIRA_TOKEN']
+email = os.environ['EMAIL']
+
+def main():
+	jira = JIRA(jira_url, basic_auth=(email, jira_token))
+	for ident in sys.argv[1:]:
+		issue = jira.issue(ident)
+		print(f"{issue}: {issue.raw['fields']['summary']}")
+		for c in issue.raw['fields']['comment']['comments']:
+			print('\t' + c['author']['displayName'], end = ':')
+			print(' ' + c['updated'])
+			print('\t\t' + c['body'].replace('\n','\n\t\t'))
+
+try:
+	main()
+except KeyboardInterrupt:
+	sys.exit(1)
+except JIRAError as e:
+	raise SystemExit(str(e))

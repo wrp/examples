@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 
 import sys
+import os
+
+print(f'len(sys.argv) = {len(sys.argv)}')
+
+if len(sys.argv) == 1:
+    sys.argv.append('foo')
 
 if __name__ == '__main__':
-	print sys.argv[0]  # Path used to invoke the program
-	for i in sys.argv[1:]:  # remainder of args
-		print i
+    name = sys.argv[0]  # Path used to invoke the program
+    print(f'argv[0] == {os.path.basename(name)}')
+    print('  i:\tsys.argv[i]')
+    print('-----------------')
+    for i in range(len(sys.argv)):
+        print(f'{i:3}:\t{sys.argv[i]}')

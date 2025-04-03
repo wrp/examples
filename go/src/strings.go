@@ -19,4 +19,9 @@ func WordCount(s string) map[string]int {
 
 func main() {
 	fmt.Println(WordCount("This is this is This is test"))
+
+	a := string("foo");   fmt.Printf("%v\n", a)
+	a += "bar";           fmt.Printf("%v\n", a)
+	a = strings.Join([]string{"This", "demonstrates", "join"}, "::"); fmt.Printf("%v\n", a)
+	a = fmt.Sprintf("%s, %s!", "Hello", "World");           fmt.Printf("%v\n", a)
 }

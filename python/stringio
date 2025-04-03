@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+# keyword: file-like object
+
+from io import StringIO
+
+a = StringIO()
+a.write('hello, world')
+a.seek(0)
+print(a.read())
+
+s = "Hello, world!"
+b = StringIO(s)
+print(b.read())
+
+
+def exhaust(a, b):
+    with open(a, 'rb') if a else b as f:
+        print(f.read())
+
+
+with StringIO("foo") as b:
+    exhaust(None, b)
+    # b.seek(0)  # Would fail, since exhaust() closes file
+    # print(b.read())  # Also would fail

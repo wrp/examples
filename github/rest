@@ -1,16 +1,4 @@
 #!/bin/sh
 
-show_all_repos() {
-	# List repositories accessible ty the user associated with the access token:
-	curl -Ssf -H "Accept: application/vnd.github+json" \
-		-H "Authorization: Bearer $GITHUB_TOKEN" \
-		-H "X-GitHub-Api-Version: 2022-11-28" \
-		https://api.github.com/user/repos
-}
-
-# List the names of user's repository
-curl -Ssf -H "Accept: application/vnd.github+json" \
-	-H "Authorization: Bearer ${GITHUB_TOKEN?}" \
-	-H "X-GitHub-Api-Version: 2022-11-28" \
-	https://api.github.com/user/repos |
-jq -r ".[] | select(.owner.login == \"${GITHUB_USER?}\") | .name"
+GET user/repos # List the names of user's repository
+GET orgs/${org}/repos  # List the repos owned by org

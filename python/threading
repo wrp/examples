@@ -1,41 +1,44 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 import threading
 import sys
 import time
 
 lock = threading.RLock()
-sem = threading.Semaphore(value=5)
+sem = threading.Semaphore(value=1)
+val = 2
 
 class Foo(Exception): pass
 
 def foo(name):
-
+    global val
+    time.sleep(1)
     try:
         sem.acquire()
-        sys.stderr.write( '%s sem: %d\n' % (name, sem._Semaphore__value))
+        print(f'{name} acquired', flush=True)
         raise Foo('%s:oops' % name)  # semaphore is not incremented
         sem.release()
     except Foo:
-        if name == 'c':
-            raise
+        # Need to explicity release
+        sem.release()
 
     try:
         with lock:
             for x in range(5):
-                print name, "running:", x
-            raise Foo('%s:oops' % name)  # Lock is released
+                val = val + 2
+                print(name, f"in {name}, val = {val}", flush=True)
+                if x == 3:
+                    raise Foo('%s:oops' % name)  # Lock is released
     except Foo:
-        if name == 'c':
-            raise
+        print(f'No need to release lock in {name}')
 
     if name == 'a':
         time.sleep(5)
-        print 'a is done'
 
     if name == 'b':
-        time.sleep(1)
-        print 'b is done'
+        time.sleep(2)
+
+    print(f'{name} is done', flush=True)  # Will not see this for a
 
 a = threading.Thread(target=foo, args=('a'))
 b = threading.Thread(target=foo, args=('b'))
@@ -47,8 +50,10 @@ a.daemon = True
 a.start()
 b.start()
 c.start()
-# a.join() a is daemon, so is will be uncleanly terminated when program ends
-# b.join() b is not daemon, so program will wait even though we don't join
 c.join()
+
 d.start()
 d.join()
+
+# b is not daemon, so program will wait even though we didn't join
+# a is daemon, so it will be uncleanly terminated when program ends

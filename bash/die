@@ -1,11 +1,16 @@
 #!/bin/bash
 
-die() { echo "$(basename $0): $(date +"%Y-%m-%d %H:%M:%S%z"): ${*-Failed}"; exit 1; } >&2
-warn() { printf "%s${1:+\n}" "$*"; } >&2
-die() { warn "$@"; exit 1; } >&2
-die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
+# The implementations I think I like best.
+# Print each argument on a separate line.
+err() { printf "%s${1:+\n}" "$@"; } >&2
+die() { err "$@"; exit 1; } >&2
 
-( die "Test with args" )
-echo 'Testing die without arguments...'
+# Some other ideas
+# die() { echo "$(basename $0): $(date +"%Y-%m-%d %H:%M:%S%z"): ${*-Failed}"; exit 1; } >&2
+
+
+( die "Test with one arg" )
+( die test with multiple args "one per line in outpu" )
+echo 'Testing die without arguments... (should not insert blank line)'
 ( die )
 die Terminating

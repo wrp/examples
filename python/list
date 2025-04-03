@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
-a = []  # An empty list
+a = [0]  # An empty list
+b = (1,2,3)
+a.extend(b)  # roughly equivalent to 'for v in b: a.append(v)'
+assert( a == [0,1,2,3])
+a.append(b)
+assert( a == [0,1,2,3,(1,2,3)])
 
 # lists are passed by reference
 def mutate(b, x=5):
@@ -16,6 +21,7 @@ a = [1, 2, 3]
 print([x for x in a if x % 2])
 
 
+# You cannot apply builtin len() to a generator
 def length(x):
     c = 0
     for i in x:
@@ -36,4 +42,15 @@ print(f"now, x has {length(x)} elements")
 
 x = (1,2,3,4,5,6)
 # Find the number of elements in the list that match a condition:
+# (a < 4 for a in x) is the generator object that yields
+# [True, True, True, False, False, False]
 print(f'There are {sum(a < 4 for a in x)} elements in x less than 4')
+
+# slicing gives a shallow copy
+a = [1,2,3]
+b = [1, 2, a, 3]
+b[2][0] = 'foo'  # This modifies a
+c = b[2:]
+print(a)
+c[0][0] = 'bar'  # This also modifies a
+print(a)

@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+class cm:
+    def __init__(self, name='default', suppress=False):
+        self.name = name
+        self.suppress = suppress
+
+    def __enter__(self):
+        print(f'__enter__ called for {self.name}')
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        """
+            Exit the runtime context and return a Boolean flag indicating if
+            any exception that occurred should be suppressed. If an exception
+            occurred while executing the body of the with statement, the arguments
+            contain the exception type, value and traceback information.
+            Otherwise, all three arguments are None.
+
+            Returning a true value from this method will cause the with statement
+            to suppress the exception and continue execution with the statement
+            immediately following the with statement. Otherwise the exception
+            continues propagating after this method has finished executing.
+            Exceptions that occur during execution of this method will replace
+            any exception that occurred in the body of the with statement.
+
+            The exception passed in should never be reraised explicitly -
+            instead, this method should return a false value to indicate that
+            the method completed successfully and does not want to suppress the
+            raised exception. This allows context management code to easily
+            detect whether or not an __exit__() method has actually failed.
+        """
+        print(f'__exit__ called for {self.name} with args: ', end=None)
+        if exception_type is AttributeError:
+            print('***********************')
+            print(f'exception type = {exception_type}')
+            print(f'exception value = {exception_value}')
+            print(f'exception traceback = {traceback}')
+            print('***********************')
+        # If __exit__ returns a truthy value, exceptions are not propagated
+        return self.suppress
+
+
+with cm('foo') as k:
+    print(f'k name is {k.name}')
+
+# ??? k is still valid (python 3.8.13)
+print(f'type: {type(k)}')
+
+with cm('BAD', True):
+    # Raise an exception
+    a = k.no_such_attribute
+    print('Never called')

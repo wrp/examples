@@ -1,5 +1,9 @@
 # Examples
 
+# See ssh_config(5)
+
+# Put this file in ~/.ssh/config.  System default is /etc/ssh/ssh_config, can override with -F
+
 # proxy through jumphost to machines with prefix pfx-
 Host !pfx-jumphost pfx-*
 	ProxyJump pfx-jumphost
@@ -11,12 +15,12 @@ Host !pfx-jumphost !pfx-host1 pfx-*
 Host pfx-host1
 	ProxyJump pfx-jumphost
 
-Host specific-host
+Host host-alias   # Let ssh rename hosts for you.
 	ProxyJump pfx-host1
-	Hostname N.N.N.N   # <--- an ip of specific-host
+	Hostname N.N.N.N   # <--- an ip or name of specific-host
 
 # Auto copy dotfiles: from http://klaig.blogspot.com/2013/04/make-your-dotfiles-follow-you.html
-# See ssh_config(5).  %n expands to the original remote host name
+#   %n expands to the original remote host name
 Host *
 	PermitLocalCommand yes
 	LocalCommand tar c -C${HOME} .bashrc .vim .vimrc .tmux.conf \

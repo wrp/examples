@@ -1,0 +1,5 @@
+# Find all my pull-requests:
+gh pr list --author @me
+
+# Show details of a pr:
+gh pr view nnnnn

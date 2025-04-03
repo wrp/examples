@@ -2,9 +2,10 @@
 
 use 5.12.0;
 
-# $ARGV[0] is first arg
-# $0 is name
+# $0 is name of program
 say '$0 ='. $0;
+
+# $ARGV[0] is first arg (eg, argv[1] in C)
 foreach my $arg (@ARGV) {
 	say "arg: $arg"
 }
@@ -15,7 +16,6 @@ say "total number of args:" . @ARGV;
 # so 1 or 2 ( or 3 if you pass 100 args!)
 # say "total number of args:", length @ARGV
 #
-
-if( @ARGV == 0) {
+if (@ARGV == 0) {
 	say "no args"
 }

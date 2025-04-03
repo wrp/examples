@@ -1,0 +1,190 @@
+#!/usr/bin/env python
+
+# naive script to merge sorted shell histories
+
+import os
+import platform
+import sys
+import re
+from datetime import datetime, timezone
+
+timestamp_len = 10
+
+# Commands that are probably not interesting to keep in history
+# TODO: add flags to allow user to specify categories to omit,
+#       or patterns to ignore, or categories to keep, or ...?
+#       For now, just honor HISTIGNORE as an extra pattern to ignore.
+commands_to_ignore_re = [
+    re.compile('^(g|git)\s+(ap|dc|diff|l1h||s|show|--version)(\s+[^|]*)$'),
+    re.compile('^(cat|grep|ls|pwd|s|type|vi|which)(\s+[^|]*)$'),
+]
+
+
+def merge_files(paths):
+    files = [hist_file(path) for path in paths]
+    prev = None
+    while any(files):
+        s = min(files)
+        if s.cmd != prev and s.cmd.is_printable():
+            prev = s.cmd
+            print(s.cmd)
+        s.next()
+
+
+class cmd():
+    def __init__(self, ts, lines):
+        self.ts = ts
+        self.lines = lines
+
+    def __eq__(self, other):
+        if not other: return False
+        if self.ts != other.ts: return False
+        if len(self.lines) != len(other.lines): return False
+        for i in range(1,len(self.lines)):
+            if self.lines[i] != other.lines[i]:
+                return False
+        return True
+
+    def __str__(self):
+        return '\n'.join(self.lines)
+
+    def __lt__(self, other):
+        """If timestamps are the same, the timestamp with the longest
+        comment is considered 'less' so that the entry with the longest
+        comment makes it through the dedup"""
+        if self.ts == other.ts:
+            return len(self.lines[0]) > len(other.lines[0])
+        return self.ts < other.ts
+
+    def is_printable(self):
+        """Return True if the command should be printed in the output"""
+        if len(self.lines) == 1:
+            return " begins " in self.lines[0]
+
+        for pattern in commands_to_ignore_re:
+            if pattern.match(self.lines[1]):
+                return False
+
+        return True
+
+class NotSorted(Exception): pass
+
+
+class hist_file():
+    bof = re.compile(f'^#[0-9]{{{timestamp_len}}}')
+    def __init__(self, path, allow_unsorted=False):
+        self.allow_unsorted = allow_unsorted
+        if path == '-':
+            self.path = 'stdin'
+            self.basename = platform.node()
+            self.f = sys.stdin
+        else:
+            self.path = path
+            self.basename = os.path.basename(path)
+            self.f = open(path, 'r')
+        self.line_number = 0
+        self.cmd = None
+        self.readline()
+        self.next()
+
+    def __repr__(self):
+        return f'{self.path}: {self.line_number}: {self.cmd.ts if self.cmd else "NONE"}'
+
+    def __lt__(self, other):
+        if self.cmd and other.cmd:
+            return self.cmd < other.cmd
+        if other.cmd:
+            return False
+        return True
+
+    def __bool__(self):
+        return bool(self.cmd)
+
+    def readline(self):
+        self.next_line = self.f.readline()
+        self.line_number += 1
+        eof = len(self.next_line) == 0
+        self.next_line = self.next_line.rstrip()
+        return not eof and not self.bof.match(self.next_line)
+
+    def check_order(self, ts):
+        if not self.allow_unsorted and self.cmd and ts < self.cmd.ts:
+            # OOOOK == out of order okay
+            msg = f'{self.path} is out of order at line {self.line_number}'
+            if os.environ.get('OOOOK', False):
+                print(msg, file=sys.stderr)
+            else:
+                raise(NotSorted(msg))
+
+    def append_name_to_next_line(self):
+        """If next_line is only a timestamp, append filename to comment"""
+        extra = ''
+        if self.bof.match(self.next_line) and len(self.next_line) == timestamp_len + 1:
+            ts = int(self.next_line[1:])
+            when = datetime.fromtimestamp(ts, timezone.utc)
+            extra = f' ({when.isoformat()} {self.basename})'
+        return self.next_line + extra
+
+    def next(self):
+        """Put the next command from the file into self.cmd"""
+
+        if not self.next_line:
+            self.cmd = None
+        else:
+            ts = int(self.next_line[1:timestamp_len + 1])
+            self.check_order(ts)
+
+            lines = [self.append_name_to_next_line()]
+            while self.readline():
+                lines.append(self.next_line)
+
+            self.cmd = cmd(ts, lines)
+        return self.cmd
+
+    def readlines(self):
+        return self.f.readlines()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.f.close()
+
+
+def sort_file(path):
+    new_path = path + '.sorted'
+    backup_path = path + '.bak'
+    for p in [new_path, backup_path]:
+        if os.path.exists(p):
+            raise SystemExit(f'{p} already exists!  Aborting')
+
+    h = hist_file(path, allow_unsorted=True)
+    if h.cmd:
+        cmds = [h.cmd]
+    while h.next():
+        cmds.append(h.cmd)
+
+    cmds.sort()
+
+    with open(new_path, 'w') as output:
+        for x in cmds:
+            print(x, file=output)
+
+    os.rename(path, backup_path)
+    os.rename(new_path, path)
+
+def main():
+    if pattern := os.environ.get('HISTIGNORE', None):
+        commands_to_ignore_re.append(re.compile(pattern))
+
+    try:
+        if os.path.basename(sys.argv[0]).startswith('sort'):
+            for x in sys.argv[1:]: sort_file(x)
+        else:
+            merge_files(sys.argv[1:])
+    except IOError as e:
+        raise SystemExit(f'{e.filename}: {e.strerror}')
+    except NotSorted as e:
+        raise SystemExit(e)
+
+main()

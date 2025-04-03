@@ -1,0 +1,13 @@
+
+
+To reset the root password:
+$ gitlab-rake gitlab:password:reset\[root\]
+
+This prompts for "Password:", which is asking for
+the new password, not the old one.
+
+
+
+
+To restart after a config change:
+$ gitlab-ctl reconfigure

@@ -1,0 +1,44 @@
+
+ifndef image
+$(error image is not defined)
+endif
+uid ?= $$(id -u)
+home_mount ?= /$(USER)
+docker_file ?= Dockerfile
+
+.PHONY: run image
+run:
+	@if ! docker image inspect $(image) > /dev/null 2>&1; then \
+	make image; fi
+	@- rename-tmux-window $(image)
+	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
+		echo "Attaching to docker containter $$id ($(image))"; \
+		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
+	else \
+		wd="$$(pwd | sed -e "s@^$$HOME/@@")"; \
+		echo 'Creating new docker container from $(image)'; \
+		docker run -it \
+		--user "$(uid):$$(id -g)" \
+		--privileged \
+		-w "/$(USER)/$${wd}" \
+		-e HOME="/$(USER)/$${wd}" \
+		-v "$(HOME)":"$(home_mount)" \
+		--label "$(USER)-$(image)" \
+		--cap-add=SYS_PTRACE --security-opt seccomp=unconfined "$(image)"; \
+	fi
+	# EXITED the $(image) docker container
+
+image:
+	docker build \
+		--build-arg user="$(USER)" \
+		--build-arg uid="$(uid)" \
+		-t "$(image)" \
+		-f "$(docker_file)" \
+		.
+clean:
+	docker system prune -a -f
+
+Dockerfile-$(USER): Dockerfile
+	sed -e 's/@user@/$(USER)/g' $< > $@
+
+.PHONY: run clean image

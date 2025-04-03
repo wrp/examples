@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Get a list of all jobs and their associated script path
+
+get() {
+	curl -Ssf --user "${EMAIL?}:${JENKINS_TOKEN?}" "$@"
+}
+
+
+i=0
+get "${JENKINS_URL?}"/api/json |
+jq -rc '.jobs[] | .url' |
+while read url; do
+	let i=$(( (i + 1) % 10  ))
+	printf '%-60s:' "${url##$JENKINS_URL/job/}" |
+	if test $i = 0; then tr ' ' .;  else cat; fi
+	get "$url"/config.xml |
+	xmlstarlet sel -t \
+		--value-of org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject/factory/scriptPath \
+		2> /dev/null | sed -E 's/^(.)/  \1/' | grep . || echo
+done

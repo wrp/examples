@@ -12,6 +12,8 @@ printf 'foo\000bar\nfinal line slurpped by -000\n' | perl -000 -ne 'print if $. 
 # paragraph mode (both newlines are retained)
 printf 'blay\n\n2nd paragraph retains two newlines\n\nbar' | perl -00 -ne 'print if $. == 2'
 
+# Read 4 bytes from stdin
+printf 'foobar' | perl -wE 'read STDIN, my $s, 4; say $s'
 
 # From perldoc perlvar:
 # To read a complete file:

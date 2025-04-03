@@ -1,0 +1,8 @@
+
+See https://stackoverflow.com/questions/57754901/what-is-a-fat-pointer/57754902#57754902
+
+Currently 4 types of dynamically sized types (DST):
+slice: ([T] and str)
+trait object:
+custom DST: (struct where last element is a DST)
+exception: (https://github.com/rust-lang/rfcs/blob/master/text/1861-extern-types.md)

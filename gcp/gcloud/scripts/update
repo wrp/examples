@@ -18,8 +18,8 @@
 # `-- sshKeys
 
 
-. $(dirname $0)/funcs.sh
-: ${base_dir=$(dirname $0)}
+. $(dirname $(readlink $0))/funcs.sh
+: ${base_dir=$(pwd)}
 
 : ${FORCE="update gcp data on $(date)"}
 
@@ -71,17 +71,19 @@ all_hosts() {
 	export FORCE
 	test -s $1/list || { echo "No entries in $1/list" >&2; return 1; }
 
-	$(dirname $0)/purge $1 || return 1
 	count=$(( $(wc -l < $1/list) - 1 ))
 
 	trap 'tput ve' RETURN
 
 	tput vi #  make cursor invisible
 	el=$(tput el)
-	awk 'NR>1 {print $1}' $1/list | while read host; do
+	while read host _; do
+		case $host in
+		gcloud|NAME|"") continue;;
+		esac
 		printf "\r(%d/%d) update $host$el" "$((++i))" "$count"
 		$0 $1/$host || return 1
-	done
+	done < $1/list
 	echo
 }
 
@@ -176,11 +178,9 @@ main() {
 		if ! test -s "$x"; then rm "$x"; else (
 			cd "$base_dir"
 			git add $x
-			interactive_commit "$(printf \
-				"Update $PROJECT:$orig_type/$host$(
-					test "$PROJECT" != gcloud && echo " in $PROJECT"
-					)\n\n%s" \
-					"${FORCE}"
+			interactive_commit "$(printf '%s\n\n%s\n' \
+				"Update $PROJECT:$orig_type/$host" \
+				"${FORCE}"
 				)"
 			)
 		fi

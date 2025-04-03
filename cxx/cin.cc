@@ -9,7 +9,8 @@ using namespace std;
  * eg: int x; cin >> x; will fail if the stream cannot be
  * converted.
  *
- * How this is considered better than scanf is beyond me
+ * This is basically scanf, but with uglier notation.  See
+ * std::format for output.
  */
 int main()
 {
@@ -23,7 +24,7 @@ int main()
 	cout << "cin.bad " << cin.bad() << endl;
 	cout << "cin.good" << cin.good() << endl;
 	cout << "cin.eof " << cin.eof() << endl;
-	cout << "cin.fail " << cin.eof() << endl;
+	cout << "cin.fail " << cin.fail() << endl;
 	if( cin.rdstate() ){
 		cout << "cin in state: " << cin.rdstate() << endl;
 		cin.clear();

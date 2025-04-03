@@ -7,3 +7,6 @@ esac
 case $0 in
 -*) echo This is a login shell;;
 esac
+
+
+unset command_not_found_handle  # Disable stupid autoload bash feature

@@ -7,7 +7,7 @@ use warnings;
 
 sub get_sorted_files {
 	my $path = shift;
-	opendir my($dir), $path or die "can't opendir $path: $!";
+	opendir my($dir), $path or die "can't opendir $path: $!\n";
 	my %hash = map {$_ => (stat($_))[9] || undef} # avoid empty list
 		map  { "$path$_" }
 		readdir $dir;

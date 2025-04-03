@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# keep only the first 8 : in each line
+perl -wpe 'BEGIN {$/=\1} $m += m/:/; $m = 0 if m/\n/; s/// if $m > 8'
+
+# or (replaces : after 8th with a single space)
+perl -wpE '$k=0; while(m/:/g) { $i = pos; substr($_, $i-1, 1) = " " if ++$k > 8; last unless $i; pos=$i}'

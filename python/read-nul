@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+# Read key-value pairs from a nul-separated input stream
+
+import sys
+
+f = sys.stdin
+for record in f.read().split('\0'):
+    try:
+        k, v = record.split('=')
+    except ValueError:
+        print(record)
+    else:
+        print(f'{k}\t--->\t{v}')

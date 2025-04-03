@@ -3,7 +3,7 @@
 use POSIX qw/ WIFEXITED WEXITSTATUS /;
 
 if(! defined($pid = fork()) ){
-	die "fork: $!";
+	die "fork: $!\n";
 } elsif( $pid == 0 ){
 	print "child is pid $$\n";
 	exit 17;

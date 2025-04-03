@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# API at https://developer.statuspage.io
+#   /pages                       list all pages
+#       $id/
+#           /components          list components for a page
+#           /subscribers         list subscribers for a page
+#   /incidents                   list all incidents
+
+curl -Ssf -X "${method-GET}" \
+	-H "Authorization:OAuth $SP_TOKEN" \
+	"https://api.statuspage.io/v1/${1-pages/$STATUSPAGE_PAGE/incidents}"

@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+from collections.abc import Sequence, Iterable
+from abc import ABC, abstractmethod
+
+
+# Example from https://docs.python.org/3.10/library/collections.abc.html#collections.abc.MutableMapping
+class D:                                 # No inheritance
+    def __init__(self): ...              # Extra method not required by the ABC
+    def __getitem__(self, index):  ...   # Abstract method
+    def __len__(self):  ...              # Abstract method
+    def count(self, value): ...          # Mixin method
+    def index(self, value): ...          # Mixin method
+
+print(f'before registering: ', end='')
+print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
+Sequence.register(D)                     # Register instead of inherit
+print(f'after registering : ', end='')
+print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
+print(f'D() is an instance: {isinstance(D(), Sequence)}')
+
+# For simple interfaces, you do not have to explicitly register
+class E:
+    def __iter__(self): ...
+    def __next__(next): ...
+
+issubclass(E, Iterable)
+isinstance(E(), Iterable)
+print(f'E is iterable: {issubclass(E, Iterable)}')
+
+
+class F(ABC):
+    @abstractmethod
+    def foo(self, x): ... # All subclasses must define
+
+class G(F):
+    def foo(self, y):
+        return y;
+g = G()
+
+
+# This definition is fine, but instances cannot be instantiated
+class H(F): pass
+try:
+    h = H()
+except TypeError as e:
+    print(f'Attempt to instantiate H failed since foo is not defined: {e}')

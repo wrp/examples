@@ -1,0 +1,20 @@
+Some commands to remember:
+:messages
+
+Some options to remember:
+relativenumber  (rnu)
+
+
+Motion commands
+z.    # Move current line to center/middle of screen
+z-    # Move current line to bottom of screen
+z<cr> # Move current line to top of screen
+
+To open a file with a search: +/pattern
+vim '+/text\|other' filename
+
+Uppercase a word: gUaw
+Uppercase a line: gUgU
+Uppercase 3 words: gU3aw
+
+Put quotes around the word the cursor is on:  ciw""<esc>P

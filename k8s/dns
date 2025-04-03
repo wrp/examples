@@ -1,0 +1,3 @@
+Each k8s cluster provides a dns service
+
+k8s services and pods get dns records

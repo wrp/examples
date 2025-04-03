@@ -1,5 +1,8 @@
 #!/usr/bin/env python2.7
 
+# See dataclasses: https://peps.python.org/pep-0557/
+
+
 from collections import namedtuple
 
 Thing = namedtuple('Thingy', ['one', 'two'])

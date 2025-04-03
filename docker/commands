@@ -6,4 +6,18 @@ docker exec -it  ${container?} /bin/bash
 docker ps
 
 # Copy file from a container:
-docker cp ${container_id}:/path/within/container /host/path/
+docker cp ${container?}:/path/within/container /host/path/
+
+# Various inspect examples  # keyword: describe details examine
+docker inspect --format '{{ .ContainerConfig.Cmd }}' ${container?}
+docker inspect --format '{{ .State.Pid }}' ${container?}
+docker inspect ${container?} | jq -r '.[].State.Pid'
+
+# Use container as a shim around a command:
+cmd() { docker run -i ${container} cmd "$@"; }
+
+# Add a tag to an image
+docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
+# Create an image from a running container
+docker commit ${container_id}

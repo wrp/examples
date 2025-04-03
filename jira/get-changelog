@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# vim: sw=8 ts=8 sts=8 noet
+
+# Given a ticket (key or id), show the changelog
+
+from jira import JIRA, JIRAError
+import os
+import sys
+from http import HTTPStatus
+from datetime import datetime
+
+
+jira_url = os.environ['JIRA_URL']
+jira_token = os.environ['JIRA_TOKEN']
+email = os.environ['EMAIL']
+
+
+def if_print(s):
+	print(f' ({s})' if s and not s.isspace() else '')
+
+def main():
+	jira = JIRA(jira_url, basic_auth=(email, jira_token))
+	issue = jira.issue(sys.argv[1], expand='changelog')
+
+	# prev = get_time(issue.changelog.histories[-1].created)
+
+	for h in issue.changelog.histories:
+		print(f'event {h.id} by {h.author} at {h.created}')
+		for item in h.items:
+			print(f'\tfield:\t{item.field}', end='')
+			try:
+				s =f'{item.fieldId} of type {item.fieldtype}'
+			except AttributeError:
+				pass
+			if_print(s)
+			print(f'\tfrom:\t{item.__dict__["from"]}', end='')
+			if_print(f'{item.fromString}')
+
+			print(f'\tto:\t{item.to}', end='')
+			if_print(f'{item.toString}')
+
+# methods of objects in issue.changelog.histories:
+# ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__',
+# '__eq__', '__format__', '__ge__', '__getattribute__', '__getstate__',
+# '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__',
+# '__lt__', '__module__', '__ne__', '__new__', '__reduce__',
+# '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__',
+# '__subclasshook__', '__weakref__', 'author', 'created', 'id', 'items']
+
+# h.items is a list
+
+try:
+	main()
+except KeyboardInterrupt:
+	sys.exit(1)
+except JIRAError as e:
+	raise SystemExit(f'{e.status_code}:' +
+		'{HTTPStatus(e.status_code).phrase}')

@@ -40,7 +40,7 @@ json='{ "devices" : [ {"id" : 0, "name": "bcval" }, {"id":1, "name":"doug"}],
 exe() {
 	cmd=$1
 	echo "input: $json"
-	echo jq -c "'$cmd'"
+	# echo jq -c "'$cmd'"
 	echo "$json" | eval jq -c "'$cmd'"
 }
 exe '.'
@@ -74,3 +74,18 @@ exe '..|.name?' # Recursive descent
 json='[{"a":"a1", "b":"b1","c":"c1"},{"a":"a2", "b":"b2","c":"c2"}]'
 exe '.[] | [.a,.c]'
 
+# Select an element if any in array matches
+json='[
+	{"title":"has 7",
+	"b":[
+		{"c": 5, "d": 3 },
+		{"c": 7, "d": 3 }
+	]},
+	{"title":"no match",
+	"b":[
+		{"c": 4, "d": 3 },
+		{"c": 4, "d": 8 }
+	]}
+]'
+# Select the element with title == "has 7", since one of the members of the subarray has a c == 7
+exe '.[] | select( any(.b[]; .c == 7)) | .'

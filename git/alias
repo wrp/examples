@@ -1,0 +1,4 @@
+
+To see an alias, use:
+
+git -h "$alias"   # instead of grep "$alias" ~/.gitconfig

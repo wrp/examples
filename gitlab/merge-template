@@ -1,0 +1,36 @@
+
+The default merge commit template looks like:
+
+--------------------------------------------------------
+Merge branch '%{source_branch}' into '%{target_branch}'
+
+%{title}
+
+%{issues}
+
+See merge request %{reference}
+--------------------------------------------------------
+
+
+If we change it to be:
+
+
+--------------------------------------------------------
+Merge branch '%{source_branch}' into '%{target_branch}'
+
+See merge request %{reference}
+
+%{first_multiline_commit}
+--------------------------------------------------------
+
+we should get all the trailers from the first multiline commit for free.
+%{issues} does not seem useful, and that information ought to be
+in the first multiline commit message.  Another option is to use
+%{first_commit}, but I like that %{first_multiline_commit} defaults
+to be the same as %{title}, and will be more useful for users
+who are not disciplined about their commit messages but rely
+on the web UI.  (note that getting all the trailers may be
+a bad thing.  It does not really make sense to grab signed-off-by
+for the merge commit, since those people did not sign off on the
+merge commit.  See discussion at
+https://gitlab.com/gitlab-org/gitlab/-/issues/385092

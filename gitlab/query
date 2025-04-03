@@ -1,0 +1,23 @@
+#!/bin/sh
+
+: ${protocol=https}  # eg: http
+: ${method=GET}
+
+# Query the gitlab endpoint
+curl -X ${method?} -kSs -H "Authorization: Bearer ${GITLAB_TOKEN?}" \
+	${protocol}://${GITLAB_DOMAIN?}/api/v4/${1-projects} |
+${QUERY_PAGER-jq .}
+
+# Some sample queries. (See 'api' for more details)
+
+# Search for a project by name:
+# "projects?search=${name}&search_namespaces=True"
+
+# Get the id of a search:
+# ... | jq -rc '.[] | [.id, .name]'
+
+# Validate the ci pipeline:
+# projects/${id}/ci/lint?sha=${oid}
+
+# Find the path of the ci/cd config file:
+# $0 projects/$id | jq .ci_config_path

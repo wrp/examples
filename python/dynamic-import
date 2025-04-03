@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+# Demonstrate import with dynamic name resolution:
+
+sys = __import__('sys')  # same as "import sys"
+foo = __import__('sys')  # same as "import sys as foo"
+
+# Same as "from os import path as bar"
+bar = getattr(__import__('os', fromlist=['path']), 'path')
+
+from os import path as banana
+
+assert(banana is bar)
+print(foo.version_info)
+sys.exit(0)
+

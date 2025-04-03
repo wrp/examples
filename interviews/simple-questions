@@ -13,3 +13,14 @@ What's the difference between a load balancer and a reverse proxy?
 
 What's the difference between a daemon set, a replica set, and a stateful set?
 
+
+Design an LRU cache
+
+
+Design a web crawler: given api:
+	def crawl(seed_urls: list<str>, max_depth: int): list<str>
+	def get_content_and_parse(url: str): list<str>
+
+	items to discuss:
+		concurrency/threading
+		recursion

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if test "${GITLAB_HOME?}" = "${GITLAB_HOME#/}"; then
+	echo "GITLAB_HOME must be an absolute path.  Set to: '$GITLAB_HOME'" >&2
+	exit 1
+fi
+
+# Use this variable to populate data in initial config /etc/gitlab/gitlab.rm
+GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/';"
+GITLAB_OMNIBUS_CONFIG+="gitlab_rails['lfs_enabled'] = true;"
+unset GITLAB_OMNIBUS_CONFIG  # leaving here for demonstration only
+
+# Run the main gitlab instance
+docker run --detach \
+	--hostname gitlab.example.com \
+	--env GITLAB_OMNIBUS_CONFIG="$GITLAB_OMNIBUS_CONFIG" \
+	--publish 1043:443 \
+	--publish 1080:80 \
+	--publish 1022:22 \
+	--name gitlab \
+	--restart always \
+	--volume $GITLAB_HOME/config:/etc/gitlab \
+	--volume $GITLAB_HOME/logs:/var/log/gitlab \
+	--volume $GITLAB_HOME/data:/var/opt/gitlab \
+	--shm-size 256m \
+	gitlab/gitlab-ee:latest
+
+# Start a runner
+docker run -d --name gitlab-runner --restart always \
+	-v $GITLAB_HOME/gitlab-runner/config:/etc/gitlab-runner \
+	--net host \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	gitlab/gitlab-runner:latest

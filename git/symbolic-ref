@@ -1,0 +1,4 @@
+
+# Create a symbolic ref with symbolic-ref:
+git symbolic-ref new-name refs/heads/main  # Make "new-name" like "HEAD"
+git symbolic-ref new-name2 HEAD  # same

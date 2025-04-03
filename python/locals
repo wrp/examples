@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+a = 'the value of a'
+
+k = locals()  # get a reference to the locals dict
+
+try: print(f'b = {b}')
+except NameError as e: print(f'{e.args[0]} is not in locals')
+
+# This assigns the local variable
+k['b'] = 5
+print(f'b = {b}')

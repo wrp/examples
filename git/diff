@@ -1,0 +1,3 @@
+
+# Show the files changed from branch to main
+git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}

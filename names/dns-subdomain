@@ -1,0 +1,33 @@
+
+This is taken from documentation at kubernetes.io.
+After a quick perusalo RFC 1123, I do not see this
+description there and am not sure if the k8s docs
+just have the rfc wrong.  Not worth tracking down
+right now.
+
+
+RFC 1123 rules for a valid dns subdomain name:
+
+No more than 253 characters in length.
+Valid characters are [-a-z.] (lowercase, hyphen, and period)
+Must start and end with alpha.
+
+
+But RFC 1035 says:
+
+	<domain> ::= <subdomain> | " "
+	<subdomain> ::= <label> | <subdomain> "." <label>
+	<label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
+	<ldh-str> ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+	<let-dig-hyp> ::= <let-dig> | "-"
+	<let-dig> ::= <letter> | <digit>
+	<letter> ::= any one of the 52 alphabetic characters A through Z in
+	upper case and a through z in lower case
+	<digit> ::= any one of the ten digits 0 through 9
+
+	Note that while upper and lower case letters are allowed in domain
+	names, no significance is attached to the case.  That is, two names with
+	the same spelling but different case are to be treated as if identical.
+
+Which suggests a subdomain can be uppercase, but since it does not matter
+k8s has decided to disallow uppercase.

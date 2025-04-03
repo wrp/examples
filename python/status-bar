@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+import time
+import random
+from status_bar import status_bar
+
+s = status_bar().run()
+
+
+try:
+    val=0
+    while True:
+        a = random.choice([.12, .37, .45, .65, 1, 5])
+        if a == 5:
+            s.status("sleeping for 5!")
+        else:
+            val += a
+            s.status(f'val = {val}')
+        time.sleep(a)
+
+except KeyboardInterrupt:
+    pass

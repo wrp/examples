@@ -1,0 +1,16 @@
+#!/bin/bash
+
+start=0
+incr=30
+
+while
+	curl -Ssf -G \
+		-d startAt=${start} \
+		-d maxResults=${incr} \
+		-H 'Content-Type: application/json' \
+		-u "${EMAIL?}:${JIRA_TOKEN?}" \
+		"${JIRA_URL?}/rest/api/2/dashboard" \
+	| jq '.dashboards[], if .next == null then null | halt_error else empty end'
+do
+	: $(( start += $incr ))
+done

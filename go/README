@@ -1,0 +1,12 @@
+# for help: "go help {command}" eg "go help mod init"
+
+To start a project:
+
+mkdir $name && cd $name
+# create a go.mod file in $PWD with 'go mod init'
+go mod init ${module_path} # $module_path typically ends in $name
+# edit source code.  For an executable, create package main
+# To run the code, 'go run .' or 'go build' to create executable
+
+
+debugging: dlv  (delve)

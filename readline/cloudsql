@@ -1,0 +1,12 @@
+
+So many versions of readline, and so many environments that ignore .editrc and .inputrc :(
+
+This is a quick reminder of keys that work in google's cloudsql client.  (on my current Mac)
+
+<esc>  b  - move back to start of word
+<esc>  f  - move forward to one past end of next word
+<ctrl> a  - move to beginning of line
+<ctrl> b  - move backward one char
+<ctrl> e  - move to end of line
+<ctrl> f  - move forward one char
+<ctrl> t  - transpose letters

@@ -1,0 +1,6 @@
+git merge -X ours
+git merge -X theirs
+
+To see merge conflicts:
+
+git checkout --conflict diff3 $path

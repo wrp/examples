@@ -1,0 +1,9 @@
+#!/bin/sh
+
+exe=./fread
+srcdir=.
+
+die() { test -n "$*" && echo "$*"; exit 1; } >&2
+
+< $0 $exe | cmp - $0 || die
+< ${srcdir}/fread.c $exe | cmp - ${srcdir}/fread.c || die

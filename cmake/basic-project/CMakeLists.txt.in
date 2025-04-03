@@ -1,0 +1,10 @@
+
+cmake_minimum_required(VERSION 3.26)
+project(hello-world VERSION @PKG_VERSION@)
+add_executable(hello src/hello.c)
+include_directories(inc)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/include/config.h.in
+    ${PROJECT_SOURCE_DIR}/inc/config.h
+)
+message(STATUS "[${PROJECT_NAME}] VERSION = ${PROJECT_VERSION} = ${hello-world_VERSION}")

@@ -19,8 +19,18 @@ EOF
 }
 
 data | jq -r '.[] | select( .name == "Burrito") | .uuid '
+
+# Use a boolean || or
+data | jq -r '.[] | select( .name == "Burrito" or .name == "Taco") | .uuid '
+
 # Use a variable to select
 data | jq --arg target Nacho -r '.[] | select( .name == $target) | .uuid'
+
+# Select from a group
+data | jq --arg names 'Taco Nacho' -r '.[] |
+    map(select(.name == ($names | split(" ")[])) | .uuid)'
+
+exit
 
 strings() { cat << EOF
 [

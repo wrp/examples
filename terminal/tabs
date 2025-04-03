@@ -1,0 +1,4 @@
+
+see tabs(1)
+
+To set tabstops to 4 and print a ruler: tabs -4 -d

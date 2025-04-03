@@ -1,7 +1,27 @@
 #!/bin/sh
 
-# Select all those objects in which a sub-member array contains a particular string
 
+# Select items in which a string is present in an array
+echo '[
+	{ "a": [ "n", "z" ], "b" : "bar" },
+	{ "a": [ "q", "s" ], "b" : "baz" },
+	{ "a": [ "a", "c" ], "b" : "bla" }
+]' |
+jq -rc '.[] | select( .a | index("z")) | .b'
+# output: bar
+
+
+
+echo '[
+	{ "a": "foo", "b": "bar" },
+	{ "a": "qux", "b": "baz" },
+	{ "a": "qaz", "b": "bla" }
+]' |
+jq -c '.[] | select( .a == "foo" )'
+# output: {"a":"foo","b":"bar"}
+
+
+# Select all those objects in which a sub-member array contains a particular string
 for t in a b c; do
 	printf "%s: " "$t";
 	echo '{
@@ -9,12 +29,10 @@ for t in a b c; do
 		"z": {"m": ["b","c"]},
 		"a": {"m": ["z","y"]}
 	}' |
-
-jq -c ".[] |= select( .m | index(\"$t\"))"
-# jq -c "map_values( select( .m | index(\"$t\")))"
-
+	jq -c ".[] | select( .m | index(\"$t\"))"
 done
 
+if false; then
 for t in a b c; do
 	printf "%s: " "$t"
 	echo '[
@@ -24,11 +42,9 @@ for t in a b c; do
 		{ "m": ["z","c"], "r": "bar3"},
 		{ "m": ["z","c"], "r": "bar4"}
 	]' |
-
-jq -c ".[] |= select( .m | index(\"$t\"))[]  "
-# jq -c "map_values( select( .m | index(\"$t\")))[] | .r"
-
+	jq -c ".[] | select( .m | index(\"$t\"))[]  "
 done
+fi
 
 printf "%s: " "b"; echo '[
 	{ "members": ["a","z"], "role": "foo1"},
@@ -40,8 +56,3 @@ printf "%s: " "b"; echo '[
 	' |
 jq -c ' .[] | select( .members | index("b")) | .role'
 # jq -c '.bindings | map_values( select( .members | index("b"))) '
-exit
-#output
-a: {"q":{"m":["a","b"]}}
-b: {"q":{"m":["a","b"]},"z":{"m":["b","c"]}}
-c: {"z":{"m":["b","c"]}}

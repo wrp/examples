@@ -1,3 +1,5 @@
+# docker run -ti d3fk/kubectl version
+
 kubectl controls the Kubernetes cluster manager.
 
 # PODS
@@ -6,6 +8,8 @@ kubectl get pods ${selector+-l ${selector}}         # list pods
 kubectl get pods -o json ${selector+-l ${selector}} # list pods in json format
 kubectl describe pod ${name?} | grep Node:          # Determine node on which a pod is running
 
+# label selector
+kubectl get pods -l label_key=value # find/search/filter all pods that have a particular label
 
 # list all the containers in a pod  https://kubernetes.io/docs/reference/kubectl/jsonpath/
 kubectl get pod ${pod?} -o jsonpath='{.spec.containers[*].name}' ; echo
@@ -21,6 +25,11 @@ kubectl get event --namespace ${namespace?} $( : # Get events for one specific o
 kubectl get event --namespace ${namespace?} $( : # Get events for one specific pod
 	) --field-selector involvedObject.name=${pod#pod/},involvedObject.kind=Pod
 
+# include timestamp:
+kubectl get events -o custom-columns=FirstSeen:.firstTimestamp,LastSeen:.lastTimestamp,$( :
+	)Count:.count,From:.source.component,Type:.type,Reason:.reason,Message:.message \
+	--field-selector involvedObject.kind=Pod
+
 # DEPLOYMENTS
 kubectl scale deployment ${deployment?} --replicas=${n-3} # Set the number of pods
 kubectl rollout restart deployment ${deployment}  # Rolling restart
@@ -29,6 +38,10 @@ kubectl rollout status deployment ${deployment}   # Show status of rollout
 # CONFIGS  k8s configs reside in $HOME/.kube
 kubectl config current-context # Get the current context
 kubectl config view            # See the available contexts
+kubectl config use ${context}  # Use the $context (use == use-context)
+kubectl config view | yq -r '.clusters[].name'  # List names of all clusters
+kubectl config view | yq -r '.contexts[].name'  # List names of all contexts
+
 
 # NAMESPACES
 kubectl get namespaces
@@ -60,17 +73,15 @@ pods () {
 
  Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
 
-Basic Commands (Beginner):
+Basic Commands
   create        Create a resource from a file or from stdin.
+  delete        Delete resources by filenames, stdin, resources and names, or by resources and label selector
+  edit          Edit a resource on the server
+  explain       Documentation of resources
   expose        Take a replication controller, service, deployment or pod and expose it as a new Kubernetes Service
+  get           Display one or many resources
   run           Run a particular image on the cluster
   set           Set specific features on objects
-
-Basic Commands (Intermediate):
-  explain       Documentation of resources
-  get           Display one or many resources
-  edit          Edit a resource on the server
-  delete        Delete resources by filenames, stdin, resources and names, or by resources and label selector
 
 Deploy Commands:
   rollout       Manage the rollout of a resource
@@ -80,11 +91,11 @@ Deploy Commands:
 Cluster Management Commands:
   certificate   Modify certificate resources.
   cluster-info  Display cluster info
-  top           Display Resource (CPU/Memory) usage.
   cordon        Mark node as unschedulable
-  uncordon      Mark node as schedulable
   drain         Drain node in preparation for maintenance
   taint         Update the taints on one or more nodes
+  top           Display Resource (CPU/Memory) usage.
+  uncordon      Mark node as schedulable
 
 Troubleshooting and Debugging Commands:
   describe      Show details of a specific resource or group of resources
@@ -97,13 +108,13 @@ Troubleshooting and Debugging Commands:
   auth          Inspect authorization
   debug         Create debugging sessions for troubleshooting workloads and nodes
 
-Advanced Commands:
-  diff          Diff live version against would-be applied version
+Misc Commands:
   apply         Apply a configuration to a resource by filename or stdin
+  diff          Diff live version against would-be applied version
+  kustomize     Build a kustomization target from a directory or URL.
   patch         Update field(s) of a resource
   replace       Replace a resource by filename or stdin
   wait          Experimental: Wait for a specific condition on one or many resources.
-  kustomize     Build a kustomization target from a directory or URL.
 
 Settings Commands:
   label         Update the labels on a resource

@@ -1,0 +1,19 @@
+
+General questions to which answers are needed.
+
+vim:
+	If you start vim with arguments '+/foo path', the cursor
+	will be on the first instance of 'foo' in the buffer.
+	If you then type '/pat' to search for pat in the buffer,
+	all such instances of 'pat' are loaded into a history and
+	you can scroll through with the arrow keys.  But 'foo'
+	is not in that history.  How do you startup vim and
+	put 'foo' in the history? (You get the same behavior
+	with 'vim -c /foo')
+
+
+	If the cursor is on a word and you type [n]*, you
+	search forward for the nth next occurrence of the
+	string.  But n cannot be zero.  How can you easily
+	load the search buffer with the current word without
+	moving the cursor?

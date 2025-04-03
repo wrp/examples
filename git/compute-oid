@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# To compute the $oid  (eg, the output of this should be "$oid")
+{
+	printf "commit %s\0" $(git --no-replace-objects cat-file commit "${oid-HEAD}" | wc -c)
+	git cat-file commit "${oid-HEAD}"
+} | sha1sum | awk '{print $1}'

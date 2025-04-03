@@ -1,0 +1,190 @@
+#!/bin/sh
+
+# test calc.c
+
+exe=./calc
+
+RV=0
+count=0
+fail_count=0
+
+fail() {
+	printf '%3d: %s\n' "$((++fail_count))" "$1" >&2
+}
+
+test_string() {
+	out=$(echo "$1" | $exe 2>&1)
+	if test $# -gt 1 && test "$out" != "$2" && test "$out" != "$3"; then
+		fail " On input: '$1', expected output '$2', got '$out'"
+	fi
+	out=$($exe "$1" 2>&1)
+	if test $# -gt 1 && test "$out" != "$2" && test "$out" != "$3"; then
+		fail "With args: '$1', expected output '$2', got '$out'"
+	fi
+	: $((count += 1))
+}
+
+nl='
+'
+err='Stack empty'
+
+main() {
+	test_string 'p' "$err"
+	test_string "1 $(yes 24 | sed -e 300q | tr -d \\n)
+		3+p" "Overflow: Term truncated${nl}4"
+	test_string 'hq'
+	test_string '1 1+p' '2'
+	test_string '3 +1 +1 +p' 2   # 1 + 1
+	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
+	test_string '3 1--5-p' '7'   # 3 - 1 - (-5)
+	test_string '3e+2p' '300'
+	test_string '10,3,1-,-5,-+p' '17' # 3 - 1 - (-1) + 10
+	test_string '10,3,1--5,-+p' '17'  # 3 - 1 - (-5) + 10
+	test_string '10,3,1--5,-,+,p' '17'
+	test_string '4.5 1 1+Y' "  0: 4.5${nl}  1: 2"
+	test_string '5 6*p' '30'
+	test_string '5,6*p' '30'
+	test_string '5,+6*p' 30
+	test_string '5,-6*p' -30
+	test_string '7 -3+p' '4'
+	test_string '5e-1 30*p' 15
+	test_string '7    2/p' '3.5'
+	test_string '1 2 *-7+p ' '-5'
+	test_string '3.1 1.3+p' '4.4'
+	test_string '2 5^pq' '32'
+	test_string '2z5 ' 'Unexpected: z'
+	test_string '10k10 3/p' '3.3333333333'
+	test_string '1y+p' '2'
+	test_string '1 2 3np' "3${nl}2"
+	test_string '2 4r/p' '2'
+	test_string '4,1-8Y' "  0: 4${nl}  1: 1${nl}  2: -8"
+	test_string '4,1- 8Y' "  0: 3${nl}  1: 8"
+	if $have_comma_format; then
+		test_string "[%.3'Lf]0F1024,1+p" '1,025.000'
+		test_string "[%'Ld]0F 1234567 p" '1,234,567'
+	fi
+
+	# Test string registers
+	test_string '[2 2+p][1 1+p]1x0x' "2${nl}4"
+	test_string '5[2 2+n]1[1 1+n]x0xp' "2${nl}4${nl}5"
+	test_string '[garbage][2 2+n]5[1 1+n]2x1xn' "2${nl}4${nl}5"
+	test_string '[f_oo][bar]Z' "(0): f_oo${nl}(1): bar"
+	test_string '[foo][bar]RZ' "(0): bar${nl}(1): foo"
+	test_string 'D[foo][bar][baz]DZ' "$err${nl}(0): foo${nl}(1): bar"
+	test_string '[foo]ZRZ' "$err${nl}(0): foo"
+	long='this string needs to be at least 32 characters long'
+	test_string "[$long][bar]Z" "(0): ${long}${nl}(1): bar"
+	test_string '[a][b][3p][c][d][1 1+p]x2x' "2${nl}3"
+	test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
+	test_string '[]9x' 'Register 9 empty'
+	test_string 'x' "$err"
+	test_string '1024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
+	test_string '1_024p[%.0Lf]0Fp' "1.02e+03${nl}1024"
+	fmt_warning="Warning: output fmt should print a long value"
+	fmt_warning="$fmt_warning (eg '%.2Lf' or '%3Lu')"
+	test_string '[%.0f]F' "$fmt_warning"
+	test_string '[L%.0f]F' "$fmt_warning"
+	long_string="1 $( yes "1+" | sed 1049q )"
+	test_string "[$long_string]0x[%.0Lf]1Fp" '1050'
+	test_string "[${long_string} 1+]0x[%.0Lf]1Fp" '1051'
+	test_string '1 4eXe2 3-p' "Garbled (discarded): 4eXe2${nl}-2"
+	test_string "4-" 'Stack empty'
+	test_string "4-2" ''
+	test_string "4-2+p" '2'
+	test_string "4 3.5-p" '0.5'
+	test_string "4 2e-1-p" '3.8'
+	test_string '5-1-2-3-4nnn+p' "-4${nl}-3${nl}-2${nl}4"
+	test_string '1 2-5 9+p' '4'  # 9 - 5
+	test_string '1 2 -5 9+p' '4'
+	test_string "4 2e-1 -p" '3.8'
+	test_string "[a]5[b]p" 5
+	test_string '4[1 1+]0xnn' "2${nl}4"
+	test_string '4[1 1+]3[2 2+]0xnnn' "2${nl}3${nl}4"
+	test_string '4[1 1+]3[2 5*]1xnnn' "10${nl}3${nl}4"
+	test_string '0Xap' 10
+	test_string '0XaP2p' 40
+	test_string '3.45 0 kp' 3
+	test_string '0Xfp' 15
+	test_string '0XfP1p' 30
+	test_string '0XfP1p' 30
+	LC_NUMERIC=en_US.UTF-8 test_string '-1k1456798p' '1,456,798' 1456798
+	LC_NUMERIC=C test_string '-1k2456798p' '2456798'
+	LC_ALL=en_US.UTF-8 test_string '-1k3456798p' '3,456,798' 3456798
+	LC_ALL=C test_string '-1k4456798p' '4456798'
+
+	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1,1+,1.2+
+	test_string '[%04Ld]F23p' '0023'
+
+	# Grow the stack
+	s=$(yes 1 | sed -e 128q | tr \\n ' ')
+	test_string "$s"
+	e='Stack empty'
+	test_string '**' "$e$nl$e"
+
+	test_string '3.14159 6 /[sin]0!p' '0.5'
+	test_string '3.14159 6 /[sin]!p' '0.5'
+	test_string '3.14159 3 /[cos]0!p' '0.5'
+	test_string '3.14159 3 /[cos]!p' '0.5'
+	test_string '[log2][foo] 3.14159 3 /[cos]!0!p' '-1'
+	test_string '1 [acos]0!p' '0'
+	test_string '0 [tan]0!p' '0'
+	test_string '2.718281828459 [log]0!p' '1'
+	test_string '1024 [log2]0!p' '10'
+	test_string '1000 [log10]0!p' '3'
+	test_string '1 2e-5 + [log1p] 0! p' 0.693
+	test_string '100 [sqrt] 0! p' 10
+	test_string '10 2 [pow] 0! p' 100
+
+	test_string '-3.4 [fabs] !p' 3.4
+	test_string '27 [cbrt]0!p' 3
+	test_string '3 4 [hypot]0!p' 5
+	test_string '5 6 [nextafter] 0! 4 0! p' 5
+
+	test_string '5 [exp2] 0!p' 32
+	test_string '2 [exp] 0!p' 7.39
+
+	test_string '[banana] 0!' 'Unknown function: banana'
+	summarize_results
+}
+
+
+set_color() { if test -t 1; then tput setaf $1; fi; }
+
+summarize_results() {
+	printf '%s' "$count tests executed, "
+	case $fail_count in
+	0) set_color 2; echo all passed!!;;
+	*) set_color 1; echo "$fail_count failed";;
+	esac
+	set_color 9
+	test "$fail_count" = 0
+}
+
+check_comma_format() {
+	# See  fa469334^:c/configure.ac, in which we used a configure
+	# script to evaluate the platform.  For now, just do the
+	# check at runtime.
+	source_file=$(mktemp).c
+	executable=$(mktemp)
+	cat > "$source_file" <<- EOF
+		#include <stdio.h>
+		#include <string.h>
+		#include <locale.h>
+		int main(void) {
+			char s[32];
+			setlocale(LC_NUMERIC, "");
+			sprintf(s, "%.3'Lf", (long double)1025);
+			return strcmp(s, "1,025.000");
+		}
+		EOF
+	${CC-cc} "$source_file" -o "$executable" 2> /dev/null
+	have_comma_format=false
+	if "$executable"; then
+		have_comma_format=true
+	fi
+	rm "$source_file" "$executable"
+}
+
+
+check_comma_format
+main

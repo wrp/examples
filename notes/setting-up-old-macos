@@ -1,0 +1,295 @@
+
+A few weeks ago, I turned on a really old macos machine and am trying
+to make it usable.  I should have been documenting what I was doing,
+but did not.  So starting to do so now.  (I haven't looked at it all
+for a few days (weeks!) and have already forgotten the state!).
+
+Brew is almost completely useless, as every invocation spits out
+warnings saying (paraphrased) "your machine is too old, go away".
+
+The biggest takeaway from this experience so far is that testing
+platform instead of features is a huge mistake.
+
+Getting go working was a pain.  Modern go (I cloned
+f215a0be4d1231d897123e28324ab024f3502a52 from Oct 29, 2023,
+which is go1.19beta1-5450-gf215a0be4d) simply refuses to build
+on this machine because my machine does not have nanosecond
+precision on the filesystem (there is some system call that
+I do not have, and at the moment I cannot reproduce the error
+message).  The process was basically: checkout go-1.4 and build,
+then chekcout 1.17.13 and build.  Now I have a working go-1.17
+and will never be able to upgrade to 18.
+
+Have been trying to get zig working, but ran into issues with
+llvm complaining that my clang is too old.  Seems weird, since
+the whole point of building llvm-project is to get clang, so
+this feels like a chicken and egg issue.  Decided instead
+to get a container runtime going.  Docker seems more painful
+that podman, so I am going to try to get podman working.
+
+Downloaded a podman disk image, but double clicking on the
+icon brings up a window that says "verifying disk image" which
+then goes away and the disk does not get mounted.  No visible
+error message anywhere.  I still do not understand why anyone
+likes graphical user interfaces, since they are invariably
+useless.  Glancing through my .bash-history, it looks
+like I cloned podman from github where I see a bunch of failed
+calls to 'make podman-remote', and then a checkout of
+c06460bea followed by a successful call to 'make podman-remote'
+Looks like that commit was the bump of podman to go 1.17.
+So now I have a working podman (version 4.0.0-dev)
+
+
+But 'podman machine init' yields the error:
+Error: exec: "qemu-system-x86_64": executable file not found in $PATH
+
+Decided to try macports:
+	git clone https://github.com/macports/macports-base.git
+	macports has a configure script (why do people include that in the git
+	repo?!?  We (as an industry) have got to get away from this idea
+	that git is a good mechanism for distributing anything other
+	than source code.  It is not an artifact distribution mechanism.
+	If we want to use it that way, we should put generated files
+	in a different namespace.)
+
+	configure script ran okay (prefix set to path in $HOME), but make fails with:
+
+	chmod: ${CWD}/vendor/vendor-destroot/${prefix}/libexec/macports/lib/tcllib*: No such file or directory
+
+	I notice that git describe --tags on ddc57c5f6ced9ccc0bb4e04e22e218ae851c241d
+	shows v2.8.0-beta1-120-gddc57c5f6, but the documentation on https://guide.macports.org/#installing.macports.git
+	recommends using v.2.8.1 as most recent stable, so maybe the github repo is
+	behind.
+
+	There are files in vendor/vendor-destroot/${prefix}/lib/tcllib1.21, so maybe I need
+	to specify libexecdir to the configure script.
+
+	Trying again with ./configure --libexecdir=$HOME/$(uname -m)/$(uname -s)/libexec/macports
+	(prefix is set to $HOME/$(uname -m)/$(uname -s) in CONFIG_SITE)
+
+	make gives the same error.  Let's try again with no CONFIG_SITE:
+	./configure --prefix=$HOME/$(uname -m)/$(uname -s)
+
+	With CONFIG_SITE unset, the build "works", which is to say make completes
+	succesfully.  But 'make install' does not give a usable setup.
+
+	Decided to abandon ports.
+
+qemu:
+	Cloned qemu from https://gitlab.com/qemu-project/qemu
+	and checked out v8.2.0-rc0 (9c673a41ee).  configury fails because I do not
+	have ninja installed.
+
+ninja:
+	cloned git@github.com:ninja-build/ninja.git and built using
+	cmake without issue.  Copying resulting binary to $prefix/bin
+
+Back to qemu, configure is failing with
+../meson.build:89:0: ERROR: <PythonExternalProgram 'python3' -> ['$PATH_TO_QEMU/build/pyvenv/bin/python3']> is not a valid python or it is missing distutils
+
+Checking the git log for python, I see that distutils is no longer shipped as of 3.12, so let's downgrade python to 3.11.6 (only
+a few months old, from Oct 2, 2023)
+
+After downgrading python, qemu fails with:
+../meson.build:207:4: ERROR: Problem encountered: You either need GCC v7.4 or Clang v10.0 (or XCode Clang v12.0) to compile QEMU
+
+Current clang is Apple LLVM version 9.0.0 (clang-900.0.39.2)
+
+So let's try building  https://github.com/llvm-mirror/clang
+
+That does not work.  The cmake run in clang fails with:
+  Could not find a package configuration file provided by "LLVM" with any of
+
+
+Try: brew install llm  ... fails with:
+Error: An exception occurred within a child process:
+  CompilerSelectionError: z3 cannot be built with any available compilers.
+  Install GNU's GCC:
+    brew install gcc
+
+
+try: brew install gcc
+
+After 40 hours or so, brew install gcc appears stalled.
+Going to try reverting llvm-project: g co    ea89965b3cfc^
+
+llvm:
+	(That is the commit that bumped CLANG version to >= 1600
+
+	That didn't work: let's try 892e6e2200d9^
+	Got a warning, so going to try:
+	rm -rf build; LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1 cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+	That didn't work; trying:
+	rm -rf build; cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release  -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	That worked!  Now
+	ninja -C build
+
+	Argh.  need to rebuild with a prefix:
+
+	history not stored in .bash-history :( rebuilt with
+	cmake -DCMAKE_INSTALL_PREFIX=$prefix
+	ninja -C build install
+
+zig:
+	now attempting to cmake in zig is giving an encouraging error:
+	CMake Error at cmake/Findllvm.cmake:27 (message):
+	expected LLVM 17.x but found 16.0.0git using
+	$prefix/bin/llvm-config
+	Call Stack (most recent call first):
+	      CMakeLists.txt:135 (find_package)
+
+	So we are using my installed llvm.  Now, we can either
+	try to bootstrap an llvm upgrade, or downgrade zig.  I think
+	I prefer the former.
+
+
+clang:
+	need to update clang, so running from top-level llvm-project
+	checked out at d0cf7b2015ebd76ec2957ff808aec2b1201ebc9d:
+	cmake -G Ninja -S clang -B build-clang -DLLVM_EXTERNAL_LIT=$(pwd)/build/utils/lit -DLLVM_ROOT=/Users/wrp/x86_64/Darwin/ -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	Getting error:
+
+	CMake Error at /Users/wrp/x86_64/Darwin/lib/cmake/llvm/LLVMExports.cmake:1152 (set_target_properties):
+	  The link interface of target "LLVMLineEditor" contains:
+
+	    LibEdit::LibEdit
+
+	  but the target was not found.  Possible reasons include:
+
+	    * There is a typo in the target name.
+	    * A find_package call is missing for an IMPORTED target.
+	    * An ALIAS target is missing.
+
+	Call Stack (most recent call first):
+	  /Users/wrp/x86_64/Darwin/lib/cmake/llvm/LLVMConfig.cmake:319 (include)
+	  CMakeLists.txt:73 (find_package)
+
+llvm:
+	let's go back to llvm and try re-installing with different options:
+	cmake -S llvm -B build-llvm -G Ninja -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	That generated an error that recommend adding libcxx to runtimes:s
+	cmake -S llvm -B build-llvm -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+	cmake --build build-llvm
+
+	grr:
+/Users/wrp/github/llvm-project/lld/ELF/Config.h:382:3: error: too few template arguments for class template 'SmallVector'
+  SmallVector<std::unique_ptr<MemoryBuffer>> memoryBuffers;
+  ^
+/Users/wrp/github/llvm-project/lld/include/lld/Common/LLVM.h:35:41: note: template is declared here
+template <typename T, unsigned N> class SmallVector;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^
+1 error generated.
+[4781/6318] Building CXX object tools/lld/COFF/CMakeFiles/lldCOFF.dir/Writer.cpp.o
+ninja: build stopped: subcommand failed.
+
+	Let's back up a bit.  Checking out 809855b56f06dd7182685f88fbbc64111df9339a (tag: llvmorg-16-init)
+	and executing:
+	$ cmake -S llvm -B build-llvm-809855b5 -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1k
+	$ cmake --build build-llvm
+	... and after 8.5 hours (I suspect the build was not running while the screen saver was on)
+	same error (but now in line 381)
+
+	Let's try applying this patch:
+
+diff --git a/lld/ELF/Config.h b/lld/ELF/Config.h
+index 39723f092784..c53d39b89307 100644
+--- a/lld/ELF/Config.h
++++ b/lld/ELF/Config.h
+@@ -378,7 +378,7 @@ struct DuplicateSymbol {
+ };
+
+ struct Ctx {
+-  SmallVector<std::unique_ptr<MemoryBuffer>> memoryBuffers;
++  SmallVector<std::unique_ptr<MemoryBuffer>, 0> memoryBuffers;
+   SmallVector<ELFFileBase *, 0> objectFiles;
+   SmallVector<SharedFile *, 0> sharedFiles;
+   SmallVector<BinaryFile *, 0> binaryFiles;
+
+	and see what happens.
+
+
+	Arghhh!!  cmake --build build-llvm was the wrong command.  Let's unapply the
+	patch and run:
+
+	cmake --build build-llvm-809855b5
+
+	While I wait...note that the offending line was added in 9a572164d592e
+	dated 2022-06-29 18:53:38
+
+	Going to checkout llvmorg-15-init, which is the first tag prior to the offending
+	release. (a2601c98873376bbbeff4b6eddf0f4d920535f8b)
+
+	$ cmake -S llvm -B build-llvmorg-15-init -G Ninja -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+	$ cmake --build build-llvmorg-15-init
+
+	FAILED: tools/lld/ELF/CMakeFiles/lldELF.dir/Arch/ARM.cpp.o
+	/Library/Developer/CommandLineTools/usr/bin/c++ -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/Users/wrp/github/llvm-project/build-llvmorg-15-init/tools/lld/ELF -I/Users/wrp/github/llvm-project/lld/ELF -I/Users/wrp/github/llvm-project/lld/include -I/Users/wrp/github/llvm-project/build-llvmorg-15-init/tools/lld/include -I/Users/wrp/github/llvm-project/build-llvmorg-15-init/include -I/Users/wrp/github/llvm-project/llvm/include -fPIC -fvisibility-inlines-hidden -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wcovered-switch-default -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wstring-conversion -fdiagnostics-color -O3 -DNDEBUG -std=c++14  -fno-exceptions -fno-rtti -MD -MT tools/lld/ELF/CMakeFiles/lldELF.dir/Arch/ARM.cpp.o -MF tools/lld/ELF/CMakeFiles/lldELF.dir/Arch/ARM.cpp.o.d -o tools/lld/ELF/CMakeFiles/lldELF.dir/Arch/ARM.cpp.o -c /Users/wrp/github/llvm-project/lld/ELF/Arch/ARM.cpp
+	In file included from /Users/wrp/github/llvm-project/lld/ELF/Arch/ARM.cpp:9:
+	/Users/wrp/github/llvm-project/lld/ELF/InputFiles.h:409:8: error: too few template arguments for class template 'SmallVector'
+	extern SmallVector<std::unique_ptr<MemoryBuffer>> memoryBuffers;
+	       ^
+	/Users/wrp/github/llvm-project/lld/include/lld/Common/LLVM.h:35:41: note: template is declared here
+	template <typename T, unsigned N> class SmallVector;
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^
+	/Users/wrp/github/llvm-project/lld/ELF/Arch/ARM.cpp:63:16: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+	  trapInstr = {0xd4, 0xd4, 0xd4, 0xd4};
+		       ^~~~~~~~~~~~~~~~~~~~~~
+		       {                     }
+	1 warning and 1 error generated.
+	[4573/6094] Building CXX object tools/lld/COFF/CMakeFiles/lldCOFF.dir/Writer.cpp.o
+	ninja: build stopped: subcommand failed.
+
+	Now retrying same at: llvmorg-14-init (08c766a7318ab37bf1d77e0c683cd3b00e700877)
+
+
+	FAILED: bin/lld
+	: && /Library/Developer/CommandLineTools/usr/bin/c++ -fPIC -fvisibility-inlines-hidden -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wcovered-switch-default -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wstring-conversion -fdiagnostics-color -O3 -DNDEBUG -Wl,-search_paths_first -Wl,-headerpad_max_install_names -rdynamic tools/lld/tools/lld/CMakeFiles/lld.dir/lld.cpp.o -o bin/lld  -Wl,-rpath,@loader_path/../lib  lib/libLLVMSupport.a  lib/liblldCommon.a  lib/liblldCOFF.a  lib/liblldDriver.a  lib/liblldELF.a  lib/liblldMachO2.a  lib/liblldMinGW.a  lib/liblldWasm.a  lib/liblldMachO.a  lib/liblldReaderWriter.a  lib/liblldYAML.a  lib/liblldCore.a  -lxar  lib/liblldCOFF.a  lib/libLLVMDebugInfoPDB.a  lib/libLLVMLibDriver.a  lib/libLLVMWindowsManifest.a  /usr/lib/libxml2.dylib  lib/liblldCommon.a  lib/libLLVMOption.a  lib/libLLVMAArch64CodeGen.a  lib/libLLVMAArch64AsmParser.a  lib/libLLVMAArch64Disassembler.a  lib/libLLVMAArch64Desc.a  lib/libLLVMAArch64Info.a  lib/libLLVMAArch64Utils.a  lib/libLLVMAMDGPUCodeGen.a  lib/libLLVMMIRParser.a  lib/libLLVMAMDGPUAsmParser.a  lib/libLLVMAMDGPUDisassembler.a  lib/libLLVMAMDGPUDesc.a  lib/libLLVMAMDGPUInfo.a  lib/libLLVMAMDGPUUtils.a  lib/libLLVMARMCodeGen.a  lib/libLLVMARMAsmParser.a  lib/libLLVMARMDisassembler.a  lib/libLLVMARMDesc.a  lib/libLLVMARMInfo.a  lib/libLLVMARMUtils.a  lib/libLLVMAVRCodeGen.a  lib/libLLVMAVRAsmParser.a  lib/libLLVMAVRDesc.a  lib/libLLVMAVRDisassembler.a  lib/libLLVMAVRInfo.a  lib/libLLVMBPFCodeGen.a  lib/libLLVMBPFAsmParser.a  lib/libLLVMBPFDesc.a  lib/libLLVMBPFDisassembler.a  lib/libLLVMBPFInfo.a  lib/libLLVMHexagonCodeGen.a  lib/libLLVMHexagonAsmParser.a  lib/libLLVMHexagonDisassembler.a  lib/libLLVMHexagonDesc.a  lib/libLLVMHexagonInfo.a  lib/libLLVMLanaiCodeGen.a  lib/libLLVMLanaiAsmParser.a  lib/libLLVMLanaiDisassembler.a  lib/libLLVMLanaiDesc.a  lib/libLLVMLanaiInfo.a  lib/libLLVMMipsCodeGen.a  lib/libLLVMMipsAsmParser.a  lib/libLLVMMipsDesc.a  lib/libLLVMMipsDisassembler.a  lib/libLLVMMipsInfo.a  lib/libLLVMMSP430CodeGen.a  lib/libLLVMMSP430AsmParser.a  lib/libLLVMMSP430Desc.a  lib/libLLVMMSP430Disassembler.a  lib/libLLVMMSP430Info.a  lib/libLLVMNVPTXCodeGen.a  lib/libLLVMNVPTXDesc.a  lib/libLLVMNVPTXInfo.a  lib/libLLVMPowerPCCodeGen.a  lib/libLLVMPowerPCAsmParser.a  lib/libLLVMPowerPCDesc.a  lib/libLLVMPowerPCDisassembler.a  lib/libLLVMPowerPCInfo.a  lib/libLLVMRISCVCodeGen.a  lib/libLLVMRISCVAsmParser.a  lib/libLLVMRISCVDisassembler.a  lib/libLLVMRISCVDesc.a  lib/libLLVMRISCVInfo.a  lib/libLLVMSparcCodeGen.a  lib/libLLVMSparcAsmParser.a  lib/libLLVMSparcDesc.a  lib/libLLVMSparcDisassembler.a  lib/libLLVMSparcInfo.a  lib/libLLVMSystemZCodeGen.a  lib/libLLVMSystemZAsmParser.a  lib/libLLVMSystemZDisassembler.a  lib/libLLVMSystemZDesc.a  lib/libLLVMSystemZInfo.a  lib/libLLVMWebAssemblyCodeGen.a  lib/libLLVMWebAssemblyAsmParser.a  lib/libLLVMWebAssemblyDisassembler.a  lib/libLLVMWebAssemblyDesc.a  lib/libLLVMWebAssemblyInfo.a  lib/libLLVMWebAssemblyUtils.a  lib/libLLVMX86CodeGen.a  lib/libLLVMGlobalISel.a  lib/libLLVMCFGuard.a  lib/libLLVMX86AsmParser.a  lib/libLLVMX86Desc.a  lib/libLLVMX86Disassembler.a  lib/libLLVMX86Info.a  lib/libLLVMXCoreCodeGen.a  lib/libLLVMAsmPrinter.a  lib/libLLVMDebugInfoDWARF.a  lib/libLLVMDebugInfoMSF.a  lib/libLLVMSelectionDAG.a  lib/libLLVMXCoreDesc.a  lib/libLLVMXCoreDisassembler.a  lib/libLLVMMCDisassembler.a  lib/libLLVMXCoreInfo.a  lib/libLLVMLTO.a  lib/libLLVMCodeGen.a  lib/libLLVMExtensions.a  lib/libLLVMPasses.a  lib/libLLVMTarget.a  lib/libLLVMObjCARCOpts.a  lib/libLLVMCoroutines.a  lib/libLLVMipo.a  lib/libLLVMBitWriter.a  lib/libLLVMScalarOpts.a  lib/libLLVMVectorize.a  lib/libLLVMAggressiveInstCombine.a  lib/libLLVMInstCombine.a  lib/libLLVMLinker.a  lib/libLLVMFrontendOpenMP.a  lib/libLLVMIRReader.a  lib/libLLVMAsmParser.a  lib/libLLVMInstrumentation.a  lib/libLLVMTransformUtils.a  lib/libLLVMAnalysis.a  lib/libLLVMObject.a  lib/libLLVMBitReader.a  lib/libLLVMTextAPI.a  lib/libLLVMMCParser.a  lib/libLLVMMC.a  lib/libLLVMDebugInfoCodeView.a  lib/libLLVMProfileData.a  lib/libLLVMCore.a  lib/libLLVMBinaryFormat.a  lib/libLLVMRemarks.a  lib/libLLVMBitstreamReader.a  lib/libLLVMSupport.a  -lm  /usr/lib/libz.dylib  /usr/lib/libcurses.dylib  lib/libLLVMDemangle.a && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/lld-link && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/ld.lld && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/ld64.lld && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/ld64.lld.darwinnew && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/ld64.lld.darwinold && cd /Users/wrp/github/llvm-project/build-llvmorg-14-init/tools/lld/tools/lld && /usr/local/Cellar/cmake/3.27.8/bin/cmake -E create_symlink lld /Users/wrp/github/llvm-project/build-llvmorg-14-init/./bin/wasm-ld
+	Undefined symbols for architecture x86_64:
+	  "xar_opt_set(__xar_t const*, char const*, char const*)", referenced from:
+	      lld::macho::BitcodeBundleSection::finalize() in liblldMachO2.a(SyntheticSections.cpp.o)
+	  "xar_open(char const*, int)", referenced from:
+	      lld::macho::BitcodeBundleSection::finalize() in liblldMachO2.a(SyntheticSections.cpp.o)
+	  "xar_close(__xar_t const*)", referenced from:
+	      lld::macho::BitcodeBundleSection::finalize() in liblldMachO2.a(SyntheticSections.cpp.o)
+	ld: symbol(s) not found for architecture x86_64
+	clang: error: linker command failed with exit code 1 (use -v to see invocation)
+	[4583/5944] Building CXX object tools/lldb/source/Host/CMakeFiles/lldbHost.dir/common/TCPSocket.cpp.o
+	ninja: build stopped: subcommand failed.
+
+llvm-12 (7ab7b979d29e1e43701cf690f5cf1903740f50e3)
+	Various other attempts have seen cmake failures.  Now trying:
+	$ cmake -S llvm -B build-llvmorg-12-init -G Ninja -DLLDB_INCLUDE_TESTS=OFF -DLLVM_ENABLE_RUNTIMES=libcxx -DLLVM_ENABLE_PROJECTS='clang;lld;lldb;clang-tools-extra' -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_BUILD_TYPE=Release -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=1
+
+podman from .dmg
+	I just realized that one of the reasons for going down this route was that double clicking
+	on the podman.dmg wasn't mounting the drive.  So instead I opened up 'disk-utility' and
+	did an explicit 'file/open' to access the disk image.  That worked and I was able to get
+	a podman-desktop out, but attempting to run it gives: "You can't use this version
+	of the application "..." with this version of macOS.  You have MacOS 10.12.6, the application
+	requires 10.15 or later.".  Reinforcing my complaint about testing for system verses testing
+	for features.  It would be nice to know which feature is actually missing.  so I'll try
+	to get an older podman disk image.
+
+
+	Was able to download 1.13.1.15353 from https://download.docker.com/mac/stable/1.13.1.15353/Docker.dmg,
+	but attempts to build fail with:
+
+	DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+		    Install the buildx component to build images with BuildKit:
+		    https://docs.docker.com/go/buildx/
+
+	Sending build context to Docker daemon  12.29kB
+	Error response from daemon: Bad response from Docker engine
+
+	Great error message.  So informative.
+
+
+	Downloaded https://download.docker.com/mac/stable/1.12.6.14937/Docker.dmg
+
+	docker build is happier, but now getting complaints about defining ARG before
+	FROM, so I will need to revamp my Dockerfiles to use the old syntax.

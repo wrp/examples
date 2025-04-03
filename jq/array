@@ -1,0 +1,11 @@
+#!/bin/sh
+
+exec 2>&1
+set -v
+
+json='{
+	"foo": ["a", "bc", "de"],
+	"bar": [10, 5]
+}'
+echo "$json" | jq -c '.foo | length'  # Use length to get count/size of array
+echo "$json" | jq -c '.bar | length'

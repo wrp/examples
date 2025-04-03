@@ -1,0 +1,12 @@
+#!/bin/bash
+
+field=$2
+if test "$field" -ge 0 2> /dev/null; then
+	field=customfield_$2
+fi
+
+curl -Ssf \
+	-H 'Content-Type: application/json' \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	${JIRA_URL?}/rest/api/2/issue/"$1" \
+| jq .fields.$field

@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+# Demonstrate expanding (exploding) a dictionary into an argument list
+
+def foo(a, b = 'default b', c = 'default c'):
+	print(f'a = {a}, b = {b}, c = {c}')
+
+d = {'a': 'va'}
+foo(*d)
+d = {'a': 'va', 'b': 'vb'}
+foo(*d)

@@ -1,8 +1,6 @@
 #!/usr/bin/env perl
 
-use 5.12.0;
-use strict;
-use warnings;
+use 5.12.0; # enables strict and warnings
 
 # use Time::Format qw/%time/;
 use Time::HiRes qw/gettimeofday/;

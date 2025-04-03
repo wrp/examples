@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+# Instances of a class with a __slots__ member can only have attributes
+# explicitly named in __slots__
+
+class Example:
+	__slots__ = ('name', 'height')
+	def __init__(self, x, h = 5):
+		self.name = x
+		self.height = h
+
+	def __str__(self):
+		return f'{self.name}: {self.height}'
+
+a = Example('a')
+try:
+    a.weight = 7
+except AttributeError:
+    pass

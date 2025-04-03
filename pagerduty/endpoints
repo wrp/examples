@@ -1,0 +1,8 @@
+escalation_policies/
+event_rules/
+incidents/
+schedules/
+services/
+teams/
+user/
+users/

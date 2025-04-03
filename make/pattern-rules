@@ -2,3 +2,7 @@
 # Pattern rules make suffix rules obsolete.  They look like:
 
 %.ex : %.in ; @echo "making $@ from $< with stem $* (Make .ex file from .in)"
+
+# For example:
+%: %.rs
+        rustc $<

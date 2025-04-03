@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+
+# Demonstrate File::Find to implement file tree walk
+use 5.12.0;
+
+use File::Find;
+
+my @directories_to_search = @ARGV ? @ARGV : ('.');
+
+find(\&cb, @directories_to_search);
+sub cb {
+	# current dir: $File::Find::dir
+	# basename: $_
+	# path: $File::Find::name    (seems to be $File::Find::dir . '/' . $_)
+	say "$File::Find::name"
+}
+
+
+# Find all names with whitespace:
+# perl -MFile::Find -E 'find( sub{ say $File::Find::name if(m/\s+/) }, ("."))'

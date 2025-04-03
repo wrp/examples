@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Get the owners of a project
+
+show_owners() {
+	echo ${1:?}
+	gcloud projects --format=json get-iam-policy ${1} \
+	| jq '.bindings[]|select(.role == "roles/owner") | .members'
+}
+
+if test $# = 0; then
+	set -- ${PROJECT:?}
+fi
+
+for project; do
+	show_owners $project
+done

@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import sys
+
+parser = argparse.ArgumentParser(
+    prog=os.path.basename(sys.argv[0]),
+    description='Text at top of help',
+    epilog='Text at bottom of help',
+)
+parser.add_argument('arg1') # positional arg
+parser.add_argument('arg2', default='0') # positional arg w/default
+parser.add_argument('-c', '--count')     # Optional flag, None if not given
+parser.add_argument('-d', '--depth', default=0) # Flag with default value
+parser.add_argument('-v', '--verbose', action='store_true') # boolean flag
+parser.add_argument('--arg-with-hyphens', action='store', required=False)
+
+args, remainder = parser.parse_known_args()
+print(f'arg1 = {args.arg1}')
+print(f'arg2 = {args.arg2}')
+print(f'count = {args.count}')
+print(f'optional arg-with-hyphens = {args.arg_with_hyphens}')
+print(f'verbose = {args.verbose}')
+print(f"unparsed args are: {remainder}")

@@ -1,0 +1,7 @@
+
+To determine which version of cgroups is running on the host, use:
+stat -fc %T /sys/fs/cgroup/
+
+
+If the output is 'cgroup2fs', then this is v2.  If the output is 'tmpfs',
+then you are using v1.

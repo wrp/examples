@@ -1,20 +1,20 @@
-O -> f = O(g) means that there exists c and n such that f(m) <= c*g(m) for all m > n (big 0)
-M -> f = M(g) means that there exists u and n such that u*g(m) <= f(m) for all m > n (big Omega)
-T -> f = T(g) means that there exists a, b, and n such that a*g(m) <= f(m) <= b*g(m) for all m > n (big Theta)
+O -> f = O(g) means that there exists c and n such that f(m) <= c*g(m) for all m > n (big O)
+Ω -> f = Ω(g) means that there exists u and n such that u*g(m) <= f(m) for all m > n (big Omega)
+Θ -> f = Θ(g) means that there exists a, b, and n such that a*g(m) <= f(m) <= b*g(m) for all m > n (big Theta)
 
                                    Time
 		    Best           Avg         Worst       Space
-Selection sort     M(n^2)         T(n^2)       O(n^2)      O(1)
-Bubble sort        M(n)           T(n^2)       O(n^2)      O(1)      Stable
-Insertion sort     M(n)           T(n^2)       O(n^2)      O(1)      Stable
-Heap sort          M(n log n)   T(n log n)   O(n log n)    O(1)      Unstable
-Quick sort         M(n log n)   T(n log n)     O(n^2)      O(n)      Unstable
-Merge sort         M(n log n)   T(n log n)   O(n log n)    O(n)      Stable
-Bucket sort        M(n + k)     T(n + k)       O(n^2)      O(n)      ? Stable
-Radix sort         M(nk)          T(nk)        O(nk)     O(n + k)
-Count sort         M(n + k)     T(n + k)     O(n + k)      O(k)      Stable
-Shell sort         M(n log n)   T(n log n)     O(n^2)      O(1)
-Tim sort           M(n)         T(n log n)   O(n log n)    O(n)
-Tree sort          M(n log n)   T(n log n)     O(n^2)      O(n)
-Cube sort          M(n)         T(n log n)   O(n log n)    O(n)
-Smooth sort        M(n)         T(n log n)   O(n log n)    O(n)
+Selection sort     Ω(n^2)         Θ(n^2)       O(n^2)      O(1)
+Bubble sort        Ω(n)           Θ(n^2)       O(n^2)      O(1)      Stable
+Insertion sort     Ω(n)           Θ(n^2)       O(n^2)      O(1)      Stable
+Heap sort          Ω(n log n)   Θ(n log n)   O(n log n)    O(1)      Unstable
+Quick sort         Ω(n log n)   Θ(n log n)     O(n^2)      O(n)      Unstable
+Merge sort         Ω(n log n)   Θ(n log n)   O(n log n)    O(n)      Stable
+Bucket sort        Ω(n + k)     Θ(n + k)       O(n^2)      O(n)      ? Stable
+Radix sort         Ω(nk)          Θ(nk)        O(nk)     O(n + k)
+Count sort         Ω(n + k)     Θ(n + k)     O(n + k)      O(k)      Stable
+Shell sort         Ω(n log n)   Θ(n log n)     O(n^2)      O(1)
+Tim sort           Ω(n)         Θ(n log n)   O(n log n)    O(n)
+Tree sort          Ω(n log n)   Θ(n log n)     O(n^2)      O(n)
+Cube sort          Ω(n)         Θ(n log n)   O(n log n)    O(n)
+Smooth sort        Ω(n)         Θ(n log n)   O(n log n)    O(n)

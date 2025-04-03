@@ -1,0 +1,32 @@
+
+To see the value of a variable:
+
+:echo variable
+
+
+To see the value of an option:
+:set option?  (eg:set ts?)
+
+To toggle a boolean option:
+:set option!  (eg:set list!)
+
+
+
+The namespace for options is separate from the namespace of
+variables, so you can have variables with the same name as
+options.  eg:
+:set textwidth=50  (set an option)
+:let textwidth="Hello, world!" (set a variable)
+
+Use a & to refer to the option:
+:echo &textwidth   <--- prints 50
+:echo textwidth    <--- prints Hello, world!
+
+You can also use let to set an option, but must precede with &.
+:let &textwidth=&textwidth + 5
+
+Local option (to window)
+:let &l:textwidth=&textwidth + 5
+
+Variable local to the buffer (:help internal-variables)
+:let b:foo="bar"

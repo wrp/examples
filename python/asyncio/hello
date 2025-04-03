@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+# Print 'hello, world!'
+
+import asyncio
+
+async def hello():
+	await asyncio.sleep(1)
+	print("hello")
+
+async def world():
+	await asyncio.sleep(1)
+	print("world")
+
+async def say(msg):
+	await asyncio.sleep(1)
+	print(msg)
+
+async def main():
+	await asyncio.gather(hello(), world())
+
+if __name__ == "__main__":
+	# Older python. (pre 3.9?)
+	# event_loop = asyncio.get_event_loop()
+	# event_loop.run_until_complete(main())
+	# event_loop.run_until_complete(asyncio.gather(say('foo')))
+
+	asyncio.run(main())
+	asyncio.run(say('foo'))

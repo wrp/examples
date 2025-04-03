@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Put a well-formatted json input stream
+usage() {
+	cat <<- 'EOF'
+	Send $2 to $1.  $2 should be a json stream.  If empty,
+	the data is read from stdin.  $1 should be an endpoint.
+	If it does not contain a /, "issue/" will be prepended.
+
+	Some example operations:
+	'{ "update": { "labels": [ { "remove" : "test" } ] } }'
+
+	EOF
+	exit 0
+}
+
+end=$1
+case $end in
+-h|--help|help) usage;;
+*/*) : ;;
+*) end=issue/${1};;
+esac
+
+data=${2:-$(jq .)} || exit
+
+curl -Ssf \
+	--request PUT \
+	"${JIRA_URL?}/rest/api/latest/${end:?}" \
+	--header 'Content-Type: application/json' \
+	-u "${EMAIL?}:${JIRA_TOKEN?}" \
+	--data-raw "$data" \
+;

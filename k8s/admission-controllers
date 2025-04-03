@@ -1,0 +1,25 @@
+A controller which can validate or modify a request before objects
+are persisted in etcd.
+
+Available controllers as of 1.28: (incomplete)
+
+AlwaysAdmit [deprecated]
+AlwaysDeny  [deprecated]
+AlwaysPullImages
+CertificateApproval
+CertificateSigning
+CertificateSubjectRestriction
+DefaultIngressClass
+DefaultStorageClass
+DefaultTolerationSeconds
+DenyServiceExternlIPs
+EvenRateLimit
+ExtendedResourceToleration
+ImagePolicyWebhook
+LimitPodHardAntiAffinityTopology
+LimitRanger
+MutatingAdmissionWebhook
+NamespaceAutoProvision
+NamespaceExists
+NamespaceLifecycle
+NodeRestriction

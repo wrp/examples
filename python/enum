@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+from enum import Enum, IntEnum, auto
+from dataclasses import dataclass
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class S_info:
+    side: int
+    area: float
+
+    def meth(self):
+        return f'[{self.side}, {self.area}]'
+
+    @property
+    def prop(self):
+        return f'<{self.side}>'
+
+class Shape(Enum):
+    SQUARE = S_info(5, 25)
+    CIRCLE = S_info(1, 3.141)
+
+# Also functional notation
+Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
+
+print(f'red = {Color.RED}')  # red = Color.RED
+
+b = Color.RED
+print(f'b = {b}: {b.name} = {b.value}') # b = Color.RED: RED = 1
+
+print(f'shape = {Shape}') #  shape = <enum 'Shape'>
+
+c = Shape.SQUARE
+
+# c = Shape.SQUARE = Shape.SQUARE = 1
+print(f'c = {c} = {Shape.SQUARE} = {Shape.SQUARE.value}')
+
+print(Shape.__members__) # {'SQUARE': <Shape.SQUARE: 1>, 'CIRCLE': <Shape.CIRCLE: 2>}
+
+try:
+    d = Shape.OVAL
+except AttributeError as e:
+    print(f'AttributeError: {e}') # AttributeError: OVAL
+
+
+class Numbers(IntEnum):
+    ONE = auto()
+    TWO = auto()
+
+c = Numbers.TWO
+print(c.value)
+
+print('iterating over the enum:')
+for x in Shape:
+    print(f'x = {x}')
+    v=x.value
+    print(f'meth -> {v.meth()}, prop -> {v.prop}')
+
+

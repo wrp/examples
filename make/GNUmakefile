@@ -9,6 +9,7 @@
 .PHONY: all
 
 all:
+	@echo arguments to make: $(MAKECMDGOALS)
 	@echo 'Running rules in GNUmakefile (try bsdmake, or use -f to avoid)'
 
 
