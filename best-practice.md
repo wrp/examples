@@ -106,10 +106,10 @@ it as a syntax error", tell them to stop using broken IDEs.
 [^5]:
 	Comments in a config file should be constrained to comments on
 	your configuration.  Many projects ship with highly documented
-	config files (95% of the file is comments!)  and it is common
+	config files (95% of the file is comments!) and it is common
 	to see production config files with all of that commentary left
 	inside.  Don't do that.  If you need to know what a configuration
-	item does, go look in the documentation.  If you want to
+	item does, look in the documentation.  If you want to
 	document why your site has that item set to a particular value,
 	it is (maybe) appropriate to put a comment in the config file.
 	A 1000 line config file in which 990 of the lines are commentary
