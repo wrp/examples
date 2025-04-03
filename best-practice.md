@@ -32,7 +32,7 @@
 
 
 ## git specific best practices:
-- Put meta data for commits in a git trailer.
+- Put meta data for commits in a git trailer. [^no-conventional-commits]
 - Put only project specific items in .gitignore.  [^4]
 
 
@@ -219,3 +219,6 @@ it as a syntax error", tell them to stop using broken IDEs.
 	be one source of truth, and comments must not become a conflicting
 	source.  If the code needs comments to be understood, then the code
 	should be refactored with better names.
+
+[^no-conventional-commits]:
+	https://wrp.github.io/blog/2024/01/03/conventional-commits.html
