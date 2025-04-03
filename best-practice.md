@@ -27,7 +27,7 @@
 
 
 ## vcs best practices:
-- Rigidly enforce commit message formats from the first commit.
+- Vigorously enforce commit message formats from the first commit.
 - Keep all changes small and obvious.  History matters.  Churn matters.  This impacts style. [^7]
 
 
