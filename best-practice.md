@@ -138,7 +138,7 @@ it as a syntax error", tell them to stop using broken IDEs.
 	your line widths below 80 (allowing for 8 space indentation).  As
 	I write this, I have 3 terminals currently open on a width of 30;
 	don't just assume your reader has a lot of real estate to waste
-	on excessive indentation of Java-esque naming schemes.
+	on excessive indentation or Java-esque naming schemes.
 [^7]:
 	Changes in code need to be contained.  Given the following
 	two diffs, consider how long it takes to understand fully
