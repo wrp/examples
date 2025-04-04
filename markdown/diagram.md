@@ -35,3 +35,13 @@ graph TD;
     A-->C;
     B-->D;
     C-->D;
+
+
+
+$$
+\begin{tikzpicture}
+\node (A) {A};
+\node (B) [below=of A] {B};
+\draw[->] (A) -- (B);
+\end{tikzpicture}
+$$
