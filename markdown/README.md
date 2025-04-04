@@ -2,8 +2,6 @@
 This page has only been validated by looking at this file on github,
 so should certainly not be considered anything but github specific.
 
-[[__TOC__]]  Insert a table of contents
-
 [documentation](https://developer.statuspage.io)
 Use text in square brackets followed by url in parentheses to make a link.
 
