@@ -1,5 +1,5 @@
 
-### 3. **ASCII Art Diagram**
+### **ASCII Art Diagram**
 
 ```markdown
     In github, this renders pretty much verbatim:
@@ -26,22 +26,3 @@
    | C |-------*   +--------+
    +---+       \-> |  Host  |
                    +--------+
-
-
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-
-
-
-$$
-\begin{tikzpicture}
-\node (A) {A};
-\node (B) [below=of A] {B};
-\draw[->] (A) -- (B);
-\end{tikzpicture}
-$$
