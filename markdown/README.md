@@ -2,6 +2,8 @@
 This page has only been validated by looking at this file on github,
 so should certainly not be considered anything but github specific.
 
+[[__TOC__]]  Insert a table of contents
+
 [documentation](https://developer.statuspage.io)
 Use text in square brackets followed by url in parentheses to make a link.
 
@@ -59,3 +61,11 @@ of text in the column with a colon:
 | :---        |    :----:   |          ---: |
 | Apple      | Banana       | Cherry |
 | Dog | Elephant        | Frog |
+
+~~~
+	Code block is delimited by triple tilde or triple back-tick
+~~~
+	This is outside of any block.
+```
+	This also denotes a code block.
+```
