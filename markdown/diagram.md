@@ -2,6 +2,8 @@
 ### 3. **ASCII Art Diagram**
 
 ```markdown
+    In github, this renders pretty much verbatim:
+
     +---+       +--------+
     | A |<----> |  Host  |
     +---+       +--------+
@@ -24,3 +26,12 @@
    | C |-------*   +--------+
    +---+       \-> |  Host  |
                    +--------+
+
+
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
