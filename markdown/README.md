@@ -5,9 +5,9 @@ so should certainly not be considered anything but github specific.
 [documentation](https://developer.statuspage.io)
 Use text in square brackets followed by url in parentheses to make a link.
 
-~~~~
+~~~
 $ echo Use '~~~~' for a code block
-~~~~
+~~~
 
 ----
 Create a horizontal line by placing 3 or more hyphens, asterisks,
@@ -63,7 +63,9 @@ of text in the column with a colon:
 ~~~
 	Code block is delimited by triple tilde or triple back-tick
 ~~~
+
 	This is outside of any block.
+
 ```
 	This also denotes a code block.
 ```
