@@ -38,14 +38,14 @@ main() {
 	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
 	test_string '3 1--5-p' '7'   # 3 - 1 - (-5)
 	test_string '3e+2p' '300'
-	test_string '10,3,1-,-5,-+p' '17' # 3 - 1 - (-1) + 10
-	test_string '10,3,1--5,-+p' '17'  # 3 - 1 - (-5) + 10
-	test_string '10,3,1--5,-,+,p' '17'
+	test_string '10;3;1-;-5;-+p' '17' # 3 - 1 - (-1) + 10
+	test_string '10;3;1--5;-+p' '17'  # 3 - 1 - (-5) + 10
+	test_string '10;3;1--5;-;+;p' '17'
 	test_string '4.5 1 1+Y' "  0: 4.5${nl}  1: 2"
 	test_string '5 6*p' '30'
-	test_string '5,6*p' '30'
-	test_string '5,+6*p' 30
-	test_string '5,-6*p' -30
+	test_string '5;6*p' '30'
+	test_string '5;+6*p' 30
+	test_string '5;-6*p' -30
 	test_string '7 -3+p' '4'
 	test_string '5e-1 30*p' 15
 	test_string '7    2/p' '3.5'
@@ -57,10 +57,10 @@ main() {
 	test_string '1y+p' '2'
 	test_string '1 2 3np' "3${nl}2"
 	test_string '2 4r/p' '2'
-	test_string '4,1-8Y' "  0: 4${nl}  1: 1${nl}  2: -8"
-	test_string '4,1- 8Y' "  0: 3${nl}  1: 8"
+	test_string '4;1-8Y' "  0: 4${nl}  1: 1${nl}  2: -8"
+	test_string '4;1- 8Y' "  0: 3${nl}  1: 8"
 	if $have_comma_format; then
-		test_string "[%.3'Lf]0F1024,1+p" '1,025.000'
+		test_string "[%.3'Lf]0F1024;1+p" '1,025.000'
 		test_string "[%'Ld]0F 1234567 p" '1,234,567'
 	fi
 
@@ -112,7 +112,7 @@ main() {
 	LC_ALL=en_US.UTF-8 test_string '-1k3456798p' '3,456,798' 3456798
 	LC_ALL=C test_string '-1k4456798p' '4456798'
 
-	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1,1+,1.2+
+	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1;1+;1.2+
 	test_string '[%04Ld]F23p' '0023'
 
 	# Grow the stack
@@ -142,6 +142,8 @@ main() {
 
 	test_string '5 [exp2] 0!p' 32
 	test_string '2 [exp] 0!p' 7.39
+
+	test_string '2,123 23 + ' 2146
 
 	test_string '[banana] 0!' 'Unknown function: banana'
 	summarize_results
