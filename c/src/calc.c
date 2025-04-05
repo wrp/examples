@@ -267,6 +267,22 @@ process_entry(struct state *S, unsigned char c)
 	}
 }
 
+static int
+get_value_from_input(struct ring_buf *b, long double *v, char *s, char *end)
+{
+	int i;
+	while( (i = rb_pop(b)) != EOF ){
+		if( s < end ){
+			*s++ = i;
+		}
+	}
+	if( s == end ){
+		fprintf(stderr, "Overflow: Term truncated\n");
+		return 0;
+	}
+	return 1;
+}
+
 /*
  * Parse a number.  If we encounter an unexpected '-' or '+',
  * treat it as a binary operator and push the rest of
@@ -279,21 +295,15 @@ push_value(struct state *S, unsigned char c)
 	struct ring_buf *b = S->accum;
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
-	int i;
 
 	cp = start = s;
 	if( ! rb_isempty(b) ){
 		long double val;
 
-		while( (i = rb_pop(b)) != EOF ){
-			if( cp < end ){
-				*cp++ = i;
-			}
-		}
-		if( cp == end ){
-			fprintf(stderr, "Overflow: Term truncated\n");
+		if( !get_value_from_input(b, &val, start, end) ){
 			return 0;
 		}
+
 		val = strtold(start, &cp);
 		while( *cp && strchr("+-", *cp) && cp != start ){
 			stack_push(S->values, &val);
