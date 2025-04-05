@@ -257,13 +257,17 @@ process_entry(struct state *S, unsigned char c)
 		if( !push_value(S, c) ){
 			apply_unary(S, c);
 		}
-	} else switch( c ) {
-		default: fprintf( stderr, "Unexpected: %c\n", c );
+	} else if( strchr(nonary_ops, c) ){
+		switch( c ) {
+		default: assert(0);
 		case ',':
 		case '_': break; /* noop */
 		case 'q': exit(0);
 		case 'h': print_help(S); /* Fall Thru */
 		case '?': printf("Output format currently: %s", S->fmt);
+		}
+	} else {
+		fprintf( stderr, "Unexpected: %c\n", c );
 	}
 }
 
