@@ -271,22 +271,6 @@ process_entry(struct state *S, unsigned char c)
 	}
 }
 
-static int
-get_input_string(struct ring_buf *b, long double *v, char *s, char *end)
-{
-	int i;
-	while( (i = rb_pop(b)) != EOF ){
-		if( s < end ){
-			*s++ = i;
-		}
-	}
-	if( s == end ){
-		fprintf(stderr, "Overflow: Term truncated\n");
-		return 0;
-	}
-	return 1;
-}
-
 /*
  * Parse a number.  If we encounter an unexpected '-' or '+',
  * treat it as a binary operator and push the rest of
@@ -299,35 +283,46 @@ push_value(struct state *S, unsigned char c)
 	struct ring_buf *b = S->accum;
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
+	long double val;
+	int i;
 
 	cp = start = s;
-	if( ! rb_isempty(b) ){
-		long double val;
+	if( rb_isempty(b) ){
+		return 0;
+	}
 
-		if( !get_input_string(b, &val, start, end) ){
-			return 0;
-		}
-
-		val = strtold(start, &cp);
-		while( *cp && strchr("+-", *cp) && cp != start ){
-			stack_push(S->values, &val);
-			start = cp;
-			val = strtold(start, &cp);
-		}
-		if( *cp && strchr("+-", *cp) ){
-			assert( cp == start );
-			apply_binary(S, *cp);
-			for( char *t = cp + 1; *t; t++ ){
-				push_it(S, *t);
-			}
-			push_it(S, c);
-		} else if( *cp ){
-			fprintf(stderr, "Garbled (discarded): %s\n", s);
-		} else {
-			stack_push(S->values, &val);
+	while( (i = rb_pop(b)) != EOF ){
+		if( start < end ){
+			*start++ = i;
 		}
 	}
-	return *cp && strchr("+-", *cp) != NULL;
+	if( start == end ){
+		fprintf(stderr, "Overflow: Term truncated\n");
+		return 0;
+	}
+	start = s;
+
+	val = strtold(start, &cp);
+	while( *cp && strchr("+-", *cp) && cp != start ){
+		stack_push(S->values, &val);
+		start = cp;
+		val = strtold(start, &cp);
+	}
+	if( *cp && strchr("+-", *cp) ){
+		assert( cp == start );
+		apply_binary(S, *cp);
+		for( char *t = cp + 1; *t; t++ ){
+			push_it(S, *t);
+		}
+		push_it(S, c);
+		return 1;
+	}
+	if( *cp ){
+		fprintf(stderr, "Garbled (discarded): %s\n", s);
+	} else {
+		stack_push(S->values, &val);
+	}
+	return 0;
 }
 
 
