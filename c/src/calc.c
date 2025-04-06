@@ -22,6 +22,7 @@ const char *help[] = {
 "and then push 3 onto the stack.",
 "",
 "!    use function from specified register",
+"\f   apply func to the top value(s) in the stack (eg 0\\sin)",
 "D    delete the first register",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
@@ -56,7 +57,7 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
-#define string_ops "[]D!FRxZ"
+#define string_ops "[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_,?"
@@ -78,6 +79,7 @@ struct state {
 	struct stack *registers;
 	char fmt[32];
 	int enquote;
+	int escape;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 	enum { rational, integer } type;
@@ -122,6 +124,7 @@ struct func {
 };
 
 static void show_functions(void);
+static void execute_function(struct state *S, const char *cmd);
 
 void
 print_help(struct state *S)
@@ -129,7 +132,7 @@ print_help(struct state *S)
 	for( const char **s = help; *s; s++ ){
 		puts(*s);
 	}
-	puts("\nThe ! command understands the following functions:");
+	puts("\nThe ! and \\ commands understand the following functions:");
 	show_functions();
 	putchar('\n');
 }
@@ -189,6 +192,7 @@ init_state(struct state *S)
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
+	S->escape = 0;
 	S->type = rational;
 	S->values = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
@@ -245,6 +249,8 @@ process_entry(struct state *S, unsigned char c)
 		rb_push(b, c);
 	} else if( strchr(token_div, c) ){
 		push_value(S, c);
+	} else if( S->escape ) {
+		rb_push(b, c);
 	} else if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
 	} else if( strchr(string_ops, c) ){
@@ -272,7 +278,8 @@ process_entry(struct state *S, unsigned char c)
 }
 
 /*
- * Parse a number.  If we encounter an unexpected '-' or '+',
+ * Collect inputs in the ring buffer and push values onto
+ * the stack.  If we encounter an unexpected '-' or '+',
  * treat it as a binary operator and push the rest of
  * the buffer back on the stack to be processed, and
  * return non-zero to indicate that has happened.
@@ -295,6 +302,12 @@ push_value(struct state *S, unsigned char c)
 		if( start < end ){
 			*start++ = i;
 		}
+	}
+	if( S->escape && start + 1 < end ){
+		*start = 0;
+		S->escape = 0;
+		execute_function(S, s);
+		return 0;
 	}
 	if( start == end ){
 		fprintf(stderr, "Overflow: Term truncated\n");
@@ -488,6 +501,9 @@ apply_string_op(struct state *S, unsigned char c)
 		push_value(S, c);
 	}
 	switch( c ){
+	case '\\':
+		S->escape = 1;
+		break;
 	case '[':
 		S->enquote = 1;
 		break;
