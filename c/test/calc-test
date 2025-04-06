@@ -44,6 +44,7 @@ simple_arithmetic() {
 	test_string '3 +1 +1 +p' 2   # 1 + 1
 	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
 	test_string '3 1--5-p' '7'   # 3 - 1 - (-5)
+	test_string '4+3-1+4 3 1--5-nnn' "7${nl}4${nl}-1"
 	test_string '3e+2p' '300'
 	test_string '10;3;1-;-5;-+p' '17' # 3 - 1 - (-1) + 10
 	test_string '10;3;1--5;-+p' '17'  # 3 - 1 - (-5) + 10
