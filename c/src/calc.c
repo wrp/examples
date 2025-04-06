@@ -59,7 +59,7 @@ const char *help[] = {
 #define string_ops "[]D!FRxZ"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
-#define nonary_ops "hq_,"
+#define nonary_ops "hq_,?"
 #define token_div " \t\n;"
 
 /* We construct the hash table to avoid collisions.  If

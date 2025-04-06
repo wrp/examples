@@ -146,6 +146,7 @@ main() {
 	test_string '2,123 23 + ' 2146
 
 	test_string '[banana] 0!' 'Unknown function: banana'
+	test_string ? 'Output format currently: %.3Lg'
 	summarize_results
 }
 
