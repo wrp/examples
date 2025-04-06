@@ -272,7 +272,7 @@ process_entry(struct state *S, unsigned char c)
 }
 
 static int
-get_value_from_input(struct ring_buf *b, long double *v, char *s, char *end)
+get_input_string(struct ring_buf *b, long double *v, char *s, char *end)
 {
 	int i;
 	while( (i = rb_pop(b)) != EOF ){
@@ -304,7 +304,7 @@ push_value(struct state *S, unsigned char c)
 	if( ! rb_isempty(b) ){
 		long double val;
 
-		if( !get_value_from_input(b, &val, start, end) ){
+		if( !get_input_string(b, &val, start, end) ){
 			return 0;
 		}
 
