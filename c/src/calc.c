@@ -299,6 +299,7 @@ push_value(struct state *S, unsigned char c)
 	}
 
 	while( (i = rb_pop(b)) != EOF ){
+		assert( strchr(numeric_tok, i) || S->escape );
 		if( start < end ){
 			*start++ = i;
 		}
