@@ -1,24 +1,9 @@
+In calc:
+Make it possible to specify a base for integer inputs.
 
-In calc, either have all of the registers pre-loaded with all the known
+Either have all of the registers pre-loaded with all the known
 functions, or have ! cause them to be loaded if they are empty, or
 have a command line argument to preload them.
-
-Perhaps redo the interface so that:  0[sin]! does not use the 0
-as the index of the register in which to find the function, but
-instead takes 0 as the argument of sin.  So 0 2! would still use
-0 as the argument to the function in register 2, but 0[func]!
-would use 0 as the argument to func, but 1[func]2! would use 1
-as the argument to the function in register 2, while pushing
-func onto the register stack.  I don't like any of these
-approaches :(  Maybe we need to add a function to clear the stack,
-but I don't want to special case behavior when the stack is empty.
-(eg, if there are 2 elements on the stack, then the first is used
-as an index to pick which function to use, and the second
-is the argument, but if there is only one element on the stack
-it is used as an argument to the function that is currently
-on top of the register stack)  But it feels like we want
-to treat "1 2 [func]!" differently than "1 [func]2!", and .... ick
-
 
 Maybe make ! compute a factorial, and use a different operator for
 running a function.  Or add a "fac" function.
