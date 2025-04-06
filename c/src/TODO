@@ -22,3 +22,7 @@ to treat "1 2 [func]!" differently than "1 [func]2!", and .... ick
 
 Maybe make ! compute a factorial, and use a different operator for
 running a function.  Or add a "fac" function.
+
+Perhaps validate commas.  ie, "1,000" is a valid number, but "1,23"
+is not.  Not sure how to handle values to the right of the radix
+point.
