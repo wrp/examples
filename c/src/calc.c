@@ -304,10 +304,14 @@ push_value(struct state *S, unsigned char c)
 			*start++ = i;
 		}
 	}
-	if( S->escape && start + 1 < end ){
-		*start = 0;
+	if( S->escape ){
 		S->escape = 0;
-		execute_function(S, s);
+		if( start + 1 < end ){
+			*start = 0;
+			execute_function(S, s);
+		} else {
+			fputs("Overflow: function ignored", stderr);
+		}
 		return 0;
 	}
 	if( start == end ){
