@@ -31,6 +31,8 @@ err='Stack empty'
 main() {
 	basic_tests
 	simple_arithmetic
+	test_string_registers
+
 	summarize_results
 }
 basic_tests() {
@@ -72,8 +74,9 @@ simple_arithmetic() {
 		test_string "[%.3'Lf]0F1024;1+p" '1,025.000'
 		test_string "[%'Ld]0F 1234567 p" '1,234,567'
 	fi
+}
 
-	# Test string registers
+test_string_registers() {
 	test_string '[2 2+p][1 1+p]1x0x' "2${nl}4"
 	test_string '5[2 2+n]1[1 1+n]x0xp' "2${nl}4${nl}5"
 	test_string '[garbage][2 2+n]5[1 1+n]2x1xn' "2${nl}4${nl}5"
