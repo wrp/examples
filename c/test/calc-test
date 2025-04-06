@@ -29,10 +29,17 @@ nl='
 err='Stack empty'
 
 main() {
+	basic_tests
+	simple_arithmetic
+	summarize_results
+}
+basic_tests() {
 	test_string 'p' "$err"
 	test_string "1 $(yes 24 | sed -e 300q | tr -d \\n)
 		3+p" "Overflow: Term truncated${nl}4"
 	test_string 'hq'
+}
+simple_arithmetic() {
 	test_string '1 1+p' '2'
 	test_string '3 +1 +1 +p' 2   # 1 + 1
 	test_string '3 +1 + 1 +p' 5  # 3 + 1 + 1
@@ -147,7 +154,6 @@ main() {
 
 	test_string '[banana] 0!' 'Unknown function: banana'
 	test_string ? 'Output format currently: %.3Lg'
-	summarize_results
 }
 
 
