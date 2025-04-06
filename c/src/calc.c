@@ -22,7 +22,7 @@ const char *help[] = {
 "and then push 3 onto the stack.",
 "",
 "!    use function from specified register",
-"\f   apply func to the top value(s) in the stack (eg 0\\sin)",
+"\\f   apply function f to the top value(s) in the stack (eg 0\\sin)",
 "D    delete the first register",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
