@@ -18,3 +18,7 @@ is the argument, but if there is only one element on the stack
 it is used as an argument to the function that is currently
 on top of the register stack)  But it feels like we want
 to treat "1 2 [func]!" differently than "1 [func]2!", and .... ick
+
+
+Maybe make ! compute a factorial, and use a different operator for
+running a function.  Or add a "fac" function.
