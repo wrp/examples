@@ -145,9 +145,11 @@ print_help(struct state *S)
 }
 
 typedef void (*operator) (struct state *, unsigned char, int);
+operator char_lut[256];
 static void apply_binary(struct state *S, unsigned char c, int);
 static void apply_unary(struct state *S, unsigned char c, int);
 static void apply_nonary(struct state *S, unsigned char c, int);
+static void throw_warning(struct state *S, unsigned char c, int);
 
 void process_entry(struct state *S, unsigned char c);
 void push_it(struct state *, int);
@@ -214,6 +216,7 @@ init_state(struct state *S)
 	hash_functions(S);
 }
 
+#ifndef BUILD_LUT
 int
 main(int argc, char **argv)
 {
@@ -236,6 +239,7 @@ main(int argc, char **argv)
 	rb_free(S->accum);
 	return 0;
 }
+#endif
 
 
 /*
@@ -309,17 +313,9 @@ process_entry(struct state *S, unsigned char c)
 		;
 	} else {
 		flag = push_value(S, c);
-
-		if( strchr(binary_ops, c) ){
-			apply_binary(S, c, flag);
-		} else if( strchr(token_div, c) ){
-			;
-		} else if( strchr(unary_ops, c) ){
-			apply_unary(S, c, flag);
-		} else if( strchr(nonary_ops, c) ){
-			apply_nonary(S, c, flag);
-		} else {
-			fprintf( stderr, "Unexpected: %c\n", c );
+		operator f = char_lut[c];
+		if( f ){
+			f(S, c, flag);
 		}
 	}
 }
@@ -714,3 +710,91 @@ sum(struct state *S)
 
 	return sum;
 }
+
+#ifdef BUILD_LUT
+/* Use this and copy-paste into calc.c */
+int
+main(void)
+{
+	puts("operator char_lut[256] = {");
+	fputs("throw_warning,", stdout);
+	for( unsigned c = 1; c < 256; c += 1 ){
+		char *msg = "throw_warning";
+		if( strchr(binary_ops, c)) {
+			msg = "apply_binary";
+		} else if( strchr(unary_ops, c) ){
+			msg = "apply_unary";
+		} else if( strchr(nonary_ops, c) ){
+			msg = "apply_nonary";
+		} else if( strchr(token_div, c) ){
+			msg = "NULL";
+		}
+		putchar( c % 5 ? ' ' : '\n');
+		fputs(msg, stdout);
+		if( c != 255 ){
+			putchar(',');
+		}
+	}
+	puts("};");
+}
+#endif
+
+static void
+throw_warning(struct state *S, unsigned char c, int f)
+{
+	fprintf( stderr, "Unexpected: %c\n", c );
+}
+
+operator char_lut[256] = {
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, NULL,
+NULL, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, NULL, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, apply_binary, apply_binary, throw_warning,
+apply_binary, throw_warning, apply_binary, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, NULL,
+throw_warning, throw_warning, throw_warning, apply_nonary, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
+throw_warning, throw_warning, throw_warning, throw_warning, apply_binary,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
+throw_warning, throw_warning, apply_unary, throw_warning, apply_nonary,
+apply_unary, throw_warning, apply_unary, apply_nonary, apply_binary,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, apply_unary, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning};
