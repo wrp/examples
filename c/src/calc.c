@@ -367,7 +367,7 @@ show_functions(void)
 
 
 static int
-pop_value(struct stack *s, void *value)
+wrap_pop(struct stack *s, void *value)
 {
 	int rv = stack_pop(s, value);
 	if( !rv ){
@@ -390,11 +390,11 @@ execute_function(struct state *S, const char *cmd)
 	func = S->function_lut[idx];
 
 	if (func && strcmp(cmd, func->name) == 0) {
-		pop_value(S->values, &res);
+		wrap_pop(S->values, &res);
 		switch(func->arg_count){
 		default: assert(0);
 		case 2:
-			pop_value(S->values, &arg);
+			wrap_pop(S->values, &arg);
 			res = func->g(arg, res);
 			break;
 		case 1:
@@ -479,7 +479,7 @@ select_register(struct state *S)
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_size(S->values) && pop_value(S->values, &val) ){
+	if( stack_size(S->values) && wrap_pop(S->values, &val) ){
 		offset = val;
 	}
 	if( rint(val) != val ){
@@ -523,14 +523,14 @@ apply_string_op(struct state *S, unsigned char c)
 		}
 		break;
 	case 'D':
-		pop_value(S->registers, &e);
+		wrap_pop(S->registers, &e);
 		break;
 	case 'F':
 		extract_format(S);
 		break;
 	case 'R':
-		if( pop_value(S->registers, &a) &&
-			pop_value(S->registers, &rb) ){
+		if( wrap_pop(S->registers, &a) &&
+			wrap_pop(S->registers, &rb) ){
 			stack_push(S->registers, a);
 			stack_push(S->registers, rb);
 		}
@@ -575,7 +575,7 @@ apply_unary(struct state *S, unsigned char c)
 {
 	long double val;
 	assert( strchr(unary_ops, c) );
-	if( !pop_value(S->values, &val) ){
+	if( !wrap_pop(S->values, &val) ){
 		return;
 	}
 	switch( c ){
@@ -614,7 +614,7 @@ apply_binary(struct state *S, unsigned char c)
 	long double val[2];
 	long double res;
 	assert( strchr(binary_ops, c));
-	if( !pop_value(S->values, val) || !pop_value(S->values, val + 1) ){
+	if( !wrap_pop(S->values, val) || !wrap_pop(S->values, val + 1) ){
 		return;
 	}
 	switch(c) {
