@@ -63,7 +63,7 @@ const char *help[] = {
 #define memory_ops "mM"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpy"
-#define nonary_ops "hqY?"
+#define nonary_ops "hqMY?"
 #define ignore_char "_,"
 #define token_div " \t\n;"
 
@@ -81,6 +81,7 @@ struct func;
 struct state {
 	struct stack *values;
 	struct stack *registers;
+	struct stack *memory;
 	char fmt[32];
 	int enquote;
 	int escape;
@@ -153,7 +154,7 @@ void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
-static void print_stack(struct state *S);
+static void print_stack(struct state *S, struct stack *);
 
 
 static size_t
@@ -203,6 +204,7 @@ init_state(struct state *S)
 	S->escape = 0;
 	S->type = rational;
 	S->values = stack_xcreate(sizeof(long double));
+	S->memory = stack_xcreate(sizeof(long double));
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
 	hash_functions(S);
@@ -254,7 +256,10 @@ apply_nonary(struct state *S, int c)
 	switch( c ){
 	default: assert(0);
 	case 'Y':
-		print_stack(S);
+		print_stack(S, S->values);
+		break;
+	case 'M':
+		print_stack(S, S->memory);
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
@@ -385,6 +390,17 @@ show_functions(void)
 	putchar('\n');
 }
 
+static int
+pop_value(struct state *S, long double *value, int msg)
+{
+	int rv = stack_pop(S->values, value);
+	if( rv ) {
+		stack_push(S->memory, value);
+	} else if( msg ){
+		fputs("Stack empty\n", stderr);
+	}
+	return rv;
+}
 
 static int
 wrap_pop(struct stack *s, void *value)
@@ -416,12 +432,12 @@ execute_function(struct state *S, const char *cmd)
 			res = func->s(S);
 			break;
 		case 2:
-			wrap_pop(S->values, &res);
-			wrap_pop(S->values, &arg);
+			pop_value(S, &res, 1);
+			pop_value(S, &arg, 1);
 			res = func->g(arg, res);
 			break;
 		case 1:
-			wrap_pop(S->values, &res);
+			pop_value(S, &res, 1);
 			res = func->f(res);
 		}
 		stack_push(S->values, &res);
@@ -503,7 +519,7 @@ select_register(struct state *S)
 	struct ring_buf *ret = NULL;
 	int offset = -1;
 
-	if( stack_size(S->values) && wrap_pop(S->values, &val) ){
+	if( stack_size(S->values) && pop_value(S, &val, 1) ){
 		offset = val;
 	}
 	if( rint(val) != val ){
@@ -583,11 +599,11 @@ apply_string_op(struct state *S, unsigned char c)
 }
 
 static void
-print_stack(struct state *S)
+print_stack(struct state *S, struct stack *v)
 {
 	unsigned i = 0;
 	long double *s;
-	for( s = stack_base(S->values); i < stack_size(S->values); s++, i++ ){
+	for( s = stack_base(v); i < stack_size(v); s++, i++ ){
 		printf("%3u: ", i);
 		printf(S->fmt, *s);
 	}
@@ -599,7 +615,7 @@ apply_unary(struct state *S, unsigned char c)
 {
 	long double val;
 	assert( strchr(unary_ops, c) );
-	if( !wrap_pop(S->values, &val) ){
+	if( !pop_value(S, &val, 1) ){
 		return;
 	}
 	switch( c ){
@@ -634,7 +650,7 @@ apply_binary(struct state *S, unsigned char c)
 	long double val[2];
 	long double res;
 	assert( strchr(binary_ops, c));
-	if( !wrap_pop(S->values, val) || !wrap_pop(S->values, val + 1) ){
+	if( !pop_value(S, val, 1) || !pop_value(S, val + 1, 1) ){
 		return;
 	}
 	switch(c) {
@@ -658,7 +674,7 @@ sum(struct state *S)
 	long double sum = 0.0;
 	int rv;
 
-	while( (rv = stack_pop(S->values, &value)) != 0 ){
+	while( (rv = pop_value(S, &value, 0)) != 0 ){
 		sum += value;
 	}
 
