@@ -62,8 +62,9 @@ const char *help[] = {
 #define string_ops "[]D!FRxZ\\"
 #define memory_ops "mM"
 #define binary_ops "*-+/^r"
-#define unary_ops "knpyY"
-#define nonary_ops "hq_,?"
+#define unary_ops "knpy"
+#define nonary_ops "hqY?"
+#define ignore_char "_,"
 #define token_div " \t\n;"
 
 /* We construct the hash table to avoid collisions.  If
@@ -152,6 +153,7 @@ void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
+static void print_stack(struct state *S);
 
 
 static size_t
@@ -251,8 +253,9 @@ apply_nonary(struct state *S, int c)
 {
 	switch( c ){
 	default: assert(0);
-	case ',':
-	case '_': break; /* noop */
+	case 'Y':
+		print_stack(S);
+		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
 	case '?': printf("Output format currently: %s", S->fmt);
@@ -284,7 +287,11 @@ process_entry(struct state *S, unsigned char c)
 			apply_unary(S, c);
 		}
 	} else if( strchr(nonary_ops, c) ){
-		apply_nonary(S, c);
+		if( !push_value(S, c) ){
+			apply_nonary(S, c);
+		}
+	} else if( strchr(ignore_char, c) ){
+		;
 	} else {
 		fprintf( stderr, "Unexpected: %c\n", c );
 	}
@@ -575,7 +582,7 @@ apply_string_op(struct state *S, unsigned char c)
 	}
 }
 
-void
+static void
 print_stack(struct state *S)
 {
 	unsigned i = 0;
@@ -608,10 +615,6 @@ apply_unary(struct state *S, unsigned char c)
 			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n", (int)val);
 			S->type = rational;
 		}
-		break;
-	case 'Y':
-		stack_push(S->values, &val);
-		print_stack(S);
 		break;
 	case 'p': stack_push(S->values, &val); /* Fall thru */
 	case 'n':
