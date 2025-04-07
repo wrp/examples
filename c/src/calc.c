@@ -28,6 +28,8 @@ const char *help[] = {
 "[s]  push s onto the register stack",
 "h    print this help message",
 "k    set precision of format string",
+"m    push value from the specified memory location",
+"M    show the memory stack",
 "n    print and pop top value of stack",
 "p    print top value of stack",
 "q    quit",
@@ -58,6 +60,7 @@ const char *help[] = {
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "[]D!FRxZ\\"
+#define memory_ops "mM"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpyY"
 #define nonary_ops "hq_,?"
