@@ -151,7 +151,6 @@ static void apply_unary(struct state *S, unsigned char c, int);
 static void apply_nonary(struct state *S, unsigned char c, int);
 static void throw_warning(struct state *S, unsigned char c, int);
 
-void process_entry(struct state *S, unsigned char c);
 void push_it(struct state *, int);
 
 void apply_string_op(struct state *S, unsigned char c);
@@ -253,7 +252,27 @@ push_it(struct state *S, int c)
 	int k;
 	rb_push(S->raw, (unsigned char)c);
 	while( (k = rb_pop( S->raw )) != EOF ){
-		process_entry(S, (unsigned char)k);
+		unsigned char c = (unsigned char)k;
+		struct ring_buf *b = S->accum;
+		int flag;
+
+		if( S->enquote && c != ']' ){
+			rb_push(b, c);
+		} else if( S->escape && ! strchr(token_div, c)) {
+			rb_push(b, c);
+		} else if( strchr(numeric_tok, c) ){
+			rb_push(b, c);
+		} else if( strchr(string_ops, c) ){
+			apply_string_op(S, c);
+		} else if( strchr(ignore_char, c) ){
+			;
+		} else {
+			flag = push_value(S, c);
+			operator f = char_lut[c];
+			if( f ){
+				f(S, c, flag);
+			}
+		}
 	}
 }
 
@@ -294,31 +313,6 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 	}
 }
 
-
-void
-process_entry(struct state *S, unsigned char c)
-{
-	struct ring_buf *b = S->accum;
-	int flag;
-
-	if( S->enquote && c != ']' ){
-		rb_push(b, c);
-	} else if( S->escape && ! strchr(token_div, c)) {
-		rb_push(b, c);
-	} else if( strchr(numeric_tok, c) ){
-		rb_push(b, c);
-	} else if( strchr(string_ops, c) ){
-		apply_string_op(S, c);
-	} else if( strchr(ignore_char, c) ){
-		;
-	} else {
-		flag = push_value(S, c);
-		operator f = char_lut[c];
-		if( f ){
-			f(S, c, flag);
-		}
-	}
-}
 
 /*
  * Collect inputs in the ring buffer and push values onto
