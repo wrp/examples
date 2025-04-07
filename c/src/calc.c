@@ -144,10 +144,14 @@ print_help(struct state *S)
 	putchar('\n');
 }
 
+typedef void (*operator) (struct state *, unsigned char, int);
+static void apply_binary(struct state *S, unsigned char c, int);
+static void apply_unary(struct state *S, unsigned char c, int);
+static void apply_nonary(struct state *S, unsigned char c, int);
+
 void process_entry(struct state *S, unsigned char c);
 void push_it(struct state *, int);
-void apply_binary(struct state *S, unsigned char c);
-void apply_unary(struct state *S, unsigned char c);
+
 void apply_string_op(struct state *S, unsigned char c);
 void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
@@ -264,8 +268,11 @@ push_memory_to_stack(struct state *S)
 
 
 static void
-apply_nonary(struct state *S, int c)
+apply_nonary(struct state *S, unsigned char c, int flag)
 {
+	if( flag ){
+		return;
+	}
 	switch( c ){
 	default: assert(0);
 	case 'Y':
@@ -288,33 +295,32 @@ void
 process_entry(struct state *S, unsigned char c)
 {
 	struct ring_buf *b = S->accum;
+	int flag;
 
 	if( S->enquote && c != ']' ){
 		rb_push(b, c);
-	} else if( strchr(token_div, c) ){
-		push_value(S, c);
-	} else if( S->escape ) {
+	} else if( S->escape && ! strchr(token_div, c)) {
 		rb_push(b, c);
 	} else if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
 	} else if( strchr(string_ops, c) ){
 		apply_string_op(S, c);
-	} else if( strchr(binary_ops, c) ){
-		if( !push_value(S, c) ){
-			apply_binary(S, c);
-		}
-	} else if( strchr(unary_ops, c) ){
-		if( !push_value(S, c) ){
-			apply_unary(S, c);
-		}
-	} else if( strchr(nonary_ops, c) ){
-		if( !push_value(S, c) ){
-			apply_nonary(S, c);
-		}
 	} else if( strchr(ignore_char, c) ){
 		;
 	} else {
-		fprintf( stderr, "Unexpected: %c\n", c );
+		flag = push_value(S, c);
+
+		if( strchr(binary_ops, c) ){
+			apply_binary(S, c, flag);
+		} else if( strchr(token_div, c) ){
+			;
+		} else if( strchr(unary_ops, c) ){
+			apply_unary(S, c, flag);
+		} else if( strchr(nonary_ops, c) ){
+			apply_nonary(S, c, flag);
+		} else {
+			fprintf( stderr, "Unexpected: %c\n", c );
+		}
 	}
 }
 
@@ -369,7 +375,7 @@ push_value(struct state *S, unsigned char c)
 	}
 	if( *cp && strchr("+-", *cp) ){
 		assert( cp == start );
-		apply_binary(S, *cp);
+		apply_binary(S, *cp, 0);
 		for( char *t = cp + 1; *t; t++ ){
 			push_it(S, *t);
 		}
@@ -635,12 +641,12 @@ print_stack(struct state *S, struct stack *v)
 }
 
 
-void
-apply_unary(struct state *S, unsigned char c)
+static void
+apply_unary(struct state *S, unsigned char c, int flag)
 {
 	long double val;
 	assert( strchr(unary_ops, c) );
-	if( !pop_value(S, &val, 1) ){
+	if( flag || !pop_value(S, &val, 1) ){
 		return;
 	}
 	switch( c ){
@@ -669,9 +675,12 @@ apply_unary(struct state *S, unsigned char c)
 	}
 }
 
-void
-apply_binary(struct state *S, unsigned char c)
+static void
+apply_binary(struct state *S, unsigned char c, int flag)
 {
+	if( flag ){
+		return;
+	}
 	long double val[2];
 	long double res;
 	assert( strchr(binary_ops, c));
