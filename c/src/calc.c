@@ -89,12 +89,14 @@ struct state {
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
 
+static long double sum(struct state *);
 struct func {
 	const char *name;
 	int arg_count;
 	union {
 		long double (*f)(long double);
 		long double (*g)(long double, long double);
+		long double (*s)(struct state *);
 	};
 } functions[] = {
 	{ "acos", 1, acosl },
@@ -119,6 +121,7 @@ struct func {
 	{ "pow", 2, .g = powl},
 	{ "sin", 1, sinl },
 	{ "sinh", 1, sinhl },
+	{ "sum", 0, .s = sum},
 	{ "sqrt", 1, sqrtl },
 	{ "tan", 1, tanl },
 	{ "tgamma", 1, tgammal },
@@ -400,14 +403,18 @@ execute_function(struct state *S, const char *cmd)
 	func = S->function_lut[idx];
 
 	if (func && strcmp(cmd, func->name) == 0) {
-		wrap_pop(S->values, &res);
 		switch(func->arg_count){
 		default: assert(0);
+		case 0:
+			res = func->s(S);
+			break;
 		case 2:
+			wrap_pop(S->values, &res);
 			wrap_pop(S->values, &arg);
 			res = func->g(arg, res);
 			break;
 		case 1:
+			wrap_pop(S->values, &res);
 			res = func->f(res);
 		}
 		stack_push(S->values, &res);
@@ -639,4 +646,18 @@ apply_binary(struct state *S, unsigned char c)
 	case '^': res = pow(val[1], val[0]); break;
 	}
 	stack_push(S->values, &res);
+}
+
+static long double
+sum(struct state *S)
+{
+	long double value;
+	long double sum = 0.0;
+	int rv;
+
+	while( (rv = stack_pop(S->values, &value)) != 0 ){
+		sum += value;
+	}
+
+	return sum;
 }

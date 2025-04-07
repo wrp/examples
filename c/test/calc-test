@@ -162,6 +162,8 @@ test_funcs() {
 
 	test_string '2,123 23 + ' 2146
 
+	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
+
 	test_string '[banana] 0!' 'Unknown function: banana'
 	test_string ? 'Output format currently: %.3Lg'
 }
