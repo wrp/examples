@@ -60,10 +60,9 @@ const char *help[] = {
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "[]D!FRxZ\\"
-#define memory_ops "mM"
 #define binary_ops "*-+/^r"
 #define unary_ops "knpy"
-#define nonary_ops "hqMY?"
+#define nonary_ops "hmMqY?"
 #define ignore_char "_,"
 #define token_div " \t\n;"
 
@@ -155,6 +154,7 @@ void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
 struct ring_buf * select_register(struct state *S);
 static void print_stack(struct state *S, struct stack *);
+static int get_index(struct state *S);
 
 
 static size_t
@@ -251,12 +251,28 @@ push_it(struct state *S, int c)
 
 
 static void
+push_memory_to_stack(struct state *S)
+{
+	int offset = get_index(S);
+	long double *val;
+	if( (val = stack_get(S->memory, offset)) == NULL ){
+		fputs("Stack empty\n", stderr);
+	} else {
+		stack_push(S->values, val);
+	}
+}
+
+
+static void
 apply_nonary(struct state *S, int c)
 {
 	switch( c ){
 	default: assert(0);
 	case 'Y':
 		print_stack(S, S->values);
+		break;
+	case 'm':
+		push_memory_to_stack(S);
 		break;
 	case 'M':
 		print_stack(S, S->memory);
