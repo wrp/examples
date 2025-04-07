@@ -243,6 +243,20 @@ push_it(struct state *S, int c)
 }
 
 
+static void
+apply_nonary(struct state *S, int c)
+{
+	switch( c ){
+	default: assert(0);
+	case ',':
+	case '_': break; /* noop */
+	case 'q': exit(0);
+	case 'h': print_help(S); /* Fall Thru */
+	case '?': printf("Output format currently: %s", S->fmt);
+	}
+}
+
+
 void
 process_entry(struct state *S, unsigned char c)
 {
@@ -267,14 +281,7 @@ process_entry(struct state *S, unsigned char c)
 			apply_unary(S, c);
 		}
 	} else if( strchr(nonary_ops, c) ){
-		switch( c ) {
-		default: assert(0);
-		case ',':
-		case '_': break; /* noop */
-		case 'q': exit(0);
-		case 'h': print_help(S); /* Fall Thru */
-		case '?': printf("Output format currently: %s", S->fmt);
-		}
+		apply_nonary(S, c);
 	} else {
 		fprintf( stderr, "Unexpected: %c\n", c );
 	}
