@@ -512,13 +512,12 @@ extract_format(struct state *S)
 	}
 }
 
-struct ring_buf *
-select_register(struct state *S)
+
+static int
+get_index(struct state *S)
 {
 	long double val = -1.0;
-	struct ring_buf *ret = NULL;
 	int offset = -1;
-
 	if( stack_size(S->values) && pop_value(S, &val, 1) ){
 		offset = val;
 	}
@@ -526,6 +525,16 @@ select_register(struct state *S)
 		offset = -1;
 		stack_push(S->values, &val);
 	}
+	return offset;
+}
+
+
+struct ring_buf *
+select_register(struct state *S)
+{
+	struct ring_buf *ret = NULL;
+	int offset = get_index(S);
+
 	if( (ret = stack_get(S->registers, offset)) == NULL ){
 		if( offset == -1 ){
 			fprintf(stderr, "Stack empty\n");
