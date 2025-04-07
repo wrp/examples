@@ -1,4 +1,7 @@
 In calc:
+Add a memory.  User should have access to all values previously used.
+See comment in 709e6c6f
+
 Make it possible to specify a base for integer inputs.
 
 Either have all of the registers pre-loaded with all the known
