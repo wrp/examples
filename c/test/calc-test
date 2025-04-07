@@ -9,17 +9,20 @@ count=0
 fail_count=0
 
 fail() {
-	printf '%3d: %s\n' "$((++fail_count))" "$1" >&2
+	printf '%3d: %s\n' "$((++fail_count))" "$*" >&2
 }
 
 test_string() {
-	out=$(echo "$1" | $exe 2>&1)
-	if test $# -gt 1 && test "$out" != "$2" && test "$out" != "$3"; then
-		fail " On input: '$1', expected output '$2', got '$out'"
+	input=$1
+	expected=$2
+	out=$(echo "$input" | $exe 2>&1)
+	if test $# -gt 1 && test "$out" != "$expected"; then
+		fail " On input: '$input', expected '$expected', got '$out'"
 	fi
-	out=$($exe "$1" 2>&1)
-	if test $# -gt 1 && test "$out" != "$2" && test "$out" != "$3"; then
-		fail "With args: '$1', expected output '$2', got '$out'"
+
+	out=$($exe "$input" 2>&1)
+	if test $# -gt 1 && test "$out" != "$expected"; then
+		fail "With args: '$input', expected '$expected', got '$out'"
 	fi
 	: $((count += 1))
 }
@@ -176,7 +179,11 @@ test_funcs() {
 	test_string '5 [exp2] 0!p' 32
 	test_string '2 [exp] 0!p' 7.39
 
-	test_string '2,123 23 + ' 2146
+	if $have_comma_format; then
+		test_string '0k 2,123 23 +n' 2,146
+	else
+		test_string '0k 2,123 23 +n' 2146
+	fi
 
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
