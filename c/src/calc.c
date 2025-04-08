@@ -90,6 +90,7 @@ struct state {
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
 
+static int wrap_pop(struct stack *, void *);
 static long double sum(struct state *);
 struct func {
 	const char *name;
@@ -427,11 +428,12 @@ show_functions(void)
 static int
 pop_value(struct state *S, long double *value, int msg)
 {
-	int rv = stack_pop(S->values, value);
+	int (*popper)(struct stack *, void *);
+
+	popper = msg ? wrap_pop : stack_pop;
+	int rv = popper(S->values, value);
 	if( rv ) {
 		stack_push(S->memory, value);
-	} else if( msg ){
-		fputs("Stack empty\n", stderr);
 	}
 	return rv;
 }
