@@ -95,6 +95,7 @@ struct stack_entry {
 		long double lf;
 		long long ld;
 	} v;
+	int stored;  /* bool */
 };
 
 static struct stack_entry *wrap_get(struct stack *, int);
@@ -293,6 +294,7 @@ push_memory_to_stack(struct state *S)
 	int offset = get_index(S);
 	struct stack_entry *val;
 	if( (val = wrap_get(S->memory, offset)) != NULL ){
+		assert(val->stored == 1);
 		stack_push(S->values, val);
 	}
 }
@@ -355,7 +357,7 @@ push_value(struct state *S, unsigned char c)
 	struct ring_buf *b = S->accum;
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
-	struct stack_entry val;
+	struct stack_entry val = { 0 };
 	int i;
 
 	cp = start = s;
@@ -437,7 +439,8 @@ pop_value(struct state *S, struct stack_entry *value, int msg)
 
 	popper = msg ? wrap_pop : stack_pop;
 	int rv = popper(S->values, value);
-	if( rv ) {
+	if( rv && !value->stored ) {
+		value->stored = 1;
 		stack_push(S->memory, value);
 	}
 	return rv;
@@ -491,6 +494,7 @@ execute_function(struct state *S, const char *cmd)
 			pop_value(S, &res, 1);
 			res.v.lf = func->f(res.v.lf);
 		}
+		res.stored = 0;
 		stack_push(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
@@ -704,7 +708,7 @@ apply_binary(struct state *S, unsigned char c, int flag)
 		return;
 	}
 	struct stack_entry val[2];
-	struct stack_entry res;
+	struct stack_entry res = {0};
 	assert( strchr(binary_ops, c));
 	if( !pop_value(S, val, 1) || !pop_value(S, val + 1, 1) ){
 		return;
@@ -727,10 +731,8 @@ static long double
 sum(struct state *S)
 {
 	struct stack_entry value;
-	struct stack_entry sum;
+	struct stack_entry sum = {0};
 	int rv;
-
-	sum.v.lf = 0.0;
 
 	while( (rv = pop_value(S, &value, 0)) != 0 ){
 		sum.v.lf += value.v.lf;
