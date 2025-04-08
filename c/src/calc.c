@@ -66,15 +66,16 @@ const char *help[] = {
 #define ignore_char "_,"
 #define token_div " \t\n;"
 
-/* We construct the hash table to avoid collisions.  If
-a collision happens (this is a compile-time issue), either implement
-probing or change the hash function.  For now, we just set the
-offset of 3 because 0, 1, and 2 collide.  We could iterate at run
-time to find an offset that works, but a better approach is to just
-fix as needed when/if we change the set of known functions.
-*/
+#define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256
-#define HASH_OFFSET 3
+/*
+ * (hash-table-note) We construct the hash table to avoid collisions.  If
+ * a collision happens (this is a compile-time issue), either implement
+ * probing or change the hash function.  For now, we just set the
+ * offset of 3 because 0, 1, and 2 collide.  We could iterate at run
+ * time to find an offset that works, but a better approach is to just
+ * fix as needed when/if we change the set of known functions.
+ */
 
 struct func;
 struct state {
