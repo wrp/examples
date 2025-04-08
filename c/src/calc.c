@@ -90,8 +90,11 @@ struct state {
 	enum { rational, integer } type;
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
+struct stack_entry {
+	long double v;
+};
 
-static long double *wrap_get(struct stack *, int);
+static struct stack_entry *wrap_get(struct stack *, int);
 static int wrap_pop(struct stack *, void *);
 static long double sum(struct state *);
 struct func {
@@ -211,8 +214,8 @@ init_state(struct state *S)
 	S->enquote = 0;
 	S->escape = 0;
 	S->type = rational;
-	S->values = stack_xcreate(sizeof(long double));
-	S->memory = stack_xcreate(sizeof(long double));
+	S->values = stack_xcreate(sizeof(struct stack_entry));
+	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
 	strcpy(S->fmt, DEFAULT_FMT);
 	hash_functions(S);
@@ -285,7 +288,7 @@ static void
 push_memory_to_stack(struct state *S)
 {
 	int offset = get_index(S);
-	long double *val;
+	struct stack_entry *val;
 	if( (val = wrap_get(S->memory, offset)) != NULL ){
 		stack_push(S->values, val);
 	}
@@ -293,13 +296,13 @@ push_memory_to_stack(struct state *S)
 
 
 static void
-show_value(struct state *S, long double val)
+show_value(struct state *S, struct stack_entry val)
 {
 
 	if( S->type == rational ){
-		printf(S->fmt, val);
+		printf(S->fmt, val.v);
 	} else {
-		long lval = (long)val;
+		long lval = (long)val.v;
 		printf(S->fmt, lval);
 	}
 }
@@ -308,7 +311,7 @@ show_value(struct state *S, long double val)
 static void
 apply_nonary(struct state *S, unsigned char c, int flag)
 {
-	long double *val;
+	struct stack_entry *val;
 	if( flag ){
 		return;
 	}
@@ -349,7 +352,7 @@ push_value(struct state *S, unsigned char c)
 	struct ring_buf *b = S->accum;
 	char s[256] = "", *end = s + sizeof s;
 	char *cp, *start;
-	long double val;
+	struct stack_entry val;
 	int i;
 
 	cp = start = s;
@@ -379,11 +382,11 @@ push_value(struct state *S, unsigned char c)
 	}
 	start = s;
 
-	val = strtold(start, &cp);
+	val.v = strtold(start, &cp);
 	while( *cp && strchr("+-", *cp) && cp != start ){
 		stack_push(S->values, &val);
 		start = cp;
-		val = strtold(start, &cp);
+		val.v = strtold(start, &cp);
 	}
 	if( *cp && strchr("+-", *cp) ){
 		assert( cp == start );
@@ -425,7 +428,7 @@ show_functions(void)
 }
 
 static int
-pop_value(struct state *S, long double *value, int msg)
+pop_value(struct state *S, struct stack_entry *value, int msg)
 {
 	int (*popper)(struct stack *, void *);
 
@@ -437,10 +440,10 @@ pop_value(struct state *S, long double *value, int msg)
 	return rv;
 }
 
-static long double *
+static struct stack_entry *
 wrap_get(struct stack *s, int idx)
 {
-	long double *value = stack_get(s, idx);
+	struct stack_entry *value = stack_get(s, idx);
 	if( value == NULL ){
 		fputs("Stack empty\n", stderr);
 	}
@@ -461,8 +464,8 @@ wrap_pop(struct stack *s, void *value)
 static void
 execute_function(struct state *S, const char *cmd)
 {
-	long double arg;
-	long double res;
+	struct stack_entry arg;
+	struct stack_entry res;
 	struct func *func;
 	size_t idx;
 
@@ -474,16 +477,16 @@ execute_function(struct state *S, const char *cmd)
 		switch(func->arg_count){
 		default: assert(0);
 		case 0:
-			res = func->s(S);
+			res.v = func->s(S);
 			break;
 		case 2:
 			pop_value(S, &res, 1);
 			pop_value(S, &arg, 1);
-			res = func->g(arg, res);
+			res.v = func->g(arg.v, res.v);
 			break;
 		case 1:
 			pop_value(S, &res, 1);
-			res = func->f(res);
+			res.v = func->f(res.v);
 		}
 		stack_push(S->values, &res);
 	} else {
@@ -561,12 +564,12 @@ extract_format(struct state *S)
 static int
 get_index(struct state *S)
 {
-	long double val = -1.0;
+	struct stack_entry val = { .v = -1.0 };
 	int offset = -1;
 	if( pop_value(S, &val, 1) ){
-		offset = val;
+		offset = val.v;
 	}
-	if( rint(val) != val ){
+	if( rint(val.v) != val.v ){
 		offset = -1;
 		stack_push(S->values, &val);
 	}
@@ -654,10 +657,10 @@ static void
 print_stack(struct state *S, struct stack *v)
 {
 	unsigned i = 0;
-	long double *s;
+	struct stack_entry *s;
 	for( s = stack_base(v); i < stack_size(v); s++, i++ ){
 		printf("%3u: ", i);
-		printf(S->fmt, *s);
+		printf(S->fmt, s->v);
 	}
 }
 
@@ -665,7 +668,7 @@ print_stack(struct state *S, struct stack *v)
 static void
 apply_unary(struct state *S, unsigned char c, int flag)
 {
-	long double val;
+	struct stack_entry val;
 	assert( strchr(unary_ops, c) );
 	if( flag || !pop_value(S, &val, 1) ){
 		return;
@@ -676,11 +679,12 @@ apply_unary(struct state *S, unsigned char c, int flag)
 		stack_push(S->values, &val);
 		break;
 	case 'k':
-		if( val < 1 ){
+		if( val.v < 1 ){
 			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
-			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n", (int)val);
+			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n",
+				(int)val.v);
 			S->type = rational;
 		}
 		break;
@@ -696,8 +700,8 @@ apply_binary(struct state *S, unsigned char c, int flag)
 	if( flag ){
 		return;
 	}
-	long double val[2];
-	long double res;
+	struct stack_entry val[2];
+	struct stack_entry res;
 	assert( strchr(binary_ops, c));
 	if( !pop_value(S, val, 1) || !pop_value(S, val + 1, 1) ){
 		return;
@@ -707,11 +711,11 @@ apply_binary(struct state *S, unsigned char c, int flag)
 		stack_push(S->values, val);
 		res = val[1];
 		break;
-	case '*': res = val[1] * val[0]; break;
-	case '-': res = val[1] - val[0]; break;
-	case '+': res = val[1] + val[0]; break;
-	case '/': res = val[1] / val[0]; break;
-	case '^': res = pow(val[1], val[0]); break;
+	case '*': res.v = val[1].v * val[0].v; break;
+	case '-': res.v = val[1].v - val[0].v; break;
+	case '+': res.v = val[1].v + val[0].v; break;
+	case '/': res.v = val[1].v / val[0].v; break;
+	case '^': res.v = pow(val[1].v, val[0].v); break;
 	}
 	stack_push(S->values, &res);
 }
@@ -719,15 +723,17 @@ apply_binary(struct state *S, unsigned char c, int flag)
 static long double
 sum(struct state *S)
 {
-	long double value;
-	long double sum = 0.0;
+	struct stack_entry value;
+	struct stack_entry sum;
 	int rv;
 
+	sum.v = 0.0;
+
 	while( (rv = pop_value(S, &value, 0)) != 0 ){
-		sum += value;
+		sum.v += value.v;
 	}
 
-	return sum;
+	return sum.v;
 }
 
 #ifdef BUILD_LUT
