@@ -554,9 +554,7 @@ get_index(struct state *S)
 {
 	long double val = -1.0;
 	int offset = -1;
-	if( stack_size(S->values) == 0 ){
-		fprintf(stderr, "Stack empty\n");
-	} else if( pop_value(S, &val, 1) ){
+	if( pop_value(S, &val, 1) ){
 		offset = val;
 	}
 	if( rint(val) != val ){
