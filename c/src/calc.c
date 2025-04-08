@@ -61,8 +61,8 @@ const char *help[] = {
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
-#define unary_ops "knpy"
-#define nonary_ops "hmMqY?"
+#define unary_ops "kny"
+#define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 #define token_div " \t\n;"
 
@@ -291,8 +291,22 @@ push_memory_to_stack(struct state *S)
 
 
 static void
+show_value(struct state *S, long double val)
+{
+
+	if( S->type == rational ){
+		printf(S->fmt, val);
+	} else {
+		long lval = (long)val;
+		printf(S->fmt, lval);
+	}
+}
+
+
+static void
 apply_nonary(struct state *S, unsigned char c, int flag)
 {
+	long double *val;
 	if( flag ){
 		return;
 	}
@@ -306,6 +320,14 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 		break;
 	case 'M':
 		print_stack(S, S->memory);
+		break;
+	case 'p':
+		val = stack_get(S->values, -1);
+		if( val ){
+			show_value(S, *val);
+		} else {
+			fprintf(stderr, "Stack empty\n");
+		}
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
@@ -653,14 +675,8 @@ apply_unary(struct state *S, unsigned char c, int flag)
 			S->type = rational;
 		}
 		break;
-	case 'p': stack_push(S->values, &val); /* Fall thru */
 	case 'n':
-		if( S->type == rational ){
-			printf(S->fmt, val);
-		} else {
-			long lval = (long)val;
-			printf(S->fmt, lval);
-		}
+		show_value(S, val);
 		break;
 	}
 }
@@ -762,7 +778,7 @@ throw_warning, throw_warning, throw_warning, throw_warning, apply_binary,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
 throw_warning, throw_warning, apply_unary, throw_warning, apply_nonary,
-apply_unary, throw_warning, apply_unary, apply_nonary, apply_binary,
+apply_unary, throw_warning, apply_nonary, apply_nonary, apply_binary,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, apply_unary, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
