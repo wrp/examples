@@ -554,7 +554,9 @@ get_index(struct state *S)
 {
 	long double val = -1.0;
 	int offset = -1;
-	if( stack_size(S->values) && pop_value(S, &val, 1) ){
+	if( stack_size(S->values) == 0 ){
+		fprintf(stderr, "Stack empty\n");
+	} else if( pop_value(S, &val, 1) ){
 		offset = val;
 	}
 	if( rint(val) != val ){
@@ -572,9 +574,7 @@ select_register(struct state *S)
 	int offset = get_index(S);
 
 	if( (ret = stack_get(S->registers, offset)) == NULL ){
-		if( offset == -1 ){
-			fprintf(stderr, "Stack empty\n");
-		} else {
+		if( offset != -1 ){
 			fprintf(stderr, "Register %d empty\n", offset);
 		}
 	}
