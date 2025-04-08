@@ -255,10 +255,8 @@ main(int argc, char **argv)
 void
 push_it(struct state *S, int c)
 {
-	int k;
 	rb_push(S->raw, (unsigned char)c);
-	while( (k = rb_pop( S->raw )) != EOF ){
-		unsigned char c = (unsigned char)k;
+	while( (c = rb_pop( S->raw )) != EOF ){
 		struct ring_buf *b = S->accum;
 		int flag;
 
