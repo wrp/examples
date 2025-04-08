@@ -90,6 +90,7 @@ struct state {
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
 
+static long double *wrap_get(struct stack *, int);
 static int wrap_pop(struct stack *, void *);
 static long double sum(struct state *);
 struct func {
@@ -283,9 +284,7 @@ push_memory_to_stack(struct state *S)
 {
 	int offset = get_index(S);
 	long double *val;
-	if( (val = stack_get(S->memory, offset)) == NULL ){
-		fputs("Stack empty\n", stderr);
-	} else {
+	if( (val = wrap_get(S->memory, offset)) != NULL ){
 		stack_push(S->values, val);
 	}
 }
@@ -323,11 +322,9 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 		print_stack(S, S->memory);
 		break;
 	case 'p':
-		val = stack_get(S->values, -1);
+		val = wrap_get(S->values, -1);
 		if( val ){
 			show_value(S, *val);
-		} else {
-			fprintf(stderr, "Stack empty\n");
 		}
 		break;
 	case 'q': exit(0);
@@ -436,6 +433,16 @@ pop_value(struct state *S, long double *value, int msg)
 		stack_push(S->memory, value);
 	}
 	return rv;
+}
+
+static long double *
+wrap_get(struct stack *s, int idx)
+{
+	long double *value = stack_get(s, idx);
+	if( value == NULL ){
+		fputs("Stack empty\n", stderr);
+	}
+	return value;
 }
 
 static int
