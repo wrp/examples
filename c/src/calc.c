@@ -91,7 +91,10 @@ struct state {
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
 struct stack_entry {
-	long double v;
+	union {
+		long double lf;
+		long long ld;
+	} v;
 };
 
 static struct stack_entry *wrap_get(struct stack *, int);
@@ -300,9 +303,9 @@ show_value(struct state *S, struct stack_entry val)
 {
 
 	if( S->type == rational ){
-		printf(S->fmt, val.v);
+		printf(S->fmt, val.v.lf);
 	} else {
-		long lval = (long)val.v;
+		long lval = (long)val.v.lf;
 		printf(S->fmt, lval);
 	}
 }
@@ -382,11 +385,11 @@ push_value(struct state *S, unsigned char c)
 	}
 	start = s;
 
-	val.v = strtold(start, &cp);
+	val.v.lf = strtold(start, &cp);
 	while( *cp && strchr("+-", *cp) && cp != start ){
 		stack_push(S->values, &val);
 		start = cp;
-		val.v = strtold(start, &cp);
+		val.v.lf = strtold(start, &cp);
 	}
 	if( *cp && strchr("+-", *cp) ){
 		assert( cp == start );
@@ -477,16 +480,16 @@ execute_function(struct state *S, const char *cmd)
 		switch(func->arg_count){
 		default: assert(0);
 		case 0:
-			res.v = func->s(S);
+			res.v.lf = func->s(S);
 			break;
 		case 2:
 			pop_value(S, &res, 1);
 			pop_value(S, &arg, 1);
-			res.v = func->g(arg.v, res.v);
+			res.v.lf = func->g(arg.v.lf, res.v.lf);
 			break;
 		case 1:
 			pop_value(S, &res, 1);
-			res.v = func->f(res.v);
+			res.v.lf = func->f(res.v.lf);
 		}
 		stack_push(S->values, &res);
 	} else {
@@ -564,12 +567,12 @@ extract_format(struct state *S)
 static int
 get_index(struct state *S)
 {
-	struct stack_entry val = { .v = -1.0 };
+	struct stack_entry val = { .v.lf = -1.0 };
 	int offset = -1;
 	if( pop_value(S, &val, 1) ){
-		offset = val.v;
+		offset = val.v.lf;
 	}
-	if( rint(val.v) != val.v ){
+	if( rint(val.v.lf) != val.v.lf ){
 		offset = -1;
 		stack_push(S->values, &val);
 	}
@@ -679,12 +682,12 @@ apply_unary(struct state *S, unsigned char c, int flag)
 		stack_push(S->values, &val);
 		break;
 	case 'k':
-		if( val.v < 1 ){
+		if( val.v.lf < 1 ){
 			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
 			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n",
-				(int)val.v);
+				(int)val.v.lf);
 			S->type = rational;
 		}
 		break;
@@ -711,11 +714,11 @@ apply_binary(struct state *S, unsigned char c, int flag)
 		stack_push(S->values, val);
 		res = val[1];
 		break;
-	case '*': res.v = val[1].v * val[0].v; break;
-	case '-': res.v = val[1].v - val[0].v; break;
-	case '+': res.v = val[1].v + val[0].v; break;
-	case '/': res.v = val[1].v / val[0].v; break;
-	case '^': res.v = pow(val[1].v, val[0].v); break;
+	case '*': res.v.lf = val[1].v.lf * val[0].v.lf; break;
+	case '-': res.v.lf = val[1].v.lf - val[0].v.lf; break;
+	case '+': res.v.lf = val[1].v.lf + val[0].v.lf; break;
+	case '/': res.v.lf = val[1].v.lf / val[0].v.lf; break;
+	case '^': res.v.lf = pow(val[1].v.lf, val[0].v.lf); break;
 	}
 	stack_push(S->values, &res);
 }
@@ -727,13 +730,13 @@ sum(struct state *S)
 	struct stack_entry sum;
 	int rv;
 
-	sum.v = 0.0;
+	sum.v.lf = 0.0;
 
 	while( (rv = pop_value(S, &value, 0)) != 0 ){
-		sum.v += value.v;
+		sum.v.lf += value.v.lf;
 	}
 
-	return sum.v;
+	return sum.v.lf;
 }
 
 #ifdef BUILD_LUT
