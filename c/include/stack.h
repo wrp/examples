@@ -15,3 +15,4 @@ void stack_xpush(struct stack *, void *);
 void * stack_get(struct stack *, int);
 void * stack_base(struct stack *);
 size_t stack_size(struct stack *);
+void stack_free(struct stack *);

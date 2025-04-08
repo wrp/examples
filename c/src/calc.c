@@ -238,6 +238,9 @@ main(int argc, char **argv)
 	}
 	rb_free(S->raw);
 	rb_free(S->accum);
+	stack_free(S->values);
+	stack_free(S->memory);
+	stack_free(S->registers);
 	return 0;
 }
 #endif

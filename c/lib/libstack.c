@@ -157,3 +157,12 @@ stack_get(struct stack *s, int idx)
 	}
 	return v;
 }
+
+void
+stack_free(struct stack *s)
+{
+	if( s ){
+		free(s->data);
+		free(s);
+	}
+}
