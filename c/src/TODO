@@ -15,8 +15,13 @@ like "[4x^3 + 2x - 12y][eval 3x 8y] where 3x would cause
 x to take the value from memory location 3 and y from 8 (or more likely
 off the stack)
 
-Add a memory.  User should have access to all values previously used.
-See comment in 709e6c6f
+Add command to delete all entries in the stack.  We can sort of
+already do this with \sum.  Maybe just add a command to pop and
+discard the top of the stack.
+
+Add a command to allow sorting and deduplicating the memory stack.
+Or...maybe the memory stack shouldn't be a stack at all.  Just make
+it a sorted heap and always dedup when entering values.
 
 Categorize values.  eg, in the display of the memory, it would
 be nice to know if a value was entered, or calculated.  if
