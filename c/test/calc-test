@@ -43,6 +43,7 @@ test_memory() {
 	test_string '3 2 + M' "  0: 2;  1: 3"
 	test_string '6 7 8 9+++1mp' 8
 	test_string '6 7 8 9 10 11\sum 0mp5mp' '11;6'
+	test_string '1 2 3+ 1m + M' '  0: 3;  1: 2;  2: 1;  3: 2;  4: 5'
 }
 test_long_string(){
 	s=
