@@ -2,6 +2,11 @@ In calc:
 Add a memory.  User should have access to all values previously used.
 See comment in 709e6c6f
 
+Categorize values.  eg, in the display of the memory, it would
+be nice to know if a value was entered, or calculated.  if
+calculated, by what operator/function?  Also, we could indicate
+if a value is already in memory and avoid duplicates.
+
 Make it possible to specify a base for integer inputs.
 
 Either have all of the registers pre-loaded with all the known
