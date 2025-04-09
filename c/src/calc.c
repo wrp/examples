@@ -28,6 +28,7 @@ const char *help[] = {
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
 "h    print this help message",
+"i    set input base (0 for float)",
 "k    set precision of format string",
 "m    push value from the specified memory location",
 "M    show the memory stack",
@@ -78,17 +79,26 @@ const char *help[] = {
  * fix as needed when/if we change the set of known functions.
  */
 
+enum number_type { rational, integer };
 struct func;
+
+struct format_string {
+	char fmt[32];
+	char *specifier;  /* location of 'd' or 'g', etc. in fmt. */
+	char integer_specifier;  /* 'd', or 'i', etc. */
+	char float_specifier;    /* 'g', 'e', etc. */
+};
 struct state {
 	struct stack *values;
 	struct stack *registers;
 	struct stack *memory;
-	char fmt[32];
+	struct format_string fmt;
 	int enquote;
 	int escape;
+	int input_base;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
-	enum { rational, integer } type;
+	enum number_type type;
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
 struct stack_entry {
@@ -96,6 +106,7 @@ struct stack_entry {
 		long double lf;
 		long long ld;
 	} v;
+	enum number_type type;
 	int stored;  /* bool */
 };
 
@@ -220,10 +231,11 @@ init_state(struct state *S)
 	S->enquote = 0;
 	S->escape = 0;
 	S->type = rational;
+	S->input_base = 0;
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
-	strcpy(S->fmt, DEFAULT_FMT);
+	strcpy(S->fmt.fmt, DEFAULT_FMT);
 	hash_functions(S);
 }
 
@@ -309,10 +321,9 @@ show_value(struct state *S, struct stack_entry val)
 {
 
 	if( S->type == rational ){
-		printf(S->fmt, val.v.lf);
+		printf(S->fmt.fmt, val.v.lf);
 	} else {
-		long lval = (long)val.v.lf;
-		printf(S->fmt, lval);
+		printf(S->fmt.fmt, (long)val.v.lf);
 	}
 }
 
@@ -346,7 +357,7 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
-	case '?': printf("Output format currently: %s", S->fmt);
+	case '?': printf("Output format currently: %s", S->fmt.fmt);
 	}
 }
 
@@ -534,35 +545,26 @@ extract_format(struct state *S)
 {
 	struct ring_buf *rb = select_register(S);
 	if( rb ){
-		char *b = S->fmt, *e = S->fmt + sizeof S->fmt;
+		char *b = S->fmt.fmt, *e = S->fmt.fmt + sizeof S->fmt.fmt;
 		int count = 0;
 		int c = 0;
 
-		while( b < e && (c = rb_peek(rb, b - S->fmt)) != EOF ){
+		while( b < e && (c = rb_peek(rb, b - S->fmt.fmt)) != EOF ){
 			/* Extremely naive check of format string.  */
-			*b++ = c;
 			if( count == 2 ){
-				switch( c ){
-				case 'd':
-				case 'i':
-				case 'o':
-				case 'u':
-				case 'x':
-				case 'X':
+				if( strchr("diouxX", c) ){
+					S->fmt.specifier = b;
 					S->type = integer;
-					break;
-				case 'f':
-				case 'e':
-				case 'g':
-				case 'a':
+				} else if( strchr("fega", c) ){
+					S->fmt.specifier = b;
 					S->type = rational;
-
 				}
 			}
+			*b++ = c;
 			count += !count && c == '%';
 			count += count && c == 'L';
 		}
-		if( b > S->fmt && b + 1 < e && b[-1] != '\n' ){
+		if( b > S->fmt.fmt && b + 1 < e && b[-1] != '\n' ){
 			*b++ = '\n';
 		}
 		*b = '\0';
@@ -673,7 +675,7 @@ print_stack(struct state *S, struct stack *v)
 	struct stack_entry *s;
 	for( s = stack_base(v); i < stack_size(v); s++, i++ ){
 		printf("%3u: ", i);
-		printf(S->fmt, s->v);
+		printf(S->fmt.fmt, s->v);
 	}
 }
 
@@ -693,10 +695,10 @@ apply_unary(struct state *S, unsigned char c, int flag)
 		break;
 	case 'k':
 		if( val.v.lf < 1 ){
-			snprintf(S->fmt, sizeof S->fmt, "%%'Ld\n");
+			snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%'Ld\n");
 			S->type = integer;
 		} else {
-			snprintf(S->fmt, sizeof S->fmt, "%%.%dLf\n",
+			snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%.%dLf\n",
 				(int)val.v.lf);
 			S->type = rational;
 		}
