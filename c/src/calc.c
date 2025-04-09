@@ -23,7 +23,8 @@ const char *help[] = {
 "",
 "!    use function from specified register",
 "\\f   apply function f to the top value(s) in the stack (eg 0\\sin)",
-"D    delete the first register",
+"C    pop and discard the top item in the stack",
+"D    pop and discard the top item in the register stack",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
 "h    print this help message",
@@ -61,7 +62,7 @@ const char *help[] = {
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
-#define unary_ops "kny"
+#define unary_ops "Ckny"
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 #define token_div " \t\n;"
@@ -98,6 +99,7 @@ struct stack_entry {
 	int stored;  /* bool */
 };
 
+static int pop_value(struct state *, struct stack_entry *, int);
 static struct stack_entry *wrap_get(struct stack *, int);
 static int wrap_pop(struct stack *, void *);
 static long double sum(struct state *);
@@ -232,6 +234,8 @@ main(int argc, char **argv)
 	int c;
 	struct state S[1];
 
+	assert( char_lut['d'] == throw_warning);
+	assert( char_lut['C'] == apply_nonary);
 	setlocale(LC_NUMERIC, "");
 	init_state(S);
 
@@ -316,12 +320,15 @@ show_value(struct state *S, struct stack_entry val)
 static void
 apply_nonary(struct state *S, unsigned char c, int flag)
 {
-	struct stack_entry *val;
+	struct stack_entry *val, v;
 	if( flag ){
 		return;
 	}
 	switch( c ){
 	default: assert(0);
+	case 'C':
+		pop_value(S, &v, 1);
+		break;
 	case 'Y':
 		print_stack(S, S->values);
 		break;
@@ -789,7 +796,7 @@ apply_binary, throw_warning, apply_binary, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, NULL,
 throw_warning, throw_warning, throw_warning, apply_nonary, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
