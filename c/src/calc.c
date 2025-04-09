@@ -86,11 +86,24 @@ struct state {
 	char fmt[32];
 	int enquote;
 	int escape;
+	int plus_minus_counter; /* (1) count +- symbols in raw buffer */
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 	enum { rational, integer } type;
 	struct func *function_lut[HASH_TABLE_SIZE];
 };
+/*
+ * (1) We are special casing the +/- symbols, as they can either be a binary
+ * operator or part of a numeric value.  Rather than attempting to do any
+ * parsing to decide which, we just pass the string to strtold and let it
+ * decide.  This means we need to accumulate enough input to pass something
+ * to strtold (or eventuallly perhaps also to strtol or strtoll).  As a short
+ * circuit, we will immediately pass the accumulated input as soon as we have
+ * seen a certain number of + or - symbols.  That is, we assume that if the
+ * input string contains several such symbols, we have enough data to pass it
+ * to strtold and let it parse a number.
+ */
+
 struct stack_entry {
 	union {
 		long double lf;
@@ -273,15 +286,23 @@ push_it(struct state *S, int c)
 
 		if( S->enquote && c != ']' ){
 			rb_push(b, c);
+		} else if( (c == '+' || c == '-' ) &&
+				(++S->plus_minus_counter > 2) ){
+			S->plus_minus_counter = 0;
+			flag = push_value(S, c);
+			assert(char_lut[c] == apply_binary);
+			apply_binary(S, c, 0);
 		} else if( S->escape && ! strchr(token_div, c)) {
 			rb_push(b, c);
 		} else if( strchr(numeric_tok, c) ){
 			rb_push(b, c);
 		} else if( strchr(string_ops, c) ){
+			S->plus_minus_counter = 0;
 			apply_string_op(S, c);
 		} else if( strchr(ignore_char, c) ){
 			;
 		} else {
+			S->plus_minus_counter = 0;
 			flag = push_value(S, c);
 			operator f = char_lut[c];
 			if( f ){
@@ -394,19 +415,18 @@ push_value(struct state *S, unsigned char c)
 	s = start;
 
 	val.v.lf = strtold(s, &cp);
-	while( *cp && strchr("+-", *cp) && cp != s ){
-		stack_push(S->values, &val);
-		s = cp;
-		val.v.lf = strtold(s, &cp);
+
+/*
+	fprintf(stderr, "wrp: val = %Lg, start = %s, cp = '%c'\n", val.v.lf,
+		start, *cp);
+		*/
+	while( *cp && strchr(token_div, *cp) ){
+		cp++;
 	}
-	if( *cp && strchr("+-", *cp) ){
-		assert( cp == s );
-		apply_binary(S, *cp, 0);
-		for( char *t = cp + 1; *t; t++ ){
-			push_it(S, *t);
+	if( *cp && strchr("+-", *cp)){
+		while( *++cp ){
+			push_it(S, *cp);
 		}
-		push_it(S, c);
-		return 1;
 	}
 	if( *cp ){
 		fprintf(stderr, "Garbled (discarded): %s\n", start);
