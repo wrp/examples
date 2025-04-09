@@ -382,7 +382,7 @@ push_value(struct state *S, unsigned char c)
 	if( s < end ){
 		*s++ = '\0';
 	} else {
-		fprintf(stderr, "Overflow: Term truncated\n");
+		fprintf(stderr, "Overflow: Term ignored\n");
 		return 0;
 	}
 
