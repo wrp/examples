@@ -362,46 +362,46 @@ int
 push_value(struct state *S, unsigned char c)
 {
 	struct ring_buf *b = S->accum;
-	char s[256] = "", *end = s + sizeof s;
-	char *cp, *start;
+	char start[256] = "", *end = start + sizeof start;
+	char *cp, *s;
 	struct stack_entry val = { 0 };
 	int i;
 
-	cp = start = s;
+	cp = s = start;
 	if( rb_isempty(b) ){
 		return 0;
 	}
 
 	while( (i = rb_pop(b)) != EOF ){
 		assert( strchr(numeric_tok, i) || S->escape );
-		if( start < end ){
-			*start++ = i;
+		if( s < end ){
+			*s++ = i;
 		}
 	}
 	if( S->escape ){
 		S->escape = 0;
-		if( start + 1 < end ){
-			*start = 0;
-			execute_function(S, s);
+		if( s + 1 < end ){
+			*s = 0;
+			execute_function(S, start);
 		} else {
 			fputs("Overflow: function ignored", stderr);
 		}
 		return 0;
 	}
-	if( start == end ){
+	if( s == end ){
 		fprintf(stderr, "Overflow: Term truncated\n");
 		return 0;
 	}
-	start = s;
+	s = start;
 
-	val.v.lf = strtold(start, &cp);
-	while( *cp && strchr("+-", *cp) && cp != start ){
+	val.v.lf = strtold(s, &cp);
+	while( *cp && strchr("+-", *cp) && cp != s ){
 		stack_push(S->values, &val);
-		start = cp;
-		val.v.lf = strtold(start, &cp);
+		s = cp;
+		val.v.lf = strtold(s, &cp);
 	}
 	if( *cp && strchr("+-", *cp) ){
-		assert( cp == start );
+		assert( cp == s );
 		apply_binary(S, *cp, 0);
 		for( char *t = cp + 1; *t; t++ ){
 			push_it(S, *t);
@@ -410,7 +410,7 @@ push_value(struct state *S, unsigned char c)
 		return 1;
 	}
 	if( *cp ){
-		fprintf(stderr, "Garbled (discarded): %s\n", s);
+		fprintf(stderr, "Garbled (discarded): %s\n", start);
 	} else {
 		stack_push(S->values, &val);
 	}
