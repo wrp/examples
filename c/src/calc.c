@@ -317,13 +317,12 @@ push_memory_to_stack(struct state *S)
 
 
 static void
-show_value(struct state *S, struct stack_entry val)
+show_value(struct state *S, struct stack_entry *val)
 {
-
-	if( S->type == rational ){
-		printf(S->fmt.fmt, val.v.lf);
+	if( val->type == rational ){
+		printf(S->fmt.fmt, val->v.lf);
 	} else {
-		printf(S->fmt.fmt, (long)val.v.lf);
+		printf(S->fmt.fmt, (long)val->v.lf);
 	}
 }
 
@@ -352,7 +351,7 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 	case 'p':
 		val = wrap_get(S->values, -1);
 		if( val ){
-			show_value(S, *val);
+			show_value(S, val);
 		}
 		break;
 	case 'q': exit(0);
@@ -361,6 +360,13 @@ apply_nonary(struct state *S, unsigned char c, int flag)
 	}
 }
 
+
+static void
+read_val(struct state *S, struct stack_entry *v, char *s, char **cp)
+{
+	v->v.lf = strtold(s, cp);
+	v->type = S->type;
+}
 
 /*
  * Collect inputs in the ring buffer and push values onto
@@ -404,11 +410,11 @@ push_value(struct state *S, unsigned char c)
 	}
 	s = start;
 
-	val.v.lf = strtold(s, &cp);
+	read_val(S, &val, s, &cp);
 	while( *cp && strchr("+-", *cp) && cp != s ){
 		stack_push(S->values, &val);
 		s = cp;
-		val.v.lf = strtold(s, &cp);
+		read_val(S, &val, s, &cp);
 	}
 	if( *cp && strchr("+-", *cp) ){
 		assert( cp == s );
@@ -512,6 +518,7 @@ execute_function(struct state *S, const char *cmd)
 			res.v.lf = func->f(res.v.lf);
 		}
 		res.stored = 0;
+		res.type = rational;
 		stack_push(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
@@ -704,7 +711,7 @@ apply_unary(struct state *S, unsigned char c, int flag)
 		}
 		break;
 	case 'n':
-		show_value(S, val);
+		show_value(S, &val);
 		break;
 	}
 }
