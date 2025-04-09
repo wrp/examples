@@ -55,7 +55,7 @@ test_long_string(){
 basic_tests() {
 	test_string 'p' "$err"
 	test_string "1 $(yes 24 | sed -e 300q | tr -d \\n)
-		3+p" "Overflow: Term truncated;4"
+		3+p" "Overflow: Term ignored;4"
 	test_string 'hq'
 }
 simple_arithmetic() {
