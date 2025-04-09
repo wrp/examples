@@ -13,11 +13,14 @@ main(int argc, char **argv)
 
 	for( argv += 1; *argv; argv += 1 ) {
 		d = strtod(*argv, &end);
-		printf("%s parses as %g", *argv, d);
+		printf("'%s' parses as %g\n", *argv, d);
 		if(*end) {
-			printf(", ending at %c\n", *end);
+			putchar(' ');
+			for(char *a = *argv; a < end; a += 1) {
+				putchar(' ');
+			}
+			printf("^-- ending at '%c'\n", *end);
 		}
-		putchar('\n');
 	}
 	return 0;
 }
