@@ -290,8 +290,6 @@ push_it(struct state *S, int c)
 				(++S->plus_minus_counter > 2) ){
 			S->plus_minus_counter = 0;
 			flag = push_value(S, c);
-			assert(char_lut[c] == apply_binary);
-			apply_binary(S, c, 0);
 		} else if( S->escape && ! strchr(token_div, c)) {
 			rb_push(b, c);
 		} else if( strchr(numeric_tok, c) ){
@@ -416,19 +414,13 @@ push_value(struct state *S, unsigned char c)
 
 	val.v.lf = strtold(s, &cp);
 
-/*
-	fprintf(stderr, "wrp: val = %Lg, start = %s, cp = '%c'\n", val.v.lf,
-		start, *cp);
-		*/
-	while( *cp && strchr(token_div, *cp) ){
-		cp++;
-	}
-	if( *cp && strchr("+-", *cp)){
+	if( *cp && strchr("+-", *cp) ){
+		stack_push(S->values, &val);
+		apply_binary(S, *cp, 0);
 		while( *++cp ){
 			push_it(S, *cp);
 		}
-	}
-	if( *cp ){
+	} else if( *cp ){
 		fprintf(stderr, "Garbled (discarded): %s\n", start);
 	} else {
 		stack_push(S->values, &val);
