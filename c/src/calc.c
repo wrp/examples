@@ -378,18 +378,17 @@ push_value(struct state *S, unsigned char c)
 			*s++ = i;
 		}
 	}
-	if( S->escape ){
-		S->escape = 0;
-		if( s + 1 < end ){
-			*s = 0;
-			execute_function(S, start);
-		} else {
-			fputs("Overflow: function ignored", stderr);
-		}
+
+	if( s < end ){
+		*s++ = '\0';
+	} else {
+		fprintf(stderr, "Overflow: Term truncated\n");
 		return 0;
 	}
-	if( s == end ){
-		fprintf(stderr, "Overflow: Term truncated\n");
+
+	if( S->escape ){
+		S->escape = 0;
+		execute_function(S, start);
 		return 0;
 	}
 	s = start;
