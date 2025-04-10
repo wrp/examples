@@ -66,7 +66,7 @@ const char *help[] = {
 #define unary_ops "Ckny"
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
-#define token_div " \t\n;"
+#define token_div " \t\n"
 
 #define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256

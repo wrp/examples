@@ -46,15 +46,15 @@ simple_arithmetic() {
 	test_string '4+3-1+4 3 1--5-nnn' "7;4;-1"
 	test_string '4,123+393-123+4 3 1--5-nrn+p' "7;-123;397"
 	test_string '3e+2p' '300'
-	test_string '10;3;1-;-5;-+p' '17' # 3 - 1 - (-1) + 10
-	test_string '10;3;1--5;-+p' '17'  # 3 - 1 - (-5) + 10
-	test_string '10;3;1--5;-;+;p' '17'
+	test_string '10 3 1- -5 -+p' '17' # 3 - 1 - (-1) + 10
+	test_string '10 3 1--5 -+p' '17'  # 3 - 1 - (-5) + 10
+	test_string '10 3 1--5 - + p' '17'
 	test_string '4.5 1 1+Y' "  0: 4.5;  1: 2"
 	test_string '5 6*p' '30'
 	test_string '5 4 6C*p' '20'
-	test_string '5;6*p' '30'
-	test_string '5;+6*p' 30
-	test_string '5;-6*p' -30
+	test_string '5 6*p' '30'
+	test_string '5 +6*p' 30
+	test_string '5 -6*p' -30
 	test_string '7 -3+p' '4'
 	test_string '5e-1 30*p' 15
 	test_string '7    2/p' '3.5'
@@ -66,8 +66,8 @@ simple_arithmetic() {
 	test_string '1y+p' '2'
 	test_string '1 2 3np' "3;2"
 	test_string '2 4r/p' '2'
-	test_string '4;1-8Y' "  0: 4;  1: 1;  2: -8"
-	test_string '4;1- 8Y' "  0: 3;  1: 8"
+	test_string '4 1-8Y' "  0: 4;  1: 1;  2: -8"
+	test_string '4 1- 8Y' "  0: 3;  1: 8"
 	if $have_comma_format; then
 		test_string "[%.3'Lf]0F1024;1+p" '1,025.000'
 		test_string "[%'Ld]0F 1234567 p" '1,234,567'
