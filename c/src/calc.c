@@ -61,7 +61,7 @@ const char *help[] = {
 #define COMMA_DEFAULT_FMT "%.3'Lg\n"
 #define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
-#define string_ops "[]D!FRxZ\\"
+#define string_ops "()[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
 #define unary_ops "Ckny"
 #define nonary_ops "hmMpqY?"
@@ -94,6 +94,7 @@ struct state {
 	struct stack *memory;
 	struct format_string fmt;
 	int enquote;
+	int paren;
 	int escape;
 	int input_base;
 	struct ring_buf *raw;   /* raw input as entered */
@@ -229,6 +230,7 @@ init_state(struct state *S)
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->enquote = 0;
+	S->paren = 0;
 	S->escape = 0;
 	S->type = rational;
 	S->input_base = 0;
@@ -284,6 +286,8 @@ push_it(struct state *S, int c)
 		int flag;
 
 		if( S->enquote && c != ']' ){
+			rb_push(b, c);
+		} else if( S->paren && c != ')' ){
 			rb_push(b, c);
 		} else if( S->escape && ! strchr(token_div, c)) {
 			rb_push(b, c);
@@ -625,6 +629,13 @@ apply_string_op(struct state *S, unsigned char c)
 	switch( c ){
 	case '\\':
 		S->escape = 1;
+		break;
+	case '(':
+		S->paren = 1;
+		break;
+	case ')':
+		S->paren = 0;
+		rb_push(S->raw, ' ');
 		break;
 	case '[':
 		S->enquote = 1;
