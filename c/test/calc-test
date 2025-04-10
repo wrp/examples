@@ -24,11 +24,13 @@ test_memory() {
 }
 
 test_long_string(){
-	s=
-	for((i=0; i <256; i++)); do
-		s="${s} +2"
+	for op in + -; do
+		s=
+		for((i=0; i <256; i++)); do
+			s="${s}(${op}2)"
+		done
+		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op}512"
 	done
-	test_string "${s} \sum n" "512"
 }
 
 basic_tests() {
