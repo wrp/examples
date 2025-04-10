@@ -1,5 +1,12 @@
 In calc:
 
+Maybe instead of trying to be cute with +-, we should
+group with parentheses.  (eg, "2(-5)+" instead of "2-5+").
+We would then need to add logic for parens.  It seems
+like it makes things more readable, but less (?) user
+friendly.  But if we are going to add logic for parens,
+should we just use infix notation?
+
 Need to be able to manipulate the stack and memory better.
 Also, need to be able to clear things out.  Perhaps something
 like [1,4,6,9]m to push items 1,4,6,9 from the memory to the
