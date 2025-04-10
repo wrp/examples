@@ -1,35 +1,11 @@
 #!/bin/sh
 
 # test calc.c
-
 exe=./calc
 
-RV=0
-count=0
-fail_count=0
-
-fail() {
-	printf '%3d: %s\n' "$((++fail_count))" "$*" >&2
-}
-
-test_string() {
-	input=$1
-	expected=$(printf '%s' "$2" | tr ';' \\n)
-	out=$(echo "$input" | $exe 2>&1)
-	if test $# -gt 1 && test "$out" != "$expected"; then
-		fail " On input: '$input', expected '$expected', got '$out'"
-	fi
-
-	out=$($exe "$input" 2>&1)
-	if test $# -gt 1 && test "$out" != "$expected"; then
-		fail "With args: '$input', expected '$expected', got '$out'"
-	fi
-	: $((count += 1))
-}
-
-err='Stack empty'
-
 main() {
+	initialize
+
 	basic_tests
 	simple_arithmetic
 	test_string_registers
@@ -39,12 +15,14 @@ main() {
 
 	summarize_results
 }
+
 test_memory() {
 	test_string '3 2 + M' "  0: 2;  1: 3"
 	test_string '6 7 8 9+++1mp' 8
 	test_string '6 7 8 9 10 11\sum 0mp5mp' '11;6'
 	test_string '1 2 3+ 1m + M' '  0: 3;  1: 2;  2: 1;  3: 5'
 }
+
 test_long_string(){
 	s=
 	for((i=0; i <256; i++)); do
@@ -52,12 +30,14 @@ test_long_string(){
 	done
 	test_string "${s} \sum n" "512"
 }
+
 basic_tests() {
 	test_string 'p' "$err"
 	test_string "1 $(yes 24 | sed -e 300q | tr -d \\n)
 		3+p" "Overflow: Term ignored;4"
 	test_string 'hq'
 }
+
 simple_arithmetic() {
 	test_string '1 1+p' '2'
 	test_string '3 +1 +1 +p' 2   # 1 + 1
@@ -228,6 +208,31 @@ check_comma_format() {
 	rm "$source_file" "$executable"
 }
 
+fail() {
+	printf '%3d: %s\n' "$((++fail_count))" "$*" >&2
+}
 
-check_comma_format
+test_string() {
+	input=$1
+	expected=$(printf '%s' "$2" | tr ';' \\n)
+	out=$(echo "$input" | $exe 2>&1)
+	if test $# -gt 1 && test "$out" != "$expected"; then
+		fail " On input: '$input', expected '$expected', got '$out'"
+	fi
+
+	out=$($exe "$input" 2>&1)
+	if test $# -gt 1 && test "$out" != "$expected"; then
+		fail "With args: '$input', expected '$expected', got '$out'"
+	fi
+	: $((count += 1))
+}
+
+initialize() {
+	check_comma_format
+	RV=0
+	count=0
+	fail_count=0
+	err='Stack empty'
+}
+
 main
