@@ -1,5 +1,15 @@
 In calc:
 
+Need to be able to manipulate the stack and memory better.
+Also, need to be able to clear things out.  Perhaps something
+like [1,4,6,9]m to push items 1,4,6,9 from the memory to the
+stack.   I like the idea of keeping items fixed in memory (so
+item N is constant), but if we avoid duplication that means
+that important values may wind up being inaccessible.  eg, if
+you compute a value that is important and then compute a lot
+of unimportant values, the important one will scroll off the
+top of the display when you list the memory content.
+
 Add the ability to evaluate a polynomial. Eg, something
 like "[4x^3 + 2x - 12y][eval 3x 8y] where 3x would cause
 x to take the value from memory location 3 and y from 8 (or more likely
