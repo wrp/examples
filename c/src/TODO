@@ -1,4 +1,10 @@
 In calc:
+
+Add the ability to evaluate a polynomial. Eg, something
+like "[4x^3 + 2x - 12y][eval 3x 8y] where 3x would cause
+x to take the value from memory location 3 and y from 8 (or more likely
+off the stack)
+
 Add a memory.  User should have access to all values previously used.
 See comment in 709e6c6f
 
