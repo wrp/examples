@@ -5,7 +5,11 @@ group with parentheses.  (eg, "2(-5)+" instead of "2-5+").
 We would then need to add logic for parens.  It seems
 like it makes things more readable, but less (?) user
 friendly.  But if we are going to add logic for parens,
-should we just use infix notation?
+should we just use infix notation?  Or....instead of requiring
+parens, we could just force whitespace.  eg, "3 -5 -" is
+computing 3 - (-5), and "3-5-" is a syntax error.  This
+allows values like "3e-5" to be entered without ().  Eg,
+let's require whitespace around operators.
 
 Need to be able to manipulate the stack and memory better.
 Also, need to be able to clear things out.  Perhaps something
