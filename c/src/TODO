@@ -20,7 +20,12 @@ a simple toy to to reverse-polish!
 Add the ability to evaluate a polynomial. Eg, something
 like "[4x^3 + 2x - 12y][eval 3x 8y] where 3x would cause
 x to take the value from memory location 3 and y from 8 (or more likely
-off the stack)
+off the stack) (Note, this is totaly unnecessary.  For example,
+to compute 2x^3 -5x, you can already do "2[y 3^2* r 5 * -]0x",
+which puts 2 on the stack and then evaluates the polynomial.  To
+evaluate for x == 3, you can now do "3 0x".  So we should either
+delete this paragraph, or leave it as a reminder to future self
+that this is supposed to be "simple"...not a new language.)
 
 Add command to delete all entries in the stack.  We can sort of
 already do this with \sum.  Maybe just add a command to pop and
