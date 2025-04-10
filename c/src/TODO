@@ -8,7 +8,14 @@ item N is constant), but if we avoid duplication that means
 that important values may wind up being inaccessible.  eg, if
 you compute a value that is important and then compute a lot
 of unimportant values, the important one will scroll off the
-top of the display when you list the memory content.
+top of the display when you list the memory content.  Perhaps the
+solution is to allow named memory stacks.  eg [foo]C might create
+a memory stack named foo, then [foo]m could push to foo, etc.
+Go ahead and continue storing values that are used for computation,
+maybe on a stack named "trash" or similar, but don't make it be
+the default stack from which to recover.  It almost feels like
+this is becoming a complete programming language rather than
+a simple toy to to reverse-polish!
 
 Add the ability to evaluate a polynomial. Eg, something
 like "[4x^3 + 2x - 12y][eval 3x 8y] where 3x would cause
