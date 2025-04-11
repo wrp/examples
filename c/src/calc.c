@@ -362,9 +362,13 @@ process_normal(struct state *S, int c)
 		;
 	} else {
 		int flag = push_value(S, c);
-		operator f = char_lut[c];
-		if( f ){
-			f(S, c, flag);
+		if( flag ){
+			push_raw(S, c);
+		} else {
+			operator f = char_lut[c];
+			if( f ){
+				f(S, c, flag);
+			}
 		}
 	}
 }
@@ -397,6 +401,7 @@ static void
 apply_nonary(struct state *S, unsigned char c, int flag)
 {
 	struct stack_entry *val, v;
+	assert(flag == 0);
 	if( flag ){
 		return;
 	}
@@ -466,7 +471,6 @@ push_value(struct state *S, unsigned char c)
 		for( char *t = cp + 1; *t; t++ ){
 			push_raw(S, *t);
 		}
-		push_raw(S, c);
 		return 1;
 	}
 	if( *cp ){
@@ -759,6 +763,7 @@ apply_unary(struct state *S, unsigned char c, int flag)
 static void
 apply_binary(struct state *S, unsigned char c, int flag)
 {
+	assert(flag == 0);
 	if( flag ){
 		return;
 	}
