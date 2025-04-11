@@ -235,6 +235,7 @@ test_string() {
 		if test "$status" = failed; then
 			printf '%s\n' " ^^ expected: '$expected'"
 			printf '%s\n' "         got: '$out'"
+			: $((fail_count++))
 		fi
 	fi
 }
