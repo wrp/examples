@@ -316,8 +316,10 @@ process_enquote(struct state *S, int c)
 {
 	if( c != ']' ){
 		rb_push(S->accum, c);
-	}  else {
-		apply_string_op(S, c);
+	} else {
+		S->processor = process_normal;
+		stack_xpush(S->registers, S->accum);
+		S->accum = rb_create(32);
 	}
 }
 
@@ -657,10 +659,8 @@ apply_string_op(struct state *S, unsigned char c)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
-	assert( (S->processor != process_enquote) || (c == ']') );
-	if( c != ']' ){
-		push_value(S, c);
-	}
+	assert( c != ']' );
+	push_value(S, c);
 	switch( c ){
 	case '\\':
 		S->processor = process_escape;
@@ -670,11 +670,6 @@ apply_string_op(struct state *S, unsigned char c)
 		break;
 	case '[':
 		S->processor = process_enquote;
-		break;
-	case ']':
-		S->processor = process_normal;
-		stack_xpush(S->registers, S->accum);
-		S->accum = rb_create(32);
 		break;
 	case '!':
 		if( (rb = select_register(S)) != NULL ){
