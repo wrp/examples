@@ -93,9 +93,7 @@ struct state {
 	struct stack *registers;
 	struct stack *memory;
 	struct format_string fmt;
-	int enquote;
-	int paren;
-	int escape;
+	enum { normal, enquote, paren, escape } state;
 	int input_base;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
@@ -229,9 +227,7 @@ init_state(struct state *S)
 {
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
-	S->enquote = 0;
-	S->paren = 0;
-	S->escape = 0;
+	S->state = normal;
 	S->type = rational;
 	S->input_base = 0;
 	S->values = stack_xcreate(sizeof(struct stack_entry));
@@ -285,11 +281,11 @@ push_raw(struct state *S, int c)
 		struct ring_buf *b = S->accum;
 		int flag;
 
-		if( S->enquote && c != ']' ){
+		if( (S->state == enquote) && c != ']' ){
 			rb_push(b, c);
-		} else if( S->paren && c != ')' ){
+		} else if( (S->state == paren) && (c != ')') ){
 			rb_push(b, c);
-		} else if( S->escape && ! strchr(token_div, c)) {
+		} else if( (S->state == escape) && ! strchr(token_div, c)) {
 			rb_push(b, c);
 		} else if( strchr(numeric_tok, c) ){
 			rb_push(b, c);
@@ -394,7 +390,7 @@ push_value(struct state *S, unsigned char c)
 	}
 
 	while( (i = rb_pop(b)) != EOF ){
-		assert( strchr(numeric_tok, i) || S->escape );
+		assert( strchr(numeric_tok, i) || (S->state == escape) );
 		if( s < end ){
 			*s++ = i;
 		}
@@ -407,8 +403,8 @@ push_value(struct state *S, unsigned char c)
 		return 0;
 	}
 
-	if( S->escape ){
-		S->escape = 0;
+	if( S->state == escape ){
+		S->state = normal;
 		execute_function(S, start);
 		return 0;
 	}
@@ -622,26 +618,26 @@ apply_string_op(struct state *S, unsigned char c)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
-	assert( !S->enquote || c == ']' );
+	assert( (S->state != enquote) || (c == ']') );
 	if( c != ']' ){
 		push_value(S, c);
 	}
 	switch( c ){
 	case '\\':
-		S->escape = 1;
+		S->state = escape;
 		break;
 	case '(':
-		S->paren = 1;
+		S->state = paren;
 		break;
 	case ')':
-		S->paren = 0;
+		S->state = normal;
 		rb_push(S->raw, ' ');
 		break;
 	case '[':
-		S->enquote = 1;
+		S->state = enquote;
 		break;
 	case ']':
-		S->enquote = 0;
+		S->state = normal;
 		stack_xpush(S->registers, S->accum);
 		S->accum = rb_create(32);
 		break;
