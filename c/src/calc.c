@@ -175,7 +175,7 @@ static void apply_unary(struct state *S, unsigned char c, int);
 static void apply_nonary(struct state *S, unsigned char c, int);
 static void throw_warning(struct state *S, unsigned char c, int);
 
-void push_it(struct state *, int);
+void push_raw(struct state *, int);
 
 void apply_string_op(struct state *S, unsigned char c);
 void die(const char *msg);
@@ -254,13 +254,13 @@ main(int argc, char **argv)
 	init_state(S);
 
 	if( argc > 1 ){
-		for( ; *++argv; push_it(S, ' ') ){
+		for( ; *++argv; push_raw(S, ' ') ){
 			for( char *t = *argv; *t; t++ ){
-				push_it(S, *t);
+				push_raw(S, *t);
 			}
 		}
 	} else while( (c=getchar()) != EOF ){
-		push_it(S, c);
+		push_raw(S, c);
 	}
 	rb_free(S->raw);
 	rb_free(S->accum);
@@ -273,12 +273,12 @@ main(int argc, char **argv)
 
 
 /*
- * Push an item onto the ring buffer and then read the ring buffer until empty.
- * Some operations (notably 'x') will push additional values into the ring
- * buffer, and they should be processed before the next entry coming from input.
+ * Push an item onto the raw buffer and then read it until empty.  Some
+ * operations (notably 'x') will push additional values into the ring buffer,
+ * and they should be processed before the next entry coming from input.
  */
 void
-push_it(struct state *S, int c)
+push_raw(struct state *S, int c)
 {
 	rb_push(S->raw, (unsigned char)c);
 	while( (c = rb_pop( S->raw )) != EOF ){
@@ -424,9 +424,9 @@ push_value(struct state *S, unsigned char c)
 		assert( cp == s );
 		apply_binary(S, *cp, 0);
 		for( char *t = cp + 1; *t; t++ ){
-			push_it(S, *t);
+			push_raw(S, *t);
 		}
-		push_it(S, c);
+		push_raw(S, c);
 		return 1;
 	}
 	if( *cp ){
