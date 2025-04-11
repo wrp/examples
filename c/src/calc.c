@@ -290,25 +290,40 @@ push_raw(struct state *S, int c)
 }
 
 
+static int
+get_term(struct state *S, char *buf, size_t siz)
+{
+	char *s = buf, *end = buf + siz;
+	int i;
+
+	if( rb_isempty(S->accum) ){
+		return 0;
+	}
+
+	while( (i = rb_pop(S->accum)) != EOF ){
+		if( s < end ){
+			*s++ = i;
+		}
+	}
+	if( s < end ){
+		*s = '\0';
+		return 1;
+	} else {
+		fprintf(stderr, "Overflow: Term ignored\n");
+		return 0;
+	}
+}
+
 static void
 process_escape(struct state *S, int c)
 {
 	if( isspace(c) ){
 		int i;
-		char start[256] = "", *s = start, *end = start + sizeof start;
+		char buf[256];
 
 		S->processor = process_normal;
-
-		while( (i = rb_pop(S->accum)) != EOF ){
-			if( s < end ){
-				*s++ = i;
-			}
-		}
-		if( s < end ){
-			*s++ = '\0';
-			execute_function(S, start);
-		} else {
-			fprintf(stderr, "Overflow: Term ignored\n");
+		if( get_term(S, buf, sizeof buf) ){
+			execute_function(S, buf);
 		}
 	} else {
 		rb_push(S->accum, c);
@@ -433,31 +448,17 @@ read_val(struct state *S, struct stack_entry *v, char *s, char **cp)
 int
 push_value(struct state *S, unsigned char c)
 {
-	struct ring_buf *b = S->accum;
-	char start[256] = "", *end = start + sizeof start;
+	char buf[256];
 	char *cp, *s;
 	struct stack_entry val = { 0 };
 	int i;
 
-	cp = s = start;
-	if( rb_isempty(b) ){
+	cp = s = buf;
+	if( !get_term(S, buf, sizeof buf) ){
 		return 0;
 	}
 
-	while( (i = rb_pop(b)) != EOF ){
-		if( s < end ){
-			*s++ = i;
-		}
-	}
-
-	if( s < end ){
-		*s++ = '\0';
-	} else {
-		fprintf(stderr, "Overflow: Term ignored\n");
-		return 0;
-	}
-
-	s = start;
+	s = buf;
 
 	read_val(S, &val, s, &cp);
 	while( *cp && strchr("+-", *cp) && cp != s ){
@@ -475,7 +476,7 @@ push_value(struct state *S, unsigned char c)
 		return 1;
 	}
 	if( *cp ){
-		fprintf(stderr, "Garbled (discarded): %s\n", start);
+		fprintf(stderr, "Garbled (discarded): %s\n", buf);
 	} else {
 		stack_push(S->values, &val);
 	}
