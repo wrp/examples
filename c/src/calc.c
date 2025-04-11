@@ -304,7 +304,8 @@ static void
 process_paren(struct state *S, int c)
 {
 	if( c == ')' ){
-		apply_string_op(S, c);
+		S->processor = process_normal;
+		rb_push(S->raw, ' ');
 	} else {
 		rb_push(S->accum, c);
 	}
@@ -666,10 +667,6 @@ apply_string_op(struct state *S, unsigned char c)
 		break;
 	case '(':
 		S->processor = process_paren;
-		break;
-	case ')':
-		S->processor = process_normal;
-		rb_push(S->raw, ' ');
 		break;
 	case '[':
 		S->processor = process_enquote;
