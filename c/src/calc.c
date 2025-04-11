@@ -294,7 +294,22 @@ static void
 process_escape(struct state *S, int c)
 {
 	if( isspace(c) ){
-		push_value(S, c);
+		int i;
+		char start[256] = "", *s = start, *end = start + sizeof start;
+
+		S->processor = process_normal;
+
+		while( (i = rb_pop(S->accum)) != EOF ){
+			if( s < end ){
+				*s++ = i;
+			}
+		}
+		if( s < end ){
+			*s++ = '\0';
+			execute_function(S, start);
+		} else {
+			fprintf(stderr, "Overflow: Term ignored\n");
+		}
 	} else {
 		rb_push(S->accum, c);
 	}
@@ -430,8 +445,6 @@ push_value(struct state *S, unsigned char c)
 	}
 
 	while( (i = rb_pop(b)) != EOF ){
-		assert( strchr(numeric_tok, i) ||
-			(S->processor == process_escape) );
 		if( s < end ){
 			*s++ = i;
 		}
@@ -444,11 +457,6 @@ push_value(struct state *S, unsigned char c)
 		return 0;
 	}
 
-	if( S->processor == process_escape ){
-		S->processor = process_normal;
-		execute_function(S, start);
-		return 0;
-	}
 	s = start;
 
 	read_val(S, &val, s, &cp);
