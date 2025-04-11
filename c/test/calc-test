@@ -27,7 +27,7 @@ test_long_string(){
 	for op in + -; do
 		s=
 		for((i=0; i <256; i++)); do
-			s="${s} ${op}2"
+			s="${s}${op}2"
 		done
 		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op}512"
 	done

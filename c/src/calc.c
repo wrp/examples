@@ -106,6 +106,7 @@ struct state {
 	struct ring_buf *accum; /* accumulator (used to re-process) */
 	enum number_type type;
 	struct func *function_lut[HASH_TABLE_SIZE];
+	int plus_minus_count;
 };
 struct stack_entry {
 	union {
@@ -240,6 +241,7 @@ init_state(struct state *S)
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
+	S->plus_minus_count = 0;
 	strcpy(S->fmt.fmt, DEFAULT_FMT);
 	hash_functions(S);
 }
@@ -313,13 +315,20 @@ get_term(struct state *S, char *buf, size_t siz)
 }
 
 static void
+normalize_state(struct state *S)
+{
+	S->plus_minus_count = 0;
+	S->processor = process_normal;
+}
+
+static void
 process_escape(struct state *S, int c)
 {
 	if( isspace(c) ){
 		int i;
 		char buf[256];
 
-		S->processor = process_normal;
+		normalize_state(S);
 		if( get_term(S, buf, sizeof buf) ){
 			execute_function(S, buf);
 		}
@@ -332,7 +341,7 @@ static void
 process_paren(struct state *S, int c)
 {
 	if( c == ')' ){
-		S->processor = process_normal;
+		normalize_state(S);
 		push_value(S, c);
 	} else {
 		rb_xpush(S->accum, c);
@@ -345,7 +354,7 @@ process_enquote(struct state *S, int c)
 	if( c != ']' ){
 		rb_xpush(S->accum, c);
 	} else {
-		S->processor = process_normal;
+		normalize_state(S);
 		stack_xpush(S->registers, S->accum);
 		S->accum = rb_create(32);
 	}
@@ -355,6 +364,14 @@ static void
 process_normal(struct state *S, int c)
 {
 	struct ring_buf *b = S->accum;
+
+	if( (c == '+') || (c == '-') ){
+		S->plus_minus_count += 1;
+		if( S->plus_minus_count > 3 ){
+			S->plus_minus_count = 0;
+			push_value(S, c);
+		}
+	}
 
 	if( strchr(numeric_tok, c) ){
 		rb_xpush(b, c);
