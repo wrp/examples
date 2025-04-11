@@ -75,7 +75,7 @@ simple_arithmetic() {
 	test_string '4 1- 8Y' "  0: 3;  1: 8"
 	if $have_comma_format; then
 		test_string "[%.3'Lf]0F1024 1+p" '1,025.000'
-		test_string "[%'Ld]0F 1234567 p" '1,234,567'
+		test_string "[%.0'Lf]0F 1234567 p" '1,234,567'
 	fi
 }
 
@@ -129,7 +129,7 @@ test_string_registers() {
 	LC_ALL=C test_string '0k4456798p' '4456798'
 
 	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1;1+;1.2+
-	test_string '[%04Ld]0F23p' '0023'
+	test_string '[%04.0Lf]0F23p' '0023'
 
 	# Grow the stack
 	s=$(yes 1 | sed -e 128q | tr \\n ' ')
