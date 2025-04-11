@@ -305,7 +305,7 @@ process_paren(struct state *S, int c)
 {
 	if( c == ')' ){
 		S->processor = process_normal;
-		rb_push(S->raw, ' ');
+		push_value(S, c);
 	} else {
 		rb_push(S->accum, c);
 	}
