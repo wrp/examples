@@ -449,13 +449,11 @@ push_value(struct state *S, unsigned char c)
 	struct stack_entry val = { 0 };
 	int i;
 
-	cp = s = buf;
 	if( !get_term(S, buf, sizeof buf) ){
 		return 0;
 	}
 
-	s = buf;
-
+	cp = s = buf;
 	read_val(S, &val, s, &cp);
 	while( *cp && strchr("+-", *cp) && cp != s ){
 		stack_push(S->values, &val);
