@@ -378,8 +378,7 @@ process_normal(struct state *S, int c)
 	} else if( strchr(ignore_char, c) ){
 		;
 	} else {
-		int flag = push_value(S, c);
-		if( flag ){
+		if( push_value(S, c) ){
 			push_raw(S, c);
 		} else {
 			operator f = operator_lut[c];
