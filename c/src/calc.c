@@ -104,7 +104,6 @@ struct state {
 	int input_base;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
-	enum number_type type;
 	struct func *function_lut[HASH_TABLE_SIZE];
 	int plus_minus_count;
 };
@@ -236,7 +235,6 @@ init_state(struct state *S)
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
 	S->processor = process_normal;
-	S->type = rational;
 	S->input_base = 0;
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
@@ -455,10 +453,15 @@ apply_nonary(struct state *S, unsigned char c)
 
 
 static void
-read_val(struct state *S, struct stack_entry *v, char *s, char **cp)
+read_val(struct state *S, struct stack_entry *v, char *s, char **end)
 {
-	v->v.lf = strtold(s, cp);
-	v->type = S->type;
+	if( S->input_base ){
+		v->v.ld = strtoll(s, end, S->input_base);
+		v->type = integer;
+	} else {
+		v->v.lf = strtold(s, end);
+		v->type = rational;
+	}
 }
 
 /*
@@ -629,12 +632,8 @@ extract_format(struct state *S)
 		while( b < e && (c = rb_peek(rb, b - S->fmt.fmt)) != EOF ){
 			/* Extremely naive check of format string.  */
 			if( count == 2 ){
-				if( strchr("diouxX", c) ){
+				if( strchr("diouxXfega", c) ){
 					S->fmt.specifier = b;
-					S->type = integer;
-				} else if( strchr("fega", c) ){
-					S->fmt.specifier = b;
-					S->type = rational;
 				}
 			}
 			*b++ = c;
@@ -768,7 +767,6 @@ apply_unary(struct state *S, unsigned char c)
 	case 'k':
 		snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%'.%dLf\n",
 			(int)val.v.lf);
-		S->type = rational;
 		break;
 	case 'n':
 		show_value(S, &val);
