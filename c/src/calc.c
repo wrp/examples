@@ -380,12 +380,12 @@ process_normal(struct state *S, int c)
 	} else {
 		/*
 		 * This symbol looks like it is potentially a boundary on
-		 * a number, so try to parse the accumulator.  But...there
+		 * a number, so try to parse the accumulator.  But there
 		 * may be some cruft in the accumulator that is not part
-		 * of a number (eg in "+4e-3+++", the trailing +++ are all
-		 * operators, and push_value will push those back on the
-		 * raw buffer.  If that happens, we push this symbol on
-		 * *after* those symbols and let it get processed in the
+		 * of a number.  Eg given input "+4e-3+++n", we won't get
+		 * here until we see the 'n'. push_value() will push those
+		 * back on the raw buffer, and we push this symbol on
+		 * *after* those symbols to let it get processed in the
 		 * proper order.
 		 */
 		if( push_value(S) ){
