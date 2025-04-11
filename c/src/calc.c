@@ -174,7 +174,7 @@ print_help(struct state *S)
 }
 
 typedef void (*operator) (struct state *, unsigned char);
-operator char_lut[256];
+operator operator_lut[256];
 static void apply_binary(struct state *S, unsigned char c);
 static void apply_unary(struct state *S, unsigned char c);
 static void apply_nonary(struct state *S, unsigned char c);
@@ -365,7 +365,7 @@ process_normal(struct state *S, int c)
 		if( flag ){
 			push_raw(S, c);
 		} else {
-			operator f = char_lut[c];
+			operator f = operator_lut[c];
 			if( f ){
 				f(S, c);
 			}
@@ -797,7 +797,7 @@ sum(struct state *S)
 int
 main(void)
 {
-	puts("operator char_lut[256] = {");
+	puts("operator operator_lut[256] = {");
 	fputs("throw_warning,", stdout);
 	for( unsigned c = 1; c < 256; c += 1 ){
 		char *msg = "throw_warning";
@@ -828,7 +828,7 @@ throw_warning(struct state *S, unsigned char c)
 	fprintf( stderr, "Unexpected: %c\n", c );
 }
 
-operator char_lut[256] = {
+operator operator_lut[256] = {
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, NULL,
 NULL, NULL, NULL, NULL, throw_warning,
