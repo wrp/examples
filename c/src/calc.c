@@ -186,7 +186,7 @@ void push_raw(struct state *, int);
 void apply_string_op(struct state *S, unsigned char c);
 void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
-static int push_value(struct state *, unsigned char);
+static int push_value(struct state *);
 struct ring_buf * select_register(struct state *S);
 static void print_stack(struct state *S, struct stack *);
 static int get_index(struct state *S);
@@ -342,7 +342,7 @@ process_paren(struct state *S, int c)
 {
 	if( c == ')' ){
 		normalize_state(S);
-		push_value(S, c);
+		push_value(S);
 	} else {
 		rb_xpush(S->accum, c);
 	}
@@ -369,7 +369,7 @@ process_normal(struct state *S, int c)
 		S->plus_minus_count += 1;
 		if( S->plus_minus_count > 3 ){
 			S->plus_minus_count = 0;
-			push_value(S, c);
+			push_value(S);
 		}
 	}
 
@@ -388,7 +388,7 @@ process_normal(struct state *S, int c)
 		 * *after* those symbols and let it get processed in the
 		 * proper order.
 		 */
-		if( push_value(S, c) ){
+		if( push_value(S) ){
 			push_raw(S, c);
 		} else {
 			operator f = operator_lut[c];
@@ -469,7 +469,7 @@ read_val(struct state *S, struct stack_entry *v, char *s, char **cp)
  * return non-zero to indicate that has happened.
  */
 int
-push_value(struct state *S, unsigned char c)
+push_value(struct state *S)
 {
 	char buf[256];
 	char *cp, *s;
