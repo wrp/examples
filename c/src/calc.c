@@ -293,10 +293,10 @@ push_raw(struct state *S, int c)
 static void
 process_escape(struct state *S, int c)
 {
-	if( ! isspace(c) ){
-		rb_push(S->accum, c);
+	if( isspace(c) ){
+		push_value(S, c);
 	} else {
-		apply_string_op(S, c);
+		rb_push(S->accum, c);
 	}
 }
 
