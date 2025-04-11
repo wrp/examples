@@ -381,7 +381,7 @@ push_memory_to_stack(struct state *S)
 	struct stack_entry *val;
 	if( (val = wrap_get(S->memory, offset)) != NULL ){
 		assert(val->stored == 1);
-		stack_push(S->values, val);
+		stack_xpush(S->values, val);
 	}
 }
 
@@ -457,7 +457,7 @@ push_value(struct state *S, unsigned char c)
 	cp = s = buf;
 	read_val(S, &val, s, &cp);
 	while( *cp && strchr("+-", *cp) && cp != s ){
-		stack_push(S->values, &val);
+		stack_xpush(S->values, &val);
 		s = cp;
 		read_val(S, &val, s, &cp);
 	}
@@ -472,7 +472,7 @@ push_value(struct state *S, unsigned char c)
 	if( *cp ){
 		fprintf(stderr, "Garbled (discarded): %s\n", buf);
 	} else {
-		stack_push(S->values, &val);
+		stack_xpush(S->values, &val);
 	}
 	return 0;
 }
@@ -508,7 +508,7 @@ pop_value(struct state *S, struct stack_entry *value, int msg)
 	int rv = popper(S->values, value);
 	if( rv && !value->stored ) {
 		value->stored = 1;
-		stack_push(S->memory, value);
+		stack_xpush(S->memory, value);
 	}
 	return rv;
 }
@@ -563,7 +563,7 @@ execute_function(struct state *S, const char *cmd)
 		}
 		res.stored = 0;
 		res.type = rational;
-		stack_push(S->values, &res);
+		stack_xpush(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
@@ -637,7 +637,7 @@ get_index(struct state *S)
 	}
 	if( rint(val.v.lf) != val.v.lf ){
 		offset = -1;
-		stack_push(S->values, &val);
+		stack_xpush(S->values, &val);
 	}
 	return offset;
 }
@@ -687,8 +687,8 @@ apply_string_op(struct state *S, unsigned char c)
 	case 'R':
 		if( wrap_pop(S->registers, &a) &&
 			wrap_pop(S->registers, &rb) ){
-			stack_push(S->registers, a);
-			stack_push(S->registers, rb);
+			stack_xpush(S->registers, a);
+			stack_xpush(S->registers, rb);
 		}
 		break;
 	case 'Z':
@@ -736,8 +736,8 @@ apply_unary(struct state *S, unsigned char c)
 	}
 	switch( c ){
 	case 'y':
-		stack_push(S->values, &val);
-		stack_push(S->values, &val);
+		stack_xpush(S->values, &val);
+		stack_xpush(S->values, &val);
 		break;
 	case 'k':
 		if( val.v.lf < 1 ){
@@ -766,7 +766,7 @@ apply_binary(struct state *S, unsigned char c)
 	}
 	switch(c) {
 	case 'r':
-		stack_push(S->values, val);
+		stack_xpush(S->values, val);
 		res = val[1];
 		break;
 	case '*': res.v.lf = val[1].v.lf * val[0].v.lf; break;
@@ -775,7 +775,7 @@ apply_binary(struct state *S, unsigned char c)
 	case '/': res.v.lf = val[1].v.lf / val[0].v.lf; break;
 	case '^': res.v.lf = pow(val[1].v.lf, val[0].v.lf); break;
 	}
-	stack_push(S->values, &res);
+	stack_xpush(S->values, &res);
 }
 
 static long double
