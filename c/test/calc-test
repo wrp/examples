@@ -74,7 +74,7 @@ simple_arithmetic() {
 	test_string '4 1(-8)Y' "  0: 4;  1: 1;  2: -8"
 	test_string '4 1- 8Y' "  0: 3;  1: 8"
 	if $have_comma_format; then
-		test_string "[%.3'Lf]0F1024;1+p" '1,025.000'
+		test_string "[%.3'Lf]0F1024 1+p" '1,025.000'
 		test_string "[%'Ld]0F 1234567 p" '1,234,567'
 	fi
 }
