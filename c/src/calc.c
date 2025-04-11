@@ -361,6 +361,7 @@ process_normal(struct state *S, int c)
 	if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
 	} else if( strchr(string_ops, c) ){
+		push_value(S, c);
 		apply_string_op(S, c);
 	} else if( strchr(ignore_char, c) ){
 		;
@@ -669,7 +670,6 @@ apply_string_op(struct state *S, unsigned char c)
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
 	assert( c != ']' );
-	push_value(S, c);
 	switch( c ){
 	case '\\':
 		S->processor = process_escape;
