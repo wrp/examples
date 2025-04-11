@@ -766,14 +766,9 @@ apply_unary(struct state *S, unsigned char c)
 		stack_xpush(S->values, &val);
 		break;
 	case 'k':
-		if( val.v.lf < 1 ){
-			snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%'Ld\n");
-			S->type = integer;
-		} else {
-			snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%.%dLf\n",
-				(int)val.v.lf);
-			S->type = rational;
-		}
+		snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%'.%dLf\n",
+			(int)val.v.lf);
+		S->type = rational;
 		break;
 	case 'n':
 		show_value(S, &val);
