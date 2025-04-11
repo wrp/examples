@@ -6,3 +6,4 @@ int rb_pop( struct ring_buf *R );
 int rb_peek(struct ring_buf const *R, size_t idx);
 int rb_tail( struct ring_buf *R );
 int rb_isempty( struct ring_buf *R );
+void rb_xpush( struct ring_buf *R, unsigned char c );

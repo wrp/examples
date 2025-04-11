@@ -86,6 +86,14 @@ rb_push(struct ring_buf *R, unsigned char c)
 	return R->err;
 }
 
+void
+rb_xpush(struct ring_buf *R, unsigned char c)
+{
+	if( rb_push(R, c) ){
+		perror("malloc");
+		exit(1);
+	}
+}
 
 int
 rb_isempty(struct ring_buf *r)
