@@ -281,7 +281,7 @@ main(int argc, char **argv)
 void
 push_raw(struct state *S, int c)
 {
-	rb_push(S->raw, (unsigned char)c);
+	rb_xpush(S->raw, (unsigned char)c);
 	while( (c = rb_pop( S->raw )) != EOF ){
 		S->processor(S, c);
 	}
@@ -324,7 +324,7 @@ process_escape(struct state *S, int c)
 			execute_function(S, buf);
 		}
 	} else {
-		rb_push(S->accum, c);
+		rb_xpush(S->accum, c);
 	}
 }
 
@@ -335,7 +335,7 @@ process_paren(struct state *S, int c)
 		S->processor = process_normal;
 		push_value(S, c);
 	} else {
-		rb_push(S->accum, c);
+		rb_xpush(S->accum, c);
 	}
 }
 
@@ -343,7 +343,7 @@ static void
 process_enquote(struct state *S, int c)
 {
 	if( c != ']' ){
-		rb_push(S->accum, c);
+		rb_xpush(S->accum, c);
 	} else {
 		S->processor = process_normal;
 		stack_xpush(S->registers, S->accum);
@@ -357,7 +357,7 @@ process_normal(struct state *S, int c)
 	struct ring_buf *b = S->accum;
 
 	if( strchr(numeric_tok, c) ){
-		rb_push(b, c);
+		rb_xpush(b, c);
 	} else if( strchr(ignore_char, c) ){
 		;
 	} else {
@@ -707,7 +707,7 @@ apply_string_op(struct state *S, unsigned char c)
 		if( (rb = select_register(S)) != NULL ){
 			int j=0, c;
 			while( (c = rb_peek(rb, j++)) != EOF ){
-				rb_push(S->raw, c);
+				rb_xpush(S->raw, c);
 			}
 		}
 		break;
