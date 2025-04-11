@@ -173,16 +173,16 @@ print_help(struct state *S)
 	putchar('\n');
 }
 
-typedef void (*operator) (struct state *, unsigned char, int);
+typedef void (*operator) (struct state *, unsigned char);
 operator char_lut[256];
-static void apply_binary(struct state *S, unsigned char c, int);
-static void apply_unary(struct state *S, unsigned char c, int);
-static void apply_nonary(struct state *S, unsigned char c, int);
-static void throw_warning(struct state *S, unsigned char c, int);
+static void apply_binary(struct state *S, unsigned char c);
+static void apply_unary(struct state *S, unsigned char c);
+static void apply_nonary(struct state *S, unsigned char c);
+static void throw_warning(struct state *S, unsigned char c);
 
 void push_raw(struct state *, int);
 
-void apply_string_op(struct state *S, unsigned char c, int);
+void apply_string_op(struct state *S, unsigned char c);
 void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
@@ -367,7 +367,7 @@ process_normal(struct state *S, int c)
 		} else {
 			operator f = char_lut[c];
 			if( f ){
-				f(S, c, flag);
+				f(S, c);
 			}
 		}
 	}
@@ -398,7 +398,7 @@ show_value(struct state *S, struct stack_entry *val)
 
 
 static void
-apply_nonary(struct state *S, unsigned char c, int flag)
+apply_nonary(struct state *S, unsigned char c)
 {
 	struct stack_entry *val, v;
 	switch( c ){
@@ -463,7 +463,7 @@ push_value(struct state *S, unsigned char c)
 	}
 	if( *cp && strchr("+-", *cp) ){
 		assert( cp == s );
-		apply_binary(S, *cp, 0);
+		apply_binary(S, *cp);
 		for( char *t = cp + 1; *t; t++ ){
 			push_raw(S, *t);
 		}
@@ -658,11 +658,10 @@ select_register(struct state *S)
 }
 
 void
-apply_string_op(struct state *S, unsigned char c, int ignore)
+apply_string_op(struct state *S, unsigned char c)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
-	(void)ignore;
 	assert( c != ']' );
 	switch( c ){
 	case '\\':
@@ -728,7 +727,7 @@ print_stack(struct state *S, struct stack *v)
 
 
 static void
-apply_unary(struct state *S, unsigned char c, int flag)
+apply_unary(struct state *S, unsigned char c)
 {
 	struct stack_entry val;
 	assert( strchr(unary_ops, c) );
@@ -757,7 +756,7 @@ apply_unary(struct state *S, unsigned char c, int flag)
 }
 
 static void
-apply_binary(struct state *S, unsigned char c, int flag)
+apply_binary(struct state *S, unsigned char c)
 {
 	struct stack_entry val[2];
 	struct stack_entry res = {0};
@@ -824,7 +823,7 @@ main(void)
 #endif
 
 static void
-throw_warning(struct state *S, unsigned char c, int f)
+throw_warning(struct state *S, unsigned char c)
 {
 	fprintf( stderr, "Unexpected: %c\n", c );
 }
