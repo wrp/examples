@@ -182,7 +182,7 @@ static void throw_warning(struct state *S, unsigned char c, int);
 
 void push_raw(struct state *, int);
 
-void apply_string_op(struct state *S, unsigned char c);
+void apply_string_op(struct state *S, unsigned char c, int);
 void die(const char *msg);
 void write_args_to_stdin(char *const*argv);
 static int push_value(struct state *, unsigned char);
@@ -251,8 +251,6 @@ main(int argc, char **argv)
 	int c;
 	struct state S[1];
 
-	assert( char_lut['d'] == throw_warning);
-	assert( char_lut['C'] == apply_nonary);
 	setlocale(LC_NUMERIC, "");
 	init_state(S);
 
@@ -360,9 +358,6 @@ process_normal(struct state *S, int c)
 
 	if( strchr(numeric_tok, c) ){
 		rb_push(b, c);
-	} else if( strchr(string_ops, c) ){
-		push_value(S, c);
-		apply_string_op(S, c);
 	} else if( strchr(ignore_char, c) ){
 		;
 	} else {
@@ -665,10 +660,11 @@ select_register(struct state *S)
 }
 
 void
-apply_string_op(struct state *S, unsigned char c)
+apply_string_op(struct state *S, unsigned char c, int ignore)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
+	(void)ignore;
 	assert( c != ']' );
 	switch( c ){
 	case '\\':
@@ -817,6 +813,8 @@ main(void)
 			msg = "apply_unary";
 		} else if( strchr(nonary_ops, c) ){
 			msg = "apply_nonary";
+		} else if( strchr(string_ops, c) ){
+			msg = "apply_string_op";
 		} else if( isspace(c) ){
 			msg = "NULL";
 		}
@@ -839,29 +837,29 @@ throw_warning(struct state *S, unsigned char c, int f)
 operator char_lut[256] = {
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, NULL,
-NULL, throw_warning, throw_warning, throw_warning, throw_warning,
+NULL, NULL, NULL, NULL, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, NULL, throw_warning, throw_warning,
+throw_warning, throw_warning, NULL, apply_string_op, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, apply_binary, apply_binary, throw_warning,
+apply_string_op, apply_string_op, apply_binary, apply_binary, throw_warning,
 apply_binary, throw_warning, apply_binary, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, NULL,
+throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, apply_nonary, throw_warning,
+throw_warning, throw_warning, apply_unary, apply_string_op, throw_warning,
+apply_string_op, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
+throw_warning, throw_warning, apply_string_op, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
-throw_warning, throw_warning, throw_warning, throw_warning, apply_binary,
+apply_string_op, apply_string_op, apply_string_op, apply_string_op, apply_binary,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
 throw_warning, throw_warning, apply_unary, throw_warning, apply_nonary,
 apply_unary, throw_warning, apply_nonary, apply_nonary, apply_binary,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, apply_unary, throw_warning, throw_warning, throw_warning,
+apply_string_op, apply_unary, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
 throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
