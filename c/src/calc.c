@@ -401,10 +401,6 @@ static void
 apply_nonary(struct state *S, unsigned char c, int flag)
 {
 	struct stack_entry *val, v;
-	assert(flag == 0);
-	if( flag ){
-		return;
-	}
 	switch( c ){
 	default: assert(0);
 	case 'C':
@@ -736,7 +732,7 @@ apply_unary(struct state *S, unsigned char c, int flag)
 {
 	struct stack_entry val;
 	assert( strchr(unary_ops, c) );
-	if( flag || !pop_value(S, &val, 1) ){
+	if( !pop_value(S, &val, 1) ){
 		return;
 	}
 	switch( c ){
@@ -763,10 +759,6 @@ apply_unary(struct state *S, unsigned char c, int flag)
 static void
 apply_binary(struct state *S, unsigned char c, int flag)
 {
-	assert(flag == 0);
-	if( flag ){
-		return;
-	}
 	struct stack_entry val[2];
 	struct stack_entry res = {0};
 	assert( strchr(binary_ops, c));
