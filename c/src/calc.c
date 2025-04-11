@@ -66,7 +66,6 @@ const char *help[] = {
 #define unary_ops "Ckny"
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
-#define token_div " \t\n"
 
 #define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256
@@ -294,7 +293,7 @@ push_raw(struct state *S, int c)
 static void
 process_escape(struct state *S, int c)
 {
-	if( ! strchr(token_div, c) ){
+	if( ! isspace(c) ){
 		rb_push(S->accum, c);
 	} else {
 		apply_string_op(S, c);
@@ -817,7 +816,7 @@ main(void)
 			msg = "apply_unary";
 		} else if( strchr(nonary_ops, c) ){
 			msg = "apply_nonary";
-		} else if( strchr(token_div, c) ){
+		} else if( isspace(c) ){
 			msg = "NULL";
 		}
 		putchar( c % 5 ? ' ' : '\n');
