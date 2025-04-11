@@ -88,12 +88,20 @@ struct format_string {
 	char integer_specifier;  /* 'd', or 'i', etc. */
 	char float_specifier;    /* 'g', 'e', etc. */
 };
+struct state;
+typedef void (*process)(struct state *, int);
+static void process_normal(struct state *S, int c);
+static void process_enquote(struct state *S, int c);
+static void process_paren(struct state *S, int c);
+static void process_escape(struct state *S, int c);
+
 struct state {
 	struct stack *values;
 	struct stack *registers;
 	struct stack *memory;
 	struct format_string fmt;
-	enum { normal, enquote, paren, escape } state;
+	process processor;
+
 	int input_base;
 	struct ring_buf *raw;   /* raw input as entered */
 	struct ring_buf *accum; /* accumulator (used to re-process) */
@@ -227,7 +235,7 @@ init_state(struct state *S)
 {
 	S->raw = rb_create(32);
 	S->accum = rb_create(32);
-	S->state = normal;
+	S->processor = process_normal;
 	S->type = rational;
 	S->input_base = 0;
 	S->values = stack_xcreate(sizeof(struct stack_entry));
@@ -278,27 +286,57 @@ push_raw(struct state *S, int c)
 {
 	rb_push(S->raw, (unsigned char)c);
 	while( (c = rb_pop( S->raw )) != EOF ){
-		struct ring_buf *b = S->accum;
-		int flag;
+		S->processor(S, c);
+	}
+}
 
-		if( (S->state == enquote) && c != ']' ){
-			rb_push(b, c);
-		} else if( (S->state == paren) && (c != ')') ){
-			rb_push(b, c);
-		} else if( (S->state == escape) && ! strchr(token_div, c)) {
-			rb_push(b, c);
-		} else if( strchr(numeric_tok, c) ){
-			rb_push(b, c);
-		} else if( strchr(string_ops, c) ){
-			apply_string_op(S, c);
-		} else if( strchr(ignore_char, c) ){
-			;
-		} else {
-			flag = push_value(S, c);
-			operator f = char_lut[c];
-			if( f ){
-				f(S, c, flag);
-			}
+
+static void
+process_escape(struct state *S, int c)
+{
+	if( ! strchr(token_div, c) ){
+		rb_push(S->accum, c);
+	} else {
+		apply_string_op(S, c);
+	}
+}
+
+static void
+process_paren(struct state *S, int c)
+{
+	if( c == ')' ){
+		apply_string_op(S, c);
+	} else {
+		rb_push(S->accum, c);
+	}
+}
+
+static void
+process_enquote(struct state *S, int c)
+{
+	if( c != ']' ){
+		rb_push(S->accum, c);
+	}  else {
+		apply_string_op(S, c);
+	}
+}
+
+static void
+process_normal(struct state *S, int c)
+{
+	struct ring_buf *b = S->accum;
+
+	if( strchr(numeric_tok, c) ){
+		rb_push(b, c);
+	} else if( strchr(string_ops, c) ){
+		apply_string_op(S, c);
+	} else if( strchr(ignore_char, c) ){
+		;
+	} else {
+		int flag = push_value(S, c);
+		operator f = char_lut[c];
+		if( f ){
+			f(S, c, flag);
 		}
 	}
 }
@@ -390,7 +428,8 @@ push_value(struct state *S, unsigned char c)
 	}
 
 	while( (i = rb_pop(b)) != EOF ){
-		assert( strchr(numeric_tok, i) || (S->state == escape) );
+		assert( strchr(numeric_tok, i) ||
+			(S->processor == process_escape) );
 		if( s < end ){
 			*s++ = i;
 		}
@@ -403,8 +442,8 @@ push_value(struct state *S, unsigned char c)
 		return 0;
 	}
 
-	if( S->state == escape ){
-		S->state = normal;
+	if( S->processor == process_escape ){
+		S->processor = process_normal;
 		execute_function(S, start);
 		return 0;
 	}
@@ -618,26 +657,26 @@ apply_string_op(struct state *S, unsigned char c)
 {
 	struct ring_buf *a = NULL, *rb = NULL;
 	void *e;
-	assert( (S->state != enquote) || (c == ']') );
+	assert( (S->processor != process_enquote) || (c == ']') );
 	if( c != ']' ){
 		push_value(S, c);
 	}
 	switch( c ){
 	case '\\':
-		S->state = escape;
+		S->processor = process_escape;
 		break;
 	case '(':
-		S->state = paren;
+		S->processor = process_paren;
 		break;
 	case ')':
-		S->state = normal;
+		S->processor = process_normal;
 		rb_push(S->raw, ' ');
 		break;
 	case '[':
-		S->state = enquote;
+		S->processor = process_enquote;
 		break;
 	case ']':
-		S->state = normal;
+		S->processor = process_normal;
 		stack_xpush(S->registers, S->accum);
 		S->accum = rb_create(32);
 		break;
