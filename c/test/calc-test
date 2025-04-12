@@ -73,10 +73,8 @@ simple_arithmetic() {
 	test_string '2 4r/p' '2'
 	test_string '4 1(-8)Y' "  0: 4;  1: 1;  2: -8"
 	test_string '4 1- 8Y' "  0: 3;  1: 8"
-	if $have_comma_format; then
-		test_string "[%.3'Lf]0F1024 1+p" '1,025.000'
-		test_string "[%.0'Lf]0F 1234567 p" '1,234,567'
-	fi
+	test_string "[%.3'Lf]0F1024 1+p" "1${c}025.000"
+	test_string "[%.0'Lf]0F 1234567 p" "1${c}234${c}567"
 }
 
 test_string_registers() {
@@ -163,11 +161,7 @@ test_funcs() {
 	test_string '5 [exp2] 0!p' 32
 	test_string '2 [exp] 0!p' 7.39
 
-	if $have_comma_format; then
-		test_string "[%5.0'Lf]0F 2,123 23 +n" 2,146
-	else
-		test_string '[%5.0Lf]0F 2,123 23 +n' 2146
-	fi
+	test_string "[%5.0'Lf]0F 2,123 23 +n" "2${c}146"
 
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
@@ -208,6 +202,7 @@ check_comma_format() {
 	${CC-cc} "$source_file" -o "$executable" 2> /dev/null
 	have_comma_format=false
 	if "$executable"; then
+		c=,
 		have_comma_format=true
 	fi
 	rm "$source_file" "$executable"
