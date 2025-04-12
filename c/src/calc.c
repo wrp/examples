@@ -61,7 +61,7 @@ const char *help[] = {
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "()[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
-#define unary_ops "Ckny"
+#define unary_ops "Cikny"
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 
@@ -104,11 +104,12 @@ struct state {
 	struct func *function_lut[HASH_TABLE_SIZE];
 	int plus_minus_count;
 };
+union value {
+	long double lf;
+	long long ld;
+};
 struct stack_entry {
-	union {
-		long double lf;
-		long long ld;
-	} v;
+	union value v;
 	enum number_type type;
 	int stored;  /* bool */
 };
@@ -669,9 +670,9 @@ get_index(struct state *S)
 	struct stack_entry val = { .v.lf = -1.0 };
 	int offset = -1;
 	if( pop_value(S, &val, 1) ){
-		offset = val.v.lf;
+		offset = val.type == rational ? val.v.lf : val.v.ld;
 	}
-	if( rint(val.v.lf) != val.v.lf ){
+	if( val.type == rational && (rint(val.v.lf) != val.v.lf) ){
 		offset = -1;
 		stack_xpush(S->values, &val);
 	}
@@ -770,13 +771,18 @@ apply_unary(struct state *S, unsigned char c)
 	if( !pop_value(S, &val, 1) ){
 		return;
 	}
+	enum number_type t = val.type;
+	union value v = val.v;
 	switch( c ){
+	case 'i':
+		S->input_base = t == rational ? rint(v.lf) : v.ld;
+		break;
 	case 'y':
 		stack_xpush(S->values, &val);
 		stack_xpush(S->values, &val);
 		break;
 	case 'k':
-		S->precision = rint(val.v.lf);
+		S->precision = t == rational ? rint(v.lf) : v.ld;
 		S->specifier = 'f';
 		break;
 	case 'n':
@@ -816,8 +822,12 @@ sum(struct state *S)
 	int rv;
 
 	while( (rv = pop_value(S, &value, 0)) != 0 ){
-		sum.v.lf += value.v.lf;
+		enum number_type t = value.type;
+		union value v = value.v;
+		sum.v.lf += t == rational ? v.lf : v.ld;
 	}
+	assert(sum.type == rational);
+	assert(sum.type == 0);
 
 	return sum.v.lf;
 }
