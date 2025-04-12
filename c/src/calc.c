@@ -502,7 +502,11 @@ push_value(struct state *S)
 		return 1;
 	}
 	if( *cp ){
-		fprintf(stderr, "Garbled (discarded): %s\n", buf);
+		fprintf(stderr, "Garbled Input");
+		if( S->input_base ){
+			fprintf(stderr, " (input base is %d)", S->input_base);
+		}
+		fprintf(stderr, ": Discarded '%s'\n", buf);
 	} else {
 		stack_xpush(S->values, &val);
 	}

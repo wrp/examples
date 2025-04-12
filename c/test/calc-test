@@ -101,7 +101,7 @@ test_string_registers() {
 	long_string="1 $( yes "1+" | sed 1049q )"
 	test_string "[$long_string]0x[%.0Lf]1Fp" '1050'
 	test_string "[${long_string} 1+]0x[%.0Lf]1Fp" '1051'
-	test_string '1 4eXe2 3-p' "Garbled (discarded): 4eXe2;-2"
+	test_string '1 4eXe2 3-p' "Garbled Input: Discarded '4eXe2';-2"
 	test_string "4-" 'Stack empty'
 	test_string "4(-2)" ''
 	test_string "4(-2)+p" '2'
