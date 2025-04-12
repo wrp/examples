@@ -58,8 +58,6 @@ const char *help[] = {
 #include <math.h>
 #include <unistd.h>
 
-#define COMMA_DEFAULT_FMT "%.3'Lg\n"
-#define DEFAULT_FMT "%.3Lg\n"
 #define numeric_tok "+-0123456789XPEabcdef."
 #define string_ops "()[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
@@ -81,12 +79,6 @@ const char *help[] = {
 enum number_type { rational, integer };
 struct func;
 
-struct format_string {
-	char fmt[32];
-	char *specifier;  /* location of 'd' or 'g', etc. in fmt. */
-	char integer_specifier;  /* 'd', or 'i', etc. */
-	char float_specifier;    /* 'g', 'e', etc. */
-};
 struct state;
 typedef void (*process)(struct state *, int);
 static void process_normal(struct state *S, int c);
@@ -98,7 +90,9 @@ struct state {
 	struct stack *values;
 	struct stack *registers;
 	struct stack *memory;
-	struct format_string fmt;
+	unsigned precision;
+	char specifier;
+	int quote;
 	process processor;
 
 	int input_base;
@@ -236,11 +230,13 @@ init_state(struct state *S)
 	S->accum = rb_create(32);
 	S->processor = process_normal;
 	S->input_base = 0;
+	S->precision = 3;
+	S->specifier = 'g';
+	S->quote = 1;
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
 	S->plus_minus_count = 0;
-	strcpy(S->fmt.fmt, DEFAULT_FMT);
 	hash_functions(S);
 }
 
@@ -413,10 +409,16 @@ push_memory_to_stack(struct state *S)
 static void
 show_value(struct state *S, struct stack_entry *val)
 {
+	char fmt[64];
+	snprintf(fmt, 64, "%%.%d%sL%c\n",
+		S->precision,
+		S->quote ? "'" : "",
+		val->type == rational ? S->specifier : 'd'
+	);
 	if( val->type == rational ){
-		printf(S->fmt.fmt, val->v.lf);
+		printf(fmt, val->v.lf);
 	} else {
-		printf(S->fmt.fmt, (long)val->v.lf);
+		printf(fmt, val->v.ld);
 	}
 }
 
@@ -447,7 +449,7 @@ apply_nonary(struct state *S, unsigned char c)
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
-	case '?': printf("Output format currently: %s", S->fmt.fmt);
+	case '?': printf("Output format .%d%c", S->precision, S->specifier);
 	}
 }
 
@@ -623,27 +625,36 @@ apply_function(struct state *S, struct ring_buf *rb)
 void
 extract_format(struct state *S)
 {
+	/* This is completely deprecated.  Just parsing the fmt
+	 * string to defer changing the test suite.
+	 */
 	struct ring_buf *rb = select_register(S);
 	if( rb ){
-		char *b = S->fmt.fmt, *e = S->fmt.fmt + sizeof S->fmt.fmt;
 		int count = 0;
 		int c = 0;
+		int i = 0;
+		char buf[1024];
+		char *dot;
 
-		while( b < e && (c = rb_peek(rb, b - S->fmt.fmt)) != EOF ){
-			/* Extremely naive check of format string.  */
+		S->quote = 0;
+		while( (c = rb_peek(rb, i++)) != EOF ){
+			buf[i-1] = c;
+			if( c == '\'' ){
+				S->quote = 1;
+			}
 			if( count == 2 ){
 				if( strchr("diouxXfega", c) ){
-					S->fmt.specifier = b;
+					S->specifier = c;
 				}
 			}
-			*b++ = c;
 			count += !count && c == '%';
 			count += count && c == 'L';
 		}
-		if( b > S->fmt.fmt && b + 1 < e && b[-1] != '\n' ){
-			*b++ = '\n';
+		dot = strchr(buf, '.');
+		if(dot) {
+			S->precision = strtol(dot+1, NULL, 10);
 		}
-		*b = '\0';
+
 		if( count < 2 ){
 			fputs("Warning: output fmt should print a long value "
 				"(eg '\%.2Lf' or '\%3Lu')\n", stderr);
@@ -746,7 +757,7 @@ print_stack(struct state *S, struct stack *v)
 	struct stack_entry *s;
 	for( s = stack_base(v); i < stack_size(v); s++, i++ ){
 		printf("%3u: ", i);
-		printf(S->fmt.fmt, s->v);
+		show_value(S, s);
 	}
 }
 
@@ -765,8 +776,8 @@ apply_unary(struct state *S, unsigned char c)
 		stack_xpush(S->values, &val);
 		break;
 	case 'k':
-		snprintf(S->fmt.fmt, sizeof S->fmt.fmt, "%%'.%dLf\n",
-			(int)val.v.lf);
+		S->precision = rint(val.v.lf);
+		S->specifier = 'f';
 		break;
 	case 'n':
 		show_value(S, &val);

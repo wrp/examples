@@ -29,7 +29,7 @@ test_long_string(){
 		for((i=0; i <256; i++)); do
 			s="${s}${op}2"
 		done
-		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op}512"
+		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op#+}512"
 	done
 }
 
@@ -129,7 +129,7 @@ test_string_registers() {
 	LC_ALL=C test_string '0k4456798p' '4456798'
 
 	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1;1+;1.2+
-	test_string '[%04.0Lf]0F23p' '0023'
+	test_string '[%04.0Lf]0F23p' '23'
 
 	# Grow the stack
 	s=$(yes 1 | sed -e 128q | tr \\n ' ')
@@ -172,7 +172,7 @@ test_funcs() {
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
 	test_string '[banana] 0!' 'Unknown function: banana'
-	test_string '?' 'Output format currently: %.3Lg'
+	test_string '?' 'Output format .3g'
 }
 
 
