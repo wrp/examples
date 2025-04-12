@@ -85,6 +85,9 @@ static void process_normal(struct state *S, int c);
 static void process_enquote(struct state *S, int c);
 static void process_paren(struct state *S, int c);
 static void process_escape(struct state *S, int c);
+typedef void (*operator) (struct state *, unsigned char);
+operator operator_lut[256];
+static void build_lut(struct state *);
 
 struct state {
 	struct stack *values;
@@ -167,8 +170,6 @@ print_help(struct state *S)
 	putchar('\n');
 }
 
-typedef void (*operator) (struct state *, unsigned char);
-operator operator_lut[256];
 static void apply_binary(struct state *S, unsigned char c);
 static void apply_unary(struct state *S, unsigned char c);
 static void apply_nonary(struct state *S, unsigned char c);
@@ -238,9 +239,9 @@ init_state(struct state *S)
 	S->registers = stack_xcreate(0);
 	S->plus_minus_count = 0;
 	hash_functions(S);
+	build_lut(S);
 }
 
-#ifndef BUILD_LUT
 int
 main(int argc, char **argv)
 {
@@ -266,7 +267,6 @@ main(int argc, char **argv)
 	stack_free(S->registers);
 	return 0;
 }
-#endif
 
 
 /*
@@ -822,92 +822,28 @@ sum(struct state *S)
 	return sum.v.lf;
 }
 
-#ifdef BUILD_LUT
-/* Use this and copy-paste into calc.c */
-int
-main(void)
+static void
+build_lut(struct state *S)
 {
-	puts("operator operator_lut[256] = {");
-	fputs("throw_warning,", stdout);
-	for( unsigned c = 1; c < 256; c += 1 ){
-		char *msg = "throw_warning";
+	for( unsigned c = 0; c < 256; c += 1 ){
+		operator f = throw_warning;
 		if( strchr(binary_ops, c)) {
-			msg = "apply_binary";
+			f = apply_binary;
 		} else if( strchr(unary_ops, c) ){
-			msg = "apply_unary";
+			f = apply_unary;
 		} else if( strchr(nonary_ops, c) ){
-			msg = "apply_nonary";
+			f = apply_nonary;
 		} else if( strchr(string_ops, c) ){
-			msg = "apply_string_op";
+			f = apply_string_op;
 		} else if( isspace(c) ){
-			msg = "NULL";
+			f = NULL;
 		}
-		putchar( c % 5 ? ' ' : '\n');
-		fputs(msg, stdout);
-		if( c != 255 ){
-			putchar(',');
-		}
+		operator_lut[c] = f;
 	}
-	puts("};");
 }
-#endif
 
 static void
 throw_warning(struct state *S, unsigned char c)
 {
 	fprintf( stderr, "Unexpected: %c\n", c );
 }
-
-operator operator_lut[256] = {
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, NULL,
-NULL, NULL, NULL, NULL, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, NULL, apply_string_op, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-apply_string_op, apply_string_op, apply_binary, apply_binary, throw_warning,
-apply_binary, throw_warning, apply_binary, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, apply_nonary, throw_warning,
-throw_warning, throw_warning, apply_unary, apply_string_op, throw_warning,
-apply_string_op, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, apply_nonary, throw_warning, throw_warning,
-throw_warning, throw_warning, apply_string_op, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
-apply_string_op, apply_string_op, apply_string_op, apply_string_op, apply_binary,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, apply_nonary,
-throw_warning, throw_warning, apply_unary, throw_warning, apply_nonary,
-apply_unary, throw_warning, apply_nonary, apply_nonary, apply_binary,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-apply_string_op, apply_unary, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning, throw_warning, throw_warning, throw_warning, throw_warning,
-throw_warning};
