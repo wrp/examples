@@ -475,6 +475,7 @@ push_value(struct state *S)
 	char buf[256];
 	char *cp, *s;
 	struct stack_entry val = { 0 };
+	operator *f = operator_lut;
 	int i;
 
 	if( !get_term(S, buf, sizeof buf) ){
@@ -483,14 +484,14 @@ push_value(struct state *S)
 
 	cp = s = buf;
 	read_val(S, &val, s, &cp);
-	while( *cp && strchr("+-", *cp) && cp != s ){
+	while( *cp && f[*cp] && f[*cp] != throw_warning && cp != s ){
 		stack_xpush(S->values, &val);
 		s = cp;
 		read_val(S, &val, s, &cp);
 	}
-	if( *cp && strchr("+-", *cp) ){
+	if( *cp && f[*cp] && f[*cp] != throw_warning ){
 		assert( cp == s );
-		apply_binary(S, *cp);
+		f[*cp](S, *cp);
 		for( char *t = cp + 1; *t; t++ ){
 			push_raw(S, *t);
 		}
