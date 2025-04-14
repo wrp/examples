@@ -120,14 +120,14 @@ struct stack_entry {
 static int pop_value(struct state *, struct stack_entry *, int);
 static struct stack_entry *wrap_get(struct stack *, int);
 static int wrap_pop(struct stack *, void *);
-static long double sum(struct state *);
+static void sum(struct state *);
 struct func {
 	const char *name;
 	int arg_count;
 	union {
 		long double (*f)(long double);
 		long double (*g)(long double, long double);
-		long double (*s)(struct state *);
+		void (*s)(struct state *);
 	};
 } functions[] = {
 	{ "acos", 1, acosl },
@@ -583,32 +583,34 @@ static void
 execute_function(struct state *S, const char *cmd)
 {
 	struct stack_entry arg;
-	struct stack_entry res;
+	struct stack_entry res = {0};
 	struct func *func;
 	size_t idx;
 
 	idx = compute_hash(cmd);
 	assert(idx < sizeof S->function_lut / sizeof *S->function_lut);
+	assert(res.stored == 0);
+	assert(res.type == rational);
+
 	func = S->function_lut[idx];
 
 	if (func && strcmp(cmd, func->name) == 0) {
 		switch(func->arg_count){
 		default: assert(0);
 		case 0:
-			res.v.lf = func->s(S);
+			func->s(S);
 			break;
 		case 2:
 			pop_value(S, &res, 1);
 			pop_value(S, &arg, 1);
 			res.v.lf = func->g(arg.v.lf, res.v.lf);
+			stack_xpush(S->values, &res);
 			break;
 		case 1:
 			pop_value(S, &res, 1);
 			res.v.lf = func->f(res.v.lf);
+			stack_xpush(S->values, &res);
 		}
-		res.stored = 0;
-		res.type = rational;
-		stack_xpush(S->values, &res);
 	} else {
 		fprintf(stderr, "Unknown function: %s\n", cmd);
 	}
@@ -821,7 +823,8 @@ apply_binary(struct state *S, unsigned char c)
 	stack_xpush(S->values, &res);
 }
 
-static long double
+
+static void
 sum(struct state *S)
 {
 	struct stack_entry value;
@@ -835,8 +838,9 @@ sum(struct state *S)
 	}
 	assert(sum.type == rational);
 	assert(sum.type == 0);
+	assert(sum.stored == 0);
 
-	return sum.v.lf;
+	stack_xpush(S->values, &sum);
 }
 
 static void
