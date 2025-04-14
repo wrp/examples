@@ -1,5 +1,8 @@
 In calc:
 
+Add basic statistical functions to compute common statistics
+of all the values on the stack.
+
 Drop the 'F' command.  Just allow the user to specify precision
 and type (eg 'g' or 'f' or 'x')
 
