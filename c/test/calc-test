@@ -25,6 +25,10 @@ test_input_base() {
 	test_string '5#14p 20#p 14p' '9;9;14'
 	test_string '36# 2z5 a# p' "3${c}857"
 	test_string '36# 2z5 a# 25 nn' "25;3${c}857"
+	test_string '11# a n' '10'
+	test_string '23# m n' '22'
+	test_string '24# n a#n' '23'
+	test_string '24# n n Y' '  0: 23;  1: 23'
 }
 test_memory() {
 	test_string '3 2 + M' "  0: 2;  1: 3"
