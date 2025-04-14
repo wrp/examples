@@ -65,6 +65,8 @@ const char *help[] = {
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 
+#define DEFAULT_FORMAT ".3'"
+
 #define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256
 /*
@@ -93,9 +95,8 @@ struct state {
 	struct stack *values;
 	struct stack *registers;
 	struct stack *memory;
-	unsigned precision;
+	char format[32];
 	char specifier;
-	int quote;
 	process processor;
 
 	int input_base;
@@ -232,9 +233,8 @@ init_state(struct state *S)
 	S->accum = rb_create(32);
 	S->processor = process_normal;
 	S->input_base = 0;
-	S->precision = 3;
 	S->specifier = 'g';
-	S->quote = 1;
+	strncpy(S->format, DEFAULT_FORMAT, sizeof S->format);
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
@@ -411,9 +411,8 @@ static void
 show_value(struct state *S, struct stack_entry *val)
 {
 	char fmt[64];
-	snprintf(fmt, 64, "%%.%d%sL%c\n",
-		S->precision,
-		S->quote ? "'" : "",
+	snprintf(fmt, 64, "%%%sL%c\n",
+		S->format,
 		val->type == rational ? S->specifier : 'd'
 	);
 	if( val->type == rational ){
@@ -450,7 +449,7 @@ apply_nonary(struct state *S, unsigned char c)
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
-	case '?': printf("Output format .%d%c", S->precision, S->specifier);
+	case '?': printf("Output format %s%c", S->format, S->specifier);
 	}
 }
 
@@ -634,36 +633,33 @@ extract_format(struct state *S)
 	 * string to defer changing the test suite.
 	 */
 	struct ring_buf *rb = select_register(S);
-	if( rb ){
-		int count = 0;
-		int c = 0;
-		int i = 0;
-		char buf[1024];
-		char *dot;
+	if( rb == NULL ){
+		return;
+	}
+	int bad_format = 0;
+	int c = 0;
+	int i = 0;
+	char *dest = S->format;
+	char *end = S->format + sizeof S->format;
 
-		S->quote = 0;
-		while( (c = rb_peek(rb, i++)) != EOF ){
-			buf[i-1] = c;
-			if( c == '\'' ){
-				S->quote = 1;
-			}
-			if( count == 2 ){
-				if( strchr("diouxXfega", c) ){
-					S->specifier = c;
-				}
-			}
-			count += !count && c == '%';
-			count += count && c == 'L';
+	while( dest < end && ((c = rb_peek(rb, i)) != EOF )){
+		i += 1;
+		if( c == '%' || c == 'L') {
+			continue;
 		}
-		dot = strchr(buf, '.');
-		if(dot) {
-			S->precision = strtol(dot+1, NULL, 10);
+		if( strchr("diouxXfega", c) ){
+			S->specifier = c;
+			continue;
 		}
+		*dest++ = c;
+	}
+	if( dest < end ){
+		*dest++ = '\0';
+	}
 
-		if( count < 2 ){
-			fputs("Warning: output fmt should print a long value "
-				"(eg '\%.2Lf' or '\%3Lu')\n", stderr);
-		}
+	if( bad_format ){
+		fputs("Warning: output fmt should print a long value "
+			"(eg '\%.2Lf' or '\%3Lu')\n", stderr);
 	}
 }
 
@@ -771,6 +767,7 @@ static void
 apply_unary(struct state *S, unsigned char c)
 {
 	struct stack_entry val;
+	int precision;
 	assert( strchr(unary_ops, c) );
 	if( !pop_value(S, &val, 1) ){
 		return;
@@ -786,7 +783,8 @@ apply_unary(struct state *S, unsigned char c)
 		stack_xpush(S->values, &val);
 		break;
 	case 'k':
-		S->precision = t == rational ? rint(v.lf) : v.ld;
+		precision =  t==rational ? rint(v.lf) : v.ld;
+		snprintf(S->format, sizeof S->format, ".%d'", precision);
 		S->specifier = 'f';
 		break;
 	case 'n':

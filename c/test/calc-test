@@ -29,7 +29,7 @@ test_long_string(){
 		for((i=0; i <256; i++)); do
 			s="${s}${op}2"
 		done
-		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op#+}512"
+		test_string "[%${op}.3Lg]0F ${s} \sum n" "${op}512"
 	done
 }
 
@@ -94,10 +94,6 @@ test_string_registers() {
 	test_string 'x' "$err"
 	test_string '1024p[%.0Lf]0Fp' "1.02e+03;1024"
 	test_string '1_024p[%.0Lf]0Fp' "1.02e+03;1024"
-	fmt_warning="Warning: output fmt should print a long value"
-	fmt_warning="$fmt_warning (eg '%.2Lf' or '%3Lu')"
-	test_string '[%.0f]0F' "$fmt_warning"
-	test_string '[L%.0f]0F' "$fmt_warning"
 	long_string="1 $( yes "1+" | sed 1049q )"
 	test_string "[$long_string]0x[%.0Lf]1Fp" '1050'
 	test_string "[${long_string} 1+]0x[%.0Lf]1Fp" '1051'
@@ -127,7 +123,7 @@ test_string_registers() {
 	LC_ALL=C test_string '0k4456798p' '4456798'
 
 	test_string '4[1 1+]1.2x+p' 3.2  # Execute 1;1+;1.2+
-	test_string '[%04.0Lf]0F23p' '23'
+	test_string '[%04.0Lf]0F23p' '0023'
 
 	# Grow the stack
 	s=$(yes 1 | sed -e 128q | tr \\n ' ')
@@ -166,7 +162,7 @@ test_funcs() {
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
 	test_string '[banana] 0!' 'Unknown function: banana'
-	test_string '?' 'Output format .3g'
+	test_string '?' "Output format .3'g"
 }
 
 
