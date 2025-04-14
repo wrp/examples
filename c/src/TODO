@@ -4,9 +4,6 @@ Add basic statistical functions to compute common statistics
 of all the values on the stack. (or make it a binary operator
 and take the top two elements as a range)
 
-Drop the 'F' command.  Just allow the user to specify precision
-and type (eg 'g' or 'f' or 'x')
-
 Add the ability to display prime factorization.
 
 Need to be able to manipulate the stack and memory better.
@@ -38,8 +35,6 @@ Categorize values.  eg, in the display of the memory, it would
 be nice to know if a value was entered, or calculated.  if
 calculated, by what operator/function?  Also, we could indicate
 if a value is already in memory and avoid duplicates.
-
-Make it possible to specify a base for integer inputs.
 
 Either have all of the registers pre-loaded with all the known
 functions, or have ! cause them to be loaded if they are empty, or
