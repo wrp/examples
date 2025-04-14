@@ -679,7 +679,7 @@ get_index(struct state *S)
 	if( pop_value(S, &val, 1) ){
 		offset = val.type == rational ? val.v.lf : val.v.ld;
 	}
-	if( val.type == rational && (rint(val.v.lf) != val.v.lf) ){
+	if( val.type == rational && (rintl(val.v.lf) != val.v.lf) ){
 		offset = -1;
 		stack_xpush(S->values, &val);
 	}
@@ -783,14 +783,14 @@ apply_unary(struct state *S, unsigned char c)
 	union value v = val.v;
 	switch( c ){
 	case '#':
-		S->input_base = t == rational ? rint(v.lf) : v.ld;
+		S->input_base = t == rational ? rintl(v.lf) : v.ld;
 		break;
 	case 'y':
 		stack_xpush(S->values, &val);
 		stack_xpush(S->values, &val);
 		break;
 	case 'k':
-		precision =  t==rational ? rint(v.lf) : v.ld;
+		precision =  t==rational ? rintl(v.lf) : v.ld;
 		snprintf(S->format[0], sizeof *S->format, ".%d'", precision);
 		S->specifier = 'f';
 		break;
