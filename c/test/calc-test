@@ -10,12 +10,18 @@ main() {
 	simple_arithmetic
 	test_string_registers
 	test_funcs
+	test_input_base
 	test_long_string
 	test_memory
 
 	summarize_results
 }
 
+test_input_base() {
+	test_string '5i15' "Garbled Input (input base is 5): Discarded '15'"
+	test_string '5i14p' '9'
+	test_string '5i14p 20ip 14p' '9;9;14'
+}
 test_memory() {
 	test_string '3 2 + M' "  0: 2;  1: 3"
 	test_string '6 7 8 9 +++ 1mp' 8
