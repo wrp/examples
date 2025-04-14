@@ -469,6 +469,14 @@ read_val(struct state *S, struct stack_entry *v, char *s, char **end)
 	}
 }
 
+static int
+is_operator(char c)
+{
+	operator *f = operator_lut;
+	return c && f[c] && f[c] != throw_warning;
+}
+
+
 /*
  * Collect inputs in the ring buffer and push values onto
  * the stack.  If we encounter an unexpected '-' or '+',
@@ -491,12 +499,12 @@ push_value(struct state *S)
 
 	cp = s = buf;
 	read_val(S, &val, s, &cp);
-	while( *cp && f[*cp] && f[*cp] != throw_warning && cp != s ){
+	while( cp != s && is_operator(*cp) ){
 		stack_xpush(S->values, &val);
 		s = cp;
 		read_val(S, &val, s, &cp);
 	}
-	if( *cp && f[*cp] && f[*cp] != throw_warning ){
+	if( is_operator(*cp) ){
 		assert( cp == s );
 		f[*cp](S, *cp);
 		for( char *t = cp + 1; *t; t++ ){
