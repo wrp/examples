@@ -1,5 +1,4 @@
 const char *help[] = {
-"A simple reverse polish calculator",
 "",
 "When possible, '-' and '+' are treated as numeric symbols,",
 "so you can use '2 -1+' or '2 1-' to subtract 1 from 2.  This makes it easier",
@@ -410,15 +409,12 @@ push_memory_to_stack(struct state *S)
 static void
 show_value(struct state *S, struct stack_entry *val)
 {
-	char fmt[64];
-	snprintf(fmt, 64, "%%%sL%c\n",
-		S->format,
-		val->type == rational ? S->specifier : 'd'
-	);
 	if( val->type == rational ){
+		char fmt[64];
+		snprintf(fmt, 64, "%%%sL%c\n", S->format, S->specifier);
 		printf(fmt, val->v.lf);
 	} else {
-		printf(fmt, val->v.ld);
+		printf("%'lld\n", val->v.ld);
 	}
 }
 
