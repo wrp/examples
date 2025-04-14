@@ -102,8 +102,8 @@ test_string_registers() {
 	test_string '[abcdefghijklmnopqrskjkjkjjjkjkjjkjjkj]' ''
 	test_string '[]9x' 'Register 9 empty'
 	test_string 'x' "$err"
-	test_string '1024p[.0f]0Fp' "1.02e+03;1024"
-	test_string '1_024p[.0f]0Fp' "1.02e+03;1024"
+	test_string '1024p[.3g]0Fp' "1${c}024;1.02e+03"
+	test_string '1_024p[.3g]0Fp' "1${c}024;1.02e+03"
 	long_string="1 $( yes "1+" | sed 1049q )"
 	test_string "[$long_string]0x[.0f]1Fp" '1050'
 	test_string "[${long_string} 1+]0x[.0f]1Fp" '1051'
@@ -155,7 +155,7 @@ test_funcs() {
 	test_string '2.718281828459 [log]0!p' '1'
 	test_string '1024 [log2]0!p' '10'
 	test_string '1000 [log10]0!p' '3'
-	test_string '1 2e-5 + [log1p] 0! p' 0.693
+	test_string '1 2e-5 + [log1p] 0! p' '0.6931571805'
 	test_string '100 [sqrt] 0! p' 10
 	test_string '10 2 [pow] 0! p' 100
 
@@ -165,14 +165,14 @@ test_funcs() {
 	test_string '5 6 [nextafter] 0! 4 0! p' 5
 
 	test_string '5 [exp2] 0!p' 32
-	test_string '2 [exp] 0!p' 7.39
+	test_string '2 [exp] 0!p' '7.389056099'
 
 	test_string "[5.0'f]0F 2,123 23 +n" "2${c}146"
 
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
 	test_string '[banana] 0!' 'Unknown function: banana'
-	test_string '?' "Output format .3'g"
+	test_string '?' "Output format .10'g"
 }
 
 

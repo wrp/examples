@@ -66,7 +66,7 @@ const char *help[] = {
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 
-#define DEFAULT_FORMAT ".3'"
+#define DEFAULT_FORMAT ".10'"
 
 #define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256
