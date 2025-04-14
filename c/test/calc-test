@@ -15,8 +15,20 @@ main() {
 	test_input_base
 	test_long_string
 	test_memory
+	test_format
 
 	summarize_results
+}
+
+test_format(){
+	test_string '10# [6] 0F 1024p' '  1024'
+	test_string '10# [.6] 0F 1024p' '001024'
+	if test -n "$c"; then
+		expect="01,024"
+	else
+		expect="001024"
+	fi
+	test_string "10# [.6'] 0F 1024p" "$expect"
 }
 
 test_input_base() {
@@ -180,7 +192,7 @@ test_funcs() {
 	test_string '1+2-3+4 5 +6 7 -8 9 10 \sum n' 33
 
 	test_string '[banana] 0!' 'Unknown function: banana'
-	test_string '?' "Output format .10'g"
+	test_string '?' "Output formats rational:.10'g  integer: 'd"
 }
 
 

@@ -67,6 +67,7 @@ const char *help[] = {
 #define ignore_char "_,"
 
 #define DEFAULT_FORMAT ".10'"
+#define DEFAULT_INT_FORMAT "'"
 
 #define HASH_OFFSET 3 /* (hash-table-note) */
 #define HASH_TABLE_SIZE 256
@@ -96,7 +97,7 @@ struct state {
 	struct stack *values;
 	struct stack *registers;
 	struct stack *memory;
-	char format[32];
+	char format[2][32];
 	char specifier;
 	process processor;
 
@@ -235,7 +236,8 @@ init_state(struct state *S)
 	S->processor = process_normal;
 	S->input_base = 0;
 	S->specifier = 'g';
-	strncpy(S->format, DEFAULT_FORMAT, sizeof S->format);
+	strncpy(S->format[0], DEFAULT_FORMAT, sizeof S->format[0]);
+	strncpy(S->format[1], DEFAULT_INT_FORMAT, sizeof S->format[1]);
 	S->values = stack_xcreate(sizeof(struct stack_entry));
 	S->memory = stack_xcreate(sizeof(struct stack_entry));
 	S->registers = stack_xcreate(0);
@@ -411,13 +413,15 @@ push_memory_to_stack(struct state *S)
 static void
 show_value(struct state *S, struct stack_entry *val)
 {
+	char fmt[64] = "%";
 	if( val->type == rational ){
-		char fmt[64];
-		snprintf(fmt, 64, "%%%sL%c\n", S->format, S->specifier);
+		snprintf(fmt + 1, 63, "%sL%c", S->format[0], S->specifier);
 		printf(fmt, val->v.lf);
 	} else {
-		printf("%'lld\n", val->v.ld);
+		snprintf(fmt + 1, 63, "%slld", S->format[1]);
+		printf(fmt, val->v.ld);
 	}
+	putchar('\n');
 }
 
 
@@ -447,7 +451,8 @@ apply_nonary(struct state *S, unsigned char c)
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
-	case '?': printf("Output format %s%c", S->format, S->specifier);
+	case '?': printf("Output formats rational:%s%c  integer: %sd",
+		S->format[0], S->specifier, S->format[1]);
 	}
 }
 
@@ -635,11 +640,11 @@ extract_format(struct state *S)
 	if( rb == NULL ){
 		return;
 	}
-	int bad_format = 0;
 	int c = 0;
 	int i = 0;
-	char *dest = S->format;
-	char *end = S->format + sizeof S->format;
+	int fmt_idx = S->input_base != 0;
+	char *dest = S->format[fmt_idx];
+	char *end = S->format[fmt_idx] + sizeof S->format[0];
 
 	while( dest < end && ((c = rb_peek(rb, i)) != EOF )){
 		i += 1;
@@ -654,11 +659,6 @@ extract_format(struct state *S)
 	}
 	if( dest < end ){
 		*dest++ = '\0';
-	}
-
-	if( bad_format ){
-		fputs("Warning: output fmt should print a long value "
-			"(eg '\%.2Lf' or '\%3Lu')\n", stderr);
 	}
 }
 
@@ -783,7 +783,7 @@ apply_unary(struct state *S, unsigned char c)
 		break;
 	case 'k':
 		precision =  t==rational ? rint(v.lf) : v.ld;
-		snprintf(S->format, sizeof S->format, ".%d'", precision);
+		snprintf(S->format[0], sizeof *S->format, ".%d'", precision);
 		S->specifier = 'f';
 		break;
 	case 'n':
