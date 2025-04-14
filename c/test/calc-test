@@ -18,9 +18,11 @@ main() {
 }
 
 test_input_base() {
-	test_string '5i15' "Garbled Input (input base is 5): Discarded '15'"
-	test_string '5i14p' '9'
-	test_string '5i14p 20ip 14p' '9;9;14'
+	test_string '5#15' "Garbled Input (input base is 5): Discarded '15'"
+	test_string '5#14p' '9'
+	test_string '5#14p 20#p 14p' '9;9;14'
+	test_string '36# 2z5 a# p' "3${c}857"
+	test_string '36# 2z5 a# 25 nn' "25;3${c}857"
 }
 test_memory() {
 	test_string '3 2 + M' "  0: 2;  1: 3"
@@ -72,7 +74,7 @@ simple_arithmetic() {
 	test_string '1 2 *(-7)+p ' '-5'
 	test_string '3.1 1.3+p' '4.4'
 	test_string '2 5^pq' '32'
-	test_string '2z5 ' 'Unexpected: z'
+	test_string '2z5 ' "Garbled Input: Discarded '2z5'"
 	test_string '10k10 3/p' '3.3333333333'
 	test_string '1y+p' '2'
 	test_string '1 2 3np' "3;2"

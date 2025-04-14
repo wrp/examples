@@ -21,13 +21,13 @@ const char *help[] = {
 "and then push 3 onto the stack.",
 "",
 "!    use function from specified register",
+"#    set input base (0 for float)",
 "\\f   apply function f to the top value(s) in the stack (eg 0\\sin)",
 "C    pop and discard the top item in the stack",
 "D    pop and discard the top item in the register stack",
 "F    use value from the specified register as format string",
 "[s]  push s onto the register stack",
 "h    print this help message",
-"i    set input base (0 for float)",
 "k    set precision of format string",
 "m    push value from the specified memory location",
 "M    show the memory stack",
@@ -57,10 +57,12 @@ const char *help[] = {
 #include <math.h>
 #include <unistd.h>
 
-#define numeric_tok "+-0123456789XPEabcdef."
+#define numeric_tok "+-0123456789." \
+	"abcdefghijklmnopqrstuvwxyz" \
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define string_ops "()[]D!FRxZ\\"
 #define binary_ops "*-+/^r"
-#define unary_ops "Cikny"
+#define unary_ops "C#kny"
 #define nonary_ops "hmMpqY?"
 #define ignore_char "_,"
 
@@ -772,7 +774,7 @@ apply_unary(struct state *S, unsigned char c)
 	enum number_type t = val.type;
 	union value v = val.v;
 	switch( c ){
-	case 'i':
+	case '#':
 		S->input_base = t == rational ? rint(v.lf) : v.ld;
 		break;
 	case 'y':
