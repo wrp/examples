@@ -1,11 +1,8 @@
 In calc:
 
-If we allow alternate input base, then literally every alpha
-character is potentially a numeric value, so we need to treat
-them similarly to +/-. Hmmm.  This is potentially problematic.
-
 Add basic statistical functions to compute common statistics
-of all the values on the stack.
+of all the values on the stack. (or make it a binary operator
+and take the top two elements as a range)
 
 Drop the 'F' command.  Just allow the user to specify precision
 and type (eg 'g' or 'f' or 'x')
