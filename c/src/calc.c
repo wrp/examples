@@ -361,8 +361,6 @@ process_enquote(struct state *S, int c)
 static void
 process_normal(struct state *S, int c)
 {
-	struct ring_buf *b = S->accum;
-
 	if( (c == '+') || (c == '-') ){
 		S->plus_minus_count += 1;
 		if( S->plus_minus_count > 3 ){
@@ -372,7 +370,7 @@ process_normal(struct state *S, int c)
 	}
 
 	if( strchr(numeric_tok, c) ){
-		rb_xpush(b, c);
+		rb_xpush(S->accum, c);
 	} else if( strchr(ignore_char, c) ){
 		;
 	} else {
