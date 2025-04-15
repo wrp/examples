@@ -451,7 +451,7 @@ apply_nonary(struct state *S, unsigned char c)
 		break;
 	case 'q': exit(0);
 	case 'h': print_help(S); /* Fall Thru */
-	case '?': printf("Output formats rational:%s%c  integer: %sd",
+	case '?': printf("Output formats rational: %s%c  integer: %sd\n",
 		S->format[0], S->specifier, S->format[1]);
 	}
 }
