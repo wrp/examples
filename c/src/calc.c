@@ -811,6 +811,12 @@ apply_binary(struct state *S, unsigned char c)
 	if( !pop_value(S, val, 1) || !pop_value(S, val + 1, 1) ){
 		return;
 	}
+	for( int i = 0; i < 2; i += 1 ){
+		if( val[i].type == integer ){
+			val[i].v.lf = (long double)val[i].v.ld;
+			val[i].type = rational;
+		}
+	}
 	switch(c) {
 	case 'r':
 		stack_xpush(S->values, val);
