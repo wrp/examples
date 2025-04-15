@@ -8,6 +8,7 @@ pi=3.14159265358
 main() {
 	initialize
 
+	test_factoring
 	basic_tests
 	simple_arithmetic
 	test_string_registers
@@ -18,6 +19,12 @@ main() {
 	test_format
 
 	summarize_results
+}
+
+test_factoring(){
+	test_string '4 \factor nn' '2;2'
+	test_string '7 \factor n' '7'
+	test_string '24 \factor nnnn' '3;2;2;2'
 }
 
 test_format(){

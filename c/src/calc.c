@@ -121,6 +121,7 @@ static int pop_value(struct state *, struct stack_entry *, int);
 static struct stack_entry *wrap_get(struct stack *, int);
 static int wrap_pop(struct stack *, void *);
 static void sum(struct state *);
+static void factor(struct state *);
 struct func {
 	const char *name;
 	int arg_count;
@@ -142,6 +143,7 @@ struct func {
 	{ "exp", 1, expl },
 	{ "exp2", 1, exp2l },
 	{ "fabs", 1, fabsl },
+	{ "factor", 0, .s = factor },
 	{ "hypot", 2, .g = hypotl },
 	{ "lgamma", 1, lgammal },
 	{ "log", 1, logl },
@@ -821,6 +823,43 @@ apply_binary(struct state *S, unsigned char c)
 	case '^': res.v.lf = pow(val[1].v.lf, val[0].v.lf); break;
 	}
 	stack_xpush(S->values, &res);
+}
+
+
+static void
+factor(struct state *S)
+{
+	long long v;
+	struct stack_entry value;
+	if( !pop_value(S, &value, 0) ){
+		return;
+	}
+	if( value.type == rational ){
+		if( value.v.lf != rintl(value.v.lf) ){
+			fputs("Can only factor integers\n", stderr);
+			stack_xpush(S->values, &value);
+			return;
+		}
+		value.type = integer;
+		value.v.ld = llrintl(value.v.lf);
+	}
+	v = value.v.ld;
+	while( v % 2 == 0 ){
+		v = v / 2;
+		value.v.ld = 2;
+		stack_xpush(S->values, &value);
+	}
+	for( long long f = 3; f < v; f += 2 ){
+		value.v.ld = f;
+		while( v % f == 0 ){
+			v = v / f;
+			stack_xpush(S->values, &value);
+		}
+	}
+	if( v > 1 ){
+		value.v.ld = v;
+		stack_xpush(S->values, &value);
+	}
 }
 
 
