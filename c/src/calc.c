@@ -850,6 +850,10 @@ factor(struct state *S)
 		value.v.ld = llrintl(value.v.lf);
 	}
 	v = value.v.ld;
+	if( v == 1 ){
+		stack_xpush(S->values, &value);
+		return;
+	}
 	while( v % 2 == 0 ){
 		v = v / 2;
 		value.v.ld = 2;
