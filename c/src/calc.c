@@ -266,6 +266,7 @@ main(int argc, char **argv)
 	} else while( (c=getchar()) != EOF ){
 		push_raw(S, c);
 	}
+	push_raw(S, ' ');
 	rb_free(S->raw);
 	rb_free(S->accum);
 	stack_free(S->values);

@@ -249,7 +249,7 @@ test_string() {
 	local status=success
 	input=$1
 	expected=$(printf '%s' "$2" | tr ';' \\n)
-	out=$(printf '%s\n' "$input" | $exe 2>&1)
+	out=$(printf '%s' "$input" | $exe 2>&1)
 	: $((count += 1))
 	if test $# -gt 1 && test "$out" != "$expected"; then
 		status=failed
