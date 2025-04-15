@@ -253,10 +253,11 @@ test_string() {
 	: $((count += 1))
 	if test $# -gt 1 && test "$out" != "$expected"; then
 		status=failed
-	fi
-	out=$($exe "$input" 2>&1)
-	if test $# -gt 1 && test "$out" != "$expected"; then
-		status=failed
+	else
+		out=$($exe "$input" 2>&1)
+		if test $# -gt 1 && test "$out" != "$expected"; then
+			status=failed
+		fi
 	fi
 
 	if test -n "$V" || test "$status" = failed; then
