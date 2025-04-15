@@ -121,6 +121,11 @@ simple_arithmetic() {
 	test_string '4 1- 8Y' "  0: 3;  1: 8"
 	test_string "[.3'f]0F1024 1+p" "1${c}025.000"
 	test_string "[.0'f]0F 1234567 p" "1${c}234${c}567"
+
+	test_string '1 10# 2 + p' '3'
+	test_string '10# 1 0# 2 + p' '3'
+	test_string '[.3f]0F 1 1 + p' '2.000'
+	test_string '[.3f]0F 10# 1 1 + p' '2'
 }
 
 test_string_registers() {

@@ -804,30 +804,63 @@ apply_unary(struct state *S, unsigned char c)
 }
 
 static void
+coerce_to(enum number_type t, struct stack_entry *v)
+{
+	if( v->type == t ){
+		return;
+	}
+	switch( t ){
+	case integer: v->v.ld = (long long)v->v.lf; break;
+	case rational: v->v.lf = (long double)v->v.ld; break;
+	}
+	v->type = t;
+}
+
+
+static void
 apply_binary(struct state *S, unsigned char c)
 {
+	enum number_type t;
 	struct stack_entry val[2];
 	struct stack_entry res = {0};
 	assert( strchr(binary_ops, c));
 	if( !pop_value(S, val, 1) || !pop_value(S, val + 1, 1) ){
 		return;
 	}
-	for( int i = 0; i < 2; i += 1 ){
-		if( val[i].type == integer ){
-			val[i].v.lf = (long double)val[i].v.ld;
-			val[i].type = rational;
-		}
+	if( c == 'r' ){
+		stack_xpush(S->values, val + 0);
+		stack_xpush(S->values, val + 1);
+		return;
 	}
-	switch(c) {
-	case 'r':
-		stack_xpush(S->values, val);
-		res = val[1];
+
+	if( val[0].type == val[1].type ){
+		t = val[0].type;
+	} else {
+		t = rational;
+	}
+	res.type = t;
+	for( int i = 0; i < 2; i += 1 ){
+		coerce_to(t, val + i);
+	}
+	switch(t) {
+	case rational:
+		switch(c) {
+		case '*': res.v.lf = val[1].v.lf * val[0].v.lf; break;
+		case '-': res.v.lf = val[1].v.lf - val[0].v.lf; break;
+		case '+': res.v.lf = val[1].v.lf + val[0].v.lf; break;
+		case '/': res.v.lf = val[1].v.lf / val[0].v.lf; break;
+		case '^': res.v.lf = powl(val[1].v.lf, val[0].v.lf); break;
+		}
 		break;
-	case '*': res.v.lf = val[1].v.lf * val[0].v.lf; break;
-	case '-': res.v.lf = val[1].v.lf - val[0].v.lf; break;
-	case '+': res.v.lf = val[1].v.lf + val[0].v.lf; break;
-	case '/': res.v.lf = val[1].v.lf / val[0].v.lf; break;
-	case '^': res.v.lf = pow(val[1].v.lf, val[0].v.lf); break;
+	case integer:
+		switch(c) {
+		case '*': res.v.ld = val[1].v.ld * val[0].v.ld; break;
+		case '-': res.v.ld = val[1].v.ld - val[0].v.ld; break;
+		case '+': res.v.ld = val[1].v.ld + val[0].v.ld; break;
+		case '/': res.v.ld = val[1].v.ld / val[0].v.ld; break;
+		case '^': res.v.ld = powl(val[1].v.ld, val[0].v.ld); break;
+		}
+		break;
 	}
 	stack_xpush(S->values, &res);
 }
