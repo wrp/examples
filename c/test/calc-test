@@ -25,6 +25,9 @@ test_factoring(){
 	test_string '4 \factor nn' '2;2'
 	test_string '7 \factor n' '7'
 	test_string '24 \factor nnnn' '3;2;2;2'
+	test_string '24.4 \factor n' 'Can only factor integers;24.4'
+	test_string '2 1 \factor p +n' '1;3'
+	test_string '2 1 6 \factor +++n' '8'
 }
 
 test_format(){
