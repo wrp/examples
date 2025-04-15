@@ -21,6 +21,12 @@ main() {
 	summarize_results
 }
 
+# Inputs that currently fail but should not.
+# TODO: fix these
+
+# This mistakenly applies the format string .3d
+# [.3d]0F 1 1 + p
+
 test_factoring(){
 	test_string '4 \factor nn' '2;2'
 	test_string '7 \factor n' '7'
