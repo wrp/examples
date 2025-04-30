@@ -30,11 +30,20 @@ main(int argc, char **argv)
 {
 	show("Smallest float", FLT_MIN, 0, 1.0);
 	printf("EPSILON: " FMT "\n", FLT_EPSILON);
+
+	show("Zero", 0.0, 1, 2.0);
+	double n = nextafter(0.0, 1.0);
+	show("0 Successor", n, 1, 2.0);
+
 	show("One", 1.0, 0, 2.0);
 	show("Middle float", 3e15, 0, 2.0);
 	show("Largest float", FLT_MAX, 0, 2.0);
 
 	show("Smallest double", DBL_MIN, 1, 2.0);
+
+	double v = nextafter(DBL_MIN, -2.0);
+	show("Denormalized", v, 1, -4.0);
+
 	show("Middle double", 3e15, 1, 2.0);
 	show("Largest double", DBL_MAX, 1, 2.0);
 
