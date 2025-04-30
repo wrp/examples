@@ -5,11 +5,23 @@
 #include <math.h>
 #include <stdio.h>
 
+void
+show(const char *msg, float v)
+{
+	printf("%s: %g\n", msg, v);
+	for( int i=0; i < 5; i += 1 ){
+		v = nextafterf(v, 1.0);
+		printf("\t%d: %.120e\n", i, v);
+	}
+}
+
 int
 main(int argc, char **argv)
 {
-	printf("Smallest float: %g\n", FLT_MIN);
-	printf("Largest float: %g\n", FLT_MAX);
+	show("Smallest float", FLT_MIN);
+	show("Middle float", 3e15);
+	show("Largest float", FLT_MAX);
+
 	return 0;
 }
 
