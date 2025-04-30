@@ -5,13 +5,23 @@
 #include <math.h>
 #include <stdio.h>
 
+#define FMT "%.120e"
 void
 show(const char *msg, double v, int s)
 {
-	printf("%s: %g\n", msg, v);
+	printf("%s: %g is ", msg, v);
+	switch(fpclassify(v)){
+	case FP_INFINITE:   printf("an infinite number."); break;
+	case FP_NAN:        printf("not a number (NaN)."); break;
+	case FP_NORMAL:     printf("a normalized number."); break;
+	case FP_SUBNORMAL:  printf("a denormalized number."); break;
+	case FP_ZERO:       printf("is zero (0 or -0)."); break;
+	}
+	putchar('\n');
+
 	for( int i=0; i < 5; i += 1 ){
-		v = s ? nextafter(v, 1.0) : nextafterf(v, 1.0);
-		printf("\t%d: %.120e\n", i, v);
+		v = s ? nextafter(v, 2.0) : nextafterf(v, 2.0);
+		printf("\t%d: " FMT "\n", i, v);
 	}
 }
 
@@ -19,6 +29,8 @@ int
 main(int argc, char **argv)
 {
 	show("Smallest float", FLT_MIN, 0);
+	printf("EPSILON: " FMT "\n", FLT_EPSILON);
+	show("One", 1.0, 0);
 	show("Middle float", 3e15, 0);
 	show("Largest float", FLT_MAX, 0);
 
@@ -34,6 +46,10 @@ main(int argc, char **argv)
 
 See also:
      feclearexcept, fegetexceptflag, feraiseexcept, fesetexceptflag, fetestexcept – functions providing access to the floating-point status flags.
+     fpclassify, isfinite, isinf, isnan, isnormal – classify a floating-point number
+     isgreater, signbit
+
+
 
      FLT_MANT_DIG - The number of binary digits in the significand of a float.
      FLT_MIN_EXP - One more than the smallest exponent available in the float type.
