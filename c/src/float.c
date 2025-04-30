@@ -7,7 +7,7 @@
 
 #define FMT "%.120e"
 void
-show(const char *msg, double v, int s)
+show(const char *msg, double v, int s, double dir)
 {
 	printf("%s: %g is ", msg, v);
 	switch(fpclassify(v)){
@@ -19,8 +19,8 @@ show(const char *msg, double v, int s)
 	}
 	putchar('\n');
 
-	for( int i=0; i < 5; i += 1 ){
-		v = s ? nextafter(v, 2.0) : nextafterf(v, 2.0);
+	for( int i=0; i < 2; i += 1 ){
+		v = s ? nextafter(v, dir) : nextafterf(v, dir);
 		printf("\t%d: " FMT "\n", i, v);
 	}
 }
@@ -28,15 +28,15 @@ show(const char *msg, double v, int s)
 int
 main(int argc, char **argv)
 {
-	show("Smallest float", FLT_MIN, 0);
+	show("Smallest float", FLT_MIN, 0, 1.0);
 	printf("EPSILON: " FMT "\n", FLT_EPSILON);
-	show("One", 1.0, 0);
-	show("Middle float", 3e15, 0);
-	show("Largest float", FLT_MAX, 0);
+	show("One", 1.0, 0, 2.0);
+	show("Middle float", 3e15, 0, 2.0);
+	show("Largest float", FLT_MAX, 0, 2.0);
 
-	show("Smallest double", DBL_MIN, 1);
-	show("Middle double", 3e15, 1);
-	show("Largest double", DBL_MAX, 1);
+	show("Smallest double", DBL_MIN, 1, 2.0);
+	show("Middle double", 3e15, 1, 2.0);
+	show("Largest double", DBL_MAX, 1, 2.0);
 
 	return 0;
 }
