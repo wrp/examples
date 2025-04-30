@@ -6,11 +6,11 @@
 #include <stdio.h>
 
 void
-show(const char *msg, float v)
+show(const char *msg, double v, int s)
 {
 	printf("%s: %g\n", msg, v);
 	for( int i=0; i < 5; i += 1 ){
-		v = nextafterf(v, 1.0);
+		v = s ? nextafter(v, 1.0) : nextafterf(v, 1.0);
 		printf("\t%d: %.120e\n", i, v);
 	}
 }
@@ -18,9 +18,13 @@ show(const char *msg, float v)
 int
 main(int argc, char **argv)
 {
-	show("Smallest float", FLT_MIN);
-	show("Middle float", 3e15);
-	show("Largest float", FLT_MAX);
+	show("Smallest float", FLT_MIN, 0);
+	show("Middle float", 3e15, 0);
+	show("Largest float", FLT_MAX, 0);
+
+	show("Smallest double", DBL_MIN, 1);
+	show("Middle double", 3e15, 1);
+	show("Largest double", DBL_MAX, 1);
 
 	return 0;
 }
