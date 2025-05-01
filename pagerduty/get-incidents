@@ -27,7 +27,7 @@ main() {
 		RESOLVED=1
 	fi
 	parse_services "${1-$PD_SERVICE}"   # Can be a colon separated list
-	parse_start_date "${2-$(date -v -1w -Iseconds)}"
+	parse_start_date "${2-$(date -v -1w -Iseconds)}" || exit
 	offset=0
 
 	while curl -fsS \
@@ -56,6 +56,7 @@ main() {
 		'${ASSIGNEE+.assignments[].assignee.summary,}'
 		.created_at,
 		.incident_number,
+		.urgency,
 		.status,
 		.title
 	] | @tsv' \
@@ -77,12 +78,12 @@ parse_services() {
 # If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
 # to use it as an argument to date to generate a timestamp
 parse_start_date() {
-	start_date=${1}
+	local case_fixed=$(printf '%s' "${1}" | tr YMWDhms ymwdHMS)
 	local d='[0-9]'
 
 	case $start_date in
 	$d$d$d$d-[01]$d-[0-3]${d}T[0-2]$d:[0-6]$d:[0-6]$d[+-]$d$d:$d$d) : ;;
-	*) start_date=$(date -v -${start_date#-} -Iseconds);;
+	*) start_date=$(date -v -${case_fixed#-} -Iseconds);;
 	esac
 }
 

@@ -3,7 +3,7 @@
 tabs 20,+16,+40
 
 header=$(printf 'key\tstatus\tcreated at\tsummary')
-curl -Ssf \
+curl -Ssf --ca-native \
 	-u "${EMAIL?}:${JIRA_TOKEN?}" \
 	-H 'Content-Type: application/json' \
 	"${JIRA_URL?}/rest/api/2/search?jql=$(:
