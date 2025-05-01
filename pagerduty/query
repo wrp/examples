@@ -6,6 +6,8 @@ if test -z "$1"; then
 
 	incidents/${id}
 	incidents/${id}/log_entries
+	incidents/$id/log_entries?include[]=channels
+
 	incidents?team_ids[]=${PD_TEAM_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
 	incidents?serivce_ids[]=${SVC_ID}&sort_by=incident_number:DESC&offset=$((100 * i++))"
 
