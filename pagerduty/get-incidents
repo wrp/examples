@@ -4,7 +4,7 @@
 
 # Get recent unresolved incidents.  Set RESOLVED to see all.
 # If $1 is specified, limit search to that service,
-# otherwise get incidents for $PD_SERVICE, or (if empty) all incidents (up to 1st 100).
+# otherwise get incidents for $PD_SERVICE, or (if empty) all incidents.
 
 # If $2 is given, it should be an ISO 8601 formatted time or a string that
 # can be passed to the -v option of gnu date (eg "2w" or "-2w"): only incidents
