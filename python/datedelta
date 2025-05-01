@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+# Show difference of two times
+
+from datetime import datetime, timedelta, timezone, tzinfo
+
+import sys
+
+
+a = datetime.strptime(sys.stdin.readline().strip(), '%Y-%m-%dT%H:%M:%SZ')
+b = datetime.strptime(sys.stdin.readline().strip(), '%Y-%m-%dT%H:%M:%SZ')
+
+print(b - a)
