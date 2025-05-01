@@ -68,7 +68,7 @@ parse_services() {
 	while read service; do
 		services="${services} -d service_ids[]=${service}"
 	done <<- EOF
-	$(echo $1 | tr : \\n)
+	$(printf '%s\n' "$1" | tr : \\n)
 	EOF
 	fi
 }
