@@ -16,6 +16,7 @@
 # (Use ./list-all-services to account for pagination)
 
 # If RESOLVED is set in the environment, also return resolved incidents
+# If ASSIGNEE is set in the environment, include assignee in output
 
 : ${output=incidents-$(date +%s)}
 
@@ -52,7 +53,7 @@ main() {
 	| tee -a "$output" \
 	| jq -rc '.incidents[] | [
 		.service.id,
-		.assignments[].assignee.summary,
+		'${ASSIGNEE+.assignments[].assignee.summary,}'
 		.created_at,
 		.incident_number,
 		.status,
