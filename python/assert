@@ -4,7 +4,7 @@ import traceback
 import sys
 
 # Build module with -O to disable (eg, python -O $file)
-print(f"debug = {__debug__}, modified with -O")
+print(f"debug = {__debug__}")  # Can be modified with -O
 
 # Assert will either "raise AssertionError" or
 # raise "AssertionError(expression2)"
@@ -19,3 +19,6 @@ except AssertionError as e:
     print("caught:", e.__traceback__)
     print(dir(e.__traceback__))
     print(traceback.extract_tb(e.__traceback__))
+    print(e)
+else:
+    print('No assertions raised')  #  Happens when -O is applied
