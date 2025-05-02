@@ -65,10 +65,14 @@ main() {
 }
 
 parse_services() {
+	local d='[A-Z0-9]'
 	if test -n "$1"; then
 	unset services
 	while read service; do
-		services="${services} -d service_ids[]=${service}"
+		case $service in
+		$d$d$d$d$d$d$d) services="${services} -d service_ids[]=${service}";;
+		*) echo >&2 "Invalid PD service: $service"; exit 1;;
+		esac
 	done <<- EOF
 	$(printf '%s\n' "$1" | tr : \\n)
 	EOF
