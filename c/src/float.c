@@ -1,4 +1,7 @@
 
+/* ieee 754 double has 11-bit exponent, 52-bit significand
+ * ieee 754 single has 7-bit exponent, 24-bit significand
+*/
 
 #include <assert.h>
 #include <float.h>
