@@ -55,6 +55,7 @@ main() {
 		.service.id,
 		'${ASSIGNEE+.assignments[].assignee.summary,}'
 		.created_at,
+		.resolved_at,
 		.incident_number,
 		.urgency,
 		.status,
