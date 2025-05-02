@@ -4,6 +4,8 @@
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define FMT "%.120e"
 
@@ -12,9 +14,9 @@ void
 show(const char *msg, double v, enum width context)
 {
 	if( context == dbl ){
-		show("dbl", nextafter(v, -INFINITY), 0);
+		show("prev dbl", nextafter(v, -INFINITY), 0);
 	} else if( context == flt ){
-		show("sgl", nextafterf(v, -INFINITY), 0);
+		show("prev sgl", nextafterf(v, -INFINITY), 0);
 	}
 
 	printf("%25s: " FMT " is ", msg, v);
@@ -28,16 +30,35 @@ show(const char *msg, double v, enum width context)
 	putchar('\n');
 
 	if( context == dbl ){
-		show("dbl", nextafter(v, INFINITY), 0);
+		show("next dbl", nextafter(v, INFINITY), 0);
 	} else if( context == flt ){
-		show("sgl", nextafterf(v, INFINITY), 0);
+		show("next sgl", nextafterf(v, INFINITY), 0);
 	}
 }
 
 int
 main(int argc, char **argv)
 {
-	enum width context = argc > 1 ? flt : dbl;
+	enum width context = dbl;
+	if( argc > 1 && strcmp("float", argv[1]) == 0 ){
+		context = flt;
+		argv += 1;
+		argc -= 1;
+	}
+	if( argc > 1 ){
+		for( argv += 1; *argv; argv += 1 ){
+			char *end;
+			double d = strtod(*argv, &end);
+			char buf[23];
+			snprintf(buf, sizeof buf, "%s", *argv);
+			if( *end ){
+				fprintf(stderr, "parse error: %s\n", *argv);
+			} else {
+				show(buf, d, context);
+			}
+		}
+		return 0;
+	}
 
 	show("Neg infinity", -INFINITY, context);
 	show("Zero        ", 0.0, context);
