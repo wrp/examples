@@ -7,10 +7,11 @@
 
 #define FMT "%.120e"
 void
-show(const char *msg, double v, int flag)
+show(const char *msg, double v, int context)
 {
-	if( flag ){
+	if( context > 0 ){
 		show("dbl", nextafter(v, -FLT_MAX), 0);
+	} else if( context < 0 ){
 		show("sgl", nextafterf(v, -FLT_MAX), 0);
 	}
 
@@ -24,8 +25,9 @@ show(const char *msg, double v, int flag)
 	}
 	putchar('\n');
 
-	if( flag ){
+	if( context > 0 ){
 		show("dbl", nextafter(v, FLT_MAX), 0);
+	} else if( context < 0 ){
 		show("sgl", nextafterf(v, FLT_MAX), 0);
 	}
 }
@@ -33,24 +35,25 @@ show(const char *msg, double v, int flag)
 int
 main(int argc, char **argv)
 {
+	int context = argc > 1 ? -1 : 1;
 	show("FLT_EPSILON", FLT_EPSILON, 0);
 	show("DBL_EPSILON", DBL_EPSILON, 0);
 
-	show("Smallest float", FLT_MIN, 1);
+	show("Smallest float", FLT_MIN, context);
 
-	show("Zero        ", 0.0, 1);
+	show("Zero        ", 0.0, context);
 
-	show("        One", 1.0, 2);
-	show("Middle float", 3e15, 2);
-	show("Largest float", FLT_MAX, 2);
+	show("        One", 1.0, context);
+	show("Middle float", 3e15, context);
+	show("Largest float", FLT_MAX, context);
 
-	show("Smallest double", DBL_MIN, 2);
+	show("Smallest double", DBL_MIN, context);
 
 	double v = nextafter(DBL_MIN, -2.0);
-	show("DBL_MIN predecessor", v, 1);
+	show("DBL_MIN predecessor", v, context);
 
-	show("Middle double", 3e15, 1);
-	show("Largest double", DBL_MAX, 1);
+	show("Middle double", 3e15, context);
+	show("Largest double", DBL_MAX, context);
 
 	return 0;
 }
