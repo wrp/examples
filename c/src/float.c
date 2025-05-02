@@ -7,45 +7,50 @@
 
 #define FMT "%.120e"
 void
-show(const char *msg, double v, int s, double dir)
+show(const char *msg, double v, int flag)
 {
-	printf("%s: %g is ", msg, v);
+	if( flag ){
+		show("dbl", nextafter(v, -FLT_MAX), 0);
+		show("sgl", nextafterf(v, -FLT_MAX), 0);
+	}
+
+	printf("%25s: " FMT " is ", msg, v);
 	switch(fpclassify(v)){
 	case FP_INFINITE:   printf("an infinite number."); break;
 	case FP_NAN:        printf("not a number (NaN)."); break;
 	case FP_NORMAL:     printf("a normalized number."); break;
 	case FP_SUBNORMAL:  printf("a denormalized number."); break;
-	case FP_ZERO:       printf("is zero (0 or -0)."); break;
+	case FP_ZERO:       printf("zero (0 or -0)."); break;
 	}
 	putchar('\n');
 
-	for( int i=0; i < 2; i += 1 ){
-		v = s ? nextafter(v, dir) : nextafterf(v, dir);
-		printf("\t%d: " FMT "\n", i, v);
+	if( flag ){
+		show("dbl", nextafter(v, FLT_MAX), 0);
+		show("sgl", nextafterf(v, FLT_MAX), 0);
 	}
 }
 
 int
 main(int argc, char **argv)
 {
-	show("Smallest float", FLT_MIN, 0, 1.0);
-	printf("EPSILON: " FMT "\n", FLT_EPSILON);
+	show("FLT_EPSILON", FLT_EPSILON, 0);
+	show("DBL_EPSILON", DBL_EPSILON, 0);
 
-	show("Zero", 0.0, 1, 2.0);
-	double n = nextafter(0.0, 1.0);
-	show("0 Successor", n, 1, 2.0);
+	show("Smallest float", FLT_MIN, 1);
 
-	show("One", 1.0, 0, 2.0);
-	show("Middle float", 3e15, 0, 2.0);
-	show("Largest float", FLT_MAX, 0, 2.0);
+	show("Zero        ", 0.0, 1);
 
-	show("Smallest double", DBL_MIN, 1, 2.0);
+	show("        One", 1.0, 2);
+	show("Middle float", 3e15, 2);
+	show("Largest float", FLT_MAX, 2);
+
+	show("Smallest double", DBL_MIN, 2);
 
 	double v = nextafter(DBL_MIN, -2.0);
-	show("Denormalized", v, 1, -4.0);
+	show("DBL_MIN predecessor", v, 1);
 
-	show("Middle double", 3e15, 1, 2.0);
-	show("Largest double", DBL_MAX, 1, 2.0);
+	show("Middle double", 3e15, 1);
+	show("Largest double", DBL_MAX, 1);
 
 	return 0;
 }
