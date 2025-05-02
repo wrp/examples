@@ -80,6 +80,7 @@ parse_services() {
 parse_start_date() {
 	local case_fixed=$(printf '%s' "${1}" | tr YMWDhms ymwdHMS)
 	local d='[0-9]'
+	start_date=$1
 
 	case $start_date in
 	$d$d$d$d-[01]$d-[0-3]${d}T[0-2]$d:[0-6]$d:[0-6]$d[+-]$d$d:$d$d) : ;;
