@@ -61,6 +61,20 @@ main() {
 		.status,
 		.title
 	] | @tsv' \
+	| python -c '
+from datetime import datetime
+import sys
+
+for x in sys.stdin.readlines():
+	fields = x.split()
+	_, created, resolved, _, _, status = fields[0:6]
+	if status == "resolved":
+		a = datetime.strptime(created, "%Y-%m-%dT%H:%M:%SZ")
+		b = datetime.strptime(resolved, "%Y-%m-%dT%H:%M:%SZ")
+		fields[5] = f"Res({b - a})"
+		del(fields[2])
+	print("\t".join(fields))
+' \
 	| ${PAGER-more} \
 	| grep . || exit 1
 }
