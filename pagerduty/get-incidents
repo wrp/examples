@@ -72,7 +72,7 @@ for x in sys.stdin.readlines():
 		a = datetime.strptime(created, "%Y-%m-%dT%H:%M:%SZ")
 		b = datetime.strptime(resolved, "%Y-%m-%dT%H:%M:%SZ")
 		fields[5] = f"Res({b - a})"
-		del(fields[2])
+	del(fields[2])
 	print("\t".join(fields))
 ' \
 	| ${PAGER-more} \
