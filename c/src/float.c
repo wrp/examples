@@ -1,5 +1,6 @@
 
 
+#include <assert.h>
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -15,6 +16,7 @@ show(const char *msg, double v, enum width context)
 {
 	union { double v; unsigned long k; } vu;
 	vu.v = v;
+	assert( sizeof vu.v == sizeof vu.k );
 
 	if( context == dbl ){
 		double prev = nextafter(v, -INFINITY);
@@ -43,6 +45,23 @@ show(const char *msg, double v, enum width context)
 	}
 }
 
+double
+get_value(const char *s)
+{
+	char *end;
+	union { double v; unsigned long k; } vu;
+	if( *s == '0' && s[1] == 'x' ){
+		vu.k = strtoul(s + 2, &end, 16);
+	} else {
+		vu.v = strtod(s, &end);
+	}
+	if( *end ){
+		fprintf(stderr, "parse error at '%c' %s\n", *end, s);
+		exit(1);
+	}
+	return vu.v;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -54,15 +73,10 @@ main(int argc, char **argv)
 	}
 	if( argc > 1 ){
 		for( argv += 1; *argv; argv += 1 ){
-			char *end;
-			double d = strtod(*argv, &end);
+			double d = get_value(*argv);
 			char buf[23];
 			snprintf(buf, sizeof buf, "%s", *argv);
-			if( *end ){
-				fprintf(stderr, "parse error: %s\n", *argv);
-			} else {
-				show(buf, d, context);
-			}
+			show(buf, d, context);
 		}
 		return 0;
 	}
@@ -73,8 +87,6 @@ main(int argc, char **argv)
 	show("Smallest float", FLT_MIN, context);
 	show("DBL_EPSILON", DBL_EPSILON, context);
 	show("FLT_EPSILON", FLT_EPSILON, context);
-
-
 
 	show("        One", 1.0, context);
 	show("Middle float", 3e15, context);
