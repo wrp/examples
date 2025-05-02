@@ -13,6 +13,9 @@ enum width { none, dbl, flt };
 void
 show(const char *msg, double v, enum width context)
 {
+	union { double v; unsigned long k; } vu;
+	vu.v = v;
+
 	if( context == dbl ){
 		double prev = nextafter(v, -INFINITY);
 		show("prev dbl", prev, 0);
@@ -23,7 +26,7 @@ show(const char *msg, double v, enum width context)
 		printf("%25s: %g\n", "delta", v - prev);
 	}
 
-	printf("%25s: " FMT " is ", msg, v);
+	printf("%25s: 0x%0lx: " FMT " is ", msg, vu.k, v);
 	switch(fpclassify(v)){
 	case FP_INFINITE:   printf("an infinite number."); break;
 	case FP_NAN:        printf("not a number (NaN)."); break;
