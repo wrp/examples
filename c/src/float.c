@@ -6,13 +6,15 @@
 #include <stdio.h>
 
 #define FMT "%.120e"
+
+enum width { none, dbl, flt };
 void
-show(const char *msg, double v, int context)
+show(const char *msg, double v, enum width context)
 {
-	if( context > 0 ){
-		show("dbl", nextafter(v, -FLT_MAX), 0);
-	} else if( context < 0 ){
-		show("sgl", nextafterf(v, -FLT_MAX), 0);
+	if( context == dbl ){
+		show("dbl", nextafter(v, -INFINITY), 0);
+	} else if( context == flt ){
+		show("sgl", nextafterf(v, -INFINITY), 0);
 	}
 
 	printf("%25s: " FMT " is ", msg, v);
@@ -25,35 +27,34 @@ show(const char *msg, double v, int context)
 	}
 	putchar('\n');
 
-	if( context > 0 ){
-		show("dbl", nextafter(v, FLT_MAX), 0);
-	} else if( context < 0 ){
-		show("sgl", nextafterf(v, FLT_MAX), 0);
+	if( context == dbl ){
+		show("dbl", nextafter(v, INFINITY), 0);
+	} else if( context == flt ){
+		show("sgl", nextafterf(v, INFINITY), 0);
 	}
 }
 
 int
 main(int argc, char **argv)
 {
-	int context = argc > 1 ? -1 : 1;
-	show("FLT_EPSILON", FLT_EPSILON, 0);
-	show("DBL_EPSILON", DBL_EPSILON, 0);
+	enum width context = argc > 1 ? flt : dbl;
 
-	show("Smallest float", FLT_MIN, context);
-
+	show("Neg infinity", -INFINITY, context);
 	show("Zero        ", 0.0, context);
+	show("Smallest double", DBL_MIN, context);
+	show("Smallest float", FLT_MIN, context);
+	show("DBL_EPSILON", DBL_EPSILON, context);
+	show("FLT_EPSILON", FLT_EPSILON, context);
+
+
 
 	show("        One", 1.0, context);
 	show("Middle float", 3e15, context);
-	show("Largest float", FLT_MAX, context);
-
-	show("Smallest double", DBL_MIN, context);
-
-	double v = nextafter(DBL_MIN, -2.0);
-	show("DBL_MIN predecessor", v, context);
-
 	show("Middle double", 3e15, context);
+
+	show("Largest float", FLT_MAX, context);
 	show("Largest double", DBL_MAX, context);
+	show("+infinity", INFINITY, context);
 
 	return 0;
 }
