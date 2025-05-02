@@ -83,7 +83,7 @@ parse_services() {
 # If start date is not of the form "YYYY-MM-DDTHH:mm:ss-dd:dd", try
 # to use it as an argument to date to generate a timestamp
 parse_start_date() {
-	local case_fixed=$(printf '%s' "${1}" | tr YMWDhms ymwdHMS)
+	local case_fixed=$(printf '%s' "${1}" | tr YWDhs ywdHS)
 	local d='[0-9]'
 	start_date=$1
 
