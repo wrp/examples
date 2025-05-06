@@ -14,9 +14,10 @@
 
 uint32_t float_as_uint32 (float a)
 {
-    uint32_t r;
-    memcpy (&r, &a, sizeof r);
-    return r;
+	union { uint32_t d; float f; } v;
+	assert( sizeof v.d == sizeof v.f );
+	v.f = a;
+	return v.d;
 }
 
 float uint32_as_float (uint32_t a)
