@@ -7,7 +7,9 @@
 #include <string.h> // for memcpy
 #include <math.h>   // for frexpf, ldexpf, isinf, nextafterf
 
-#define PORTABLE (1) // 0=bit-manipulation of 'float', 1= math library functions
+#ifndef PORTABLE
+#define PORTABLE (0) // 0=bit-manipulation of 'float', 1= math library functions
+#endif
 
 uint32_t float_as_uint32 (float a)
 {
