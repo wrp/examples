@@ -199,12 +199,47 @@ float my_powf (float a, float b)
     return r;
 }
 
+
+static void
+check(float *f)
+{
+	float a = powf(f[0], f[1]);
+	float b = my_powf(f[0], f[1]);
+	if( a != b && fpclassify(a) != FP_NAN){
+		fprintf(stderr, "Test case failed: %g %g\n", f[0], f[1]);
+		fprintf(stderr, "powf gives %.30g, my_powf gives %.30g\n", a, b);
+		fprintf(stderr, "diff is %g", b - a);
+		b = nextafter(a, b);
+		fprintf(stderr, ", delta = %.30g\n", b - a);
+		exit(1);
+	}
+}
+
+
 int
 main(int argc, char **argv)
 {
 	double a, b;
 	a = argc > 1 ? strtod(argv[1], NULL) : 2.0;
 	b = argc > 2 ? strtod(argv[2], NULL) : 2.0;
-	printf(" %g ** %g == %g\n", a, b, my_powf(a, b));
-	printf(" %g ** %g == %g\n", a, b, powf(a, b));
+	if( argc > 2 ){
+		printf(" %g ** %g == %g\n", a, b, my_powf(a, b));
+	} else {
+		float test_cases[][2] = {
+			{ 1.2, 3},
+			{ 1.2, .5},
+			{ 2.0, 2.0},
+			{ .5, .5},
+			{ 4, .5},
+			{ -.5, -.5},
+			{ -.25, .25},
+			{ 2, 20},
+			{ 2.3, 20.1}
+		};
+
+		for(int i = 0; i < sizeof test_cases / sizeof *test_cases; i += 1){
+			check(test_cases[i]);
+		}
+	}
+	return 0;
 }
