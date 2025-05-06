@@ -1,6 +1,7 @@
 /* From https://stackoverflow.com/questions/4518011/ */
 
 
+#include <assert.h>
 #include <stdlib.h> // for strtod
 #include <stdio.h>
 #include <stdint.h> // for uint32_t
@@ -20,9 +21,10 @@ uint32_t float_as_uint32 (float a)
 
 float uint32_as_float (uint32_t a)
 {
-    float r;
-    memcpy (&r, &a, sizeof r);
-    return r;
+	union { uint32_t d; float f; } v;
+	assert( sizeof v.d == sizeof v.f );
+	v.d = a;
+	return v.f;
 }
 
 /* Compute log(a) with extended precision, returned as a double-float value
