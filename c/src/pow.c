@@ -200,46 +200,66 @@ float my_powf (float a, float b)
 }
 
 
-static void
+static int
+is_nan(double f)
+{
+	return fpclassify(f) == FP_NAN;
+}
+
+static int
 check(float *f)
 {
 	float a = powf(f[0], f[1]);
 	float b = my_powf(f[0], f[1]);
-	if( a != b && fpclassify(a) != FP_NAN){
-		fprintf(stderr, "Test case failed: %g %g\n", f[0], f[1]);
-		fprintf(stderr, "powf gives %.30g, my_powf gives %.30g\n", a, b);
-		fprintf(stderr, "diff is %g", b - a);
-		b = nextafter(a, b);
-		fprintf(stderr, ", delta = %.30g\n", b - a);
-		exit(1);
+	if( a != b && (!is_nan(a) || !is_nan(b)) ){
+		float c = b;
+		fprintf(stderr, "Test case failed: ");
+		fprintf(stderr, "powf(%g, %g) = ", f[0], f[1]);
+		fprintf(stderr, "%.30g != %.30g  ", a, b);
+		int count = 1;
+		while( c != a ){
+			c = nextafter(a, b);
+			count += 1;
+		}
+		fprintf(stderr, "(%d)\n", count);
+		return 1;
 	}
+	return 0;
 }
 
 
 int
 main(int argc, char **argv)
 {
-	double a, b;
-	a = argc > 1 ? strtod(argv[1], NULL) : 2.0;
-	b = argc > 2 ? strtod(argv[2], NULL) : 2.0;
 	if( argc > 2 ){
+		double a = strtod(argv[1], NULL);
+		double b = strtod(argv[2], NULL);
 		printf(" %g ** %g == %g\n", a, b, my_powf(a, b));
-	} else {
-		float test_cases[][2] = {
-			{ 1.2, 3},
-			{ 1.2, .5},
-			{ 2.0, 2.0},
-			{ .5, .5},
-			{ 4, .5},
-			{ -.5, -.5},
-			{ -.25, .25},
-			{ 2, 20},
-			{ 2.3, 20.1}
-		};
-
-		for(int i = 0; i < sizeof test_cases / sizeof *test_cases; i += 1){
-			check(test_cases[i]);
-		}
+		printf(" %g ** %g == %g\n", a, b, powf(a, b));
+		return 0;
 	}
-	return 0;
+
+	int pass = 0, fail = 0;
+	float test_cases[][2] = {
+		{ 1.2, 3},
+		{ 1.2, .5},
+		{ 2.0, 2.0},
+		{ .5, .5},
+		{ 4, .5},
+		{ -.5, -.5},
+		{ -.25, .25},
+		{ 2, 20},    /* FAILS */
+		{ 2.3, 20.1}
+	};
+
+	for(int i = 0; i < sizeof test_cases / sizeof *test_cases; ){
+		if( check(test_cases[i])){
+			fail += 1;
+		} else {
+			pass += 1;
+		}
+		i += 1;
+	}
+	printf("%d tests passed, %d tests failed\n", pass, fail);
+	return fail > 0;
 }
