@@ -5,6 +5,7 @@ from itertools import accumulate
 def foo(a, b):
     return (a + b) % 7
 
+# Iterate over values returned by successive invocations of foo
 a = accumulate([1,5,3], foo)
 assert(a.__next__() == 1)
 assert(a.__next__() == 6)
