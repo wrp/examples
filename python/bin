@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+class foo():
+    def __init__(self, x):
+        self.idx = x
+    def __index__(self):
+        return self.idx
+
+# if arg is not an integer, it must have a __index__ method
+
+assert( bin(foo(17)) == '0b10001')
+assert( int(bin(foo(17)), 2) == 17)
+assert( bin(17) == '0b10001')
