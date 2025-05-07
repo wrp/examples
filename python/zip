@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-# Zip returns an iterable of tuples, where the ith
-# tuple contains the ith item from each of its args.
+# Zip returns a zip object which behaves as an iterable of tuples,
+# where the ith tuple contains the ith item from each of its args.
 # Stops when any of the iterables in the arguments are exhausted
 
 a = zip([1, 2, 3], [4, 5])  # Returns [(1,4), (2,5)]
+print(type(a))
 print(list(a))
