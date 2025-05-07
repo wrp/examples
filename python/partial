@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+
+from functools import partial
+
+def my_sum(*args, **kwargs):
+    if kwargs:
+        print(f"kwargs: {kwargs}")
+    return sum(args)
+
+f = partial(my_sum, 1, 2)  # Takes function and some arguments
+
+assert( f(3) == 6 )  # Invokes my_sum(1, 2, 3)
+
+g = partial(my_sum, 1, name='g')
+assert( g() == 1 )
