@@ -252,6 +252,12 @@ main(int argc, char **argv)
 		{ 2.3, 20.1}
 	};
 
+#if FAST_FADD_RZ
+	fputs("Using __fadd_rz\n", stdout);
+#endif
+#if PORTABLE
+	fputs("Using frexpf, ldexpf, and nextafterf\n", stdout);
+#endif
 	for(int i = 0; i < sizeof test_cases / sizeof *test_cases; ){
 		if( check(test_cases[i])){
 			fail += 1;
