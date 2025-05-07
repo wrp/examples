@@ -8,15 +8,21 @@ called_with = []
 @lru_cache(maxsize=3, typed=False)
 def foo(x):
     called_with.append(x)
+    return {'val': x}
 
-foo(3)
-foo(4)
+a = foo(3)
+m = foo(4)
 foo(5)
-foo(3)  # Uses cache
+b = foo(3)  # Uses cache
+assert(a is b)
+assert(b['val'] == 3)
+a['val'] = 'updated'
+assert(b['val'] == 'updated')
 foo(3)  # Uses cache
 foo(1)  # Causes eviction of 4
 foo(3)  # Uses cache
-foo(4)  # calls foo again
+c = foo(4)  # calls foo again
+assert(c is not m)
 
 assert(called_with == [3,4,5,1,4])
 
