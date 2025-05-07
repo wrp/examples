@@ -4,14 +4,14 @@
 A = {0, 2, 4, 6, 8, 2};
 B = {1, 2, 3, 4, 5};
 
-print("A:                         A = ", A)
-print("B:                         B = ", B)
-print("type:                type(A) = ", type(A))
-print("Union:                 A | B = ", A | B)
-print("Intersection:          A & B = ", A & B)
-print("Difference :           A - B = ", A - B)
-print("Symmetric difference : A ^ B = ", A ^ B)
+assert(isinstance(A, set))
+assert( A | B == {0, 1, 2, 3, 4, 5, 6, 8})
+assert( A & B == {2, 4})
+assert( A - B == {0, 6, 8})
+assert( A ^ B == {0, 1, 3, 5, 6, 8})
 
+
+'''
 
 Help on class frozenset in module builtins:
 
@@ -108,3 +108,4 @@ diff help(sets) help(frozensets)
 <  |  Data and other attributes defined here:
 <  |
 <  |  __hash__ = None
+'''
