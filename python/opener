@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import os
+import io
+import sys
+
+os.dup2(1, 3)
+
+def opener(path, flags):
+    os.dup2(3, 1)
+    os.write(3, f'opener called with path = {path}, flags = {flags}: '.encode('utf-8'))
+    return 1
+
+with open('foo', 'w', opener=opener) as f:
+    f.write('w\n')
+
+try:
+    with open('foo', 'w+', opener=opener) as f:
+        f.write('w+\n')
+except io.UnsupportedOperation:
+    os.write(3, b"stdout is not seeakble\n")
+
+
+with open('foo', 'a', opener=opener) as f:
+    f.write('a\n')
