@@ -51,10 +51,10 @@ kwdict(**a)
 # If function definition does not contain / to indicate
 # end of postional args, all args are keyword
 def bar(a, b = 'def b'):
-    print(f'bar: a = {a}, b = {b}')
+    return f'a={a}, b={b}'
 
-bar(b = 5, a = 2)
-bar(**{"b": 5, "a": 2})
-bar(*[1,2])
+assert(bar(b = 5, a = 2) == 'a=2, b=5')
+assert(bar(**{"b": 5, "a": 2}) == 'a=2, b=5')
+assert(bar(*[1,2]) == 'a=1, b=2')
 
 print(f'foo.__annotations__: {foo.__annotations__}')
