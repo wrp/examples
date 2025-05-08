@@ -1,0 +1,4 @@
+#!/bin/sh
+
+gcloud logging read "logName : projects/${PROJECT_ID?}/logs/cloudaudit.googleapis.com" \
+    --project=${PROJECT_ID}
