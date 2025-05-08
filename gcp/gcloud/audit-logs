@@ -1,10 +1,36 @@
 #!/bin/sh
 
 # See: https://cloud.google.com/logging/docs/view/query-library
+# Get k8s logs beginning at time $1 (defaulting to one hour ago) until
+# $2 (defaulting to one hour after start time).  Arguments should
+# be epoch timestamps.
+
+fmt='%Y-%m-%dT%H:%M:%S+00:00'
+
+test "${1-0}" -ge 0 || { echo "Start time must be an epoch time" >&2; exit 1; }
+test "${2-${1-1}}" -ge "${1-0}" || { echo "End time must be an epoch time > start time" >&2; exit 1; }
+
+convert() {
+	printf '"%s"\n' "$1" | jq -r "strptime(\"%s\") | strftime(\"$fmt\")"
+}
+
+if test -n "$1"; then
+	start_time=$(convert "$1")
+else
+	start_time=$(date -z UTC -v-1H -Iseconds)
+fi
+
+if test -n "$2"; then
+	end_time=$(convert $2)
+else
+	end_time=${2-$(printf '"%s"\n' "$start_time" | jq -r "strptime(\"$fmt\") |
+		mktime - 60 | strftime(\"$fmt\")" )}
+fi
+
 
 gcloud logging read "(
 	logName : projects/${PROJECT_ID?}/logs/cloudaudit.googleapis.com
 	AND resource.type=k8s_cluster
-	AND timestamp>=\"2024-05-07T00:00:00\" AND timestamp<=\"2024-05-09T00:00:00Z\"
+	AND timestamp>=\"$start_time\" AND timestamp<=\"$end_time\"
 )" \
 	--project=${PROJECT_ID} --format=json --limit 50
