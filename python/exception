@@ -43,8 +43,18 @@ print('This is reached because break in finally discards the raise in except')
 
 try:
     reraise()
-except Exception:
+except Exception:  # Does not catch SystemExit or KeyboardInterrupt
     pass
+
+try:
+    data = input('pausing for input')
+    if data == 'quit':
+        raise SystemExit
+    else:
+        k = int(data)
+except BaseException as e:  # *Does* catch SystemExit and KeyboardInterrupt
+    print(f'caught {e.__class__}!!')
+
 
 def f(flag=False):
     try:
