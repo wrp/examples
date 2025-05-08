@@ -11,6 +11,8 @@ def foo(a: str = 'default a', /, b: str = 'default b', *, c=['default c'], **kwa
         print("c:", c)
     c.append(a)  # Modifies/mutates the default value for subsequent calls
 
+assert(foo.__annotations__ == {'b': str, 'a': str})
+
 foo(1, verbose=1)
 foo(2, 5, verbose=1)
 foo(3, b=6, verbose=1)
@@ -56,5 +58,3 @@ def bar(a, b = 'def b'):
 assert(bar(b = 5, a = 2) == 'a=2, b=5')
 assert(bar(**{"b": 5, "a": 2}) == 'a=2, b=5')
 assert(bar(*[1,2]) == 'a=1, b=2')
-
-print(f'foo.__annotations__: {foo.__annotations__}')
