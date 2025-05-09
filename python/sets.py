@@ -5,10 +5,10 @@ A = {0, 2, 4, 6, 8, 2};
 B = {1, 2, 3, 4, 5};
 
 assert(isinstance(A, set))
-assert( A | B == {0, 1, 2, 3, 4, 5, 6, 8})
-assert( A & B == {2, 4})
-assert( A - B == {0, 6, 8})
-assert( A ^ B == {0, 1, 3, 5, 6, 8})
+assert( A | B == {0, 1, 2, 3, 4, 5, 6, 8})     # Union:                 A | B
+assert( A & B == {2, 4})                       # Intersection:          A & B
+assert( A - B == {0, 6, 8})                    # Difference :           A - B
+assert( A ^ B == {0, 1, 3, 5, 6, 8})           # Symmetric difference : A ^ B
 
 
 '''
