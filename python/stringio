@@ -2,12 +2,14 @@
 
 # keyword: file-like object
 
-from io import StringIO
+from io import StringIO, SEEK_END
 
-a = StringIO()
-a.write('hello, world')
-a.seek(0)
-print(a.read())
+with StringIO("hello, ") as a:
+    a.seek(0, SEEK_END)
+    a.write('world')
+    a.seek(0)
+    hw = a.read()
+print(hw)
 
 s = "Hello, world!"
 b = StringIO(s)
