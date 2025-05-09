@@ -9,17 +9,7 @@ class bar(Exception): pass
 try:
     raise foo ("help")
 except (foo, bar) as e:   # Use parens to group multiple exceptions
-    print(f"Raised {e}, with size {e.__sizeof__()}")
-    """ At this point, attributes of e (output of dir)
-    dir ['__class__', '__delattr__', '__dict__', '__doc__',
-        '__format__', '__getattribute__', '__getitem__', '__getslice__',
-        '__hash__', '__init__', '__module__', '__new__', '__reduce__',
-        '__reduce_ex__', '__repr__', '__setattr__', '__setstate__',
-        '__sizeof__', '__str__', '__subclasshook__', '__unicode__',
-        '__weakref__', 'args', 'message']
-    """
-    # e.message = 'help'
-    # e.args = ('help',)
+    print(f"Raised {e}, with cause {e.__cause__}")
 
 
 def reraise():
@@ -27,11 +17,11 @@ def reraise():
     try:
         raise foo("raised foo")
     except Exception as e:
-        raise e
+        raise bar("reraised bar") from e
     finally:  # finally clause is executed whether an exception is thrown or not
         print('finally in re-raised foo')
 
-# break in a finally discards an exception raise in an except clause
+# break in a finally discards an exception raised in an except clause
 while True:
     try: a = int('foo')
     except ValueError as e: raise e
@@ -43,17 +33,12 @@ print('This is reached because break in finally discards the raise in except')
 
 try:
     reraise()
-except Exception:  # Does not catch SystemExit or KeyboardInterrupt
-    pass
-
-try:
-    data = input('pausing for input')
-    if data == 'quit':
-        raise SystemExit
-    else:
-        k = int(data)
+except Exception as e:  # Does not catch SystemExit or KeyboardInterrupt
+    assert(str(e) == 'reraised bar')
+    assert(e.args[0] == 'reraised bar')
+    assert(isinstance(e.__cause__, foo))
 except BaseException as e:  # *Does* catch SystemExit and KeyboardInterrupt
-    print(f'caught {e.__class__}!!')
+    pass
 
 
 def f(flag=False):
