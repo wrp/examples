@@ -14,4 +14,4 @@ try:
     print(globals()['__doc__'])
     main()
 except KeyboardInterrupt:
-    sys.exit(0)
+    raise SystemExit

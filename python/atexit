@@ -8,7 +8,7 @@ import threading
 import signal
 
 def bar(signum, frame):
-    sys.exit(0)
+    raise SystemExit
 
 def foo():
     print "in foo"

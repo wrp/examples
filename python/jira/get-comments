@@ -23,6 +23,6 @@ def main():
 try:
 	main()
 except KeyboardInterrupt:
-	sys.exit(1)
+	raise SystemExit(1)
 except JIRAError as e:
 	raise SystemExit(str(e))

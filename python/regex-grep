@@ -19,7 +19,7 @@ def process(p, f):
 
 if len(sys.argv) < 2:
     print('usage: %s pattern [path [...]]'.format(sys.argv[0]))
-    sys.exit(0)
+    raise SystemExit
 
 pattern = re.compile(sys.argv[1], flags=re.IGNORECASE)
 names = sys.argv[2:]

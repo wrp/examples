@@ -12,7 +12,7 @@ print("a = ")
 print(a)
 print("a.banana = ")
 print(pd.concat([a.name, a.banana], axis=1))
-sys.exit(0)
+raise SystemExit
 
 a = pd.DataFrame(
     {
