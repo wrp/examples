@@ -12,5 +12,4 @@ from os import path as banana
 
 assert(banana is bar)
 print(foo.version_info)
-sys.exit(0)
-
+print(sys.modules)
