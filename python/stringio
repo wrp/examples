@@ -7,13 +7,12 @@ from io import StringIO, SEEK_END
 with StringIO("hello, ") as a:
     a.seek(0, SEEK_END)
     a.write('world')
-    a.seek(0)
-    hw = a.read()
-print(hw)
+    hw = a.getvalue()
+assert(hw == 'hello, world')
 
 s = "Hello, world!"
 b = StringIO(s)
-print(b.read())
+assert(b.read() == 'Hello, world!')
 
 
 def exhaust(a, b):
