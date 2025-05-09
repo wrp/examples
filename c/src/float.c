@@ -18,7 +18,7 @@ print_human(double v)
 {
 	int exp;
 	v = frexp(v, &exp);
-	printf("(%0.3lf * 2 ^ %d)\t", v, exp);
+	printf("%7.3lf E%+d\t", v, exp);
 }
 
 enum width { none, dbl, flt };
@@ -39,15 +39,14 @@ show(const char *msg, double v, enum width context)
 
 	printf("%15s: 0x%016lx: ", msg, vu.k);
 	print_human(v);
-	printf(FMT " is ", v);
 	switch(fpclassify(v)){
-	case FP_INFINITE:   printf("an infinite number."); break;
-	case FP_NAN:        printf("not a number (NaN)."); break;
-	case FP_NORMAL:     printf("a normalized number."); break;
-	case FP_SUBNORMAL:  printf("a denormalized number."); break;
-	case FP_ZERO:       printf("zero (0 or -0)."); break;
+	case FP_INFINITE:   printf("inf"); break;
+	case FP_NAN:        printf("nan"); break;
+	case FP_NORMAL:     printf("normal"); break;
+	case FP_SUBNORMAL:  printf("sub"); break;
+	case FP_ZERO:       printf("zero"); break;
 	}
-	putchar('\n');
+	printf("\t" FMT "\n", v);
 
 	if( context == dbl ){
 		show("next dbl", nextafter(v, INFINITY), 0);
