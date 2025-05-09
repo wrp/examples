@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+
+class C: pass
+class D: pass
+class foo(C,D): pass
+
+a = foo()
+assert(a.__class__.__mro__ == (foo, C, D, object))
