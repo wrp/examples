@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+
+called = []
+
+class Foo:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __setattr__(self, name, value):
+        called.append((name, value))
+        object.__setattr__(self, name, value)
+
+obj = Foo(name="Alice", age=30)
+assert(obj.name == 'Alice')
+assert(obj.age == 30)
+assert(called == [('name', 'Alice'), ('age', 30)])
