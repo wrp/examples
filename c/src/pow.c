@@ -199,19 +199,12 @@ float my_powf (float a, float b)
     return r;
 }
 
-
-static int
-is_nan(double f)
-{
-	return fpclassify(f) == FP_NAN;
-}
-
 static int
 check(float *f)
 {
 	float a = powf(f[0], f[1]);
 	float b = my_powf(f[0], f[1]);
-	if( a != b && (!is_nan(a) || !is_nan(b)) ){
+	if( a != b && (!isnan(a) || !isnan(b)) ){
 		float c = b;
 		fprintf(stderr, "Test case failed: ");
 		fprintf(stderr, "powf(%g, %g) = ", f[0], f[1]);
