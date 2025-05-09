@@ -2,6 +2,7 @@
 """This is the docstring for the script"""
 
 import inspect
+import sys
 
 def main():
     """This is the docstring for main"""
@@ -13,4 +14,4 @@ try:
     print(globals()['__doc__'])
     main()
 except KeyboardInterrupt:
-    sys.exit(1)
+    sys.exit(0)
