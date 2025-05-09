@@ -1,6 +1,6 @@
 
-/* ieee 754 double has 11-bit exponent, 52-bit significand
- * ieee 754 single has 7-bit exponent, 24-bit significand
+/* ieee 754 double has 11-bit exponent, 52-bit significand, bias 1023
+ * ieee 754 single has 7-bit exponent, 24-bit significand, bias 127
 */
 
 #include <assert.h>
@@ -12,6 +12,14 @@
 #include <string.h>
 
 #define FMT "%.120e"
+
+static void
+print_human(double v)
+{
+	int exp;
+	v = frexp(v, &exp);
+	printf("(%0.3lf * 2 ^ %d)\t", v, exp);
+}
 
 enum width { none, dbl, flt };
 void
@@ -29,7 +37,9 @@ show(const char *msg, double v, enum width context)
 		show("prev sgl", prev, 0);
 	}
 
-	printf("%25s: 0x%0lx: " FMT " is ", msg, vu.k, v);
+	printf("%15s: 0x%016lx: ", msg, vu.k);
+	print_human(v);
+	printf(FMT " is ", v);
 	switch(fpclassify(v)){
 	case FP_INFINITE:   printf("an infinite number."); break;
 	case FP_NAN:        printf("not a number (NaN)."); break;
