@@ -24,11 +24,9 @@ show(const char *msg, double v, enum width context)
 	if( context == dbl ){
 		double prev = nextafter(v, -INFINITY);
 		show("prev dbl", prev, 0);
-		printf("%25s: %g\n", "delta", v - prev);
 	} else if( context == flt ){
 		float prev = nextafterf(v, -INFINITY);
 		show("prev sgl", prev, 0);
-		printf("%25s: %g\n", "delta", v - prev);
 	}
 
 	printf("%25s: 0x%0lx: " FMT " is ", msg, vu.k, v);
