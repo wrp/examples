@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+called = []
+class equalizer:
+    def __init__(self, name):
+        self.name = name
+
+    def __eq__(self, other):
+        called.append((self.name, other.name))
+        return f'checked {self.name} against {other.name}'
+
+a = equalizer('a')
+b = equalizer('b')
+
+assert( (a == b) == 'checked a against b' )
+assert( (b == a) == 'checked b against a' )
+assert( called == [('a', 'b'), ('b', 'a')] )
