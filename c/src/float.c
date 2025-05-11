@@ -121,7 +121,9 @@ main(int argc, char **argv)
 
 	show("Neg infinity", -INFINITY, context);
 	show("Zero        ", 0.0, context);
+	show("DBL_TRUE_MIN", DBL_TRUE_MIN, context);
 	show("DBL_MIN", DBL_MIN, context);  /* Smallest normalized double */
+	show("FLT_TRUE_MIN", FLT_TRUE_MIN, context);
 	show("FLT_MIN", FLT_MIN, context);  /* Smallest normalized float */
 	show("DBL_EPSILON", DBL_EPSILON, context);
 	show("FLT_EPSILON", FLT_EPSILON, context);
@@ -130,8 +132,8 @@ main(int argc, char **argv)
 	show("Middle float", 3e15, context);
 	show("Middle double", 3e15, context);
 
-	show("Largest float", FLT_MAX, context);
-	show("Largest double", DBL_MAX, context);
+	show("FLT_MAX", FLT_MAX, context);
+	show("DBL_MAX", DBL_MAX, context);
 	show("+infinity", INFINITY, context);
 
 	return 0;
