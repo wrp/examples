@@ -11,14 +11,39 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FMT "%.120e"
+char fmt[256];  /* "%.120e" */
+
+static void
+init_fmt(void)
+{
+	int precision = 6;
+	char format_char = 'e';
+	char *p;
+	char *f;
+	if( (p = getenv("p")) != NULL ){
+		char *end;
+		precision = strtol(p, &end, 10);
+		if( *end || precision < 1 || precision > 120 ){
+			fprintf(stderr, "Invalid precision\n");
+			exit(1);
+		}
+	}
+	if( (f = getenv("f")) != NULL ){
+		if( strchr("fFeEgGaA", *f) == NULL ){
+			fprintf(stderr, "Invalid format character\n");
+			exit(1);
+		}
+		format_char = f[0];
+	}
+	snprintf(fmt, sizeof fmt, "%%.%dl%c", precision, format_char);
+}
 
 static void
 print_human(double v)
 {
 	int exp;
 	v = frexp(v, &exp);
-	printf("%7.3lf E%+d\t", v, exp);
+	printf("%7.3lfe%+d\t", v, exp);
 }
 
 enum width { none, dbl, flt };
@@ -37,7 +62,7 @@ show(const char *msg, double v, enum width context)
 		show("prev sgl", prev, 0);
 	}
 
-	printf("%15s: 0x%016lx: ", msg, vu.k);
+	printf("%15s: 0x%016lx:\t", msg, vu.k);
 	print_human(v);
 	switch(fpclassify(v)){
 	case FP_INFINITE:   printf("inf"); break;
@@ -46,7 +71,9 @@ show(const char *msg, double v, enum width context)
 	case FP_SUBNORMAL:  printf("sub"); break;
 	case FP_ZERO:       printf("zero"); break;
 	}
-	printf("\t" FMT "\n", v);
+	putchar('\t');
+	printf(fmt, v);
+	putchar('\n');
 
 	if( context == dbl ){
 		show("next dbl", nextafter(v, INFINITY), 0);
@@ -81,6 +108,7 @@ main(int argc, char **argv)
 		argv += 1;
 		argc -= 1;
 	}
+	init_fmt();
 	if( argc > 1 ){
 		for( argv += 1; *argv; argv += 1 ){
 			double d = get_value(*argv);
@@ -93,8 +121,8 @@ main(int argc, char **argv)
 
 	show("Neg infinity", -INFINITY, context);
 	show("Zero        ", 0.0, context);
-	show("Smallest double", DBL_MIN, context);
-	show("Smallest float", FLT_MIN, context);
+	show("DBL_MIN", DBL_MIN, context);  /* Smallest normalized double */
+	show("FLT_MIN", FLT_MIN, context);  /* Smallest normalized float */
 	show("DBL_EPSILON", DBL_EPSILON, context);
 	show("FLT_EPSILON", FLT_EPSILON, context);
 
