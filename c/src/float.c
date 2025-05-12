@@ -109,6 +109,15 @@ main(int argc, char **argv)
 		argc -= 1;
 	}
 	init_fmt();
+	if( context == flt ){
+		printf("FLT_MIN_EXP = %d\n", FLT_MIN_EXP);
+		printf("FLT_MAX_EXP = %d\n", FLT_MAX_EXP);
+		printf("FLT_MANT_DIG = %d\n", FLT_MANT_DIG);
+	} else {
+		printf("DBL_MIN_EXP = %d\n", DBL_MIN_EXP);
+		printf("DBL_MAX_EXP = %d\n", DBL_MAX_EXP);
+		printf("DBL_MANT_DIG = %d\n", DBL_MANT_DIG);
+	}
 	if( argc > 1 ){
 		for( argv += 1; *argv; argv += 1 ){
 			double d = get_value(*argv);
