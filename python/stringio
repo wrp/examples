@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# keyword: file-like object
+# keyword: file-like object, iostream, streamio, iostring, stringio
 
 from io import StringIO, SEEK_END
 
