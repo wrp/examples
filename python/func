@@ -11,6 +11,10 @@ def foo(a: str = 'default a', /, b: str = 'default b', *, c=['default c'], **kwa
         print("c:", c)
     c.append(a)  # Modifies/mutates the default value for subsequent calls
 
+bar = foo
+assert foo.__name__ == 'foo'
+assert bar.__name__ == 'foo'
+
 assert(foo.__annotations__ == {'b': str, 'a': str})
 
 foo(1, verbose=1)
