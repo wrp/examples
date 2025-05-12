@@ -16,7 +16,7 @@ def get_records():
     with StringIO(data) as s:
         headers = s.readline().strip().split(',')
         record = namedtuple('record', headers)
-        for line in s.readlines():
+        for line in s:
             yield record(*map(float, line.strip().split(',')))
 
 res = []
