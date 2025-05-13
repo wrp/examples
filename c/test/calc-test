@@ -18,7 +18,17 @@ main() {
 	test_memory
 	test_format
 
+	demonstrate_not_commutative
 	summarize_results
+}
+
+demonstrate_not_commutative()
+{
+	v=$($exe '70k .2 .3 * .4 *p')
+# 0.0240000000000000000015449880957918438184606202412396669387817382812500
+	x=$($exe '70k .2 .4 * .3 *p')
+# 0.0240000000000000000032390539903004444965972652425989508628845214843750
+	test_string "$v $x - p" -1.694065895e-21
 }
 
 # Inputs that currently fail but should not.
