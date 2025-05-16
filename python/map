@@ -8,6 +8,8 @@ class map(object)
  |  each of the iterables.  Stops when the shortest iterable is exhausted.
 '''
 
+from itertools import starmap
+
 
 a = [1, 2, 3]
 b = [[c] for c in "abc"]
@@ -18,3 +20,11 @@ b = [[c] for c in "abc"]
 list(map(lambda x, a: x.append(a), b, a))
 
 list(map(lambda x: print(x), b))
+
+def foo(x, y):
+    return x + y
+
+args = [(1,2), (3,4)]
+i = starmap(foo, args)
+assert i.__next__() == 3
+assert i.__next__() == 7
