@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+# Demonstrate how to override the default behavior of an unhandled
+# exception
+import sys
+
+def foo(x, y, z):
+    print('Hello, World!')
+
+sys.excepthook = foo
+
+raise ValueError
