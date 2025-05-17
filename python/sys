@@ -3,9 +3,10 @@
 # miscellaneous things found in sys
 
 import sys
+import platform
 
 print(sys.version_info)        # sys.version_info(major=x, minor=x, micro=x, releaselevel='final', serial=0)
-print(type(sys.version_info))  # type is sys.version_info
+print(platform.python_version())
 
 
 '''
@@ -38,7 +39,7 @@ In 3.11.2, dir(sys) gives
 'stdin',                      'stdlib_module_names',                  'stdout',               'thread_info',
 'unraisablehook',             'version',                              'version_info',         'warnoptions'
 ]
-'''
+
 Help on built-in module sys:
 
 NAME
@@ -377,3 +378,4 @@ FILE
     (built-in)
 
 
+'''
