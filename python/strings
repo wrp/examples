@@ -12,3 +12,9 @@ s = [
 ]
 for i in s:
 	print(f':{i}:')
+
+s = 'a1'
+assert s[0].isalnum()
+assert not s[0].isdigit()
+assert s[1].isalnum()
+assert s[1].isdigit()
