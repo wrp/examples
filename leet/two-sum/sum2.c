@@ -1,9 +1,17 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 typedef struct { int v, i; } T;
+struct test_case {
+	int target;
+	int result[2];
+	int *array;
+	char line[256];
+	size_t siz;
+};
 
 static void * xrealloc(void *b, size_t num, size_t siz);
 
@@ -204,18 +212,101 @@ twoSum(int *nums, int numsSize, int target, int *returnSize)
 	};
 	int *rv = (int *)h.data;
 	*returnSize = 2;
+	if( a.i > b.i){
+		int tmp = a.i;
+		a.i = b.i;
+		b.i = tmp;
+	}
 	rv[0] = a.i;
 	rv[1] = b.i;
 	return rv;
 }
 
 #if 1
-int main(int argc, char**argv )
+
+void
+push(struct test_case *t, int k)
 {
-	int test_case[] = { 2, 14, 18, 7, -3, 1 };
+	t->siz += 1;
+	t->array = realloc(t->array, t->siz * sizeof *t->array);
+	if( t->array == NULL ){
+		perror("malloc");
+		exit(1);
+	}
+	t->array[t->siz - 1] = k;
+}
+
+
+int
+parse_test_case(const char *line, struct test_case *t)
+{
 	int k;
-	int *r = twoSum(test_case, sizeof test_case / sizeof *test_case, 9, &k);
-	printf(" return: %d,%d\n", r[0], r[1]);
+	const char *p;
+	char *end;
+	k = sscanf(line, "%d\t%d,%d\t[", &t->target, t->result, t->result + 1);
+	if( k != 3 ){
+		goto error;
+	}
+	t->array = NULL;
+	t->siz = 0;
+	p = strchr(line, '[');
+	assert(p != NULL);
+	p += 1;
+	while( k = strtol(p, &end, 10), *end == ',' ){
+		push(t, k);
+		p = end + 1;
+	}
+	if( *end == ']' ){
+		push(t, k);
+		return 0;
+	}
+error:
+	fprintf(stderr, "Invalid test case: %s", line);
+	return 1;
+}
+
+int
+get_test_case(struct test_case *t)
+{
+	if( fgets(t->line, sizeof t->line, stdin) == NULL ){
+		return 0;
+	}
+	size_t len = strlen(t->line);
+	if( len == 0 ){
+		return get_test_case(t);
+	}
+	if( t->line[len - 1] != '\n' ){
+		int c;
+		fprintf(stderr, "Input too long.  Ignoring test!!\n");
+		while( (c = getchar()) != EOF && c != '\n') {
+			;
+		}
+		return get_test_case(t);
+	}
+	if( t->line[0] == 't' || t->line[0] == '#' ){
+		return get_test_case(t);
+	}
+	if( parse_test_case(t->line, t)) {
+		return get_test_case(t);
+	}
+	return 1;
+}
+
+int
+main(int argc, char**argv )
+{
+	struct test_case t[1];
+	int i = 0, *r;
+	while( get_test_case(t) ){
+		int k;
+		i += 1;
+		r = twoSum(t->array, t->siz, t->target, &k);
+		if( r[0] != t->result[0] || r[1] != t->result[1] ){
+			fprintf(stderr, "test %d failed: %s", i, t->line);
+			return 1;
+		}
+	}
+	fprintf(stderr, "%d tests passed\n", i);
 	return 0;
 }
 #endif
