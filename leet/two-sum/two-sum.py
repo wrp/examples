@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import heapq
 import sys
 import platform
 from typing import List
@@ -17,20 +18,24 @@ if sys.version_info.major != 3:
 # 4	3,4	[2, 14, 18, 7, -3, 1]
 
 def find_sum(values: List[int], target: int):
-    s = sorted(list(enumerate(values)), key = lambda x: x[1])
-    left = 0
-    right = len(s) - 1
-    while left < right:
-        if s[left][1] + s[right][1] == target:
-            a, b = s[left][0], s[right][0]
-            if a > b:
-                a, b = b, a
-            return a, b
+    s = [(item, index) for index, item in enumerate(values)]
+    heapq.heapify(s)
+    a = heapq.heappop(s)
+    v = 1
+    b = heapq.nlargest(v, s)[-1]
 
-        if s[left][1] + s[right][1] < target:
-            left += 1
+    while a[0] <= b[0] and v <= len(s):
+        if a[0] + b[0] == target:
+            i, j = a[1], b[1]
+            if i > j:
+                i, j = j, i
+            return i, j
+
+        if a[0] + b[0] < target:
+            a = heapq.heappop(s)
         else:
-            right -= 1
+            v += 1
+            b = heapq.nlargest(v, s)[-1]
 
     return None
 
@@ -55,6 +60,6 @@ for line in sys.stdin:
     if result and result[0] == t.answer[0] and result[1] == t.answer[1]:
         count += 1
     else:
-        print(f'test failed: {t}', file=sys.stderr)
+        print(f'test failed: Got {result}:  {t}', file=sys.stderr)
 
 print(f'{count} tests passed')
