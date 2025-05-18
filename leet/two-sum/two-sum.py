@@ -17,21 +17,41 @@ if sys.version_info.major != 3:
 # 20	0,2	[2, 14, 18, 7, -3, 1]
 # 4	3,4	[2, 14, 18, 7, -3, 1]
 
+class entry:
+    def __init__(self, value, idx, reverse=False):
+        self.idx = idx
+        self.value = value
+        self.reverse = reverse
+
+    def __lt__(self, other):
+        if self.reverse:
+            if self.value == other.value:
+                return other.idx < self.idx
+            return other.value < self.value
+        else:
+            if self.value == other.value:
+                return self.idx < other.idx
+            else:
+                return self.value < other.value
+
+    def __repr__(self):
+        return f'({self.value}, {self.idx})'
+
 def find_sum(values: List[int], target: int):
-    s = [(item, index) for index, item in enumerate(values)]
+    s = [entry(item, index) for index, item in enumerate(values)]
     heapq.heapify(s)
     a = heapq.heappop(s)
     v = 1
     b = heapq.nlargest(v, s)[-1]
 
-    while a[0] <= b[0] and v <= len(s):
-        if a[0] + b[0] == target:
-            i, j = a[1], b[1]
+    while a.value <= b.value and v <= len(s):
+        if a.value + b.value == target:
+            i, j = a.idx, b.idx
             if i > j:
                 i, j = j, i
             return i, j
 
-        if a[0] + b[0] < target:
+        if a.value + b.value < target:
             a = heapq.heappop(s)
         else:
             v += 1
