@@ -24,15 +24,13 @@ class entry:
         self.reverse = reverse
 
     def __lt__(self, other):
-        if self.reverse:
-            if self.value == other.value:
-                return other.idx < self.idx
-            return other.value < self.value
+        if self.value == other.value:
+            rv = self.idx < other.idx
         else:
-            if self.value == other.value:
-                return self.idx < other.idx
-            else:
-                return self.value < other.value
+            rv = self.value < other.value
+        if self.reverse:
+            rv = not rv
+        return rv
 
     def __repr__(self):
         return f'({self.value}, {self.idx})'
@@ -47,10 +45,7 @@ def find_sum(self, values: List[int], target: int):
 
     while a != b:
         if a.value + b.value == target:
-            i, j = a.idx, b.idx
-            if i > j:
-                i, j = j, i
-            return [i, j]
+            return [a.idx, b.idx]
 
         if a.value + b.value < target:
             a = heapq.heappop(s)
@@ -81,6 +76,8 @@ for line in sys.stdin:
     S = Solution()
     t = test_case(line)
     result = S.twoSum(t.array, t.target)
+    if result[0] > result[1]:
+        result = result[1], result[0]
     if result and result[0] == t.answer[0] and result[1] == t.answer[1]:
         count += 1
     else:
