@@ -40,11 +40,12 @@ class entry:
 def find_sum(values: List[int], target: int):
     s = [entry(item, index) for index, item in enumerate(values)]
     heapq.heapify(s)
+    t = [entry(item, index, True) for index, item in enumerate(values)]
+    heapq.heapify(t)
     a = heapq.heappop(s)
-    v = 1
-    b = heapq.nlargest(v, s)[-1]
+    b = heapq.heappop(t)
 
-    while a.value <= b.value and v <= len(s):
+    while a != b:
         if a.value + b.value == target:
             i, j = a.idx, b.idx
             if i > j:
@@ -54,8 +55,7 @@ def find_sum(values: List[int], target: int):
         if a.value + b.value < target:
             a = heapq.heappop(s)
         else:
-            v += 1
-            b = heapq.nlargest(v, s)[-1]
+            b = heapq.heappop(t)
 
     return None
 
