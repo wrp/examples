@@ -37,7 +37,7 @@ class entry:
     def __repr__(self):
         return f'({self.value}, {self.idx})'
 
-def find_sum(values: List[int], target: int):
+def find_sum(self, values: List[int], target: int):
     s = [entry(item, index) for index, item in enumerate(values)]
     heapq.heapify(s)
     t = [entry(item, index, True) for index, item in enumerate(values)]
@@ -50,7 +50,7 @@ def find_sum(values: List[int], target: int):
             i, j = a.idx, b.idx
             if i > j:
                 i, j = j, i
-            return i, j
+            return [i, j]
 
         if a.value + b.value < target:
             a = heapq.heappop(s)
@@ -58,6 +58,9 @@ def find_sum(values: List[int], target: int):
             b = heapq.heappop(t)
 
     return None
+
+class Solution:
+    twoSum = find_sum
 
 class test_case:
     def __init__(self, line):
@@ -75,8 +78,9 @@ for line in sys.stdin:
     if not line[0].isdigit():
         continue
 
+    S = Solution()
     t = test_case(line)
-    result = find_sum(t.array, t.target)
+    result = S.twoSum(t.array, t.target)
     if result and result[0] == t.answer[0] and result[1] == t.answer[1]:
         count += 1
     else:
