@@ -14,15 +14,13 @@ class Solution:
             if lut.get(s[i]) is None:
                 lut[s[i]] = 1
             else:
-                if i - start > max_:
-                    max_ = i - start
+                max_ = max(max_, i - start)
                 while s[start] != s[i]:
                     del lut[s[start]]
                     start += 1
                 start += 1
             i += 1
-        if i - start > max_:
-            max_ = i - start
+        max_ = max(max_, i - start)
 
         return max_
 
