@@ -6,4 +6,4 @@ nmcli device wifi list
 nmcli con delete $ssid
 
 # Connect:
-nmcli dev wifi connect $ssid -s
+nmcli dev wifi connect $ssid -a
