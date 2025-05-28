@@ -1,0 +1,9 @@
+
+# list available wifi networks
+nmcli device wifi list
+
+# Delete a connection:
+nmcli con delete $ssid
+
+# Connect:
+nmcli dev wifi connect $ssid -s
