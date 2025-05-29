@@ -1,10 +1,10 @@
 
 FROM debian-@user@-dev
 
-ARG commit=4f3b59f
+ARG commit=be87b2b
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
-ARG llvm_version=18
+ARG llvm_version=20
 
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list.d/sid.list
