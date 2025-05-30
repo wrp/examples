@@ -1,3 +1,34 @@
+To make the playground, we need to tweak max_rss since my
+laptop has an embarassingly small amount of  ram.  There
+is almost certainly a flag we could pass to the build to
+fix this, but instead I'm just patching the upstream source:
+
+$ k=be87b2b1; git rev-parse ${k}^1; git show $k
+4f3b59f708058ce4e4b6a1cacd2a3dae6e1c7aae
+commit be87b2b160e7f8b41f4ed2ef6c6ed83f80ca62be (HEAD -> wrp)
+Author: William Pursell <william.r.pursell@gmail.com>
+Date:   Sun Jan 28 18:43:42 2024 -0700
+
+    Tweak max_rss to 3,956,006,911
+
+    Cherry picked from 4793e52ab624773bd90896813f4d595dcee5553a
+
+diff --git a/build.zig b/build.zig
+index 5c7ee4063b..e08330cce2 100644
+--- a/build.zig
++++ b/build.zig
+@@ -690,7 +690,7 @@ fn addCompilerMod(b: *std.Build, options: AddCompilerModOptions) *std.Build.Modu
+ fn addCompilerStep(b: *std.Build, options: AddCompilerModOptions) *std.Build.Step.Compile {
+     const exe = b.addExecutable(.{
+         .name = "zig",
+-        .max_rss = 7_800_000_000,
++        .max_rss = 3_956_006_911,
+         .root_module = addCompilerMod(b, options),
+     });
+     exe.stack_size = stack_size;
+
+
+
 
 make image  # create the zig-playground
 make run    # start a shell in the container
