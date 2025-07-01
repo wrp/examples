@@ -1,2 +1,13 @@
 
-git submodule foreach 'echo $path $(git rev-parse HEAD)'
+
+# Initialize all submodules:
+git submodule update --init --recursive
+
+
+# Get all submodules with initial clone:
+git clone --recursive $url
+
+
+# Iterate over all submodules
+#  The command has access to the variables $name, $sm_path, $displaypath, $sha1 and $toplevel
+git submodule foreach $cmd
