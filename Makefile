@@ -3,7 +3,10 @@ LEN ?= 12
 .PHONY: password passwd
 passwd: password
 password:
-	@perl -E 'my $$k = ""; my @s = ("A".."N","P".."Z","a".."k","m".."z",2..9); $$k .= $$s[rand @s] for 1..$(LEN); say $$k' \
+	@perl -E 'my $$k = ""; \
+	my $$a = "ABCDEFGHJKMNPQRSTUVWXYZ"; \
+	my @s = (split(//, $$a . lc $$a), 2..9);  \
+	$$k .= $$s[rand @s] for 1..$(LEN); say $$k' \
 	| while read line; do \
 		printf '%s\n' "$$line" >&2; \
 		if env <&- | grep -q TMUX; then \
