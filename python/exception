@@ -92,3 +92,186 @@ def func3(a):
     raise foo('f1->f2->f3')
 
 func1(3)
+
+"""
+List of builtin exceptions, culled from Doc/library/exceptions.rst
+
+
+Built-in Exceptions
+===================
+.. exception:: BaseException
+.. exception:: Exception
+.. exception:: ArithmeticError
+.. exception:: BufferError
+.. exception:: LookupError
+
+Concrete exceptions
+-------------------
+.. exception:: AssertionError
+.. exception:: AttributeError
+.. exception:: EOFError
+.. exception:: FloatingPointError # Not currently used.
+.. exception:: GeneratorExit
+.. exception:: ImportError
+.. exception:: ModuleNotFoundError
+.. exception:: IndexError
+.. exception:: KeyError
+.. exception:: KeyboardInterrupt
+.. exception:: MemoryError
+.. exception:: NameError
+.. exception:: NotImplementedError
+.. exception:: OSError([arg])
+.. exception:: OverflowError
+.. exception:: PythonFinalizationError
+.. exception:: RecursionError
+.. exception:: ReferenceError
+.. exception:: RuntimeError
+.. exception:: StopIteration
+.. exception:: StopAsyncIteration
+.. exception:: SyntaxError(message, details)
+.. exception:: IndentationError
+.. exception:: TabError
+.. exception:: SystemError
+.. exception:: SystemExit
+.. exception:: TypeError
+.. exception:: UnboundLocalError
+.. exception:: UnicodeError
+.. exception:: UnicodeEncodeError
+.. exception:: UnicodeDecodeError
+.. exception:: UnicodeTranslateError
+.. exception:: ValueError
+.. exception:: ZeroDivisionError
+
+The following exceptions are kept for compatibility with previous versions;
+starting from Python 3.3, they are aliases of :exc:`OSError`.
+
+.. exception:: EnvironmentError
+.. exception:: IOError
+.. exception:: WindowsError
+
+
+
+OS exceptions
+^^^^^^^^^^^^^
+
+The following exceptions are subclasses of :exc:`OSError`, they get raised
+depending on the system error code.
+
+.. exception:: BlockingIOError
+.. exception:: ChildProcessError
+.. exception:: ConnectionError
+.. exception:: BrokenPipeError
+.. exception:: ConnectionAbortedError
+.. exception:: ConnectionRefusedError
+.. exception:: ConnectionResetError
+.. exception:: FileExistsError
+.. exception:: FileNotFoundError
+.. exception:: InterruptedError
+.. exception:: IsADirectoryError
+.. exception:: NotADirectoryError
+.. exception:: PermissionError
+.. exception:: ProcessLookupError
+.. exception:: TimeoutError
+.. seealso:: :pep:`3151` - Reworking the OS and IO exception hierarchy
+
+Warnings
+--------
+.. exception:: Warning
+.. exception:: UserWarning
+.. exception:: DeprecationWarning
+.. exception:: PendingDeprecationWarning
+.. exception:: SyntaxWarning
+.. exception:: RuntimeWarning
+.. exception:: FutureWarning
+.. exception:: ImportWarning
+.. exception:: UnicodeWarning
+.. exception:: EncodingWarning
+.. exception:: BytesWarning
+.. exception:: ResourceWarning
+
+Exception groups
+----------------
+
+The following are used when it is necessary to raise multiple unrelated
+exceptions. They are part of the exception hierarchy so they can be
+handled with :keyword:`except` like all other exceptions. In addition,
+they are recognised by :keyword:`except*<except_star>`, which matches
+their subgroups based on the types of the contained exceptions.
+
+.. exception:: ExceptionGroup(msg, excs)
+.. exception:: BaseExceptionGroup(msg, excs)
+
+Exception hierarchy
+-------------------
+
+The class hierarchy for built-in exceptions is in Lib/test/exception_hierarchy.txt
+
+BaseException
+ ├── BaseExceptionGroup
+ ├── GeneratorExit
+ ├── KeyboardInterrupt
+ ├── SystemExit
+ └── Exception
+      ├── ArithmeticError
+      │    ├── FloatingPointError
+      │    ├── OverflowError
+      │    └── ZeroDivisionError
+      ├── AssertionError
+      ├── AttributeError
+      ├── BufferError
+      ├── EOFError
+      ├── ExceptionGroup [BaseExceptionGroup]
+      ├── ImportError
+      │    └── ModuleNotFoundError
+      ├── LookupError
+      │    ├── IndexError
+      │    └── KeyError
+      ├── MemoryError
+      ├── NameError
+      │    └── UnboundLocalError
+      ├── OSError
+      │    ├── BlockingIOError
+      │    ├── ChildProcessError
+      │    ├── ConnectionError
+      │    │    ├── BrokenPipeError
+      │    │    ├── ConnectionAbortedError
+      │    │    ├── ConnectionRefusedError
+      │    │    └── ConnectionResetError
+      │    ├── FileExistsError
+      │    ├── FileNotFoundError
+      │    ├── InterruptedError
+      │    ├── IsADirectoryError
+      │    ├── NotADirectoryError
+      │    ├── PermissionError
+      │    ├── ProcessLookupError
+      │    └── TimeoutError
+      ├── ReferenceError
+      ├── RuntimeError
+      │    ├── NotImplementedError
+      │    ├── PythonFinalizationError
+      │    └── RecursionError
+      ├── StopAsyncIteration
+      ├── StopIteration
+      ├── SyntaxError
+      │    └── IndentationError
+      │         └── TabError
+      ├── SystemError
+      ├── TypeError
+      ├── ValueError
+      │    └── UnicodeError
+      │         ├── UnicodeDecodeError
+      │         ├── UnicodeEncodeError
+      │         └── UnicodeTranslateError
+      └── Warning
+           ├── BytesWarning
+           ├── DeprecationWarning
+           ├── EncodingWarning
+           ├── FutureWarning
+           ├── ImportWarning
+           ├── PendingDeprecationWarning
+           ├── ResourceWarning
+           ├── RuntimeWarning
+           ├── SyntaxWarning
+           ├── UnicodeWarning
+           └── UserWarning
+"""
