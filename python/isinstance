@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+class Foo():
+	pass
+
+class Bar(Foo):
+	pass
+
+
+b = Bar()
+
+# Demonstrate that isinstance returns true for subclasses
+assert isinstance(b, Bar)
+assert isinstance(b, Foo)
