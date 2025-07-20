@@ -12,7 +12,7 @@ class foo():
 
     # Called for other / self if other does not implement __truediv__
     def __rtruediv__(self, other):
-        return self.x * other.x
+        return other.x / self.x
 
 
 @dataclass
@@ -31,7 +31,7 @@ b = bar(5)
 c = baz(7)
 
 assert a/b == 3/5
-assert b/a == 5*3
+assert b/a == 5/3
 
 assert a/c == 3/7
-assert c/a == 7*3
+assert c/a == 7/3
