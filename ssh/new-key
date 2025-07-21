@@ -1,5 +1,5 @@
 #!/bin/sh
 
-# generate a new private key
+# generate a new private key: rcs gpg genkey
 
 ssh-keygen
