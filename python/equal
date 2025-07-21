@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+# Demonstrate __eq__, __ne__
+
+
+foo_eq_count = 0
+bar_ne_count = 0
+
+class Foo():
+    def __init__(self, x):
+        self.x = x
+    def __eq__(self, other):
+        global foo_eq_count
+        foo_eq_count += 1
+        return self.x == other.x
+
+class Bar():
+    def __init__(self, x):
+        self.x = x
+    def __ne__(self, other):
+        global bar_ne_count
+        bar_ne_count += 1
+        return self.x != other.x
+
+f = Foo(2)
+b = Bar(2)
+
+assert f == b         # Calls Foo.__eq__
+assert f == f         # Calls Foo.__eq__
+assert b == f         # Calls Foo.__eq__
+assert not (f != b)   # Calls Foo.__eq__
+assert not (b != f)   # Calls Bar.__ne__
+
+assert foo_eq_count == 4
+assert bar_ne_count == 1
