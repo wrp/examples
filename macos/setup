@@ -1,0 +1,8 @@
+
+Typical things that need to be changed to make a mac usable.
+TODO: figure out how to change these setting without the gui
+
+setup stick keys: system preferences/accesibility
+remap(swap) option <-> control: system preferences/keyboard, push "modifier keys" in lower right
+	(this will make option-arrow change desktops)  Note: option is labeled "alt/option"
+hot corners: system preferences/desktop & screen saver, push "Hot corners" button in lower right
