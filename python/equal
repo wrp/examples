@@ -1,35 +1,32 @@
 #!/usr/bin/env python
 
 # Demonstrate __eq__, __ne__
+from dataclasses import dataclass
 
+@dataclass(eq=False)
+class Base():
+    x: float
 
-foo_eq_count = 0
-bar_ne_count = 0
-
-class Foo():
-    def __init__(self, x):
-        self.x = x
+class EQ(Base):
     def __eq__(self, other):
-        global foo_eq_count
-        foo_eq_count += 1
+        print('eq')
         return self.x == other.x
 
-class Bar():
-    def __init__(self, x):
-        self.x = x
+class NE(Base):
     def __ne__(self, other):
-        global bar_ne_count
-        bar_ne_count += 1
+        print('ne')
         return self.x != other.x
 
-f = Foo(2)
-b = Bar(2)
+class Neither(Base): pass
 
-assert f == b         # Calls Foo.__eq__
-assert f == f         # Calls Foo.__eq__
-assert b == f         # Calls Foo.__eq__
-assert not (f != b)   # Calls Foo.__eq__
-assert not (b != f)   # Calls Bar.__ne__
+f = EQ(2)
+b = NE(2)
+c = Neither(2)
 
-assert foo_eq_count == 4
-assert bar_ne_count == 1
+assert f == b         # calls f.__eq__(b)
+assert b == f         # delegates to f.__eq__(b)
+assert not (f != b)   # delegates to f.__eq__(b)
+assert not (b != f)   # calls be.__ne__(f)
+assert c == f         # calls f.__eq__(c)
+c.__ne__ = b.__ne__
+assert False == (c == b)     # no dunder method is called
