@@ -27,6 +27,6 @@ assert f == b         # calls f.__eq__(b)
 assert b == f         # delegates to f.__eq__(b)
 assert not (f != b)   # delegates to f.__eq__(b)
 assert not (b != f)   # calls be.__ne__(f)
-assert c == f         # calls f.__eq__(c)
-c.__ne__ = b.__ne__
+assert f == c         # calls f.__eq__(c)
+assert c == f         # delegates to f.__eq__(c)
 assert False == (c == b)     # no dunder method is called
