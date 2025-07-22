@@ -27,7 +27,7 @@ RUN aptitude install -y build-essential
 
 RUN mkdir /${project}
 WORKDIR /${project}
-copy Makefile ${project}-*.bundle /${project}
+COPY Makefile ${project}-*.bundle /${project}
 RUN rm /${project}/Makefile
 
 RUN git init
