@@ -1,7 +1,8 @@
 
 FROM debian-@user@-dev
 
-ARG commit=be87b2b
+ARG commit=c41ac8f
+
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
 ARG llvm_version=20
