@@ -4,4 +4,4 @@ discoverable via "git grep"
 --orphan is an option to git-checkout, not git-branch
 
 
-git log --raw --all --find-object=$oid   #  Find which commits contain a blob
+git log --format=%H --all --find-object=$oid   #  Find which commits contain a blob
