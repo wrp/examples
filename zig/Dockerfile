@@ -50,4 +50,4 @@ RUN mv stage3/lib/zig /usr/local/lib
 ARG user
 USER ${user}
 
-CMD /bin/bash
+CMD ["/bin/bash"]
