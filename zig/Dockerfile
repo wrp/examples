@@ -5,7 +5,7 @@ ARG commit=c41ac8f
 
 ARG project=zig
 ARG url=https://github.com/ziglang/zig.git
-ARG llvm_version=22
+ARG llvm_version=21
 
 
 RUN printf 'deb http://deb.debian.org/debian sid main\n' > /etc/apt/sources.list.d/sid.list
