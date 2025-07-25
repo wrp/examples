@@ -15,8 +15,8 @@ timestamp_len = 10
 #       or patterns to ignore, or categories to keep, or ...?
 #       For now, just honor HISTIGNORE as an extra pattern to ignore.
 commands_to_ignore_re = [
-    re.compile('^(g|git)\s+(ap|dc|diff|l1h||s|show|--version)(\s+[^|]*)$'),
-    re.compile('^(cat|grep|ls|pwd|s|type|vi|which)(\s+[^|]*)$'),
+    re.compile('^(g|git)\\s+(ap|dc|diff|l1h||s|show|--version)(\\s+[^|]*)$'),
+    re.compile('^(cat|grep|ls|pwd|s|type|vi|which)(\\s+[^|]*)$'),
 ]
 
 
