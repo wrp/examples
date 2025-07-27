@@ -10,7 +10,7 @@ class foo():
     def __mul__(self, other):
         return self.x * other.x
 
-    # Called for other / self if other does not implement __mul__
+    # Called for other * self if other does not implement __mul__
     def __rmul__(self, other):
         return other.x + self.x
 
