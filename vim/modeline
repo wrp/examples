@@ -1,0 +1,7 @@
+#!/bin/python
+# this modeline tells the pre-commit hook to expect indentation with tabs vim: noet
+
+def Hello(s):
+	print(f'Hello, {s}')
+
+Hello('world')
