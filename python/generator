@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: noet
 # keyword: generator
 
 # A "generator function" is a function that returns a generator.
@@ -32,14 +33,14 @@ def delegated_generator():
 	def f() -> Generator[int, None, str]:
 		yield 1
 		yield 2
-		return "returned value"
+		return "Hello"
 
 	def g():
-		x = yield from f()
-		print(f'"{x}" returned from yield')  # x == "returned value"
+		x = yield from f()  # delegated generator
+		yield f'"{x}" returned from delegated generator'  # x == "Hello"
 
-	for y in g():  # y takes values 1, 2
-		print(f'{y} yielded from g')
+	for y in g():  # y takes values 1, 2, ...
+		print(f'"{y}" yielded from g')
 
 def send_to():
 	"""Demonstrate sending a value to a generator
