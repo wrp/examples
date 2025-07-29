@@ -1,0 +1,4 @@
+
+# To put a vertical column on screen in line 12
+# keywords: cc
+:set colorcolumn=12
