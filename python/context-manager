@@ -43,8 +43,10 @@ class cm:
         return self.suppress
 
 
-with cm('foo') as k:
+with cm('foo') as j, cm('bar') as k:
+    print(f'j name is {j.name}')
     print(f'k name is {k.name}')
+    print(f'type in cm: {type(k)}')
 
 # ??? k is still valid (python 3.8.13)
 print(f'type: {type(k)}')
