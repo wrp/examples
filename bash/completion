@@ -23,3 +23,6 @@ _internal_completion() {
 	COMPREPLY=($(echo "$list" | tr ' ' \\n | grep "${COMP_WORDS[$COMP_CWORD]}"))
 }
 complete -o default -F _internal_completion internal
+
+
+# Disable completion for a command:  "complete -r $cmd"
