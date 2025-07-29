@@ -17,4 +17,6 @@ class Counter:
         raise StopIteration
 
 for c in Counter(-2, 4):
-    print(c)
+    print(c, end=', ')
+
+print(', '.join([str(x) for x in Counter(4,6)]))
