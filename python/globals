@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+a = globals()
+
+
+assert set(a.keys()) == {'__name__', '__doc__', '__package__', '__loader__',
+    '__spec__', '__builtins__', '__file__', '__cached__', 'a'}
+def foo():
+    bar()  # okay even though bar is not in globals.  Resolution happens later
+def bar(): pass
+assert set(a.keys()) == {'__name__', '__doc__', '__package__', '__loader__',
+    '__spec__', '__builtins__', '__file__', '__cached__', 'a', 'foo', 'bar'}
+
+assert foo == a['foo']
