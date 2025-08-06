@@ -14,6 +14,14 @@
 char fmt[256];  /* "%.120e" */
 
 static void
+usage(void)
+{
+	puts("Use first arg 'float' or 'double', or set env vars: ");
+	puts("  p (integer in [1,120]) to set precision");
+	puts("  f in {fFeEgGaA} to set format");
+}
+
+static void
 init_fmt(void)
 {
 	int precision = 6;
@@ -103,6 +111,12 @@ int
 main(int argc, char **argv)
 {
 	enum width context = dbl;
+
+	if( argc > 1 && strcmp("-h", argv[1]) == 0 ){
+		usage();
+		exit(0);
+	}
+
 	if( argc > 1 && strcmp("float", argv[1]) == 0 ){
 		context = flt;
 		argv += 1;
