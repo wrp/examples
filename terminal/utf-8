@@ -2,6 +2,8 @@
 # Print utf-8 characters. Arguments can be single
 # values or ranges.  (eg 'e29c8b f09f8cb9-bb')
 
+# keywords: encoding, utf-8
+
 use 5.12.0;
 use Unicode::UCD "charinfo";
 binmode STDOUT, ':encoding(UTF-8)';
