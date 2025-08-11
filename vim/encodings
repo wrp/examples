@@ -1,0 +1,10 @@
+keywords: utf-8, utf8
+
+To enter a raw unicode character, use i_CTRL-R
+To enter a code point, use i_CTRL-V
+
+eg, to enter the code point c2b1, type (from insert mode):
+^vuc2b1
+
+To enter the raw unicode \xc2\xb1, type:
+^r="\xc2\xb1"
