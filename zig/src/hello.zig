@@ -2,6 +2,6 @@
 const std = @import("std");
 
 pub fn main() !void {
-    const stdout = std.io.getStdOut().writer();
-    try stdout.print("Hello, {s}!\n", .{"world"});
+	var stdout = std.fs.File.stdout().writerStreaming(&.{});
+	try stdout.interface.print("Hello, {s}!\n", .{"world"});
 }
