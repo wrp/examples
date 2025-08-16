@@ -867,6 +867,16 @@ apply_binary(struct state *S, unsigned char c)
 
 
 static void
+push_factors(struct stack *values, long long div, long long *v)
+{
+	struct stack_entry se = {.v.ld = div, .type = integer, .stored = 0};
+	while( *v % div == 0 ){
+		*v /= div;
+		stack_xpush(values, &se);
+	}
+}
+
+static void
 factor(struct state *S)
 {
 	long long v;
@@ -888,17 +898,9 @@ factor(struct state *S)
 		stack_xpush(S->values, &value);
 		return;
 	}
-	while( v % 2 == 0 ){
-		v = v / 2;
-		value.v.ld = 2;
-		stack_xpush(S->values, &value);
-	}
+	push_factors(S->values, 2, &v);
 	for( long long f = 3; f < v; f += 2 ){
-		value.v.ld = f;
-		while( v % f == 0 ){
-			v = v / f;
-			stack_xpush(S->values, &value);
-		}
+		push_factors(S->values, f, &v);
 	}
 	if( v > 1 ){
 		value.v.ld = v;
