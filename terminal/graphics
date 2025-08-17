@@ -10,6 +10,7 @@ use Data::Dumper;
 my @samples = (
 	'f09f9b91',  # A stop sign: 🛑  x1f6d1
 	'e29c8b',    # A yellow hand  ✋
+	'f09f8c80',  # Debian symbol 🌀
 	'f09f8cb9',  # A rose 🌹
 	'e2888a',    # ∊
 	'e28888',    # ∈
