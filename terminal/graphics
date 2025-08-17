@@ -15,8 +15,8 @@ my @samples = (
 	'e2888a',    # ∊
 	'e28888',    # ∈
 	'e2889e',    # ∞
-	'c2b1',      # 슱 뇂
-	'cf80',      # ±
+	'c2b1',      # ±
+	'cf80',      # π
 	'e284a4',    # ℤ
 );
 printf "%s", pack "H*", $_ foreach @samples; print "\n";
