@@ -28,14 +28,14 @@ binmode STDOUT, ':encoding(UTF-8)';
 print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
 
 @samples = (
-	[0x2589..0x25A0],
-	[0x2B00..0x2B56],
-	[9800..9811],
-	[9812..9831],  # chess/card symbols
-	[9833..9839],
+	[0x2589..0x25A0],  # Block elements
+	[0x2B00..0x2B56],  # Miscellaneous symbols and arrows
+	[9800..9811],      # Miscellaneous symbols
+	[9812..9831],      #   chess/card symbols
+	[9833..9839],      #   music
 	[9855..9865],
 	[9889..9899],
-	[913..991],
+	[913..991],        # Greek an Coptic
 );
 
 my $block = "";
