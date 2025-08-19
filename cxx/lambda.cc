@@ -10,6 +10,8 @@ int main(){
 
 	int i = 5;
 	int y = 5;
+
+	/* Square brackets define the capture list */
 	auto show = [](int i, string n) { cout << n << ": " << i << "  "; };
 
 	/* Capture all variables by reference */
