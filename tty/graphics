@@ -18,6 +18,8 @@ my @samples = (
 	'c2b1',      # ±
 	'cf80',      # π
 	'e284a4',    # ℤ
+	'e29ca8',    # ✨
+	'e29c85',    # ✅
 );
 printf "%s", pack "H*", $_ foreach @samples; print "\n";
 # print Dumper(charinfo(0x1f6d1));
