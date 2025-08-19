@@ -32,7 +32,7 @@ sub print_range {
 	}
 	print "\n";
 }
-print_range 0xe58c90, 0xe58cb0; # Some chineses characters
+print_range 0xe58c90, 0xe58cb0; # Some Chinese characters
 print_range 0xe59080, 0xe590a0;
 print_range 0xe38190, 0xe381b0;
 print_range 0xe29c82, 0xe29cc0;
