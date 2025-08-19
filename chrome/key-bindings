@@ -1,0 +1,4 @@
+# vim: vartabstop=25,8
+
+ctrl-tab	move to next tab
+ctrl-shift-tab	move to previous tab
