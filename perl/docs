@@ -1,2 +1,28 @@
 
 Character classes: perldoc perlrecharclass
+
+
+  Backslash sequences
+    A backslash sequence is a sequence of characters, the first one of which
+    is a backslash. Perl ascribes special meaning to many such sequences,
+    and some of these are character classes. That is, they match a single
+    character each, provided that the character belongs to the specific set
+    of characters defined by the sequence.
+
+    Here's a list of the backslash sequences that are character classes.
+    They are discussed in more detail below. (For the backslash sequences
+    that aren't character classes, see perlrebackslash.)
+
+     \d             Match a decimal digit character.
+     \D             Match a non-decimal-digit character.
+     \w             Match a "word" character.
+     \W             Match a non-"word" character.
+     \s             Match a whitespace character.
+     \S             Match a non-whitespace character.
+     \h             Match a horizontal whitespace character.
+     \H             Match a character that isn't horizontal whitespace.
+     \v             Match a vertical whitespace character.
+     \V             Match a character that isn't vertical whitespace.
+     \N             Match a character that isn't a newline.
+     \pP, \p{Prop}  Match a character that has the given Unicode property.
+     \PP, \P{Prop}  Match a character that doesn't have the Unicode property
