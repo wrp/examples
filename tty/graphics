@@ -24,6 +24,13 @@ my @samples = (
 printf "%s", pack "H*", $_ foreach @samples; print "\n";
 # print Dumper(charinfo(0x1f6d1));
 
+# Some chineses characters
+foreach my $x (0xe58c90..0xe58cb0) {
+	my $s = sprintf('%x', $x);
+	printf "%s", pack "H*", $s;
+}
+print "\n";
+
 # use open ":std", ":encoding(UTF-8)";
 binmode STDOUT, ':encoding(UTF-8)';
 
