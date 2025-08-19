@@ -61,11 +61,11 @@ of text in the column with a colon:
 | Dog | Elephant        | Frog |
 
 ~~~
-	Code block is delimited by triple tilde or triple back-tick
+Code block is delimited by triple tilde or triple back-tick
 ~~~
 
-	This is outside of any block.
+This is outside of any block.
 
 ```
-	This also denotes a code block.
+This also denotes a code block.
 ```
