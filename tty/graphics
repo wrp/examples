@@ -81,6 +81,11 @@ foreach my $range (@samples) {
 
 # perl -MUnicode::UCD=charinfo -MData::Dumper -e 'print Dumper(charinfo(0x1f6d1))'
 __DATA__
+
+for i in แ ก้ ไ ... ; do
+	printf "$i\t";
+	printf $i | xxd;
+done | awk '{$2=""}1'
 แ  e0b9 81 ...
 ก้  e0b8 81e0 b989 ......
 ไ  e0b9 84 ...
@@ -120,4 +125,5 @@ __DATA__
 ย  e0b8 a2 ...
 ก  e0b8 81 ...
 
+แก้ไขเพิ่มฟังก์ชันใช้แทนที่และเพื่อตรวจว่าไม่ถูกเรียก
 ฟิกซ์เจอร์สำหรับแก้ไขและคืนค่าฟังก์ชันชั่วคราว.
