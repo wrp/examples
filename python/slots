@@ -17,3 +17,17 @@ try:
     a.weight = 7
 except AttributeError:
     pass
+
+class Example2:
+    __slots__ = ('a', 'b', 'c')
+    def __init__(self, **kwargs):
+        # self.__dict__.update(kwargs) Ooops: no __dict__ is slots is defined
+        for k,v in kwargs.items():
+            setattr(self, k, v)
+
+a = Example2(a=5, b=6)
+assert a.a == 5
+assert a.b == 6
+try: print(a.c)
+except AttributeError: assert True
+else: assert False
