@@ -33,7 +33,9 @@ except AttributeError: assert True
 else: assert False
 
 # Enable slots with dynamic allowed
-class Example3(): __slots__ = ['a', '__dict__']
+class Example3(): __slots__ = ['x', '__dict__']
 a = Example3()
 a.b = 5  # okay: inserted into __dict__
-print(dir(a))
+assert a.__dict__ == {'b': 5}
+m = set(x for x in dir(a) if not x.startswith('__'))
+assert m == set(('x', 'b'))
