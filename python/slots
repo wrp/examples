@@ -31,3 +31,9 @@ assert a.b == 6
 try: print(a.c)
 except AttributeError: assert True
 else: assert False
+
+# Enable slots with dynamic allowed
+class Example3(): __slots__ = ['a', '__dict__']
+a = Example3()
+a.b = 5  # okay: inserted into __dict__
+print(dir(a))
