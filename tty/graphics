@@ -2,13 +2,26 @@
 # A random collection of symbols.
 # printf '\xf0\x9f\x9b\x91 \U1f6d1'  # Shell printf
 
+# Mapping from a code-point to a byte sequence is a bit
+# convoluted.  The point code \U1f6d1 uses the template
+# 11110xxx  10xxxxxx  10xxxxxx  10xxxxxx
+
+# 1f6d1 == 0 0001 1111 0110 1101 0001, so we fill in the
+# template to get:
+# 11110xxx  10xxxxxx  10xxxxxx  10xxxxxx
+#      ^^^    ^^^^^^    ^^^^^^    ^^^^^^
+#      000    011111    011011    010001
+# 11110000  10011111  10011011  10010001
+# 0xf0      9f         9b        91
+#
+
 use 5.12.0;
 use Unicode::UCD "charinfo";
 use Data::Dumper;
 
 
 my @samples = (
-	'f09f9b91',  # A stop sign: 🛑  x1f6d1
+	'f09f9b91',  # A stop sign: 🛑  \U1f6d1
 	'e29c8b',    # A yellow hand  ✋
 	'f09f8c80',  # Debian symbol 🌀
 	'f09f8cb9',  # A rose 🌹
