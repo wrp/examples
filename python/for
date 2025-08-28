@@ -11,3 +11,9 @@ for x in range(5):
 	print(x)
 else:
 	print("The 'else' branch is only executed if the loop terminates without break")
+
+
+# Iterate if foo may be None or otherwise Falsey
+foo = (1, 2, 3)
+for x in (foo or ()): pass
+# Do not use "foo or []", since that creates a temporary mutable
