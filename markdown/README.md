@@ -15,14 +15,16 @@ Create a horizontal line by placing 3 or more hyphens, asterisks,
 or underscores on a line by themselves. All three of these look the same.
 ___
 
-# This is a 1-hash header
-The single hash header is big.
+Level 1 and level 2 headers get a horizontal line.  Smaller
+headers do not.
 
-## This is 2-hash header
-The 2 hash header is not as big.
+# This is a level 1 header
+## This is level 2 header
+### This is level 3 header
+#### Level 4 header
+##### Level 5 header
+###### Level 6 header
 
-### This is 3-hash header
-The 3 hash header is smallish, and looks a lot like **bold text**
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
 
