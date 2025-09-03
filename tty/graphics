@@ -31,7 +31,7 @@ my @samples = (
 	'e2889e',    # ∞   infinity
 	'e28b85',    # ⋅   multiplication symbol, multiply
 	'c2b1',      # ±   plus/minus
-	'c3b7',      # ÷   division
+	'c3b7',      # ÷   division, obelus
 	'cf80',      # π   pi
 	'e28a86',    # ⊆   Subset
 	'e284a4',    # ℤ   integers
