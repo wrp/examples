@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# An object is considered True unless it has
+# a __bool__() method that returns False or a __len__()
+# method that returns 0
+
 # boolean operator 'and' returns one of its arguments
 
 def parity_init(self, x, f):
