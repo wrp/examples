@@ -29,7 +29,9 @@ my @samples = (
 	'e28888',    # ∈   epsilon element
 	'e280a6',    # …   ellipsis
 	'e2889e',    # ∞   infinity
+	'e28b85',    # ⋅   multiplication symbol, multiply
 	'c2b1',      # ±   plus/minus
+	'c3b7',      # ÷   division
 	'cf80',      # π   pi
 	'e28a86',    # ⊆   Subset
 	'e284a4',    # ℤ   integers
@@ -53,6 +55,8 @@ print_32 0xe0b880;
 print_32 0xe0b8a0;
 print_32 0xe0b980;
 print_32 0xe28a80;  # Set relations
+print_32 0xe28b80;  # More sets
+print_32 0xe28ba0;
 print_range 0xe58580, 0xe5859f;
 print_range 0xe585a0, 0xe585bf;
 print_range 0xe58a90, 0xe58aaf;
