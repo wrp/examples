@@ -30,6 +30,8 @@ while True:
 print('This is reached because break in finally discards the raise in except')
 # See https://peps.python.org/pep-0601/
 
+# KeyboardInterrupt is indistinuishable from receiving a SIGINT.  Perhaps there
+# is some platform on which that is not true.
 
 try:
     reraise()
