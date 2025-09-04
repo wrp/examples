@@ -1,0 +1,2 @@
+# convert lower to upper
+tr '[:lower:]' '[:upper:]'
