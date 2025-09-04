@@ -1,0 +1,10 @@
+
+>>> from sympy import symbols, init_printing
+>>> x, y = symbols('x y')
+>>> a = x + 2 * y + x**3
+>>> a
+x**3 + x + 2*y
+>>> init_printing(use_unicode=True)
+>>> a
+ 3
+x  + x + 2⋅y
