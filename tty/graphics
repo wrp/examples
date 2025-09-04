@@ -33,6 +33,7 @@ my @samples = (
 	'c2b1',      # ±   plus/minus
 	'c3b7',      # ÷   division, obelus
 	'cf80',      # π   pi
+	'e284af',    # ℯ   e the base of natural log
 	'e28a86',    # ⊆   Subset
 	'e284a4',    # ℤ   integers
 	'e29ca8',    # ✨  stars
@@ -54,6 +55,7 @@ sub print_32 { print_range $_[0], $_[0] + 31; }
 print_32 0xe0b880;
 print_32 0xe0b8a0;
 print_32 0xe0b980;
+print_32 0xe284a0;  # misc mathy symbols
 print_32 0xe28a80;  # Set relations
 print_32 0xe28b80;  # More sets
 print_32 0xe28ba0;
