@@ -1,0 +1,5 @@
+
+Quick list of version management tools for python
+
+uv    -- from git@github.com:astral-sh/uv   (preferred)
+asdf  -- alright, but a bit klunky compare to uv
