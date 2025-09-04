@@ -52,6 +52,8 @@ sub print_range {
 }
 
 sub print_32 { print_range $_[0], $_[0] + 31; }
+print_32 0xce90;  # Greek alphabet
+print_32 0xceb0;  # Greek alphabet
 print_32 0xe0b880;
 print_32 0xe0b8a0;
 print_32 0xe0b980;
