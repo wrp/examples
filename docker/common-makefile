@@ -10,7 +10,7 @@ docker_file ?= Dockerfile
 run:
 	@if ! docker image inspect $(image) > /dev/null 2>&1; then \
 	make image; fi
-	@- rename-tmux-window $(image)
+	@- set-title $(image)
 	@if id=$$(docker ps --filter label=$(USER)-$(image) -q | grep .); then \
 		echo "Attaching to docker containter $$id ($(image))"; \
 		docker exec -it --user $(uid):$$(id -g) "$$id" bash; \
