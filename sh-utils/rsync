@@ -8,3 +8,16 @@ $ rsync -zva --delete foo bar
 # Copy files in foo to bar, deleting unmatched files in bar
 # but keeping bar/file-to-keep  (P == protect)
 $ rsync -zva --delete --filter 'P file-to-keep' foo/ bar
+
+# -a is the same as -rlptgoD
+#    -r  recurse
+#    -l  copy symlinks as symlinks
+#    -p  preserve permissions
+#    -t  preserve timestamps
+#    -g  preserve group
+#    -o  preserve owner
+#    -D  preserve device files
+
+
+# Perhaps a more useful set of options is -rlpgoH
+#  which won't try to change timestamps and preserves hard links
