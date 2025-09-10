@@ -11,6 +11,8 @@ class foo():
         return self.x * other.x
 
     # Called for other * self if other does not implement __mul__
+    # or if other.__mul__(self) returns NotImplemented, or if
+    # other.__mul__ is not implemented.
     def __rmul__(self, other):
         return other.x + self.x
 
@@ -23,8 +25,8 @@ class bar():
 class baz():
     x: float
 
-    def __rmul__(self, other):
-        return NotImplemented
+    def __mul__(self, other):
+        return NotImplemented  # Trigger delegation to other.__rmul__(self)
 
 a = foo(3)
 b = bar(5)
@@ -34,4 +36,4 @@ assert a*b == 3*5
 assert b*a == 5+3
 
 assert a*c == 3*7
-assert c*a == 7+3
+assert c*a == 7+3  # delegates to a.__rmul__(c)
