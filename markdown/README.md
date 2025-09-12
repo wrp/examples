@@ -69,5 +69,5 @@ Code block is delimited by triple tilde or triple back-tick
 This is outside of any block.
 
 ```
-This also denotes a code block.
+This also denotes a code block.  (A "fenced code block", according to OAI's chat GPT-5)
 ```
