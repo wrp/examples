@@ -1,0 +1,5 @@
+
+
+# Create a new commit with a given tree and single parent
+git commit-tree ${tree?} -p ${parent} \
+	-m "New commit with parent ${parent} and tree ${tree}"
