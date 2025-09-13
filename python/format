@@ -4,6 +4,24 @@ import os
 
 # specify width of integer:
 
+class foo():
+    def __format__(self, x): return f'Calls __format__: x = {x}'
+    def __str__(self): return 'Calls __str__'
+    def __repr__(self): return 'Calls __repr__'
+
+"""
+f"{x}" → x.__format__("")
+f"{x:>10}" → x.__format__(">10")
+f"{x!r:>10}" → repr(x).__format__(">10")
+"""
+
+a = foo()
+assert f'{a:banana}' == 'Calls __format__: x = banana'
+assert f'{a!r}' == 'Calls __repr__'
+assert f'{a!s}' == 'Calls __str__'
+
+
+
 a = 5
 print(f'{a:03}')  # Width of 3, zero padded
 print(f'{a:3}')   # Width of 3, space padded
