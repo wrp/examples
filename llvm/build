@@ -1,0 +1,14 @@
+
+Common cmake options:
+
+git clone https://github.com/llvm/llvm-project.git
+
+cmake -S llvm-project/llvm -B ${builddir?} -G Ninja \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=${prefix?} \
+	-DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra;compiler-rt;libcxx;libcxxabi;lldb"
+cmake --build ${builddir?} --target install
+
+# use explicitly when building
+export CC=${prefix}/bin/clang
+export CXX=${prefix}/bin/clang++
