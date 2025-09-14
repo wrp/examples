@@ -13,3 +13,16 @@ cmake -DCMAKE_INSTALL_PREFIX:PATH=$DESTDIR "$@"
 
 To use ninja for the generator
 cmake "${path?}" -GNinja
+
+
+According to ChatGPT, you can tweak at install time with:
+cmake --install --prefix
+instead of 'make install'.  Have not yet tested.  Also, should be able
+to do:
+cmake --install --component
+
+or
+
+DESTDIR=... cmake --install
+
+instead of 'make install'
