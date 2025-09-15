@@ -1,0 +1,3 @@
+
+# Tell pip to use a particular build dir
+python -m pip install . -Cbuild-dir=build -v
