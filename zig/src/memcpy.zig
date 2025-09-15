@@ -22,7 +22,10 @@
 // buffer 'abklmnoXXXX len = 11'
 
 const std = @import("std");
-const stdout = std.io.getStdOut().writer();
+var stdout_buffer: [1024]u8 = undefined;
+var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+const stdout = &stdout_writer.interface;
+
 
 // copy first n bytes from src to dest
 pub fn write_to_slice(dest: []u8, src: []const u8, comptime n: u32) []const u8 {
@@ -47,4 +50,5 @@ pub fn main() !void {
 	try stdout.print("copied '{s} len = {}'\n", .{d, d.len});
 	try stdout.print("buffer '{s} len = {}'\n", .{buffer, buffer.len});
 	}
+	try stdout.flush();
 }
