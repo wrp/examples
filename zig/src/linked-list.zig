@@ -21,7 +21,10 @@ pub fn main() !void {
 		.len = 1,
 	};
 
-	const stdout = std.io.getStdOut().writer();
+	var stdout_buffer: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+	const stdout = &stdout_writer.interface;
+
 	try stdout.print("{?}\n", .{list.first});
 	try stdout.print("{?}\n", .{list.last});
 	try stdout.print("{?}\n", .{usize});
@@ -31,6 +34,7 @@ pub fn main() !void {
 
 	list.push(&node2);
 	try stdout.print("new head is: {d}\n", .{list.first.?.data});
+	try stdout.flush();
 }
 
 fn LinkedList(comptime T: type) type {
