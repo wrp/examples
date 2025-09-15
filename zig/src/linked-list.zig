@@ -25,10 +25,10 @@ pub fn main() !void {
 	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
 	const stdout = &stdout_writer.interface;
 
-	try stdout.print("{?}\n", .{list.first});
-	try stdout.print("{?}\n", .{list.last});
-	try stdout.print("{?}\n", .{usize});
-	try stdout.print("{?}\n", .{list});
+	try stdout.print("{any}\n", .{list.first});
+	try stdout.print("{any}\n", .{list.last});
+	try stdout.print("{any}\n", .{usize});
+	try stdout.print("{any}\n", .{list});
 
 	try stdout.print("Value is: {d}\n", .{list.first.?.data});
 
