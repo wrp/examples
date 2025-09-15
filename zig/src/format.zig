@@ -14,11 +14,15 @@
 const std = @import("std");
 
 pub fn main() !void {
-	const s = std.io.getStdOut().writer();
+	var stdout_buffer: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+	const s = &stdout_writer.interface;
+
 	const i:i8 = -6;
 	const u:u8 = 6;
 	try s.print("{{b}} misbehaves with signed int: -6 -> {b:0>8}\n", .{i});
 	try s.print("To display signed, bitCast to unsigned: -6 ->", .{});
 	try s.print("{b:0>8}\n", .{ @as(u8, @bitCast(i)) });
 	try s.print("{{b}} behaves with unsigned: {b:0>8}\n", .{u});
+	try s.flush();
 }
