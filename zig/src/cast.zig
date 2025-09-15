@@ -3,7 +3,9 @@
 const std = @import("std");
 
 pub fn main() !void {
-	const stdout = std.io.getStdOut().writer();
+	var stdout_buffer: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+	const stdout = &stdout_writer.interface;
 
 	for(0..1) |i| { try stdout.print("for(0..1) type is {}\n", .{ @TypeOf(i) }); } // usize
 
@@ -34,4 +36,5 @@ pub fn main() !void {
 	}
 
 	try stdout.print("EOL\n", .{});
+	try stdout.flush();
 }
