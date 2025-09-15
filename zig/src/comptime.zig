@@ -5,8 +5,8 @@ const std = @import("std");
 
 
 pub fn main() !void {
-    comptime var x = 3;
-    comptime var y = squareComptime(x);
+    const x = comptime 3;
+    const y = comptime squareComptime(x);
     std.debug.print("{d}\n", .{y});
 }
 
