@@ -1,0 +1,8 @@
+
+To build zig, you need to correct llvm.  To build llvm from
+github.com/llvm/llvm-project, you need to build several
+sub-projects: llvm, clang, lld
+
+Build each with:
+cmake -B $builddir -DCMAKE_INSTALL_PREFIX:PATH=/Users/wrp/x86_64/Darwin/ -DCMAKE_BUILD_TYPE=Release .
+cmake --build $builddir
