@@ -2,7 +2,7 @@
 
 const std = @import("std");
 
-fn for_loops(stdout: std.fs.File.Writer) !void {
+fn for_loops(stdout: *std.Io.Writer) !void {
 	const names = [_][]const u8{"Alice", "Bob"};  // Initialize array of strings
 	const text = "banana";
 
@@ -50,7 +50,7 @@ fn is_odd(x: i32) !bool {
 	return true;
 }
 
-fn conditionals(stdout: std.fs.File.Writer) !void {
+fn conditionals(stdout: *std.Io.Writer) !void {
 	// capture clause on the if captures the non-error value
 	if (is_odd(8)) |a| {
 		try stdout.print("Cannot happen, that {any} is true\n", .{a});
@@ -62,7 +62,11 @@ fn conditionals(stdout: std.fs.File.Writer) !void {
 
 
 pub fn main() !void {
-	const stdout = std.io.getStdOut().writer();
+	var stdout_buffer: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+	const stdout = &stdout_writer.interface;
+
 	try for_loops(stdout);
 	try conditionals(stdout);
+	try stdout.flush();
 }
