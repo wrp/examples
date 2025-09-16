@@ -17,8 +17,8 @@ pub fn main() !void {
 	// allocate a buffer of u8
 	const b:[]u8 = try allocator.alloc(u8, 32);
 	defer allocator.free(b);
-	for (@as(u8, 0).., b) |i, *v| {
-		v.* = i;
+	for (0.., b) |i, *v| {
+		v.* = @as(u8, @intCast(i));
 	}
 	std.debug.print("{}: {d}\n", .{@TypeOf(b), b[31]});
 }
