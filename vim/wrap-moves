@@ -1,3 +1,5 @@
 
 zL  - Shift view half screen to the right when nowrap is set
 gj  - Move cursor down one displayed line
+g$  - Move cursor to the rightmost visible column
+g^  - Move cursor to the leftmost visible column
