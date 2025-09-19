@@ -1,0 +1,26 @@
+# Makefile to use on MacOS in the top-level of the zig git repo
+
+ifndef PREFIX
+$(error PREFIX  is not set)
+endif
+
+build/stage3/bin/zig: build
+	cmake --build build
+
+install: build/stage3/bin/zig
+	cmake --install build
+
+
+# TODO: figure out how to pass CPATH, etc. as -D flags to cmake
+build:
+	CPATH=${PREFIX}/include \
+	CPPFLAGS=-I${PREFIX}/include \
+	CFLAGS=-I${PREFIX}/include \
+	PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PREFIX}/share/pkgconfig \
+	DYLD_FALLBACK_LIBRARY_PATH=${PREFIX}/lib \
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_C_COMPILER=/Users/wrp/x86_64/Darwin/bin/clang \
+		-DCMAKE_CXX_COMPILER=/Users/wrp/x86_64/Darwin/bin/clang++ \
+		-DCMAKE_EXE_LINKER_FLAGS="-L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib -Wl,-adhoc_codesign" \
+		-DCMAKE_INSTALL_PREFIX:PATH=/Users/wrp/x86_64/Darwin \
+		-DCMAKE_BUILD_TYPE=Release
