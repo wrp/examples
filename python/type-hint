@@ -27,5 +27,6 @@ class Bar():
 def g(x: Dict[str, int]) -> int:
     return x.get('foo', 2)
 
-a = Bar(f(1))
+a: Bar = Bar(f(1))
+b: int = 6
 assert( 1 == g({'foo': 1}))
