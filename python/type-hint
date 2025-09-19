@@ -7,7 +7,7 @@
 
 # Verify the hints with 'mypy $path'
 
-from __future__ import annotations  # Allow incomplete types
+from __future__ import annotations  # Allow incomplete types (only necessary in 3.7-3.10)
 
 # explicit import of types seems unnecessary when using
 # __future__.annotations, but mypy requires it
