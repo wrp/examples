@@ -33,9 +33,9 @@ cmake -B build-21.1.0 \
 	$HOME/github/llvm/llvm-project/llvm \
 	-DCMAKE_INSTALL_PREFIX:PATH=/Users/wrp/x86_64/Darwin/ \
 	-DCMAKE_BUILD_TYPE=Release \
-	-DLLVM_ENABLE_PROJECTS='clang;lld;clang-tools-extra;compiler-rt;lldb' \
-	-DCMAKE_CXX_FLAGS="-Uisnan -Uisinf -Usignbit -Ufpclassify -Uisfinite -Uisnormal -Uisgreater -Uisgreaterequal -Uisless -Uislessequal -Uislessgreater" \
-	-DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx' \
+	-DLLVM_ENABLE_PROJECTS='clang;lld;clang-tools-extra;lldb' \
+	-DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx;libcxxabi' \
+	-DCMAKE_CXX_FLAGS='-Uisnan -Uisinf -Usignbit -Ufpclassify -Uisfinite -Uisnormal -Uisgreater -Uisgreaterequal -Uisless -Uislessequal -Uislessgreater' \
 	-DCOMPILER_RT_BUILD_PROFILE=ON \
 	-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
 	-DCMAKE_C_COMPILER_TARGET=x86_64-apple-darwin21.2.0 \
