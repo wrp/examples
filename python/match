@@ -14,3 +14,45 @@ match b:
         print(f"X={x}, Y={y}")
     case _:
         raise ValueError("Not a point")
+
+"""
+grammar:
+
+match_stmt   ::= 'match' subject_expr ":" NEWLINE INDENT case_block+ DEDENT
+subject_expr ::= star_named_expression "," star_named_expressions?
+                 | named_expression
+case_block   ::= 'case' patterns [guard] ":" block
+
+
+8.6.1. Overview
+Here’s an overview of the logical flow of a match statement:
+
+The subject expression subject_expr is evaluated and a resulting
+subject value obtained. If the subject expression contains a comma,
+a tuple is constructed using the standard rules.
+
+Each pattern in a case_block is attempted to match with the subject
+value. The specific rules for success or failure are described
+below. The match attempt can also bind some or all of the standalone
+names within the pattern. The precise pattern binding rules vary
+per pattern type and are specified below. Name bindings made during
+a successful pattern match outlive the executed block and can be
+used after the match statement.
+
+Note During failed pattern matches, some subpatterns may succeed.
+Do not rely on bindings being made for a failed match. Conversely,
+do not rely on variables remaining unchanged after a failed match.
+The exact behavior is dependent on implementation and may vary.
+This is an intentional decision made to allow different implementations
+to add optimizations.  If the pattern succeeds, the corresponding
+guard (if present) is evaluated. In this case all name bindings are
+guaranteed to have happened.
+
+If the guard evaluates as true or is missing, the block inside
+case_block is executed.
+
+Otherwise, the next case_block is attempted as described above.
+
+If there are no further case blocks, the match statement is completed.
+
+"""
