@@ -1,0 +1,6 @@
+#!/bin/sh
+
+python -c 'import sys; print(sys._git)'          # ('CPython', 'heads/main', 'd7b9ea5cab9')
+python -c 'import sys; print(sys.version_info)'  # sys.version_info(major=3, minor=15, micro=0, releaselevel='alpha', serial=0)
+python --version                                 # Python 3.15.0a0
+python -VV                                       # Python 3.15.0a0 (heads/main:d7b9ea5cab9, Sep  7 2025, 09:04:26) [Clang 13.1.6 (clang-1316.0.21.2.5)]
