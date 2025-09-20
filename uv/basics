@@ -8,3 +8,6 @@ $ . .venv/bin/activate
 $ uv pip install 'pytest<8.0'
 $ uv run pytest ...
 $ uv run python ...
+
+
+To setup a test environment in sphinx: uv pip install -e ".[test]"
