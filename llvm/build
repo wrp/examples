@@ -12,3 +12,31 @@ cmake --build ${builddir?} --target install
 # use explicitly when building
 export CC=${prefix}/bin/clang
 export CXX=${prefix}/bin/clang++
+
+
+To ensure that we can build Python, we also need compiler-rt runtime
+When building that, I ran into error related to isinf, etc. getting pulled in
+from a math.h from somehwere, so configured using the following:
+
+PREFIX="$HOME"/x86_64/Darwin;
+CC=$PREFIX/bin/clang \
+CXX=$PREFIX/bin/clang++ \
+CPATH="$PREFIX/include" \
+CPPFLAGS="-I$PREFIX/include" \
+CFLAGS="-I$PREFIX/include" \
+LIBRARY_PATH="$PREFIX/lib" \
+LDFLAGS="-L$PREFIX/lib -Wl,-rpath,$PREFIX/lib" \
+PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig" \
+DYLD_FALLBACK_LIBRARY_PATH="$PREFIX/lib" \
+cmake -B build-21.1.0 \
+	-G Ninja \
+	$HOME/github/llvm/llvm-project/llvm \
+	-DCMAKE_INSTALL_PREFIX:PATH=/Users/wrp/x86_64/Darwin/ \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra;compiler-rt;lldb" \
+	-DCMAKE_CXX_FLAGS="-Uisnan -Uisinf -Usignbit -Ufpclassify -Uisfinite -Uisnormal -Uisgreater -Uisgreaterequal -Uisless -Uislessequal -Uislessgreater" \
+	-DLLVM_ENABLE_RUNTIMES=compiler-rt \
+	-DCOMPILER_RT_BUILD_PROFILE=ON \
+	-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
+	-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+	-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
