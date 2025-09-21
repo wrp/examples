@@ -1,5 +1,5 @@
 # A method to bisect over merge commits.  Essentially, treat
-# all commits of a branch atomically. (Untested)
+# all commits of a branch atomically.
 
 # Start your bisect normally
 git bisect start $bad $good
