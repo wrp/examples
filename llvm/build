@@ -34,7 +34,8 @@ cmake -B build-21.1.0 \
 	-DCMAKE_INSTALL_PREFIX:PATH=/Users/wrp/x86_64/Darwin/ \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DLLVM_ENABLE_PROJECTS='clang;lld;clang-tools-extra;lldb' \
-	-DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx;libcxxabi' \
+	-DLLDB_USE_SYSTEM_DEBUGSERVER=ON \
+	-DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx;libcxxabi;libunwind' \
 	-DCMAKE_CXX_FLAGS='-Uisnan -Uisinf -Usignbit -Ufpclassify -Uisfinite -Uisnormal -Uisgreater -Uisgreaterequal -Uisless -Uislessequal -Uislessgreater' \
 	-DCOMPILER_RT_BUILD_PROFILE=ON \
 	-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
