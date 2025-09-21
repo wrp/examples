@@ -1,0 +1,10 @@
+# A method to bisect over merge commits.  Essentially, treat
+# all commits of a branch atomically. (Untested)
+
+# Start your bisect normally
+git bisect start $bad $good
+
+# Skip every non-merge reachable from $bad but not from $good
+git bisect skip $(git rev-list --no-merges $good..$bad)
+
+# …then proceed (manually mark good/bad at each step, or use `git bisect run`)
