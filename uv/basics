@@ -11,3 +11,14 @@ $ uv run python ...
 
 
 To setup a test environment in sphinx: uv pip install -e .\[test\]
+
+
+If you get errors like:
+
+	error: No `project` table found in: `.../pyproject.toml`
+
+it indicates that the project uses a pyproject.toml in an older
+format without a project table.  uv tries to use the project table,
+and it's not there.  To get around this, use:
+
+	uv tool run ...  (eg, 'uv tool run pytest')
