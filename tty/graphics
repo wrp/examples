@@ -31,6 +31,8 @@ my @samples = (
 	'e2889e',    # ∞   infinity
 	'e28b85',    # ⋅   multiplication symbol, multiply
 	'c2b1',      # ±   plus/minus
+	'c2b2',      #     superscript 2
+	'c2b3',      #     superscript 3
 	'c3b7',      # ÷   division, obelus
 	'cf80',      # π   pi
 	'e284af',    # ℯ   e the base of natural log
