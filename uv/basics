@@ -2,9 +2,12 @@
 uv relies on virtualenv.
 To use old version of python (eg, 3.8), first pin it:
 
+# typical sequence to enable pytest in older code:
 $ uv python pin 3.8
 $ uv venv  # create .venv containing symbolic links into $HOME/.local/share/uv
 $ . .venv/bin/activate
+$ uv pip install setuptools
+$ uv pip install --no-build-isolation -e .\[test\]
 $ uv pip install 'pytest<8.0'
 $ uv run pytest ...
 $ uv run python ...
