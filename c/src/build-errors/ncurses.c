@@ -25,6 +25,10 @@ main(void)
 			continue;
 		}
 		switch(w){
+		case 'b': beep(); break;
+		case 'f': flash(); break;
+		case 'h': attron(A_REVERSE); break;
+		case 'o': attroff(A_REVERSE); break;
 		case 'q': goto fini;
 		case 'g':
 			printw("Moving to (%d, %d)", y, x);
