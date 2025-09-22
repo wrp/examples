@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+
 int
 main(void)
 {
@@ -16,7 +17,7 @@ main(void)
 	if( initscr() == NULL ) {
 		err(1, "initscr");
 	}
-	printw("Type some characters, 'q' to quit\n");
+	printw("Type some characters, 'Q' to quit\n");
 	while( (w = getch()) != ERR ) {
 		if (w == KEY_RESIZE) {
 			int a, b;
@@ -29,7 +30,9 @@ main(void)
 		case 'f': flash(); break;
 		case 'h': attron(A_REVERSE); break;
 		case 'o': attroff(A_REVERSE); break;
-		case 'q': goto fini;
+		case 'H': attron(A_STANDOUT); break;
+		case 'O': attroff(A_STANDOUT); break;
+		case 'Q': goto fini;
 		case 'g':
 			printw("Moving to (%d, %d)", y, x);
 			move(y, x);
