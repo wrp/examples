@@ -32,6 +32,8 @@ main(void)
 		case 'o': attroff(A_REVERSE); break;
 		case 'H': attron(A_STANDOUT); break;
 		case 'O': attroff(A_STANDOUT); break;
+		case 'u': attron(A_UNDERLINE); break;
+		case 'U': attroff(A_UNDERLINE); break;
 		case 'Q': goto fini;
 		case 'g':
 			printw("Moving to (%d, %d)", y, x);
