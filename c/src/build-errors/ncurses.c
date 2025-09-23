@@ -17,6 +17,10 @@ main(void)
 	if( initscr() == NULL ) {
 		err(1, "initscr");
 	}
+	cbreak();
+	/* noecho(); */
+	keypad(stdscr, TRUE);
+	/* nodelay(stdscr, TRUE); */
 	printw("Type some characters, 'Q' to quit\n");
 	while( (w = getch()) != ERR ) {
 		if (w == KEY_RESIZE) {
