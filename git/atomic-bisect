@@ -8,3 +8,25 @@ git bisect start $bad $good
 git bisect skip $(git rev-list --no-merges $good..$bad)
 
 # …then proceed (manually mark good/bad at each step, or use `git bisect run`)
+
+# Note that git-rev-list might create a very large list, which is
+# not suitable for passing as command line arguments (unless you
+# are a major tech company who thinks it is better to modify
+# the OS to allow more command-line arguments than it is to just
+# impose decent engineering practice, that is.)  In that case,
+# just do the check in the git runner with something like:
+
+--------------- cut "test-script" --------------------
+#!/bin/sh
+# Return 125 unless HEAD is a merge commit
+# (a merge has >1 parent)
+
+if ! git rev-parse --quiet --verify HEAD^2 >/dev/null; then
+	# HEAD is not a merge commit
+	exit 125
+# Remainder of test here.
+# exit 0 for success, non-zero for bad, 125 to skip
+--------------- cut "test-script" --------------------
+
+Put test-script somewhere (safest if outside the repo) and
+pass its path as argument to 'git bisect run /path/to/test-script'
