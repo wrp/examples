@@ -18,6 +18,7 @@ main(void)
 		err(1, "initscr");
 	}
 	cbreak();
+	curs_set(0);  /* cursor visiblity 0, 1, 2 */
 	/* noecho(); */
 	keypad(stdscr, TRUE);
 	/* nodelay(stdscr, TRUE); */
