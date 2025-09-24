@@ -16,13 +16,17 @@ main(void)
 	mvprintw(0, 0, "Press keys (q to quit)");
 	refresh();
 
+	mvprintw(2, 0, "received : ");
+	mvprintw(3, 0, "name     : ");
+	untouchwin(stdscr);  /* Prevent implicit refresh by getch */
 	for (;;) {
 		int c = getch();
+		touchwin(stdscr);
 
+		move(2, 11);
 		if (c == 'q') {
 			break;
 		}
-		mvprintw(2, 0, "Got ");
 		if (c >= 1 && c <= 26) {
 			int base = 'A' + (c - 1);
 			assert(base == (c | 0x40));
@@ -33,6 +37,8 @@ main(void)
 		} else {
 			printw("'%s' (0x%02x)", keyname(c), c);
 		}
+		clrtoeol();
+		mvprintw(3, 11, "%s", keyname(c));
 		clrtoeol();
 		refresh();
 	}
