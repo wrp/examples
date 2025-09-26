@@ -39,3 +39,12 @@ cmake -B build-21.1.0 \
 	-DCMAKE_CXX_FLAGS='-Uisnan -Uisinf -Usignbit -Ufpclassify -Uisfinite -Uisnormal -Uisgreater -Uisgreaterequal -Uisless -Uislessequal -Uislessgreater' \
 	-DCOMPILER_RT_BUILD_PROFILE=ON \
 	-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+
+
+Here is what brew does:
+
+==> Installing node dependency: llvm
+==> Patching
+==> Applying 1381ad497b9a6d3da630cbef53cbfa9ddf117bb6...40a8c7c0ff3f688b690e4c74db734de67f0f89e9.diff
+==> cmake -G Ninja .. -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;mlir;polly;lldb -DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind;openmp -DLLVM_POLLY_LINK_INTO_T
+==> cmake --build .
