@@ -41,7 +41,7 @@ cmake -B build-21.1.0 \
 	-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
 
-Here is what brew does:
+Here is what brew does: (see 01.cmake.log for details)
 
 ==> Installing node dependency: llvm
 ==> Patching
