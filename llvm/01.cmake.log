@@ -1,0 +1,458 @@
+2025-09-26 16:52:25 +0000
+
+cmake
+-G
+Ninja
+..
+-DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/llvm/21.1.2
+-DCMAKE_INSTALL_LIBDIR=lib
+-DCMAKE_BUILD_TYPE=Release
+-DCMAKE_FIND_FRAMEWORK=LAST
+-DCMAKE_VERBOSE_MAKEFILE=ON
+-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=/usr/local/Homebrew/Library/Homebrew/cmake/trap_fetchcontent_provider.cmake
+-Wno-dev
+-DBUILD_TESTING=OFF
+-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;mlir;polly;lldb
+-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind;openmp
+-DLLVM_POLLY_LINK_INTO_TOOLS=ON
+-DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
+-DLLVM_LINK_LLVM_DYLIB=ON
+-DLLVM_ENABLE_EH=OFF
+-DLLVM_ENABLE_FFI=ON
+-DLLVM_ENABLE_RTTI=ON
+-DLLVM_INCLUDE_DOCS=OFF
+-DLLVM_INCLUDE_TESTS=OFF
+-DLLVM_INSTALL_UTILS=ON
+-DLLVM_ENABLE_Z3_SOLVER=ON
+-DLLVM_OPTIMIZED_TABLEGEN=ON
+-DLLVM_TARGETS_TO_BUILD=all
+-DLLVM_USE_RELATIVE_PATHS_IN_FILES=ON
+-DLLVM_SOURCE_PREFIX=.
+-DLLDB_USE_SYSTEM_DEBUGSERVER=ON
+-DLLDB_ENABLE_PYTHON=ON
+-DLLDB_ENABLE_LUA=OFF
+-DLLDB_ENABLE_LZMA=ON
+-DLLDB_PYTHON_RELATIVE_PATH=libexec/python3.13/site-packages
+-DLIBOMP_INSTALL_ALIASES=OFF
+-DLIBCXX_INSTALL_MODULES=ON
+-DCLANG_PYTHON_BINDINGS_VERSIONS=3.10;3.11;3.12;3.13;3.8;3.9
+-DLLVM_CREATE_XCODE_TOOLCHAIN=OFF
+-DCLANG_FORCE_MATCHING_LIBCLANG_SOVERSION=OFF
+-DCLANG_CONFIG_FILE_SYSTEM_DIR=../../../../etc/clang
+-DCLANG_CONFIG_FILE_USER_DIR=~/.config/clang
+-DPACKAGE_VENDOR=Homebrew
+-DBUG_REPORT_URL=https://github.com/Homebrew/homebrew-core/issues
+-DCLANG_VENDOR_UTI=sh.brew.clang
+-DFFI_INCLUDE_DIR=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/include/ffi
+-DFFI_LIBRARY_DIR=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/lib
+-DLLVM_BUILD_LLVM_C_DYLIB=ON
+-DLLVM_ENABLE_LIBCXX=ON
+-DLIBCXX_PSTL_BACKEND=libdispatch
+-DLIBCXX_INSTALL_LIBRARY_DIR=/usr/local/Cellar/llvm/21.1.2/lib/c++
+-DLIBUNWIND_INSTALL_LIBRARY_DIR=/usr/local/Cellar/llvm/21.1.2/lib/unwind
+-DLIBCXXABI_INSTALL_LIBRARY_DIR=/usr/local/Cellar/llvm/21.1.2/lib/c++
+-DRUNTIMES_CMAKE_ARGS=-DCMAKE_INSTALL_RPATH=@loader_path|@loader_path/../unwind
+-DBUILTINS_CMAKE_ARGS=-DCOMPILER_RT_ENABLE_IOS=OFF;-DCOMPILER_RT_ENABLE_WATCHOS=OFF;-DCOMPILER_RT_ENABLE_TVOS=OFF
+
+-- The C compiler identification is AppleClang 14.0.0.14000029
+-- The CXX compiler identification is AppleClang 14.0.0.14000029
+-- The ASM compiler identification is AppleClang
+-- Found assembler: /usr/local/Homebrew/Library/Homebrew/shims/mac/super/clang
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/Homebrew/Library/Homebrew/shims/mac/super/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/Homebrew/Library/Homebrew/shims/mac/super/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- bolt project is disabled
+-- clang project is enabled
+-- clang-tools-extra project is enabled
+-- compiler-rt project is disabled
+-- cross-project-tests project is disabled
+-- libclc project is disabled
+-- lld project is disabled
+-- lldb project is enabled
+-- mlir project is enabled
+-- openmp project is disabled
+-- polly project is enabled
+-- flang project is disabled
+-- libc project is disabled
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Found Z3: /usr/local/lib/libz3.dylib (found suitable version "4.15.3", minimum required is "4.8.9")
+-- Found libtool - /Library/Developer/CommandLineTools/usr/bin/libtool
+-- Found Python3: /usr/local/bin/python3.13 (found suitable version "3.13.7", minimum required is "3.0") found components: Interpreter
+-- Performing Test CXX_COMPILER_SUPPORTS_STDLIB
+-- Performing Test CXX_COMPILER_SUPPORTS_STDLIB - Success
+-- Performing Test CXX_LINKER_SUPPORTS_STDLIB
+-- Performing Test CXX_LINKER_SUPPORTS_STDLIB - Success
+-- Looking for __GLIBC__
+-- Looking for __GLIBC__ - not found
+-- Looking for valgrind/valgrind.h
+-- Looking for valgrind/valgrind.h - not found
+-- Looking for FE_ALL_EXCEPT
+-- Looking for FE_ALL_EXCEPT - found
+-- Looking for FE_INEXACT
+-- Looking for FE_INEXACT - found
+-- Performing Test HAVE_BUILTIN_THREAD_POINTER
+-- Performing Test HAVE_BUILTIN_THREAD_POINTER - Failed
+-- Looking for CrashReporterClient.h
+-- Looking for CrashReporterClient.h - not found
+-- Performing Test HAVE_CRASHREPORTER_INFO
+-- Performing Test HAVE_CRASHREPORTER_INFO - Success
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Looking for pthread_rwlock_init in pthread
+-- Looking for pthread_rwlock_init in pthread - found
+-- Looking for pthread_mutex_lock in pthread
+-- Looking for pthread_mutex_lock in pthread - found
+-- Looking for dlopen in dl
+-- Looking for dlopen in dl - found
+-- Looking for shm_open in rt
+-- Looking for shm_open in rt - not found
+-- Looking for pfm_initialize in pfm
+-- Looking for pfm_initialize in pfm - not found
+-- Found ZLIB: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/lib/libz.tbd (found version "1.2.11")
+-- Looking for compress2
+-- Looking for compress2 - found
+-- Found LibXml2: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/lib/libxml2.tbd (found version "2.9.4")
+-- Looking for xmlReadMemory
+-- Looking for xmlReadMemory - found
+-- Looking for histedit.h
+-- Looking for histedit.h - found
+-- Found LibEdit: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/include (found version "2.11")
+-- Looking for arc4random
+-- Looking for arc4random - found
+-- Looking for backtrace
+-- Looking for backtrace - found
+-- backtrace facility detected in default set of libraries
+-- Found Backtrace: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/include
+-- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW
+-- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Success
+-- Looking for __register_frame
+-- Looking for __register_frame - found
+-- Looking for __deregister_frame
+-- Looking for __deregister_frame - found
+-- Looking for __unw_add_dynamic_fde
+-- Looking for __unw_add_dynamic_fde - found
+-- Looking for _Unwind_Backtrace
+-- Looking for _Unwind_Backtrace - found
+-- Looking for getpagesize
+-- Looking for getpagesize - found
+-- Looking for sysconf
+-- Looking for sysconf - found
+-- Looking for getrusage
+-- Looking for getrusage - found
+-- Looking for isatty
+-- Looking for isatty - found
+-- Looking for futimens
+-- Looking for futimens - found
+-- Looking for futimes
+-- Looking for futimes - found
+-- Looking for getauxval
+-- Looking for getauxval - not found
+-- Looking for mallctl
+-- Looking for mallctl - not found
+-- Looking for mallinfo
+-- Looking for mallinfo - not found
+-- Looking for mallinfo2
+-- Looking for mallinfo2 - not found
+-- Looking for malloc_zone_statistics
+-- Looking for malloc_zone_statistics - found
+-- Looking for posix_spawn
+-- Looking for posix_spawn - found
+-- Looking for pread
+-- Looking for pread - found
+-- Looking for sbrk
+-- Looking for sbrk - found
+-- Looking for strerror_r
+-- Looking for strerror_r - found
+-- Looking for strerror_s
+-- Looking for strerror_s - not found
+-- Looking for setenv
+-- Looking for setenv - found
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC - Success
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC - Failed
+-- Looking for pthread_getname_np
+-- Looking for pthread_getname_np - found
+-- Looking for pthread_setname_np
+-- Looking for pthread_setname_np - found
+-- Looking for pthread_get_name_np
+-- Looking for pthread_get_name_np - not found
+-- Looking for pthread_set_name_np
+-- Looking for pthread_set_name_np - not found
+-- Looking for dlopen
+-- Looking for dlopen - found
+-- Performing Test HAVE_FFI_CALL
+-- Performing Test HAVE_FFI_CALL - Success
+-- Found FFI: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/lib/libffi.tbd
+-- Looking for proc_pid_rusage
+-- Looking for proc_pid_rusage - found
+-- Performing Test HAVE_CXX_ATOMICS_WITHOUT_LIB
+-- Performing Test HAVE_CXX_ATOMICS_WITHOUT_LIB - Success
+-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB
+-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB - Success
+-- Performing Test LLVM_HAS_ATOMICS
+-- Performing Test LLVM_HAS_ATOMICS - Success
+-- LLVM host triple: x86_64-apple-darwin21.6.0
+-- Native target architecture is X86
+-- Threads enabled.
+-- Doxygen disabled.
+-- Ninja version: 1.13.1
+xcrun: error: unable to find utility "ld-classic", not a developer tool or in PATH
+-- Found ld64 - /Library/Developer/CommandLineTools/usr/bin/ld
+-- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
+-- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
+-- OCaml bindings disabled.
+-- Could NOT find Python module pygments
+-- Could NOT find Python module pygments.lexers.c_cpp
+-- Could NOT find Python module yaml
+-- LLVM default target triple: x86_64-apple-darwin21.6.0
+-- Performing Test C_SUPPORTS_FPIC
+-- Performing Test C_SUPPORTS_FPIC - Success
+-- Performing Test CXX_SUPPORTS_FPIC
+-- Performing Test CXX_SUPPORTS_FPIC - Success
+-- Building with -fPIC
+-- Performing Test C_SUPPORTS_FNO_SEMANTIC_INTERPOSITION
+-- Performing Test C_SUPPORTS_FNO_SEMANTIC_INTERPOSITION - Success
+-- Performing Test CXX_SUPPORTS_FNO_SEMANTIC_INTERPOSITION
+-- Performing Test CXX_SUPPORTS_FNO_SEMANTIC_INTERPOSITION - Success
+-- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG
+-- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG - Success
+-- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
+-- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
+-- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
+-- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
+-- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG
+-- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG - Success
+-- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL
+-- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL - Success
+-- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP
+-- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP - Success
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
+-- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
+-- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
+-- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
+-- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
+-- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS
+-- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS - Failed
+-- Looking for os_signpost_interval_begin
+-- Looking for os_signpost_interval_begin - found
+-- Performing Test macos_signposts_usable
+-- Performing Test macos_signposts_usable - Success
+-- Performing Test SUPPORTS_FFILE_PREFIX_MAP
+-- Performing Test SUPPORTS_FFILE_PREFIX_MAP - Success
+-- Linker detection: Apple
+-- Performing Test LLVM_LINKER_SUPPORTS_NO_EXPORTED_SYMBOLS
+-- Performing Test LLVM_LINKER_SUPPORTS_NO_EXPORTED_SYMBOLS - Success
+-- Performing Test LLVM_LINKER_SUPPORTS_NO_WARN_DUPLICATE_LIBRARIES
+-- Performing Test LLVM_LINKER_SUPPORTS_NO_WARN_DUPLICATE_LIBRARIES - Failed
+-- Performing Test LLVM_LINKER_SUPPORTS_B_SYMBOLIC_FUNCTIONS
+-- Performing Test LLVM_LINKER_SUPPORTS_B_SYMBOLIC_FUNCTIONS - Failed
+-- Performing Test HAS_WERROR_GLOBAL_CTORS
+-- Performing Test HAS_WERROR_GLOBAL_CTORS - Success
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX - Success
+-- Looking for __x86_64__
+-- Looking for __x86_64__ - found
+-- Found Git: /usr/local/Homebrew/Library/Homebrew/shims/mac/super/git (found version "2.37.1 (Apple Git-137.1)")
+-- Looking for logf128
+-- Looking for logf128 - not found
+-- Targeting AArch64
+-- Targeting AMDGPU
+-- Targeting ARM
+-- Targeting AVR
+-- Targeting BPF
+-- Targeting Hexagon
+-- Targeting Lanai
+-- Targeting LoongArch
+-- Targeting Mips
+-- Targeting MSP430
+-- Targeting NVPTX
+-- Targeting PowerPC
+-- Targeting RISCV
+-- Targeting Sparc
+-- Targeting SPIRV
+-- Targeting SystemZ
+-- Targeting VE
+-- Targeting WebAssembly
+-- Targeting X86
+-- Targeting XCore
+-- Performing Test C_SUPPORTS_WERROR_IMPLICIT_FUNCTION_DECLARATION
+-- Performing Test C_SUPPORTS_WERROR_IMPLICIT_FUNCTION_DECLARATION - Success
+-- Performing Test C_SUPPORTS_WUNDEF
+-- Performing Test C_SUPPORTS_WUNDEF - Success
+-- Performing Test C_SUPPORTS_WERROR_MISMATCHED_TAGS
+-- Performing Test C_SUPPORTS_WERROR_MISMATCHED_TAGS - Success
+-- Performing Test C_SUPPORTS_WERROR_GLOBAL_CONSTRUCTOR
+-- Performing Test C_SUPPORTS_WERROR_GLOBAL_CONSTRUCTOR - Success
+-- Performing Test CXX_SUPPORTS_WERROR_GLOBAL_CONSTRUCTOR
+-- Performing Test CXX_SUPPORTS_WERROR_GLOBAL_CONSTRUCTOR - Success
+-- Could not find nvcc, please set CUDAToolkit_ROOT.
+-- Performing Test COMPILER_SUPPORTS_WARNING_WEAK_VTABLES
+-- Performing Test COMPILER_SUPPORTS_WARNING_WEAK_VTABLES - Success
+-- Looking for sys/resource.h
+-- Looking for sys/resource.h - found
+-- Looking for dlfcn.h
+-- Looking for dlfcn.h - found
+-- Looking for dladdr
+-- Looking for dladdr - found
+-- Clang version: 21.1.2
+-- Host linker version: 820.1
+-- Looking for include file CoreServices/CoreServices.h
+-- Looking for include file CoreServices/CoreServices.h - found
+-- Performing Test HAVE_LINKER_FLAG_LONG_PLT
+-- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Failed
+-- Found SWIG: /usr/local/bin/swig (found suitable version "4.3.1", minimum required is "4")
+-- Enable SWIG to generate LLDB bindings: TRUE
+-- Enable editline support in LLDB: TRUE
+-- Looking for acs_map
+-- Looking for acs_map - found
+-- Found CursesAndPanel: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/include
+-- Enable curses support in LLDB: TRUE
+-- Looking for lzma_auto_decoder in /usr/local/lib/liblzma.dylib
+-- Looking for lzma_auto_decoder in /usr/local/lib/liblzma.dylib - found
+-- Looking for lzma_easy_encoder in /usr/local/lib/liblzma.dylib
+-- Looking for lzma_easy_encoder in /usr/local/lib/liblzma.dylib - found
+-- Looking for lzma_lzma_preset in /usr/local/lib/liblzma.dylib
+-- Looking for lzma_lzma_preset in /usr/local/lib/liblzma.dylib - found
+-- Found LibLZMA: /usr/local/lib/liblzma.dylib (found version "5.8.1")
+-- Enable LZMA compression support in LLDB: TRUE
+-- Enable Lua scripting support in LLDB: FALSE
+-- Found Python3: /usr/local/bin/python3.13 (found version "3.13.7") found components: Interpreter Development Development.Module Development.Embed
+-- Found PythonAndSwig: /usr/local/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib
+-- Enable Python scripting support in LLDB: TRUE
+-- Found LibXml2: /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk/usr/lib/libxml2.tbd (found suitable version "2.9.4", minimum required is "2.8")
+-- Enable Libxml 2 support in LLDB: TRUE
+-- Enable libfbsdvmcore support in LLDB: 0
+-- Looking for el_winsertstr
+-- Looking for el_winsertstr - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of el_rfunc_t
+-- Check size of el_rfunc_t - failed
+-- Performing Test CXX_SUPPORTS_STRINGOP_TRUNCATION
+-- Performing Test CXX_SUPPORTS_STRINGOP_TRUNCATION - Success
+-- LLDB version: 21.1.2
+-- Looking for ppoll
+-- Looking for ppoll - not found
+-- Looking for ptsname_r
+-- Looking for ptsname_r - found
+-- Looking for accept4
+-- Looking for accept4 - not found
+-- Looking for termios.h
+-- Looking for termios.h - found
+-- Looking for include files sys/types.h, sys/event.h
+-- Looking for include files sys/types.h, sys/event.h - found
+-- Looking for process_vm_readv
+-- Looking for process_vm_readv - not found
+-- Looking for __NR_process_vm_readv
+-- Looking for __NR_process_vm_readv - not found
+-- Looking for compression_encode_buffer in compression
+-- Looking for compression_encode_buffer in compression - found
+-- Skipping FreeBSDKernel plugin due to missing libfbsdvmcore
+-- Symbols (liblldb): exporting all symbols from the lldb namespace
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- ISL version: isl-0.25-193-g8621c60c
+-- Performing Test HAS_ATTRIBUTE_WARN_UNUSED_RESULT
+-- Performing Test HAS_ATTRIBUTE_WARN_UNUSED_RESULT - Success
+-- Performing Test HAVE___ATTRIBUTE__
+-- Performing Test HAVE___ATTRIBUTE__ - Success
+-- Performing Test HAVE_DECL_FFS
+-- Performing Test HAVE_DECL_FFS - Success
+-- Performing Test HAVE_DECL___BUILTIN_FFS
+-- Performing Test HAVE_DECL___BUILTIN_FFS - Success
+-- Performing Test HAVE_DECL__BITSCANFORWARD
+-- Performing Test HAVE_DECL__BITSCANFORWARD - Failed
+-- Performing Test HAVE_DECL_STRCASECMP
+-- Performing Test HAVE_DECL_STRCASECMP - Success
+-- Performing Test HAVE_DECL__STRICMP
+-- Performing Test HAVE_DECL__STRICMP - Failed
+-- Performing Test HAVE_DECL_STRNCASECMP
+-- Performing Test HAVE_DECL_STRNCASECMP - Success
+-- Performing Test HAVE_DECL__STRNICMP
+-- Performing Test HAVE_DECL__STRNICMP - Failed
+-- Performing Test HAVE_DECL_SNPRINTF
+-- Performing Test HAVE_DECL_SNPRINTF - Success
+-- Performing Test HAVE_DECL__SNPRINTF
+-- Performing Test HAVE_DECL__SNPRINTF - Failed
+-- Performing Test HAVE_UINT8T
+-- Performing Test HAVE_UINT8T - Failed
+-- Performing Test HAVE_INTTYPES_H
+-- Performing Test HAVE_INTTYPES_H - Success
+-- Performing Test HAVE_SYS_INTTYPES_H
+-- Performing Test HAVE_SYS_INTTYPES_H - Failed
+-- Registering Polly as a pass plugin (static build: ON)
+-- Registering ExampleIRTransforms as a pass plugin (static build: OFF)
+-- Registering Bye as a pass plugin (static build: OFF)
+-- Failed to find LLVM FileCheck
+-- Google Benchmark version: v0.0.0, normalized to 0.0.0
+-- Looking for shm_open in rt
+-- Looking for shm_open in rt - not found
+-- Performing Test HAVE_CXX_FLAG_WALL
+-- Performing Test HAVE_CXX_FLAG_WALL - Success
+-- Performing Test HAVE_CXX_FLAG_WEXTRA
+-- Performing Test HAVE_CXX_FLAG_WEXTRA - Success
+-- Performing Test HAVE_CXX_FLAG_WSHADOW
+-- Performing Test HAVE_CXX_FLAG_WSHADOW - Success
+-- Performing Test HAVE_CXX_FLAG_WFLOAT_EQUAL
+-- Performing Test HAVE_CXX_FLAG_WFLOAT_EQUAL - Success
+-- Performing Test HAVE_CXX_FLAG_WOLD_STYLE_CAST
+-- Performing Test HAVE_CXX_FLAG_WOLD_STYLE_CAST - Success
+-- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE
+-- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE - Success
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC - Success
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS - Success
+-- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32
+-- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32 - Success
+-- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING
+-- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING - Success
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS - Success
+-- Performing Test HAVE_CXX_FLAG_FNO_EXCEPTIONS
+-- Performing Test HAVE_CXX_FLAG_FNO_EXCEPTIONS - Success
+-- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING
+-- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING - Success
+-- Performing Test HAVE_CXX_FLAG_WD654
+-- Performing Test HAVE_CXX_FLAG_WD654 - Failed
+-- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY
+-- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY - Success
+-- Enabling additional flags: -DINCLUDE_DIRECTORIES=/private/tmp/llvm-20250926-39596-4cp40i/llvm-project-21.1.2.src/third-party/benchmark/include
+-- Compiling and running to test HAVE_THREAD_SAFETY_ATTRIBUTES
+-- Performing Test HAVE_THREAD_SAFETY_ATTRIBUTES -- success
+-- Performing Test HAVE_CXX_FLAG_COVERAGE
+-- Performing Test HAVE_CXX_FLAG_COVERAGE - Success
+-- Compiling and running to test HAVE_GNU_POSIX_REGEX
+-- Performing Test HAVE_GNU_POSIX_REGEX -- failed to compile
+-- Compiling and running to test HAVE_POSIX_REGEX
+-- Performing Test HAVE_POSIX_REGEX -- success
+-- Compiling and running to test HAVE_STEADY_CLOCK
+-- Performing Test HAVE_STEADY_CLOCK -- success
+-- Compiling and running to test HAVE_PTHREAD_AFFINITY
+-- Performing Test HAVE_PTHREAD_AFFINITY -- failed to compile
+-- Configuring done (92.0s)
+-- Generating done (16.5s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    BUILD_TESTING
+
+
+-- Build files have been written to: /private/tmp/llvm-20250926-39596-4cp40i/llvm-project-21.1.2.src/llvm/build
