@@ -29,6 +29,7 @@ main(void)
 	set_handlers(handle);
 	set_timers(2000);
 	initscr();
+	raw();
 	noecho(); // Instruct terminal driver to not print keys
 	curs_set(0); // Hide the cursor
 	mvprintw(0, 0, "Press any key (q to quit)");
@@ -75,13 +76,18 @@ set_handlers(handler h)
 static void
 set_timers(unsigned delay_msec)
 {
-	long sec = 0;
-	while( delay_msec > 999 ) {
-		sec += 1;
-		delay_msec -= 1000;
+	struct timeval tp = {
+		.tv_sec = 0,
+		.tv_usec = delay_msec * 1000
+	};
+	while (tp.tv_usec > 999000) {
+		tp.tv_sec += 1;
+		tp.tv_usec -= 1000000;
 	}
-	struct timeval tp = {.tv_sec = sec, .tv_usec = delay_msec * 1000};
-	struct itimerval t = {.it_interval = tp, .it_value = tp };
+	struct itimerval t = {
+		.it_interval = tp,
+		.it_value = tp
+	};
 	setitimer(ITIMER_REAL, &t, NULL);
 }
 
