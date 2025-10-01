@@ -1,0 +1,22 @@
+
+To setup push to go to multiple remotes, add stanzas like:
+
+
+[remote "all"]
+	pushurl = ssh://git@codeberg.org/user/repo
+	pushurl = ssh://git@github.com/user/repo
+	fetch = +refs/heads/main:refs/remotes/codeberg/main
+[remote "github"]
+	url = git@github.com:user/repo
+	fetch = +refs/heads/*:refs/remotes/github/*
+[remote "codeberg"]
+	url = ssh://git@codeberg.org/user/repo
+	fetch = +refs/heads/*:refs/remotes/codeberg/*
+[branch "main"]
+	remote = all
+	merge = refs/heads/main
+
+Unfortunately, with the above setup, a 'git push' from main
+will update both remotes, but it will only fetch from one
+of them, so you need to explicitly 'git fetch' the other
+to update the local refs.
