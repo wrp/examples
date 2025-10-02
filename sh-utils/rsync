@@ -1,5 +1,10 @@
 
+# Copy the directory tree at foo (eg, create ./foo),
+# preserving hard links and not preserving timestamps.
+$ rsync -rlgpoH --delete foo .
+
 # Copy files in foo to bar, deleting unmatched files in bar
+# (So foo/baz gets copied to bar/baz)
 $ rsync -zva --delete foo/ bar
 
 # Copy the directory foo into bar (will copy to bar/foo/*)
