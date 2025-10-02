@@ -1,0 +1,27 @@
+/* 1) Modern CSS reset (tiny) */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+/* 2) Theme tokens */
+:root {
+  --maxw: 70rem;
+  --gap: 1rem;
+  --bg: #0b0c0f;
+  --fg: #e8eaed;
+  --muted: #aab0b6;
+  --brand: #5da0ff;
+}
+
+/* 3) Layout helpers */
+.container { max-width: var(--maxw); margin-inline: auto; padding: var(--gap); }
+
+/* 4) Typo + links + buttons */
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { padding: .6rem .9rem; border: 0; border-radius: .5rem; background: var(--brand); color: #000; cursor: pointer; }
+button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* 5) Simple responsive media */
+img, video { max-width: 100%; height: auto; display: block; }
