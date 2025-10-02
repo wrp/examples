@@ -1,26 +1,16 @@
 #!/bin/sh
 
+# This is an example of the hook I just added to .git/local-hooks/prepare-commit-msg
+# Make .git/local-hooks a symbolic link to this directory
 
-cat >> $1 << EOF
+if ! git interpret-trailers --parse "$1" | grep -q "^type:"; then
 
-Commit on $(git rev-parse --short HEAD)
-This template commit comes from the prepare-commit-msg hook
-
-EOF
-
-
-
-exit
-
-#   prepare-commit-msg
-#       This hook is invoked by git-commit(1) right after preparing the default log message, and before the editor is started.
-#
-#       It takes one to three parameters. The first is the name of the file that contains the commit log message. The second is the source of the commit
-#       message, and can be: message (if a -m or -F option was given); template (if a -t option was given or the configuration option commit.template is set);
-#       merge (if the commit is a merge or a .git/MERGE_MSG file exists); squash (if a .git/SQUASH_MSG file exists); or commit, followed by a commit SHA-1 (if
-#       a -c, -C or --amend option was given).
-#
-#       If the exit status is non-zero, git commit will abort.
-#
-#       The purpose of the hook is to edit the message file in place, and it is not suppressed by the --no-verify option. A non-zero exit means a failure of
-#       the hook and aborts the commit. It should not be used as replacement for pre-commit hook.
+	echo >> "$1"
+	git diff-index --cached --name-status HEAD -- |
+	awk 'NR==1{
+		name = $2;
+		i = index(name, "/");
+		tag = i ? substr(name, 0, i - 1) : name;
+		printf "type: %s\n", tag;
+	}' >> "$1"
+fi
