@@ -3,6 +3,7 @@ To setup push to go to multiple remotes, add stanzas like:
 
 
 [remote "all"]
+	url = git@codeberg.com:user/repo
 	pushurl = ssh://git@codeberg.org/user/repo
 	pushurl = ssh://git@github.com/user/repo
 	fetch = +refs/heads/main:refs/remotes/codeberg/main
