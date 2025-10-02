@@ -1,0 +1,17 @@
+Simple directory structure recommended by gpt-5
+
+your-site/
+├─ index.html
+├─ assets/
+│  ├─ css/
+│  │  └─ styles.css
+│  ├─ js/
+│  │  ├─ main.js
+│  │  └─ utils.js        # optional
+│  ├─ img/               # images (optimized, webp/png/svg)
+│  ├─ fonts/             # optional webfonts
+│  └─ icons/             # favicons / touch icons
+├─ pages/                # optional: extra static pages (about.html, etc.)
+├─ data/                 # optional: static JSON (faq.json, posts.json)
+├─ robots.txt            # optional
+└─ sitemap.xml           # optional
