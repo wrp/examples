@@ -1,0 +1,120 @@
+# -------------------------------------------
+# Base: character set, index, no directory listing
+# -------------------------------------------
+AddDefaultCharset utf-8
+DirectoryIndex index.html
+Options -Indexes
+
+# -------------------------------------------
+# Correct MIME types for modern assets
+# -------------------------------------------
+AddType image/avif            .avif
+AddType image/webp            .webp
+AddType image/svg+xml         .svg
+AddType application/wasm      .wasm
+AddType application/manifest+json .webmanifest
+
+# -------------------------------------------
+# Caching (tune durations)
+# -------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                  "access plus 7 days"
+  ExpiresByType application/javascript    "access plus 7 days"
+  ExpiresByType image/avif                "access plus 30 days"
+  ExpiresByType image/webp                "access plus 30 days"
+  ExpiresByType image/svg+xml             "access plus 30 days"
+  ExpiresByType image/png                 "access plus 30 days"
+  ExpiresByType image/jpeg                "access plus 30 days"
+  ExpiresDefault                          "access plus 1 hour"
+</IfModule>
+
+# Also send Cache-Control for static assets
+<FilesMatch "\.(css|js|png|jpe?g|webp|avif|svg|woff2?)$">
+  Header set Cache-Control "public, max-age=604800, immutable"
+</FilesMatch>
+
+# -------------------------------------------
+# Compression (Brotli then gzip fallback)
+# -------------------------------------------
+<IfModule mod_brotli.c>
+  BrotliCompressionQuality 5
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json image/svg+xml
+  # Proxies may get cranky otherwise:
+  Header append Vary Accept-Encoding
+</IfModule>
+
+# -------------------------------------------
+# Security headers (conservative defaults)
+# -------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(), camera=(), microphone=()"
+  # CSP: start strict; loosen if you add CDNs/inline scripts
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; connect-src 'self'"
+</IfModule>
+
+# -------------------------------------------
+# Font/SVG cross-origin (if serving from another origin, adjust or remove)
+# -------------------------------------------
+# <FilesMatch "\.(woff2?|ttf|otf|svg)$">
+#   Header set Access-Control-Allow-Origin "*"
+# </FilesMatch>
+
+# -------------------------------------------
+# Error pages (optional)
+# -------------------------------------------
+ErrorDocument 404 /pages/404.html
+ErrorDocument 403 /pages/403.html
+
+# -------------------------------------------
+# Block access to dotfiles (e.g., .git)
+# -------------------------------------------
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+# -------------------------------------------
+# Choose ONE of the URL schemes below
+# -------------------------------------------
+
+# (A) Plain multi-page site with “clean URLs”:
+#     /about -> /pages/about.html  (keeps assets untouched)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Don’t rewrite real files/dirs or common asset paths
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d [OR]
+  RewriteCond %{REQUEST_URI} ^/(assets|data|icons)/ 
+  RewriteRule ^ - [L]
+
+  # Map top-level slugs to /pages/<slug>.html
+  RewriteRule ^([^/]+)/?$ pages/$1.html [L]
+</IfModule>
+
+# (B) Single Page App fallback (comment A, uncomment B):
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   # Don’t rewrite real files/dirs
+#   RewriteCond %{REQUEST_FILENAME} -f [OR]
+#   RewriteCond %{REQUEST_FILENAME} -d
+#   RewriteRule ^ - [L]
+#   # Everything else goes to index.html
+#   RewriteRule . /index.html [L]
+# </IfModule>
+
+# -------------------------------------------
+# Canonical host (optional, if you care)
+# -------------------------------------------
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTP_HOST} !^www\.example\.com$ [NC]
+#   RewriteRule ^ https://www.example.com%{REQUEST_URI} [R=301,L]
+# </IfModule>
