@@ -92,7 +92,7 @@ ErrorDocument 403 /pages/403.html
   # Don’t rewrite real files/dirs or common asset paths
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d [OR]
-  RewriteCond %{REQUEST_URI} ^/(assets|data|icons)/ 
+  RewriteCond %{REQUEST_URI} ^/(assets|data|icons)/
   RewriteRule ^ - [L]
 
   # Map top-level slugs to /pages/<slug>.html
