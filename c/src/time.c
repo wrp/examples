@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <math.h>
 
 void
 print_time(void)
@@ -15,9 +16,23 @@ print_time(void)
 	assert(d[24] == '\n');
 }
 
+
+static double
+span_s(struct timespec a, struct timespec b)
+{
+	return (b.tv_sec - a.tv_sec) +
+		(b.tv_nsec - a.tv_nsec) / 1e9;
+}
+
+
 int
 main(void)
 {
+	struct timespec t0, t1;
+
+	// timespec_get(&t0, TIME_UTC);   // start time
+	clock_gettime(CLOCK_MONOTONIC, &t0);
+
 	struct timeval start;
 	print_time();
 
@@ -31,5 +46,8 @@ main(void)
 				(long)diff.tv_sec, (long)diff.tv_usec);
 		}
 	}
+
+	clock_gettime(CLOCK_MONOTONIC, &t1);
+	double dur = span_s(t0, t1);  // Seconds from start to finish
 	return 0;
 }
