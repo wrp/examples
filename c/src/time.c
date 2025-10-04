@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>
+/*
+time_t is seconds since epoch
+struct timeval  == { .tv_sec, .tv_usec }
+struct timespec == { .tv_sec, .tv_nsec }
+*/
 
 void
 print_time(void)
