@@ -29,6 +29,9 @@ Common macros:
 
 	timespecadd(a,b,result);         // timespec
 	timespecsub(a,b,result);         // timespec
+	timespecisset(a);
+	timespecclear(a);
+
 */
 
 void
