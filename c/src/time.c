@@ -8,6 +8,12 @@
 time_t is seconds since epoch
 struct timeval  == { .tv_sec, .tv_usec }
 struct timespec == { .tv_sec, .tv_nsec }
+
+Common macros:
+	timersub(&end, &start, &diff);   // timeval
+
+	timespecadd(a,b,result);         // timespec
+	timespecsub(a,b,result);         // timespec
 */
 
 void
