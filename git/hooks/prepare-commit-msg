@@ -8,9 +8,9 @@ if ! git interpret-trailers --parse "$1" | grep -q "^type:"; then
 	echo >> "$1"
 	git diff-index --cached --name-status HEAD -- |
 	awk 'NR==1{
-		name = $2;
-		i = index(name, "/");
-		tag = i ? substr(name, 0, i - 1) : name;
+		path = $2;
+		i = index(path, "/");
+		tag = i ? substr(path, 0, i - 1) : path;
 		printf "type: %s\n", tag;
 	}' >> "$1"
 fi
