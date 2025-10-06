@@ -15,3 +15,21 @@ your-site/
 ├─ data/                 # optional: static JSON (faq.json, posts.json)
 ├─ robots.txt            # optional
 └─ sitemap.xml           # optional
+
+
+To add an appointment book:
+
+your-site/
+├─ index.html
+├─ pages/
+│  └─ calendar.html          # simple booking UI page
+├─ assets/
+│  ├─ css/
+│  │  └─ styles.css
+│  └─ js/
+│     ├─ main.js
+│     └─ booking.js          # frontend calls to the API
+└─ server/
+   ├─ app.py                  # single-file Flask app
+      ├─ requirements.txt
+         └─ .env.example            # optional: SECRET_KEY, DB_URL
