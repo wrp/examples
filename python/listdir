@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+# List files in a directory, sorted by mtime
+
+import os
+
+def list_files_sorted_by_mtime(dirpath='.', ascending=True):
+    namelist = list(map(lambda x: os.path.join(dirpath, x), os.listdir(dirpath)))
+    return sorted(namelist, key=os.path.getmtime, reverse=not ascending)
+
+print("\nFiles sorted by mtime (newest first):")
+for file in list_files_sorted_by_mtime(ascending=False):
+    print(file)
