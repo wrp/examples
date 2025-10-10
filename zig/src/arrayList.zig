@@ -2,20 +2,20 @@
 
 const std = @import("std");
 
+var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+var alloc = gpa.allocator();
+
+
 pub fn build_array(data: anytype) !void {
-	try data.*.append(27);
-	try data.*.append(7);
-	try data.*.append(9);
+	try data.*.append(alloc, 27);
+	try data.*.append(alloc, 7);
+	try data.*.append(alloc, 9);
 }
 
 pub fn main() !void {
-	var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-	defer _ = gpa.deinit();
 
-	const alloc = gpa.allocator();
-
-	var stack = std.ArrayList(u32).init(alloc);
-	defer stack.deinit();
+	var stack: std.ArrayList(u32) = .{};
+	defer stack.deinit(alloc);
 
 	if (build_array(&stack)) {
 		for (stack.items) |n| {
