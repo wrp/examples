@@ -129,9 +129,9 @@ check_user_activity(void)
 static void
 show_lap(struct timeval now, struct timeval *prev, struct timeval *start)
 {
+	fputs("   ", stdout);
+	print_delta(*prev, now);
 	if (lap || stop || reset) {
-		fputs("   ", stdout);
-		print_delta(*prev, now);
 		putchar('\n');
 		*prev = now;
 		if (reset) {
