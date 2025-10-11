@@ -1,6 +1,7 @@
 /* Print a running stopwatch until SIGQUIT is received */
 
 
+#include <assert.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
@@ -112,8 +113,12 @@ static void
 check_user_activity(void)
 {
 	char b[128];
-	while (-1 != read(STDIN_FILENO, b, 128)) {
+	ssize_t n;
+	while (-1 != (n = read(STDIN_FILENO, b, 127))) {
 		lap = 1;
+		assert(n > 0);
+		b[n-1] = '\0';
+		printf("\r                            %s\r", b);
 	}
 	if (lap) {
 		move_cursor_up_one_line();
