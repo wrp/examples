@@ -38,3 +38,12 @@ test "parse u64" {
 	const result = try parseU64("1234", 10);
 	try std.testing.expect(result == 1234);
 }
+
+pub fn main() !void {
+	const result = try parseU64("1234", 10);
+	var stdout_buffer: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+	const stdout = &stdout_writer.interface;
+	try stdout.print("Hello, {d}!\n", .{result});
+	try stdout.flush();
+}
