@@ -1,6 +1,7 @@
 /* Sort integers or chars using Generic */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #define expand(T) \
 static void \
