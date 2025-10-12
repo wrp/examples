@@ -19,7 +19,6 @@ static void check_user_activity(void);
 static void show_lap(struct timeval, struct timeval *, struct timeval *);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
-static void move_cursor_up_one_line() { system("tput cuu 1"); }
 static void start_timer(void);
 
 
@@ -120,9 +119,6 @@ check_user_activity(void)
 		b[n-1] = '\0';
 		printf("\r                            %s\r", b);
 	}
-	if (lap) {
-		move_cursor_up_one_line();
-	}
 }
 
 
@@ -132,7 +128,9 @@ show_lap(struct timeval now, struct timeval *prev, struct timeval *start)
 	fputs("   ", stdout);
 	print_delta(*prev, now);
 	if (lap || stop || reset) {
-		putchar('\n');
+		if (!lap) {
+			putchar('\n');
+		}
 		*prev = now;
 		if (reset) {
 			puts("*****");
