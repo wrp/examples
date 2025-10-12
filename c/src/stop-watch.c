@@ -16,13 +16,13 @@ static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
 static void print_delta(struct timeval begin, struct timeval end);
 static void check_user_activity(void);
-static void show_lap(struct timeval, struct timeval *, struct timeval *);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void start_timer(void);
 static void to_col(int x) { printf("\r\e[%dC", x); }
 static void save(void) { fputs("\e7", stdout); }
 static void restore(void) { fputs("\e8", stdout); }
+static void clear_to_end_of_line(void) { fputs("\e[K", stdout); }
 
 
 int
@@ -44,11 +44,22 @@ main(void)
 		save();
 		putchar('\r');
 		print_delta(start, now);
-		show_lap(now, &prev, &start);
+		fputs("   ", stdout);
+		print_delta(prev, now);
+		if (lap) {
+			prev = now;
+		}
+		if (reset) {
+			to_col(28);
+			save();
+			clear_to_end_of_line();
+		}
+		lap = reset = 0;
 		restore();
 		fflush(stdout);
 	}
 	show_cursor();
+	putchar('\n');
 	return 0;
 }
 
@@ -123,24 +134,5 @@ check_user_activity(void)
 		lap = 1;
 		to_col(28);
 		save();
-	}
-}
-
-
-static void
-show_lap(struct timeval now, struct timeval *prev, struct timeval *start)
-{
-	fputs("   ", stdout);
-	print_delta(*prev, now);
-	if (lap || stop || reset) {
-		if (!lap) {
-			putchar('\n');
-		}
-		*prev = now;
-		if (reset) {
-			puts("*****");
-			*start = now;
-		}
-		lap = reset = 0;
 	}
 }
