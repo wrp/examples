@@ -20,6 +20,9 @@ static void show_lap(struct timeval, struct timeval *, struct timeval *);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void start_timer(void);
+static void to_col(int x) { printf("\r\e[%dC", x); }
+static void save(void) { fputs("\e7", stdout); }
+static void restore(void) { fputs("\e8", stdout); }
 
 
 int
@@ -33,13 +36,16 @@ main(void)
 	prev = start;
 	establish_handlers();
 	start_timer();
+	to_col(28);
 
 	while(!stop) {
 		check_user_activity();
 		get_time(&now);
+		save();
 		putchar('\r');
 		print_delta(start, now);
 		show_lap(now, &prev, &start);
+		restore();
 		fflush(stdout);
 	}
 	show_cursor();
@@ -115,9 +121,8 @@ check_user_activity(void)
 	ssize_t n;
 	while (-1 != (n = read(STDIN_FILENO, b, 127))) {
 		lap = 1;
-		assert(n > 0);
-		b[n-1] = '\0';
-		printf("\r                            %s\r", b);
+		to_col(28);
+		save();
 	}
 }
 
