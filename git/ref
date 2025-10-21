@@ -1,0 +1,28 @@
+
+In Git, "ref" and "rev" relate to how commits are identified, but
+they represent different concepts:
+
+Ref (Reference): A ref is a user-friendly name that points to a
+specific commit.  Examples include branch names (e.g. "main",
+"feature-x"), tag names (e.g., v1.0), and special references like
+HEAD.  Refs are stored as files in the .git/refs directory, containing
+the object id of the commit they point to.  They are a way to
+indirectly refer to commits, providing a more human-readable and
+stable way to navigate history compared to raw object ids.  Refs
+can be rewritten to point to different commits, such as when a
+branch advances with new commits.
+
+Rev (Revision): A rev, or revision, is a more general term that
+encompasses various ways to identify a commit in Git.  It includes
+refs (like branch names or tags), object ids, relative references
+(e.g., HEAD~1, main^), and other expressions that resolve to a
+specific commit or a range of commits.  Git commands that operate
+on commits like git-log or git-checkout often take a revision as
+an argument to specify which commit(s) to work with.  The git
+rev-parse command is specifically designed to resolve various
+revision expressions into their corresponding object ids.
+
+In summary: Ref is a specific type of revision that serves as a
+named pointer to a commit (e.g., a branch or tag).  Rev is a broader
+term encompassing any way to identify a commit or a set of commits
+including refs, oids, and relative expressions.
