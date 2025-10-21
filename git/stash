@@ -1,0 +1,3 @@
+
+# git stash pop --theirs does not work, but you can do:
+git cherry-pick -n -m1 -X theirs stash
