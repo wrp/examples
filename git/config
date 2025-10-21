@@ -4,3 +4,6 @@ git config --global pull.rebase true
 
 # For per-branch configs, see "onbranch" in git-config[1] import/include
 # Paths in the config clause are relative to GIT_DIR
+
+# Specify revs to be ignored by git-blame/git-annotate
+git config blame.ignoreRevsFile ${file-.git-blame-ignore-revs}
