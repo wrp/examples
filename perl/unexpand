@@ -1,0 +1,9 @@
+
+# Sadly, the unexpand utility does not only unexpand
+# leading whitespace.  Despite the claim in the documentation,
+# it exands white space after leading non-whitespace.  Just
+# do something like this:
+
+perl -pe 'while (s/^(\t*)    /$1\t/g) {}'   # Expand with tabstop == 4
+
+perl -pe 'while (s/^(\t*) {'"${ts-4}"'}/$1\t/g) {}'   # Expand arbitrary ts
