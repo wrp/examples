@@ -1,0 +1,56 @@
+
+Steps taken as I start using wordpress on cloudways.
+
+First, create a server and an application.  This gives you
+a node in a cloud provider and a skeleton directory structure.
+You will have limited write access to the applications/ directory
+(which is good), but for some reason you don't have write
+access to .bashrc (which seems really stupid, given that the
+stock .bashrc is completely lame).  But it seems to mostly work.
+
+
+Create a wp-admin user:
+
+wp user create wrp ${EMAIL} --role=administrator
+
+In my case, simply using my email address generated an error
+that the email address was being duplicated, likely because
+it is the email being used by the generic account since it
+is the email I used to create the cloudways accoung.  Get
+around that by using a variant.  (eg, append "+wp" to the
+username in the email address.
+
+This generates a random password.  Seems reasonable to use
+that password.
+
+Once you have an admin user, you can navigate to $site/wp-admin
+and login.  Now use the ui to configure the site.  Note
+that the cloudways chatbot refers to the 'wp' tool as 'WP-CLI'.
+In other words, whenever some chump talks about "WP-CLI" or
+"wp-cli", they are talking about a tool named "wp".  Next time
+I want to list the names in a directory, I'm going to use
+the "LS-CLI"!!  I hate the trends in this industry.
+
+
+Install elementor and wp-forms plugins via the wp-admin/ page
+Also install the Astra theme
+
+
+To clear the cache:
+
+wp cache flush
+
+This clears all WordPress cache types (site, edge, CDN, object cache).
+For Breeze plugin users:
+
+wp breeze purge --cache=all
+
+This purges both the plugin's internal cache and Varnish cache.
+
+For Magento applications:
+php bin/magento cache:clean
+php bin/magento cache:flush
+
+# Allegedly (according to chat GPT, but I have not verified yet),
+# this will get me some good json:
+wp post get ${PAGE_ID} --field=post_content --format=json
