@@ -53,4 +53,17 @@ php bin/magento cache:flush
 
 # Allegedly (according to chat GPT, but I have not verified yet),
 # this will get me some good json:
-wp post get ${PAGE_ID} --field=post_content --format=json
+wp post get ${POST_ID} --field=post_content --format=json
+
+
+# To get the fully rendered html (again, according to Chat GPT, not
+# yet verified):
+curl -s "$(wp post get ${POST_ID} --field=guid)" > page.html
+
+You can find the POST_ID with:
+wp post list --post_type=page --fields=ID,post_title,post_name
+
+
+
+To change title font sizes of suppress completly in subpages,
+edit custom css under Appearance -> Customize -> Additional CSS
