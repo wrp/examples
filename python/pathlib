@@ -7,8 +7,6 @@ import sys
 
 names = sys.argv[1:] if len(sys.argv) > 1 else ['/', 'tmp', 'foo']
 
-
-# check if a file exists
 f = pathlib.Path(*names)
 full_name = f.absolute()
 
