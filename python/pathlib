@@ -13,4 +13,5 @@ full_name = f.absolute()
 print(full_name, end=' ')
 print('exists' if f.exists() else 'does not exist')
 
-print(f' f = {f}, f.parent = {f.parent}')
+a = pathlib.Path('/') / 'foo' / 'bar'
+assert(str(a.parent) == '/foo')
