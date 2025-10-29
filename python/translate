@@ -5,11 +5,14 @@
 
 a = 'The quick brown fox jumps over the lazy dog'
 
-# Remove all q, j, a, and z
-b = a.translate(''.maketrans('', '', 'qjaz'))
+m = ''.maketrans('', '', 'qjaz')   # Remove all q, j, a, and z
+assert a.translate(m) == 'The uick brown fox umps over the ly dog'
 
-print(f'a = {a}')
-print(f'b = {b}')
+m = ''.maketrans('T', 'X')         #  T -> X
+assert a.translate(m).startswith('Xhe')
+
+m = ''.maketrans({'h': 'x'})       #  h -> x
+assert a.translate(m).startswith('Txe')
 
 
 #  [ins] In [1]: help(''.maketrans)
