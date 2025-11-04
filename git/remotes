@@ -26,6 +26,7 @@ git branch -u ${remote?}/${remote_branch-${branch?}} ${branch?}
 # Create remote branch
 git push ${remote?} ${branch?}       # creates remote with same name
 git push --set-upstream ${remote?} ${branch?}   # --set-upstream == -u
+git push -u ${remote} ${local_branch}:${remote_branch}
 
 # Delete a tag from a remote
 git push --delete ${remote?} ${tag?}
