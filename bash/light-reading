@@ -1,0 +1,33 @@
+
+# Demonstrate pitfalls of errexit (set -e)
+https://lists.nongnu.org/archive/html/bug-bash/2017-03/msg00171.html
+
+# Demonstrate changing/unreliable behavior of nounset (set -u)
+https://www.reddit.com/r/commandline/comments/g1vsxk/the_first_two_statements_of_your_bash_script/fniifmk
+
+# Why doesn't errexit do what I expect?
+http://mywiki.wooledge.org/BashFAQ/105
+
+# [Dis]advantages of nounset.
+http://mywiki.wooledge.org/BashFAQ/112
+
+# Pitfalls of set -euo pipefail
+https://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail
+
+https://www.reddit.com/r/commandline/comments/4b3cqu/use_the_unofficial_bash_strict_mode_unless_you/
+
+https://www.reddit.com/r/programming/comments/25y6yt/use_the_unofficial_bash_strict_mode_unless_you/
+
+https://www.reddit.com/r/bash/comments/5zdzil/shell_scripts_matter_good_shell_script_practices/
+
+https://www.reddit.com/r/programming/comments/4daos8/good_practices_for_writing_shell_scripts/d1pgv4p/
+
+https://www.reddit.com/r/bash/comments/5ddvd2/til_you_can_turn_tracing_x_on_and_off_dynamically/da3xjkk/
+
+https://news.ycombinator.com/item?id=8054440
+
+http://www.oilshell.org/blog/2020/10/osh-features.html
+
+https://fvue.nl/wiki/Bash:_Error_handling
+
+https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe
