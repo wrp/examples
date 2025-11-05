@@ -491,8 +491,6 @@ push_value(struct state *S)
 	char buf[256];
 	char *cp, *s;
 	struct stack_entry val = { 0 };
-	operator *f = operator_lut;
-	int i;
 
 	if( !get_term(S, buf, sizeof buf) ){
 		return 0;
@@ -506,8 +504,9 @@ push_value(struct state *S)
 		read_val(S, &val, s, &cp);
 	}
 	if( is_operator(*cp) ){
+		operator op = operator_lut[*cp];
 		assert( cp == s );
-		f[*cp](S, *cp);
+		op(S, *cp);
 		for( char *t = cp + 1; *t; t++ ){
 			push_raw(S, *t);
 		}
