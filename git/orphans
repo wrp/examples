@@ -1,0 +1,12 @@
+
+To create a repository with multiple root commits (eg,
+distinct projects within a single repo):
+
+# add and commit files for Project A
+git checkout --orphan projA
+
+# add and commit files for Project B
+git checkout --orphan projB
+
+# List all the roots
+git rev-list --max-parents=0 --all
