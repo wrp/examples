@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+from pypdf import PdfReader, PdfWriter
+from pypdf.annotations import FreeText
+import sys
+
+input_file = "file1.pdf" if len(sys.argv) < 2 else sys.argv[1]
+output_file = "output.pdf" if len(sys.argv) < 3 else sys.argv[2]
+
+
+# Example: Merging two PDF files
+writer = PdfWriter()
+reader1 = PdfReader(input_file)
+
+for page in reader1.pages:
+    writer.add_page(page)
+
+annotation = FreeText(
+    text="Hello World!\nThis is a new line.",
+    rect=(50, 550, 200, 650),  # Bounding box (x1, y1, x2, y2)
+    font="Helvetica",
+    font_size="12pt",
+    font_color="FF0000",  # Red color (hexadecimal RGB)
+    border_color="0000FF", # Blue border
+    background_color="FFFF00", # Yellow background
+    bold=True,
+    italic=True,
+)
+
+annotation.flags = 4  # Flag 4 makes the annotation printable
+writer.add_annotation(page_number=0, annotation=annotation)
+
+with open(output_file, "wb") as output_pdf:
+    writer.write(output_pdf)
