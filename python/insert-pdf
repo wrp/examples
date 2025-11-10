@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+# Add text to a pdf.  Input is "x, y, msg"
+
+
+from io import BytesIO
+from pypdf import PdfReader, PdfWriter
+from pypdf.annotations import FreeText
+from reportlab.pdfgen import canvas
+import sys
+
+input_file = "file1.pdf" if len(sys.argv) < 2 else sys.argv[1]
+output_file = "output.pdf" if len(sys.argv) < 3 else sys.argv[2]
+
+writer = PdfWriter()
+reader = PdfReader(input_file)
+
+packet = BytesIO()
+can = canvas.Canvas(packet)
+can.setFillColorRGB(0, 0, 0)  # black
+
+def split_line(line):
+    n = line.index(',')
+    m = 1 + n + line[n+1:].index(',')
+    x = int(line[:n])
+    y = int(line[n+1:m])
+    msg = line[m+1:]
+    return x, y, msg.strip()
+
+
+for line in sys.stdin.readlines():
+    x, y, msg = split_line(line)
+    print(f'Adding text "{msg}" at {x}, {y}')
+
+    can.drawString(x, y, msg)
+
+can.save()
+packet.seek(0)
+
+overlay = PdfReader(packet)
+
+page = reader.pages[0]
+page.merge_page(overlay.pages[0])
+writer.add_page(page)
+
+
+with open(output_file, "wb") as f:
+    writer.write(f)
