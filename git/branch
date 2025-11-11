@@ -29,6 +29,28 @@ git branch -D ${branch}
 
 git show-ref --heads  # List all branches (plumbing)
 
+# Delete a branch on remote
+git push ${remote?} --delete ${remote_branch?}
+
+# Create local branch to track extant remote (fetch ${remote?} first)
+git branch -t ${branch?} ${remote?}/${remote_branch-$branch}
+# -- or
+git branch ${branch?}
+git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
+# -- or (also checkout new branch) --
+git checkout -t ${remote?}/${remote_branch-$branch}
+# -- or (to use explicit local name)
+git checkout -t -b ${branch?} ${remote?}/${remote_branch-$branch}
+
+# Make extant local branch track branch on remote
+git branch -u ${remote?}/${remote_branch-${branch?}} ${branch?}
+
+# Create remote branch
+git push ${remote?} ${branch?}       # creates remote with same name
+git push --set-upstream ${remote?} ${branch?}   # --set-upstream == -u
+git push -u ${remote} ${local_branch}:${remote_branch}
+
+
 # Delete an arbitrary ref
 git update-ref -d refs/${name}/${base}
 
