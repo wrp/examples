@@ -19,8 +19,13 @@ fn counter() !i32 {
 }
 
 pub fn main() !void {
-	const stdout = std.io.getStdOut().writer();
-	const stderr = std.io.getStdErr().writer();
+	var stdout_buf: [1024]u8 = undefined;
+	var stdout_writer = std.fs.File.stdout().writer(&stdout_buf);
+	const stdout = &stdout_writer.interface;
+
+	var stderr_buf: [512]u8 = undefined;
+	var stderr_writer = std.fs.File.stderr().writer(&stderr_buf);
+	const stderr = &stderr_writer.interface;
 
 	// Capture the value of an optional
 	while (count()) |n| {
@@ -39,4 +44,7 @@ pub fn main() !void {
 	while (i < 3) : (i += 1) {
 		try stdout.print("i = {d}\n", .{i});
 	}
+
+	try stdout.flush();
+	try stderr.flush();
 }
