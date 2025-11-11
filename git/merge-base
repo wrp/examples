@@ -1,0 +1,4 @@
+
+Basic usage:
+
+git merge-base $commit1 $commit2    # Show merge base of two commits
