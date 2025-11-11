@@ -79,7 +79,7 @@ test "struct namespaced variable" {
 // struct field order is determined by the compiler for optimal performance.
 // however, you can still calculate a struct base pointer given a field pointer:
 fn setYBasedOnX(x: *f32, y: f32) void {
-	const point = @fieldParentPtr(Point, "x", x);
+	const point: *Point = @fieldParentPtr("x", x);
 	point.y = y;
 }
 test "field parent pointer" {
