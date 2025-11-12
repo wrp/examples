@@ -242,28 +242,47 @@ pub fn main() !void {
 	var state = State.init(allocator);
 	defer state.deinit();
 
-	var input_buffer = std.ArrayList(u8){};
-	defer input_buffer.deinit(allocator);
+	var line_buffer = std.ArrayList(u8){};
+	defer line_buffer.deinit(allocator);
 
-	// Read all input
+	// Read and process input line by line for interactive use
 	while (true) {
-		const byte = stdin.takeByte() catch |err| switch (err) {
-			error.EndOfStream => break,
-			else => return err,
-		};
-		try input_buffer.append(allocator, byte);
-	}
+		line_buffer.clearRetainingCapacity();
 
-	// Process input
-	var iter = std.mem.tokenizeAny(u8, input_buffer.items, " \t\n\r;");
-	while (iter.next()) |token| {
-		// Check for escape sequences
-		if (token.len > 0 and token[0] == '\\') {
-			const func_name = token[1..];
-			try executeFunction(&state, func_name, stderr);
-		} else {
-			try processToken(&state, token, stdout, stderr);
+		// Read until newline or EOF
+		while (true) {
+			const byte = stdin.takeByte() catch |err| switch (err) {
+				error.EndOfStream => break,
+				else => return err,
+			};
+			if (byte == '\n') break;
+			try line_buffer.append(allocator, byte);
 		}
+
+		// Check for EOF with empty line
+		if (line_buffer.items.len == 0) {
+			// Try to read one more byte to confirm EOF
+			if (stdin.takeByte() catch null == null) {
+				break;
+			}
+			// If we got a byte, continue (was just an empty line)
+		}
+
+		// Process this line's tokens
+		var iter = std.mem.tokenizeAny(u8, line_buffer.items, " \t\r;");
+		while (iter.next()) |token| {
+			// Check for escape sequences
+			if (token.len > 0 and token[0] == '\\') {
+				const func_name = token[1..];
+				try executeFunction(&state, func_name, stderr);
+			} else {
+				try processToken(&state, token, stdout, stderr);
+			}
+		}
+
+		// Flush after each line for interactive use
+		try stdout.flush();
+		try stderr.flush();
 	}
 
 	try stdout.flush();
