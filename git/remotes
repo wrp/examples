@@ -25,8 +25,8 @@ git remote set-url ${remote?} --add $(git remote get-url --push gitlab)
 git remote set-url ${remote?} --add $(git remote get-url --push github)
 
 # List branches on a given remote
-git ls-remote --heads ${remote}
-git branch --list -r "${remote}/*"
+git ls-remote --heads ${remote}       # Show refs on the remote
+git branch --list -r "${remote}/*"    # Show local remote-tracking branches
 
 # Reset branch to upstream
 git reset --hard @{u}   # @{u} is abbreviation for upstream branch
