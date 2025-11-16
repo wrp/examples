@@ -12,10 +12,10 @@ git branch B A
 git checkout B
 git commit --allow-empty -m "Created branch 'B' from 'A'"
 
-# Delete a remote branch locally
-git branch -r -d ${remote:?}/${branch:?}
+git branch -r -d ${remote:?}/${branch:?} # delete a local remote-tracking branch
+git fetch --prune # purge/delete local branches that have been deleted on the remote
 # Not to be confused with deleting the remote branch on the remote:
-git push --delete ${remote?} ${branch?}
+git push --delete ${remote?} ${branch?}  # delete branch on remote and local
 # Note that 'push --delete' will also delete the local tracking branch
 
 # Show branch structure
