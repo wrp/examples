@@ -1,0 +1,2 @@
+
+sudo killall -HUP WindowServer  # Fix most stuck keyboard cruft
