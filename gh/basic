@@ -3,3 +3,9 @@ gh pr list --author @me
 
 # Show details of a pr:
 gh pr view nnnnn
+
+gh api repos/$owner/$repo/milestones           # Get open milestones
+gh api repos/$owner/$repo/milestones?state=all # Get all milestones
+
+
+gh api --paginate ...   # For pagination
