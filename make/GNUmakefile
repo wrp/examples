@@ -2,6 +2,8 @@
 # See Makefile for things which work in both gnu
 # and bsd make
 
+include Makefile   # all and foo below will override and emit warning
+
 # Add prereqs to each target (allegedly valid in gnumake 4.3, but haven't
 # had a chance to test
 .EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST}, $(abspath ${mk}), bar)
@@ -16,3 +18,6 @@ all:
 foo:
 	echo foo newer prerequisites: $?
 	echo foo all prerequisites: $^
+
+list:
+	echo $(MAKEFILE_LIST)
