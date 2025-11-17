@@ -13,10 +13,10 @@ func main() {
 	delete(m, 5)
 
 	i, ok := m[17]  // Returns 0, false
-	fmt.Println("get nonextant:", i, e)
+	fmt.Println("get nonexistent:", i, ok)
 
 	i, ok = m[1]    // Returns, value, true
-	fmt.Println("get existing :", i, e)
+	fmt.Println("get existing :", i, ok)
 
 	/* Print unsorted */
 	fmt.Println("unsorted map with", len(m), "elements")
