@@ -1,0 +1,19 @@
+gh repo list             # List your own repositories
+gh repo list $OWNER      # List repositories for a specific user/organization
+gh repo list --limit 100 # List with more details
+gh repo list --archived  # Include archived repositories
+
+gh repo list --public               # Filter by visibility
+gh repo list --private              # Filter by visibility
+gh repo list --json name,owner,isPrivate,url # Custom JSON output
+gh repo list --search "keyword"     # Search for repositories
+gh repo list --fork                 # List forks
+gh repo list --no-archived --source # List non-forks only
+
+
+  Or using the API directly (output is raw json)
+
+gh api user/repos            # List your repositories
+gh api users/$USERNAME/repos # List repositories for a specific user
+gh api orgs/$ORGNAME/repos   # List repositories for an organization
+gh api --paginate user/repos # Paginate through all repositories
