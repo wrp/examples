@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# This is an example of the hook I just added to .git/local-hooks/prepare-commit-msg
-# Make .git/local-hooks a symbolic link to this directory
+# Make .git/hooks/prepare-commit-msg a symbolic link to this.
+# It will auto inject a trailer based on the directory name.
 
 if ! git interpret-trailers --parse "$1" | grep -q "^type:"; then
 
