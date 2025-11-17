@@ -51,3 +51,7 @@ baz: { a: {
   c: test
   }
 }
+
+list_of_strings:
+- first string
+- second string
