@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"math/rand"
+	"math/rand/v2"
 )
 
 type cache_entry struct {
@@ -90,7 +90,7 @@ func (c *cache) push(v int) {
 
 func (c *cache) fill(count int) {
 	for i := 0; i < count; i++ {
-		c.push(int(rand.Int31n(65536)))
+		c.push(rand.IntN(65536))
 	}
 }
 
