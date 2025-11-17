@@ -2,3 +2,6 @@
 
 ctrl-tab	move to next tab
 ctrl-shift-tab	move to previous tab
+cmd-t                    new tab
+cmd-shift-t              duplicate tab
+cmd-w                    close tab
