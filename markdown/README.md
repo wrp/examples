@@ -5,9 +5,12 @@ so should certainly not be considered anything but github specific.
 [documentation](https://developer.statuspage.io)
 Use text in square brackets followed by url in parentheses to make a link.
 
-~~~
-$ echo Use '~~~~' for a code block
-~~~
+```
+$ echo Use backticks for a code block, or indent with 4 spaces
+```
+
+    This text is indented with 4 spaces,
+    so it will be a code block. Same as using backticks.
 
 ----
 Create a horizontal line by placing 3 or more hyphens, asterisks,
@@ -27,6 +30,8 @@ headers do not.
 
 **Double asterisk for bold text** (no space inside **)
 *Single asterisk for italics* (no space inside *)
+You can also use _underscores_ to get italicized word,
+and __double underscore__ to get bold.
 
 ## A blockquote
 > Create a
