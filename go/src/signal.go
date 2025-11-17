@@ -19,7 +19,8 @@ func handle_interrupts(wg * sync.WaitGroup, quit chan os.Signal){
 
 
 func main() {
-	quit := make(chan os.Signal)
+	// Use buffered channel to avoid missing signals
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	var wg sync.WaitGroup
 	handle_interrupts(&wg, quit)
