@@ -3,17 +3,14 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
+	"math/rand/v2"
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-	fmt.Println("A random int in [0, 5): ", rand.Int31n(5))
+	// As of Go 1.20+, the global random generator is automatically seeded
+	// rand/v2 (Go 1.22+) provides a better API without needing Seed()
+	fmt.Println("A random int in [0, 5): ", rand.IntN(5))
 
-	// Int31n(n) returns a random 31-bit integer as an int32 in
-	// the half-open interval [0,n)
-	// AFAICT, the language mandates that integers be stored in
-	// 2s complement, or at least the documentation certainly
-	// seems to make that assumption
+	// IntN(n) returns a random integer in the half-open interval [0,n)
+	// Go relies on the underlying architecture's integer representation
 }
