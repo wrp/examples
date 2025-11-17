@@ -47,5 +47,15 @@ foo:
 -
         bc: c
 
+# foo2 is a dictionary {"a": null, "b": null}
+foo2:
+  a:
+  b:
+
+# foo 3 is a string: "a, b"
+foo3:
+  a,
+  b
+
 # Select just one
 # make array | jq '.[] | with_entries( select(.key == "bar"))'
