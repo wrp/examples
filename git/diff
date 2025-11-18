@@ -1,3 +1,7 @@
+# By default, git-diff shows the difference between the working tree and the index.
+
+git diff        # Show differences between working tree and index
+git diff HEAD   # Show differences between working tree and latest commit
 
 # Show the files changed from branch to main
 git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}
