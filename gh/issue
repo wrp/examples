@@ -1,0 +1,12 @@
+
+
+gh issue list --assignee @me   #  See all assigned open issues
+gh issue list --assignee @me --state  {open|closed|all} (default "open")
+
+gh issue list --assignee @me --state open --search is:open   # List issues in all accessible repos
+gh issue list --assignee @me --repo owner/repo               # Limit to specific repository
+
+gh issue list --assignee @me --limit 100         # Show more issues (default is 30)
+gh issue list --assignee @me --json number,title,url,labels   # Include additional fields in output
+
+gh issue list --assignee @me --label bug         # Filter issues by label
