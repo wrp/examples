@@ -11,6 +11,6 @@ if ! git interpret-trailers --parse "$1" | grep -q "^type:"; then
 		path = $2;
 		i = index(path, "/");
 		tag = i ? substr(path, 0, i - 1) : path;
-		printf "type: %s\n", tag;
+		printf "Type: %s\n", tag;
 	}' >> "$1"
 fi
