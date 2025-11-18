@@ -1,4 +1,8 @@
 
+To attach a note to an object:
+	git notes add -m "This is a note" $oid
+
+Notes which are shown in a log are determined by core.notesRef and notes.displayRef.
 
 To push:
 	git push ${remote?} refs/notes/*

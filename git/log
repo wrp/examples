@@ -1,3 +1,6 @@
 
 # Show branch structure
 git log --oneline --graph --decorate --all --simplify-by-decoration
+
+# Show all trailers
+git log --format='%H %s%n%(trailers)'
