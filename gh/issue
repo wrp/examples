@@ -10,3 +10,11 @@ gh issue list --assignee @me --limit 100         # Show more issues (default is 
 gh issue list --assignee @me --json number,title,url,labels   # Include additional fields in output
 
 gh issue list --assignee @me --label bug         # Filter issues by label
+
+
+# Assign all issues in a milestone (untested)
+for issue_number in $(gh issue list --milestone "Your Milestone Name" \
+	--state open --json number | jq -r '.[].number')
+do
+	gh issue assign "$issue_number" @me
+done
