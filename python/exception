@@ -11,13 +11,18 @@ try:
 except (foo, bar) as e:   # Use parens to group multiple exceptions
     print(f"Raised {e}, with cause {e.__cause__}")
 
+global exception_ids
+exception_ids = []
 
 def reraise():
-    print('re raise a foo')
     try:
-        raise foo("raised foo")
+        exc = foo("raised foo")
+        exception_ids.append(id(exc))
+        raise exc
     except Exception as e:
-        raise bar("reraised bar") from e
+        exc = foo("reraised bar")
+        exception_ids.append(id(exc))
+        raise exc from e
     finally:  # finally clause is executed whether an exception is thrown or not
         print('finally in re-raised foo')
 
@@ -34,6 +39,7 @@ print('This is reached because break in finally discards the raise in except')
 # KeyboardInterrupt is indistinuishable from receiving a SIGINT.  Perhaps there
 # is some platform on which that is not true.
 
+exception_ids.clear()
 try:
     reraise()
 except Exception as e:  # Does not catch SystemExit or KeyboardInterrupt
@@ -42,6 +48,7 @@ except Exception as e:  # Does not catch SystemExit or KeyboardInterrupt
     c = e.__cause__
     assert(isinstance(c, foo))
     assert(str(c) == 'raised foo')
+    assert exception_ids == [id(c), id(e)]
 except BaseException as e:  # *Does* catch SystemExit and KeyboardInterrupt
     pass
 
