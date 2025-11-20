@@ -21,11 +21,12 @@ def reraise():
     finally:  # finally clause is executed whether an exception is thrown or not
         print('finally in re-raised foo')
 
-# break in a finally discards an exception raised in an except clause
-while True:
-    try: a = int('foo')
-    except ValueError as e: raise e
-    finally: break
+# Pre 3.14, break in a finally discards an exception raised in an except clause
+# In 3.14+, a break in a finally statement raises SyntaxWarning
+# while True:
+#     try: a = int('foo')
+#     except ValueError as e: raise e
+#     finally: break
 
 print('This is reached because break in finally discards the raise in except')
 # See https://peps.python.org/pep-0601/
