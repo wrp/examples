@@ -1,0 +1,8 @@
+
+tmux show-buffer > filename  # write/save a tmux paste-buffer to a file
+
+tmux list-buffers   # List all buffers
+tmux show-buffer -b buffer0 > filename   # write/save a specific tmux paste-buffer
+
+tmux save-buffer filename   # write/save the most recent tmux paste-buffer
+tmux save-buffer -a filename   # write/save (append) a tmux paste-buffer
