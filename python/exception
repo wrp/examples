@@ -39,7 +39,9 @@ try:
 except Exception as e:  # Does not catch SystemExit or KeyboardInterrupt
     assert(str(e) == 'reraised bar')
     assert(e.args[0] == 'reraised bar')
-    assert(isinstance(e.__cause__, foo))
+    c = e.__cause__
+    assert(isinstance(c, foo))
+    assert(str(c) == 'raised foo')
 except BaseException as e:  # *Does* catch SystemExit and KeyboardInterrupt
     pass
 
