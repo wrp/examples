@@ -86,6 +86,7 @@ except Exception: pass
 # Last example, since this will abort.  Trigger a stacktrace
 def func1(a):
     func2(a)
+
 def func2(a):
     try:
         func3(a)
@@ -93,6 +94,7 @@ def func2(a):
         if hasattr(e, 'add_note'):  # Added in 3.11
             e.add_note(f"This note is added to the exception")
         raise e
+
 def func3(a):
     raise foo('f1->f2->f3')
 
