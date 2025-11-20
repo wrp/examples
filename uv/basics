@@ -25,3 +25,6 @@ format without a project table.  uv tries to use the project table,
 and it's not there.  To get around this, use:
 
 	uv tool run ...  (eg, 'uv tool run pytest')
+
+
+uv sync --all-extras   # Install dependencies
