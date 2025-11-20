@@ -98,7 +98,11 @@ def func2(a):
 def func3(a):
     raise foo('f1->f2->f3')
 
-func1(3)
+try:
+    func1(3)
+except Exception as e:
+    assert(str(e) == 'f1->f2->f3')
+    assert(e.__notes__ == ['This note is added to the exception'])
 
 """
 List of builtin exceptions, culled from Doc/library/exceptions.rst
