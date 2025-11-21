@@ -7,6 +7,9 @@ gh api /repos/$OWNER/$REPO/issues/$N   # view issue N
 
 gh issue list --assignee @me   #  See all assigned open issues
 gh issue list --assignee @me --state  {open|closed|all} (default "open")
+gh issue list --no-assignee                     #  See all unassigned issues
+gh issue list --no-assignee --search "is:open"  #  See all unassigned, open issues
+gh issue list --no-assignee --label bug
 
 gh issue list --assignee @me --state open --search is:open   # List issues in all accessible repos
 gh issue list --assignee @me --repo owner/repo               # Limit to specific repository
