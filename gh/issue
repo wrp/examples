@@ -7,6 +7,9 @@ gh api /repos/$OWNER/$REPO/issues/$N   # view issue N
 
 gh issue list --assignee @me   #  See all assigned open issues
 gh issue list --assignee @me --state  {open|closed|all} (default "open")
+
+# Sigh.  Claude recommends --no-assignee, but option unavailable in 'version 2.83.1 (2025-11-13)'
+gh issue list --search "is:open no:assignee"
 gh issue list --no-assignee                     #  See all unassigned issues
 gh issue list --no-assignee --search "is:open"  #  See all unassigned, open issues
 gh issue list --no-assignee --label bug
