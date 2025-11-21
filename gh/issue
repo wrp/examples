@@ -21,7 +21,7 @@ gh issue list --assignee @me --label bug         # Filter issues by label
 
 
 # Assign all issues in a milestone (untested)
-for issue_number in $(gh issue list --milestone "Your Milestone Name" \
+for issue_number in $(gh issue list --milestone "$milestone" \
 	--state open --json number | jq -r '.[].number')
 do
 	gh issue assign "$issue_number" @me
