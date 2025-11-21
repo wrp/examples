@@ -1,3 +1,5 @@
+gh issue --help
+gh issue ${cmd?} --help
 
 gh issue view $N                       # view issue N
 gh issue view $N --repo $OWNER/$REPO   # view issue N
