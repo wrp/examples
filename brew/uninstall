@@ -1,0 +1,55 @@
+Advice from Claude.  Seems to be about the only thing you can reasonably do with brew:
+
+
+
+Solution: Reset Homebrew Completely
+
+# 1. Clear all Homebrew caches
+rm -rf "$(brew --cache)"
+rm -rf ~/Library/Caches/Homebrew
+
+# 2. Reset Homebrew to clean state
+brew update-reset
+
+# 3. Update to latest
+brew update
+
+# 4. Try installing node again
+brew install node
+
+If That Fails: Nuclear Option
+
+# Untap and retap homebrew-core
+brew untap homebrew/core
+brew tap homebrew/core
+
+# Update again
+brew update
+
+# Try node installation
+brew install node
+
+Alternative: Install Node Without Homebrew
+
+Since Homebrew is having issues, use nvm (Node Version Manager) instead:
+
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# Reload shell
+source ~/.zshrc  # or ~/.bash_profile
+
+# Install latest Node.js
+nvm install node
+
+# Verify
+node --version
+npm --version
+
+This bypasses Homebrew entirely and is actually the preferred way to manage Node.js versions.
+
+Root Cause
+
+The "formula.jws.json" error indicates Homebrew is trying to parse a JSON Web Signature file as a formula, which means the formula cache or tap is corrupted. The reset commands above should fix it.
+
+I recommend using nvm for Node.js - it's more flexible and avoids these Homebrew dependency issues entirely.
