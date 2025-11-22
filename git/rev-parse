@@ -25,3 +25,6 @@ git rev-parse --short HEAD  # Non-ambiguous abbreviate hash
            A suffix ^ followed by an object type name enclosed in brace pair means dereference the object at <rev> recursively until an object of type <type> is found or the object cannot be dereferenced anymore (in
            which case, barf). For example, if <rev> is a commit-ish, <rev>^{commit} describes the corresponding commit object. Similarly, if <rev> is a tree-ish, <rev>^{tree} describes the corresponding tree object.
            <rev>^0 is a short-hand for <rev>^{commit}.
+
+
+git rev-parse ${commitish}^{tree}  # Get the oid of the tree of a commit-ish
