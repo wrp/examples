@@ -36,3 +36,6 @@ def slice_a_dict():
     print(f'slice = {s}')
 
 slice_a_dict()
+
+a = { 'a': 1, 'b': 2}
+assert {'a': 5, 'b': 2} == a | { 'a':  5}
