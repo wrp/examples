@@ -40,6 +40,8 @@ my @samples = (
 	'e284a4',    # ℤ   integers
 	'e29ca8',    # ✨  stars
 	'e29c85',    # ✅  check
+	'e2ac86',    # ⬆    up arrow
+
 );
 printf "%s", pack "H*", $_ foreach @samples; print "\n";
 # print Dumper(charinfo(0x1f6d1));
