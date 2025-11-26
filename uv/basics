@@ -28,3 +28,4 @@ and it's not there.  To get around this, use:
 
 
 uv sync --all-extras   # Install dependencies
+uv sync --extra database --extra config --extra dev --extra auth
