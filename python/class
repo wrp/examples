@@ -42,3 +42,8 @@ b = Bar()
 b.a = 5
 b.meth(2)
 print(f'b.a = {b.a}')
+
+# Horrific abuse of notation
+a = ( b
+    .meth(3)
+)
