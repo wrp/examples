@@ -35,3 +35,11 @@ use_locals()
 
 f = lambda *args, **kwargs: kwargs.get('foo', args)
 print(f(foo='bar'), f(2))
+
+
+
+def bar(a, b, c):
+    print (f'a = {a}, b = {b}, c = {c}')
+
+ki = { 'a': 1, 'b': 2, 'c': 3}
+bar(**(ki | { 'a':  5}))
