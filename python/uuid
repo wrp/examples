@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+import uuid
+
+a = uuid.uuid4()
+assert len(str(a)) == 36
