@@ -1,4 +1,4 @@
-# Common prefix names: feature release bugfix hotfix docs
+# Common prefix names: feature release bugfix hotfix docs refactor chore
 
 # Show name of current branch
 git rev-parse --abbrev-ref HEAD
