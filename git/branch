@@ -33,17 +33,17 @@ git show-ref --heads  # List all branches (plumbing)
 # Delete a branch on remote
 git push ${remote?} --delete ${remote_branch?}
 
-# Create local branch to track extant remote (fetch ${remote?} first)
-git branch -t ${branch?} ${remote?}/${remote_branch-$branch}
+# Create local branch to track remote (fetch ${remote?} first)
+git branch --track ${branch?} ${remote?}/${remote_branch-$branch}
 # -- or
 git branch ${branch?}
 git branch -u ${remote?}/${remote_branch-$branch} ${branch?}
 # -- or (also checkout new branch) --
-git checkout -t ${remote?}/${remote_branch-$branch}
+git checkout --track ${remote?}/${remote_branch-$branch}
 # -- or (to use explicit local name)
 git checkout -t -b ${branch?} ${remote?}/${remote_branch-$branch}
 
-# Make extant local branch track branch on remote
+# Make existing local branch track branch on remote
 git branch -u ${remote?}/${remote_branch-${branch?}} ${branch?}
 
 # Create remote branch
