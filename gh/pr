@@ -3,7 +3,7 @@ gh pr list --state closed --limit 50 --json number,headRefName,state
 
 
 # Delete branch of all closed prs
-gh pr list --state closed --limit 50 --json headRefName --jq '.[].headRefName' |
+gh pr list --state merged --json headRefName --jq '.[].headRefName' |
 while read branch; do
 	echo "Deleting branch: $branch"
 	gh api -X DELETE "repos/:owner/:repo/git/refs/heads/$branch" ||
