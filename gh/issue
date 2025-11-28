@@ -1,3 +1,6 @@
+
+gh search issues --assignee @me     # Show assigned issues in all repositories
+
 gh issue --help
 gh issue ${cmd?} --help
 
