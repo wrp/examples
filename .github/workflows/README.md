@@ -12,7 +12,21 @@ Protect the main branch (require PRs, CI checks, no admin bypass):
 
     gh api repos/${owner}/${repo}/branches/main/protection \
         --method PUT \
-        --field required_status_checks='{"strict":true,"contexts":[]}' \
-        --field enforce_admins=true \
-        --field required_pull_request_reviews='{"required_approving_review_count":0}' \
-        --field restrictions=null  # no restrictions on who can merge PRs
+        --input - <<'EOF'
+    {
+      "required_status_checks": {"strict": true, "contexts": []},
+      "enforce_admins": true,
+      "required_pull_request_reviews": {"required_approving_review_count": 1},
+      "restrictions": null
+    }
+    EOF
+
+# GitHub Limitations
+
+GitHub does not support true fast-forward merges. Even "rebase merge" rewrites
+commits, changing their hashes. This means a single-commit branch based directly
+on main cannot be merged without rewriting the commit.
+
+A reasonable workflow would allow preserving commit hashes when a fast-forward
+merge is possible (i.e., `git merge --ff-only`), but GitHub forces all merges
+through the web UI to rewrite history.
