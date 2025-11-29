@@ -1,6 +1,8 @@
 
 gh pr list --state closed --limit 50 --json number,headRefName,state
 
+gh search prs --state=open --owner=$user --limit 20  # Show all open PRs
+
 
 # Delete branch of all closed prs
 gh pr list --state merged --json headRefName --jq '.[].headRefName' |
