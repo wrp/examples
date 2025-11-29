@@ -2,9 +2,7 @@ name: Auto-rebase merge single-commit PRs
 
 on:
   pull_request:
-    types:
-    - opened
-    - synchronize
+    types: [opened, synchronize]
 
 permissions:
   contents: write
