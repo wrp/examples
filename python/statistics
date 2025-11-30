@@ -6,7 +6,7 @@ import sys
 
 
 print("mean\tmedian\tstddev\tdata")
-for x in sys.stdin.readlines():
+for x in sys.stdin:
     v = []
 
     for y in map(float, x.split()):

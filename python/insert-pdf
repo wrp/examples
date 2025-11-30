@@ -28,7 +28,7 @@ def split_line(line):
     return x, y, msg.strip()
 
 
-for line in sys.stdin.readlines():
+for line in sys.stdin:
     x, y, msg = split_line(line)
     print(f'Adding text "{msg}" at {x}, {y}')
 

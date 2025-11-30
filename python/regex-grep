@@ -6,7 +6,7 @@ import sys
 import re
 
 def process(p, f):
-    for x in f.readlines():
+    for x in f:
         m = p.match(x)
         if m:
             print('-----------')
