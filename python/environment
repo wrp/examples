@@ -7,8 +7,7 @@ from contextlib import contextmanager
 print("HOME = ", end='')
 print(os.environ['HOME'])
 
-if 'FOO' in os.environ:
-    print('FOO="%s"' % os.environ['FOO'])
+os.getenv("FOO") and print('FOO="%s"' % os.environ['FOO'])
 
 @contextmanager
 def set_env(**kwargs):
