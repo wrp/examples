@@ -1,7 +1,14 @@
 
-gh pr list --state closed --limit 50 --json number,headRefName,state
+gh pr list --state closed --limit 50 --json number,headRefName,state,url
 
 gh search prs --state=open --owner=$user --limit 20  # Show all open PRs
+
+# View the results of a search:
+gh search prs --state=open --owner=$user --json url -q '.[].url' |
+	xargs -I{} gh pr view {}
+
+# View pr $n for the specified repo when you are not in a related repo
+gh pr view $n -R $organization/$repo
 
 
 # Delete branch of all closed prs
