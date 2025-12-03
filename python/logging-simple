@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+import logging
+import os
+
+logging.basicConfig(level=os.environ.get('LOGLEVEL', 'warning').upper())
+
+class Foo(Exception): pass
+
+try:
+    raise Foo('oops')
+except:
+    logging.debug('test debug')
+    logging.info('test info')
+    logging.info('test logging.info to logging')
+    logging.warning('test warning')
+    logging.error('test error')
+    logging.fatal('*' * 20 + 'This fatal includes stack trace', exc_info=1)
+    logging.critical('test critical (no stacktrace)')
+    logging.critical('test critical (w/stacktrace)', exc_info=1)
+    logging.exception('test expcetion (includes stack trace)')
+    logging.exception('test expcetion (no stack trace)', exc_info=0)
