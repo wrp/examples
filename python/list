@@ -60,6 +60,33 @@ assert a == ['foo', 2, 3]
 c[0][0] = 'bar'  # This also modifies a
 assert a == ['bar', 2, 3]
 
+# Mutate a list while iterating. (Don't do this)
+a = [1, 2, 3]
+b = []
+three_count = 0
+for x in a:
+    match x:
+        case 1:
+            a.remove(1)  # Shift the index.  2 will be skipped
+            a.extend([4, 5])
+            assert a == [2, 3, 4, 5]
+        case 2:
+            assert False
+        case 3:
+            three_count += 1
+        case 4:
+            assert a == [2, 3, 4, 5]
+            a[1], a[3] = a[3], a[1]
+            assert a == [2, 5, 4, 3]
+            # Iteration will skip 5 and re-run 3
+        case 5:
+            assert False
+    b.append(x)
+assert three_count == 2
+assert a == [2, 5, 4, 3]
+assert b == [1, 3, 4, 3]
+
+
 
 # Methods defined on a list, and their help messages:
 """
