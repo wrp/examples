@@ -59,3 +59,54 @@ c = b[2:]
 assert a == ['foo', 2, 3]
 c[0][0] = 'bar'  # This also modifies a
 assert a == ['bar', 2, 3]
+
+
+# Methods defined on a list, and their help messages:
+"""
+append(object, /) method of builtins.list instance
+    Append object to the end of the list.
+
+clear() method of builtins.list instance
+    Remove all items from list.
+
+copy() method of builtins.list instance
+    Return a shallow copy of the list.
+
+count(value, /) method of builtins.list instance
+    Return number of occurrences of value.
+
+extend(iterable, /) method of builtins.list instance
+    Extend list by appending elements from the iterable.
+
+index(value, start=0, stop=9223372036854775807, /) method of builtins.list instance
+    Return first index of value.
+
+    Raises ValueError if the value is not present.
+
+insert(index, object, /) method of builtins.list instance
+    Insert object before index.
+
+pop(index=-1, /) method of builtins.list instance
+    Remove and return item at index (default last).
+
+    Raises IndexError if list is empty or index is out of range.
+
+remove(value, /) method of builtins.list instance
+    Remove first occurrence of value.
+
+    Raises ValueError if the value is not present.
+
+reverse() method of builtins.list instance
+    Reverse *IN PLACE*.
+
+sort(*, key=None, reverse=False) method of builtins.list instance
+    Sort the list in ascending order and return None.
+
+    The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
+    order of two equal elements is maintained).
+
+    If a key function is given, apply it once to each list item and sort them,
+    ascending or descending, according to their function values.
+
+    The reverse flag can be set to sort in descending order.
+"""
