@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from types import GeneratorType
+
 a = [0]  # An empty list
 b = (1,2,3)
 a.extend(b)  # roughly equivalent to 'for v in b: a.append(v)'
@@ -11,46 +13,49 @@ assert( a == [0,1,2,3,(1,2,3)])
 def mutate(b, x=5):
     b.append(x)
 
-
+assert( a == [0,1,2,3,(1,2,3)])
 mutate(a, 5)  # A is mutated by the call
+assert( a == [0,1,2,3,(1,2,3),5])
 mutate(list(a), 9)  # Pass a copy to avoid mutation
 
 # list comprehension:
 # [expression(i) for i in list if filter(i)]
 a = [1, 2, 3]
-print([x for x in a if x % 2])
+b = [x for x in a if x % 2]
+assert( type(b) == list )
+assert( b == [1, 3])
 
 
 # You cannot apply builtin len() to a generator
 def length(x):
+    t = type(x)
     c = 0
     for i in x:
         c += 1
-    return c
+    return c, t
 
 
 x = (a for a in [1, 2, 3])  # x is a generator object ...
-print("{} can only be iterated over once".format(type(x)))
-print(f"x has {length(x)} elements")
-print(f"now, x has {length(x)} elements")
+assert isinstance(x, GeneratorType)
 
-x = [a for a in [1, 2, 3]]
-print("{} can be iterated over multiple times".format(type(x)))
-print(f"x has {length(x)} elements")
-print(f"now, x has {length(x)} elements")
+# A generator can only be iterated over once
+t = type(x)
+assert (3, t) == length(x)
+assert (0, t) == length(x)
 
 
 x = (1,2,3,4,5,6)
 # Find the number of elements in the list that match a condition:
 # (a < 4 for a in x) is the generator object that yields
 # [True, True, True, False, False, False]
-print(f'There are {sum(a < 4 for a in x)} elements in x less than 4')
+assert sum(a < 4 for a in x) == 3
+assert (6, GeneratorType) == length(a < 4 for a in x)
 
 # slicing gives a shallow copy
 a = [1,2,3]
 b = [1, 2, a, 3]
 b[2][0] = 'foo'  # This modifies a
 c = b[2:]
-print(a)
+assert a == ['foo', 2, 3]
 c[0][0] = 'bar'  # This also modifies a
-print(a)
+assert a == ['bar', 2, 3]
