@@ -5,13 +5,17 @@ import os
 import sys
 
 
-logging.basicConfig(level=os.environ.get('LOGLEVEL', 'warning').upper())
 logger = logging.getLogger()
+logger.setLevel(os.environ.get('LOGLEVEL', 'warning').upper())
+
+stderr_handler = logging.StreamHandler()
+stderr_handler.setLevel(logging.WARNING)
+
 stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.addFilter(lambda r: r.levelno < logging.WARNING)
-logger.addHandler(stdout_handler)
-logger.handlers[0].setLevel(logging.WARNING)
 
+logger.addHandler(stderr_handler)
+logger.addHandler(stdout_handler)
 
 
 class Foo(Exception): pass
