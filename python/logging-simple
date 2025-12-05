@@ -8,14 +8,17 @@ import sys
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOGLEVEL', 'warning').upper())
 
-stderr_handler = logging.StreamHandler()
-stderr_handler.setLevel(logging.WARNING)
+# Without handlers, every message has "LEVEL:name:" prepended
+# With these handler, there is no prefix.
+if os.environ.get('WITH_HANDLERS'):
+    stderr_handler = logging.StreamHandler()
+    stderr_handler.setLevel(logging.WARNING)
 
-stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_handler.addFilter(lambda r: r.levelno < logging.WARNING)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.addFilter(lambda r: r.levelno < logging.WARNING)
 
-logger.addHandler(stderr_handler)
-logger.addHandler(stdout_handler)
+    logger.addHandler(stderr_handler)
+    logger.addHandler(stdout_handler)
 
 
 class Foo(Exception): pass
@@ -24,8 +27,8 @@ try:
     raise Foo('oops')
 except:
     logging.debug('test debug')
-    logging.info('test info')
-    logging.info('test logging.info to logging')
+    logger.info('test info to logger')
+    logging.info('test info to logging')
     logging.warning('test warning')
     logging.error('test error')
     logging.fatal('*' * 20 + 'This fatal includes stack trace', exc_info=1)
