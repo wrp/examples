@@ -8,7 +8,7 @@ import sys
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOGLEVEL', 'warning').upper())
 
-# Without handlers, every message has "LEVEL:name:" prepended
+# With default handlers, every message has "LEVEL:name:" prepended
 # With these handler, there is no prefix.
 if os.environ.get('WITH_HANDLERS'):
     stderr_handler = logging.StreamHandler()
@@ -34,5 +34,7 @@ except:
     logging.fatal('*' * 20 + 'This fatal includes stack trace', exc_info=1)
     logging.critical('test critical (no stacktrace)')
     logging.critical('test critical (w/stacktrace)', exc_info=1)
-    logging.exception('test expcetion (includes stack trace)')
-    logging.exception('test expcetion (no stack trace)', exc_info=0)
+    logging.exception('test exception (includes stack trace)')
+    logging.exception('test exception (no stack trace)', exc_info=0)
+    logger.handlers.clear()
+    logging.exception('test exception (no stack trace, default handler)', exc_info=0)
