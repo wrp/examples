@@ -1,0 +1,3 @@
+
+# To specify a particular identity on github:
+git clone git@github-oedc:$org/$repo
