@@ -25,3 +25,10 @@ Host *
 	PermitLocalCommand yes
 	LocalCommand tar c -C${HOME} .bashrc .vim .vimrc .tmux.conf \
                      | ssh -o PermitLocalCommand=no %n "tar mx -C${HOME}"
+
+# Use .ssh/github_ed25519 as the identity file for commands like:
+#  git clone git@github-oedc:$org/$repo
+Host github-oedc
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/github_ed25519

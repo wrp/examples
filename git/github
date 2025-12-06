@@ -1,3 +1,4 @@
 
 # To specify a particular identity on github:
+# (See related change in ssh/config)
 git clone git@github-oedc:$org/$repo
