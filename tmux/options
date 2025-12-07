@@ -1,0 +1,5 @@
+
+  You can see option types with:
+  tmux show-options -s    # server options
+  tmux show-options -g    # global session options
+  tmux show-options -wg   # global window options
