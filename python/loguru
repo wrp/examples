@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""Simple demonstration of common loguru features."""
+
+from loguru import logger
+import sys
+
+logger.remove()  # Remove default handler (writes to stderr)
+
+logger.add(  # Add custom handler with formatting
+    sys.stderr,
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level:<8} | {name}:{function}:{line} | {message}",
+    level="DEBUG",
+)
+
+logger.add(  # Add file handler with rotation
+    "/tmp/app.log",
+    rotation="10 MB",
+    retention="7 days",
+    compression="gz",
+    level="INFO",
+)
+
+logger.debug("Debug message")
+logger.info("Info message")
+logger.success("Success message")
+logger.warning("Warning message")
+logger.error("Error message")
+
+user = "alice"
+logger.info("User {user} logged in", user=user)
+
+# Exception logging with traceback
+try:
+    1 / 0
+except Exception:
+    logger.exception("Calculation failed")
+
+with logger.contextualize(request_id="abc123"):
+    logger.info("Processing request")
+
+@logger.catch
+def risky():
+    raise ValueError("oops")
