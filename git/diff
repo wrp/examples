@@ -5,3 +5,7 @@ git diff HEAD   # Show differences between working tree and latest commit
 
 # Show the files changed from branch to main
 git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}
+
+
+git diff --name-only --diff-filter=A  # Show only added files
+git diff --name-only --diff-filter=a  # Exclude added files
