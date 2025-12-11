@@ -32,3 +32,9 @@ for issue_number in $(gh issue list --milestone "$milestone" \
 do
 	gh issue assign "$issue_number" @me
 done
+
+
+--json accepts the following fields:
+	assignees, author, body, closed, closedAt, closedByPullRequestsReferences, comments,
+	createdAt, id, isPinned, labels, milestone, number, projectCards, projectItems,
+	reactionGroups, state, stateReason, title, updatedAt, url,
