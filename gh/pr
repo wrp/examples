@@ -18,3 +18,10 @@ while read branch; do
 	gh api -X DELETE "repos/:owner/:repo/git/refs/heads/$branch" ||
 		echo "$branch already deleted or protected" >&2
 done
+
+
+
+Alternatively, you can manually trigger a review on any PR by commenting bugbot run or cursor review.
+Sources:
+	- https://forum.cursor.com/t/bugbot-on-draft-prs/100381
+	- https://cursor.com/docs/bugbot
