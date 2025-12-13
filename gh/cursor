@@ -1,0 +1,3 @@
+
+# To trigger a cursor run on a draft PR:
+gh pr comment ${PR_NUMBER-$N} --body "@cursor run tests"
