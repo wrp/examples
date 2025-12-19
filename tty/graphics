@@ -34,6 +34,7 @@ my @samples = (
 	'c2b2',      #     superscript 2
 	'c2b3',      #     superscript 3
 	'c3b7',      # ÷   division, obelus
+	'cebc',      # μ
 	'cf80',      # π   pi
 	'e284af',    # ℯ   e the base of natural log
 	'e28a86',    # ⊆   Subset
