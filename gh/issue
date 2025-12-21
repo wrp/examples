@@ -10,6 +10,11 @@ gh api /repos/$OWNER/$REPO/issues/$N   # view issue N
 
 gh issue list --assignee @me   #  See all assigned open issues
 gh issue list --assignee @me --state  {open|closed|all} (default "open")
+gh issue list --state open --json title,assignees
+
+# Show title and assignee of open issues:
+tabs 20,+8; gh issue list --state open --json title,assignees | jq -r '.[] |
+	[([.assignees[].login] | join(",")), .title] | @tsv'
 
 # Sigh.  Claude recommends --no-assignee, but option unavailable in 'version 2.83.1 (2025-11-13)'
 gh issue list --search "is:open no:assignee"
