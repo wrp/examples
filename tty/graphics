@@ -19,8 +19,10 @@ use 5.12.0;
 use Unicode::UCD "charinfo";
 use Data::Dumper;
 
+my $misc = "✓✗";
 
 my @samples = (
+	'e29c93',    # check ✓
 	'f09f9b91',  # A stop sign: 🛑  \U1f6d1
 	'e29c8b',    # A yellow hand  ✋
 	'f09f8c80',  # Debian symbol 🌀
