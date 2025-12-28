@@ -2,11 +2,11 @@
 
 grade=${1-65}
 case 1 in
-$((grade > 100)) ) echo "impossible" ;;
-$((grade >= 70)) ) echo "distinction" ;;
-$((grade >= 60)) ) echo "merit" ;;
-$((grade >= 40)) ) echo "pass" ;;
-*) echo "fail" ;;
+( $((grade > 100)) ) echo case 100 ;;
+( $((grade >= 70)) ) echo case 70 ;;
+( $((grade >= 60)) ) echo case 60 ;;
+( $((grade >= 40)) ) echo case 40 ;;
+( * ) echo default ;;
 esac
 
 server=db-23.host.com
