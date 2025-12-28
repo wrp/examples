@@ -17,3 +17,39 @@ $(awk '/db-[0-9]*.host.com/' <<<${server}) ) echo "DB Server";;
 $(awk '/bk-[0-9]*.host.com/' <<<${server}) ) echo "Backup Server";;
 *)echo "Unknown server";;
 esac
+
+if test $BASH_VERSINFO -ge 4; then
+	# Syntax:
+	# ;& - unconditional fall-through (executes next clause without pattern check)
+	# ;;& - continues testing subsequent patterns
+
+	$BASH -c '
+	case $1 in
+	a)
+		echo "matched a"
+		;&  # falls through to b
+	b)
+		echo "matched a or b"
+		;;
+	c)
+		echo "matched c"
+		;;&  # continues checking patterns
+	[a-z])
+		echo "matched lowercase letter"
+		;;
+	esac
+	' _ "$@"
+
+	# Portability:
+	#
+	# | Shell     | ;&  | ;;& |
+	# |-----------|-----|-----|
+	# | bash 4.0+ | ✓   | ✓   |
+	# | zsh       | ✓   | ✓   |
+	# | ksh93     | ✓   | ✗   |
+	# | mksh      | ✓   | ✓   |
+	# | dash      | ✗   | ✗   |
+	# | POSIX sh  | ✗   | ✗   |
+	#
+	# Not portable for /bin/sh scripts. For POSIX compatibility, use multiple patterns with | or refactor into functions.
+fi
