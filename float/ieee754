@@ -1,0 +1,32 @@
+
+Just for curiosity's sake,
+
+  At 2⁴⁶, the ulp is 2⁻⁶ = 0.015625. The doubles are spaced at:
+  2⁴⁶ + 0.000000
+  2⁴⁶ + 0.015625  → rounds to .02
+  2⁴⁶ + 0.031250  → rounds to .03
+  2⁴⁶ + 0.046875  → rounds to .05
+  ...
+
+  For $70,368,744,177,664.01:
+  - Nearest double below: 2⁴⁶ (distance 0.01)
+  - Nearest double above: 2⁴⁶ + 0.015625 (distance 0.005625)
+  - Closest double is 2⁴⁶ + 0.015625, which rounds to .02, not .01
+
+  So the smallest dollar value that cannot be represented in a double is:
+  $70,368,744,177,664.01
+
+For single precision (32-bit float):
+
+  - 23 mantissa bits, so ulp = 2^(e-23)
+  - ulp exceeds 0.01 when e ≥ 17
+  - At 2¹⁷ = 131,072, ulp = 2⁻⁶ = 0.015625
+
+  For $131,072.01:
+  - Nearest float below: 131,072 (distance 0.01)
+  - Nearest float above: 131,072.015625 (distance 0.005625)
+  - Rounds to .02
+
+  Answer: $131,072.01
+
+  So single precision loses cent accuracy at just $131K - which is why single precision should never be used for financial calculations.
