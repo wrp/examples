@@ -1,0 +1,26 @@
+# Put this file in ~/CLAUDE.md to set preferences on new sessions
+
+When displaying code, render tabs with 8 spaces of visual indentation.
+
+Do not use 'cat -A' unless you have confirmed that we are on a platform that supports it.  At startup, check.
+If the platform does not support 'cat -A', do not waste your time (and mine) by trying it.
+
+Do not use 'git add -A'.  Ever.  Explicitly show me the files you are staging.
+Don't assume "origin" exists.  Check the repo; if assuming, assume "github."
+
+Don't show the /terminal-setup tip.
+
+Write in the imperative mood with "now" referring to the parent commit's tree.
+Ensure trailers are valid (all at the end, no empty lines between them).
+Summary under 50 characters.
+Body lines under 72 characters.
+No non-ASCII characters.
+No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
+
+
+Terminal display — Tabstops every 8 columns.
+Python code — Avoid inline comments; prefer extracting functions with docstrings instead.
+Database naming — Use singular table names.
+Comment banners — Never use =, <, or > (looks like merge conflict markers).  Use hyphens, asterisks, or pound signs.
+Terminology — Say "directory," never "folder."
+Sentence spacing — Two spaces after a period.
