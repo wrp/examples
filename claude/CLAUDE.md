@@ -2,8 +2,7 @@
 
 When displaying code, render tabs with 8 spaces of visual indentation.
 
-Do not use 'cat -A' unless you have confirmed that we are on a platform that supports it.  At startup, check.
-If the platform does not support 'cat -A', do not waste your time (and mine) by trying it.
+At session start, check if 'cat -A' is supported.  Remember the result and never retry if it fails.
 
 Do not use 'git add -A'.  Ever.  Explicitly show me the files you are staging.
 Don't assume "origin" exists.  Check the repo; if assuming, assume "github."
