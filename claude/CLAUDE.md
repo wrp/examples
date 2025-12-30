@@ -23,3 +23,8 @@ Database naming — Use singular table names.
 Comment banners — Never use =, <, or > (looks like merge conflict markers).  Use hyphens, asterisks, or pound signs.
 Terminology — Say "directory," never "folder."
 Sentence spacing — Two spaces after a period.
+
+C-style:
+Always use 1TBS.  Put braces around single line loop bodies.
+Never use pre/post-in/decrement operators purely for the side effect.
+eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
