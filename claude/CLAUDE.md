@@ -34,3 +34,9 @@ Do not add "Generated with Claude Code" or robot emojis.
 Only use Co-Authored-By trailer if you want attribution.
 If the git config core.claude-attributions is "no" (or falsey),
 do not add any Claude-related trailers or attribution to commits.
+
+
+When providing assistance, always tell me how to do things from a shell rather
+than a gui.  eg, instead of telling me to 'go to Settings → Resources → Advanced → "Virtual disk limit"',
+tell me how to use osascript to kill the docker deamon and let me know which json
+file to edit.
