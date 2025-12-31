@@ -1,0 +1,4 @@
+
+cd ~/Library/Group\ Containers/group.com.docker/
+
+< settings.json jq '.diskSizeMiB = 8192' > settings.json.tmp && mv settings.json.tmp settings.json
