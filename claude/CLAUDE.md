@@ -28,3 +28,9 @@ C-style:
 Always use 1TBS.  Put braces around single line loop bodies.
 Never use pre/post-in/decrement operators purely for the side effect.
 eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
+
+Commit messages:
+Do not add "Generated with Claude Code" or robot emojis.
+Only use Co-Authored-By trailer if you want attribution.
+If the git config core.claude-attributions is "no" (or falsey),
+do not add any Claude-related trailers or attribution to commits.
