@@ -1,0 +1,9 @@
+
+# To clone a shallow repo:
+git clone --depth $n --origin=$origin $url
+
+
+# To convert a full repo (untested):
+git fetch --depth=$n
+git reflog expire --expire=all --all
+git gc --prune=all
