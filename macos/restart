@@ -1,2 +1,4 @@
 
-sudo killall -HUP WindowServer  # Fix most stuck keyboard cruft
+# Fix most stuck keyboard cruft
+# CAUTION: this seems to unmount external drives
+sudo killall -HUP WindowServer
