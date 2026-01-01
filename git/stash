@@ -1,3 +1,6 @@
 
 # git stash pop --theirs does not work, but you can do:
 git cherry-pick -n -m1 -X theirs stash
+
+# Create a stash commit without modifying the workdir
+git stash store -m "Snapshot of work" $(git stash create)
