@@ -2,3 +2,26 @@
 # Fix most stuck keyboard cruft
 # CAUTION: this seems to unmount external drives
 sudo killall -HUP WindowServer
+
+Alternatives to killing WindowServer:
+
+1. Reset the cursor specifically:
+sudo killall -HUP coreaccessibilityd
+
+2. If it's a Bluetooth mouse:
+sudo killall -HUP bluetoothd
+
+3. Reset USB subsystem (for wired/USB receiver):
+sudo kextunload -b com.apple.driver.usb.AppleUSBHostMergeProperties
+sudo kextload -b com.apple.driver.usb.AppleUSBHostMergeProperties
+
+4. Toggle mouse via ioreg (less disruptive):
+sudo killall -HUP universalaccessd
+
+5. If cursor is stuck/invisible, sometimes this helps:
+osascript -e 'tell application "System Events" to key code 53'  # Simulate Esc
+
+6. Remount drive automatically after WindowServer restart:
+
+If you must kill WindowServer, script it to remount:
+sudo killall -HUP WindowServer; sleep 5; diskutil mount /dev/disk3s1
