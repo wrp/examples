@@ -40,3 +40,8 @@ When providing assistance, always tell me how to do things from a shell rather
 than a gui.  eg, instead of telling me to 'go to Settings → Resources → Advanced → "Virtual disk limit"',
 tell me how to use osascript to kill the docker deamon and let me know which json
 file to edit.
+
+Do not show proposed changes larger than 10 lines or so.  If the diff is likely
+to scroll off my terminal (feel free to query $LINES), I do not want you to display it.
+Indeed, if any text you intend to display is likely to scroll off my screen (eg,
+if it is greater than .8 * $LINES), do not show it.  Show me a summary instead.
