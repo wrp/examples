@@ -1,0 +1,6 @@
+
+# Specify author date and committer date when creating a commit: (note the @)
+GIT_AUTHOR_DATE=@${epoch_time} GIT_COMMITTER_DATE=@${epoch_time}  git commit -m 'Test'
+
+# The --date option can be used for author date, but there does not seem to be
+# an option for committer date.
