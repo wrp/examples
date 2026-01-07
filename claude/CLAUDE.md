@@ -32,7 +32,7 @@ eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
 Commit messages:
 Do not add "Generated with Claude Code" or robot emojis.
 Only use Co-Authored-By trailer if you want attribution.
-If the git config core.claude-attributions is "no" (or falsey),
+If the git config core.claude-attributions is "no" (or falsey, or unset),
 do not add any Claude-related trailers or attribution to commits.
 
 
