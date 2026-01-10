@@ -17,6 +17,10 @@ foreach my $v (@b) { say $v }
 say "size of arrayref is " . @$arrayref;
 foreach my $v (@$arrayref) { say $v }
 
+# slice
+my @arr = (1, 2, 3, 4, 5);
+print "@arr[0, 3, 4, 2, 1]\n";   # 1 4 5 3 2
+
 
 foreach my $v (@ARGV) { say "arg:", $v }
 
