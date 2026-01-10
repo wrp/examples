@@ -12,30 +12,22 @@ EOF
 which will make the new history: d694644 -> 4efcb5a' -> 1826839' -> 73137a3'
 
 
-Or, to change the history from 1-2-3-4 to 2-1-4-3, do something like:
+To change the history from 1-2-3-4 to 2-1-4-3, you can do
 
-GIT_SEQUENCE_EDITOR='perl -i -ne '"'"'
-	print $_. $last if !($. % 2); $last = $_;
-	END {print $last if $. %2}'"'" git rebase -i HEAD~4
-
-###  perl -i does not work in GIT_SEQUENCE_EDITOR:  But this does:
-GIT_SEQUENCE_EDITOR='perl -e '"'"'$f=shift;open F,"<",$f;@a=<F>;open F,">",$f;print F @a[0,1,2,4,3],@a[5..$#a]'"'"'' git rebase -i HEAD~5
-
-
-
-# TODO: clean out these failing examples
-
-# Permute the first 5 commits
-GIT_SEQUENCE_EDITOR='perl -i -e '"'"'@a=<>; print @a[0,1,4,2,3], @a[5..$#a]'"'" git rebase -i HEAD~5
-
-# Swap 2nd and 4th commits (0 based)
-GIT_SEQUENCE_EDITOR='perl -i -e '"'"'@a=<>; @a[2,4]=@a[4,2]; print @a'"'" git rebase -i HEAD~5
+GIT_SEQUENCE_EDITOR='perl -e '"'"'
+	$f=shift;
+	open F,"<",$f;
+	@a=<F>;
+	open F,">",$f;
+	print F @a[1,0,3,2],@a[4..$#a]
+	'"'"'' git rebase -i HEAD~5
+(perl -i does not work in GIT_SEQUENCE_EDITOR)
 
 
 A few alternatives suggested by Claude:
 
   1. --autosquash (if moving a commit to follow another):
-  git commit --fixup=<target-sha>
+  git commit --fixup=$target_oid
   git rebase -i --autosquash HEAD~n
   Git automatically moves fixup commits after their targets.
 
@@ -46,12 +38,12 @@ A few alternatives suggested by Claude:
 
   3. Cherry-pick approach (no rebase):
   git reset --hard HEAD~3
-  git cherry-pick <sha-of-commit-5>
-  git cherry-pick <sha-of-commit-3>
-  git cherry-pick <sha-of-commit-4>
+  git cherry-pick $oid_of_commit_5
+  git cherry-pick $oid_of_commit_3
+  git cherry-pick $oid_of_commit_4
 
   4. Shell script/alias:
   # In .gitconfig
   [alias]
-      swap = "!f() { GIT_SEQUENCE_EDITOR=\"perl -i -e '@a=<>; @a[$1,$2]=@a[$2,$1]; print @a'\" git rebase -i HEAD~$3; }; f"
-  Then: git swap 2 4 5 (swap positions 2 and 4 in last 5 commits)
+      swap = "!f() { GIT_SEQUENCE_EDITOR=\"perl -e '$f=shift; open F, \"<\", $f; @a=<F>; @a[$1,$2]=@a[$2,$1]; open F, \">\", $f; print F @a'\" git rebase -i HEAD~$3; }; f"
+  Then: git swap 2 4 (swap positions 2 and 4)
