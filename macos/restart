@@ -1,7 +1,9 @@
 
-# Fix most stuck keyboard cruft
-# CAUTION: this seems to unmount external drives
-sudo killall -HUP WindowServer
+# Fix most stuck keyboard/mouse cruft: unplug the device!!
+
+# ** BEFORE YOU DO THIS ** jut try unplugging the mouse
+# and keyboard.  That seems to fix most issues.
+sudo killall -HUP WindowServer   # CAUTION: this seems to unmount external drives
 
 Alternatives to killing WindowServer:
 
