@@ -14,13 +14,13 @@ which will make the new history: d694644 -> 4efcb5a' -> 1826839' -> 73137a3'
 
 To change the history from 1-2-3-4 to 2-1-4-3, you can do
 
-GIT_SEQUENCE_EDITOR='perl -e '"'"'
+GIT_SEQUENCE_EDITOR="perl -e '"'
 	$f=shift;
 	open F,"<",$f;
 	@a=<F>;
 	open F,">",$f;
 	print F @a[1,0,3,2],@a[4..$#a]
-	'"'"'' git rebase -i HEAD~5
+	'"'" git rebase -i HEAD~5
 (perl -i does not work in GIT_SEQUENCE_EDITOR)
 
 
