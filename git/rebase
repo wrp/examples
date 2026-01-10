@@ -18,6 +18,12 @@ GIT_SEQUENCE_EDITOR='perl -i -ne '"'"'
 	print $_. $last if !($. % 2); $last = $_;
 	END {print $last if $. %2}'"'" git rebase -i HEAD~4
 
+###  perl -i does not work in GIT_SEQUENCE_EDITOR:  But this does:
+GIT_SEQUENCE_EDITOR='perl -e '"'"'$f=shift;open F,"<",$f;@a=<F>;open F,">",$f;print F @a[0,1,2,4,3],@a[5..$#a]'"'"'' git rebase -i HEAD~5
+
+
+
+# TODO: clean out these failing examples
 
 # Permute the first 5 commits
 GIT_SEQUENCE_EDITOR='perl -i -e '"'"'@a=<>; print @a[0,1,4,2,3], @a[5..$#a]'"'" git rebase -i HEAD~5
