@@ -28,7 +28,7 @@ C-style:
 One declaration per statement.  Never do "int x, y;".  Always do "int x;\nint y;"
 Always use 1TBS.  Put braces around single line loop bodies.
 Never use pre/post-in/decrement operators purely for the side effect.
-eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
+  eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
 Do not mention line numbers in comments.  Ever.  They become stale too quickly.
 
 Commit messages:
