@@ -3,6 +3,9 @@
 # Show name of current branch
 git rev-parse --abbrev-ref HEAD
 
+# Create new branch on remote which current branch tracks
+git push -u ${remote-origin} $(git rev-parse --abbrev-ref HEAD)
+
 # Move a branch to a new commit:
 git branch -f ${branch} ${new_tip_commit}  # reset branch
 # or:
