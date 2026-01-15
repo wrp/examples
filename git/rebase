@@ -1,4 +1,9 @@
 
+To create a new commit and squash onto $oid:
+git add ...
+SKIP_COMMIT_CHECKS=1 git commit --fixup=$oid
+GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash ${oid}^1
+
 To auto rebase, you can do something like:
 
 GIT_SEQUENCE_EDITOR='sh -c "cat << EOF > $1
