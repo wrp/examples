@@ -28,3 +28,5 @@ git rev-parse --short HEAD  # Non-ambiguous abbreviate hash
 
 
 git rev-parse ${commitish}^{tree}  # Get the oid of the tree of a commit-ish
+
+git write-tree  # Show the oid of the tree in the index
