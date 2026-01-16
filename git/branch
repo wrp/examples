@@ -9,7 +9,7 @@ git push -u ${remote-origin} $(git rev-parse --abbrev-ref HEAD)
 # Move a branch to a new commit:
 git branch -f ${branch} ${new_tip_commit}  # reset branch
 # or:
-git update-ref refs/heads/${branch} ${new_value}   # NOTE: leading refs/heads
+git update-ref refs/heads/${branch} ${commitish}   # NOTE: leading refs/heads
 
 # Annotate a branch.  See https://stackoverflow.com/a/31441819/140750
 git branch B A
@@ -28,7 +28,7 @@ git log --oneline --graph --decorate --all --simplify-by-decoration
 git branch -m "$old_branch" "$new_branch"  # move/rename branch  -m/--move
 
 # Archive a branch (prevent gc, but don't show it in git-branch)
-git update-ref refs/archive/${branch} ${branch}
+git update-ref refs/archive/${branch} ${commitish}
 git branch -D ${branch}
 
 git show-ref --heads  # List all branches (plumbing)
