@@ -2,3 +2,16 @@
 cd ~/Library/Group\ Containers/group.com.docker/
 
 < settings.json jq '.diskSizeMiB = 8192' > settings.json.tmp && mv settings.json.tmp settings.json
+
+
+
+# Download Docker Desktop 4.25.0 for Intel Mac
+curl -L -o /tmp/Docker-4.25.0.dmg "https://desktop.docker.com/mac/main/amd64/126437/Docker.dmg"
+
+# Mount and install
+hdiutil attach /tmp/Docker-4.25.0.dmg
+cp -R /Volumes/Docker/Docker.app /Applications/
+hdiutil detach /Volumes/Docker
+
+# Start Docker
+open /Applications/Docker.app
