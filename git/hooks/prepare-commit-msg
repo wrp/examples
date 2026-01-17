@@ -3,7 +3,7 @@
 # Make .git/hooks/prepare-commit-msg a symbolic link to this.
 # It will auto inject a trailer based on the directory name.
 
-if ! git interpret-trailers --parse "$1" | grep -q "^type:"; then
+if ! git interpret-trailers --parse "$1" | grep -q "^Type:"; then
 
 	echo >> "$1"
 	git diff-index --cached --name-status HEAD -- |
