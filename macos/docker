@@ -4,6 +4,11 @@ cd ~/Library/Group\ Containers/group.com.docker/
 < settings.json jq '.diskSizeMiB = 8192' > settings.json.tmp && mv settings.json.tmp settings.json
 
 
+# Containerd
+Or check if you can manually edit ~/Library/Group Containers/group.com.docker/settings.json and set:
+    "useContainerdSnapshotter": false
+
+
 
 # Download Docker Desktop 4.25.0 for Intel Mac
 curl -L -o /tmp/Docker-4.25.0.dmg "https://desktop.docker.com/mac/main/amd64/126437/Docker.dmg"
