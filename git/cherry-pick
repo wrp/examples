@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Demonstrate cherry picking and adding a trailer
+
+GIT_EDITOR="perl -e '"'
+	open my $fh, "<", ".git/CHERRY_PICK_HEAD" or die \$!;
+	$oid = <$fh>; chomp $oid; close $fh;
+	# $oid = $ENV{"CHERRY_PICK_HEAD"};
+	$f = shift;
+	open F,"<",$f;
+	@a = <F>;
+	open F,">",$f;
+
+	$desc = qx/git describe $oid --tags/;
+	chop $desc;
+	$desc =~ s/-.*//;
+
+	push(@a, "\n");
+	push(@a, "Root: Cherry-picked from $oid ($desc)\n");
+
+	print F @a
+'"'" git cherry-pick -e $1 || exit
