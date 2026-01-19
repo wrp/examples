@@ -9,3 +9,10 @@ git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}
 
 git diff --name-only --diff-filter=A  # Show only added files
 git diff --name-only --diff-filter=a  # Exclude added files
+
+
+# Ignore files in which the only change is addition or removal of empty lines.
+# This will show changed lines with only whitespace, but . does not match
+# newline, so purely empty lines will not be detected and the file
+# will be omitted from consideration.
+git diff -G.
