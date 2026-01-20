@@ -10,8 +10,10 @@ names = sys.argv[1:] if len(sys.argv) > 1 else ['/', 'tmp', 'foo']
 f = pathlib.Path(*names)
 full_name = f.absolute()
 
-print(full_name, end=' ')
-print('exists' if f.exists() else 'does not exist')
+assert isinstance(full_name, pathlib.PosixPath)
+
+# print(full_name, end=' ')
+# print('exists' if f.exists() else 'does not exist')
 
 a = pathlib.Path('/') / 'foo' / 'bar'
 assert(str(a.parent) == '/foo')
@@ -19,3 +21,15 @@ assert(str(a.parent) == '/foo')
 a = pathlib.Path('/') / 'dir1' / 'dir2' / 'dir3' / 'dir4'
 assert str(a.resolve().parents[0]) == '/dir1/dir2/dir3'
 assert str(a.resolve().parents[1]) == '/dir1/dir2'
+
+b = f / a  # Since a is absolute, this is a no-oop
+assert b == a
+
+a = f / 'foo' / 'bar'
+t = a / 'link_target'
+p = a / 'link'
+
+a.mkdir(parents=True, exist_ok=True)
+
+p.unlink(missing_ok=True)
+p.symlink_to(t)  # Fails if p exists in the filesystem
