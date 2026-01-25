@@ -1,4 +1,6 @@
 
+# keywords: pasteb, showb, list-buffers, load-buffer, paste-buffer, save-buffer, set-buffer, show-buffer
+
 tmux show-buffer > filename  # write/save a tmux paste-buffer to a file
 
 tmux list-buffers   # List all buffers
