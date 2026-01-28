@@ -1,5 +1,13 @@
 # Find all regular files and ignore those in .git
-find . -name .git -prune -o -type f | less
+find . -name .git -prune -o -type f -print | less
 
-# Arghh! in -exec,  + must immediately follow {}.  Otherwise, it does
+# The explicit -print is necessary to avoid printing .git
+#
+# When no action is specified, find applies an implicit -print to the entire expression, and
+# the command effectively becomes: find . \( -name .git -prune -o -type f \) -print
+#
+# Since -prune returns true, .git matches the overall expression and gets printed.
+
+
+# Arghh! in -exec, + must immediately follow {}.  Otherwise, it does
 # not terminate the command
