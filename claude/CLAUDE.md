@@ -37,6 +37,12 @@ Only use Co-Authored-By trailer if you want attribution.
 If the git config core.claude-attributions is "no" (or falsey, or unset),
 do not add any Claude-related trailers or attribution to commits.
 
+yaml style:
+Do NOT increase the indentation level for list items.  eg, use:
+a:
+- b: 5
+  c: 5
+
 
 When providing assistance, always tell me how to do things from a shell rather
 than a gui.  eg, instead of telling me to 'go to Settings → Resources → Advanced → "Virtual disk limit"',
