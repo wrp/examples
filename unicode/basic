@@ -1,0 +1,52 @@
+#!/bin/sh
+# Trivial example of in which НOME is not HOME.
+# (The first H is (U+041D) — Cyrillic capital letter En)
+
+echo "$НOME" is not "$HOME".
+
+# This introduces some odd behavior.  Briefly, bash is interpreting "$Н"
+# strangely.  (This is almost certainly platform dependent).
+# POSIX and Bash both define valid variable names as consisting only of ASCII
+# alphanumerics and underscores ([a-zA-Z_][a-zA-Z0-9_]*). The Cyrillic Н (U+041D)
+# is not an ASCII letter, so Bash doesn't treat it as part of the variable name.
+# So the first character of the multibyte character 0xd09d is taken as a variable
+# name which expands to the empty string, and echo sees "0x9dOME" as an argument.
+
+# printf '\xd0' | LC_ALL=en_US.UTF-8 perl -Mlocale -ne 'print /^[[:alpha:]]$/ ? "alpha\n" : "not alpha\n"'
+#   alpha
+
+# The C library's isalpha() on macOS reports 0xd0 as alphabetic in
+# the en_US.UTF-8 locale. This is because macOS's locale implementation
+# apparently falls back to Latin-1 character classification for
+# individual bytes — and 0xd0 is Ð (Latin capital Eth) in Latin-1,
+# which is alphabetic.
+#
+# So the chain is:
+# 1. Bash sees $, starts variable name parsing
+# 2. Next byte is 0xd0, which isalpha() says is alphabetic
+# 3. Next byte is 0x9d, which is not alphabetic — variable name ends
+# 4. Bash expands the variable named \xd0 (unset) → empty string
+# 5. The orphaned 0x9d followed by OME is output as literal text
+#
+# This is a bug (or at least a misfeature) in macOS's locale-aware
+# isalpha() — it's classifying raw bytes using Latin-1 semantics even
+# in a UTF-8 locale, rather than requiring valid multibyte sequences.
+#
+
+# UTF-8 encodes U+041D (Cyrillic Н) as the two-byte sequence 0xd0 0x9d. The encoding works like this:
+#
+# U+041D in binary is 100 0001 1101 (11 bits). UTF-8 uses the two-byte template for codepoints U+0080–U+07FF:
+#
+# 110xxxxx 10xxxxxx
+#
+# Fill in the 11 bits:
+#
+# 110 10000  10 011101
+# ^^ ^^^^^   ^ ^^^^^^
+# D    0     9    D
+#
+# = 0xD0     0x9D
+#
+# So 0xd0 carries the high 5 bits of the codepoint and 0x9d carries
+# the low 6 bits. Neither byte alone represents the character — they're
+# only meaningful as a pair.
