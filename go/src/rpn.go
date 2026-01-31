@@ -12,6 +12,7 @@ import (
 
 func main() {
 	var stack []float64
+	var num strings.Builder
 
 	push := func(v float64) {
 		stack = append(stack, v)
@@ -35,40 +36,62 @@ func main() {
 		return
 	}
 
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Split(bufio.ScanWords)
-
-	for scanner.Scan() {
-		token := scanner.Text()
-
-		if n, err := strconv.ParseFloat(token, 64); err == nil {
+	flush := func() {
+		if num.Len() == 0 {
+			return
+		}
+		n, err := strconv.ParseFloat(num.String(), 64)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "bad number: %s\n", num.String())
+		} else {
 			push(n)
+		}
+		num.Reset()
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		b, err := reader.ReadByte()
+		if err != nil {
+			flush()
+			break
+		}
+
+		if b >= '0' && b <= '9' || b == '.' {
+			num.WriteByte(b)
 			continue
 		}
 
-		switch token {
-		case "+":
+		flush()
+
+		switch b {
+		case ' ', '\t', '\n', '\r':
+			// whitespace, ignore
+		case '+':
 			a, b, ok := pop2()
 			if !ok {
 				fmt.Fprintln(os.Stderr, "stack underflow")
 				continue
 			}
 			push(a + b)
-		case "-":
+			fmt.Println(stack[len(stack)-1])
+		case '-':
 			a, b, ok := pop2()
 			if !ok {
 				fmt.Fprintln(os.Stderr, "stack underflow")
 				continue
 			}
 			push(a - b)
-		case "*", "x":
+			fmt.Println(stack[len(stack)-1])
+		case '*':
 			a, b, ok := pop2()
 			if !ok {
 				fmt.Fprintln(os.Stderr, "stack underflow")
 				continue
 			}
 			push(a * b)
-		case "/":
+			fmt.Println(stack[len(stack)-1])
+		case '/':
 			a, b, ok := pop2()
 			if !ok {
 				fmt.Fprintln(os.Stderr, "stack underflow")
@@ -79,25 +102,26 @@ func main() {
 				continue
 			}
 			push(a / b)
-		case "p":
+			fmt.Println(stack[len(stack)-1])
+		case 'p':
 			if len(stack) == 0 {
 				fmt.Fprintln(os.Stderr, "stack empty")
 			} else {
 				fmt.Println(stack[len(stack)-1])
 			}
-		case "f":
+		case 'f':
 			for i := len(stack) - 1; i >= 0; i-- {
 				fmt.Println(stack[i])
 			}
-		case "c":
+		case 'c':
 			stack = stack[:0]
-		case "d":
+		case 'd':
 			if len(stack) == 0 {
 				fmt.Fprintln(os.Stderr, "stack empty")
 			} else {
 				push(stack[len(stack)-1])
 			}
-		case "r":
+		case 'r':
 			a, b, ok := pop2()
 			if !ok {
 				fmt.Fprintln(os.Stderr, "stack underflow")
@@ -105,14 +129,10 @@ func main() {
 			}
 			push(b)
 			push(a)
-		case "q":
+		case 'q':
 			return
 		default:
-			fmt.Fprintf(os.Stderr, "unknown token: %s\n", token)
-		}
-
-		if strings.ContainsAny(token, "+-*/x") && len(stack) > 0 {
-			fmt.Println(stack[len(stack)-1])
+			fmt.Fprintf(os.Stderr, "unknown token: %c\n", b)
 		}
 	}
 }
