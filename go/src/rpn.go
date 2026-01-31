@@ -74,7 +74,6 @@ func main() {
 				continue
 			}
 			push(a + b)
-			fmt.Println(stack[len(stack)-1])
 		case '-':
 			a, b, ok := pop2()
 			if !ok {
@@ -82,7 +81,6 @@ func main() {
 				continue
 			}
 			push(a - b)
-			fmt.Println(stack[len(stack)-1])
 		case '*':
 			a, b, ok := pop2()
 			if !ok {
@@ -90,7 +88,6 @@ func main() {
 				continue
 			}
 			push(a * b)
-			fmt.Println(stack[len(stack)-1])
 		case '/':
 			a, b, ok := pop2()
 			if !ok {
@@ -102,7 +99,6 @@ func main() {
 				continue
 			}
 			push(a / b)
-			fmt.Println(stack[len(stack)-1])
 		case 'p':
 			if len(stack) == 0 {
 				fmt.Fprintln(os.Stderr, "stack empty")
