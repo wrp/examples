@@ -14,7 +14,8 @@ sig_atomic_t stop, lap, reset;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
 static void establish_handlers(void);
-static void print_delta(struct timeval begin, struct timeval end);
+static void print_split(struct timeval, struct timeval, struct timeval);
+static int print_delta(struct timeval, struct timeval, char *, size_t);
 static void check_user_activity(void);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
@@ -42,10 +43,7 @@ main(void)
 		check_user_activity();
 		get_time(&now);
 		save();
-		putchar('\r');
-		print_delta(start, now);
-		fputs("   ", stdout);
-		print_delta(prev, now);
+		print_split(prev, start, now);
 		if (lap) {
 			prev = now;
 		}
@@ -113,7 +111,21 @@ establish_handlers(void)
 
 
 static void
-print_delta(struct timeval begin, struct timeval end)
+print_split(struct timeval prev, struct timeval start, struct timeval now)
+{
+	char buf[256];
+	buf[0] = '\r';
+	int len = 1;
+	len += print_delta(start, now, buf + len, sizeof buf - len);
+	len += snprintf(buf + len, sizeof buf - len, "   ");
+	len += print_delta(prev, now, buf + len, sizeof buf - len);
+	buf[len] = '\0';
+	fputs(buf, stdout);
+	fflush(stdout);
+}
+
+static int
+print_delta(struct timeval begin, struct timeval end, char *buf, size_t siz)
 {
 	struct timeval delta;
 	timersub(&end, &begin, &delta);
@@ -121,7 +133,7 @@ print_delta(struct timeval begin, struct timeval end)
 	unsigned seconds = delta.tv_sec % 60;
 	char usec[4];
 	snprintf(usec, sizeof usec, "%ld", (long)delta.tv_usec);
-	printf("%0um%02u.%ss", minutes, seconds, usec);
+	return snprintf(buf, siz, "%0um%02u.%ss", minutes, seconds, usec);
 }
 
 
