@@ -10,6 +10,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#define __(x) fputs(x, stdout);
 sig_atomic_t stop, lap, reset;
 static void get_time(struct timeval *tp);
 static void handle(int sig, siginfo_t *i, void *v);
@@ -21,9 +22,10 @@ static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void start_timer(void);
 static void to_col(int x) { printf("\r\e[%dC", x); }
-static void save(void) { fputs("\e7", stdout); }
-static void restore(void) { fputs("\e8", stdout); }
-static void clear_to_end_of_line(void) { fputs("\e[K", stdout); }
+static void save(void) { __("\e7"); }
+static void restore(void) { __("\e8"); }
+static void clear_to_end_of_line(void) { __("\e[K"); }
+static void clear_screen(void) { __("\e[2J\e[H"); }
 
 
 int
@@ -31,6 +33,7 @@ main(void)
 {
 	struct timeval start, now, prev;
 
+	clear_screen();
 	get_time(&start);
 	puts("<return> for interval, ^c to reset, ^\\ to quit");
 	hide_cursor();

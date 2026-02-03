@@ -1,6 +1,6 @@
 
 CPPFLAGS = -I ../include
-CFLAGS=--coverage -g -O0
+# CFLAGS=--coverage -g -O0
 LDFLAGS = -L../lib
 LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3 -lm
 
