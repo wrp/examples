@@ -87,7 +87,7 @@ handle(int sig, siginfo_t *i, void *v)
 static void
 start_timer(void)
 {
-	struct timeval tp = {.tv_sec = 0, .tv_usec = 100 };
+	struct timeval tp = {.tv_sec = 0, .tv_usec = 100000 };
 	struct itimerval t = {.it_interval = tp, .it_value = tp };
 	setitimer(ITIMER_REAL, &t, NULL);
 }
@@ -131,7 +131,7 @@ print_delta(struct timeval begin, struct timeval end, char *buf, size_t siz)
 	timersub(&end, &begin, &delta);
 	unsigned minutes = delta.tv_sec / 60;
 	unsigned seconds = delta.tv_sec % 60;
-	char usec[4];
+	char usec[2];
 	snprintf(usec, sizeof usec, "%ld", (long)delta.tv_usec);
 	return snprintf(buf, siz, "%0um%02u.%ss", minutes, seconds, usec);
 }
