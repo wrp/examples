@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
-#include <regex>
+#include <tuple>
 
 using namespace std;
 
@@ -49,28 +49,25 @@ load_story(const string &path)
 		throw system_error(errno, system_category(), path);
 	}
 
-	regex para_re(R"(^([A-Za-z0-9]+):\s+(.*)$)");
-	regex opt_re(R"(^([A-Za-z0-9]+):([A-Za-z0-9]+)\s+(.*)$)");
-	smatch match;
 	string line;
 
 	while (getline(f, line)) {
-		if (line.empty()) {
+		if (line.size() < 7 || line[5] != ':') {
 			continue;
 		}
-		if (regex_match(line, match, opt_re)) {
-			string src = match[1];
-			string dest = match[2];
-			string prompt = match[3];
-			pending_options.push_back({src, dest, prompt});
-		} else if (regex_match(line, match, para_re)) {
-			string label = match[1];
+		if (line[6] == ' ') {
+			string label = line.substr(0, 5);
 			ostringstream text;
-			text << match[2].str();
+			text << line.substr(7);
 			while (getline(f, line) && !line.empty()) {
 				text << '\n' << line;
 			}
 			paragraphs[label] = paragraph(label, text.str());
+		} else if (line.size() >= 12 && line[11] == ' ') {
+			string src = line.substr(0, 5);
+			string dest = line.substr(6, 5);
+			string prompt = line.substr(12);
+			pending_options.push_back({src, dest, prompt});
 		}
 	}
 
