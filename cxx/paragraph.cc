@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 #include <map>
-#include <tuple>
 
 using namespace std;
 
@@ -42,7 +42,6 @@ map<string, paragraph>
 load_story(const string &path)
 {
 	map<string, paragraph> paragraphs;
-	vector<tuple<string, string, string>> pending_options;
 
 	ifstream f(path);
 	if (!f) {
@@ -65,19 +64,14 @@ load_story(const string &path)
 			paragraphs[label] = paragraph(label, text.str());
 		} else if (line.size() >= 12 && line[11] == ' ') {
 			string src = line.substr(0, 5);
+			auto it = paragraphs.find(src);
+			if (it == paragraphs.end()) {
+				throw runtime_error("option before paragraph: " + src);
+			}
 			string dest = line.substr(6, 5);
 			string prompt = line.substr(12);
-			pending_options.push_back({src, dest, prompt});
+			it->second.options.push_back(option(prompt, dest));
 		}
-	}
-
-	for (const auto &[src, dest, prompt] : pending_options) {
-		auto it = paragraphs.find(src);
-		if (it == paragraphs.end()) {
-			cerr << "warning: option references unknown paragraph: " << src << '\n';
-			continue;
-		}
-		it->second.options.push_back(option(prompt, dest));
 	}
 
 	return paragraphs;
@@ -124,7 +118,7 @@ main(int argc, char **argv)
 	try {
 		auto story = load_story(path);
 		run_story(story, start);
-	} catch (system_error &e) {
+	} catch (exception &e) {
 		cerr << e.what() << '\n';
 		return 1;
 	}
