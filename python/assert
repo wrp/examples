@@ -5,7 +5,11 @@ import traceback
 import sys
 
 # Build module with -O to disable (eg, python -O $file)
-print(f"debug = {__debug__}")  # Can be modified with -O
+print(f"debug = {__debug__}", end='')  # Can be modified with -O
+if __debug__:
+    print("  assertions are enabled")
+else:
+    print("  assertions are disabled")
 
 # Can also disable assertions like:
 if len(sys.argv) > 1 and sys.argv[1] == 'nodebug':
@@ -24,9 +28,9 @@ try:
         assert False
 except AssertionError as e:
     print("caught:", e.__repr__())
-    print("caught:", e.__traceback__)
-    print(dir(e.__traceback__))
-    print(traceback.extract_tb(e.__traceback__))
-    print(e)
+    print("with traceback:", e.__traceback__)
+    print(f'traceback dir = {dir(e.__traceback__)}')
+    print(f'extract gives: {traceback.extract_tb(e.__traceback__)}')
+    print(f'e = {e}')
 else:
     print('No assertions raised')  #  Happens when -O is applied
