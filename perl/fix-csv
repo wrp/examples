@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+# Replace commas inside double-quoted fields with semicolons.
+
+use strict;
+use warnings;
+
+my $in_quotes = 0;
+my $prev = '';
+
+while (defined(my $c = getc)) {
+	if ($c eq '"' && $prev ne '\\') {
+		$in_quotes = !$in_quotes;
+	} elsif ($c eq ',' && $in_quotes) {
+		$c = ';';
+	}
+	print $c;
+	$prev = $c;
+}
