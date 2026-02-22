@@ -1,0 +1,7 @@
+
+brew list            # show all installed formulae and casks
+brew list --formula  # show all installed formulae
+brew list --formulae # show all installed formulae
+brew list --cask     # show all installed casks
+brew list --casks    # show all installed casks
+brew list ${pkg}     # show files installed for $pkg
