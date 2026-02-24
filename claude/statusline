@@ -1,0 +1,48 @@
+#!/bin/bash
+# Claude Code status line script
+# Displays current working directory in the lower right
+
+input=$(cat)
+
+: << \EOF
+# Sample input:
+{
+        "session_id": "4c1fa146-4766-4993-8c0b-8ddf35208c2b",
+        "transcript_path": "/Users/wrp/.claude/projects/<snip>",
+        "cwd": "/Users/wrp/github/wrp/examples/go/src",
+        "model": {
+                "id": "claude-sonnet-4-5-20250929",
+                "display_name": "Sonnet 4.5"
+        },
+        "workspace": {
+                "current_dir": "/Users/wrp/github/wrp/examples/go/src",
+                "project_dir": "/Users/wrp/github/wrp/examples"
+        },
+        "version": "2.0.42",
+        "output_style": {
+                "name": "default"
+        },
+        "cost": {
+                "total_cost_usd": 2.898200899999998,
+                "total_duration_ms": 219119735,
+                "total_api_duration_ms": 1656809,
+                "total_lines_added": 13,
+                "total_lines_removed": 15
+        },
+        "exceeds_200k_tokens": false
+}
+EOF
+
+
+dir=$(echo "$input" | jq -r '.workspace.project_dir')
+branch=$(git -C "$dir" symbolic-ref --short HEAD ||
+        git -C "$dir" rev-parse --short HEAD)
+if test -n "$branch"; then
+	branch="$(tput setaf 3)$branch  --  $(tput setaf 6)"
+	branch=@"$branch$(git log -n1 --pretty=format:%s HEAD)$(tput sgr0)"
+else
+	branch=/
+fi
+
+
+printf "$(tput setaf 1)workspace:$(tput setaf 2) ${dir##*/}$branch\n"
