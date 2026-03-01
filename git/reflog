@@ -1,3 +1,14 @@
 
 
 Reflog is stored in $(git rev-parse --git-dir)/logs/refs/heads/$name
+
+The reflog selector is the @{N} or @{date} suffix on a ref that refers to a specific reflog entry.
+Sample reflog selectors:
+
+  - HEAD@{0} — current HEAD referent
+  - HEAD@{1} — HEAD referent before the last operation that moved HEAD
+  - HEAD@{5} — five moves ago
+  - main@{2026-02-28 14:00} — referent at a particular time
+  - main@{yesterday} — Probably not ambiguous, but do not yet know which referent is selected
+  - main@{24.hours.ago}
+  - main@{7.days.ago}
