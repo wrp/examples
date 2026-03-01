@@ -5,7 +5,7 @@ Summary of text from Documentation/pretty-formats.txt
 '%%':: a raw '%'
 
 - Placeholders that affect formatting of later placeholders:
-'%Cred':: switch color to red
+'%Cred':: switch color to red     # See COLORS below
 '%Cgreen':: switch color to green
 '%Cblue':: switch color to blue
 '%Creset':: reset color
@@ -155,3 +155,22 @@ equivalent:
 $ git log -2 --pretty=tformat:%h 4da45bef
 $ git log -2 --pretty=%h 4da45bef
 ---------------------
+
+
+
+COLORS:
+In git log --format, use %C(...) for colors:
+
+  Named colors: red, green, blue, yellow, cyan, magenta, white, black
+  Attributes: bold, dim, ul (underline), blink, reverse, italic, strike
+  Reset: %C(reset) or %Creset
+  256-color: %C(0) through %C(255)
+
+  Combine with commas: %C(bold red), %C(bold blue ul)
+
+  Shortcuts:
+  - %Cred — red
+  - %Cgreen — green
+  - %Cblue — blue
+  - %Creset — reset
+  - %C(auto) — let git choose (respects color.ui config)
