@@ -1,0 +1,5 @@
+
+To allow ssh signing:
+
+$ gh api users/wrp/keys --jq '.[] | "${USER?}@github.com " + .key' >> ~/.ssh/allowed_signers
+$ git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
