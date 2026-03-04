@@ -10,3 +10,7 @@ go mod init ${module_path} # $module_path typically ends in $name
 
 
 debugging: dlv  (delve)
+
+
+initialization ordering.  package level variables are
+initialized before the init function is invoked.
