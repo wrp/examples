@@ -1,0 +1,5 @@
+
+op vault list                  # Show all vaults
+op item list --vault $vault    # List items in a vault
+op item get $id --format json  # show info about an item
+op read op://$vault/$id/${field-password}  # Read a field from an item
