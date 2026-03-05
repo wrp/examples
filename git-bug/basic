@@ -1,0 +1,17 @@
+
+git-bug is a nice tool for in-repo tracking of issues, but
+it has some foibles.
+
+
+# Basic workflow
+# Create a user (makes an object in refs/identities)
+id=$(git bug user new \
+	--avatar $(gh api user --jq '.avatar_url') \
+	--email ${EMAIL?} \
+	--name ${NAME?}
+)
+git bug user adopt ${id?}    # Adopt a user id
+git bug bug new              # Create a new issue
+gut bug termui               # Browse issues
+git bug bug status:open      # List open issues
+git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
