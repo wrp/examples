@@ -15,10 +15,11 @@ Sources:
 id=$(git bug user new \
 	--avatar $(gh api user --jq '.avatar_url') \
 	--email ${EMAIL?} \
-	--name ${NAME?}
+	--name ${UNAME?}
 )
+git bug user ls              # List users
 git bug user adopt ${id?}    # Adopt a user id
 git bug bug new              # Create a new issue
-gut bug termui               # Browse issues
+git bug termui               # Browse issues
 git bug bug status:open      # List open issues
 git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
