@@ -2,6 +2,13 @@
 git-bug is a nice tool for in-repo tracking of issues, but
 it has some foibles.
 
+Sources:
+- https://github.com/git-bug/git-bug
+- https://github.com/dspinellis/git-issue
+- https://sciit.gitlab.io/sciit/
+- https://news.ycombinator.com/item?id=43971620
+
+
 
 # Basic workflow
 # Create a user (makes an object in refs/identities)
