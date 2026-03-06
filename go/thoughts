@@ -36,7 +36,7 @@ the inconsistency here with it failing to modify the whitespace
 in the := line is .... inconsistent.
 
 
-log.Println prints to stderr by default.  This is fucking stupid.
+log.Println prints to stderr by default.  This is stupid.
 
 "func" is a mistake.  They should have been verbose and used the keyword "function"
 
