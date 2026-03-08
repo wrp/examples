@@ -1,4 +1,8 @@
 
-# To put a vertical column on screen in line 12
-# keywords: cc
-:set colorcolumn=12
+# To put a vertical column on screen in line 80
+# keywords: cc 79 80 81
+:set colorcolumn=80
+
+
+# To clear highlighting:
+: set cc=
