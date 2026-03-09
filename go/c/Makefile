@@ -1,2 +1,4 @@
+
 all:
-	go run main.go
+	go build -o cgo-demo .
+	./cgo-demo
