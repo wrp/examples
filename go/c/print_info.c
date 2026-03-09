@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 void
-print_info(float f, int n, const char *s)
+print_info(const struct Info *info)
 {
-	printf("float=%.2f int=%d str=%s\n", f, n, s);
+	printf("float=%.2f int=%d str=%s\n", info->f, info->n, info->s);
 }
