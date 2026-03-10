@@ -1,0 +1,4 @@
+
+Show audio alerts from the last 10 minutes:
+
+log show --last 600s --predicate 'eventMessage contains "sound" or eventMessage contains "beep" or eventMessage contains "alert"'
