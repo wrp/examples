@@ -1,0 +1,2 @@
+
+modinfo -F version $module_name  # Get a version
