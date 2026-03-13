@@ -16,3 +16,15 @@ bar(int x)
 	4. stream — CUDA stream for asynchronous execution (default 0, the default stream)
 	*/
 }
+
+
+Error checking:
+CUDA does not maintain a stack of errors, just the most recent.
+cudaPeekAtLastError() returns the last CUDA runtime error without clearing it. Contrast
+with cudaGetLastError(), which returns the error and resets it to cudaSuccess.  If
+there have been no errors, each return cudaSuccess, which is an enum.  Eg:
+
+cudaError_t err = cudaPeekAtLastError();
+if (err != cudaSuccess) {
+	const char *s = cudaGetErrorString(err);
+}
