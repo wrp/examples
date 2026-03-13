@@ -1,0 +1,18 @@
+
+__global__ functions are the interface.  They are called from the host and run on the device.
+eg:
+
+__global__ void foo(int x) { ... }
+
+__host__ void
+bar(int x)
+{
+	foo<<<gridDim, blockDim, sharedMem, stream>>>(x);
+
+	/*
+	1. gridDim — number of blocks (required)
+	2. blockDim — threads per block (required)
+	3. sharedMem — bytes of dynamically allocated shared memory per block (default 0)
+	4. stream — CUDA stream for asynchronous execution (default 0, the default stream)
+	*/
+}
