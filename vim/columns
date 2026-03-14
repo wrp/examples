@@ -6,3 +6,6 @@
 
 # To clear highlighting:
 : set cc=
+
+
+# variable tabstop: vartabstop: vts
