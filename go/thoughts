@@ -35,6 +35,23 @@ There is no excuse for removing the whitespace around the -, and
 the inconsistency here with it failing to modify the whitespace
 in the := line is .... inconsistent.
 
+Also, consider the following trivial patch:
+        fmt.Println("%v", &foo{
+                ab: 3,
++               abc: 5,
+        })
+
+After running gofmt, this patch is changed to:
+        fmt.Println("%v", &foo{
+-               ab: 3,
++               ab:  3,
++               abc: 5,
+        })
+
+This is not an innocuous change.  If an initializer has 10s of lines and a single value
+is added, it makes it extremely difficult to see the change.  gofmt introduces totally
+unnecessary churn.  This is completely unacceptable.  gofmt should be renamed gochurn!!
+
 
 log.Println prints to stderr by default.  This is stupid.
 
