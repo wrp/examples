@@ -46,3 +46,10 @@ main()
     MatAdd<<<grid, block>>>(A, B, C);
     ...
 }
+
+
+CUDA intrinsics:
+threadIdx gives the index of a thread within its thread block. Each thread in a thread block will have a different index.
+blockDim gives the dimensions of the thread block, which was specified in the execution configuration of the kernel launch.
+blockIdx gives the index of a thread block within the grid. Each thread block will have a different index.
+gridDim gives the dimensions of the grid, which was specified in the execution configuration when the kernel was launched.
