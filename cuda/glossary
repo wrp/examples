@@ -1,0 +1,5 @@
+
+SM	Streaming multiprocessor
+CUDA	Compute unified device architecture
+GPC	Graphics processing cluster (a collection of SMs)
+PTX	Parallel Thread Execution
