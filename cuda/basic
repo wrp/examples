@@ -17,6 +17,7 @@ bar(int x)
 	*/
 }
 
+The triple cheveron specifies the "execution configuration".
 
 Error checking:
 CUDA does not maintain a stack of errors, just the most recent.
