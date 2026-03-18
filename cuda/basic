@@ -29,3 +29,20 @@ cudaError_t err = cudaPeekAtLastError();
 if (err != cudaSuccess) {
 	const char *s = cudaGetErrorString(err);
 }
+
+
+
+When using 2 or 3-dimensional grids or thread blocks, the CUDA type
+dim3 is used as the grid and thread block dimension parameters. The
+code fragment below shows a kernel launch of a MatAdd kernel using
+16 by 16 grid of thread blocks, each thread block is 8 by 8.
+
+int
+main()
+{
+    ...
+    dim3 grid(16,16);
+    dim3 block(8,8);
+    MatAdd<<<grid, block>>>(A, B, C);
+    ...
+}
