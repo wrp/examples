@@ -13,3 +13,4 @@ Not sure if there is a difference between a "builtin" and a "device property":
 
 regsPerMultiprocessor
 regsPerBlock
+totalConstMem
