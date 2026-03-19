@@ -1,0 +1,6 @@
+
+CUDA_LOG_FILE
+	When this environment variable is set, the CUDA driver will
+	write error messages encountered out to a file whose path
+	is specified in the environment variable.  Available with
+	NVIDIA Driver version r570 and later.
