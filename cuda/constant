@@ -1,0 +1,11 @@
+
+__constant__ float coeffs[4];
+
+__global__ void compute(float *out) {
+    int idx = threadIdx.x;
+    out[idx] = coeffs[0] * idx + coeffs[1];
+}
+
+float h_coeffs[4] = {1.0f, 2.0f, 3.0f, 4.0f};
+cudaMemcpyToSymbol(coeffs, h_coeffs, sizeof(h_coeffs));
+compute<<<1, 10>>>(device_out);
