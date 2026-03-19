@@ -4,7 +4,7 @@ that will be sent to the device, use cudaMallocHost.  If you want
 memory for something else, use std::vector or std::make_unique (or
 maybe new/delete, but that's obsolete)
 
-eg:
+eg: (from https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html)
 
 //Allocate Host Memory
 cudaMallocHost(&A, size * sizeof *A);
