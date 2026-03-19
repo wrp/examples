@@ -1,0 +1,8 @@
+
+List of builtin variables: (non-exhaustive)
+
+
+blockDim
+blockIdx
+threadIdx
+gridDim
