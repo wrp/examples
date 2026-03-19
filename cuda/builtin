@@ -14,3 +14,6 @@ Not sure if there is a difference between a "builtin" and a "device property":
 regsPerMultiprocessor
 regsPerBlock
 totalConstMem
+
+The size of the L2 cache can be queried with the l2CacheSize member of the
+struct returned by the function cudaGetDeviceProperties.
