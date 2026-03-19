@@ -23,3 +23,10 @@ cudaMalloc(&devC, size * sizeof *devC);
 cudaMemcpy(devA, A, size * sizeof *A, cudaMemcpyDefault);
 cudaMemcpy(devB, B, size * sizeof *B, cudaMemcpyDefault);
 cudaMemset(devC, 0, size * sizeof *C);
+
+cudaFree(devA);
+cudaFree(devB);
+cudaFree(devC);
+cudaFreeHost(A);
+cudaFreeHost(B);
+cudaFreeHost(C);
