@@ -1,0 +1,25 @@
+
+*Never* use malloc in C++.  CUDA is C++.  If you want memory for data
+that will be sent to the device, use cudaMallocHost.  If you want
+memory for something else, use std::vector or std::make_unique (or
+maybe new/delete, but that's obsolete)
+
+eg:
+
+//Allocate Host Memory
+cudaMallocHost(&A, size * sizeof *A);
+cudaMallocHost(&B, size * sizeof *B);
+cudaMallocHost(&C, size * sizeof *C);
+
+initArray(A, size);
+initArray(B, size);
+
+// Allocate memory on the GPU
+cudaMalloc(&devA, size * sizeof *devA);
+cudaMalloc(&devB, size * sizeof *devB);
+cudaMalloc(&devC, size * sizeof *devC);
+
+// Copy data to the GPU
+cudaMemcpy(devA, A, size * sizeof *A, cudaMemcpyDefault);
+cudaMemcpy(devB, B, size * sizeof *B, cudaMemcpyDefault);
+cudaMemset(devC, 0, size * sizeof *C);
