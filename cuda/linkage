@@ -1,0 +1,6 @@
+From: https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/nvcc.html
+
+Host and device functions have external linkage by default and do
+not require the extern keyword. Note that starting from CUDA 13,
+__global__ functions and __managed__/__device__/__constant__ variables
+have internal linkage by default.
