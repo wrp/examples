@@ -1,0 +1,26 @@
+prefix sym exp
+----   --- ---
+quetta  Q  +30  nonillion
+ronna   R  +27  octillion
+yotta   Y  +24  septillion
+zetta   Z  +21  sextillion
+exa     E  +18  quintillion
+peta    P  +15  quadrillion
+tera    T  +12  trillion
+giga    G   +9  billion
+mega    M   +6  million
+kilo    k   +3  thousand
+hecto   h   +2  hundred (ex: hectare == 100 acres)
+deka    d   +1  ten
+deci    d   -1  tenth
+centi   c   -2  hundredth
+milli   m   -3  thousandth
+micro   μ   -6  millionth
+nano    n   -9  billionth
+pico    p  -12  trillionth
+femto   f  -15  quadrillionth
+atto    a  -18  quintillionth
+zepto   z  -21  sextillionth
+yocto   y  -24  septillionth
+ronto   r  -27  octillionth
+quecto  q  -30  nonillionth
