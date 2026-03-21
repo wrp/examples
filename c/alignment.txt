@@ -7,5 +7,6 @@ show() {
 }
 show WORD_BIT
 show LONG_BIT
+show INT_MAX
 
 echo 'see POSIX_MEMALIGN(3)'
