@@ -32,3 +32,6 @@ git filter-branch --env-filter '
 	   GIT_COMMITTER_EMAIL=john@example.com
    fi
 ' -- --all
+
+# Rewrite last 5 commits with signatures
+git filter-branch -f --commit-filter 'git commit-tree -S "$@"' HEAD~5..HEAD
