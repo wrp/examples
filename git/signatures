@@ -3,3 +3,14 @@ To allow ssh signing:
 
 $ gh api users/wrp/keys --jq '.[] | "${USER?}@github.com " + .key' >> ~/.ssh/allowed_signers
 $ git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+
+In the logformat:
+'%G?'::
+	"B" for a bad signature,
+	"E" if the signature cannot be checked (e.g. missing key)
+	"G" for a good (valid) signature,
+	"N" for no signature
+	"R" for a good signature made by a revoked key,
+	"U" for a good signature with unknown validity,
+	"X" for a good signature that has expired,
+	"Y" for a good signature made by an expired key,
