@@ -11,7 +11,7 @@ builddir/build.ninja:
 install: builddir/build.ninja
 	meson install -C builddir
 
-check: builddir/build.ninja
+check: all builddir/build.ninja
 	meson test -C builddir
 
 clean:
