@@ -6,7 +6,10 @@ project(
   default_options : ['warning_level=3'],
 )
 
+
 cc = meson.get_compiler('c')
+ldbl_size = cc.sizeof('long double')
+summary('long double size', ldbl_size)
 add_project_arguments(cc.get_supported_arguments(['-Wno-gnu-designator']), language: 'c')
 
 rb = static_library('ring-buffer', sources: ['libring-buffer.c'])
@@ -159,3 +162,10 @@ executable('unblock-signals', 'unblock-signals.c')
 executable('unix-client', 'unix-client.c')
 executable('unix-server', 'unix-server.c')
 executable('va_args', 'va_args.c')
+
+
+test('calc-test',
+	find_program('../test/calc-test'),
+	workdir: meson.project_source_root(),
+	env: ['LONG_DOUBLE_SIZE=@0@'.format(ldbl_size)],
+)
