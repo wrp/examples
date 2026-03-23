@@ -95,7 +95,7 @@ xtmpfile(char *tempname, size_t siz, const char *mode)
 	const char *template = "xutil.XXXXXXXXX";
 	int fd;
 	char *tmpdir = getenv("TMPDIR");
-	int length = 0;
+	size_t length = 0;
 
 	if( tmpdir ){
 		length = snprintf(tempname, siz - 1, "%s", tmpdir);
