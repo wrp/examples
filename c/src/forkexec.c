@@ -14,7 +14,6 @@ main(int argc, char **argv)
 	int p2[2];
 	int val = argc > 1 ? strtol(argv[1], NULL, 10) : 1;
 	int result;
-	int len;
 	ssize_t rc;
 	if( pipe(p1) || pipe(p2) ){
 		perror("pipe");
