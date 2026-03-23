@@ -14,7 +14,7 @@ int fooc(char *x) { return printf("char * %s\n", x); }
 
 
 #define print_type(s) do { \
-	printf(#s " at %p: ", &s); \
+	printf(#s " at %p: ", (void *)&s); \
 	if( __builtin_types_compatible_p(__typeof__(s), int) ){ \
 		puts("int"); \
 	} else if( __builtin_types_compatible_p(__typeof__(s), long) ){ \
