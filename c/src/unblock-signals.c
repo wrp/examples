@@ -25,6 +25,7 @@ set_default(struct sigaction *act, int s)
 int
 main(int argc, char **argv)
 {
+	(void) argc;
 	struct sigaction act = {{0}};
 	sigset_t new;
 

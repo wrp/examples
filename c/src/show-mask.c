@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	struct sigaction act = {{0}};
 	sigset_t old;

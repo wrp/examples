@@ -57,7 +57,7 @@ get_word(char *str)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	struct char_buf i = {0};
 	size_t word_start = 0;

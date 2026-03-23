@@ -33,7 +33,7 @@ pop(struct stack *s)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	struct stack s = {0};
 	int c;

@@ -17,7 +17,7 @@ child(void){
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	int status;
 	pid_t p = fork();

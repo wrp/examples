@@ -13,7 +13,7 @@ print_ints(int *x, size_t s)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	int explicit[] = {1, 2, 3};
 	print_ints((int[]){1,2,3}, 3);

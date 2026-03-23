@@ -39,7 +39,7 @@ int compar(const void *k1, const void *k2)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	char buf[256];
 	void *root = NULL;

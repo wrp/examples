@@ -99,7 +99,7 @@ handle(int maxfd, fd_set *fds)
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	struct data val = { 1, 2, 3, 5.0, 1.2 };
 	struct data result;

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
 
 	/* For C 2017, __STDC_VERSION__ is 201710L. */

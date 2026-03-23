@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	char name[PATH_MAX];
 	getcwd(name, sizeof name);

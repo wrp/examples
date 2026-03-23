@@ -4,7 +4,7 @@
 #include <string.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	char dest[32];
 
