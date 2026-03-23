@@ -504,7 +504,7 @@ push_value(struct state *S)
 		read_val(S, &val, s, &cp);
 	}
 	if( is_operator(*cp) ){
-		operator op = operator_lut[*cp];
+		operator op = operator_lut[(int)*cp];
 		assert( cp == s );
 		op(S, *cp);
 		for( char *t = cp + 1; *t; t++ ){
@@ -930,6 +930,7 @@ sum(struct state *S)
 static void
 build_lut(struct state *S)
 {
+	(void)S;
 	for( unsigned c = 0; c < 256; c += 1 ){
 		operator f = throw_warning;
 		if( strchr(binary_ops, c)) {
@@ -950,5 +951,6 @@ build_lut(struct state *S)
 static void
 throw_warning(struct state *S, unsigned char c)
 {
+	(void)S;
 	fprintf( stderr, "Unexpected: %c\n", c );
 }
