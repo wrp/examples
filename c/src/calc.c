@@ -168,6 +168,7 @@ static void execute_function(struct state *S, const char *cmd);
 void
 print_help(struct state *S)
 {
+	(void)S;
 	for( const char **s = help; *s; s++ ){
 		puts(*s);
 	}
@@ -326,7 +327,6 @@ static void
 process_escape(struct state *S, int c)
 {
 	if( isspace(c) ){
-		int i;
 		char buf[256];
 
 		normalize_state(S);
@@ -471,7 +471,7 @@ read_val(struct state *S, struct stack_entry *v, char *s, char **end)
 }
 
 static int
-is_operator(char c)
+is_operator(int c)
 {
 	operator *f = operator_lut;
 	return c && f[c] && f[c] != throw_warning;
