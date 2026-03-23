@@ -13,8 +13,8 @@
 
 void xclose(int fd);
 void xdup2(int a, int b);
-void xwrite(int fd, void *v, size_t s);
-void xread(int fd, void *v, size_t s);
+void xwrite(int fd, void *v, ssize_t s);
+void xread(int fd, void *v, ssize_t s);
 void xpipe(int *p);
 
 
@@ -54,7 +54,7 @@ show(const struct data *v)
 }
 
 int
-doit(int (*f)(void *), void *in, size_t s, fd_set *fds, int *max)
+doit(int (*f)(void *), void *in, ssize_t s, fd_set *fds, int *max)
 {
 	int rv;
 	int p2[2];
@@ -102,8 +102,6 @@ int
 main(void)
 {
 	struct data val = { 1, 2, 3, 5.0, 1.2 };
-	struct data result;
-	int len;
 	int maxfd = 0;
 	fd_set fds[2];
 
@@ -143,7 +141,7 @@ xclose(int fd)
 }
 
 void
-xwrite(int fd, void *v, size_t s)
+xwrite(int fd, void *v, ssize_t s)
 {
 	if( write(fd, v, s) != s ){
 		perror("read");
@@ -152,7 +150,7 @@ xwrite(int fd, void *v, size_t s)
 }
 
 void
-xread(int fd, void *v, size_t s)
+xread(int fd, void *v, ssize_t s)
 {
 	if( read(fd, v, s) != s ){
 		perror("read");
