@@ -6,6 +6,9 @@ project(
   default_options : ['warning_level=3'],
 )
 
+cc = meson.get_compiler('c')
+add_project_arguments(cc.get_supported_arguments(['-Wno-gnu-designator']), language: 'c')
+
 rb = static_library('ring-buffer', sources: ['libring-buffer.c'])
 stack = static_library('stack', sources: ['libstack.c'])
 bindgen = static_library('bindgen', sources: ['libwrp-bindgen.c'])
