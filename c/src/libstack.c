@@ -87,8 +87,8 @@ stack_incr(struct stack *s)
 		void *tmp = realloc(s->data, siz);
 		if( tmp != NULL ) {
 			s->data = tmp;
-			s->top = s->data + o;
-			s->end = s->data + siz;
+			s->top = (char *)s->data + o;
+			s->end = (char *)s->data + siz;
 		}
 	}
 	return tmp;
@@ -97,7 +97,7 @@ stack_incr(struct stack *s)
 size_t
 stack_size(struct stack *s)
 {
-	return (s->top - s->data) / s->element_size;
+	return ((char *)s->top - (char *)s->data) / s->element_size;
 }
 
 
