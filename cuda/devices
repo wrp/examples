@@ -9,3 +9,15 @@ Volta             80            2048
 Ampere A 100      108           2048
 Hoppper H 100     132           2048
 Blackwell B200    160           2048
+
+
+Power consumption: https://www.youtube.com/watch?v=pC0SIzZGFSc
+Sample data, I believe for Hopper:
+Precision:	Operation:	Energy per flop:
+F64		FMA			2.5x
+F32		FMA			1.0x
+F16		FMA			0.5x
+F64		Tensor Core MMA		1.5x
+F16		Tensor Core MMA		.12x
+F8		Tensor Core MMA		.06x
+Int8		Tensor Core MMA		.04x
