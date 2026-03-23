@@ -1,27 +1,18 @@
 
-CPPFLAGS = -I ../include
-# CFLAGS=--coverage -g -O0
-LDFLAGS = -L../lib
-LDLIBS = -lxutil -lring-buffer -lstack -lsqlite3 -lm
 
-SOURCES := $(wildcard *.c)
-EXE := $(subst .c,,$(SOURCES))
 
-.PHONY: libs clean all
+.PHONY: clean all check install
+all: builddir/build.ninja
+	meson compile -C builddir $${V+--verbose}
 
-all: libs $(EXE)
+builddir/build.ninja:
+	meson setup builddir
 
-libs:
-	cd ../lib; make
+install: builddir/build.ninja
+	meson install -C builddir
 
-check: udp-client udp-server
-	@for path in ../test/*-test; do \
-		file=$$(basename $$path); \
-		test "$$file" = coverage-test && continue; \
-		make $${file%-test} > /dev/null; \
-		$$path || exit 1; \
-	done
+check: builddir/build.ninja
+	meson test -C builddir
 
 clean:
-	rm -f $(EXE) *.gcno *.gcda *.o
-	cd ../lib; make clean
+	rm -rf builddir
