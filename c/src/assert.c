@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
 	int x = 5;
 	assert(x == 4 && "Unexpected runtime value");
