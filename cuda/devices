@@ -1,0 +1,11 @@
+
+From https://www.youtube.com/watch?v=GmNkYayuaA4:
+
+Architecture:   SM count:   Threads per SM
+Kepler            15            2048
+Maxwell           24            2048
+Pascal            60            2048
+Volta             80            2048
+Ampere A 100      108           2048
+Hoppper H 100     132           2048
+Blackwell B200    160           2048
