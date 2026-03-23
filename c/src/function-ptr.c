@@ -29,8 +29,8 @@ int
 main(void)
 {
 	struct x a = { 6, multiply };
-	struct x b = { 9 };
-	struct x c = { a.op(a, b) };
+	struct x b = { 9, NULL };
+	struct x c = { a.op(a, b), NULL };
 	print(c);
 	return 0;
 }
