@@ -6,7 +6,7 @@
 void
 clean(char **p)
 {
-	printf("variable %p (%s) destructor\n", p, *p);
+	printf("variable %p (%s) destructor\n", (void *)p, *p);
 }
 
 	jmp_buf j;
@@ -17,7 +17,7 @@ foo(void)
 	printf("before scope\n");
 	{
 		char *b __attribute__((cleanup (clean))) = "b";
-		printf("inner scope: %p\n", &a);
+		printf("inner scope: %p\n", (void *)&a);
 	}
 	printf("after scope\n");
 	/* with the longjmp, clean() is not called */
