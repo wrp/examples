@@ -53,37 +53,21 @@ foreach name : names
 	executable(name, name + '.c')
 endforeach
 
-
-executable('access', 'access.c', dependencies: [libxutil])
 executable('calc', 'calc.c', dependencies: [librb, libstack])
-executable('cat', 'cat.c', dependencies: [libxutil])
-executable('chmod', 'chmod.c', dependencies: [libxutil])
-executable('diff16', 'diff16.c', dependencies: [libxutil])
-executable('dynamic-array', 'dynamic-array.c', dependencies: [libxutil])
-executable('dynamic-read', 'dynamic-read.c', dependencies: [libxutil])
-executable('dynamic', 'dynamic.c', dependencies: [libxutil])
-executable('fgetwc', 'fgetwc.c', dependencies: [libxutil])
-executable('fread', 'fread.c', dependencies: [libxutil])
-executable('fseek', 'fseek.c', dependencies: [libxutil])
-executable('fsync', 'fsync.c', dependencies: [libxutil])
-executable('getdelim', 'getdelim.c', dependencies: [libxutil])
-executable('grow', 'grow.c', dependencies: [libxutil])
-executable('head', 'head.c', dependencies: [libxutil])
-executable('list', 'list.c', dependencies: [libxutil])
-executable('load-matrix', 'load-matrix.c', dependencies: [libxutil])
-executable('mmap', 'mmap.c', dependencies: [libxutil])
-executable('poly', 'poly.c', dependencies: [libxutil])
-executable('procname', 'procname.c', dependencies: [libxutil])
-executable('random-word', 'random-word.c', dependencies: [libxutil])
-executable('read-indexed', 'read-indexed.c', dependencies: [libxutil])
-executable('read', 'read.c', dependencies: [libxutil])
-executable('scanf', 'scanf.c', dependencies: [libxutil])
-executable('sed1q', 'sed1q.c', dependencies: [libxutil])
-executable('sigaction', 'sigaction.c', dependencies: [libxutil])
+
+foreach name : [
+	'access', 'cat', 'chmod', 'diff16', 'dynamic-array', 'dynamic-read',
+	'dynamic', 'fgetwc', 'fread', 'fseek', 'fsync', 'getdelim', 'grow',
+	'head', 'list', 'load-matrix', 'mmap', 'poly', 'procname',
+	'random-word', 'read-indexed', 'read', 'scanf', 'sed1q', 'sigaction',
+	'tac',
+]
+	executable(name, name + '.c', dependencies: [libxutil])
+endforeach
+
 if sqlite3.found()
 	executable('sqlite', 'sqlite.c', dependencies: [sqlite3])
 endif
-executable('tac', 'tac.c', dependencies: [libxutil])
 
 
 wd = meson.project_build_root()
