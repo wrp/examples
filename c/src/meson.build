@@ -10,7 +10,8 @@ project(
 cc = meson.get_compiler('c')
 ldbl_size = cc.sizeof('long double')
 summary('long double size', ldbl_size)
-add_project_arguments(cc.get_supported_arguments(['-Wno-gnu-designator']), language: 'c')
+add_project_arguments(cc.get_supported_arguments(['-Wno-gnu-designator']),
+	language: 'c')
 
 rb = static_library('ring-buffer', sources: ['libring-buffer.c'])
 stack = static_library('stack', sources: ['libstack.c'])
@@ -90,4 +91,5 @@ if sqlite3.found()
 	test('sqlite-test', find_program('../test/sqlite-test'), workdir: wd)
 endif
 
-test('coverage-test', find_program('../test/coverage-test'), workdir: wd, is_parallel: false, priority: -1)
+test('coverage-test', find_program('../test/coverage-test'),
+	workdir: wd, is_parallel: false, priority: -1)
