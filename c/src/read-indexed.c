@@ -52,7 +52,6 @@ open_indexed(const char *path, struct indexed_file *ifp)
 static void
 read_index(struct indexed_file *ifp)
 {
-	int index_newer = 0;
 	struct stat idx_stat, main_stat;
 	const char *path = ifp->path;
 
@@ -80,7 +79,6 @@ read_index(struct indexed_file *ifp)
 		build_index(ifp);
 	} else {
 		/* Index is fresh; read it */
-		index_newer = 1;
 		FILE *idx = xfopen(ifp->index, "r");
 		/* TODO: read some magic numbers, maybe a hash of the input */
 		if( fread(&ifp->lines, sizeof ifp->lines, 1, idx) != 1 ){

@@ -35,7 +35,7 @@ main(void)
 {
 	int i = 0;
 	char buf[32];
-	struct sigaction act = {{0}};
+	struct sigaction act = {{0}, 0, 0};
 
 	act.sa_sigaction = handle;
 

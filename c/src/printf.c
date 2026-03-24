@@ -32,7 +32,7 @@ main(void)
 	printf("1.2345 w prec 2 : '%12.2f'\n", 1.2345);
 
 	/* Use %p to printf pointer.  PRIxPTR is here just for demonstration. */
-	printf("p = %" PRIxPTR " = %p\n", (uintptr_t)p, p);
+	printf("p = %" PRIxPTR " = %p\n", (uintptr_t)p, (void *)p);
 
 	/* Use positional arguments.  Mixing positional with non is UB */
 	printf("%2$15s: %%zd  %1$zd\n", sizeof i, "size_t");

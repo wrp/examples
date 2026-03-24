@@ -251,7 +251,7 @@ main(int argc, char **argv)
 #if PORTABLE
 	fputs("Using frexpf, ldexpf, and nextafterf\n", stdout);
 #endif
-	for(int i = 0; i < sizeof test_cases / sizeof *test_cases; ){
+	for(size_t i = 0; i < sizeof test_cases / sizeof *test_cases; ){
 		if( check(test_cases[i])){
 			fail += 1;
 		} else {
