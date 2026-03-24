@@ -52,6 +52,23 @@ This is not an innocuous change.  If an initializer has 10s of lines and a singl
 is added, it makes it extremely difficult to see the change.  gofmt introduces totally
 unnecessary churn.  This is completely unacceptable.  gofmt should be renamed gochurn!!
 
+Also, silly to require imports to be string literals.  There is an insane amount
+of required redundancy in a block like:
+
+import (
+	"github.com/foo/backend/go/pkg/block"
+	"github.com/foo/backend/go/pkg/foo/log"
+	"github.com/foo/backend/go/pkg/foo/validate"
+	"github.com/foo/backend/go/pkg/foo/chunk"
+	"github.com/foo/backend/go/pkg/pragma"
+	"github.com/foo/backend/go/pkg/stream/processor"
+	"github.com/foo/backend/go/pkg/unit/frequency"
+	"github.com/foo/backend/go/pkg/x/xerrors"
+	"github.com/foo/backend/go/pkg/x/xslices"
+	"github.com/foo/backend/go/pkg/x/xtime"
+)
+
+
 
 log.Println prints to stderr by default.  This is stupid.
 
