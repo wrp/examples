@@ -46,7 +46,7 @@ main(void)
 	}
 	pause();
 
-	if( sig < sizeof names / sizeof *names && names[sig] ){
+	if( sig < (int)(sizeof names / sizeof *names) && names[sig] ){
 		msg = names[sig];
 	}
 	printf("received %s\n", msg);

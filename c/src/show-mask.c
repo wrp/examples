@@ -7,7 +7,6 @@
 int
 main(void)
 {
-	struct sigaction act = {{0}};
 	sigset_t old;
 
 	if(sigprocmask(SIG_SETMASK, NULL, &old)) {

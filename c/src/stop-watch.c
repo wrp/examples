@@ -21,11 +21,11 @@ static void check_user_activity(void);
 static void hide_cursor() { system("tput vi"); }
 static void show_cursor() { system("tput ve"); }
 static void start_timer(void);
-static void to_col(int x) { printf("\r\e[%dC", x); }
-static void save(void) { __("\e7"); }
-static void restore(void) { __("\e8"); }
-static void clear_to_end_of_line(void) { __("\e[K"); }
-static void clear_screen(void) { __("\e[2J\e[H"); }
+static void to_col(int x) { printf("\r\033[%dC", x); }
+static void save(void) { __("\0337"); }
+static void restore(void) { __("\0338"); }
+static void clear_to_end_of_line(void) { __("\033[K"); }
+static void clear_screen(void) { __("\033[2J\033[H"); }
 
 
 int
@@ -104,7 +104,7 @@ establish_handlers(void)
 
 	memset(&act, 0, sizeof act);
 	act.sa_sigaction = handle;
-	for (int i = 0; i < sizeof to_catch / sizeof *to_catch; i += 1) {
+	for (size_t i = 0; i < sizeof to_catch / sizeof *to_catch; i += 1) {
 		if (sigaction(to_catch[i], &act, NULL)) {
 			perror("sigaction");
 			exit(1);

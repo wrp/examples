@@ -75,7 +75,6 @@ sort_dir(char *path, int print_name)
 			continue;
 		}
 		struct stat s;
-		char *t;
 		*e = '/';
 		strncpy(e + 1, f->d_name, PATH_MAX - 1 - (e - path));
 		if( lstat(path, &s) ){
