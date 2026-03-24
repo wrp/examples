@@ -26,7 +26,7 @@ int
 main(int argc, char **argv)
 {
 	(void) argc;
-	struct sigaction act = {{0}};
+	struct sigaction act = {{0}, 0, 0};
 	sigset_t new;
 
 	sigemptyset(&new);

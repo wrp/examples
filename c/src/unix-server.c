@@ -35,7 +35,6 @@ main(int argc, char **argv)
 	if( serv_sock == -1 ){
 		die("socket");
 	}
-	int o = 1;
 
 	if( bind(serv_sock, sa, sizeof serv_addr) == -1 ){
 		die(path);

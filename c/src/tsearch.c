@@ -28,6 +28,8 @@ struct wc {
 
 void print_word(const void *a, VISIT o, int l)
 {
+	(void)o;
+	(void)l;
 	struct wc *const*aw = a;
 	printf("%s: %d\n", (*aw)->word, (*aw)->count);
 }

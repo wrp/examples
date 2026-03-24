@@ -77,6 +77,6 @@ main(void)
 	}
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	double dur = span_s(t0, t1);  // Seconds from start to finish
+	(void)span_s(t0, t1);  // Seconds from start to finish
 	return 0;
 }
