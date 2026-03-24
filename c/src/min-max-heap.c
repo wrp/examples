@@ -403,17 +403,17 @@ test_pairs(size_t siz, int which)
 	T (*poppers[])(struct min_max_heap *) = { min_pop, max_pop };
 
 	/* Make a heap and validate by alternately popping max and min */
-	for (int i = 0; i < siz; i++) {
+	for (size_t i = 0; i < siz; i += 1) {
 		min_max_push(&h, i);
 	}
-	for (int i = 0; i < siz / 2; i++) {
-		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
+	for (size_t i = 0; i < siz / 2; i += 1) {
+		validate(poppers[which](&h) == (T)(which ? siz - 1 - i : i));
 		which = ! which;
-		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
+		validate(poppers[which](&h) == (T)(which ? siz - 1 - i : i));
 	}
 	if (siz % 2) {
 		int i = siz / 2;
-		validate(poppers[which](&h) == (which ? siz - 1 - i : i));
+		validate(poppers[which](&h) == (T)(which ? siz - 1 - i : i));
 	}
 	validate(0 == h.len);
 	free(h.data);
