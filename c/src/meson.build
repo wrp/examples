@@ -25,7 +25,7 @@ libstack = declare_dependency(link_with: stack, include_directories: dot)
 sqlite3 = dependency('sqlite3', required: false)
 
 
-names = [
+foreach name : [
 	'arithperm', 'array-declaration', 'array', 'assert', 'atexit', 'bst',
 	'bstee', 'casting', 'char-cast', 'check-dups', 'cleanup', 'clearerr',
 	'complex', 'compound-initializer', 'ctime', 'digraphs', 'double',
@@ -48,8 +48,6 @@ names = [
 	'udp-client', 'udp-server', 'unblock-signals', 'unix-client',
 	'unix-server', 'va_args',
 ]
-
-foreach name : names
 	executable(name, name + '.c')
 endforeach
 
