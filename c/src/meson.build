@@ -77,7 +77,6 @@ test('calc-test',
 test('arithperm-test', find_program('../test/arithperm-test'), workdir: wd)
 test('bst-test', find_program('../test/bst-test'), workdir: wd)
 test('check-dups-test', find_program('../test/check-dups-test'), workdir: wd)
-test('coverage-test', find_program('../test/coverage-test'), workdir: wd)
 test('dynamic-array-test', find_program('../test/dynamic-array-test'), workdir: wd)
 test('dynamic-read-test', find_program('../test/dynamic-read-test'), workdir: wd)
 test('dynamic-test', find_program('../test/dynamic-test'), workdir: wd)
@@ -97,3 +96,5 @@ if sqlite3.found()
 endif
 test('tac-test', find_program('../test/tac-test'), workdir: wd)
 test('udp-client-test', find_program('../test/udp-client-test'), workdir: wd)
+
+test('coverage-test', find_program('../test/coverage-test'), workdir: wd, is_parallel: false, priority: -1)
