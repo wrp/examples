@@ -164,8 +164,29 @@ executable('unix-server', 'unix-server.c')
 executable('va_args', 'va_args.c')
 
 
+wd = meson.project_build_root()
 test('calc-test',
 	find_program('../test/calc-test'),
 	workdir: meson.project_source_root(),
 	env: ['LONG_DOUBLE_SIZE=@0@'.format(ldbl_size)],
 )
+test('arithperm-test', find_program('../test/arithperm-test'), workdir: wd)
+test('bst-test', find_program('../test/bst-test'), workdir: wd)
+test('check-dups-test', find_program('../test/check-dups-test'), workdir: wd)
+test('coverage-test', find_program('../test/coverage-test'), workdir: wd)
+test('dynamic-array-test', find_program('../test/dynamic-array-test'), workdir: wd)
+test('dynamic-read-test', find_program('../test/dynamic-read-test'), workdir: wd)
+test('dynamic-test', find_program('../test/dynamic-test'), workdir: wd)
+test('fread-test', find_program('../test/fread-test'), workdir: wd)
+test('grow-test', find_program('../test/grow-test'), workdir: wd)
+test('list-test', find_program('../test/list-test'), workdir: wd)
+test('mmap-test', find_program('../test/mmap-test'), workdir: wd)
+test('poly-test', find_program('../test/poly-test'), workdir: wd)
+test('pyramid-test', find_program('../test/pyramid-test'), workdir: wd)
+test('read-indexed-test', find_program('../test/read-indexed-test'), workdir: wd)
+test('read-txt-into-array-test', find_program('../test/read-txt-into-array-test'), workdir: wd)
+test('scanf-term-test', find_program('../test/scanf-term-test'), workdir: wd)
+test('scanf-test', find_program('../test/scanf-test'), workdir: wd)
+test('sqlite-test', find_program('../test/sqlite-test'), workdir: wd)
+test('tac-test', find_program('../test/tac-test'), workdir: wd)
+test('udp-client-test', find_program('../test/udp-client-test'), workdir: wd)
