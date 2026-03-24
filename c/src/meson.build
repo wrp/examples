@@ -22,6 +22,10 @@ libxutil = declare_dependency(link_with: xutil, include_directories: dot)
 librb = declare_dependency(link_with: rb, include_directories: dot)
 libstack = declare_dependency(link_with: stack, include_directories: dot)
 
+sqlite3 = dependency('sqlite3', required: false)
+
+
+
 executable('access', 'access.c', dependencies: [libxutil])
 executable('arithperm', 'arithperm.c')
 executable('array-declaration', 'array-declaration.c')
@@ -134,7 +138,9 @@ executable('snprintf', 'snprintf.c')
 executable('sort-by-length', 'sort-by-length.c')
 executable('sort-generic', 'sort-generic.c')
 executable('sortdir', 'sortdir.c')
-# executable('sqlite', 'sqlite.c')
+if sqlite3.found()
+	executable('sqlite', 'sqlite.c', dependencies: [sqlite3])
+endif
 executable('standard', 'standard.c')
 executable('stat', 'stat.c')
 executable('stop-watch', 'stop-watch.c')
@@ -188,6 +194,8 @@ test('read-indexed-test', find_program('../test/read-indexed-test'), workdir: wd
 test('read-txt-into-array-test', find_program('../test/read-txt-into-array-test'), workdir: wd)
 test('scanf-term-test', find_program('../test/scanf-term-test'), workdir: wd)
 test('scanf-test', find_program('../test/scanf-test'), workdir: wd)
-test('sqlite-test', find_program('../test/sqlite-test'), workdir: wd)
+if sqlite3.found()
+	test('sqlite-test', find_program('../test/sqlite-test'), workdir: wd)
+endif
 test('tac-test', find_program('../test/tac-test'), workdir: wd)
 test('udp-client-test', find_program('../test/udp-client-test'), workdir: wd)
