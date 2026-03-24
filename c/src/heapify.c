@@ -166,7 +166,7 @@ basic_test(void)
 		push(&h, i);
 	}
 	validate_and_empty_heap(&h);
-	for( int t = 0; t < sizeof test_cases / sizeof *test_cases; t += 1 ){
+	for( size_t t = 0; t < sizeof test_cases / sizeof *test_cases; t += 1 ){
 		int *tc = test_cases[t];
 		for( ; tc < (int *)(test_cases + t + 1); tc += 1 ){
 			push(&h, *tc);
@@ -187,7 +187,7 @@ test_invariant(void)
 	Assert( ! satisfies_invariant(&h) );;
 	x[0] = 0;
 
-	for( int i = 1; i < siz; i += 1 ){
+	for( size_t i = 1; i < siz; i += 1 ){
 		int orig = x[i];
 		Assert( satisfies_invariant(&h) );
 		x[i] -= 2;
