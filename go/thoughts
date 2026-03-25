@@ -80,6 +80,15 @@ makes the parser more complex, that's fine.  Use that justification.
 Any other reason is just dumb.
 
 
+Comments are not documentation.  Encouraging redundant comments for every exported
+function is malpractice.  The 2 lines:
+	// Frob takes a widget and frobs it
+	func(x *widget) frob() {
+are *always* better if the comment is just deleted.  The comment provides no additional
+information and is subject to bitrot.  It is problematic that the language actively
+encourages this bad practice.
+
+
 Not to sound too negative; overall I like the language, but the culture
 has some issues.  The designers want to treat developers like idiots
 and hold their hand.  Maybe that's justified, but it's a bit insulting.
