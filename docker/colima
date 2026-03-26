@@ -1,0 +1,10 @@
+
+To run docker on Macos, you should:
+
+brew install docker
+brew install colima
+colima start
+
+
+
+Colima is a light-weight replacment of docker desktop.
