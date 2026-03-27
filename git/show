@@ -4,3 +4,6 @@
 git show --pretty=format: --name-only $commitish  # See gitrevisions(7)
 # -- or --
 git show --pretty=format: --name-status $commitish
+
+
+git show -s --format=%s $commitish   # Show just the status line
