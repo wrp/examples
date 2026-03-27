@@ -1,0 +1,11 @@
+
+# Find all dangling commits: (eg, a stash after stash pop)
+
+git fsck --no-reflog | awk '/dangling commit/ {print $3}'
+
+git log --graph --oneline --decorate $(git fsck --no-reflog | awk '/dangling commit/ {print $3}')
+
+
+git fsck --no-reflog | awk '/dangling commit/ {print $3}' | while read oid; do
+	git show -s --format='%h: %s' $oid
+done
