@@ -10,6 +10,7 @@ import (
 func main() {
 	fmt.Println("hello world")
 	fmt.Println("version:", runtime.Version())
+	foo();  // Call function from package main defined in foo.go
 	dir, err := os.UserConfigDir()
 	if err == nil {
 		fmt.Println("configdir:", dir)
