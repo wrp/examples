@@ -6,7 +6,7 @@ all: go.mod
 	go run . $(ARGS)
 
 $(base):
-	go build .
+	go build -ldflags '-X example/basic/array.top_level_var=6' .
 
 go.mod:
 	go mod init $(package_name)

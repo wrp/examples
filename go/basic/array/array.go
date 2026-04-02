@@ -26,6 +26,8 @@ func iterate_over_slice(b []int) {
 	fmt.Println("")
 }
 
+var top_level_var = "5"
+
 func Example() {
 	var (
 		a [5]int                          /* An array of 5 integers, initialized to 0 */
@@ -55,6 +57,8 @@ func Example() {
 			fmt.Printf("%v is a slice of int\n", i)
 		}
 	}
+	fmt.Printf("top_level_var = %v\n", top_level_var)
 	whatAmI(sb) /* is a slice */
 	whatAmI(b)  /* is an array */
+
 }
