@@ -5,4 +5,4 @@ GPC	Graphics processing cluster (a collection of SMs)
 PTX	Parallel Thread Execution
 
 execution policy:  thrust::device vs thrust::host
-execution specifief: __device__,  __host__, etc
+execution specifier: __device__,  __host__, etc
