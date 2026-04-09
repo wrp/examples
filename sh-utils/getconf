@@ -1,0 +1,2 @@
+
+getconf -a  # see all available settings
