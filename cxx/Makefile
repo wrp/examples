@@ -1,8 +1,14 @@
 CXXFLAGS ?= -fno-elide-constructors -std=c++20
 
-ifndef DOCKER
+source = $(shell ls *.cc)
+exe = $(source:.cc=)
 
-all:
+all: $(exe)
+
+
+
+ifndef DOCKER
+docker:
 	docker run -w /src -e DOCKER=gcc \
 		-v $$(pwd):/src \
 		--user $$(id -u):$$(id -g) -it gcc
