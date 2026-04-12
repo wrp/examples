@@ -30,3 +30,9 @@ cudaFree(devC);
 cudaFreeHost(A);
 cudaFreeHost(B);
 cudaFreeHost(C);
+
+
+// Setting heap size on the device (https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-support.html#cuda-c-standard-library)
+cudaDeviceGetLimit(size_t* size, cudaLimitMallocHeapSize)
+cudaDeviceSetLimit(cudaLimitMallocHeapSize, size_t size)
+The heap size granted will be at least size bytes. cuCtxGetLimit() and cudaDeviceGetLimit() return the currently requested heap size.
