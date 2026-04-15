@@ -16,6 +16,7 @@ Keep commit summaries under 50 characters.
 Keep lines in the commit Body under 72 characters.
 No non-ASCII characters.
 No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
+Never use the word "sha"; commits and objects are identified by their oid.
 
 
 Terminal display — Tabstops every 8 columns.
