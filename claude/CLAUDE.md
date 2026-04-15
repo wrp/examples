@@ -10,13 +10,18 @@ Don't assume "origin" exists.  Check the repo; if assuming, assume "github."
 Don't show the /terminal-setup tip.
 
 git specific hints:
-Write in the imperative mood with "now" referring to the parent commit's tree.
-Ensure trailers are valid (all at the end, no empty lines between them).
-Keep commit summaries under 50 characters.
-Keep lines in the commit Body under 72 characters.
-No non-ASCII characters.
-No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
 Never use the word "sha"; commits and objects are identified by their oid.
+
+commit messages:
+	Ensure trailers are valid (all at the end, no empty lines between them).
+	Write in the imperative mood with "now" referring to the parent commit's tree.
+	No non-ASCII characters.
+	No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
+	Keep lines in the Body under 72 characters.
+	Keep summaries under 50 characters.
+	Do not add "Generated with Claude Code" or robot emojis.
+	If the git config core.claude-attributions is "no" (or falsey, or unset),
+		do not add any Claude-related trailers or attribution to commits.
 
 
 Terminal display — Tabstops every 8 columns.
@@ -32,12 +37,6 @@ Always use 1TBS.  Put braces around single line loop bodies.
 Never use pre/post-in/decrement operators purely for the side effect.
   eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
 Do not mention line numbers in comments.  Ever.  They become stale too quickly.
-
-Commit messages:
-Do not add "Generated with Claude Code" or robot emojis.
-Only use Co-Authored-By trailer if you want attribution.
-If the git config core.claude-attributions is "no" (or falsey, or unset),
-do not add any Claude-related trailers or attribution to commits.
 
 yaml style:
 Do NOT increase the indentation level for list items.  eg, use:
