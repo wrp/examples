@@ -9,10 +9,11 @@ Don't assume "origin" exists.  Check the repo; if assuming, assume "github."
 
 Don't show the /terminal-setup tip.
 
+git specific hints:
 Write in the imperative mood with "now" referring to the parent commit's tree.
 Ensure trailers are valid (all at the end, no empty lines between them).
-Summary under 50 characters.
-Body lines under 72 characters.
+Keep commit summaries under 50 characters.
+Keep lines in the commit Body under 72 characters.
 No non-ASCII characters.
 No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
 
