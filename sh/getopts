@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Using getopts means that all flags must appear before non-option arguments
+
 usage() {
 	cat <<- EOF
 	usage: $(basename $0) [-ch] [-d arg] args ...
@@ -28,9 +30,8 @@ parse_args() {
 }
 
 parse_args "$@"
-# Reset OPTIND=1 if you call getops again
+shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
 
-shift $(($OPTIND-1))
 echo FLAG_C=$FLAG_C
 echo FLAG_D=$FLAG_D
 echo args: "$@"
