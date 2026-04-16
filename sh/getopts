@@ -14,6 +14,8 @@ usage() {
 die() { echo "$@" >&2; exit 1; }
 
 parse_args() {
+	# The leading : puts getops in silent mode so it doesn't print stupid error messages
+	# subsequent colons indicate that the previous flag takes an argument
 	while getopts ":cd:h" opt; do
 		case $opt in
 		c) FLAG_C=1;;
