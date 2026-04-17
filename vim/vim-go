@@ -1,0 +1,41 @@
+
+Some commonly used vim-go commands:
+
+- :GoDef / :GoDefPop — go to definition / come back    mapped to Ctrl-] and Ctrl-p
+
+
+bar:
+	$(MAKE) -C foo bar
+bar:
+	$(MAKE) -C foo bar
+- :GoInfo — show type info for identifier under cursor
+- :GoReferrers — find all references
+- :GoImplements — show interfaces implemented
+- :GoBuild / :GoRun / :GoTest — build/run/test
+- :GoRename — rename identifier
+- :GoFmt — format (runs automatically on save by default)
+- :GoImports — add/remove imports
+- :GoLint / :GoVet / :GoMetaLinter
+- :GoDoc — show documentation
+- :GoCallers / :GoCallees — call graph
+- :GoFillStruct — fill struct literal with zero values
+- :GoAddTags / :GoRemoveTags — struct field tags
+
+Full list with :help go-commands.  (May need to first run :helptags ALL)
+
+
+The default mappings (all buffer-local to Go files):
+
+  Definition navigation (g:go_def_mapping_enabled, on by default):
+  - Ctrl-] → :GoDef
+  - Ctrl-t → :GoDefPop
+  - gd → :GoDef
+
+  Documentation (g:go_doc_keywordprg, on by default):
+  - K → :GoDoc
+
+  Text objects (g:go_textobj_enabled, on by default):
+  - if / af — inner/around function body
+  - ic / ac — inner/around comment block
+
+verify with :help go-mappings, and :verbose map
