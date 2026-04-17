@@ -1,0 +1,11 @@
+
+# You can list multiple targets on the same rule:
+
+.PHONY: foo bar
+
+foo bar:
+	$(MAKE) -C subdir $@
+
+# $@ expands to whichever target triggered the recipe, so make foo executes
+# "$(MAKE) -C subdir foo" and make bar executes "$(MAKE) -C subdir bar".
+# This is standard POSIX make, not a gnu extension.
