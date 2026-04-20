@@ -27,15 +27,15 @@ void func(foo k) {
 int main()
 {
 	auto f = foo();
-	std::cout << f.x << std::endl;
-	std::cout << f.y << std::endl;
+	cout << f.x << endl;
+	cout << f.y << endl;
 	f.incr(3);
-	std::cout << f.x << std::endl;
-	std::cout << f.y << std::endl;
+	cout << f.x << endl;
+	cout << f.y << endl;
 
 	f.bar(7);
-	std::cout << f.x << std::endl;
-	std::cout << f.y << std::endl;
+	cout << f.x << endl;
+	cout << f.y << endl;
 
 	func(foo(5, 19));
 	return 0;
