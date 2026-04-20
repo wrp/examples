@@ -10,4 +10,9 @@ execution specifier: __device__,  __host__, etc
 alternate programming models:
 SYCL    Not an acronym (once was "system compute language"). Guided by Khronos group
 kokkos  library developed by Sandia
-RAJA    tbd
+RAJA
+OpenMP
+OpenACC
+Thrust
+OpenCL
+Alpaka
