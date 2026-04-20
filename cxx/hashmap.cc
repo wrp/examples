@@ -13,10 +13,15 @@ main(int argc, char **argv)
 	unordered_map<std::string, int> m;
 	std::string s;
 
+	/*
+	 * m.at() throws only std::out_of_range.
+	 * This is equivalent to "m[s] += 1", which
+	 * default-inserts 0 for missing keys.
+	 */
 	while (cin >> s) {
 		try {
 			m.at(s) += 1;
-		} catch (std::out_of_range& e) {
+		} catch (const std::out_of_range& e) {
 			m[s] = 1;
 		}
 	}
