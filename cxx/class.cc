@@ -10,7 +10,7 @@ public:
 	double x, y;
 
 	foo() : x{1.0}, y{2.0} {};
-    foo(double x, double y) : x{x}, y{y} {}
+	foo(double x, double y) : x{x}, y{y} {}
 
 	void incr(double a) { x += a; y -= a; }
 	void bar(int);
