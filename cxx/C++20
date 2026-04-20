@@ -1,0 +1,19 @@
+
+Major changes from C++17:
+
+
+- Concepts — constrain templates directly (template <std::integral T>) instead of SFINAE
+- Ranges — composable, lazy views for algorithms (v | filter(f) | transform(g))
+- Coroutines — co_await, co_yield, co_return for async and generator patterns
+- Modules — import std; instead of #include, faster compilation (adoption still spotty)
+- std::format — Python-style string formatting (std::format("{} is {}", name, age))
+- Three-way comparison (<=>) — "spaceship operator", auto-generates all comparison operators
+- constexpr expansion — constexpr virtual functions, try/catch, dynamic_cast, allocation
+- std::span — non-owning view over contiguous memory (like a safe array pointer + length)
+- consteval — force compile-time evaluation (stricter than constexpr)
+- constinit — guarantee static initialization without requiring constexpr
+- Designated initializers — Foo{.x = 1, .y = 2} (C had this for decades)
+- std::jthread — auto-joining thread with cooperative cancellation via stop_token
+- Calendar/time zones — std::chrono gains dates, time zones, formatting
+- requires expressions — ad-hoc concept checks inline
+- Template parameter on lambdas — []<typename T>(T x) { ... }
