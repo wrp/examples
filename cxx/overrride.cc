@@ -17,10 +17,10 @@ public:
 
 class derived : public base {
 public:
-	void pure_virtual(int x) {
+	void pure_virtual(int x) override {
 		cout << std::format("derived: {:s}: {:d}\n", __func__, x);
 	};
-	virtual void b_virtual(int x) {
+	void b_virtual(int x) override {
 		cout << std::format("derived: {:s}: {:d}\n", __func__, x);
 	};
 	void non_virtual(int x) {
