@@ -11,7 +11,7 @@ readFile(ifstream& file)
 	int c = 0;
 	while (file >> word) {
 		cout << word << endl;
-		c++;
+		c += 1;
 	}
 	cout << "Read " << c << " words." << endl;
 }
