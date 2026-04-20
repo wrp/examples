@@ -15,7 +15,7 @@ int main()
 	std::deque<int> x { 1, 2, 3 };
 	show_container(x, "Before removal");
 
-	x.erase(std::remove(x.begin(), x.end(), 2));
+	x.erase(std::remove(x.begin(), x.end(), 2), x.end());
 
 	show_container(x, "After  removal");
 	x.push_front(6); x.push_back(6); x.push_front(8);
@@ -29,7 +29,8 @@ int main()
 				if (i == 6) { cout << "removing item\n"; }
 				return i != 6;
 			}
-		)
+		),
+		x.end()
 	);
 
 	show_container(x, "After remove_if");
