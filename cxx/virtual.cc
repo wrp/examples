@@ -6,6 +6,7 @@ using namespace std;
 class Base {
 public:
 	int x;
+	virtual ~Base() = default;
 	Base(int a) : x{a + 3} {};
 	void NonVirtual() {
 		cout << "Base NonVirtual x = " << x << '\n';
@@ -58,4 +59,6 @@ int main() {
 	Derived *d = &Derived_o;
 	d->Virtual();  // Calls derived
 	d->NonVirtual();  // Calls derived
+
+	delete bDerived;
 }
