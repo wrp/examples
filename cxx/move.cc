@@ -10,21 +10,20 @@ public:
 	A(int x, std::string name) : x{x}, name{name} {
 		cout << "regular ctor: " << name << '\n';
 	}
-	A(A&& other) {
+	A(A&& other) : x{other.x}, name{other.name} {
 		cout << "move constructor: " << name << '\n';
 		cout << "other: " << other.name << '\n';
-		name = other.name;
 	}
-	A(A& other) {
+	A(A& other) : x{other.x}, name{other.name} {
 		cout << "copy constructor: " << name << '\n';
 		cout << "other: " << other.name << '\n';
-		name = other.name;
 	}
 	A& operator=(A&& other) {
 		cout << "move operator: " << name << '\n';
 		cout << "other: " << other.name << '\n';
+		x = other.x;
 		name = other.name;
-		return other;
+		return *this;
 	}
 
 };
@@ -33,7 +32,7 @@ class no_move_ctor {
 public:
 	int i;
 	no_move_ctor(int a) : i{a} { };
-	no_move_ctor(no_move_ctor& other) {
+	no_move_ctor(const no_move_ctor& other) {
 		cout << "copy constructor: " << (i = other.i) << '\n';
 	}
 };
