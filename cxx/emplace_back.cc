@@ -8,19 +8,23 @@ using namespace std;
 class Foo {
 public:
 	int i;
-	Foo(int x) : i{x} { cout << "regular ctor: " << i << "\n";}
-	Foo(Foo&& other) {
-		cout << "move ctor: " << this->i << "<--" << other.i << '\n';
+	Foo(int x) : i{x} { cout << "regular ctor: " << *this << "\n"; }
+	void trace(const char *label, const Foo &from) {
+		cout << label << ": " << *this << " <-- " << from << '\n';
 	}
+	Foo(Foo&& other) : i{other.i} { trace("move ctor", other); }
 	Foo& operator=(Foo&& other) {
-		cout << "move op: " << this->i << "<--" <<  other.i << '\n';
+		trace("move op", other);
+		i = other.i;
 		return *this;
 	}
 	Foo& operator=(const Foo& other) {
-		cout << "copy assignment operator " <<
-			this->i << "<--" <<  other.i << '\n';
+		trace("copy op", other);
 		i = other.i;
 		return *this;
+	}
+	friend ostream& operator<<(ostream &os, const Foo &f) {
+		return os << f.i;
 	}
 };
 
@@ -39,7 +43,7 @@ main()
 	x.emplace_back(make_unique<Foo>(11));
 
 	for (const auto &f: x) {
-		cout << f->i << '\n';
+		cout << *f << '\n';
 	}
 
 
