@@ -12,7 +12,7 @@ main()
 
 	std::vector<float> f(100);
 	float start = 0.1;
-	for(float &fv: f) {
+	for (float &fv: f) {
 		fv = start;
 		start += .7;
 	}

@@ -34,7 +34,7 @@ int main()
 //		{ memberFunc<unsigned>&foo::uincr, 2, "uincr" },
 	};
 	foo b(1, 2);
-	for(auto f: v) {
+	for (auto f: v) {
 		int actual = ((b).*(f.getter))(2);
 
 		cout << actual << '\n';
