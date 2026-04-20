@@ -9,7 +9,7 @@ using namespace std;
 // names, pipe to c++filt --types
 int main()
 {
-    auto m = "test";
-    cout << "M is of type: " << typeid(m).name() << '\n';
+	auto m = "test";
+	cout << "M is of type: " << typeid(m).name() << '\n';
 	return 0;
 }
