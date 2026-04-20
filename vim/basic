@@ -9,6 +9,8 @@ Motion commands
 z.    # Move current line to center/middle of screen
 z-    # Move current line to bottom of screen
 z<cr> # Move current line to top of screen
+[{    # Move to opening brace of enclosing block
+
 
 To open a file with a search: +/pattern
 vim '+/text\|other' filename
