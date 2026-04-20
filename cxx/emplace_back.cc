@@ -26,6 +26,9 @@ public:
 	friend ostream& operator<<(ostream &os, const Foo &f) {
 		return os << f.i;
 	}
+	// The copy ctor is implicitly deleted because there is a move ctor
+	Foo(const Foo& other) : i{other.i} { trace("copy ctor", other); }
+
 };
 
 
@@ -33,6 +36,7 @@ int
 main()
 {
 	vector<unique_ptr<Foo>> x{};
+	vector<Foo> y{};
 
 	unique_ptr<Foo> a = make_unique<Foo>(7);
 	Foo *bp = new Foo(9);
@@ -51,6 +55,11 @@ main()
 	Foo d(5);
 	Foo e = std::move(c);   /* move assignment ctor */
 	c = e;   /* copy assignment operator */
+
+	cout << "pushing 13" << endl;
+	y.emplace_back(13);  /* regular ctor */
+	cout << "pushing c" << endl;
+	y.emplace_back(c);  // Causes reallocation, copy ctor called for all
 
 	return 0;
 }
