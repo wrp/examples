@@ -28,7 +28,7 @@ int main(){
 		show(y++, "j: y");
 	};
 
-	for( ; i < 9; i += 1 ){
+	for (; i < 9; i += 1) {
 		f();
 		g();
 		h(i);

@@ -10,7 +10,7 @@ int main()
 {
 	string foo = "bar";
 	/* huh!?  The string class overrides == so this actually works! */
-	if( foo == "bar" ){
+	if (foo == "bar") {
 		std::cout << "yes" << endl;
 	}
 

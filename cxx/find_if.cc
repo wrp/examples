@@ -33,7 +33,7 @@ int main()
 {
 	vector<Foo> x;
 	x.reserve(20);
-	for( int i = 1; i < 4; ++i ){
+	for (int i = 1; i < 4; ++i) {
 		x.emplace_back(i);
 	}
 	show_container(x, "Container content");
@@ -43,7 +43,7 @@ int main()
 		x.end(),
 		[](auto const &i) { return i.x % 2 == 0; }
 	);
-	if( it != std::end(x) ){
+	if (it != std::end(x)) {
 		cout << "found: " << *it << endl;
 	}
 }
@@ -54,7 +54,7 @@ void
 show_container(const T& x, const string & msg)
 {
 	cerr << msg << ": ";
-	for( auto const &a: x ){
+	for (auto const &a: x) {
 		cerr << a << ' ';
 	}
 	cerr << endl << std::flush;

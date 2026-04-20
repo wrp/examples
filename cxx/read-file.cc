@@ -9,7 +9,7 @@ readFile(ifstream& file)
 {
 	string word;
 	int c = 0;
-	while( file >> word) {
+	while (file >> word) {
 		cout << word << endl;
 		c++;
 	}
@@ -46,7 +46,7 @@ main(int argc, char **argv)
 {
 	try {
 		main2(argc, argv);
-	} catch( std::system_error &e ) {
+	} catch (std::system_error &e) {
 		// e.code().message() is strerror(errno)
 		// e.what() is "path: strerror(errno)"
 		std::cerr << e.what() << std::endl;

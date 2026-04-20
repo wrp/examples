@@ -6,7 +6,7 @@ using namespace std;
 int
 main(int argc, char **argv)
 {
-	for( int i = 1; i < argc; i += 1 ){
+	for (int i = 1; i < argc; i += 1) {
 		try {
 			int x = stoi(argv[i]);
 			cerr << x << ": " << strerror(x) << endl;

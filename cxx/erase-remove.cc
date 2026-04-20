@@ -26,7 +26,7 @@ int main()
 			x.begin(),
 			x.end(),
 			[](auto i) {
-				if( i == 6 ){ cout << "removing item\n"; }
+				if (i == 6) { cout << "removing item\n"; }
 				return i != 6;
 			}
 		)
@@ -41,7 +41,7 @@ void
 show_container(const T & x, const string & msg)
 {
 	cout << msg << ": ";
-	for( auto a: x ){
+	for (auto a: x) {
 		cout << a << ' ';
 	}
 	cout << endl;

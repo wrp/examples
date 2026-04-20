@@ -30,7 +30,7 @@ int main()
 {
 	auto f = outer::foo::qux;
 	cout << f << '\n';
-	for( int i = 0; i < 10; i += 1 ) {
+	for (int i = 0; i < 10; i += 1) {
 		auto g = static_cast<outer::foo>(i);
 		cout << i << ": " << g << '\n';
 	}

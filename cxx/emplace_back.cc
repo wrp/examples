@@ -33,7 +33,7 @@ main()
 
 	x.emplace_back(make_unique<Foo>(11));
 
-	for( const auto &f: x ){
+	for (const auto &f: x) {
 		cout << f->i << '\n';
 	}
 	return 0;

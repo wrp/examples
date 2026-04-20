@@ -13,7 +13,7 @@ main(int argc, char **argv)
 	unordered_map<std::string, int> m;
 	std::string s;
 
-	while( cin >> s ){
+	while (cin >> s) {
 		try {
 			m.at(s) += 1;
 		} catch (std::out_of_range& e) {

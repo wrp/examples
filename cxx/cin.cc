@@ -16,7 +16,7 @@ int main()
 {
 	int i;
 	char c;
-	if( cin.good() ){
+	if (cin.good()) {
 		cin >> i >> c;
 		cout << "i is " << i << endl;
 		cout << "c is " << c << endl;
@@ -25,7 +25,7 @@ int main()
 	cout << "cin.good" << cin.good() << endl;
 	cout << "cin.eof " << cin.eof() << endl;
 	cout << "cin.fail " << cin.fail() << endl;
-	if( cin.rdstate() ){
+	if (cin.rdstate()) {
 		cout << "cin in state: " << cin.rdstate() << endl;
 		cin.clear();
 	}
