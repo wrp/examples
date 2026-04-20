@@ -7,9 +7,9 @@ using namespace std;
 
 int main()
 {
-	if(int i = 0; i < 5) {
+	if (int i = 0; i < 5) {
 		i += 1;
-		switch(i){
+		switch (i) {
 		case 0:
 			cout << i << endl;
 			break;
