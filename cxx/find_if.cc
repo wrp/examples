@@ -11,7 +11,7 @@ struct Foo {
 	int x;
 	Foo(int x) : x{x} { cerr << "ctor: " << x << endl; };
 	Foo(const Foo &f) : x{f.x} { cerr << "cp: " << f.x << endl; };
-	Foo(const Foo &&f) { cerr << "mv: " << f.x; };
+	Foo(Foo &&f) : x{f.x} { cerr << "mv: " << f.x; }; /* move constructor */
 	~Foo() { cerr << "destroy: " << x << endl; }
 	friend ostream& operator<<(ostream& os, const Foo& f);
 	bool operator ==(const int x) { return this->x == x; }
@@ -33,7 +33,7 @@ int main()
 {
 	vector<Foo> x;
 	x.reserve(20);
-	for (int i = 1; i < 4; ++i) {
+	for (int i = 1; i < 4; i += 1) {
 		x.emplace_back(i);
 	}
 	show_container(x, "Container content");
