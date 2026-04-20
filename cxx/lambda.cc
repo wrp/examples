@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(){
+int main() {
 
 	int i = 5;
 	int y = 5;
