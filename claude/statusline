@@ -33,6 +33,7 @@ EOF
 jq -cr '[.cwd, .workspace.current_dir, .workspace.project_dir] | @tsv' | {
 	read cwd ws_cur ws_proj
 
+	pwd=$(pwd -P)
 	red=$(tput setaf 1)
 	green=$(tput setaf 2)
 	yellow=$(tput setaf 3)
@@ -44,7 +45,14 @@ jq -cr '[.cwd, .workspace.current_dir, .workspace.project_dir] | @tsv' | {
 		branch="@$branch  --  ${cyan}$(git log -n1 --pretty=format:%s HEAD)"
 	fi
 
+	unset ws wc
+	if test "$ws_proj" != "$pwd"; then
+		ws="${red}proj: ${yellow}$ws_proj "
+	fi
+	if test "$ws_cur" != "$pwd"; then
+		wc="${red}curr: ${yellow}$ws_proj "
+	fi
 
-	printf "${red}workspace:${yellow} ${ws_proj##*/} ${green}cwd: ${yellow}$(pwd)$branch$(tput sgr0)\n"
+	printf "${ws}${wc}${green}cwd: ${cyan}${pwd}$branch$(tput sgr0)\n"
 
 }
