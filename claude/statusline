@@ -50,7 +50,7 @@ jq -cr '[.cwd, .workspace.current_dir, .workspace.project_dir] | @tsv' | {
 		ws="${red}proj: ${yellow}$ws_proj "
 	fi
 	if test "$ws_cur" != "$pwd"; then
-		wc="${red}curr: ${yellow}$ws_proj "
+		wc="${red}curr: ${yellow}$ws_cur "
 	fi
 
 	printf '%s%s%s%s%s\n' \
