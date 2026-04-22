@@ -1,0 +1,13 @@
+
+Get the comments from a PR in a reasonable format ($pr should be an integer):
+url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/comments
+gh api "$url" --jq '.[] | {id, body}'
+
+
+Reply to a comment:
+url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/comments
+gh api "${url}" -f body="your reply" -F in_reply_to=${comment_id}
+
+
+Reply to a top-level comment:
+gh pr comment ${pr} --body "your reply"
