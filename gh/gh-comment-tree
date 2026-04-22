@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Display GitHub PR comments in tree format.
+
+Usage:
+	gh-comment-tree ${pr}	# pr should be an integer
+	gh-comment-tree owner/repo/pulls/${pr}
+	gh api repos/OWNER/REPO/pulls/N/comments | gh-comment-tree
+"""
+
+import json
+import subprocess
+import sys
+import textwrap
+from collections import defaultdict
+
+
+def fetch_comments(arg):
+	if arg.isdigit():
+		repo = subprocess.run(
+			[
+				"gh", "repo", "view", "--json", "nameWithOwner",
+				"--jq", ".nameWithOwner"
+			],
+			capture_output=True, text=True, check=True,
+		).stdout.strip()
+		path = f"repos/{repo}/pulls/{arg}/comments"
+	else:
+		path = f"repos/{arg}/comments"
+	result = subprocess.run(
+		["gh", "api", "--paginate", path],
+		capture_output=True, text=True, check=True,
+	)
+	return json.loads(result.stdout)
+
+
+def main():
+	if len(sys.argv) > 1:
+		comments = fetch_comments(sys.argv[1])
+	else:
+		comments = json.load(sys.stdin)
+
+	by_id = {}
+	children = defaultdict(list)
+	roots = []
+
+	for c in comments:
+		by_id[c["id"]] = c
+		parent = c.get("in_reply_to_id")
+		if parent:
+			children[parent].append(c["id"])
+		else:
+			roots.append(c["id"])
+
+	for i, rid in enumerate(roots):
+		if i > 0:
+			print()
+		print_root(by_id, children, rid)
+
+
+def format_body(body, prefix):
+	lines = []
+	for bline in body.splitlines():
+		if not bline.strip():
+			lines.append(prefix)
+			continue
+		wrapped = textwrap.fill(
+			bline,
+			width=76,
+			initial_indent=prefix,
+			subsequent_indent=prefix,
+		)
+		lines.append(wrapped)
+	return "\n".join(lines)
+
+
+def print_root(by_id, children, cid):
+	c = by_id[cid]
+	user = c["user"]["login"]
+	date = c["created_at"][:10]
+	path = c.get("path", "")
+	line = c.get("original_line", "")
+
+	header = f"{user} ({date})"
+	if path:
+		header += f"  {path}"
+		if line:
+			header += f":{line}"
+
+	print(f"\u251c\u2500\u2500 {header}")
+	body = format_body(c["body"], "\u2502	  ")
+	print(body)
+
+	kids = children.get(cid, [])
+	for i, child_id in enumerate(kids):
+		print_reply(by_id, children, child_id, i == len(kids) - 1)
+
+
+def print_reply(by_id, children, cid, is_last):
+	c = by_id[cid]
+	user = c["user"]["login"]
+	date = c["created_at"][:10]
+
+	connector = "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 "
+	print(f"\u2502	 {connector}{user} ({date})")
+
+	child_prefix = "\u2502	 " + ("	   " if is_last else "\u2502   ") + "  "
+	body = format_body(c["body"], child_prefix)
+	print(body)
+
+	kids = children.get(cid, [])
+	for i, child_id in enumerate(kids):
+		print_reply(by_id, children, child_id, i == len(kids) - 1)
+
+
+if __name__ == "__main__":
+	main()
