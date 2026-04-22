@@ -20,6 +20,12 @@ while read branch; do
 done
 
 
+# Show all reviews for a PR  ($pr should be an integer)
+gh api repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/reviews --jq .
+
+# Show all comments for a PR  ($pr should be an integer)
+gh api repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/comments --jq .
+
 
 Alternatively, you can manually trigger a review on any PR by commenting bugbot run or cursor review.
 Sources:
