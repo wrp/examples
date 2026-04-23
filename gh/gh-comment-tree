@@ -99,7 +99,7 @@ def print_root(by_id, children, cid):
 	line = c.get("original_line", "")
 	oid = c.get("original_commit_id", '')[:7]
 
-	header = f"{user} ({date}) {oid} {path}:{line}"
+	header = f"{user} ({date}) {cid} {oid} {path}:{line}"
 
 	print(f"{header}")
 	body = format_body(c["body"], "    ")
