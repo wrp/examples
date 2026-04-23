@@ -3,7 +3,7 @@
 
 Usage:
 	gh-comment-tree ${pr}	# pr should be an integer
-	gh-comment-tree owner/repo/pulls/${pr}
+	gh-comment-tree owner/repo ${pr}
 	gh api repos/OWNER/REPO/pulls/N/comments | gh-comment-tree
 """
 
@@ -13,29 +13,43 @@ import sys
 import textwrap
 from collections import defaultdict
 
+def get_repo():
+	result = subprocess.run(
+		[
+			"gh", "repo", "view", "--json", "nameWithOwner",
+			"--jq", ".nameWithOwner"
+		],
+		capture_output=True, text=True,
+	)
+	if result.returncode != 0:
+		sys.exit(result.stderr.strip())
+	return result.stdout.strip()
 
-def fetch_comments(arg):
-	if arg.isdigit():
-		repo = subprocess.run(
-			[
-				"gh", "repo", "view", "--json", "nameWithOwner",
-				"--jq", ".nameWithOwner"
-			],
-			capture_output=True, text=True, check=True,
-		).stdout.strip()
-		path = f"repos/{repo}/pulls/{arg}/comments"
-	else:
-		path = f"repos/{arg}/comments"
+
+def fetch_comments(arg, repo):
+	path = f"repos/{repo}/pulls/{arg}/comments"
 	result = subprocess.run(
 		["gh", "api", "--paginate", path],
-		capture_output=True, text=True, check=True,
+		capture_output=True, text=True,
 	)
+	if result.returncode != 0:
+		sys.exit(f'Failed to pull results from {path}:' + result.stderr.strip())
+
 	return json.loads(result.stdout)
 
 
 def main():
-	if len(sys.argv) > 1:
-		comments = fetch_comments(sys.argv[1])
+	if len(sys.argv) == 2:
+		repo = get_repo()
+		pr = int(sys.argv[1])
+	elif len(sys.argv) == 3:
+		repo = sys.argv[1]
+		pr = int(sys.argv[2])
+	elif len(sys.argv) > 3:
+		raise SystemExit('Unexpected arguments')
+
+	if len(sys.argv) > 0:
+		comments = fetch_comments(pr, repo)
 	else:
 		comments = json.load(sys.stdin)
 
