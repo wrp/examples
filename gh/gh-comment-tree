@@ -48,7 +48,7 @@ def main():
 	elif len(sys.argv) > 3:
 		raise SystemExit('Unexpected arguments')
 
-	if len(sys.argv) > 0:
+	if len(sys.argv) > 1:
 		comments = fetch_comments(pr, repo)
 	else:
 		comments = json.load(sys.stdin)
