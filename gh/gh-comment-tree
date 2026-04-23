@@ -93,10 +93,13 @@ def print_root(by_id, children, cid):
 	date = c["created_at"][:19].replace("T", " ")
 	path = c.get("path", "")
 	line = c.get("original_line", "")
+	oid = c.get("original_commit_id", '')[:7]
 
 	header = f"{user} ({date})"
 	if path:
 		header += f"  {path}"
+		if oid:
+			header += f"@{oid}"
 		if line:
 			header += f":{line}"
 
