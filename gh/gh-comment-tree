@@ -90,7 +90,7 @@ def format_body(body, prefix):
 def print_root(by_id, children, cid):
 	c = by_id[cid]
 	user = c["user"]["login"]
-	date = c["created_at"][:10]
+	date = c["created_at"][:19].replace("T", " ")
 	path = c.get("path", "")
 	line = c.get("original_line", "")
 
@@ -100,30 +100,30 @@ def print_root(by_id, children, cid):
 		if line:
 			header += f":{line}"
 
-	print(f"\u251c\u2500\u2500 {header}")
-	body = format_body(c["body"], "\u2502	  ")
+	print(f"{header}")
+	body = format_body(c["body"], "    ")
 	print(body)
 
 	kids = children.get(cid, [])
 	for i, child_id in enumerate(kids):
-		print_reply(by_id, children, child_id, i == len(kids) - 1)
+		print_reply(by_id, children, child_id, i == len(kids) - 1, "    ")
 
 
-def print_reply(by_id, children, cid, is_last):
+def print_reply(by_id, children, cid, is_last, prefix):
 	c = by_id[cid]
 	user = c["user"]["login"]
-	date = c["created_at"][:10]
+	date = c["created_at"][:19].replace("T", " ")
 
 	connector = "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 "
-	print(f"\u2502	 {connector}{user} ({date})")
+	print(f"{prefix}{connector}{user} ({date})")
 
-	child_prefix = "\u2502	 " + ("	   " if is_last else "\u2502   ") + "  "
-	body = format_body(c["body"], child_prefix)
+	continuation = prefix + ("    " if is_last else "\u2502   ")
+	body = format_body(c["body"], continuation + "  ")
 	print(body)
 
 	kids = children.get(cid, [])
 	for i, child_id in enumerate(kids):
-		print_reply(by_id, children, child_id, i == len(kids) - 1)
+		print_reply(by_id, children, child_id, i == len(kids) - 1, continuation)
 
 
 if __name__ == "__main__":
