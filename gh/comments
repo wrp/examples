@@ -1,13 +1,44 @@
 
 Get the comments from a PR in a reasonable format ($pr should be an integer):
-url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/comments
+url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr?}/comments
 gh api "$url" --jq '.[] | {id, body}'
 
 
 Reply to a comment:
-url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr}/comments
+url=repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/${pr?}/comments
 gh api "${url}" -f body="your reply" -F in_reply_to=${comment_id}
 
 
 Reply to a top-level comment:
 gh pr comment ${pr} --body "your reply"
+
+
+Resolve a conversation:
+        This requires the GraphQL API — there's no REST endpoint for it.
+        First, find the thread IDs:
+
+        gh api graphql -f query="
+          {
+            repository(owner: \"{$owner?}\", name: \"${repo?}\") {
+              pullRequest(number: ${pr?}) {
+                reviewThreads(first: 100) {
+                  nodes {
+                    id
+                    isResolved
+                    comments(first: 1) {
+                      nodes { body }
+                    }
+                  }
+                }
+              }
+            }
+          }'
+
+        Then resolve a thread by its node ID:
+
+        gh api graphql -f query="
+          mutation {
+            resolveReviewThread(input: {threadId: \"${thread_id?}\"}) {
+              thread { isResolved }
+            }
+          }"
