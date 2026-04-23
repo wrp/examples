@@ -26,16 +26,20 @@ def get_repo():
 	return result.stdout.strip()
 
 
-def fetch_comments(arg, repo):
-	path = f"repos/{repo}/pulls/{arg}/comments"
+def gh_api(path):
 	result = subprocess.run(
 		["gh", "api", "--paginate", path],
 		capture_output=True, text=True,
 	)
 	if result.returncode != 0:
-		sys.exit(f'Failed to pull results from {path}:' + result.stderr.strip())
-
+		sys.exit(f"Failed to fetch {path}: " + result.stderr.strip())
 	return json.loads(result.stdout)
+
+
+def fetch_comments(arg, repo):
+	review = gh_api(f"repos/{repo}/pulls/{arg}/comments")
+	toplevel = gh_api(f"repos/{repo}/issues/{arg}/comments")
+	return review + toplevel
 
 
 def main():
