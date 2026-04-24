@@ -69,6 +69,8 @@ def main():
 		else:
 			roots.append(c["id"])
 
+	roots.sort(key=lambda cid: by_id[cid]["created_at"])
+
 	for i, rid in enumerate(roots):
 		if i > 0:
 			print()
@@ -105,7 +107,7 @@ def print_root(by_id, children, cid):
 	body = format_body(c["body"], "    ")
 	print(body)
 
-	kids = children.get(cid, [])
+	kids = sorted(children.get(cid, []), key=lambda cid: by_id[cid]["created_at"])
 	for i, child_id in enumerate(kids):
 		print_reply(by_id, children, child_id, i == len(kids) - 1, "    ")
 
@@ -122,7 +124,7 @@ def print_reply(by_id, children, cid, is_last, prefix):
 	body = format_body(c["body"], continuation + "  ")
 	print(body)
 
-	kids = children.get(cid, [])
+	kids = sorted(children.get(cid, []), key=lambda cid: by_id[cid]["created_at"])
 	for i, child_id in enumerate(kids):
 		print_reply(by_id, children, child_id, i == len(kids) - 1, continuation)
 
