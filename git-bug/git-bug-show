@@ -2,7 +2,7 @@
 
 """Display git-bug comments with timestamps.
 
-Usage: git-bug-show $id
+Usage: git-bug-show [$id]
 """
 
 import json
@@ -58,12 +58,19 @@ def format_time(ts):
 
 
 def main():
-	if len(sys.argv) < 2:
-		print(f"usage: {os.path.basename(sys.argv[0])} <bug-id>")
+	if len(sys.argv) > 1 and sys.argv[1] == '--help':
+		print(f"usage: {os.path.basename(sys.argv[0])} [$id] [...$id]\n")
+		print("If ids are given, show them.  If not, show all open bugs")
 		sys.exit(0)
 
+	if len(sys.argv) < 2:
+		output = run("git-bug", "bug", "status:open").split('\n')
+		args = [line.split("\t", 1)[0] for line in output]
+	else:
+		args = sys.argv[1:]
+
 	sep=''
-	for id in sys.argv[1:]:
+	for id in args:
 		print(sep)
 		show_bug(id)
 		sep='\n'
