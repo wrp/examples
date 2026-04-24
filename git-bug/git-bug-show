@@ -6,6 +6,7 @@ Usage: git-bug-show $id
 """
 
 import json
+import os
 import subprocess
 import sys
 import textwrap
@@ -58,7 +59,8 @@ def format_time(ts):
 
 def main():
 	if len(sys.argv) != 2:
-		sys.exit(f"Usage: {sys.argv[0]} <bug-id>")
+		print(f"usage: {os.path.basename(sys.argv[0])} <bug-id>")
+		sys.exit(0)
 
 	bug_id = sys.argv[1]
 	ref = run(
