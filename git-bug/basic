@@ -14,16 +14,29 @@ Sources:
 # Create a user (makes an object in refs/identities)
 id=$(git bug user new \
 	--avatar $(gh api user --jq '.avatar_url') \
-	--email ${EMAIL?} \
-	--name ${UNAME?}
+	--email "${EMAIL?}" \
+	--name "${UNAME?}"
 )
 git bug user ls              # List users
-git bug user adopt ${id?}    # Adopt a user id
+git bug user adopt ${id?}    # Adopt a user id (1)
 git bug bug new              # Create a new issue
 git bug termui               # Browse issues
 git bug bug status:open      # List open issues
+git bug bug show ${id?}      # Show comments on an issue (2)
 git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
+
+# Notes:
+#  1) If you create an identity and then fetch refs from that remote in a new repo,
+#     you should adopt the identity in the clone.
+#  2) Yikes; 'git-bug bug show' does not give any timestamps.  But you can fetch details
+#     with "git-bug bug show -f json ${id?}" and you can see the log with:
+#     git log $(git for-each-ref --format='%(objectname)' "refs/bugs/${id?}*")
+#     It's a pain to correlate the timestamps to the comments.  I need to write a
+#     script to do that.
+
 
 
 # To fetch all the issues and identities from a remote:
 git fetch ${remote-origin} 'refs/bugs/*:refs/bugs/*' 'refs/identities/*:refs/identities/*'
+--or--
+git bug pull ${remote-origin}
