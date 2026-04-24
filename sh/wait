@@ -1,0 +1,11 @@
+
+wait with no arguments waits for all background children to finish
+and always returns 0, regardless of whether any of them failed.
+
+wait      # wait for all and return 0
+wait $pid # wait for the specific process and return that process's exit status.
+
+This is POSIX-specified behavior.  The rationale: when waiting for
+multiple children, there's no single meaningful exit status to
+return, so the shell returns success.  If you need to check individual
+results, you must capture each PID and wait on it explicitly.
