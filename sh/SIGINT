@@ -1,0 +1,10 @@
+
+When a process is put in the background with &, the shell sets its
+disposition for SIGINT to SIG_IGN (ignore).  This is POSIX-specified
+behavior for job control shells.
+
+The key consequence: you cannot trap SIGINT in a backgrounded
+script.  Even if the script has trap '...' INT, the SIG_IGN
+disposition inherited from the parent takes precedence — the trap
+is never installed because the signal was already set to ignore
+before the script started.
