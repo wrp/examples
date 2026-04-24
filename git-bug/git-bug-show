@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""Display git-bug comments with timestamps.
+
+Usage: git-bug-show <bug-id>
+"""
+
+import json
+import subprocess
+import sys
+import textwrap
+from datetime import datetime, timezone
+
+
+def run(*args):
+	r = subprocess.run(args, capture_output=True, text=True)
+	if r.returncode != 0:
+		sys.exit(f"{' '.join(args)}: {r.stderr.strip()}")
+	return r.stdout.strip()
+
+
+def load_identities():
+	names = {}
+	refs = run("git", "for-each-ref", "--format=%(refname)", "refs/identities/*")
+	for ref in refs.splitlines():
+		if not ref:
+			continue
+		identity_id = ref.rsplit("/", 1)[-1]
+		tip = run("git", "rev-parse", ref)
+		tree = run("git", "ls-tree", tip)
+		for line in tree.splitlines():
+			parts = line.split("\t", 1)
+			if parts[1] == "version":
+				blob_oid = parts[0].split()[2]
+				blob = run("git", "cat-file", "-p", blob_oid)
+				try:
+					data = json.loads(blob)
+					names[identity_id] = data.get("name", identity_id[:7])
+				except json.JSONDecodeError:
+					pass
+	return names
+
+
+def read_ops_blob(tree_output):
+	for line in tree_output.splitlines():
+		parts = line.split("\t", 1)
+		if parts[1] == "ops":
+			blob_oid = parts[0].split()[2]
+			blob = run("git", "cat-file", "-p", blob_oid)
+			return json.loads(blob)
+	return None
+
+
+def format_time(ts):
+	dt = datetime.fromtimestamp(ts, tz=timezone.utc).astimezone()
+	return dt.strftime("%Y-%m-%d %H:%M:%S%z")
+
+
+def main():
+	if len(sys.argv) != 2:
+		sys.exit(f"Usage: {sys.argv[0]} <bug-id>")
+
+	bug_id = sys.argv[1]
+	ref = run(
+		"git", "for-each-ref", "--format=%(refname)",
+		f"refs/bugs/{bug_id}*",
+	)
+	if not ref:
+		sys.exit(f"No bug found matching {bug_id}")
+	if "\n" in ref:
+		sys.exit(f"Ambiguous bug id {bug_id}")
+
+	names = load_identities()
+	log = run("git", "log", "--reverse", "--format=%H", ref)
+
+	first = True
+	for oid in log.splitlines():
+		tree = run("git", "ls-tree", oid)
+		data = read_ops_blob(tree)
+		if data is None:
+			continue
+
+		author_id = data.get("author", {}).get("id", "")
+		author = names.get(author_id, author_id[:7])
+
+		ops = data.get("ops")
+		if not ops:
+			continue
+
+		for op in ops:
+			ts = op.get("timestamp", 0)
+			message = op.get("message", "")
+			title = op.get("title", "")
+
+			if not first:
+				print()
+			first = False
+
+			print(f"{author} ({format_time(ts)})")
+			if title:
+				print(f"  {title}")
+			if message:
+				for bline in message.splitlines():
+					if not bline.strip():
+						print("    ")
+						continue
+					wrapped = textwrap.fill(
+						bline, width=76,
+						initial_indent="    ",
+						subsequent_indent="    ",
+					)
+					print(wrapped)
+
+
+if __name__ == "__main__":
+	main()
