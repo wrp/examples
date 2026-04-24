@@ -58,11 +58,18 @@ def format_time(ts):
 
 
 def main():
-	if len(sys.argv) != 2:
+	if len(sys.argv) < 2:
 		print(f"usage: {os.path.basename(sys.argv[0])} <bug-id>")
 		sys.exit(0)
 
-	bug_id = sys.argv[1]
+	sep=''
+	for id in sys.argv[1:]:
+		print(sep)
+		show_bug(id)
+		sep='\n'
+
+def show_bug(bug_id):
+	print(f'---------------- {bug_id} ----------------')
 	ref = run(
 		"git", "for-each-ref", "--format=%(refname)",
 		f"refs/bugs/{bug_id}*",

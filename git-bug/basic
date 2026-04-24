@@ -25,6 +25,8 @@ git bug bug status:open      # List open issues
 git bug bug show ${id?}      # Show comments on an issue (2)
 git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
 
+git-bug bug comment ${id?}   #
+
 # Notes:
 #  1) If you create an identity and then fetch refs from that remote in a new repo,
 #     you should adopt the identity in the clone.
