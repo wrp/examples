@@ -32,7 +32,9 @@ git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs
 #     with "git-bug bug show -f json ${id?}" and you can see the log with:
 #     git log $(git for-each-ref --format='%(objectname)' "refs/bugs/${id?}*")
 #     It's a pain to correlate the timestamps to the comments.  I need to write a
-#     script to do that.
+#     script to do that.  Or, view the issue with 'git-bug termui', but then you cannot
+#     control the timestamp formats and you just see dates.  Allegedly, git-bug bug show
+#     takes a --date argument, but that's not working in v0.10.1, which is most recent.
 
 
 
