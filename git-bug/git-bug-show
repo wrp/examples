@@ -2,7 +2,7 @@
 
 """Display git-bug comments with timestamps.
 
-Usage: git-bug-show <bug-id>
+Usage: git-bug-show $id
 """
 
 import json
