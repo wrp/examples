@@ -25,5 +25,5 @@ git bug bug status:open      # List open issues
 git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
 
 
-# To fetch all the issues from a remote:
-git fetch ${remote-origin} 'refs/bugs/*:refs/bugs/*'
+# To fetch all the issues and identities from a remote:
+git fetch ${remote-origin} 'refs/bugs/*:refs/bugs/*' 'refs/identities/*:refs/identities/*'
