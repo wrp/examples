@@ -1,5 +1,12 @@
 
 With keyboard navigation enabled:
 (currently in System Settings/Keyboard, but probably
-will change next patch release), go to next window
-with   <ctrl>F4
+will change next patch release)
+
+ ⌘  - command key
+ ^  - control
+ ⌥  - option
+ ⇥  - tab
+
+⌘⇥      open menu to scroll through windows
+⌘^f     toggle full screen
