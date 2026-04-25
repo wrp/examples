@@ -63,7 +63,7 @@ unquoted with space:
 
 noquotes:
         A single string\
-        with a backslash and a space 
+        with a backslash and a space
 
 literal: |
          It keeps our line breaks but reduces
