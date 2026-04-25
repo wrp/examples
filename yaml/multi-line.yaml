@@ -1,14 +1,20 @@
 newline: >
-        The > is a "block style indicator".
-        > is the "folded style"
-        | is the "literal style"
-        If there is a second character (eg >- or |-), that
-        character is the "block chomping indicator".
-        Without a block chomping indicator, the default is "clip"
-        which puts a single newline at the end of the string.
-        a '-' is the "strip chomping indicator" which removes all
-        newlines from the end of the string. To keep all newlines,
-        use '+'.
+        The '>' is the "folded block scalar indicator", and this
+        construct is a "folded block scalar"
+        "newline" is the mapping key, ':' is the value indicator,
+        and the value is everything after (and including) '>'.
+        ('|' is the "literal block scalar indicator")
+
+        If there is a second character (eg >- or |+), that
+        character is the "chomping indicator".  The '-' is the
+        "strip chomping indicator", while '+' is the "keep
+        choming indicator".  With no chomping idicator, the
+        chomp style is "clip".
+
+        (default, no indicator) — clip: one trailing newline kept, rest stripped
+        — strip: all trailing newlines removed
+        + keep: all trailing newlines preserved
+
         With '>', you get a single string
         which compresses newlines and gives
                 indentation that matches the first line to one space
