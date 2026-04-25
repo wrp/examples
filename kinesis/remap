@@ -1,0 +1,6 @@
+
+
+
+To map "Home" to control on my Mac:
+hidutil property --matching '{"VendorID":0x29ea,"ProductID":0x102}' \
+	--set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x70000004a,"HIDKeyboardModifierMappingDst":0x7000000e3}]}'
