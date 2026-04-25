@@ -2,5 +2,17 @@
 
 
 To map "Home" to control on my Mac:
-hidutil property --matching '{"VendorID":0x29ea,"ProductID":0x102}' \
+hidutil property \
+	--matching '{"VendorID":0x29ea,"ProductID":0x102}' \
 	--set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x70000004a,"HIDKeyboardModifierMappingDst":0x7000000e3}]}'
+
+
+To undo all mappings:
+hidutil property \
+	--matching '{"VendorID":0x29ea,"ProductID":0x102}' \
+	--set '{"UserKeyMapping":[]}'
+
+
+To get the VendorID and ProductID:
+hidutil list | grep -i keyboard
+VendorID and ProductID are the first two columns.
