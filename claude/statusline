@@ -1,7 +1,7 @@
 #!/bin/bash
 # Claude Code status line script
 
-: << \EOF
+: << \END_SAMPLE_DATA
 # Sample input:
 {
         "session_id": "4c1fa146-4766-4993-8c0b-8ddf35208c2b",
@@ -28,7 +28,7 @@
         },
         "exceeds_200k_tokens": false
 }
-EOF
+END_SAMPLE_DATA
 
 jq -cr '[.cwd, .workspace.current_dir, .workspace.project_dir] | @tsv' | {
 	read cwd ws_cur ws_proj
