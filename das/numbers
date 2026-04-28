@@ -9,3 +9,7 @@ Approx width of the core of a fiber:
 	multi-mode  ~ 50µm-65µm  (5E-5m)
 
 Typical pulse length: 10 - 100 nm  (E-8m - E-7m)
+
+
+C-band: 1530-1565 nm ("conventional" band; primary wavelength used for transmission)
+L-band: 1565-1625 nm ("long" band; used for interrogation)
