@@ -1,0 +1,15 @@
+
+Placing an external monitor:
+
+brew install displayplacer
+displayplacer list  # Gives output that ends with something like:
+
+displayplacer "id:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX res:NNNNxNNNN
+hz:NNN color_depth:N enabled:true scaling:on origin:(0,0) degree:0"
+"id:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX res:NNNNxNNNN hz:NN
+color_depth:N enabled:true scaling:off origin:(N,N) degree:0"
+
+"res" gives the logical resolution of each device and "origin"
+specifies the device location (horizontal, vertical).  You can
+tweak the output from displayplacer list and feed it back
+as arguments to displayplacer to set a new orientation.
