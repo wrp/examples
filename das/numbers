@@ -10,6 +10,10 @@ Approx width of the core of a fiber:
 
 Typical pulse length: 10 - 100 nm  (E-8m - E-7m)
 
+refractive index of core: 1.46 - 1.48
+refractive index of cladding is generally about 1% lower than the core, so speed
+of light in the cladding is faster.
+
 
 C-band: 1530-1565 nm ("conventional" band; primary wavelength used for transmission)
 L-band: 1565-1625 nm ("long" band; used for interrogation)
