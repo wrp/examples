@@ -1,6 +1,4 @@
 
-
-
 To map "Home" to control on my Mac:
 hidutil property \
 	--matching '{"VendorID":0x29ea,"ProductID":0x102}' \
