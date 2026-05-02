@@ -2,36 +2,63 @@
 
 # Using getopts means that all flags must appear before non-option arguments
 
+# getopts is Posix.  getopt provides long options, but is non-standard.
+# But (except for ordering of options), it is trivial to implement the
+# same functionality with getopts.
+
 usage() {
 	cat <<- EOF
 	usage: $(basename $0) [-ch] [-d arg] args ...
 
-	-h      print this message
-	-c      specify boolean C
-	-d arg  set arg for d flag
+	-h, --help     print this message
+	-c             specify boolean C
+	-d arg         set arg for d flag
+	--long-opt arg set arg with a long option
+	--long-bool    a boolean flag with long option
 	EOF
 	exit 0
 }
 
 die() { echo "$@" >&2; exit 1; }
 
-parse_args() {
+parse_opts() {
 	# The leading : puts getops in silent mode so it doesn't print stupid error messages
 	# subsequent colons indicate that the previous flag takes an argument
-	while getopts ":cd:h" opt; do
+	while getopts ":cd:h-" opt; do
 		case $opt in
 		c) FLAG_C=1;;
 		d) FLAG_D=$OPTARG;;
 		h) usage;;
+		-) break;;
 		:) die "option -$OPTARG requires a value";;
 		?) die "illegal option -$OPTARG (-h for usage)";;
 		esac
 	done
 }
 
-parse_args "$@"
+parse_long_opts() {
+	OPTIND=1
+	while test -n "$1"; do
+		case "$1" in
+		--help) usage;;
+		--long-bool) LONG_BOOL=set;;
+		--long-opt=*) LONG_OPT=${1#*=};;
+		--long-opt) shift; : $((OPTIND += 1)); LONG_OPT=$1;;
+		--*) die "Unknown option $1";;
+		*) break;;
+		esac
+		shift
+		: $((OPTIND += 1))
+	done
+}
+
+parse_opts "$@"
+shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
+parse_long_opts "$@"
 shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
 
-echo FLAG_C=$FLAG_C
-echo FLAG_D=$FLAG_D
+for name in FLAG_C FLAG_D LONG_BOOL LONG_OPT; do
+	eval "echo $name=\$$name"
+done
+
 echo args: "$@"
