@@ -47,8 +47,10 @@ parse_long_opts() {
 		--*) die "Unknown option $1";;
 		*) break;;
 		esac
-		shift
-		: $((OPTIND += 1))
+		shift;
+		if test $((OPTIND)) -lt $#; then
+			: $((OPTIND += 1))
+		fi
 	done
 }
 
