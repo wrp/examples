@@ -8,13 +8,13 @@
 
 usage() {
 	cat <<- EOF
-	usage: $(basename $0) [-ch] [-d arg] args ...
+	usage: $(basename $0) [-ch] [-d arg] [--help] [--long-opt[=]value] [--long-bool] [--] args ...
 
-	-h, --help     print this message
-	-c             specify boolean C
-	-d arg         set arg for d flag
-	--long-opt arg set arg with a long option
-	--long-bool    a boolean flag with long option
+	-h, --help         print this message
+	-c                 specify boolean C
+	-d val             set value for d flag
+	--long-opt val     set value with a long option (--long-opt=val or --long-opt val)
+	--long-bool        a boolean flag with long option
 	EOF
 	exit 0
 }
