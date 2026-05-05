@@ -43,14 +43,17 @@ parse_long_opts() {
 		--help) usage;;
 		--long-bool) LONG_BOOL=set;;
 		--long-opt=*) LONG_OPT=${1#*=};;
-		--long-opt) shift; : $((OPTIND += 1)); LONG_OPT=$1;;
+		--long-opt)
+			shift; : $((OPTIND+=1))
+			if test $# = 0; then
+				die "Value missing for --long-opt"
+			fi
+			LONG_OPT=$1;;
+		--) shift; : $((OPTIND+=1)); break;;
 		--*) die "Unknown option $1";;
-		*) break;;
+		*) return;;
 		esac
-		shift;
-		if test $((OPTIND)) -lt $#; then
-			: $((OPTIND += 1))
-		fi
+		shift; : $((OPTIND+=1))
 	done
 }
 
