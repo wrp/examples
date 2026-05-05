@@ -4,9 +4,11 @@ In 1983, the meter was redefined as the distance light travels in 1/299,792,458 
 
 Speed of light in glass is slower than speed of light in a vacuum.  Approx 2E8 m/s
 
-Approx width of the core of a fiber:
+Approx diameter of the core of a fiber:
 	single mode ~ 9µm       (9E-6m)
 	multi-mode  ~ 50µm-65µm  (5E-5m)
+diameter of cladding: 125µm
+diateter of protective coating: 250µm
 
 Typical pulse length: 10 - 100 nm  (E-8m - E-7m)
 
