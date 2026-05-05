@@ -58,7 +58,7 @@ parse_long_opts "$@"
 shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
 
 for name in FLAG_C FLAG_D LONG_BOOL LONG_OPT; do
-	eval "echo $name=\$$name"
+	eval "echo $name=\$$name \${$name+(set)}"
 done
 
 echo args: "$@"
