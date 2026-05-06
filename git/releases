@@ -1,0 +1,28 @@
+
+As a mechanism for storing artifacts in git (eg, release tarballs or other artifacts),
+create them in refs/releases.
+
+The default refspec for clone is +refs/heads/*:refs/remotes/$remote/*, so anything
+under refs/releases/ stays out of normal clones.  To create one:
+
+Create:
+	cd build && make DESTDIR=${DESTDIR?} install
+	idx=$(mktemp); rm "$idx"
+	GIT_INDEX_FILE="$idx" GIT_WORK_TREE=${DESTDIR?} git add .
+	tree=$(GIT_INDEX_FILE="$idx" git write-tree)
+	rm "$idx"
+
+	# The temporary index avoids clobbering your real index, and GIT_WORK_TREE
+	# tells git to read file content from the external directory.  GIT_DIR
+	# still needs to resolve to your repo (for object storage), so run
+	# this from inside the repo or set GIT_DIR explicitly.
+
+	commit=$(git commit-tree "$tree" -m "${version?} release artifacts")
+	git update-ref refs/releases/${version?} "$commit"
+
+
+Then push it:
+	git push $remote refs/releases/${version?}
+
+List available releases:
+	git ls-remote $remote 'refs/releases/*'
