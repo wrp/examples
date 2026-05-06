@@ -31,3 +31,8 @@ Alternatively, you can manually trigger a review on any PR by commenting bugbot 
 Sources:
 	- https://forum.cursor.com/t/bugbot-on-draft-prs/100381
 	- https://cursor.com/docs/bugbot
+
+
+# Given an oid, find the pr that is associated with it:
+gh api repos/{$owner?}/{$repo?}/commits/${oid?}/pulls
+# This finds PRs whose merge history actually contains the commit.
