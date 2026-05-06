@@ -1,6 +1,9 @@
 
 foo = recursively expanded variable
 bar := simply expanded variable
+# Note: foo = $(shell cmd) will cause cmd to be executed every time foo is referenced,
+# but foo := $(shell cmd) will only execute cmd once.
+
 # baz ::= posix mandated simply expanded variable
 qux ?= conditional assignment
 # qan != echo shell expanded var
