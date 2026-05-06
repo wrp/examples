@@ -6,7 +6,7 @@ The default refspec for clone is +refs/heads/*:refs/remotes/$remote/*, so anythi
 under refs/releases/ stays out of normal clones.  To create one:
 
 Create:
-	cd build && make DESTDIR=${DESTDIR?} install
+	make dist; rm -rf ${DESTDIR?}; mkdir -p $DESTDIR; cp $tarball ${DESTDIR?}
 	idx=$(mktemp); rm "$idx"
 	GIT_INDEX_FILE="$idx" GIT_WORK_TREE=${DESTDIR?} git add .
 	tree=$(GIT_INDEX_FILE="$idx" git write-tree)
