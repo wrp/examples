@@ -5,7 +5,7 @@ GIT_AUTHOR_DATE=@${epoch_time} GIT_COMMITTER_DATE=@${epoch_time}  git commit -m 
 # The --date option can be used for author date, but there does not seem to be
 # an option for committer date.
 
-# Create a commit unrelated to a branch:
+# Create a commit unrelated to a branch:  (create orphan commit)
 git commit-tree $(git write-tree) -p ${parent1} -p ${parent2} -p ${parent3} -m $msg
 # each -m argument adds a paragraph to the commit message.  If no -m or -F arguments
 # are present, it will read from stdin.
