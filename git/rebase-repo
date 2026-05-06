@@ -2,6 +2,6 @@
 
 # Make the tree of the current HEAD a new non-parented commit
 
-h=$( echo 'Initial commit' | git commit-tree HEAD^{tree})
+h=$(echo 'Initial commit' | git commit-tree -S HEAD^{tree})
 git reset --hard $h > /dev/null
 git gc

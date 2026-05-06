@@ -17,7 +17,7 @@ Create:
 	# still needs to resolve to your repo (for object storage), so run
 	# this from inside the repo or set GIT_DIR explicitly.
 
-	commit=$(git commit-tree "$tree" -m "${version?} release artifacts")
+	commit=$(git commit-tree -S "$tree" -m "${version?} release artifacts")
 	git update-ref refs/releases/${version?} "$commit"
 
 
