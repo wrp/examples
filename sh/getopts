@@ -8,14 +8,14 @@
 
 usage() {
 	cat <<- EOF
-	usage: $(basename $0) [-ch] [-d value|-dvalue] [--help] [--long-opt[=]value] [--long-bool] [--] args ...
+	usage: $(basename $0) [-ch] [-d value|-dvalue] [--help] [--long-opt=value] [--long-bool] [--] args ...
 
 	Long options must come after all short options and before all positional arguments.
 
 	-h, --help         print this message
 	-c                 specify boolean C
 	-d val | -dval     set value for d flag
-	--long-opt val     set value with a long option (--long-opt=val or --long-opt val)
+	--long-opt=val     set value with a long option
 	--long-bool        a boolean flag with long option
 	EOF
 	exit 0
@@ -39,20 +39,19 @@ parse_opts() {
 }
 
 parse_long_opts() {
+	local stop
 	OPTIND=1
-	while test -n "$1"; do
+	while test -n "$1" && test -z "$stop"; do
 		case "$1" in
 		--help) usage;;
-		--long-bool) LONG_BOOL=set;;
-		--long-opt=*) LONG_OPT=${1#*=};;
-		--long-opt)
-			shift; : $((OPTIND+=1))
-			if test $# = 0; then
-				die "Value missing for --long-opt"
-			fi
-			LONG_OPT=$1;;
-		--) shift; : $((OPTIND+=1)); break;;
-		--*) die "Unknown option $1";;
+		--long-bool) LONG_BOOL=;;
+		--long-opt*)
+			LONG_OPT=${1#*=}
+			if test "$1" = "$LONG_OPT"; then
+				die '--long-opt requires a value'
+			fi;;
+		--) stop=1;;
+		--*) die "Unknown/invalid option $1";;
 		*) return;;
 		esac
 		shift; : $((OPTIND+=1))
