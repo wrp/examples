@@ -7,5 +7,9 @@ GIT_AUTHOR_DATE=@${epoch_time} GIT_COMMITTER_DATE=@${epoch_time}  git commit -m 
 
 # Create a commit unrelated to a branch:  (create orphan commit)
 git commit-tree $(git write-tree) -p ${parent1} -p ${parent2} -p ${parent3} -m $msg
+# This creates a commit using the current index, not the current work dir.
 # each -m argument adds a paragraph to the commit message.  If no -m or -F arguments
 # are present, it will read from stdin.
+
+# To create a new orphaned ref based on the work dir:
+git add . && git update-ref refs/${ref_path?} $(git commit-tree $(git write-tree) -m "${msg?}")
