@@ -7,3 +7,7 @@ git show --pretty=format: --name-status $commitish
 
 
 git show -s --format=%s $commitish   # Show just the status line
+
+
+# To always flag space indentation, lower the tabwidth:
+git config core.whitespace "indent-with-non-tab,tabwidth=1"
