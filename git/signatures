@@ -14,3 +14,13 @@ In the logformat:
 	"U" for a good signature with unknown validity,
 	"X" for a good signature that has expired,
 	"Y" for a good signature made by an expired key,
+
+
+To verify keys as trusted, fetch and sign the GPG key:
+
+	key_id=$(git verify-commit $oid | sed -n '$p')  # 40 hex digits
+	gpg --keyserver keyserver.ubuntu.com --recv-keys $key_id
+	gpg --lsign-key $key_id
+
+--recv-keys imports the public key from a keyserver.
+--lsign-key locally signs it, which marks it as trusted on your machine without publishing that trust to any keyserver.
