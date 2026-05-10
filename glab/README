@@ -6,3 +6,4 @@ basic workflow:
 glab auth login
 glab mr list                   # list of all merge requests
 glab mr view ${N?} --comments  # show comments for an mr
+glab ci status                 # show status for @{u}
