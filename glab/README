@@ -1,0 +1,8 @@
+
+The tool to interface with gitlab.
+
+basic workflow:
+
+glab auth login
+glab mr list                   # list of all merge requests
+glab mr view ${N?} --comments  # show comments for an mr
