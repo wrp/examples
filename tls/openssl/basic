@@ -17,3 +17,5 @@ $ openssl pkcs12 -in ${file?}.p12 -nodes -nocerts -out ${file?}.key
 
 # Get the certs from a .p12
 $ openssl pkcs12 -in ${file?}.p12 -nodes -nokeys -out ${file?}.pem
+
+openssl sha1 "$file"  # Compute sha-1 digest of a file
