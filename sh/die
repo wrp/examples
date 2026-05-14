@@ -1,10 +1,21 @@
 #!/bin/sh
 
-die() { printf "%s${1:+\n}" "$*"; exit 1; } >&2
+die() { printf "%s${1:+\n}" "$@"; exit 1; } >&2
 
+expect=$(
 ( die 'Test with
 multiline
-arg' )
-echo 'Testing die without arguments...'
-( die )
-die Terminating
+arg' 2>&1 )
+echo 'Testing without arguments...' 2>&1
+( die >&2 )
+( die Test with multiple args 2>&1 )
+)
+
+test "$expect" = 'Test with
+multiline
+arg
+Testing without arguments...
+Test
+with
+multiple
+args'
