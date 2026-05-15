@@ -11,3 +11,8 @@ VAR += val
 # If VAR is passed as an argument to make, then VAR will have the assigned value.
 # If VAR is passed in the environment, then 'val' (the RHS of the +=) is appended
 # to the value with a preceding space.
+
+Basic definitions:
+
+A "rule" is a full block containing a "target", "prerequisites", and "recipe".
+A rule is the whole block: target, prerequisites, and recipe together.
