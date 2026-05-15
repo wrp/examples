@@ -1,0 +1,11 @@
+
+get_uncompressed_size() {
+	# Get the size in bytes of the uncompressed file in $1
+	# Spectacularly non-robust, relying on the format:
+	# "Decompressed Size: 238 GiB (256060514304 B)"
+	# Grrr.  zstd --list prints a stupid header with version info to stderr, so
+	# we discard all error messages.
+	zstd --list -v ${1%.zst}.zst 2> /dev/null |
+		awk '/Decompressed Size/{split($2, a, " ");
+			print a[1]}' FS='[()]'
+}
