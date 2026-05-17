@@ -26,41 +26,30 @@ die() { echo "$@" >&2; exit 1; }
 parse_opts() {
 	# The leading : puts getops in silent mode so it doesn't print stupid error messages
 	# subsequent colons indicate that the previous flag takes an argument
-	while getopts ":cd:h-" opt; do
+	while getopts ":cd:h-:" opt; do
 		case $opt in
 		c) FLAG_C=1;;
 		d) FLAG_D=$OPTARG;;
 		h) usage;;
-		-) break;;
+		-)
+			case $OPTARG in
+			help) usage;;
+			long-bool) LONG_BOOL=;;
+			long-opt)
+				LONG_OPT=${!OPTIND}
+				: $((OPTIND += 1));;
+			long-opt=*)
+				LONG_OPT=${OPTARG#*=}
+				test "$OPTARG" = "$LONG_OPT" && die '--long-opt requires a value';;
+			*) die "Unknown/invalid option $1";;
+			esac;;
 		:) die "option -$OPTARG requires a value";;
 		?) die "illegal option -$OPTARG (-h for usage)";;
 		esac
 	done
 }
 
-parse_long_opts() {
-	local stop
-	OPTIND=1
-	while test -n "$1" && test -z "$stop"; do
-		case "$1" in
-		--help) usage;;
-		--long-bool) LONG_BOOL=;;
-		--long-opt*)
-			LONG_OPT=${1#*=}
-			if test "$1" = "$LONG_OPT"; then
-				die '--long-opt requires a value'
-			fi;;
-		--) stop=1;;
-		--*) die "Unknown/invalid option $1";;
-		*) return;;
-		esac
-		shift; : $((OPTIND+=1))
-	done
-}
-
 parse_opts "$@"
-shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
-parse_long_opts "$@"
 shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
 
 for name in FLAG_C FLAG_D LONG_BOOL LONG_OPT; do
