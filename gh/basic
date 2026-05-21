@@ -2,7 +2,12 @@
 gh pr list --author @me
 
 # Show details of a pr:
-gh pr view nnnnn
+gh pr view $N
+gh pr view $N --comments     # include comments
+gh api repos/${owner}/${repo}/pulls/$N/comments # For review comments
+gh api repos/${owner}/${repo}/issues/$N/comments # For issue-style (top-level) comments
+
+
 
 gh api repos/$owner/$repo/milestones           # Get open milestones
 gh api repos/$owner/$repo/milestones?state=all # Get all milestones
