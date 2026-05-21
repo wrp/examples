@@ -1,0 +1,5 @@
+
+To navigate to the concrete implementation of a method:
+:GoImplements
+
+(ctrl-] will just take you to the method name in the interface)
