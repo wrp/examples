@@ -1,5 +1,8 @@
 
 To navigate to the concrete implementation of a method:
 :GoImplements
-
 (ctrl-] will just take you to the method name in the interface)
+This will create a list of locations.  You then need to do either
+:lopen
+to open the list, or navigate directly to an item with
+:ll <item-number>
