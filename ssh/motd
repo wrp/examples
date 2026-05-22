@@ -1,0 +1,5 @@
+
+On Ubuntu, the sequence is (roughly):
+
+/etc/update-motd.d/*
+/etc/motd
