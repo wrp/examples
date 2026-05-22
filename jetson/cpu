@@ -1,0 +1,16 @@
+
+Contents of /sys/devices/system/cpu/cpuN:
+
+- online — reads 0 or 1.  Whether this CPU is currently active.  Writing 0 takes it offline (hotplug).
+- cpu_capacity — integer (0-1024) representing the relative compute capacity of this core.  On Jetson Orin with big.LITTLE, the high-performance cores will show a higher value than the efficiency cores.
+- cpufreq/ — directory containing frequency scaling controls: current frequency, min/max limits, available governors, current governor, available frequencies.
+- cpuidle/ — directory with idle state info.  Each subdirectory (state0, state1, etc.) shows latency, power consumption, time spent, and usage count for that idle state.
+- cache/ — directory with subdirectories for each cache level (index0, index1, etc.) showing size, type (data/instruction/unified), shared CPU map, and line size.
+- topology/ — which physical core, cluster, and socket this logical CPU belongs to.  Shows core_id, physical_package_id, and sibling maps.
+- hotplug/ — hotplug state machine info for this CPU.
+- of_node — symlink to the device tree node for this CPU (ARM-specific).
+- power/ — runtime power management state (autosuspend, control, status).
+- regs/ — CPU register identification info (e.g., MIDR on ARM).
+- subsystem — symlink back to /sys/bus/cpu.
+- uevent — kernel uevent attributes for this device.
+- crash_notes / crash_notes_size — physical address and size of the per-CPU note section used by kdump when capturing a crash dump.
