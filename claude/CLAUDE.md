@@ -54,3 +54,8 @@ Do not show proposed changes larger than 10 lines or so.  If the diff is likely
 to scroll off my terminal (feel free to query $LINES), I do not want you to display it.
 Indeed, if any text you intend to display is likely to scroll off my screen (eg,
 if it is greater than .8 * $LINES), do not show it.  Show me a summary instead.
+
+DON'T EVER GUESS without making it clear.   If you do not have
+concrete evidence to support an assertion, do not speculate.  Feel
+free to offer ideas that are speculative, but be very explicity and
+tell me that you are guessing.
