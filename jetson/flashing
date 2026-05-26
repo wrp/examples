@@ -1,0 +1,16 @@
+
+  1. Download two tarballs from https://developer.nvidia.com/embedded/jetson-linux-r3560:
+    - Jetson_Linux_R35.6.0_aarch64.tbz2 (BSP — bootloader, kernel, flash tools)
+    - Tegra_Linux_Sample-Root-Filesystem_R35.6.0_aarch64.tbz2 (Ubuntu 20.04 rootfs)
+  2. Extract the BSP, which creates Linux_for_Tegra/ on the host.
+  3. Extract the rootfs into Linux_for_Tegra/rootfs/.
+  4. Run apply_binaries.sh to overlay Nvidia drivers/firmware into the rootfs.
+  5. Put the Jetson into recovery mode (the device must be connected to the host via USB).
+  6. Run flash.sh with the appropriate board config to write the images to the device.
+
+  tar xf Jetson_Linux_R35.6.0_aarch64.tbz2
+  cd Linux_for_Tegra/rootfs
+  sudo tar xpf ../../Tegra_Linux_Sample-Root-Filesystem_R35.6.0_aarch64.tbz2
+  cd ..
+  sudo ./apply_binaries.sh
+  sudo ./flash.sh ${board_config} mmcblk0p1
