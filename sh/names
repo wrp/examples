@@ -1,0 +1,9 @@
+
+Variable names in POSIX shell consist of underscores, ASCII letters,
+and digits, with the constraint that the first character cannot be
+a digit. [A-Za-z_][A-Za-z_0-9]*.
+
+Function names should follow the same rule, but Bash is permissive.
+In practice, bash accepts any word that isn't a reserved word and
+doesn't contain shell metacharacters (|, &, ;, (, ), <, >, space,
+tab, newline). (so ':', '-', and '.' all work in function names.)
