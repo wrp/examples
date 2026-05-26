@@ -1,0 +1,8 @@
+Common files on jetson:
+
+/proc/device-tree/model    # device type:
+/etc/nv_tegra_release      # details
+/etc/nv_boot_control.conf  # More details
+
+Useful commands:
+findmnt /  # Show if the device uses eMMC or nVME

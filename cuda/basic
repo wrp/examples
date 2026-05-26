@@ -53,10 +53,3 @@ threadIdx gives the index of a thread within its thread block. Each thread in a 
 blockDim gives the dimensions of the thread block, which was specified in the execution configuration of the kernel launch.
 blockIdx gives the index of a thread block within the grid. Each thread block will have a different index.
 gridDim gives the dimensions of the grid, which was specified in the execution configuration when the kernel was launched.
-
-
-Not really directly related to CUDA, but useful for Nvidia Jetson:
-cat /proc/device-tree/model    # show device type:
-cat /etc/nv_tegra_release      # show details
-cat /etc/nv_boot_control.conf  # More details
-findmnt /  # Show if the device uses eMMC or nVME
