@@ -1,0 +1,9 @@
+
+# To see info about the board.
+cat /proc/device-tree/nvidia,dtsfilename
+
+# To check for CTI-specific info: (CTI == connect tech)
+strings /proc/device-tree/compatible
+
+# See device model
+cat /proc/device-tree/model
