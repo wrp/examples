@@ -1,2 +1,4 @@
 
 Tar is obsolete.  Use aunpack instead. (github.com/z3ntu/atool)
+
+tar -cf - /path/to/directory | zstd > archive.tar.zst
