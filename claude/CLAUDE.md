@@ -23,6 +23,7 @@ commit messages:
 		do not add any Claude-related trailers or attribution to commits.
 
 
+Succeed quitely, fail loudly.  Avoid extraneous echo command and the like.  They are noise.
 Terminal display — Tabstops every 8 columns.
 Python code — Avoid inline comments; prefer extracting functions with docstrings instead.
 Database naming — Use singular table names.
