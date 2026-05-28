@@ -38,8 +38,8 @@ C-style:
 	Do not mention line numbers in comments.  Ever.  They become stale too quickly.
 
 shell-style:
-	Do not *ever* use the [ command.  Avoid the [[ bashism as well.  If you want
-	to invoke test, spell it "test".
+	Do not *ever* use the [ command.  Avoid the [[ bashism as well.  Use 'test'.
+	Do not set errexit.  'set -e' is a scourge on the universe; stop using it!
 
 yaml style:
 	Do NOT increase the indentation level for list items.  eg, use:
