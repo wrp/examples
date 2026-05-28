@@ -37,6 +37,10 @@ C-style:
 		eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
 	Do not mention line numbers in comments.  Ever.  They become stale too quickly.
 
+shell-style:
+	Do not *ever* use the [ command.  Avoid the [[ bashism as well.  If you want
+	to invoke test, spell it "test".
+
 yaml style:
 	Do NOT increase the indentation level for list items.  eg, use:
 a:
