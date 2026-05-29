@@ -68,6 +68,7 @@ print_32 0xe284a0;  # misc mathy symbols
 print_32 0xe28a80;  # Set relations
 print_32 0xe28b80;  # More sets
 print_32 0xe28ba0;
+print_range 0xc3b8, 0xc3b8;     # A single ø
 print_range 0xe58580, 0xe5859f;
 print_range 0xe585a0, 0xe585bf;
 print_range 0xe58a90, 0xe58aaf;
@@ -88,6 +89,7 @@ binmode STDOUT, ':encoding(UTF-8)';
 print "\\U1f6d1: " . chr(0x1f6d1) . "\n";
 
 @samples = (
+	[0xc3b8..0xc3b9],  # Hangul
 	[0x2589..0x25A0],  # Block elements
 	[0x2B00..0x2B56],  # Miscellaneous symbols and arrows
 	[9800..9811],      # Miscellaneous symbols
