@@ -41,7 +41,8 @@
 
 `$|'
      The names of all the order-only prerequisites, with spaces between
-     them.
+     them.  (Order only prerequisites are those listed after a '|', and
+     their timestamp is not checked.  This is a gnu extension.)
 
 `$*'
      The stem with which an implicit rule matches (*note How Patterns
