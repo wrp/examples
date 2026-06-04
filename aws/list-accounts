@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# List all AWS accounts accessible via the current SSO session.
+# Requires a prior 'aws sso login'.
+
+region=${1:-ap-southeast-2}
+
+token=$(
+	python3 -c '
+import json, glob, os
+
+candidates = sorted(
+	glob.glob(os.path.expanduser("~/.aws/sso/cache/*.json")),
+	key=os.path.getmtime,
+	reverse=True,
+)
+for path in candidates:
+	with open(path) as f:
+		data = json.load(f)
+	t = data.get("accessToken")
+	if t:
+		print(t)
+		break
+'
+)
+
+if test -z "$token"; then
+	echo "No access token found.  Run 'aws sso login' first." >&2
+	exit 1
+fi
+
+aws sso list-accounts --access-token "$token" --region "$region"
