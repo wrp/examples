@@ -3,6 +3,8 @@
 # List all AWS accounts accessible via the current SSO session.
 # Requires a prior 'aws sso login'.
 
+# The SSO API endpoint is regional; this must match the region
+# where the Identity Center instance lives.
 region=${1:-ap-southeast-2}
 
 token=$(
