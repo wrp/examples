@@ -16,6 +16,11 @@ m = {'one': 1, 'two': 2}
 b = {'zero': 0, **m}  # {'zero': 0, 'one': 1, 'two': 2}
 # b = {0:'zero', *a}  # syntax error
 
+# Override values by placing them after
+b = {**m, 'two': 3}
+assert(b['one'] == 1)
+assert(b['two'] == 3)
+
 
 # Commonly used to unpack into function arguments
 def printer(*args, **kwargs):
