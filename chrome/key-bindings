@@ -3,5 +3,7 @@
 ctrl-tab	move to next tab
 ctrl-shift-tab	move to previous tab
 cmd-t                    new tab
+cmd-option-j             open developer tools
+cmd-shift-r              clear caches
 cmd-shift-t              duplicate tab
 cmd-w                    close tab
