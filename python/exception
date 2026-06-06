@@ -53,6 +53,7 @@ except BaseException as e:  # *Does* catch SystemExit and KeyboardInterrupt
     pass
 
 
+# Demonstrate pathological behavior of return
 def f(flag=False):
     try:
         print('try')
@@ -60,13 +61,17 @@ def f(flag=False):
         return 5
     except:  # bare exception DO NOT EVER DO THIS
         print('except')
-    finally:
+    else: # normally executes if no exception was raised
+        print('else')
+        # However, in this case we "return" in the try, so the else clause is skipped
+    finally: # Executed after any except/else clause
         print('finally')
         # If there is an exception before return in try, then
         # the function returns None unless the finally clause returns a value.
         # If not, it returns 5 and executes the finally clause
         # and still returns 5, regardless of whehter or not the finally
         # clause returns.  Returning something from a finally clause is bad practice
+        # IMO, it is best practce to avoid return in try as well
 
 rv = f()
 print('f without exception returns:', rv)
