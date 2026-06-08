@@ -6,3 +6,5 @@ aws eks describe-cluster --name ${cluster?}
 aws eks delete-cluster --name ${cluster?}
 
 aws cloudformation list-stacks
+
+ssh $user@$ec2_ip 'aws sts get-caller-identity'   # Get info about the account and ARN on a box:
