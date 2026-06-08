@@ -30,3 +30,9 @@ def printer(*args, **kwargs):
 printer(b)  # args = ({'zero': 0, 'one': 1, 'two': 2},), kwargs = {}
 printer(*b)  # args = ('zero', 'one', 'two'), kwargs = {}
 printer(**b)  # args = (), kwargs = {'zero': 0, 'one': 1, 'two': 2}
+
+# Demonstrate amending created dict
+def make_dict(foo, bar, **kwargs):
+    return {'foo':foo, 'bar':bar, **kwargs}
+assert make_dict(5, 3) == {'bar': 3, 'foo':5}
+assert make_dict(5, 3, blah=6) == {'foo':5, 'bar': 3, 'blah': 6}
