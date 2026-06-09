@@ -24,7 +24,7 @@ usage() {
 die() { echo "$@" >&2; exit 1; }
 
 parse_opts() {
-	# The leading : puts getops in silent mode so it doesn't print stupid error messages
+	# The leading : puts getopts in silent mode so it doesn't print stupid error messages
 	# subsequent colons indicate that the previous flag takes an argument
 	while getopts ":cd:h-:" opt; do
 		case $opt in
@@ -50,7 +50,7 @@ parse_opts() {
 }
 
 parse_opts "$@"
-shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getops again
+shift $(($OPTIND-1))   # Reset OPTIND=1 if you call getopts again
 
 for name in FLAG_C FLAG_D LONG_BOOL LONG_OPT; do
 	eval "echo $name=\$$name \${$name+(set)}"
