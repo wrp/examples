@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+import yaml
+import json
+import sys
+
+res=[]
+start=True
+want_comma=False
+
+for x in list(yaml.load_all(sys.stdin, Loader=yaml.SafeLoader)):
+	if start:
+		print('[')
+		start=False
+	if want_comma:
+		print(',')
+	want_comma=True
+	print(json.dumps(x), end='')
+if not start:
+	print(']')
