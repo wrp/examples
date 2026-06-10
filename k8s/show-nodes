@@ -1,21 +1,14 @@
 #!/bin/sh
 
 display_node() {
-	kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$1" --no-headers
+	kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$1"
 }
 
 
 if test $# = 0; then
-	kubectl get nodes --no-headers
-else
-	for node;  do
-		#node is expected to be 1st column of output from 'kubectl get nodes'
-		if test "$node" = -; then
-			while read node _; do
-				display_node "$node"
-			done
-		else
-			display_node "$node"
-		fi
-	done
+	set -- $(kubectl get nodes --no-headers | awk '{print $1}')
 fi
+
+for node;  do
+	display_node "$node"
+done
