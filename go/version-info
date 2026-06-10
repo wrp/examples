@@ -1,0 +1,6 @@
+
+Using the vcs package, one can extract versions strings related to the state
+of the repository at build time, or you can pass data via ldflags, but
+it's probably simplest to get version info from an executable via:
+
+go version -m "$path_to_executable"
