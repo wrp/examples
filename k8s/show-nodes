@@ -1,7 +1,13 @@
 #!/bin/sh
 
+columns='CPU:.status.allocatable.cpu,MEM:.status.allocatable.memory,PODS:.status.allocatable.pods' \
+
 display_node() {
-	kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$1"
+	node=$1
+	printf '%19s:  ' "$node"
+	kubectl get node "$node" --no-headers -o custom-columns="$columns" \
+	| awk '{print "CPU: " $1 "  MEM:  " $2 "  PODS: "  $3}'
+	kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$node"
 }
 
 
