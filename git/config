@@ -7,3 +7,16 @@ git config --global pull.rebase true
 
 # Specify revs to be ignored by git-blame/git-annotate
 git config blame.ignoreRevsFile ${file-.git-blame-ignore-revs}
+
+# main sources of config: --system, --global, --local, --worktree, --file.
+config --system --list --show-origin
+config --global --list --show-origin
+
+GIT_CONFIG_GLOBAL, GIT_CONFIG_SYSTEM
+	Take the configuration from the given files instead from global or
+	system-level configuration files. If GIT_CONFIG_SYSTEM is set, the
+	system config file defined at build time (usually /etc/gitconfig)
+	will not be read. Likewise, if GIT_CONFIG_GLOBAL is set, neither
+	$HOME/.gitconfig nor $XDG_CONFIG_HOME/git/config will be read. Can
+	be set to /dev/null to skip reading configuration files of the
+	respective level.
