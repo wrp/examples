@@ -1,7 +1,5 @@
 # Create new branch on remote which current branch tracks
-# remote=$(git config branch.$(git symbolic-ref --short HEAD).remote)
-# remote=$(git config branch.$(git base-branch).remote)
-git push -u ${remote-origin} $(git rev-parse --abbrev-ref HEAD)
+git push -u ${remote-$(git remote-name)} $(git rev-parse --abbrev-ref HEAD)
 
 # Push local branch to differently named remote branch (possibly creating remote_branch)
 git push -u ${remote-origin} ${branch-HEAD}:${remote_branch?}
