@@ -51,6 +51,9 @@ a:
 - b: 5
   c: 5
 
+python style:
+	Feel free to use the walrus operator.  Do so whenever appropriate.
+
 When providing assistance, always tell me how to do things from a shell rather
 than a gui.  eg, instead of telling me to 'go to Settings → Resources → Advanced → "Virtual disk limit"',
 tell me how to use osascript to kill the docker deamon and let me know which json file to edit.
