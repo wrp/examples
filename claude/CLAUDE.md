@@ -41,6 +41,9 @@ C-style:
 shell-style:
 	Do not *ever* use the [ command.  Avoid the [[ bashism as well.  Use 'test'.
 	Do not set errexit.  'set -e' is a scourge on the universe; stop using it!
+	When presenting code, never use angle brackets as a placeholder.  Instead of
+		"cmd <optional-arg>", you should write "cmd $optional_arg"
+		or "cmd ${optional_arg?}" so I can cut-n-paste without editing.
 
 yaml style:
 	Do NOT increase the indentation level for list items.  eg, use:
