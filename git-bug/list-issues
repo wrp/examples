@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# List git-bug issues matched to their GitHub issue URL.
+
+git-bug bug -f json | python3 -c "
+import json, sys
+
+bugs = json.load(sys.stdin)
+
+for b in sorted(bugs, key=lambda x: x.get('metadata', {}).get('github-url', '')):
+    status = b['status']
+    title = b['title']
+    human_id = b['human_id']
+    gh_url = b.get('metadata', {}).get('github-url', '')
+    gh_issue = gh_url.rsplit('/', 1)[-1] if gh_url else '(none)'
+    print(f'{status:<6}  #{gh_issue:<4}  {human_id}  {title}')
+"
