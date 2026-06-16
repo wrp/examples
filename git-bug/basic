@@ -45,3 +45,11 @@ git-bug bug comment ${id?}   #
 git fetch ${remote-origin} 'refs/bugs/*:refs/bugs/*' 'refs/identities/*:refs/identities/*'
 --or--
 git bug pull ${remote-origin}
+
+
+
+# To create a bridge with github, gitlab, jira, or launchpad-preview
+# First, get a PAT with repo priveleges
+git bug bridge new   # interactive; prompts for PAT
+git bug bridge pull  # pull all the issues
+git bug bridge push  # push issues back to github
