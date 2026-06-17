@@ -43,3 +43,21 @@ done
 	assignees, author, body, closed, closedAt, closedByPullRequestsReferences, comments,
 	createdAt, id, isPinned, labels, milestone, number, projectCards, projectItems,
 	reactionGroups, state, stateReason, title, updatedAt, url,
+
+
+** Creating issues
+gh issue create --title "I found a bug" --body "Nothing works"
+
+
+create flags:  (from 'gh issue create --help)
+  -a, --assignee login   Assign people by their login. Use "@me" to self-assign.
+  -b, --body string      Supply a body. Will prompt for one otherwise.
+  -F, --body-file file   Read body text from file (use "-" to read from standard input)
+  -e, --editor           Skip prompts and open the text editor to write the title and body in. The first line is the title and the remaining text is the body.
+  -l, --label name       Add labels by name
+  -m, --milestone name   Add the issue to a milestone by name
+  -p, --project title    Add the issue to projects by title
+      --recover string   Recover input from a failed run of create
+  -T, --template name    Template name to use as starting body text
+  -t, --title string     Supply a title. Will prompt for one otherwise.
+  -w, --web              Open the browser to create an issue
