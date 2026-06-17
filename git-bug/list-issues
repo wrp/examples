@@ -2,14 +2,54 @@
 
 # List git-bug issues matched to their GitHub issue URL.
 
-git-bug bug -f json | jq -r '
-	sort_by(.metadata["github-url"] // "") |
-	.[] |
-	[
-		.status,
-		(.metadata["github-url"] // "" | split("/") | last // "(none)"),
-		.human_id,
-		.title
-	] |
-	"\(.[0])\t#\(.[1])\t\(.[2])\t\(.[3])"
-' | column -t -s "$(printf '\t')"
+die() { echo "$@" >&2; exit 1; }
+usage() {
+	sed -e 's/^\./ /' <<-EOF
+		usage: $(basename $0) [-cho] [-a user] [-m string] [-p user]
+
+		options:
+		.     -a    match by author
+		.     -c    list closed issues
+		.     -h    show this message
+		.     -m    match string in title
+		.     -o    list open issues
+		.     -p    match participants
+	EOF
+	exit
+}
+
+status_filter=open
+
+while getopts ":a:chm:op:" opt; do
+	case $opt in
+	a) author_filter=$OPTARG;;
+	c) status_filter=closed;;
+	h) usage;;
+	m) match_filter=$OPTARG;;
+	o) status_filter=open;;
+	p) participant_filter=$OPTARG;;
+	:) die "option -$OPTARG requires a value";;
+	?) die "illegal option -$OPTARG";;
+	esac
+done
+shift $(($OPTIND-1))
+
+git-bug bug -f json | jq -r \
+	--arg status "$status_filter" \
+	--arg assignee "${author_filter-}" \
+	--arg participant "${participant_filter-}" \
+	--arg match "${match_filter-}" \
+	'
+	def github_num: .metadata["github-url"] // "" | split("/") | last // "(none)";
+
+	map(select(
+		.status == $status
+		and ($assignee == "" or (.author.name | test($assignee; "i")))
+		and ($participant == "" or (.participants | any(.name | test($participant; "i"))))
+		and ($match == "" or (.title | test($match; "i")))
+	))
+	| sort_by(.metadata["github-url"] // "")
+	| .[]
+	| [.status, "#" + github_num, .human_id, .title]
+	| @tsv
+	' | column -t -s "$(printf '\t')"
