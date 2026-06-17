@@ -43,6 +43,8 @@ git-bug bug comment ${id?}   #
 
 # To fetch all the issues and identities from a remote:
 git fetch ${remote-origin} 'refs/bugs/*:refs/bugs/*' 'refs/identities/*:refs/identities/*'
+ident=$(git for-each-ref --format='%(refname:lstrip=2)' refs/identities/ | sed 1q)
+git bug user adopt ${ident:?}    # You must adopt an identity before git-bug bug list will show anything
 --or--
 git bug pull ${remote-origin}
 
