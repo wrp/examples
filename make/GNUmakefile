@@ -4,6 +4,8 @@
 
 include Makefile   # all and foo below will override and emit warning
 
+override CFLAGS += -Wall   # Append to value from command line or environment
+
 # Add prereqs to each target (allegedly valid in gnumake 4.3, but haven't
 # had a chance to test
 .EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST}, $(abspath ${mk}), bar)
@@ -11,6 +13,7 @@ include Makefile   # all and foo below will override and emit warning
 .PHONY: all
 
 all:
+	@echo CFLAGS = "$(CFLAGS)"
 	@echo arguments to make: $(MAKECMDGOALS)
 	@echo 'Running rules in GNUmakefile (try bsdmake, or use -f to avoid)'
 
