@@ -15,6 +15,17 @@
 # 0xf0      9f         9b        91
 #
 
+
+# ❯ What unicode code-point can generate the sequence '\xe2\x9c\x8b'?
+# That's U+270B, the "raised hand" emoji (✋).
+#  The UTF-8 encoding breaks down as:
+#
+#  - 0xe2 = 1110 0010 → first byte of a 3-byte sequence, upper nibble 0010
+#  - 0x9c = 10 011100 → continuation, payload 011100
+#  - 0x8b = 10 001011 → continuation, payload 001011
+#  Combined payload: 0010 011100 001011 = 0x270B.
+
+
 use 5.12.0;
 use Unicode::UCD "charinfo";
 use Data::Dumper;
@@ -24,9 +35,10 @@ my $misc = "✓✗";
 my @samples = (
 	'e29c93',    # check ✓
 	'f09f9b91',  # A stop sign: 🛑  \U1f6d1
-	'e29c8b',    # A yellow hand  ✋
+	'e29c8b',    # A yellow hand  ✋  \U270B
 	'f09f8c80',  # Debian symbol 🌀
 	'f09f8cb9',  # A rose 🌹
+	'f09f92ac',  # Text bubble 💬  \U1F4AC
 	'e2888a',    # ∊   epsilon
 	'e28888',    # ∈   epsilon element
 	'e280a6',    # …   ellipsis
