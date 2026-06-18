@@ -1,0 +1,30 @@
+
+
+
+A "rule" is a full block containing a "target", "prerequisites", and "recipe".
+A rule is the whole block: target, prerequisites, and recipe together.
+
+
+Beyond rules and variable assignments:
+
+Directives
+- include / -include / sinclude — read other makefiles
+- Conditionals: ifeq, ifneq, ifdef, ifndef, else, endif
+- define / endef — multi-line variable definitions
+- export / unexport — pass variables to sub-makes
+- override — override command-line variable assignments
+- undefine
+- private — prevent a variable from being inherited by prerequisites
+- vpath — search paths for prerequisites by pattern
+
+Rule variants
+- Pattern rules (%.o: %.c)
+- Static pattern rules ($(OBJS): %.o: %.c)
+- Suffix rules (.c.o: — old-fashioned, mostly replaced by pattern rules)
+- Double-colon rules (target::)
+
+Special targets
+- .PHONY, .SUFFIXES, .DEFAULT, .PRECIOUS, .INTERMEDIATE, .SECONDARY, .DELETE_ON_ERROR, .SILENT, .IGNORE, .EXPORT_ALL_VARIABLES, .NOTPARALLEL, .ONESHELL, .SECONDEXPANSION, .POSIX
+
+Comments
+- Lines starting with #
