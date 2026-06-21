@@ -46,3 +46,7 @@ a = types.SimpleNamespace({'foo': 3})
 a.bar = 5
 assert a.foo == 3
 assert a.bar == 5
+b = types.SimpleNamespace(foo=3)
+b.bar = 5
+assert b.foo == 3
+assert b.bar == 5
