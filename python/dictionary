@@ -51,6 +51,7 @@ slice_a_dict()
 
 a = { 'a': 1, 'b': 2}
 assert {'a': 5, 'b': 2} == a | { 'a':  5}  # | == "dictionary union operator"
+assert {'a':1, 'b':3, 'c':0} == a | {'b':3, 'c':0}
 
 
 a = types.SimpleNamespace({'foo': 3})
