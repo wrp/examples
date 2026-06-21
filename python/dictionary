@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import types
 import json
 
 class dqdict(dict):
@@ -39,3 +40,9 @@ slice_a_dict()
 
 a = { 'a': 1, 'b': 2}
 assert {'a': 5, 'b': 2} == a | { 'a':  5}  # | == "dictionary union operator"
+
+
+a = types.SimpleNamespace({'foo': 3})
+a.bar = 5
+assert a.foo == 3
+assert a.bar == 5
