@@ -1,3 +1,8 @@
 
+
+Many of these probably require "show feature for web developers",
+which can be enabled at Safari->settings->advanced)
+
 Cmd-Option-E clears the cache
 Cmd-Shift-R does a hard reload.
+Cmd-Ctrl-R Resize dispaly (to match mobile device, etc)
