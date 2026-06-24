@@ -1,0 +1,16 @@
+
+aws configure help            # show usage
+
+# Most data comes from ~/.aws/config
+
+# available commands:
+aws configure add-model
+aws configure export-credentials
+aws configure get
+aws configure import
+aws configure list
+aws configure list-profiles   # show all profile names
+aws configure mfa-login
+aws configure set
+aws configure sso
+aws configure sso-session
