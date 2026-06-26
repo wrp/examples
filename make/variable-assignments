@@ -1,0 +1,37 @@
+
+For gnu make:
+
+:=    evaluated always, exactly once.  Overridden by command line, but not environment.
+=     evaluated only if referenced, and every time it is referenced.  Overridden by command line, not environment.
+?=    lazy evaluation, overridden by environment and commandline
+
+You can use override to prevent the value from being changed by env or arg (eg, "override foo = foo")
+
+
+
+$ cat Makefile
+
+foo := $(shell sh -c 'echo setting foo >&2; echo foo')
+bar = $(shell sh -c 'echo setting bar >&2; echo bar')
+baz ?= $(shell sh -c 'echo setting baz >&2; echo baz')
+
+default:
+	: $(foo) $(bar) $(baz)
+	@ echo foo=$(foo)
+	@ echo bar=$(bar)
+	@ echo baz=$(baz)
+$ make foo=a bar=b baz=c
+setting foo
+: a b c
+foo=a
+bar=b
+baz=c
+$ foo=a bar=b baz=c make
+setting foo
+setting bar
+setting bar
+: foo bar c
+setting bar
+foo=foo
+bar=bar
+baz=c
