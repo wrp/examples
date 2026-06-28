@@ -1,0 +1,5 @@
+
+go test -coverprofile=coverage.out ./...  #  code coverage results
+
+# To generate a detailed line-by-line HTML report showing exactly which lines are uncovered:
+go tool cover -html=coverage.out -o coverage.html
