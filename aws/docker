@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# List the images in a repo
+aws ecr list-images \
+	--repository-name ${repo_name?} \
+	--region ${region-us-west-2} \
+	--query 'imageIds[*].imageTag' \
+	--output text
