@@ -94,6 +94,8 @@ no proper substitute for good documentation.  Comments exist in
 code to explain *why* you are doing something, not what you are
 doing.
 
+CamelCase is and has always been brain-dead.  To enforce that horror
+as a conventional style is utterly absurd.
 
 Not to sound too negative; overall I like the language, but the culture
 has some issues.  The designers want to treat developers like idiots
