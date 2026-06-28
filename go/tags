@@ -1,0 +1,7 @@
+To generate tags:
+
+gotags -R -f tags .
+
+Or with universal-ctags:
+
+ctags -R --languages=Go .
