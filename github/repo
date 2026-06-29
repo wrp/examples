@@ -1,7 +1,11 @@
-gh repo list             # List your own repositories
+gh repo list             # List 30 of your own repositories
 gh repo list $OWNER      # List repositories for a specific user/organization
 gh repo list --limit 100 # List with more details
 gh repo list --archived  # Include archived repositories
+
+gh api "user/repos?per_page=10" --paginate | jq -r '.[].full_name'  # Full pagination
+gh api "orgs/$owner/repos" --paginate    # only list repos for $owner
+
 
 gh repo list --public               # Filter by visibility
 gh repo list --private              # Filter by visibility
