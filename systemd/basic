@@ -1,10 +1,6 @@
 See sample.service for a sample service file
 
-# To see if a service is running:
-$ systemctl is-active ${service?}
-
-# To list all services:
-$ systemctl list-units --type=service
-
-# To ensure a service starts on boot:
-$ systemctl enable ${service?}
+systemctl is-active ${service?}                 # Check if a service is running
+systemctl list-units --type=service             # List all services
+systemctl enable ${service?}                    # Ensure a service starts on boot
+systemctl show ${service?}                      # Show details for $service
