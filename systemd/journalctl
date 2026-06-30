@@ -1,6 +1,4 @@
 
-# Send a message to the log:
-echo message | systemd-cat -p info -t mylabel
-
-# View the above message:
-journalctl -t mylabel
+echo message | systemd-cat -p info -t mylabel  # Send a message to the log
+journalctl -t mylabel  # View the above message
+journalctl -u ${name}.service --no-pager -n 20  # Show last 20 messages
