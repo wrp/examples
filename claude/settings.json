@@ -1,5 +1,10 @@
 {
   "comment": "Put this in $HOME/.claude/settings.json",
+  "model": "claude-opus-4-6",
+  "statusLine": {
+    "type": "command",
+    "command": "/Users/wrp/.claude/statusline"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -7,14 +12,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '\"#\" + (now | floor | tostring), .tool_input.command' >> ~/.claude/bash_history.log"
+            "command": "jq -r '\"#\" + (now | floor | tostring) + \"\\t\" + .session_id + \"\\t\" + .cwd, .tool_input.command' >> ~/.claude/bash_history.log"
           }
         ]
       }
     ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline"
   }
 }
