@@ -21,6 +21,15 @@
             "command": "git-ai checkpoint claude --hook-input stdin"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '\"#\" + (now | floor | tostring), .tool_input.command' >> ~/.claude/bash_history.log"
+          }
+        ]
       }
     ]
   },
