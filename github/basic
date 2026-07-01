@@ -21,4 +21,5 @@ gh issue view $N --repo $OWNER/$REPO   # view issue N
 gh api /repos/$OWNER/$REPO/issues/$N   # view issue N
 
 
-gh run watch $id  # Get periodic status update on a job
+gh run list $id   # Get status update on a job
+gh run watch $id  # Get periodic status updates on a job
