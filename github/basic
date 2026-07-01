@@ -19,3 +19,6 @@ gh api --paginate ...   # For pagination
 gh issue view $N                       # view issue N
 gh issue view $N --repo $OWNER/$REPO   # view issue N
 gh api /repos/$OWNER/$REPO/issues/$N   # view issue N
+
+
+gh run watch $id  # Get periodic status update on a job
