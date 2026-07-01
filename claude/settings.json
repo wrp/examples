@@ -12,7 +12,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '\"#\" + (now | floor | tostring) + \" (\" + (now | strftime(\"%Y-%m-%dT%H:%M:%S%Z\")) + \" \" + .session_id[:8] + \":\" + .cwd + \")\\n\" + .tool_input.command' >> ~/.claude/bash_history.log"
+            "command": "jq -r '\"#\" + (now | floor | tostring) + \" (\" + (now | strflocaltime(\"%Y-%m-%dT%H:%M:%S%z\")) + \" \" + .session_id[:8] + \":\" + .cwd + \")\\n\" + .tool_input.command' >> ~/.claude/bash_history.log"
           }
         ]
       }
