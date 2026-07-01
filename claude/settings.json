@@ -6,13 +6,13 @@
     "command": "/Users/wrp/.claude/statusline"
   },
   "hooks": {
-    "PreToolUse": [
+    "PostToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '\"#\" + (now | floor | tostring) + \"\\t\" + .session_id + \"\\t\" + .cwd, .tool_input.command' >> ~/.claude/bash_history.log"
+            "command": "tee -a ~/.claude/bash_hook_debug.json"
           }
         ]
       }
