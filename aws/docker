@@ -5,4 +5,5 @@ aws ecr list-images \
 	--repository-name ${repo_name?} \
 	--region ${region-us-west-2} \
 	--query 'imageIds[*].imageTag' \
-	--output text
+	--output text \
+| tr \\t \\n | sort -V
