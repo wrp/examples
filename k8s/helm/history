@@ -1,0 +1,2 @@
+
+helm -n $namespace history $release_name  # Show release history
