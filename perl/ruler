@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 
-my $c = $ENV{"COLS"};
-my $msg = $ARGV[0] // getppid();
+my $c = $ENV{"COLS"} || 80;
+my $r = $ENV{"ROWS"} || 3;
+my $msg = $ARGV[0] // "";
 sub draw_horizontal {  # function/subroutine
 	my $i = 0;
 	while( $i < $c ) {
@@ -14,7 +15,7 @@ sub draw_horizontal {  # function/subroutine
 }
 draw_horizontal();
 my $i = 1;
-while( $i < $ENV{"ROWS"} - 2 ) {
+while( $i < $r - 1 ) {
 	my $s = sprintf "%-10s", $i;
 	if( $i == 1 || $i == $ENV{"ROWS"} - 3 ) {
 		while( length($s) + 10 < $c ) {
@@ -28,4 +29,4 @@ while( $i < $ENV{"ROWS"} - 2 ) {
 	print $s;
 	$i += 1;
 }
-draw_horizontal();
+draw_horizontal() if ($r > 1);
