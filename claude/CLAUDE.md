@@ -55,6 +55,10 @@ python style:
 	Feel free to use the walrus operator.  Do so whenever appropriate.
 	Use type annotations on everything.
 
+I often use git-bug, so if I ask you to "work on issue XXXXX" or "look at bug XXXXX"
+and XXXXX is not an integer, you should get details with "git bug bug show XXXXX".  If
+XXXXX is an integer, it is probably an issue tracker from the related remote (eg github).
+
 When providing assistance, always tell me how to do things from a shell rather
 than a gui.  eg, instead of telling me to 'go to Settings → Resources → Advanced → "Virtual disk limit"',
 tell me how to use osascript to kill the docker deamon and let me know which json file to edit.
