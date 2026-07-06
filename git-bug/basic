@@ -26,7 +26,7 @@ git bug bug status:open      # List open issues
 git bug bug show ${id?}      # Show comments on an issue (2)
 git push ${remote?} 'refs/identities/*:refs/identities/*' 'refs/bugs/*:refs/bugs/*'
 
-git-bug bug comment ${id?}        # Add comment to an issue
+git-bug bug comment new ${id?}    # Add comment to an issue
 git bug bug status close ${id?}   # Close an issue
 
 # Notes:
