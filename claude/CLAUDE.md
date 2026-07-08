@@ -63,6 +63,10 @@ a:
 - b: 5
   c: 5
 
+html style:
+	Never put a color specifier in a style tag.  Color should always be in css.
+
+
 python style:
 	Feel free to use the walrus operator.  Do so whenever appropriate.
 	Use type annotations on everything.
