@@ -1,0 +1,5 @@
+
+tools for rendering markdown:
+
+- glow: https://github.com/charmbracelet/glow — renders in the terminal
+- grip: https://github.com/joeyespo/grip — serves in a browser using GitHub's rendering API
