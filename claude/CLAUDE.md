@@ -38,6 +38,18 @@ C-style:
 		eg, always write "for (int i = 0; i < 5; i += 1)" instead of using "i++".
 	Do not mention line numbers in comments.  Ever.  They become stale too quickly.
 
+go-style:
+	It is conventional to align on columns in go, but do not do so.
+	In a hunk like:
+		fmt.Println("%v", &foo{
+	-               ab: 3,
+	+               ab:  3,
+	+               abc: 5,
+		})
+	the change to the ab: line is pure churn.  Do not ever make that change.
+	Formatting changes like that belong in their own distinct commit, if they
+	belong at all.  (gofmt is stupid)
+
 shell-style:
 	Do not *ever* use the [ command.  Avoid the [[ bashism as well.  Use 'test'.
 	Do not set errexit.  'set -e' is a scourge on the universe; stop using it!
