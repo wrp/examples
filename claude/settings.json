@@ -1,6 +1,7 @@
 {
   "comment": "Put this in $HOME/.claude/settings.json",
   "model": "claude-opus-4-6",
+  "editorMode": "vim",
   "statusLine": {
     "type": "command",
     "command": "/Users/wrp/.claude/statusline"
