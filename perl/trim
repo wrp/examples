@@ -8,7 +8,14 @@ else
 	perl -E 'say substr "@ARGV", 0, '"${COLUMNS-80}" "$@"
 fi
 
-
+# Overwrite final characters of a string with "..."
+perl -E 'my $msg = "this is a string, and the \"n\" is the 15th char";
+	$max = 15;
+	if (length $msg > $max) {
+		substr($msg, $max - 3) = "..."
+	}
+	$msg eq "this is a st..." or die "Assertion failed";
+'
 
 # Print enumerated
 # perl -E 'say ((0..9) x 50)'
