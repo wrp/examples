@@ -2,6 +2,10 @@
 # To clone a shallow repo:
 git clone --depth $n --origin=$origin $url
 
+# To get historical meta-data (eg, tags, so that git-describe works as expected),
+# you can do a blobless clone.  This will fully populate the working directory
+# from head, but content from historical commits will be loaded lazily.
+git clone --filter=blob:none --depth $n ${url?}
 
 # To convert a full repo (untested):
 git fetch --depth=$n
