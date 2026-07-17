@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# keywords: operator *, splat, spread, flatten, iterable unpacking
+# keywords: operator *, operator **, splat, spread, flatten, iterable unpacking
 #     dictionary unpacking
 # See https://docs.python.org/3/reference/expressions.html#expression-lists
 
@@ -36,3 +36,6 @@ def make_dict(foo, bar, **kwargs):
     return {'foo':foo, 'bar':bar, **kwargs}
 assert make_dict(5, 3) == {'bar': 3, 'foo':5}
 assert make_dict(5, 3, blah=6) == {'foo':5, 'bar': 3, 'blah': 6}
+
+# A literal works as well:
+assert({'a':1, ** {'a':2, 'b': 3}} == {'a':2, 'b': 3})
