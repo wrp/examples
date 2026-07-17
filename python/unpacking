@@ -26,14 +26,14 @@ assert(b['two'] == 3)
 def foo(*args, expect, **kwargs):
     assert(type(args) == tuple)
     assert(type(kwargs) == dict)
-    assert(args == expect[0])
-    assert(kwargs == expect[1])
+    assert(args == expect['args'])
+    assert(kwargs == expect['kwargs'])
 
 b = {'zero': 0, 'one': 1, 'two': 2}
-foo(b, expect = ( (b,), {} ))
+foo(b, expect = { 'args': (b,), 'kwargs': {} })
 
-foo( *b, expect = ( tuple((k for k in b.keys())), {}))
-foo( **b, expect = ( (), {'zero': 0, 'one': 1, 'two': 2}))
+foo(*b, expect = { 'args': tuple((k for k in b.keys())), 'kwargs': {}})
+foo(**b, expect = { 'args': (), 'kwargs': {'zero': 0, 'one': 1, 'two': 2}})
 
 # Demonstrate amending created dict
 def make_dict(foo, bar, **kwargs):
