@@ -23,21 +23,17 @@ assert(b['two'] == 3)
 
 
 # Commonly used to unpack into function arguments
-def foo(*args, **kwargs):
-    global expect
+def foo(*args, expect, **kwargs):
     assert(type(args) == tuple)
     assert(type(kwargs) == dict)
     assert(args == expect[0])
     assert(kwargs == expect[1])
 
 b = {'zero': 0, 'one': 1, 'two': 2}
-expect = ( (b,), {})
-foo(b)
-# expect = ( (b.keys(),), {}) # Bad: b.keys() has type dict_keys
-expect = ( tuple((k for k in b.keys())), {})
-foo( *b)
-expect = ( (), {'zero': 0, 'one': 1, 'two': 2})
-foo( **b)
+foo(b, expect = ( (b,), {} ))
+
+foo( *b, expect = ( tuple((k for k in b.keys())), {}))
+foo( **b, expect = ( (), {'zero': 0, 'one': 1, 'two': 2}))
 
 # Demonstrate amending created dict
 def make_dict(foo, bar, **kwargs):
