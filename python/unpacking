@@ -33,7 +33,8 @@ b = {'zero': 0, 'one': 1, 'two': 2}
 foo(b, expect = { 'args': (b,), 'kwargs': {} })
 
 foo(*b, expect = { 'args': tuple((k for k in b.keys())), 'kwargs': {}})
-foo(**b, expect = { 'args': (), 'kwargs': {'zero': 0, 'one': 1, 'two': 2}})
+foo(**b, expect = { 'args': (), 'kwargs': b})
+foo(**b, blah=5, expect = { 'args': (), 'kwargs': {'blah': 5, **b}})
 
 # Demonstrate amending created dict
 def make_dict(foo, bar, **kwargs):
