@@ -23,13 +23,21 @@ assert(b['two'] == 3)
 
 
 # Commonly used to unpack into function arguments
-def printer(*args, **kwargs):
-    print(f'args = {args}')
-    print(f'kwargs = {kwargs}')
+def foo(*args, **kwargs):
+    global expect
+    assert(type(args) == tuple)
+    assert(type(kwargs) == dict)
+    assert(args == expect[0])
+    assert(kwargs == expect[1])
 
-printer(b)  # args = ({'zero': 0, 'one': 1, 'two': 2},), kwargs = {}
-printer(*b)  # args = ('zero', 'one', 'two'), kwargs = {}
-printer(**b)  # args = (), kwargs = {'zero': 0, 'one': 1, 'two': 2}
+b = {'zero': 0, 'one': 1, 'two': 2}
+expect = ( (b,), {})
+foo(b)
+# expect = ( (b.keys(),), {}) # Bad: b.keys() has type dict_keys
+expect = ( tuple((k for k in b.keys())), {})
+foo( *b)
+expect = ( (), {'zero': 0, 'one': 1, 'two': 2})
+foo( **b)
 
 # Demonstrate amending created dict
 def make_dict(foo, bar, **kwargs):
