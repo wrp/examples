@@ -1,6 +1,6 @@
 # vim: vartabstop=20,8
 
 psql commands: (postgres client)
-\dt	list tables
+\dt	list tables   ("describe tables")
 \dt+	list tables with metadata
 \d {table_name}     describe table
