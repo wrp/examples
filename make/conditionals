@@ -7,9 +7,17 @@ ifeq ($(USER), foo)
 $(warning USER is foo)
 endif
 
-ifneq ($(USER), foo)
-$(warning USER is NOT foo)
-endif
 
 all:
-	echo $(USER)
+ifneq ($(USER), foo)
+	@echo warning: USER is NOT foo
+endif
+	@echo $(if $(FOO),foo=$(FOO)) $(USER)
+	@# echo $(ifeq $(USER), foo, user is foo)       # Invalid: ifeq is invalid and expands to empty string
+	@# echo $(ifneq $(USER), foo, user is not foo)  # Invalid: ifneq is invalid and expands to empty string
+	@#
+	@echo $(if $(filter foo,$(USER)),user is foo)
+	@echo $(if $(filter-out foo,$(USER)),user is not foo)
+	@#
+	@# (filter foo,$(USER)) returns foo (non-empty/true) when they match,
+	@# and empty (false) when they don't.  (filter-out ...) is the inverse.
