@@ -3,5 +3,13 @@ ifndef USER
 $(error USER is not set)
 endif
 
+ifeq ($(USER), foo)
+$(warning USER is foo)
+endif
+
+ifneq ($(USER), foo)
+$(warning USER is NOT foo)
+endif
+
 all:
 	echo $(USER)
