@@ -2,6 +2,8 @@
 
 git diff        # Show diff to get from the index to the worktree
 git diff OID    # Show diff to get from OID to the working tree
+git diff ${oid1} ${oid2}    # Show diff to get from $oid1 to $oid2
+git diff ${oid1}..${oid2}   # Same as git diff ${oid1} ${oid2}
 
 # Show the files changed from branch to main
 git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}
