@@ -3,15 +3,22 @@
 /*
  When a file has a shebang:
 
- #!path1 arg1 arg2
+ #!path1 word1 word2
 
-and is invoked with "path2 arg3 arg4",
-the file at path1 will be executed with arguments:
+and is invoked with the argument "word3",
+the file at path1 (assuming normal IFS)
+will be executed non-portably either as:
 
-path1 "arg1 arg2" path2 arg3 arg4
+path1 "word1 word2" word3
 
-(if both arg1 and arg2 do not exist, a null argument is *not* passed)
+or as:
 
+path1 word1 word2 word3
+
+(if neither word1 nor word2 are not given, a null argument is *not* passed)
+
+As a direct consequence of that ambiguity, it is highly advised
+to only have a singel word after the path.
  */
 int
 main(int argc, char **argv)
