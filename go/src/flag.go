@@ -1,8 +1,13 @@
+/*
+DO NOT use the standard flag package.  The default behavior is
+to print a usage statement to stderr in response to a flag
+parsing error.  Just avoid it.
+*/
 
 package main
 
 import (
-	"flag"
+	"flag"   // DO NOT USE
 	"fmt"
 )
 
