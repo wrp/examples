@@ -1,12 +1,14 @@
 # By default, git-diff shows the difference between the working tree and the index.
 
-git diff        # Show diff to get from the index to the worktree
-git diff OID    # Show diff to get from OID to the working tree
-git diff ${oid1} ${oid2}    # Show diff to get from $oid1 to $oid2
-git diff ${oid1}..${oid2}   # Same as git diff ${oid1} ${oid2}
+git diff                            # Show diff to get from the index to the worktree
+git diff ${treeish}                 # Show diff to get from treeish to the working tree
+git diff ${treeish1} ${treeish2}    # Show diff to get from $treeish1 to $treeish2
+git diff ${treeish1}..${treeish2}   # Same as git diff ${treeish1} ${treeish2}
 
-# Show the files changed from branch to main
-git diff --name-only $(git merge-base ${branch} ${main-main})..${branch}
+# Show the diff from branch-point to commit
+git diff --name-only $(git merge-base ${main} ${commit})..${commit}
+git diff --merge-base ${main} ${commit}  # equivalent
+git diff ${main}...${commit}             # equivalent
 
 
 git diff --name-only --diff-filter=A  # Show only added files
