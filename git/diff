@@ -1,14 +1,17 @@
 # By default, git-diff shows the difference between the working tree and the index.
 
-git diff                            # Show diff to get from the index to the worktree
-git diff ${treeish}                 # Show diff to get from treeish to the working tree
-git diff ${treeish1} ${treeish2}    # Show diff to get from $treeish1 to $treeish2
-git diff ${treeish1}..${treeish2}   # Same as git diff ${treeish1} ${treeish2}
+# Let's adopt the following convention:
+#  ${t} and ${t2} are each a treeish
+#  ${c} and ${c2} are each a committish
+git diff               # Show diff to get from the index to the worktree
+git diff ${t}          # Show diff to get from treeish to the working tree
+git diff ${t} ${t2}    # Show diff to get from $t to $t2
+git diff ${t}..${t2}   # Same as git diff ${t} ${t2}
 
-# Show the diff from branch-point to commit
-git diff --name-only $(git merge-base ${main} ${commit})..${commit}
-git diff --merge-base ${main} ${commit}  # equivalent
-git diff ${main}...${commit}             # equivalent
+# Show the diff from branch-point to commitish
+git diff --name-only $(git merge-base ${c2} ${c})..${c}
+git diff --merge-base ${c2} ${c}  # equivalent
+git diff ${c2}...${c}             # equivalent
 
 
 git diff --name-only --diff-filter=A  # Show only added files
