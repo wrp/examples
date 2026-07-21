@@ -76,3 +76,7 @@ This is outside of any block.
 ```
 This also denotes a code block.  (A "fenced code block", according to OAI's chat GPT-5)
 ```
+
+# The ! indicates that the link is an image embed. The alternate text is
+# displayed if the image cannot be fetched.
+![altnerate text](image link)
