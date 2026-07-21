@@ -1,9 +1,8 @@
-#include <stdio.h>
+keywords: shebang, sha-bang, she-bang, hashbang, hash-bang
 
-/*
- When a file has a shebang:
+When a file has a shebang:
 
- #!path1 word1 word2
+#!path1 word1 word2
 
 and is invoked with the argument "word3",
 the file at path1 (assuming normal IFS)
@@ -18,13 +17,4 @@ path1 word1 word2 word3
 (if neither word1 nor word2 are not given, a null argument is *not* passed)
 
 As a direct consequence of that ambiguity, it is highly advised
-to only have a singel word after the path.
- */
-int
-main(int argc, char **argv)
-{
-	printf("argc = %d\n", argc);
-	for( ; *argv; argv++ ){
-		printf("arg: %s\n", *argv);
-	}
-}
+to only have a single word after the path.
