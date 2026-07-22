@@ -17,6 +17,9 @@ Directives
 - private — prevent a variable from being inherited by prerequisites
 - vpath — search paths for prerequisites by pattern
 
+Note that "ifdef" is misnamed.  The semantics are such that its name
+ought to be "ifnotempty".
+
 Rule variants
 - Pattern rules (%.o: %.c)
 - Static pattern rules ($(OBJS): %.o: %.c)
