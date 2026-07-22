@@ -1,0 +1,3 @@
+
+# Show tag messages
+git tag -l -n1 --sort=-creatordate
