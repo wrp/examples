@@ -9,8 +9,9 @@ if ! git interpret-trailers --parse "$1" | grep -q "^Type:"; then
 	git diff-index --cached --name-status HEAD -- \
 	| awk ' {
 		n = split($2, p, "/")
-		if (n > 1) {
-			printf "Type: %s\n", p[n-1]
+		t = p[n-1]
+		if (n > 1 && ! seen[t]++) {
+			printf "Type: %s\n", t
 		}
 	}' >> "$1"
 fi
