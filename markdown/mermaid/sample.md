@@ -4,6 +4,10 @@
 config:
         look: handDrawn
         theme: neutral
+        layout: elk
+        elk:
+                mergeEdges: true
+                nodePlacementStrategy: LINEAR_SEGMENTS
 ---
 flowchart TD
         subgraph Frontend
