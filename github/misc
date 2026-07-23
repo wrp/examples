@@ -1,0 +1,6 @@
+
+# Get the full oid of a ref
+# ref can be an abbreviated sha, or the output of git-describe, or ...?
+curl -sf -H "Authorization: Bearer $( gh auth token )" \
+	https://api.github.com/repos/${owner}/${repo}/commits/${ref} \
+| jq -r .sha
