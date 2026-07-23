@@ -1,0 +1,49 @@
+
+
+
+npm install -g @mermaid-js/mermaid-cli
+mmdc -i ${input}.md -o ${output}.png
+
+flowchart XX
+# XX can be one of:
+#  TD - Top-down/ same as top to bottom
+#  TB - Top to bottom
+#  BT - Bottom to top
+#  RL - Right to left
+#  LR - Left to right
+
+node shape is determined by brackets:
+name (  text )   # A simple node with round edges
+name ([ text ])  # A "stadium" shaped node.
+name [[ text ]]  # Vertical line delimited
+name [( text )]  # Cylinder
+name (( text ))  # Circle
+name (((text ))) # Double Circle
+name >  text ]   # Arrow shaped box
+name {  text }   # Rhomboid
+name {{ text }}  # Hexagon
+name [/ text /]  # Parallelogram  //
+name [\ text \]  # Parallelogram  \\
+name [/ text \]  # Trapezoid / ̲̅ ̲̅\̲
+name [\ text /]  # Trapezoid         \ ̲̅ ̲̅ ̲̅/
+
+
+A --> B           # Simple link between 2 nodes
+A ==> B           # Thick link between 2 nodes
+A --- B           # link with no arrow
+A ---|text|B      # link with text
+A -- text ---B    # link with text (same as above)
+A -->|text|B      # arrow link with text
+A -- text -->B    # arrow link with text (same as above)
+A == text ==>B    # thick arrow link with text
+A -.-> B          # dotted link with arrow
+A -. text .->B    # dotted link with text and arrow
+A ~~~ B           # invisible link
+
+mulitple nodes:
+a --> b & c --> d     # b & c are grouped: creates link from a to both b and c, and from each to d
+
+attach id to an edge:
+flowchart LR
+	A e1@--> B
+	e1@{ animate: true }
