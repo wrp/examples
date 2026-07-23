@@ -2,9 +2,9 @@
 ```mermaid
 ---
 config:
-        look: handDrawn
-        theme: neutral
-        layout: elk
+        look: handDrawn   # handDrawn, classic
+        theme: neutral    # neutral, default
+        layout: elk       # elk, dagre
         elk:
                 mergeEdges: true
                 nodePlacementStrategy: LINEAR_SEGMENTS
