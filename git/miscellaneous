@@ -5,3 +5,6 @@ discoverable via "git grep"
 
 
 git log --format=%H --all --find-object=$oid   #  Find which commits contain a blob
+
+
+e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 is the oid of the empty blob (empty file)
