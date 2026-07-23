@@ -1,16 +1,16 @@
 #!/bin/sh
 
 # Make .git/hooks/prepare-commit-msg a symbolic link to this.
-# It will auto inject a trailer based on the directory name.
+# It will auto inject a trailer based on the final component of
+# the directory names.
 
 if ! git interpret-trailers --parse "$1" | grep -q "^Type:"; then
-
 	echo >> "$1"
-	git diff-index --cached --name-status HEAD -- |
-	awk 'NR==1{
-		path = $2;
-		i = index(path, "/");
-		tag = i ? substr(path, 0, i - 1) : path;
-		printf "Type: %s\n", tag;
+	git diff-index --cached --name-status HEAD -- \
+	| awk ' {
+		n = split($2, p, "/")
+		if (n > 1) {
+			printf "Type: %s\n", p[n-1]
+		}
 	}' >> "$1"
 fi
