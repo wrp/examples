@@ -42,3 +42,12 @@ printf '%s\n%b%s\n%s%b' "$alpha" "$enable" "$alpha" "$text" "$disable"
 
 perl -e 'printf "%3d: " . chr($_) . " -> \033(0 " . chr($_) .
 	"\n\033(B", $_ foreach 43..48, 96..126'
+
+printf 'A\xcc\x85\n'           # A̅
+printf 'A\xcc\xb2\n'           # A̲
+printf '/\xcc\xb2\n'           # /̲
+printf '\\\xcc\xb2\n'          # \̲
+
+printf 'A\xcc\x85\xcc\xb2\n'   #  A̲̅
+
+printf ' \xcc\x85\xcc\xb2\n'   #   ̲̅  # Interesting: vim treats as whitespace
