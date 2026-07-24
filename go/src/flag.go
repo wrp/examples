@@ -110,15 +110,22 @@ func (t *Thang) Type() string {
 }
 
 func newExportCmd() *cobra.Command {
-	var value Thang
+	var useFoo bool
+	var useBar bool
 
 	cmd := &cobra.Command{
 		Use:   "exclude",
-		Short: "Show exclusivity (demonstrates custom flag type)",
+		Short: "Show exclusivity (demonstrates mutually exclusive flags)",
 		Example: strings.TrimSpace(`
-  flag exclude --thang foo
-  flag exclude --thang bar`),
+  flag exclude --foo
+  flag exclude --bar`),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			var value Thang
+			if useFoo {
+				value = Foo
+			} else if useBar {
+				value = Bar
+			}
 			fmt.Printf("Selected: %s\n", &value)
 			if verbose {
 				fmt.Println("verbose = true")
@@ -127,8 +134,9 @@ func newExportCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().Var(&value, "thang", "select foo or bar")
-	cmd.MarkFlagRequired("thang")
+	cmd.Flags().BoolVar(&useFoo, "foo", false, "use the foo")
+	cmd.Flags().BoolVar(&useBar, "bar", false, "use the bar")
+	cmd.MarkFlagsMutuallyExclusive("foo", "bar")
 	return cmd
 }
 
