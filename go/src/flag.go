@@ -1,30 +1,46 @@
 /*
-DO NOT use the standard flag package.  The default behavior is
-to print a usage statement to stderr in response to a flag
-parsing error.  Just avoid it.
+If you use the standard flag package, you must modify it
+significantly.  The default behavior is to print a usage
+statement to stderr in response to a flag parsing error,
+which is horribly wrong on so many levels.  Here is a simple
+demonstration of how to get proper behavior.  (Usage
+statement only given in response to -h or --help, and
+it is written to stdout)
 */
 
 package main
 
 import (
-	"flag"   // DO NOT USE
+	"flag"
 	"fmt"
+	"os"
 )
 
 
 func main() {
-	var nFlag = flag.Int("n", 1, "help message for flag n, with default 1")
-	var fFlag = flag.Float64("f", 100, "help message for flag m, with default 100")
-	flag.Parse()
+	fs := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	fs.Usage = func() {}
+	var nFlag = fs.Int("n", 1, "help message for flag n, with default 1")
+	var fFlag = fs.Float64("f", 100, "help message for flag m, with default 100")
+	if err := fs.Parse(os.Args[1:]); err != nil {
+		if err == flag.ErrHelp {
+			fs.SetOutput(os.Stdout)
+			fmt.Fprintf(os.Stdout, "Usage of %s:\n", os.Args[0])
+			fs.PrintDefaults()
+			fmt.Fprintf(os.Stdout, "  -h, --help\n\tDisplay this usage statement\n")
+			os.Exit(0)
+		}
+		os.Exit(1)
+	}
 	fmt.Println("n = ", *nFlag)
 	fmt.Println("f = ", *fFlag)
 
 	// get nth arg; empty string returned if not set
-	fmt.Printf("Arg %d is: %s\n", *nFlag, flag.Arg(*nFlag))
+	fmt.Printf("Arg %d is: %s\n", *nFlag, fs.Arg(*nFlag))
 
-	fmt.Printf("There are %d arguments:\n", flag.NArg())
+	fmt.Printf("There are %d arguments:\n", fs.NArg())
 	// Show all args
-	for i, v := range flag.Args() {
+	for i, v := range fs.Args() {
 		fmt.Println("Arg ", i, ": ", v)
 	}
 }
