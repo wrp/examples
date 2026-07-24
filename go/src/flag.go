@@ -1,5 +1,5 @@
 /*
-Demonstration of cobra for CLI flag parsing.
+Demonstration of cobra for flag parsing.
 
 Features shown:
   - Short and long flags (-n / --arg-num)
@@ -75,23 +75,51 @@ Demonstrates short/long flag aliases and required flags.`),
 	return cmd
 }
 
+type Thang int
+
+const (
+	Unspecified Thang = iota
+	Foo
+	Bar
+)
+
+func (t *Thang) String() string {
+	switch *t {
+	case Foo:
+		return "foo"
+	case Bar:
+		return "bar"
+	}
+	return "unspecified"
+}
+
+func (t *Thang) Set(s string) error {
+	switch s {
+	case "foo":
+		*t = Foo
+	case "bar":
+		*t = Bar
+	default:
+		return fmt.Errorf("must be \"foo\" or \"bar\"")
+	}
+	return nil
+}
+
+func (t *Thang) Type() string {
+	return "thang"
+}
+
 func newExportCmd() *cobra.Command {
-	var outFile string
-	var toStdout bool
-	var format string
+	var value Thang
 
 	cmd := &cobra.Command{
-		Use:   "export",
-		Short: "Export data (demonstrates mutually exclusive flags)",
+		Use:   "exclude",
+		Short: "Show exclusivity (demonstrates custom flag type)",
 		Example: strings.TrimSpace(`
-  flag export --stdout --format json
-  flag export --output result.csv --format csv`),
+  flag exclude --thang foo
+  flag exclude --thang bar`),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if toStdout {
-				fmt.Printf("Exporting to stdout in %s format\n", format)
-			} else {
-				fmt.Printf("Exporting to %s in %s format\n", outFile, format)
-			}
+			fmt.Printf("Selected: %s\n", &value)
 			if verbose {
 				fmt.Println("verbose = true")
 			}
@@ -99,13 +127,8 @@ func newExportCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&outFile, "output", "o", "",
-		"output file path")
-	cmd.Flags().BoolVar(&toStdout, "stdout", false,
-		"write to stdout instead of a file")
-	cmd.Flags().StringVarP(&format, "format", "f", "json",
-		"output format (json, csv, xml)")
-	cmd.MarkFlagsMutuallyExclusive("output", "stdout")
+	cmd.Flags().Var(&value, "thang", "select foo or bar")
+	cmd.MarkFlagRequired("thang")
 	return cmd
 }
 
