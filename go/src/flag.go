@@ -35,6 +35,14 @@ func newRootCmd() *cobra.Command {
 	}
 	root.SetOut(os.Stdout)
 	root.SetErr(os.Stderr)
+	tmpl := root.UsageTemplate()
+	tmpl = strings.Replace(tmpl,
+		"{{if .Runnable}}\n  {{.UseLine}}{{end}}",
+		"{{if .Runnable}}{{if not .HasAvailableSubCommands}}\n  {{.UseLine}}{{end}}{{end}}", 1)
+	tmpl = strings.Replace(tmpl,
+		"{{.CommandPath}} [command]",
+		"{{.CommandPath}} [-h | command]", 1)
+	root.SetUsageTemplate(tmpl)
 	root.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false,
 		"enable verbose output")
 	root.AddCommand(newShowCmd())
