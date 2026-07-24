@@ -23,9 +23,8 @@ assert f'{a!s}' == 'Calls __str__'
 
 
 a = 5
-print(f'{a:03}')  # Width of 3, zero padded
-print(f'{a:3}')   # Width of 3, space padded
-
+assert f'{a:03}' == '005'
+assert f'{a:3}' == '  5'
 
 template = 'this is a template: {:03}'
 for x in range(3):
