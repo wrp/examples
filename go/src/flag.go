@@ -29,6 +29,9 @@ func newRootCmd() *cobra.Command {
 		Short:         "Demonstrate cobra features",
 		SilenceUsage:  true,
 		SilenceErrors: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return fmt.Errorf("a subcommand is required; see '%s --help'", cmd.CommandPath())
+		},
 	}
 	root.SetOut(os.Stdout)
 	root.SetErr(os.Stderr)
