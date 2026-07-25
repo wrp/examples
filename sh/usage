@@ -1,13 +1,12 @@
 #!/bin/sh
-
+# Simple demonstration parsing the file header to produce usage
+#
 # usage: @NAME@ [-h] required_argument [optional_argument ...]
 #
 # options:
-#   -h         print usage statement
-##############################################################
+#     -h/--help         print usage statement
 
-case "$1" in
--h)
-	sed -nE "/^##/q; s|@NAME@|$(basename $0)|; 1!s/# ?//p;" "$0"
+if printf '%s\n' "$*" | grep -wqE -- '-h|--help'; then
+	sed -nE '2,/^$/{/^$/q; s/# ?//; s|@NAME@|'"${0##*/}|"'; p;}' "$0"
 	exit
-esac
+fi
