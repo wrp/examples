@@ -23,3 +23,7 @@ git diff --name-only --diff-filter=a  # Exclude added files
 # newline, so purely empty lines will not be detected and the file
 # will be omitted from consideration.
 git diff -G.
+
+
+# See when code is moved:  keyword: lift-n-shift, lift and shift
+git diff --color-moved=dimmed-zebra HEAD^..HEAD
