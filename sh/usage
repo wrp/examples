@@ -6,7 +6,7 @@
 # options:
 #     -h/--help         print usage statement
 
-if printf '%s\n' "$*" | grep -wqE -- '-h|--help'; then
+if printf '%s\n' "$@" | sed '/^--$/q' | grep -qE -- '^(-h|--help)$'; then
 	sed -nE '2,/^$/{/^$/q; s/# ?//; s|@NAME@|'"${0##*/}|"'; p;}' "$0"
 	exit
 fi
