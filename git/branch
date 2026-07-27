@@ -72,3 +72,6 @@ get_branch() {
 		done
 	fi
 }
+
+# Describe the purpose of a branch
+git branch --edit-description ${branch-HEAD}
