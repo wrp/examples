@@ -9,7 +9,8 @@ EXE = $(patsubst %.go,%,$(SRCS))
 all: $(EXE)
 
 %: %.go
-	go build -gcflags=-m $^
+	@#go build -gcflags=-m $^
+	go build $^
 
 check:
 	go test
