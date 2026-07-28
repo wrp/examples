@@ -1,3 +1,4 @@
+git config --list # List all config
 
 # Make --rebase default
 git config --global pull.rebase true
