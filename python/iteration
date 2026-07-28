@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+# Do not modify a dictionary while iterating via items()
+data = {'foo': 0, 'bar': 0}
+
+try:
+    for k, v in data.items():
+        data['baz'] = 0
+except RuntimeError as e:
+    a = str(e)
+
+assert(a == 'dictionary changed size during iteration')
