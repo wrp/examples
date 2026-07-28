@@ -3,10 +3,38 @@
 # Do not modify a dictionary while iterating via items()
 data = {'foo': 0, 'bar': 0}
 
+#  The dictionary mutation (data['baz'] = 0) happens before the iterator checks for modification.  The sequence is:
+
+#  1. The loop body executes data['baz'] = 0 — the key is inserted, len(data) is now 3
+#  2. The iterator advances to get the next item, detects the dict size changed, and raises RuntimeError
+
+# CPython's dict iterator checks the dict's version/size at the
+# start of each tp_iternext call, not when the mutation happens.  So
+# the insertion always completes; the exception comes on the next
+# iteration step.
+
+# This is a CPython implementation detail that has been stable for a
+# long time, but it is not formally guaranteed by the language
+# specification.  The spec only says modifying a dict during iteration
+# may raise RuntimeError — it doesn't specify whether the mutation
+# takes effect first.  In practice, relying on it is safe in CPython.
+
 try:
     for k, v in data.items():
         data['baz'] = 0
 except RuntimeError as e:
-    a = str(e)
+    assert str(e) == 'dictionary changed size during iteration'
+else:
+    assert False
 
-assert(a == 'dictionary changed size during iteration')
+assert len(data) == 3   # !!
+
+try:
+    for k in data:
+        data.pop('baz')
+except RuntimeError as e:
+    assert str(e) == 'dictionary changed size during iteration'
+else:
+    assert False
+
+assert len(data) == 2   # !!
