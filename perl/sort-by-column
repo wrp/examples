@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+
+# Sort on a given column
+# Set RS in the environ to specify record separator
+
+use strict;
+use warnings;
+
+my $col = shift // 0;
+$col -= 1 if $col > 0;
+my $sep = defined $ENV{RS} ? qr/\Q$ENV{RS}\E/ : qr/\s+/;
+
+sub extract_column {
+	my ($line, $index) = @_;
+	my @fields = split $sep, $line;
+	return $fields[$index] // "";
+}
+
+sub build_hash {
+	my %hash = map {$_ => extract_column($_, $col)}
+		map  { chomp; $_ }
+		<>;
+	return %hash;
+}
+
+my %data = build_hash();
+foreach my $key (sort{$data{$a} cmp $data{$b}} keys %data) {
+	print "$key\n";
+}
