@@ -1,0 +1,9 @@
+#!/bin/sh
+# Display images running in all cronjobs
+kubectl get cronjobs --all-namespaces \
+	-o custom-columns=$( tr \\n , <<- EOF | sed -e 's/,$//'
+		NAMESPACE:.metadata.namespace
+		NAME:.metadata.name
+		IMAGE:.spec.jobTemplate.spec.template.spec.containers[0].image
+	EOF
+	)
