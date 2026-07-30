@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# It's spelled with a hyphen: rev-list, not revlist
+
+git rev-list foo bar ^baz  # all commits reachable from foo or bar, but not from baz
+git rev-list foo..bar      # same as "bar ^foo"
+
+git rev-list A...B  # List all commits from A to B to their merge-base
+git rev-list A B --not $(git merge-base --all A B)
