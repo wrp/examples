@@ -2,4 +2,7 @@
 
 To generate tags for a particular language: (assuming universal-ctags)
 
-ctags -R --languages=Go .
+ctags -R --languages=Go ${dir-.}
+
+
+ctags --list-languages  # List available langauges
