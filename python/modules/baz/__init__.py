@@ -6,5 +6,3 @@ try:
     f()
 except Exception as e:
     print("raised ", e)
-
-True
