@@ -1,0 +1,9 @@
+#!/bin/sh
+jq -r '
+	"#" + (now | floor | tostring)
+	+ " (" + (now | strflocaltime("%Y-%m-%dT%H:%M:%S%z"))
+	+ " " + .session_id[:8]
+	+ ":" + .cwd
+	+ ")\n"
+	+ .tool_input.command
+' >> "${XDG_HOME_CONFIG-$HOME}"/.claude/bash_history.log
