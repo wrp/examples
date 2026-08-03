@@ -5,6 +5,7 @@ kubectl config current-context # Get the current context
 kubectl config get-contexts    # List the available contexts
 kubectl config view            # See the available contexts (very verbose)
 kubectl config use ${context}  # Use the $context (use == use-context)
+kubectl config delete-context ${context}        # Remove entyry from ~/.kube/config
 kubectl config view | yq -r '.contexts[].name'  # List names of all contexts
 
 
