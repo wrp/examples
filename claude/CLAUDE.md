@@ -15,7 +15,8 @@ commit messages:
 	Ensure trailers are valid (all at the end, no empty lines between them).
 	Write in the imperative mood with "now" referring to the parent commit's tree.
 	No non-ASCII characters.
-	No metadata prefixes like "feat:" in subjects — use trailers instead (e.g., Type: feature).
+	No prefixes in subjects (eg "feat:", "component:", "area:").
+		Subjects are plain imperative sentences.  Use trailers for metadata.
 	Keep lines in the Body under 72 characters.
 	Keep summaries under 50 characters.
 	Do not add "Generated with Claude Code" or robot emojis.
