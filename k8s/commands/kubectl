@@ -47,6 +47,7 @@ kubectl config view | yq -r '.contexts[].name'  # List names of all contexts
 kubectl get namespaces
 kubectl get pods --namespace "${namespace}"
 kubectl get pods -A  # get pods from all namespaces
+kubectl describe ns ${ns}   # View details, including annotations
 
 # NODES
 kubectl cordon $NODENAME  # Mark a node unschduleable (untested)
