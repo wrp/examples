@@ -1,0 +1,9 @@
+# Emit a prompt prefix on all commands.  eg:
+# $ echo foo
+# foo
+
+
+SHELL := PS4='$$ ' $(SHELL) -x
+
+all:
+	@echo foo
