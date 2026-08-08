@@ -1,11 +1,5 @@
 {
-  "comment": "Put this in $HOME/.claude/settings.json",
   "model": "claude-opus-4-6",
-  "editorMode": "vim",
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline"
-  },
   "hooks": {
     "PreToolUse": [
       {
@@ -18,5 +12,13 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline"
+  },
+  "theme": "dark",
+  "editorMode": "vim",
+  "comment": "Put this in $HOME/.claude/settings.json",
+  "tui": "fullscreen"
 }
