@@ -3,3 +3,7 @@ Use <backslash><enter> to get a newline in the prompt.  You can
 try '/terminal-setup', but that will tweak the emulator settings
 and probably mess up a lot of things.  The interface with the terminal
 is already wonky.
+
+
+Type <ctrl>o  to get transcript mode, which enables scrollback.  Quit
+transcript mode with q or <esc>
