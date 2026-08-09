@@ -13,6 +13,7 @@ override CFLAGS += -Wall   # Append to value from command line or environment
 .PHONY: all
 
 all:
+	@echo USER = $(USER)
 	@echo CFLAGS = "$(CFLAGS)"
 	@echo arguments to make: $(MAKECMDGOALS)
 	@echo 'Running rules in GNUmakefile (try bsdmake, or use -f to avoid)'
