@@ -1,0 +1,9 @@
+
+To fetch issues from another repo.  (eg, if you were in
+the wrong directory when you created an issue):
+
+repo=/path/to/other
+git fetch $repo '+refs/bugs/*:refs/bugs/*'
+git fetch $repo '+refs/bugs/*:refs/bugs/*'
+rm -f .git/git-bug/cache
+git bug bug
