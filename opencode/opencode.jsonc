@@ -1,0 +1,31 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "ollama/qwen3-coder:30b",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama qwen3-coder",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3-coder-fibersense:latest": {
+          "name": "Qwen3-Coder (local)",
+          "capabilities": {
+            "tools": true
+          }
+        }
+      }
+    }
+  },
+  "permission": {
+    "*": "ask",
+    "edit": "allow",
+    "external_directory": {
+      "*": "allow"
+    }
+  },
+  "instructions": [
+    "Use shell variables instead of angle brackets for all placeholders. For example, use $CLUSTER_NAME instead of <your-cluster-name>. This applies to all contexts, not just shell commands."
+  ]
+}
