@@ -3,10 +3,11 @@
 kubectl controls the Kubernetes cluster manager.
 
 # PODS
-kubectl cp pod:/p/a/t/h /p/a/t/h                    # Copy a file from a pod to local
+kubectl cp ${pod?}:${path?} ${path##*/}             # Copy a file from a pod to local
 kubectl get pods ${selector+-l ${selector}}         # list pods
 kubectl get pods -o json ${selector+-l ${selector}} # list pods in json format
-kubectl get pod ${pod?} -o jsonpath='{.spec.nodeName}' # Determine node on which a pod is running
+pod=$(kubectl get pods ${selector+-l ${selector}} -o name | sed 1q)  # select first pod
+node=$(kubectl get pod ${pod?} -o jsonpath='{.spec.nodeName}')  # Determine NODE on which a pod is running
 
 # label selector
 kubectl get pods -l label_key=value # find/search/filter all pods that have a particular label
