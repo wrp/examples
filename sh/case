@@ -1,14 +1,22 @@
 #!/bin/sh
 
 
-# Patterns are matched as via Pathname Expansion.
-# (eg, they are globs, not regex)
 s=${1-foo}
 
+match() {
 case $s in
 foo|\
 bar)
-	echo 'case 1: foo|bar'
+	echo "$s matches foo|bar"
 ;;
-*)	echo default
+*)	echo "$s does not match foo|bar"
+esac
+}
+for s in foo bar 'foo|bar'; do match "$s"; done
+
+# Patterns are matched as via Pathname Expansion.
+# (eg, they are globs, not regex)
+case fooooox in
+f.*x) exit 1;;   # Does not match
+f*x) echo 'f*x matches foooooox';;
 esac
