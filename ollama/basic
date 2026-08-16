@@ -1,4 +1,4 @@
 
 ollama pull $model   # Download a model, default store is $HOME/.ollama
 ollama list          # list available models
-ollama ps            # check which models have been loaded
+ollama ps            # check which models have been loaded, and gpu/cpu split
