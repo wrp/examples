@@ -54,7 +54,7 @@ kubectl create namespace ${ns}     # Create a namespace
 # NODES
 kubectl cordon $NODENAME  # Mark a node unschduleable (untested)
 kubectl patch node $NODENAME -p '{"spec":{"unschedulable":true}}'  # edit a node (untested)
-kubectl get node $node -o jsonpath='{.metadata.labels.node\.kubernetes\.io/instance-type}'  # get instance type
+kubectl get node $node -o jsonpath='{.metadata.labels.node\.kubernetes\.io/instance-type}'  # get instance type of NODE
 
 kubectl get pods --all-namespaces  $( : Show which pods are running on a node
 	) -o jsonpath="{range .items[?(.spec.nodeName==\"${NODENAME?}\")]}{.metadata.name} {end}"
