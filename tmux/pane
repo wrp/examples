@@ -1,6 +1,8 @@
 Pane in which a process is executing is available in $TMUX_PANE
 #{pane_id} (tmux variable) is the currently active pane
 
+You can switch to a given pane using: tmux switch-client -t $target_pane
+
 identify pane as: ${name_of_session}:${index_of_window}.${index_of_pane}
 
 Move to a pane in the current window:
