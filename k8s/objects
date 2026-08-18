@@ -1,0 +1,8 @@
+
+# Show most objects in a namesapce
+kubectl get all -n "${namespace?}"
+
+# Show all objects of any kind in a namespace
+kubectl api-resources --verbs=list --namespaced -o name \
+| xargs -n 1 sh -c 'echo "******* $1 *******";
+	kubectl get --show-kind --ignore-not-found -n "'"${namespace?}"'" "$1"' _
