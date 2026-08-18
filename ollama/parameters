@@ -1,0 +1,4 @@
+
+See the parameters of a model:
+
+printf "$(curl -s $host:11434/api/show -d '{"name":"'"${model?}"'"}' | jq -r .parameters)"\\n
