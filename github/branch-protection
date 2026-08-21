@@ -1,0 +1,22 @@
+
+
+1. Require signed commits (branch protection on main):
+   The branch-protection PUT is a full replacement — the null/empty fields reset
+   checks/reviews/restrictions to off.  If you already require status checks or PR reviews, include them instead.
+
+     gh api repos/$user/$repo/branches/main/protection \
+       -X PUT \
+       -f required_status_checks='{"strict":true,"contexts":[]}' \
+       -f enforce_admins=true \
+       -f required_pull_request_reviews=null \
+       -f restrictions=null \
+       -f required_signatures='{"enabled":true}'
+
+2. Ban squash merging (repo setting — independent of branch protection):
+
+     gh api repos/$user/$repo -X PATCH \
+       -f allow_squash_merge=false \
+       -f allow_rebase_merge=false \
+       -f allow_merge_commit=true
+
+That leaves only merge commits permitted, and all commits (including PR heads) must be signed.
