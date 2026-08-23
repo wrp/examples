@@ -1,5 +1,5 @@
 
-gh repo create $owner/$repo --internal --no-push   # create an internal repo
+gh repo create $owner/$repo --internal   # create an internal repo
 
 gh repo list             # List 30 of your own repositories
 gh repo list $OWNER      # List repositories for a specific user/organization
