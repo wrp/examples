@@ -1,0 +1,94 @@
+
+re: gofmt churn
+
+This exact problem has been heavily debated in the community. Over a decade ago on [Google Groups](https://groups.google.com/g/golang-nuts/c/kp5-wX2ONdc), developers raised proposals to change how gofmt formats struct fields and assignments because the hardcoded space alignment "may cause extra changes in a commit diff when one field is added or removed." [1, 2]
+The community consensus remains clear: mixing formatting and logic is a terrible practice. As early as 2011, community discussions on [Stack Overflow](https://stackoverflow.com/questions/7348548/gos-gofmt-and-diff-vcs-issues) explicitly recommended a two-commit approach to isolate diff noise: [3]
+
+"If this really bothers you, do two checkins. The first check in adds your variable... Your diff will be isolated to the code you have actually changed. Then, perform gofmt. The second commit is just formatting changes..." [3]
+
+If you want to convince your team to drop rigid formatting blocks in your CI pipeline to allow clean commit histories, here is a coherent, technical argument you can present.
+------------------------------
+## The Argument: Prioritize Git History and Code Review Integrity Over Absolute Pipeline Rigidity
+Rigidly blocking pull requests in CI because of a gofmt violation forces developers to destroy their Git history. It combines functional logic and layout adjustments into a single commit, rendering code reviews and regression tracking far more difficult.
+## 1. It Pollutes git blame and Code Reviews
+When a pipeline forces a developer to format a file before merging, a single-line logic change becomes obscured by 99 lines of meaningless whitespace adjustment due to gofmt's vertical alignment blocks. This means: [4]
+
+*
+* PR Review Noise: Reviewers must read through dozens of shifted lines to find the single line that alters system behavior.
+* Destruction of git blame: Future developers trying to trace a bug will see the formatting commit as the origin for 100 lines of code, completely hiding the author who originally wrote the business logic. [4, 5]
+*
+
+## 2. Clean Version Control Requires Atomic Commits
+According to standard software engineering practices, commits should be atomic and semantic. Mixing logic and layout adjustments breaks this foundation. The correct way to handle code modification in a vertically aligned environment is: [6]
+
+*
+* Commit 1 (The Logic): A single-line diff that clearly states the feature add or bug fix.
+* Commit 2 (The Layout): A subsequent commit clearly titled gofmt that explicitly handles the layout adjustments. [3]
+*
+
+A CI pipeline that fails on Commit 1 prevents developers from pushing granular, clean histories to remote branches.
+## 3. The CI Pipeline is the Wrong Enforcement Layer
+A CI pipeline should validate correctness and safety (tests, security scans, compilation), not cosmetic layouts. Forcing formatting checks in the pipeline turns the centralized build tool into a gatekeeper for text aesthetics. [7]
+Formatting enforcement belongs exclusively in the local development layer (via automated editor extensions or git pre-commit hooks), which ensures code is unified before it ever lands on the main branch, without breaking intermediate, logical commits. [8, 9, 10]
+------------------------------
+## Alternative: If they won't disable it, use .git-blame-ignore-revs
+If your team refuses to remove the CI check, you can leverage a native Git feature to mitigate the damage. You can convince the team to let you isolate formatting-only commits and tell Git to ignore those specific revisions. [5]
+
+   1. Create a file in your repository named .git-blame-ignore-revs.
+   2. Add the full commit hash of your formatting-only commits to that file:
+
+   # Ignore massive gofmt vertical alignment churn commit
+   a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+
+   3. Configure Git locally or via the repository to respect it:
+
+   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+   [5]
+
+This compromise satisfies a rigid CI pipeline while keeping your functional commits completely clean and preserving your git blame history. [5]
+
+[1] [https://groups.google.com](https://groups.google.com/g/golang-nuts/c/kp5-wX2ONdc)
+[2] [https://groups.google.com](https://groups.google.com/g/golang-nuts/c/kp5-wX2ONdc)
+[3] [https://stackoverflow.com](https://stackoverflow.com/questions/7348548/gos-gofmt-and-diff-vcs-issues)
+[4] [https://www.reddit.com](https://www.reddit.com/r/golang/comments/b2ir1i/dont_commit_improperly_formatted_go_code/)
+[5] [https://oneuptime.com](https://oneuptime.com/blog/post/2026-01-24-git-blame-effectively/view)
+[6] [https://stackoverflow.com](https://stackoverflow.com/questions/2214480/committing-when-changing-source-formatting)
+[7] [https://github.com](https://github.com/golang/go/issues/24230)
+[8] [https://stackoverflow.com](https://stackoverflow.com/questions/39792766/checking-to-find-out-if-go-code-has-been-formatted)
+[9] [https://go.dev](https://go.dev/blog/gofmt)
+[10] [https://www.gopherguides.com](https://www.gopherguides.com/articles/dont-commit-improperly-formatted-golang-code)
+
+
+
+Yes, GitHub natively supports it by default. You do not even have to configure any backend settings on the site; GitHub’s UI automatically looks for a specific file name in your repository. [1, 2, 3, 4]
+If you set it up according to GitHub's naming convention, the web interface will completely hide your formatting commits from the blame view. [1, 5]
+## How to Make GitHub Honor It
+
+   1. Name the file exactly: Create a file named .git-blame-ignore-revs and place it in the root directory of your repository.
+   2. Add the hashes: Add the full 40-character commit hashes of your formatting-only commits to this file, one per line. You can add comments using # to describe the commit.
+
+   # Fix gofmt vertical alignment diff explosion
+   7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b
+
+   3. Commit it: Commit and push this file to your main branch. [1, 2, 4, 6]
+
+Once that file exists on GitHub, any developer who clicks the "Blame" button on the GitHub website will see lines attributed to the actual functional commits, bypassing your formatting commit entirely. [1, 5]
+## The Ultimate Workflow to Show Your Team
+If your team sets up this file, you can bypass the pipeline restrictions locally while keeping both Git histories clean:
+
+   1. Write your clean logic: Make your 1-line code change.
+   2. Commit the logic: git commit -m "feat: add business logic code" (This is your rational, single-line diff).
+   3. Run the formatting tool: Run gofmt to satisfy the pipeline, which explodes the 100 lines of whitespace.
+   4. Commit the formatting: git commit -m "style: gofmt formatting churn" (This is your formatting-only commit).
+   5. Update the ignore file: Copy the hash of your formatting commit, paste it into .git-blame-ignore-revs, and commit that change too.
+   6. Push: Your CI pipeline will pass because the code is formatted on the head of your branch, but your code reviewers and future debugging sessions won't have to suffer through the layout noise. [2, 4]
+
+Would you like a script or a Git alias that automates extracting the latest commit hash and appending it to your .git-blame-ignore-revs file to save you the manual copy-pasting?
+
+[1] [https://github.com](https://github.com/orgs/community/discussions/5033)
+[2] [https://black.readthedocs.io](https://black.readthedocs.io/en/stable/guides/introducing_black_to_your_project.html)
+[3] [https://github.com](https://github.com/mpurg/ComplianceAsCode/blob/master/.git-blame-ignore-revs)
+[4] [https://testdouble.com](https://testdouble.com/insights/managing-git-blame-with-ignore-revs)
+[5] [https://docs.github.com](https://docs.github.com/en/repositories/working-with-files/using-files/viewing-and-understanding-files)
+[6] [https://stackoverflow.com](https://stackoverflow.com/questions/34957237/can-i-configure-git-blame-to-always-ignore-certain-commits-want-to-fix-git-blam)
