@@ -1,0 +1,4 @@
+
+
+opencode session list  # List all open sessions
+opencode -s $session   # open a session
