@@ -1,4 +1,4 @@
 
 
-opencode session list  # List all open sessions
+opencode session list  # List all open sessions in the current workspace (cwd?)
 opencode -s $session   # open a session
