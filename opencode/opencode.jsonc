@@ -1,19 +1,19 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/qwen3-coder:30b",
-  "shell": "/path/to/dotfiles/scripts/bash-wrapper",
+  "model": "ollama/qwen3.8:27b-878c756",
+  "shell": "/Users/wrp/dotfiles/scripts/bash-wrapper",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama qwen3-coder",
+      "name": "Ollama (local)",
       "options": {
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen3-coder-fibersense:latest": {
-          "name": "Qwen3-Coder (local)",
+        "qwen3.8:27b-878c756": {
+          "name": "qwen38-27b-878c756",
           "capabilities": {
-            "tools": true
+            "tool_call": true
           }
         }
       }
@@ -27,6 +27,6 @@
     }
   },
   "instructions": [
-    "Use shell variables instead of angle brackets for all placeholders. For example, use $CLUSTER_NAME instead of <your-cluster-name>. This applies to all contexts, not just shell commands."
+    "Use shell variables instead of angle brackets for all placeholders. For example, use $CLUSTER_NAME instead of <your-cluster-name>. This applies to all contexts, not just shell commands.  NEVER use 'git add -A'.  Always explicitly add the files you want staged."
   ]
 }
