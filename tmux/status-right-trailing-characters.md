@@ -1,5 +1,11 @@
 # tmux status-right: trailing duplicated characters with a different background
 
+
+This issue is not fixed.  Afer increasing the font size in the terminal,
+the stray characters appear to the right of the status window.  Which 2
+characters from the status string are duplicated changes depending on the
+font size.  This is currently happening in 267746603a4ff25baad62e3477b126411e49b52f
+
 ## Incident
 
 In the tmux status bar, the right-side format
