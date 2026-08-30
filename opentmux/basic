@@ -1,0 +1,12 @@
+
+Tried opentmux briefly, and it has 2 quick strikes against it.  I
+followed the advice given on the web page and prompted qwen to
+install opentmux, and it seemingly succesfully did so.  But the
+installation wrote lines to the end of my ~/.bashrc, which in my
+opinion is an utterly unacceptable practice.  Also, after the
+install, the next time I opened opencode it connected to the wrong
+model.  Installing a package should not change a person's already
+established config.
+
+That being said, I didn't use it enough to really form an opinion.
+But it seems immature and not worth investigating further.
