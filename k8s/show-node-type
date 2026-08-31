@@ -1,0 +1,20 @@
+#!/bin/sh
+
+
+show_node() {
+	pod=$1
+
+	test "$pod" = NAME && return  # Special case so we can read output directly from kubectl get pods
+
+	node=$(kubectl get pod ${pod:?} -o jsonpath='{.spec.nodeName}') || exit
+	type=$(kubectl get node $node \
+		-o jsonpath='{.metadata.labels.node\.kubernetes\.io/instance-type}') || exit
+	printf '%s\t%s\n' "$pod" "$type"
+}
+
+
+if test $# = 0; then
+	while read pod _; do show_node "$pod"; done
+else
+	for pod; do show_node "$pod"; done
+fi
