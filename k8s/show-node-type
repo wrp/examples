@@ -9,12 +9,13 @@ show_node() {
 	node=$(kubectl get pod ${pod:?} -o jsonpath='{.spec.nodeName}') || exit
 	type=$(kubectl get node $node \
 		-o jsonpath='{.metadata.labels.node\.kubernetes\.io/instance-type}') || exit
-	printf '%s\t%s\n' "$pod" "$type"
+	printf '%s' "$type"
 }
 
 
 if test $# = 0; then
-	while read pod _; do show_node "$pod"; done
+	if test -t 0; then kubectl get pod; else cat ; fi |
+	while read line; do printf '%s\t%s\n' "$line" "$(show_node $line)"; done
 else
-	for pod; do show_node "$pod"; done
+	for pod; do printf '%s\t%s\n' "$pod" "$(show_node "$pod")"; done
 fi
