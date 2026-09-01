@@ -25,3 +25,12 @@ get_size() {
 			--image-ids imageTag="$tag" --query "imageDetails[0].imageSizeInBytes"
 	done
 }
+
+
+# Delete an image
+remove_image() {
+	for image; do
+		aws ecr batch-delete-image --repository-name ${repo} \
+			--region ${region-us-west-2} --image-ids imageTag="${image}"
+	done
+}
