@@ -2,7 +2,7 @@
 
 
 # List all repositories
-aws ecr describe-repositories
+aws ecr describe-repositories | jq -r .repositories'[].repositoryName'
 
 
 # List the images in a repo
