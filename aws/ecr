@@ -34,3 +34,10 @@ remove_image() {
 			--region ${region-us-west-2} --image-ids imageTag="${image}"
 	done
 }
+
+
+# Show most recently pushed image
+aws ecr describe-images \
+	--repository-name ${repo} \
+	--query 'sort_by(imageDetails, &imagePushedAt)[-1]' \
+| jq -r '.imageTags[]'
