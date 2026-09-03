@@ -1,5 +1,17 @@
 
 On macos, <function><up-arrow> serves as page-up
 
-<ctrl>x-m    - select model
-<ctrl>x-l    - list models (also allows pinning, deleting, and renaming)
+
+
+Commands that follow <ctrl>x:
+n: Start a new session (session_new)
+q: Exit the application (app_exit)
+x: Export the current session (session_export)
+y: Copy messages or session info (session_copy / messages_copy)
+r: Redo last message (messages_redo)
+h: Toggle help, tips, or concealed messages (messages_toggle_conceal / tips_toggle)
+a: Open the agent picker/list (agent_list)
+l: List session (also allows pinning, deleting, and renaming)
+m: Open the model list (model_list)
+e: Open the editor (editor_open)
+t: View theme list (theme_list)
