@@ -1,2 +1,5 @@
 
 On macos, <function><up-arrow> serves as page-up
+
+<ctrl>x-m    - select model
+<ctrl>x-l    - list models (also allows pinning, deleting, and renaming)
