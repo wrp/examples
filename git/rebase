@@ -53,3 +53,6 @@ A few alternatives suggested by Claude:
   [alias]
       swap = "!f() { GIT_SEQUENCE_EDITOR=\"perl -e '$f=shift; open F, \"<\", $f; @a=<F>; @a[$1,$2]=@a[$2,$1]; open F, \">\", $f; print F @a'\" git rebase -i HEAD~$3; }; f"
   Then: git swap 2 4 (swap positions 2 and 4)
+
+
+git rebase -X theirs $upstream_branch  # Always accept upstream changes
