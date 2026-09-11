@@ -15,6 +15,7 @@
 # 0xf0      9f         9b        91
 #
 
+# \U00b0 °
 
 # ❯ What unicode code-point can generate the sequence '\xe2\x9c\x8b'?
 # That's U+270B, the "raised hand" emoji (✋).
