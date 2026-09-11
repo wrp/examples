@@ -26,3 +26,6 @@ In summary: Ref is a specific type of revision that serves as a
 named pointer to a commit (e.g., a branch or tag).  Rev is a broader
 term encompassing any way to identify a commit or a set of commits
 including refs, oids, and relative expressions.
+
+
+To list refs:  git for-each-ref refs/name
