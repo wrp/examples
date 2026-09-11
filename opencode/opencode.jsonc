@@ -1,5 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "compaction": {
+    "auto": true,
+    "keep": {
+      "tokens": 15000
+    },
+    "buffer": 2000
+  },
   "model": "ollama/qwen3.8:27b-878c756",
   "shell": "/Users/wrp/dotfiles/scripts/bash-wrapper",
   "provider": {
