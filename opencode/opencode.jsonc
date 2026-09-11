@@ -9,6 +9,9 @@
   },
   "model": "ollama/qwen3.8:27b-878c756",
   "shell": "/Users/wrp/dotfiles/scripts/bash-wrapper",
+  "plugin": [
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
