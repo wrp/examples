@@ -2,5 +2,6 @@
 # Show branch structure
 git log --oneline --graph --decorate --all --simplify-by-decoration
 
-# Show all trailers
-git log --format='%H %s%n%(trailers)'
+git log --format='%H %s%n%(trailers)'  # Show all trailers
+
+git log -- p/a/t/h  # Restrict log to a given directory (path is relative to repo root)
