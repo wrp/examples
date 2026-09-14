@@ -1,6 +1,8 @@
 #!/bin/sh
 
 
+kubectl() { command kubectl ${NAMESPACE+-n $NAMESPACE} "$@"; }
+
 show_node() {
 	pod=$1
 
