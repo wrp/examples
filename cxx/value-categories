@@ -1,0 +1,49 @@
+
+3 mutually exclusive primary value categories: lvalue, prvalue, xvalue
+
+
+rvalue   an expression that does not have an explicit memory location
+
+prvalue  (pure rvalue) is defined as an expression whose evaluation
+         satisfies one of two outcomes: 1) It computes the value of an operand
+         of a built-in operator (this computation does not denote an
+         object). 2) It initializes an object (or a bit-field).
+
+         A prvalue is an expression whose evaluation either computes the
+         value of an operand or initializes an object.
+         a prvalue has no identity; it does not have a permanent
+         memory address that you can access via the address-of operator
+         (&)—but its resources can be moved
+
+xvalue  (expiring value)
+glvalue (generalized lvalue) an lvalue or an xvalue
+
+
+
+From https://www.stroustrup.com/terminology.pdf
+i = has identity         I = not i
+m = can be moved from    M = not M
+         iM       im       Im
+          \       /\       /
+           \     /  \     /
+            \   /    \   /
+             \ /      \ /
+              i        m
+
+upper left   (iM) lvalue
+lower left   (i)  glvalue
+upper middle (Im) xvalue
+lower right  (m)  rvalue
+upper right  (Im) prvalue
+
+    ______ ______
+   /      X      \
+  /      / \      \
+ |   l  | x |  pr  |
+  \      \ /      /
+   \______X______/
+       gl    r
+
+int   prvalue();
+int&  lvalue();
+int&& xvalue();
