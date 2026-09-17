@@ -1,11 +1,12 @@
 
 Major changes from C++17:
 
-
+"The big 4"
 - Concepts — constrain templates directly (template <std::integral T>) instead of SFINAE
 - Ranges — composable, lazy views for algorithms (v | filter(f) | transform(g))
 - Coroutines — co_await, co_yield, co_return for async and generator patterns
 - Modules — import std; instead of #include, faster compilation (adoption still spotty)
+
 - std::format — Python-style string formatting (std::format("{} is {}", name, age))
 - Three-way comparison (<=>) — "spaceship operator", auto-generates all comparison operators
 - constexpr expansion — constexpr virtual functions, try/catch, dynamic_cast, allocation
