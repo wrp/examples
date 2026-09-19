@@ -1,5 +1,11 @@
 
 
+# For non-meson builds, allowing the user to
+# do 'make foo' in the top-level dir
+CPPFLAGS=-Ibuilddir
+LDFLAGS=-Lbuilddir
+LDLIBS=-lring-buffer -lstack
+
 
 .PHONY: clean all check install
 all: builddir/build.ninja
