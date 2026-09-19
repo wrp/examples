@@ -1,0 +1,5 @@
+
+# Add a hook to trigger the terminal bell when the model finishes a turn
+hook add Stop \
+	--command "printf '\a'" \
+	--name "model-respond-beep"
