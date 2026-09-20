@@ -1,4 +1,4 @@
-CXXFLAGS ?= -fno-elide-constructors -std=c++20
+CXXFLAGS ?= -fno-elide-constructors -std=c++23
 
 source = $(shell ls *.cc)
 exe = $(source:.cc=)
