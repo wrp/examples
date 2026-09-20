@@ -19,7 +19,7 @@ struct foo {
 template <typename T>
 using memberFunc = T (foo::*)(int) const;
 template <typename T>
-struct exp {
+struct bar {
 	memberFunc<T> getter;
 	int expected_value;
 	std::string name;
@@ -28,7 +28,7 @@ struct exp {
 
 int main()
 {
-	std::vector<exp<int>> v{
+	std::vector<bar<int>> v{
 		{ &foo::incr, 3, "incr" },
 		{ &foo::decr, 1, "decr" },
 //		{ memberFunc<unsigned>&foo::uincr, 2, "uincr" },
