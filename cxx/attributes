@@ -1,0 +1,33 @@
+
+Standard attributes (in the language):
+
+[[noreturn]], [[likely]], [[unlikely]], [[assume(expr)]]
+
+
+Attributes common to gcc, clang, and msvc:
+
+[[nodiscard]]
+[[maybe_unused]]
+[[deprecated]]/[[deprecated("this is deprecated (arbitrary warning msg")]]
+[[fallthrough]]
+
+Misc:
+[gnu::always_inline]] or [[gnu::noinline]]
+[[msvc::forceinline]]
+[[gnu::format(printf, string_index, first_to_check_index)]]
+[[gnu::pure]]
+[[gnu::const]]
+[[gnu::packed]] or [[gnu::aligned(X)]]
+[[msvc::options(pack(X))]]
+
+
+# common pracice:
+#if defined(__clang__)
+    #define FORCE_INLINE [[clang::always_inline]]
+#elif defined(__GNUC__)
+    #define FORCE_INLINE [[gnu::always_inline]]
+#elif defined(_MSC_VER)
+    #define FORCE_INLINE [[msvc::forceinline]]
+#else
+    #define FORCE_INLINE
+#endif
