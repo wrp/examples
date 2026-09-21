@@ -3,18 +3,24 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 class foo {
 public:
-	double x;
-	double y;
+	double x{1.0};
+	double y{2.0};
+	std::string name{"unknown"};
 
-	foo() : x{1.0}, y{2.0} {};
+	foo() {};
 	foo(double x, double y) : x{x}, y{y} {}
+	foo(double x, double y, std::string name) : x{x}, y{y}, name{name} {}
+	foo(std::string name) : name{name} {};
 
 	void incr(double a) { x += a; y -= a; }
 	void bar(int);
+
+	void print(std::string prefix="") {
+		std::println("{0}: {1}.x = {2}, {1}.y = {3}",
+			prefix, name, x, y);
+	}
 };
 
 void foo::bar(int z) {
@@ -22,21 +28,17 @@ void foo::bar(int z) {
 }
 
 void func(foo k) {
-	cout << "in f, x = " << k.x << " y = " << k.y << endl;
+	k.print("in func");
 }
 
 int main()
 {
-	auto f = foo();
-	cout << f.x << endl;
-	cout << f.y << endl;
+	auto f = foo("test");
+	f.print();
 	f.incr(3);
-	cout << f.x << endl;
-	cout << f.y << endl;
-
+	f.print();
 	f.bar(7);
-	cout << f.x << endl;
-	cout << f.y << endl;
+	f.print();
 
 	func(foo(5, 19));
 	return 0;
