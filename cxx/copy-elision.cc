@@ -11,18 +11,21 @@ of times the following code will print
 */
 
 
-#include<iostream>
-using namespace std;
+#include <iostream>
 
 struct C {
-	C() { std::cout << "Initializer called" << endl; }
-	C(const C&) { std::cout << "A copy was made." << endl; }
+public:
+	C() { std::println("Initializer called"); }
+	C(const C&) { std::println("A copy was made."); }
+
+	void ident() { std::println("{}", static_cast<const void*>(this)); }
 };
 
-C f() {
-	return C();
-}
+C f() { return C(); }
 
 int main() {
-	C obj = f();
+	C obj{f()};
+	C a{obj};
+	a.ident();
+	obj.ident();
 }
