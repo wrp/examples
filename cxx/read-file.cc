@@ -10,10 +10,10 @@ readFile(ifstream& file)
 	string word;
 	int c = 0;
 	while (file >> word) {
-		cout << word << endl;
+		std::println("{}",  word);
 		c += 1;
 	}
-	cout << "Read " << c << " words." << endl;
+	std::println("Read {} words",  c);
 }
 
 int
