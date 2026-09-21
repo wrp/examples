@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <ranges>
+#include <algorithm>
 #include <vector>
 
 struct Task {
