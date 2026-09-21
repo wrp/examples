@@ -15,7 +15,7 @@ int main()
 {
 	using a = foo::bar::e;
 	using foo::bar::e;
-	int i = one;
+	int i = e::one;
 	int j = e::two;
 	cout << "i = " << i << j << "\n";
 	return 0;
