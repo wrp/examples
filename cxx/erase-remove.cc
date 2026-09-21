@@ -4,11 +4,9 @@
 #include <algorithm>
 #include <deque>
 
-using namespace std;
 
 template <typename T>
-void show_container(const T & x, const string & msg);
-
+void show_container(const T & x, const std::string & msg);
 
 int main()
 {
@@ -26,7 +24,7 @@ int main()
 			x.begin(),
 			x.end(),
 			[](auto i) {
-				if (i == 6) { cout << "removing item\n"; }
+				if (i == 6) { std::println("removing item"); }
 				return i != 6;
 			}
 		),
@@ -39,11 +37,11 @@ int main()
 
 template <typename T>
 void
-show_container(const T & x, const string & msg)
+show_container(const T & x, const std::string & msg)
 {
-	cout << msg << ": ";
+	std::print("{}: ", msg);
 	for (auto a: x) {
-		cout << a << ' ';
+		std::print("{} ", a);
 	}
-	cout << endl;
+	std::println("");
 }
