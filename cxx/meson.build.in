@@ -1,0 +1,8 @@
+
+project('example_cpp_project', 'cpp',
+	version : '@version@',
+	default_options : [
+		'cpp_std=c++23',
+		'cpp_importstd=true'
+  ]
+)
