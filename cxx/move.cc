@@ -19,8 +19,15 @@ public:
 		cout << "other: " << other.name << '\n';
 	}
 	A& operator=(A&& other) {
-		cout << "move operator: " << name << '\n';
+		cout << "move assignment operator: " << name << '\n';
 		cout << "other: " << other.name << '\n';
+		x = other.x;
+		name = other.name;
+		return *this;
+	}
+	A& operator=(A& other) {
+		std::println("copy assignment operator: {} = {}",
+			name, other.name);
 		x = other.x;
 		name = other.name;
 		return *this;
@@ -45,13 +52,14 @@ void foo(A a) {
 }
 int main()
 {
-	A a { 5, "foo" };
+	A a { 5, "A" };
+	A e { 5, "E" };
 	A b { std::move(a) };
-	cout << "main: " << b.name << '\n';
+	std::print("main: b.name = {}", b.name);
 	foo(b);
 
 	const no_move_ctor c{0};
 	auto d = std::move(c);
-	// auto d = c;
+	a = e;
 	return 0;
 }
