@@ -10,7 +10,6 @@ meson.build: meson.build.in
 	sed -e 's/@version@/'"$${head}/" meson.build.in > meson.build
 	for suffix in cpp cc; do \
 		for file in *.$$suffix; do \
-			grep -q "std::print" $$file && continue; \
 			base=$${file%.$$suffix}; \
 			printf '%s\n' "executable('$${base}', '$$file')"; \
 		done; \
