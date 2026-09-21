@@ -26,4 +26,4 @@ check: all builddir/build.ninja
 	meson test -C builddir
 
 clean:
-	git clean -xdff
+	rm -rf builddir
