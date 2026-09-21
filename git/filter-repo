@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Use filter repo to move conventional commit metadata into trailers
+
+git filter-repo --message-callback '
+import re
+
+msg = message.decode("utf-8")
+
+# Pattern captures: 1=Type, 2=Scope(optional), 3=Breaking!(optional), 4=First char of subject, 5=Rest of subject
+pattern = r"^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(?:\(([^)]+)\))?(!)?:\s*(.)(.*)"
+match = re.match(pattern, msg)
+
+if match:
+    c_type = match.group(1)
+    c_scope = match.group(2)
+    c_breaking = match.group(3)
+    first_char = match.group(4).upper()
+    rest_of_subject = match.group(5)
+
+    new_subject = f"{first_char}{rest_of_subject}"
+
+    lines = msg.split("\n", 1)
+    body = lines[1] if len(lines) > 1 else ""
+
+    trailers = f"\nCommit-Type: {c_type}"
+    if c_scope:
+        trailers += f"\nCommit-Scope: {c_scope}"
+    if c_breaking:
+        trailers += f"\nBreaking-Change: True"
+
+    if body.strip():
+        new_msg = f"{new_subject}\n{body.rstrip()}\n{trailers}\n"
+    else:
+        new_msg = f"{new_subject}\n\n{trailers}\n"
+
+    return new_msg.encode("utf-8")
+
+return message
+'
