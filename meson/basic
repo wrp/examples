@@ -9,3 +9,6 @@ meson test -C ${builddir}
 
 For debug:
 meson setup ${builddir} --buildtype=debug
+
+Configure an existing builddir
+meson configure ${builddir} -Doptimization=0
