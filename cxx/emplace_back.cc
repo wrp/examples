@@ -10,13 +10,13 @@ public:
 	void trace(const char *label, const Foo &from) {
 		std::println("{}: {} <-- {}", label, i, from.i);
 	}
-	Foo(Foo&& other) : i{other.i} { trace("move ctor", other); }
+	Foo(Foo&& other) noexcept : i{other.i} { trace("move ctor", other); }
 	Foo& operator=(Foo&& other) {
 		trace("move op", other);
 		i = other.i;
 		return *this;
 	}
-	Foo& operator=(const Foo& other) {
+	Foo& operator=(const Foo& other) noexcept {
 		trace("copy op", other);
 		i = other.i;
 		return *this;
