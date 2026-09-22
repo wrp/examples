@@ -16,9 +16,8 @@ meson.build: meson.build.in
 		done; \
 	done >> meson.build
 
-
 $(BUILDDIR)/build.ninja:
-	meson setup $(BUILDDIR)
+	meson setup $(BUILDDIR) $${DEBUG+--buildtype=debug}
 
 install: $(BUILDDIR)/build.ninja
 	meson install -C $(BUILDDIR)
