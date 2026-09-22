@@ -1,10 +1,12 @@
+#include <expected>
+#include <system_error>
 #include <iostream>
 #include <fstream>
 #include <string>
 
 using namespace std;
 
-void
+int
 readFile(ifstream& file)
 {
 	string word;
@@ -13,44 +15,55 @@ readFile(ifstream& file)
 		std::println("{}",  word);
 		c += 1;
 	}
-	std::println("Read {} words",  c);
+	return c;
 }
 
-int
+
+struct FileError {
+	std::error_code ec;
+	std::string path;
+
+	std::string message() const {
+		return path + ": " + ec.message();
+	}
+};
+
+
+std::expected<int, FileError>
 main2(int argc, char **argv)
 {
 	string path = argc > 1 ? argv[1] : "input";
-	std::ifstream f;
+	std::ifstream f(path);
 
-#if 0
-	// Set exceptions to be thrown on failure
-	f.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-	try {
-		f.open(path);
-	} catch (std::system_error& e) {
-		std::cerr << e.code().message() << std::endl;
-	}
-#endif
-	f.open(path);
-	if (!f) {
-		throw std::system_error(errno, std::system_category(), path);
+	if (!f.is_open()) {
+		auto ec = std::make_error_code(static_cast<std::errc>(errno));
+		return std::unexpected(FileError{ec, path});
 	}
 
-	readFile(f);
-	return 0;
+	return readFile(f);
 }
+
 
 int
 main(int argc, char **argv)
 {
-	try {
-		main2(argc, argv);
-	} catch (std::system_error &e) {
-		// e.code().message() is strerror(errno)
-		// e.what() is "path: strerror(errno)"
-		std::cerr << e.what() << std::endl;
-		return 1;
+	int rc{0};
+	auto result = main2(argc, argv);
+	if(result) {
+		std::println("Read {} words", *result);
+	} else {
+		FileError fe = result.error();
+		std::error_code ec = fe.ec;
+		std::println("Error category: {}, Code: {}",
+			ec.category().name(), ec.value());
+
+		if (ec == std::errc::no_such_file_or_directory) {
+			;
+		} else if (ec == std::errc::permission_denied) {
+			;
+		}
+		std::println("{}", fe.message());
+		rc = 1;
 	}
-	return 0;
+	return rc;
 }
