@@ -3,8 +3,6 @@
 #include <vector>
 #include <memory>
 
-using namespace std;
-
 class Foo {
 public:
 	int i;
@@ -23,7 +21,7 @@ public:
 		i = other.i;
 		return *this;
 	}
-	friend ostream& operator<<(ostream &os, const Foo &f) {
+	friend std::ostream& operator<<(std::ostream &os, const Foo &f) {
 		return os << f.i;
 	}
 	// The copy ctor is implicitly deleted because there is a move ctor
@@ -35,16 +33,16 @@ public:
 int
 main()
 {
-	vector<unique_ptr<Foo>> x{};
-	vector<Foo> y{};
+	std::vector<std::unique_ptr<Foo>> x{};
+	std::vector<Foo> y{};
 
-	unique_ptr<Foo> a = make_unique<Foo>(7);
+	std::unique_ptr<Foo> a = std::make_unique<Foo>(7);
 	Foo bp{Foo(9)};
 	auto b = std::unique_ptr<Foo>(&bp);
 
 	x.push_back(std::move(a));  // Does not use move ctor
 	x.push_back(std::move(b));
-	x.emplace_back(make_unique<Foo>(11));
+	x.emplace_back(std::make_unique<Foo>(11));
 
 	for (const auto &f: x) {
 		std::println("{}", f->i);
