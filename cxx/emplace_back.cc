@@ -38,7 +38,8 @@ main()
 
 	std::unique_ptr<Foo> a = std::make_unique<Foo>(7);
 	Foo bp{Foo(9)};
-	auto b = std::unique_ptr<Foo>(&bp);
+	auto b = std::unique_ptr<Foo>(&bp); // BUG  b will be freed at
+		// end of scope, but b points to a stack variable
 
 	x.push_back(std::move(a));  // Does not use move ctor
 	x.push_back(std::move(b));
