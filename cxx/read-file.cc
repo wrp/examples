@@ -47,23 +47,14 @@ main2(int argc, char **argv)
 int
 main(int argc, char **argv)
 {
-	int rc{0};
-	auto result = main2(argc, argv);
-	if(result) {
-		std::println("Read {} words", *result);
-	} else {
-		FileError fe = result.error();
-		std::error_code ec = fe.ec;
-		std::println("Error category: {}, Code: {}",
-			ec.category().name(), ec.value());
-
-		if (ec == std::errc::no_such_file_or_directory) {
-			;
-		} else if (ec == std::errc::permission_denied) {
-			;
-		}
-		std::println("{}", fe.message());
-		rc = 1;
+	auto result = main2(argc, argv)
+		.and_then([](int c) -> std::expected<int, FileError> {
+		std::println("Read {} words", c);
+		return 0;
+	});
+	if (!result) {
+		std::println("{}", result.error().message());
+		return 1;
 	}
-	return rc;
+	return result.value_or(1);
 }
