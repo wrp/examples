@@ -1,9 +1,10 @@
 CXXFLAGS ?= -fno-elide-constructors -std=c++23
 
 .PHONY: all
+BUILDDIR := builddir
 
-all: meson.build builddir/build.ninja
-	meson compile -C builddir $${V+--verbose}
+all: meson.build $(BUILDDIR)/build.ninja
+	meson compile -C $(BUILDDIR) $${V+--verbose}
 
 meson.build: meson.build.in
 	head=$$(git describe --always); \
@@ -16,14 +17,14 @@ meson.build: meson.build.in
 	done >> meson.build
 
 
-builddir/build.ninja:
-	meson setup builddir
+$(BUILDDIR)/build.ninja:
+	meson setup $(BUILDDIR)
 
-install: builddir/build.ninja
-	meson install -C builddir
+install: $(BUILDDIR)/build.ninja
+	meson install -C $(BUILDDIR)
 
-check: all builddir/build.ninja
-	meson test -C builddir
+check: all $(BUILDDIR)/build.ninja
+	meson test -C $(BUILDDIR)
 
 clean:
-	rm -rf builddir
+	rm -rf $(BUILDDIR)
