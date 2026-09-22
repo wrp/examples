@@ -8,9 +8,9 @@ using namespace std;
 class Foo {
 public:
 	int i;
-	Foo(int x) : i{x} { cout << "regular ctor: " << *this << "\n"; }
+	Foo(int x) : i{x} { std::println("regular ctor: {}", i); }
 	void trace(const char *label, const Foo &from) {
-		cout << label << ": " << *this << " <-- " << from << '\n';
+		std::println("{}: {} <-- {}", label, i, from.i);
 	}
 	Foo(Foo&& other) : i{other.i} { trace("move ctor", other); }
 	Foo& operator=(Foo&& other) {
@@ -47,7 +47,7 @@ main()
 	x.emplace_back(make_unique<Foo>(11));
 
 	for (const auto &f: x) {
-		cout << *f << '\n';
+		std::println("{}", f->i);
 	}
 
 
@@ -56,9 +56,9 @@ main()
 	Foo e = std::move(c);   /* move assignment ctor */
 	c = e;   /* copy assignment operator */
 
-	cout << "pushing 13" << endl;
+	std::println("pushing 13");
 	y.emplace_back(13);  /* regular ctor */
-	cout << "pushing c" << endl;
+	std::println("pushing c");
 	y.emplace_back(c);  // Causes reallocation, copy ctor called for all
 
 	return 0;
