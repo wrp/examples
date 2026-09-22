@@ -48,7 +48,6 @@ main()
 		std::println("{}", f->i);
 	}
 
-
 	Foo c(3);
 	Foo d(5);
 	Foo e = std::move(c);   /* move assignment ctor */
