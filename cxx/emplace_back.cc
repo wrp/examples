@@ -39,8 +39,8 @@ main()
 	vector<Foo> y{};
 
 	unique_ptr<Foo> a = make_unique<Foo>(7);
-	Foo *bp = new Foo(9);
-	auto b = std::unique_ptr<Foo>(bp);
+	Foo bp{Foo(9)};
+	auto b = std::unique_ptr<Foo>(&bp);
 
 	x.push_back(std::move(a));  // Does not use move ctor
 	x.push_back(std::move(b));
