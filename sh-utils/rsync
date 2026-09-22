@@ -1,14 +1,15 @@
 
-# Copy the directory tree at foo (eg, create ./foo),
+# Copy the directory tree at /p/a/t/h (eg, create ./h),
+# Unlinking names that do not exist in /p/a/t/h,
 # preserving hard links and not preserving timestamps.
-$ rsync -rlgpoH --delete foo .
+$ rsync -rlgpoH --delete /p/a/t/h .
 
-# Copy files in foo to bar, deleting unmatched files in bar
+# Copy files in foo to bar.
 # (So foo/baz gets copied to bar/baz)
-$ rsync -zva --delete foo/ bar
+$ rsync -zva foo/ bar
 
 # Copy the directory foo into bar (will copy to bar/foo/*)
-$ rsync -zva --delete foo bar
+$ rsync -zva foo bar
 
 # Copy files in foo to bar, deleting unmatched files in bar
 # but keeping bar/file-to-keep  (P == protect)
