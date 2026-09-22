@@ -1,0 +1,11 @@
+
+
+
+meson setup ${builddir}
+meson compile -C ${builddir} --verbose
+meson install -C ${builddir}
+meson test -C ${builddir}
+
+
+For debug:
+meson setup ${builddir} --buildtype=debug
