@@ -14,7 +14,7 @@ main()
 		std::ranges::views::filter(even) |
 		std::ranges::views::transform(square)
 	) {
-		std::cout << i << ' ';             // 0 4 16
+		std::print("{} ", i);             // 0 4 16
 	}
-	std::cout << '\n';
+	std::putchar('\n');
 }
