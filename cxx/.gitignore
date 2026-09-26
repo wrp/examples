@@ -10,7 +10,7 @@ emplace_back
 enum_class
 erase-remove
 errno
-exception
+exception_example
 finalize
 find_if
 fold
