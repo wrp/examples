@@ -1,0 +1,5 @@
+
+Check if the new gnu config scripts work
+when remote is not called "origin".  In
+particular, it looks like autpull.sh in gperf
+requires the name "origin".
