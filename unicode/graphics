@@ -55,8 +55,10 @@ my @samples = (
 	'e28a86',    # ⊆   Subset
 	'e284a4',    # ℤ   integers
 	'e29ca8',    # ✨  stars
-	'e29c85',    # ✅  check
+	'e29c85',    # ✅  check  \U2705
 	'e2ac86',    # ⬆    up arrow
+	'e29d8c',    # ❌  \U274C
+	'e284b9',    # ℹ️    \U2139
 );
 # ½⅓¼⅕⅙⅐⅛⅑⅒
 printf "%s", pack "H*", $_ foreach @samples; print "\n";
