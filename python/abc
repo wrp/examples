@@ -12,21 +12,18 @@ class D:                                 # No inheritance
     def count(self, value): ...          # Mixin method
     def index(self, value): ...          # Mixin method
 
-print(f'before registering: ', end='')
-print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
+assert(not issubclass(D, Sequence))
 Sequence.register(D)                     # Register instead of inherit
-print(f'after registering : ', end='')
-print(f'D is{" **NOT**" if not issubclass(D, Sequence) else ""} a sequence: ')
-print(f'D() is an instance: {isinstance(D(), Sequence)}')
+assert(issubclass(D, Sequence))
+assert(isinstance(D(), Sequence))
 
 # For simple interfaces, you do not have to explicitly register
 class E:
     def __iter__(self): ...
     def __next__(next): ...
 
-issubclass(E, Iterable)
-isinstance(E(), Iterable)
-print(f'E is iterable: {issubclass(E, Iterable)}')
+assert(issubclass(E, Iterable))
+assert(isinstance(E(), Iterable))
 
 
 class F(ABC):
@@ -43,5 +40,6 @@ g = G()
 class H(F): pass
 try:
     h = H()
+    assert(False)
 except TypeError as e:
-    print(f'Attempt to instantiate H failed since foo is not defined: {e}')
+    assert(True)
