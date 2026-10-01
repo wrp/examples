@@ -3,21 +3,21 @@
 # Demonstrate any and all
 import sys
 
-x = [int(a) for a in sys.argv[1:]]
+x = [1, 3, 6, 9]
 
 if any(a > 7 for a in x):
-    print("Some greater than 7")
+    assert(True)
 else:
-    print("All less than or equal to 7")
+    assert(False)
 
 if all(a > 7 for a in x):
-    print("All greater than 7")
+    assert(False)
 else:
-    print("Some less than or equal to 7")
+    assert(True)
 
 lod = []
 lod.append({'a': 5})
 lod.append({'b': 7})
 lod.append({'a': 9})
 if any(x.get('a', 0) == 7 for x in lod):
-    print('one of the dicts has value 7')
+    assert(False)
