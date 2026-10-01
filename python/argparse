@@ -4,6 +4,13 @@ import argparse
 import os
 import sys
 
+if len(sys.argv) > 1:
+    interactive = True
+else:
+    interactive = False
+    for arg in ['-c', '5', 'foo', 'bar', '--arg-with-hyphens', 'baz']:
+        sys.argv.append(arg)
+
 parser = argparse.ArgumentParser(
     prog=os.path.basename(sys.argv[0]),
     description='Text at top of help',
@@ -17,9 +24,17 @@ parser.add_argument('-v', '--verbose', action='store_true') # boolean flag
 parser.add_argument('--arg-with-hyphens', action='store', required=False)
 
 args, remainder = parser.parse_known_args()
-print(f'arg1 = {args.arg1}')
-print(f'arg2 = {args.arg2}')
-print(f'count = {args.count}')
-print(f'optional arg-with-hyphens = {args.arg_with_hyphens}')
-print(f'verbose = {args.verbose}')
-print(f"unparsed args are: {remainder}")
+
+if interactive:
+    print(f'arg1 = {args.arg1}')
+    print(f'arg2 = {args.arg2}')
+    print(f'count = {args.count}')
+    print(f'optional arg-with-hyphens = {args.arg_with_hyphens}')
+    print(f'verbose = {args.verbose}')
+    print(f"unparsed args are: {remainder}")
+else:
+    assert(args.arg1 == 'foo')
+    assert(args.arg2 == 'bar')
+    assert(args.count == '5')
+    assert(not args.verbose)
+    assert(args.arg_with_hyphens == 'baz')
