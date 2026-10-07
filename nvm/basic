@@ -1,0 +1,7 @@
+
+nvm is a manager for node.  Do not use it.  nvm
+is written as a giant shell function that manipulates the
+environment of the caller, similar to Xmidas insanity.  Just
+avoid it and use fnm as a replacement.  For most things,
+you can simply create an nvm wrapper that calls fnm: eg
+nvm() { exec fnm "$@"; }
