@@ -1,0 +1,10 @@
+
+Often, when running 'yarn run dev' or 'netlify dev',
+I'll see an error like:
+
+sh: next: command not found
+
+In that case, try:
+$ corepack enable
+$ hash -r
+$ corepack use yarn@*
