@@ -1,0 +1,2 @@
+
+git status -uall --ignored  # Show status for everything
