@@ -1,0 +1,6 @@
+By default, npm will download GiBs of crap
+into $HOME.  You can change the location with:
+
+NPM_CONFIG_CACHE
+NPM_CONFIG_LOGS_DIR
+NPM_CONFIG_NPA_CACHE
