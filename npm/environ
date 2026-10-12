@@ -4,3 +4,7 @@ into $HOME.  You can change the location with:
 NPM_CONFIG_CACHE
 NPM_CONFIG_LOGS_DIR
 NPM_CONFIG_NPA_CACHE
+
+You can also use `npm config set cache /p/a/t/h --global`
+to modify ~/.npmrc.  I'm not sure how that plays with the
+log or NPA cache
