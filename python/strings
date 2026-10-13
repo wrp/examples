@@ -3,15 +3,15 @@
 # keyword: format string print
 
 s = [
-	f'{"centered":^15}',
-	f'{"left":<15}',
-	f'{"right":>15}',
-	f'{"neither justified or truncated":>15}',
-	f'{"truncated to 15":15.15}',
-	f'{"Truncated to 4 characters, centered on width of 20":^20.4}',
+	(f'{"centered":^15}', '   centered    '),
+	(f'{"left":<15}',     'left           '),
+	(f'{"right":>15}',    '          right'),
+	(f'{"neither justified nor truncated":>15}', 'neither justified nor truncated'),
+	(f'{"truncated to 5":15.5}', 'trunc          '),
+	(f'{"Truncated to 4 characters, centered on width of 20":^20.4}', '        Trun        '),
 ]
-for i in s:
-	print(f':{i}:')
+for i, j in s:
+    assert i == j, f'\ni = "{i}",\nj = "{j}"'
 
 s = 'a1'
 assert s[0].isalnum()
