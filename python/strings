@@ -18,3 +18,6 @@ assert s[0].isalnum()
 assert not s[0].isdigit()
 assert s[1].isalnum()
 assert s[1].isdigit()
+
+s = 'this.is.a.string'
+assert s.split('.')[0:-1] == ['this', 'is', 'a']
