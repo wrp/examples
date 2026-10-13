@@ -21,3 +21,5 @@ assert s[1].isdigit()
 
 s = 'this.is.a.string'
 assert s.split('.')[0:-1] == ['this', 'is', 'a']
+assert '.'.join(s.split('.')[0:-1]) == 'this.is.a'
+assert s[0:s.rindex('.')] == 'this.is.a'
