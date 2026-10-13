@@ -5,16 +5,19 @@ import sys
 
 # pathlib should generally be preferred over os.path
 
-names = ['/', 'tmp', 'foo']
+names = ['/', 'tmp', 'foo.bar.baz']
 
 f = pathlib.Path(*names)
 full_name = f.absolute()
 
 assert isinstance(full_name, pathlib.PosixPath)
-assert str(full_name) == '/tmp/foo', f'full_name = {full_name}'
+assert str(full_name) == '/tmp/foo.bar.baz', f'full_name = {full_name}'
+assert str(full_name.name) == 'foo.bar.baz'
+assert str(full_name.stem) == 'foo.bar'
+assert str(full_name.suffix) == '.baz', f'suffix = {full_name.suffix}'
 
-# print(full_name, end=' ')
-# print('exists' if f.exists() else 'does not exist')
+assert full_name.suffixes == ['.bar', '.baz'], f'suffixes = {full_name.suffixes}'
+
 
 a = pathlib.Path('/') / 'foo' / 'bar'
 assert(str(a.parent) == '/foo')
