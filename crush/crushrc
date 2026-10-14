@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Put this file in $HOME/.config/crush/crushrc
+
 # Ring the terminal bell when the model finishes a turn
 option notifications bell
 
