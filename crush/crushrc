@@ -17,3 +17,12 @@ provider add gemini --api-key "$GEMINI_KEY"
 model large gemini/gemini-3.8-flash
 
 provider add openrouter --api-key "$(gpg -qd $HOME/.config/secrets/OPENROUTER_API_KEY.gpg)"
+
+provider add aihubmix \
+  --type openai-compat \
+  --base-url "https://aihubmix.com" \
+  --api-key "$(gpg -qd $HOME/.config/secrets/AIHUBMIX.gpg)"
+model add aihubmix/qwen3.8-flash-free \
+  --name "Qwen 3.8 Flash (Free)" \
+  --context-window 1000000
+model large aihubmix/qwen3.8-flash-free
