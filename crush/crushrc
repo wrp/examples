@@ -16,4 +16,4 @@ model large anthropic/claude-opus-4-8
 provider add gemini --api-key "$GEMINI_KEY"
 model large gemini/gemini-3.8-flash
 
-provider add openrouter --api-key $(gpg -qd $HOME/.config/secrets/OPENROUTER_API_KEY.gpg)
+provider add openrouter --api-key "$(gpg -qd $HOME/.config/secrets/OPENROUTER_API_KEY.gpg)"
