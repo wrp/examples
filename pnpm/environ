@@ -1,0 +1,8 @@
+
+To get data storage on a different device:
+
+export PNPM_CONFIG_STORE_DIR="$CACHE_BASE/pnpm/store"
+export PNPM_CONFIG_CACHE_DIR="$CACHE_BASE/pnpm/cache"
+export PNPM_HOME="$CACHE_BASE/pnpm/home"
+export PNPM_CONFIG_STATE_DIR="$CACHE_BASE/pnpm/state"
+export PNPM_CONFIG_PACKAGE_IMPORT_METHOD="symlink"
