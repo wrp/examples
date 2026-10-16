@@ -1,3 +1,11 @@
+
+DO NOT USE THIS TOOL
+
+npm's fundamental flaw is that it will add a lot
+of files in the local node_modules directory, and
+there is no sane way to prevent massive bloat.
+Use yarn instead.
+
 By default, npm will download GiBs of crap
 into $HOME.  You can change the location with:
 

@@ -1,8 +1,7 @@
 
-To get data storage on a different device:
 
-export PNPM_CONFIG_STORE_DIR="$CACHE_BASE/pnpm/store"
-export PNPM_CONFIG_CACHE_DIR="$CACHE_BASE/pnpm/cache"
-export PNPM_HOME="$CACHE_BASE/pnpm/home"
-export PNPM_CONFIG_STATE_DIR="$CACHE_BASE/pnpm/state"
-export PNPM_CONFIG_PACKAGE_IMPORT_METHOD="symlink"
+Grrr.  Don't use pnpm either.  There is no way to
+avoid dumping hunreds of MiB into the local node_modules
+directory in every project.  The front-end ecosystem
+is a complete disaster.  Maybe yarn will be less
+pathological.
