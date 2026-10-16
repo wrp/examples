@@ -1,0 +1,6 @@
+
+# 1. Redirects the global package tarball cache (downloaded modules)
+export BUN_INSTALL_CACHE_DIR="/path/to/your/other/device/bun/cache"
+
+# 2. Redirects runtime transpiler file caches (TypeScript/JSX compilation assets)
+export BUN_RUNTIME_TRANSPILER_CACHE_PATH="/path/to/your/other/device/bun/transpiler"
