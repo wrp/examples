@@ -1,0 +1,5 @@
+npm is a pacakge manager for node.  It is mostly worthless,
+and superseded by pnpm, which is also worthless, and superseded
+by yarn, which in turn is useless, and replaced by bun.
+
+Use bun
