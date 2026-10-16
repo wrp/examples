@@ -20,9 +20,9 @@ provider add openrouter --api-key "$(gpg -qd $HOME/.config/secrets/OPENROUTER_AP
 
 provider add aihubmix \
   --type openai-compat \
-  --base-url "https://aihubmix.com" \
+  --base-url "https://aihubmix.com/v1" \
   --api-key "$(gpg -qd $HOME/.config/secrets/AIHUBMIX.gpg)"
 model add aihubmix/qwen3.8-flash-free \
-  --name "Qwen 3.8 Flash (Free)" \
+  --name "Qwen3.8-flash-free" \
   --context-window 1000000
 model large aihubmix/qwen3.8-flash-free
