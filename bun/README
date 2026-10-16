@@ -1,0 +1,15 @@
+
+bun is a package manager for node.  It does the same
+job as yarn, pnpm, and npm.
+
+pnpm and npm are worthless, because they both require
+that a node_modules/ directory be created in each
+package directory.  All the names in node_modules/ must
+be linked to files in the same physical device as
+the package directory, so it is effectively impossible
+to manage.  yarn is a bit better, and (allegedly)
+can handle symlinks in node_modules/, but it does not
+work with Astro unless node_modules/ contains names
+which are on the same device.  Allegedly, bun can
+handle moving the contents of node_modules/ to a different
+physical device, and it works with Astro.
