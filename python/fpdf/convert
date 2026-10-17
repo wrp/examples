@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import sys
+from fpdf import FPDF
+import unicodedata
+
+def text_to_pdf(name):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Helvetica", size=12)
+
+    # Explicit translation map for characters that break standard PDF fonts
+    replacements = {
+        "\u2010": "-",  # Unicode Hyphen -> Standard Hyphen (Fixes your current crash)
+        "\u2014": "-",  # Em-dash (—) -> Hyphen
+        "\u2013": "-",  # En-dash (–) -> Hyphen
+        "\u2015": "-",  # Horizontal bar (―) -> Hyphen
+        "\u201c": '"',  # Left smart quote (“) -> Regular quote
+        "\u201d": '"',  # Right smart quote (”) -> Regular quote
+        "\u2018": "'",  # Left smart single quote (‘) -> Regular apostrophe
+        "\u2019": "'",  # Right smart single quote (’) -> Regular apostrophe
+    }
+
+    with open(name, "r", encoding="utf-8") as file:
+        for line in file:
+            clean_line = unicodedata.normalize('NFKD', line)
+
+            # Step 1: Map known troublesome symbols to safe ones
+            for bad_char, good_char in replacements.items():
+                clean_line = clean_line.replace(bad_char, good_char)
+
+            # Step 2: THE FIREWALL. Drop ANY remaining character that latin-1 cannot print.
+            # This completely guarantees the script will never crash, even if new weird characters show up.
+            clean_line = clean_line.encode("latin-1", "ignore").decode("latin-1")
+
+            # Print to PDF using the safe, standard font
+            pdf.multi_cell(w=0, h=8, text=clean_line)
+
+    pdf.output(name + '.pdf')
+
+if __name__ == '__main__':
+    for name in sys.argv[1:]:
+        text_to_pdf(name)
