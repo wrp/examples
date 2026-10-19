@@ -2,3 +2,77 @@
 See the parameters of a model:
 
 printf "$(curl -s $host:11434/api/show -d '{"name":"'"${model?}"'"}' | jq -r .parameters)"\\n
+
+Large language model (LLM) parameters control how a model generates text during inference, balancing determinism (predictable, focused answers) with creativity (random, diverse answers). [1] (https://www.promptingguide.ai/introduction/settings), [2] (https://ngebodh.github.io/projects/Short_dive_posts/LLM_temp/LLM_temp.html)
+
+Core LLM Parameters
+
+• Temperature
+	• What it does: Modifies the logit probabilities before the
+	softmax function.  • Range: Typically 0.0 to 2.0 (depending
+	on the provider like OpenAI or Gemini; Anthropic caps at
+	1.0).  • Low (0.0 – 0.3): Makes output deterministic and
+	factual; picks the most probable next token every time
+	(ideal for code, data extraction, or factual Q&A).  • High
+	(0.7 – 1.0+): Flattens the probability curve, introducing
+	randomness and variety (ideal for brainstorming, poetry,
+	or creative writing). Values above 1.0 can cause incoherence.
+	[1] (https://www.youtube.com/watch?v=33kb37NYOTc&t=41), [2]
+	(https://medium.com/@kelseyywang/a-comprehensive-guide-to-llm-temperature-%EF%B8%8F-363a40bbc91f),
+	[3] (https://www.vellum.ai/llm-parameters/temperature), [4]
+	(https://www.youtube.com/watch?v=IWSutLJbURU&t=61), [5]
+	(https://unstructured.io/insights/what-does-the-temperature-parameter-mean-in-llms),
+	[6] (https://www.promptingguide.ai/introduction/settings)
+• Top-P (Nucleus Sampling)
+	• What it does: Selects from a dynamic subset of tokens
+	whose cumulative probability adds up to threshold P (e.g.,
+	0.9 means consider tokens that make up 90% of the probability
+	mass).  • Range: 0.0 to 1.0.  • Effect: A lower Top-P
+	restricts choices to only the most likely words; a higher
+	Top-P lets in a wider vocabulary. [1]
+	(https://www.youtube.com/watch?v=TjeDv6Nb6EI), [2]
+	(https://www.youtube.com/watch?v=CPs_PGELoMY)
+• Top-K
+	• What it does: Limits the next-token choice to a fixed
+	number (K) of the most likely words (e.g., K = 50 means
+	only look at the top 50 contenders).  • Range: 1 to thousands
+	(or disabled).  • Effect: Small K forces high focus; larger
+	K increases diversity. [1]
+	(https://www.youtube.com/watch?v=CPs_PGELoMY), [2]
+	(https://www.youtube.com/watch?v=TjeDv6Nb6EI)
+• Frequency Penalty
+	• What it does: Lowers the probability of a token proportional
+	to how many times it has already appeared in the generated
+	text.  • Range: Usually -2.0 to 2.0.  • Effect: Discourages
+	the model from repeating the exact same words or phrases.
+	[1] (https://www.youtube.com/watch?v=TjeDv6Nb6EI), [2]
+	(https://www.youtube.com/watch?v=CPs_PGELoMY)
+• Presence Penalty
+	• What it does: Applies a flat penalty to any token that
+	has appeared at least once, regardless of how often.  •
+	Range: Usually -2.0 to 2.0.  • Effect: Encourages the model
+	to pivot to new topics rather than recycling vocabulary.
+	[1] (https://www.youtube.com/watch?v=TjeDv6Nb6EI)
+• Max Tokens
+	• What it does: Sets a hard upper limit on the length of
+	the model's generated response.  • Effect: Cuts off generation
+	once the token count is reached. [1]
+	(https://www.geeksforgeeks.org/artificial-intelligence/what-are-llm-parameters/)
+
+Recommended Settings by Use Case
+
+• Factual Q&A / Code Generation / RAG: Temperature 0.0 – 0.2, Top-P
+0.9, low frequency/presence penalties.  • General Conversation /
+Chatbots: Temperature 0.5 – 0.7, Top-P 0.9.  • Creative Writing /
+Brainstorming: Temperature 0.8 – 1.0, moderate frequency penalty
+to avoid repetitive phrasing. [1]
+(https://unstructured.io/insights/what-does-the-temperature-parameter-mean-in-llms)
+Learn more about configuring these values through the Prompting
+Guide LLM Settings or review general definitions on GeeksforGeeks
+LLM Parameters. [1] (https://www.promptingguide.ai/introduction/settings),
+[2]
+(https://www.geeksforgeeks.org/artificial-intelligence/what-are-llm-parameters/)
+If you are working on a specific project, tell me what task you are
+trying to build or run (e.g., a data extractor, a creative writer,
+or a customer support bot), and I can recommend the exact parameter
+combination to use.
