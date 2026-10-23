@@ -4,3 +4,11 @@ terraform plan -out=${file}
 
 # Produce human readable output of a plan
 terraform show ${file}
+
+# Basic work flow:
+vi *.tf
+terraform fmt
+terraform init
+terraform validate
+terraform plan
+terraform apply
