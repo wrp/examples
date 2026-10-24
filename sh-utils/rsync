@@ -5,11 +5,10 @@
 $ rsync -rlgpoH --delete /p/a/t/h .
 
 # Copy files in foo to bar.
-# (So foo/baz gets copied to bar/baz)
-$ rsync -zva foo/ bar
+$ rsync -zva foo/ bar  # foo/baz -> bar/baz)
 
-# Copy the directory foo into bar (will copy to bar/foo/*)
-$ rsync -zva foo bar
+# Copy the directory foo into bar
+$ rsync -zva foo bar  # foo/baz -> bar/foo/baz)
 
 # Copy files in foo to bar, deleting unmatched files in bar
 # but keeping bar/file-to-keep  (P == protect)
