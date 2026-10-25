@@ -25,3 +25,10 @@ foo:
 
 list:
 	echo $(MAKEFILE_LIST)
+
+.SECONDEXPANSION:
+dev prod staging: $$(addsuffix .yaml,$$@)
+	echo 'Dependencies are $^'
+
+dev.yaml prod.yaml staging.yaml:
+	echo This is a phony target to make $@
