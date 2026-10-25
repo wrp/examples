@@ -1,6 +1,6 @@
 
 all:
-	cue eval constraint.cue
+	cue eval -c constraint.cue
 
 check:
 	cue vet constraint.cue
