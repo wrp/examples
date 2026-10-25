@@ -12,9 +12,14 @@
 	maximum?: int & > minimum
 }
 
-spec: #Spec
-spec: {
-	kind: "Homo Sapien"
-	name: first: "Jane"
-	name: last:  "Doe"
+
+
+specs: {
+	for i in [1, 2, 3] {
+		"spec-\(i)": #Spec & {
+			kind: "Homo Sapien"
+			name: first: "Jane"
+			name: last:  "Doe"
+		}
+	}
 }
