@@ -6,5 +6,5 @@ all:
 .SECONDEXPANSION:
 dev prod staging: $$(addsuffix .yaml,$$@)
 
-dev.yaml prod.yaml staging.yaml:
+dev.yaml prod.yaml staging.yaml: config.cue
 	cue cmd -t env=$(basename $@) gen

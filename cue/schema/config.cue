@@ -28,5 +28,6 @@ environments: {
 	prod: {
 		replicas: 5
 		database: host: "prod-db.internal"
+		database: port: 1234
 	}
 }
