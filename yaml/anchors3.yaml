@@ -1,4 +1,3 @@
-# The following two documents are the same
 ---
 build_release_gcc:
   variables:
@@ -13,20 +12,9 @@ build_clang:
     CMAKE_CONFIGURE_ARGUMENTS: $PYTHON_CONFIG_ARGUMENT
 
 ---
-build_release_gcc: &vars
+build_release_gcc_a: &vars
   variables:
     CMAKE_CONFIGURE_ARGUMENTS: $PYTHON_CONFIG_ARGUMENT
 
-build_coverage_gcc: *vars
-build_clang: *vars
-
-&bar build_release_gcc: 8
-
-test: [
-*vars,
-*bar
-]
-
-foo:
- - *vars
- - *bar
+build_coverage_gcc_a: *vars
+build_clang_a: *vars
