@@ -1,6 +1,6 @@
 
 all:
-	cue cmd gen  # Generate all the yaml files, as specified in gen_tool.cue
+	cue cmd gen  # Generate yaml files as specified in gen_tool.cue
 
 dev:
 	cue cmd -t env=dev gen
