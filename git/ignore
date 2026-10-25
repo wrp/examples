@@ -5,3 +5,6 @@ ${XDG_CONFIG_HOME:-$HOME/.config}/git/ignore.
 
 # Find all extant files that are being ignored
 find . -print0 | git check-ignore -z --stdin | tr '\0' \\n
+
+
+git check-ignore -v /p/a/t/h  # Show why a file is ignored
