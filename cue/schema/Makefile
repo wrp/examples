@@ -1,0 +1,2 @@
+all:
+	cue cmd gen
