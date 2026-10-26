@@ -4,11 +4,11 @@ I generally add $HOME to GIT_CEILING_DIRECTORIES so I can put things like .bash-
 is a subdir of $HOME to be tracked, you just need to use $HOME as your workdir.
 
 
-list of ENVIRONMENT VARIABLES from current (~2.39) man-page
+list of ENVIRONMENT VARIABLES:
        GIT_INDEX_FILE
        GIT_INDEX_VERSION
-       GIT_OBJECT_DIRECTORY
-       GIT_ALTERNATE_OBJECT_DIRECTORIES
+       GIT_OBJECT_DIRECTORY       location of the object store [.git/objects].
+       GIT_ALTERNATE_OBJECT_DIRECTORIES  colon-separated list of locations to look for objects that aren’t in GIT_OBJECT_DIRECTORY.
        GIT_DIR
        GIT_WORK_TREE
        GIT_NAMESPACE
@@ -21,6 +21,7 @@ list of ENVIRONMENT VARIABLES from current (~2.39) man-page
        GIT_AUTHOR_NAME
        GIT_AUTHOR_EMAIL
        GIT_AUTHOR_DATE
+       GIT_COMMITTER_NAME
        GIT_COMMITTER_EMAIL
        GIT_COMMITTER_DATE
        EMAIL
@@ -39,11 +40,12 @@ list of ENVIRONMENT VARIABLES from current (~2.39) man-page
        GIT_SEQUENCE_EDITOR
        GIT_SSH, GIT_SSH_COMMAND
        GIT_SSH_VARIANT
+       GIT_CURL_VERBOSE
        GIT_SSL_NO_VERIFY
        GIT_ASKPASS
        GIT_TERMINAL_PROMPT
        GIT_CONFIG_GLOBAL, GIT_CONFIG_SYSTEM
-       GIT_CONFIG_NOSYSTEM
+       GIT_CONFIG_NOSYSTEM  if set, disables the use of the system-wide configuration file
        GIT_FLUSH
        GIT_TRACE
        GIT_TRACE_FSMONITOR
@@ -72,3 +74,66 @@ list of ENVIRONMENT VARIABLES from current (~2.39) man-page
        GIT_OPTIONAL_LOCKS
        GIT_REDIRECT_STDIN, GIT_REDIRECT_STDOUT, GIT_REDIRECT_STDERR
        GIT_PRINT_SHA1_ELLIPSIS (deprecated)
+
+
+
+GIT_EXEC_PATH location of sub-programs (like git-commit, git-diff, and others). You can check the current setting by running git --exec-path.
+HOME          location of the global configuration file.
+PREFIX        location of tthe system-wide configuration. Git looks for this file at $PREFIX/etc/gitconfig.
+
+If the data rate of an HTTP operation is lower than GIT_HTTP_LOW_SPEED_LIMIT bytes per second for longer than GIT_HTTP_LOW_SPEED_TIME seconds, Git will abort that operation. These values override the http.lowSpeedLimit and http.lowSpeedTime configuration values.
+
+GIT_HTTP_USER_AGENT sets the user-agent string used by Git when communicating over HTTP. The default is a value like git/2.0.0.
+
+GIT_DIFF_OPTS is a bit of a misnomer. The only valid values are -u<n> or --unified=<n>, which controls the number of context lines shown in a git diff command.
+
+GIT_EXTERNAL_DIFF is used as an override for the diff.external configuration value. If it’s set, Git will invoke this program when git diff is invoked.
+
+GIT_DIFF_PATH_COUNTER and GIT_DIFF_PATH_TOTAL are useful from inside the program specified by GIT_EXTERNAL_DIFF or diff.external. The former represents which file in a series is being diffed (starting with 1), and the latter is the total number of files in the batch.
+
+GIT_MERGE_VERBOSITY controls the output for the recursive merge strategy. The allowed values are as follows:
+
+	0 outputs nothing, except possibly a single error message.
+	1 shows only conflicts.
+	2 also shows file changes. [default]
+	3 shows when files are skipped because they haven’t changed.
+	4 shows all paths as they are processed.
+	5 and above show detailed debugging information.
+
+
+Want to really know what Git is up to? Git has a fairly complete set of traces embedded, and all you need to do is turn them on. The possible values of these variables are as follows:
+
+“true”, “1”, or “2” – the trace category is written to stderr.
+
+An absolute path starting with / – the trace output will be written to that file.
+
+GIT_TRACE             controls general traces, which don’t fit into any specific category. This includes the expansion of aliases, and delegation to other sub-programs.
+GIT_TRACE_PACK_ACCESS controls tracing of packfile access. The first field is the packfile being accessed, the second is the offset within that file:
+GIT_TRACE_PACKET      enables packet-level tracing for network operations.
+GIT_TRACE_PERFORMANCE controls logging of performance data. The output shows how long each particular git invocation takes.
+GIT_TRACE_SETUP       shows information about what Git is discovering about the repository and environment it’s interacting with.
+
+
+GIT_ASKPASS is an override for the core.askpass configuration value.
+	This is the program invoked whenever Git needs to ask the user for
+	credentials, which can expect a text prompt as a command-line
+	argument, and should return the answer on stdout (see Credential
+	Storage for more on this subsystem).
+
+GIT_NAMESPACE controls access to namespaced refs, and is equivalent
+	to the --namespace flag. This is mostly useful on the server side,
+	where you may want to store multiple forks of a single repository
+	in one repository, only keeping the refs separate.
+
+GIT_FLUSH can be used to force Git to use non-buffered I/O when
+	writing incrementally to stdout. A value of 1 causes Git to flush
+	more often, a value of 0 causes all output to be buffered. The
+	default value (if this variable is not set) is to choose an appropriate
+	buffering scheme depending on the activity and the output mode.
+
+GIT_REFLOG_ACTION lets you specify the descriptive text written to the reflog. Here’s an example:
+
+$ GIT_REFLOG_ACTION="my action" git commit --allow-empty -m 'My message'
+[master 9e3d55a] My message
+$ git reflog -1
+9e3d55a HEAD@{0}: my action: My message
