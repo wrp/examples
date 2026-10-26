@@ -9,6 +9,7 @@ list of ENVIRONMENT VARIABLES:
        GIT_INDEX_VERSION
        GIT_OBJECT_DIRECTORY       location of the object store [.git/objects].
        GIT_ALTERNATE_OBJECT_DIRECTORIES  colon-separated list of locations to look for objects that aren’t in GIT_OBJECT_DIRECTORY.
+               The --shared flag to git clone is related, as is .git/objects/info/alternates
        GIT_DIR
        GIT_WORK_TREE
        GIT_NAMESPACE
