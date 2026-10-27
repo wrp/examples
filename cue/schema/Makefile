@@ -3,6 +3,9 @@
 all:
 	cue cmd gen  # Generate yaml files as specified in gen_tool.cue
 
+vet:
+	cue vet schema.cue data.yaml -d '#User'
+
 .SECONDEXPANSION:
 dev prod staging: $$(addsuffix .yaml,$$@)
 
