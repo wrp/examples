@@ -11,17 +11,16 @@ import "strings"
 	_service: string | *"api"  // leading underscore prevents concrete vaue (won't export)
 	deploymentName: "\(name)-\(_service)-v1"
 
-	port: 123 & >=123 & < 124
-
-	_assert: true & (port == 123)
-
-
 	// The basic mental model in CUE is: Constraint & ( *DefaultValue | AlternativeTypesOrValues )
-	defaulting_port: int & >=1024 & <2000 | *1058
+	port: int & >=128 & < 255 | *128
 }
 
 con: C=#foo & {
 	hostname: "foo.net"
 	name: "alice"
 	_assert: true & (C.deploymentName == "alice-api-v1")
+
+	_base: 128
+	port: C._base + 10 &== 138
+	_assert2: true & (C.port == 138)
 }
