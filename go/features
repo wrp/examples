@@ -1,6 +1,6 @@
 A list from https://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html
 
-a list of significant simplifications in Go over C and C++:
+a list of significant simplifications in Go
 
 regular syntax (don't need a symbol table to parse)
 garbage collection (only)
