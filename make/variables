@@ -1,3 +1,5 @@
+See 'Variable-assignments' below for semantics of :=, ?=, etc.
+
 
 `$@'
      The file name of the target of the rule.  If the target is an
@@ -55,8 +57,7 @@
 
      In an explicit rule, there is no stem; so `$*' cannot be determined
      in that way.  Instead, if the target name ends with a recognized
-     suffix (*note Old-Fashioned Suffix Rules: Suffix Rules.), `$*' is
-     set to the target name minus the suffix.  For example, if the
+     suffix (*note Old-Fashioned Suffix Rules: Suffix Rules.), `$*' is set to the target name minus the suffix.  For example, if the
      target name is `foo.c', then `$*' is set to `foo', since `.c' is a
      suffix.  GNU `make' does this bizarre thing only for compatibility
      with other implementations of `make'.  You should generally avoid
@@ -117,3 +118,45 @@ function.  Here is a table of the variants:
 `$(^F)'
      Lists of the directory parts and the file-within-directory parts
      of all prerequisites.
+
+
+
+
+*************  Variable-assignments *************
+
+For gnu make:
+
+:=    evaluated always, exactly once.  Overridden by command line, but not environment.
+=     evaluated only if referenced, and every time it is referenced.  Overridden by command line, not environment.
+?=    lazy evaluation, overridden by environment and commandline
+
+You can use override to prevent the value from being changed by env or arg (eg, "override foo = foo")
+
+
+
+$ cat Makefile
+
+foo := $(shell sh -c 'echo setting foo >&2; echo foo')
+bar = $(shell sh -c 'echo setting bar >&2; echo bar')
+baz ?= $(shell sh -c 'echo setting baz >&2; echo baz')
+
+default:
+	: $(foo) $(bar) $(baz)
+	@ echo foo=$(foo)
+	@ echo bar=$(bar)
+	@ echo baz=$(baz)
+$ make foo=a bar=b baz=c
+setting foo
+: a b c
+foo=a
+bar=b
+baz=c
+$ foo=a bar=b baz=c make
+setting foo
+setting bar
+setting bar
+: foo bar c
+setting bar
+foo=foo
+bar=bar
+baz=c
