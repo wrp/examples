@@ -1,0 +1,36 @@
+
+
+Essential Terraform Blocks
+
+• terraform (Root Configuration): Sets ground rules for the project,
+	including the required Terraform CLI version and provider version
+	constraints inside a required_providers nested block. Visit the
+	HashiCorp Terraform Block Reference to view syntax rules for version
+	pinning and cloud settings.
+• provider: Connects Terraform to your target cloud or SaaS platform
+	(such as AWS, Azure, or GCP) and configures authentication, regions,
+	or endpoint defaults.
+• resource: Declares actual infrastructure components (such as an
+	EC2 instance, VPC, or database) using a unique combination of
+	resource type and resource name.
+• data: Queries and fetches existing, read-only infrastructure or
+	external data from your cloud provider so you can reference it
+	inside your configuration.
+• variable: Defines input parameters for your modules or root
+	configuration, allowing you to pass customizable values across
+	different environments.
+• output: Exposes specific values (such as an IP address, DNS name,
+	or ID) from your root or child module so other modules or operators
+	can read them after an apply.
+• locals: Defines local (private) variables or intermediate expressions
+	to simplify complex calculations and prevent code duplication within
+	a module.o
+• module: Calls and reuses a child module from a local path, git
+	repository, or the public registry to compose larger infrastructure
+	architectures.
+• backend: Configures where and how your state file is stored
+	remotely (such as Amazon S3, Azure Blob Storage, or Google Cloud
+	Storage) to enable team collaboration and state locking.
+• dynamic: Programmatically generates repeating nested configuration
+	blocks (such as security group ingress rules or IAM policies) from
+	lists or maps to keep your code DRY.
