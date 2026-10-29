@@ -34,3 +34,5 @@ Essential Terraform Blocks
 • dynamic: Programmatically generates repeating nested configuration
 	blocks (such as security group ingress rules or IAM policies) from
 	lists or maps to keep your code DRY.
+• moved: Use to indicate to terraform that a resource has moved, preventing
+	terraform from destroying and recreating the resource.
